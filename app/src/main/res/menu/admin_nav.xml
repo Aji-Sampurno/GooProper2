@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/akunAdmin_nav"
+        android:icon="@drawable/ic_user"
+        android:title="Akun" />
+    <item
+        android:id="@+id/closingAdmin_nav"
+        android:icon="@drawable/ic_listing"
+        android:title="Closing" />
+    <item
+        android:id="@+id/flowUpAdmin_nav"
+        android:icon="@drawable/ic_agent"
+        android:title="FlowUp" />
+    <item
+        android:id="@+id/homeAdmin_nav"
+        android:icon="@drawable/ic_home"
+        android:title="Home" />
+    <item
+        android:id="@+id/listingAdmin_nav"
+        android:icon="@drawable/ic_listing"
+        android:title="Listing" />
+
+</menu>

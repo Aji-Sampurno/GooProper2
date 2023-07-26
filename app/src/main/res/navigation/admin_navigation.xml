@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/admin_navigation"
+    app:startDestination="@id/homeAdmin_nav">
+
+    <fragment
+        android:id="@+id/akunAdmin_nav"
+        android:name="com.gooproper.admin.fragment.AkunAdminFragment"
+        tools:layout="@layout/fragment_akun_admin" />
+    <fragment
+        android:id="@+id/closingAdmin_nav"
+        android:name="com.gooproper.admin.fragment.ClosingAdminFragment"
+        tools:layout="@layout/fragment_closing_admin" />
+    <fragment
+        android:id="@+id/flowUpAdmin_nav"
+        android:name="com.gooproper.admin.fragment.FlowUpAdminFragment"
+        tools:layout="@layout/fragment_flow_up_admin" />
+    <fragment
+        android:id="@+id/homeAdmin_nav"
+        android:name="com.gooproper.admin.fragment.HomeAdminFragment"
+        tools:layout="@layout/fragment_home_admin" />
+    <fragment
+        android:id="@+id/listingAdmin_nav"
+        android:name="com.gooproper.admin.fragment.ListingAdminFragment"
+        tools:layout="@layout/fragment_listing_admin" />
+</navigation>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    app:startDestination="@id/home_nav">
+
+    <fragment
+        android:id="@+id/home_nav"
+        android:name="com.gooproper.customer.fragment.HomeFragment"
+        tools:layout="@layout/fragment_home" />
+    <fragment
+        android:id="@+id/akun_nav"
+        android:name="com.gooproper.customer.fragment.AkunFragment"
+        tools:layout="@layout/fragment_akun" />
+    <fragment
+        android:id="@+id/agent_nav"
+        android:name="com.gooproper.customer.fragment.AgentFragment"
+        tools:layout="@layout/fragment_agent" />
+    <fragment
+        android:id="@+id/listing_nav"
+        android:name="com.gooproper.customer.fragment.ListingFragment"
+        tools:layout="@layout/fragment_listing" />
+</navigation>
