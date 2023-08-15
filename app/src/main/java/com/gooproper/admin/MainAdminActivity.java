@@ -21,7 +21,7 @@ public class MainAdminActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main_admin);
 
         BottomNavigationView navigationView = findViewById(R.id.nav_view);
-        AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(R.id.home_nav, R.id.listing_nav, R.id.agent_nav, R.id.akun_nav).build();
+        AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(R.id.closingAdmin_nav, R.id.flowUpAdmin_nav, R.id.homeAdmin_nav, R.id.listingAdmin_nav, R.id.akunAdmin_nav).build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);

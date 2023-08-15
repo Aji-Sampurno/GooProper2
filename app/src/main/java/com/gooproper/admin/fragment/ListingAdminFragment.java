@@ -1,66 +1,245 @@
 package com.gooproper.admin.fragment;
 
+import android.animation.Animator;
+import android.animation.AnimatorInflater;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.AnimatorSet;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.widget.Button;
+import android.widget.ImageView;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.Volley;
 import com.gooproper.R;
+import com.gooproper.adapter.ListingAdapter;
+import com.gooproper.adapter.PraListingAdapter;
+import com.gooproper.model.ListingModel;
+import com.gooproper.ui.SoldActivity;
+import com.gooproper.util.ServerApi;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link ListingAdminFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class ListingAdminFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    public ListingAdminFragment() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment ListingAdminFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static ListingAdminFragment newInstance(String param1, String param2) {
-        ListingAdminFragment fragment = new ListingAdminFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
+    boolean isGridChanged = false;
+    ProgressDialog PDListingAdmin;
+    ImageView ivgrid;
+    SwipeRefreshLayout srlistingadmin;
+    RecyclerView rvgrid, rvlist;
+    RecyclerView.Adapter adapter;
+    List<ListingModel> list;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_listing_admin, container, false);
+        View root = inflater.inflate(R.layout.fragment_listing_admin, container, false);
+
+        PDListingAdmin = new ProgressDialog(getActivity());
+        rvlist = root.findViewById(R.id.RVListingListAdmin);
+        rvgrid = root.findViewById(R.id.RVListingGridAdmin);
+        srlistingadmin = root.findViewById(R.id.SRListingAdmin);
+        ivgrid = root.findViewById(R.id.IVGridListingAdmin);
+
+        list = new ArrayList<>();
+
+        rvgrid.setLayoutManager(new GridLayoutManager(getActivity(), 2));
+        adapter = new PraListingAdapter(getActivity(), list);
+        rvgrid.setAdapter(adapter);
+
+        /*rvlist.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
+        adapter = new PraListingAdapter(getActivity(), list);
+        rvlist.setAdapter(adapter);*/
+
+        LoadListing(true);
+        /*ivgrid.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (isGridChanged) {
+                    AnimatorSet animatorSet = (AnimatorSet) AnimatorInflater.loadAnimator(getActivity(), R.animator.crossfade);
+                    animatorSet.setTarget(ivgrid);
+                    animatorSet.addListener(new AnimatorListenerAdapter() {
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
+                            super.onAnimationEnd(animation);
+                            ivgrid.setImageResource(R.drawable.ic_menu_grid);
+                            rvgrid.setVisibility(View.VISIBLE);
+                            rvlist.setVisibility(View.GONE);
+                        }
+                    });
+                    animatorSet.start();
+                    isGridChanged = false;
+                } else {
+                    AnimatorSet animatorSet = (AnimatorSet) AnimatorInflater.loadAnimator(getActivity(), R.animator.crossfade);
+                    animatorSet.setTarget(ivgrid);
+                    animatorSet.addListener(new AnimatorListenerAdapter() {
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
+                            super.onAnimationEnd(animation);
+                            ivgrid.setImageResource(R.drawable.ic_menu_list);
+                            rvlist.setVisibility(View.VISIBLE);
+                            rvgrid.setVisibility(View.GONE);
+                        }
+                    });
+                    animatorSet.start();
+                    isGridChanged = true;
+                }
+            }
+        });*/
+
+        srlistingadmin.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                LoadListing(false);
+            }
+        });
+
+        return root;
+    }
+
+    private void LoadListing(boolean showProgressDialog) {
+        PDListingAdmin.setMessage("Memuat Listingan Masuk...");
+        PDListingAdmin.show();
+        if (showProgressDialog) PDListingAdmin.show();
+        else PDListingAdmin.cancel();
+
+        RequestQueue queue = Volley.newRequestQueue(getActivity());
+        JsonArrayRequest reqData = new JsonArrayRequest(Request.Method.GET, ServerApi.URL_GET_PRALISTING, null,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        if (showProgressDialog) PDListingAdmin.cancel();
+                        else srlistingadmin.setRefreshing(false);
+                        list.clear();
+                        for (int i = 0; i < response.length(); i++) {
+                            try {
+                                JSONObject data = response.getJSONObject(i);
+                                ListingModel md = new ListingModel();
+                                md.setIdPraListing(data.getString("IdPraListing"));
+                                md.setIdAgen(data.getString("IdAgen"));
+                                md.setIdInput(data.getString("IdInput"));
+                                md.setIdVendor(data.getString("IdVendor"));
+                                md.setNamaListing(data.getString("NamaListing"));
+                                md.setAlamat(data.getString("Alamat"));
+                                md.setLocation(data.getString("Location"));
+                                md.setWide(data.getString("Wide"));
+                                md.setLevel(data.getString("Level"));
+                                md.setBed(data.getString("Bed"));
+                                md.setBath(data.getString("Bath"));
+                                md.setBedArt(data.getString("BedArt"));
+                                md.setBathArt(data.getString("BathArt"));
+                                md.setGarage(data.getString("Garage"));
+                                md.setCarpot(data.getString("Carpot"));
+                                md.setNoCertificate(data.getString("NoCertificate"));
+                                md.setPbb(data.getString("Pbb"));
+                                md.setJenisProperti(data.getString("JenisProperti"));
+                                md.setJenisCertificate(data.getString("JenisCertificate"));
+                                md.setSumberAir(data.getString("SumberAir"));
+                                md.setKondisi(data.getString("Kondisi"));
+                                md.setDeskripsi(data.getString("Deskripsi"));
+                                md.setPrabot(data.getString("Prabot"));
+                                md.setKetPrabot(data.getString("KetPrabot"));
+                                md.setPriority(data.getString("Priority"));
+                                md.setTtd(data.getString("Ttd"));
+                                md.setBanner(data.getString("Banner"));
+                                md.setHarga(data.getString("Harga"));
+                                md.setTglInput(data.getString("TglInput"));
+                                md.setImg1(data.getString("Img1"));
+                                md.setImg2(data.getString("Img2"));
+                                md.setImg3(data.getString("Img3"));
+                                md.setImg4(data.getString("Img4"));
+                                md.setImg5(data.getString("Img5"));
+                                md.setImg6(data.getString("Img6"));
+                                md.setImg7(data.getString("Img7"));
+                                md.setImg8(data.getString("Img8"));
+                                md.setVideo(data.getString("Video"));
+                                md.setLinkFacebook(data.getString("LinkFacebook"));
+                                md.setLinkTiktok(data.getString("LinkTiktok"));
+                                md.setLinkInstagram(data.getString("LinkInstagram"));
+                                md.setLinkYoutube(data.getString("LinkYoutube"));
+                                md.setIsAdmin(data.getString("IsAdmin"));
+                                md.setIsManager(data.getString("IsManager"));
+                                list.add(md);
+                                PDListingAdmin.dismiss();
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                                PDListingAdmin.dismiss();
+
+                                Dialog customDialog = new Dialog(getActivity());
+                                customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                                customDialog.setContentView(R.layout.alert_eror);
+
+                                if (customDialog.getWindow() != null) {
+                                    customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                                }
+
+                                Button ok = customDialog.findViewById(R.id.BTNOkEror);
+
+                                ok.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        customDialog.dismiss();
+                                        LoadListing(true);
+                                    }
+                                });
+
+                                customDialog.show();
+                            }
+                        }
+
+                        adapter.notifyDataSetChanged();
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        PDListingAdmin.dismiss();
+                        error.printStackTrace();
+
+                        Dialog customDialog = new Dialog(getActivity());
+                        customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                        customDialog.setContentView(R.layout.alert_eror);
+
+                        if (customDialog.getWindow() != null) {
+                            customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                        }
+
+                        Button ok = customDialog.findViewById(R.id.BTNOkEror);
+
+                        ok.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                customDialog.dismiss();
+                                LoadListing(true);
+                            }
+                        });
+                        customDialog.show();
+                    }
+                });
+        queue.add(reqData);
     }
 }

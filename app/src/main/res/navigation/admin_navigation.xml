@@ -7,10 +7,6 @@
     app:startDestination="@id/homeAdmin_nav">
 
     <fragment
-        android:id="@+id/akunAdmin_nav"
-        android:name="com.gooproper.admin.fragment.AkunAdminFragment"
-        tools:layout="@layout/fragment_akun_admin" />
-    <fragment
         android:id="@+id/closingAdmin_nav"
         android:name="com.gooproper.admin.fragment.ClosingAdminFragment"
         tools:layout="@layout/fragment_closing_admin" />
@@ -26,4 +22,8 @@
         android:id="@+id/listingAdmin_nav"
         android:name="com.gooproper.admin.fragment.ListingAdminFragment"
         tools:layout="@layout/fragment_listing_admin" />
+    <fragment
+        android:id="@+id/akunAdmin_nav"
+        android:name="com.gooproper.admin.fragment.AkunAdminFragment"
+        tools:layout="@layout/fragment_akun_admin" />
 </navigation>

@@ -2,6 +2,8 @@
 <resources>
     <color name="main">#330376</color>
     <color name="second">#EBE81A</color>
+    <color name="third">#5A5068</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="grey">#adb5bd</color>
 </resources>

@@ -1,14 +1,16 @@
 package com.gooproper;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
-import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -24,9 +26,12 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.bumptech.glide.Glide;
 import com.gooproper.admin.MainAdminActivity;
 import com.gooproper.agen.MainAgenActivity;
 import com.gooproper.customer.MainCustomerActivity;
+import com.gooproper.ui.registrasi.RegistrasiAgenActivity;
+import com.gooproper.ui.registrasi.RegistrasiCustomerActivity;
 import com.gooproper.util.Preferences;
 import com.gooproper.util.ServerApi;
 
@@ -65,6 +70,13 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
+        regisagent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(LoginActivity.this, RegistrasiAgenActivity.class));
+            }
+        });
+
         if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
         }
@@ -87,6 +99,13 @@ public class LoginActivity extends AppCompatActivity {
                                 if(res.getBoolean("admin")){
                                     Preferences.setKeyIdAdmin(getBaseContext(), res.getString("IdAdmin"));
                                     Preferences.setKeyUsername(getBaseContext(), res.getString("Username"));
+                                    Preferences.setKeyNamaLengkap(getBaseContext(), res.getString("NamaLengkap"));
+                                    Preferences.setKeyNoTelp(getBaseContext(), res.getString("NoTelp"));
+                                    Preferences.setKeyAlamat(getBaseContext(), res.getString("Alamat"));
+                                    Preferences.setKeyTglLahir(getBaseContext(), res.getString("TglLahir"));
+                                    Preferences.setKeyEmail(getBaseContext(), res.getString("Email"));
+                                    Preferences.setKeyPhoto(getBaseContext(), res.getString("Photo"));
+                                    Preferences.setKeyPassword(getBaseContext(), res.getString("Password"));
                                     Preferences.setKeyStatus(getBaseContext(), res.getString("Status"));
 
                                     Intent intent = new Intent(LoginActivity.this, MainAdminActivity.class);
@@ -95,30 +114,105 @@ public class LoginActivity extends AppCompatActivity {
                                 } else if (res.getBoolean("customer")) {
                                     Preferences.setKeyIdCustomer(getBaseContext(), res.getString("IdCustomer"));
                                     Preferences.setKeyUsername(getBaseContext(), res.getString("Username"));
+                                    Preferences.setKeyNamaLengkap(getBaseContext(), res.getString("NamaLengkap"));
+                                    Preferences.setKeyNoTelp(getBaseContext(), res.getString("NoTelp"));
+                                    Preferences.setKeyAlamat(getBaseContext(), res.getString("Alamat"));
+                                    Preferences.setKeyTglLahir(getBaseContext(), res.getString("TglLahir"));
+                                    Preferences.setKeyEmail(getBaseContext(), res.getString("Email"));
+                                    Preferences.setKeyPhoto(getBaseContext(), res.getString("Photo"));
+                                    Preferences.setKeyPassword(getBaseContext(), res.getString("Password"));
                                     Preferences.setKeyStatus(getBaseContext(), res.getString("Status"));
 
                                     Intent intent = new Intent(LoginActivity.this, MainCustomerActivity.class);
                                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                     startActivity(intent);
                                 } else if (res.getBoolean("agen")) {
-                                    Preferences.setKeyIdCustomer(getBaseContext(), res.getString("IdAgen"));
+                                    Preferences.setKeyIdAgen(getBaseContext(), res.getString("IdAgen"));
                                     Preferences.setKeyUsername(getBaseContext(), res.getString("Username"));
+                                    Preferences.setKeyPassword(getBaseContext(), res.getString("Password"));
+                                    Preferences.setKeyNama(getBaseContext(), res.getString("Nama"));
+                                    Preferences.setKeyNoTelp(getBaseContext(), res.getString("NoTelp"));
+                                    Preferences.setKeyEmail(getBaseContext(), res.getString("Email"));
+                                    Preferences.setKeyTglLahir(getBaseContext(), res.getString("TglLahir"));
+                                    Preferences.setKeyKotaKelahiran(getBaseContext(), res.getString("KotaKelahiran"));
+                                    Preferences.setKeyPendidikan(getBaseContext(), res.getString("Pendidikan"));
+                                    Preferences.setKeyNamaSekolah(getBaseContext(), res.getString("NamaSekolah"));
+                                    Preferences.setKeyMasaKerja(getBaseContext(), res.getString("MasaKerja"));
+                                    Preferences.setKeyJabatan(getBaseContext(), res.getString("Jabatan"));
+                                    Preferences.setKeyAlamatDomisili(getBaseContext(), res.getString("AlamatDomisili"));
+                                    Preferences.setKeyFacebook(getBaseContext(), res.getString("Facebook"));
+                                    Preferences.setKeyInstagram(getBaseContext(), res.getString("Instagram"));
+                                    Preferences.setKeyNoKtp(getBaseContext(), res.getString("NoKtp"));
+                                    Preferences.setKeyImgKtp(getBaseContext(), res.getString("ImgKtp"));
+                                    Preferences.setKeyImgTtd(getBaseContext(), res.getString("ImgTtd"));
+                                    Preferences.setKeyNpwp(getBaseContext(), res.getString("Npwp"));
+                                    Preferences.setKeyPhoto(getBaseContext(), res.getString("Photo"));
+                                    Preferences.setKeyPoin(getBaseContext(), res.getString("Poin"));
                                     Preferences.setKeyStatus(getBaseContext(), res.getString("Status"));
+                                    Preferences.setKeyIsAkses(getBaseContext(), res.getString("IsAkses"));
 
                                     Intent intent = new Intent(LoginActivity.this, MainAgenActivity.class);
                                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                     startActivity(intent);
                                 }
                             }else {
-                                androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(LoginActivity.this);
-                                builder.setMessage("Username atau Password Anda salah!"+res)
-                                        .setNegativeButton("Retry", null).create().show();
+                                Dialog customDialog = new Dialog(LoginActivity.this);
+                                customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                                customDialog.setContentView(R.layout.custom_dialog_login);
+
+                                if (customDialog.getWindow() != null) {
+                                    customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                                }
+
+                                TextView dialogTitle = customDialog.findViewById(R.id.TVStatusLogin);
+                                TextView dialogKet = customDialog.findViewById(R.id.TVKeteranganLogin);
+                                Button cobalagi = customDialog.findViewById(R.id.BtnCobalagiLogin);
+                                ImageView image = customDialog.findViewById(R.id.IVStatusLogin);
+
+                                dialogTitle.setText("Login Gagal");
+                                dialogKet.setText("Username atau Password Salah");
+                                cobalagi.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        customDialog.dismiss();
+                                    }
+                                });
+
+                                Glide.with(LoginActivity.this)
+                                        .load(R.mipmap.ic_no)
+                                        .into(image);
+
+                                customDialog.show();
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
-                            androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(LoginActivity.this);
-                            builder.setMessage("Terdapat Kesalahan Jaringan" +e)
-                                    .setNegativeButton("Retry", null).create().show();
+                            Dialog customDialog = new Dialog(LoginActivity.this);
+                            customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                            customDialog.setContentView(R.layout.custom_dialog_login);
+
+                            if (customDialog.getWindow() != null) {
+                                customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                            }
+
+                            TextView dialogTitle = customDialog.findViewById(R.id.TVStatusLogin);
+                            TextView dialogKet = customDialog.findViewById(R.id.TVKeteranganLogin);
+                            Button cobalagi = customDialog.findViewById(R.id.BtnCobalagiLogin);
+                            ImageView image = customDialog.findViewById(R.id.IVStatusLogin);
+
+                            dialogTitle.setText("Login Gagal");
+                            dialogKet.setText("Username atau Password Salah");
+                            cobalagi.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    customDialog.dismiss();
+                                }
+                            });
+
+                            Glide.with(LoginActivity.this)
+                                    .load(R.mipmap.ic_no)
+                                    .into(image);
+
+                            customDialog.show();
                         }
                     }
                 },
@@ -126,9 +220,33 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         pDialog.cancel();
-                        androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(LoginActivity.this);
-                        builder.setMessage("Terdapat Kesalahan Jaringan")
-                                .setNegativeButton("Retry", null).create().show();
+                        Dialog customDialog = new Dialog(LoginActivity.this);
+                        customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                        customDialog.setContentView(R.layout.custom_dialog_login);
+
+                        if (customDialog.getWindow() != null) {
+                            customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                        }
+
+                        TextView dialogTitle = customDialog.findViewById(R.id.TVStatusLogin);
+                        TextView dialogKet = customDialog.findViewById(R.id.TVKeteranganLogin);
+                        Button cobalagi = customDialog.findViewById(R.id.BtnCobalagiLogin);
+                        ImageView image = customDialog.findViewById(R.id.IVStatusLogin);
+
+                        dialogTitle.setText("Login Gagal");
+                        dialogKet.setText("Terdapat Kesalahan Jaringan");
+                        cobalagi.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                customDialog.dismiss();
+                            }
+                        });
+
+                        Glide.with(LoginActivity.this)
+                                .load(R.mipmap.ic_eror_network_foreground)
+                                .into(image);
+
+                        customDialog.show();
                     }
                 }){
             @Override

@@ -21,8 +21,6 @@ import com.gooproper.util.Preferences;
 
 public class SettingActivity extends AppCompatActivity {
 
-    private String gifUrl = "your_gif_url_here";
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

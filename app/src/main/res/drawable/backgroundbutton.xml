@@ -5,6 +5,4 @@
     <solid android:color="@color/second"/>
     <corners android:radius="6dp"/>
 
-
-
 </shape>

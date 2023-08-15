@@ -1,8 +1,6 @@
 package com.gooproper.customer.fragment;
 
-import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -14,27 +12,30 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.gooproper.EditAkunActivity;
-import com.gooproper.LoginActivity;
 import com.gooproper.R;
 import com.gooproper.SettingActivity;
 import com.gooproper.TentangKamiActivity;
 import com.gooproper.ui.ListingFavoriteActivity;
 import com.gooproper.ui.ListingTerakhirDilihatActivity;
+import com.gooproper.ui.LoginConditionActivity;
+import com.gooproper.ui.registrasi.RegistrasiAgenActivity;
 import com.gooproper.util.Preferences;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class AkunFragment extends Fragment {
 
+    LinearLayout topbar,favorite,dilihat,daftar,pengaturan,hubungi,tentang,login;
+    CardView cardView1,cardView2;
+    TextView editakun,namaakun;
+    CircleImageView cvcustomer;
+    String imgurl;
+    String profile;
+    String id;
     String wa = "";
     String ig = "";
     String tt = "";
@@ -46,25 +47,32 @@ public class AkunFragment extends Fragment {
                              Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_akun, container, false);
 
-        LinearLayout topbar     = root.findViewById(R.id.lyttopbar);
-        LinearLayout favorite   = root.findViewById(R.id.lytfavorite);
-        LinearLayout dilihat    = root.findViewById(R.id.lytterakhirdilihat);
-        LinearLayout daftar     = root.findViewById(R.id.lytdaftaragent);
-        LinearLayout pengaturan = root.findViewById(R.id.lytpengaturan);
-        LinearLayout hubungi    = root.findViewById(R.id.lythubungikami);
-        LinearLayout tentang    = root.findViewById(R.id.lyttentangkami);
-        LinearLayout login      = root.findViewById(R.id.lytlogin);
-        CardView cardView1      = root.findViewById(R.id.cv1);
-        CardView cardView2      = root.findViewById(R.id.cv2);
-        TextView editakun       = root.findViewById(R.id.tveditakun);
-        TextView namaakun       = root.findViewById(R.id.tvnamaakun);
-        CircleImageView profile = root.findViewById(R.id.cvprofile);
-        String status = Preferences.getKeyStatus(getActivity());
-        if (status.isEmpty()){
-            login.setVisibility(View.VISIBLE);
-            topbar.setVisibility(View.GONE);
-            cardView1.setVisibility(View.GONE);
-            cardView2.setVisibility(View.GONE);
+        topbar     = root.findViewById(R.id.lyttopbar);
+        favorite   = root.findViewById(R.id.lytfavorite);
+        dilihat    = root.findViewById(R.id.lytterakhirdilihat);
+        daftar     = root.findViewById(R.id.lytdaftaragent);
+        pengaturan = root.findViewById(R.id.lytpengaturan);
+        hubungi    = root.findViewById(R.id.lythubungikami);
+        tentang    = root.findViewById(R.id.lyttentangkami);
+        login      = root.findViewById(R.id.lytlogin);
+        cardView1  = root.findViewById(R.id.cv1);
+        cardView2  = root.findViewById(R.id.cv2);
+        editakun   = root.findViewById(R.id.tveditakun);
+        namaakun   = root.findViewById(R.id.tvnamaakun);
+        cvcustomer = root.findViewById(R.id.cvprofile);
+
+        id      = Preferences.getKeyIdCustomer(getActivity());
+        profile = Preferences.getKeyPhoto(getActivity());
+
+        if (profile.isEmpty()){
+            imgurl = "https://testingadnro.000webhostapp.com/gambar/profile/user%20default.png";
+        } else {
+            imgurl = profile;
+        }
+
+        if (id.isEmpty()){
+            startActivity(new Intent(getActivity(), LoginConditionActivity.class));
+            getActivity().finish();
         }
 
         namaakun.setText(Preferences.getKeyUsername(getActivity()));
@@ -93,7 +101,7 @@ public class AkunFragment extends Fragment {
         daftar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                startActivity(new Intent(getActivity(), RegistrasiAgenActivity.class));
             }
         });
 
@@ -133,13 +141,13 @@ public class AkunFragment extends Fragment {
         TextView dialogTitle = customDialog.findViewById(R.id.dialog_title);
         dialogTitle.setText("Hubungi Kami");
 
-        LinearLayout wa = customDialog.findViewById(R.id.lytwa);
-        LinearLayout ig = customDialog.findViewById(R.id.lytig);
-        LinearLayout tt = customDialog.findViewById(R.id.lyttiktok);
-        LinearLayout yt = customDialog.findViewById(R.id.lytyt);
-        LinearLayout em = customDialog.findViewById(R.id.lytemail);
+        LinearLayout lytwa = customDialog.findViewById(R.id.lytwa);
+        LinearLayout lytig = customDialog.findViewById(R.id.lytig);
+        LinearLayout lyttt = customDialog.findViewById(R.id.lyttiktok);
+        LinearLayout lytyt = customDialog.findViewById(R.id.lytyt);
+        LinearLayout lytem = customDialog.findViewById(R.id.lytemail);
 
-        wa.setOnClickListener(new View.OnClickListener() {
+        lytwa.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String url = "https://api.whatsapp.com/send?phone="+wa;
@@ -149,7 +157,7 @@ public class AkunFragment extends Fragment {
             }
         });
 
-        ig.setOnClickListener(new View.OnClickListener() {
+        lytig.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String url = "http://instagram.com/_u/"+ig;
@@ -159,7 +167,7 @@ public class AkunFragment extends Fragment {
             }
         });
 
-        tt.setOnClickListener(new View.OnClickListener() {
+        lyttt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String url = "http://instagram.com/_u/"+tt;
@@ -169,7 +177,7 @@ public class AkunFragment extends Fragment {
             }
         });
 
-        yt.setOnClickListener(new View.OnClickListener() {
+        lytyt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String url = "http://instagram.com/_u/"+yt;
@@ -179,7 +187,7 @@ public class AkunFragment extends Fragment {
             }
         });
 
-        em.setOnClickListener(new View.OnClickListener() {
+        lytem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String url = "http://instagram.com/_u/"+em;

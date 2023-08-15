@@ -28,8 +28,14 @@ public class MainCustomerActivity extends AppCompatActivity {
         navigationView.setItemIconTintList(colorStateList);
         navigationView.setItemTextColor(colorStateList);
 
+
+
         if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
         }
+    }
+
+    public void onBackPressed() {
+        finishAffinity();
     }
 }

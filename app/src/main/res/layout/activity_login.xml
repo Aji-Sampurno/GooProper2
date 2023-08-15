@@ -5,9 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingLeft="30dp"
-    android:paddingRight="30dp"
-    android:paddingTop="80dp"
+    android:paddingTop="50dp"
     android:background="@color/main"
     tools:context=".LoginActivity">
 
@@ -17,81 +15,89 @@
         android:layout_width="match_parent"
         android:layout_height="200dp"/>
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/lytusername"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+    <LinearLayout
+        android:id="@+id/lytlogin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
-        android:layout_below="@id/logo">
-        <EditText
-            android:id="@+id/etusername"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textPersonName"
-            android:hint="Username" />
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/lytpassword"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/lytusername"
-        app:passwordToggleEnabled="true">
-        <EditText
-            android:id="@+id/etpassword"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textPassword"
-            android:hint="Password" />
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <ProgressBar
-        android:id="@+id/loading"
-        android:layout_marginTop="30dp"
-        android:visibility="gone"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/lytpassword"/>
-
-    <Button
-        android:id="@+id/btnlogin"
-        android:layout_width="match_parent"
-        android:layout_height="55dp"
-        android:backgroundTint="@color/second"
-        android:layout_marginTop="20dp"
-        android:layout_below="@id/loading"
-        android:textColor="@color/main"
-        android:text="Login"/>
-
-    <TextView
-        android:id="@+id/tvregis"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/btnlogin"
-        android:layout_marginTop="20dp"
-        android:gravity="center"
-        android:textColor="@color/second"
-        android:text="Belum Mempunyai Akun ? Daftar"/>
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@id/btnregisagent"
-        android:layout_marginBottom="20dp"
-        android:gravity="center"
-        android:textColor="@color/second"
-        android:text="Anda tertarik menjadi agent properti GooProper"/>
-
-    <Button
-        android:id="@+id/btnregisagent"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:backgroundTint="@color/second"
-        android:text="Daftar Sekarang"
-        android:textColor="@color/main"
+        android:orientation="vertical"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="20dp"/>
+        android:background="@drawable/background_login"
+        android:paddingStart="30dp"
+        android:paddingEnd="40dp"
+        android:gravity="center"
+        android:layout_marginEnd="30dp"
+        android:layout_marginBottom="50dp"
+        android:layout_below="@id/logo">
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/lytusername"
+            style="@style/CustomOutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <EditText
+                android:id="@+id/etusername"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPersonName"
+                android:textColor="@color/black"
+                android:hint="Username" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/lytpassword"
+            style="@style/CustomOutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            app:passwordToggleEnabled="true"
+            app:passwordToggleTint="@color/black">
+            <EditText
+                android:id="@+id/etpassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:inputType="textPassword"
+                android:hint="Password" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <Button
+            android:id="@+id/btnlogin"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:backgroundTint="@color/main"
+            android:layout_marginTop="20dp"
+            android:textColor="@color/white"
+            android:text="Login"/>
+
+        <TextView
+            android:id="@+id/tvregis"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/btnlogin"
+            android:layout_marginTop="10dp"
+            android:gravity="center"
+            android:textColor="@color/black"
+            android:text="Belum Mempunyai Akun ? Daftar"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/btnregisagent"
+            android:layout_marginTop="30dp"
+            android:gravity="center"
+            android:textColor="@color/black"
+            android:text="Anda tertarik menjadi agent properti GooProper"/>
+
+        <Button
+            android:id="@+id/btnregisagent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/main"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:text="Daftar Sekarang"
+            android:textColor="@color/white"/>
+
+    </LinearLayout>
 
 </RelativeLayout>

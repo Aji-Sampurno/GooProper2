@@ -1,5 +1,8 @@
 package com.gooproper.admin.fragment;
 
+import android.app.Dialog;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -7,60 +10,155 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
+import com.gooproper.EditAkunActivity;
 import com.gooproper.R;
+import com.gooproper.SettingActivity;
+import com.gooproper.TentangKamiActivity;
+import com.gooproper.ui.AgenActivity;
+import com.gooproper.ui.LamarActivity;
+import com.gooproper.ui.RewardActivity;
+import com.gooproper.ui.TambahListingActivity;
+import com.gooproper.util.Preferences;
+import com.squareup.picasso.Picasso;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link AkunAdminFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class AkunAdminFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    public AkunAdminFragment() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment AkunAdminFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static AkunAdminFragment newInstance(String param1, String param2) {
-        AkunAdminFragment fragment = new AkunAdminFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
+    private LinearLayout pelamar, agen, listing, pengaturan, hubungikami, tentangkami;
+    TextView nama, edit;
+    CircleImageView cvadmin;
+    View view;
+    String imgurl;
+    String profile;
+    String status;
+    String wa = "";
+    String ig = "";
+    String tt = "";
+    String yt = "";
+    String em = "";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_akun_admin, container, false);
+        View root = inflater.inflate(R.layout.fragment_akun_admin, container, false);
+
+        listing = root.findViewById(R.id.LytListingAdmin);
+        pelamar = root.findViewById(R.id.LytPelamarAdmin);
+        agen = root.findViewById(R.id.LytAgenAdmin);
+        pengaturan = root.findViewById(R.id.LytPengaturanAdmin);
+        hubungikami = root.findViewById(R.id.LytHubungiKamiAdmin);
+        tentangkami = root.findViewById(R.id.LytTentangKamiAdmin);
+        nama = root.findViewById(R.id.TVNamaAkunAdmin);
+        edit = root.findViewById(R.id.TVEditAkunAdmin);
+        cvadmin = root.findViewById(R.id.CIVAkunAdmin);
+        view = root.findViewById(R.id.V1);
+
+        nama.setText(Preferences.getKeyUsername(getActivity()));
+        edit.setOnClickListener(view -> startActivity(new Intent(getActivity(), EditAkunActivity.class)));
+
+        profile = Preferences.getKeyPhoto(getActivity());
+        status = Preferences.getKeyStatus(getActivity());
+
+        if (status.equals("1")){
+            listing.setVisibility(View.GONE);
+        } else {
+            listing.setVisibility(View.VISIBLE);
+        }
+
+        if (profile.isEmpty()) {
+            imgurl = "https://testingadnro.000webhostapp.com/gambar/profile/user%20default.png";
+        } else {
+            imgurl = profile;
+        }
+
+        edit.setOnClickListener(view -> startActivity(new Intent(getContext(), EditAkunActivity.class)));
+        listing.setOnClickListener(view -> startActivity(new Intent(getContext(), TambahListingActivity.class)));
+        pelamar.setOnClickListener(view -> startActivity(new Intent(getContext(), LamarActivity.class)));
+        agen.setOnClickListener(view -> startActivity(new Intent(getContext(), AgenActivity.class)));
+        pengaturan.setOnClickListener(view -> startActivity(new Intent(getContext(), SettingActivity.class)));
+        tentangkami.setOnClickListener(view -> startActivity(new Intent(getContext(), TentangKamiActivity.class)));
+        hubungikami.setOnClickListener(view -> showCustomAlertDialog(view));
+
+        Picasso.get()
+                .load(imgurl)
+                .into(cvadmin);
+
+        return root;
+    }
+
+    public void showCustomAlertDialog(View view) {
+        Dialog customDialog = new Dialog(getActivity());
+        customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        customDialog.setContentView(R.layout.custom_dialog);
+
+        if (customDialog.getWindow() != null) {
+            customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        }
+
+        TextView dialogTitle = customDialog.findViewById(R.id.dialog_title);
+        dialogTitle.setText("Hubungi Kami");
+
+        LinearLayout lytwa = customDialog.findViewById(R.id.lytwa);
+        LinearLayout lytig = customDialog.findViewById(R.id.lytig);
+        LinearLayout lyttt = customDialog.findViewById(R.id.lyttiktok);
+        LinearLayout lytyt = customDialog.findViewById(R.id.lytyt);
+        LinearLayout lytem = customDialog.findViewById(R.id.lytemail);
+
+        lytwa.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String url = "https://api.whatsapp.com/send?phone=" + wa;
+                Intent i = new Intent(Intent.ACTION_VIEW);
+                i.setData(Uri.parse(url));
+                startActivity(i);
+            }
+        });
+
+        lytig.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String url = "http://instagram.com/_u/" + ig;
+                Intent i = new Intent(Intent.ACTION_VIEW);
+                i.setData(Uri.parse(url));
+                startActivity(i);
+            }
+        });
+
+        lyttt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String url = "http://instagram.com/_u/" + tt;
+                Intent i = new Intent(Intent.ACTION_VIEW);
+                i.setData(Uri.parse(url));
+                startActivity(i);
+            }
+        });
+
+        lytyt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String url = "http://instagram.com/_u/" + yt;
+                Intent i = new Intent(Intent.ACTION_VIEW);
+                i.setData(Uri.parse(url));
+                startActivity(i);
+            }
+        });
+
+        lytem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String url = "http://instagram.com/_u/" + em;
+                Intent i = new Intent(Intent.ACTION_VIEW);
+                i.setData(Uri.parse(url));
+                startActivity(i);
+            }
+        });
+
+        customDialog.show();
     }
 }

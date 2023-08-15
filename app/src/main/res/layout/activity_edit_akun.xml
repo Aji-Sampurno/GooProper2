@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/main"
+    android:background="@color/white"
+    android:orientation="vertical"
     tools:context=".EditAkunActivity">
 
     <LinearLayout
-        android:id="@+id/lyt1"
+        android:id="@+id/LytTopEditAkun"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -17,7 +18,7 @@
         android:weightSum="7">
 
         <ImageView
-            android:id="@+id/ivback"
+            android:id="@+id/IVBackEditAkun"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="3"
@@ -37,7 +38,7 @@
             style="@style/TextAppearance.Material3.TitleMedium"/>
 
         <ImageView
-            android:id="@+id/ivsave"
+            android:id="@+id/IVSaveEditAkun"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="3"
@@ -50,126 +51,152 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="11dp"
-        android:layout_below="@id/lyt1">
+        android:layout_margin="11dp">
 
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/lytusername"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:id="@+id/TILUsernameEditAkun"
+                style="@style/CustomOutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp">
-                <EditText
-                    android:id="@+id/etusername"
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/ETUsernameEditAkun"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/black"
                     android:inputType="textPersonName"
                     android:hint="Username"/>
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/lytnamalengkap"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:id="@+id/TILNamaLengkapEditAkun"
+                style="@style/CustomOutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:layout_below="@id/lytusername">
-                <EditText
-                    android:id="@+id/etnamalengkap"
+                android:layout_marginTop="10dp">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/ETNamaLengkapEditAkun"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/black"
                     android:inputType="textPersonName"
                     android:hint="Nama Lengkap"/>
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/lyttelp"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:id="@+id/TILNamaEditAkun"
+                style="@style/CustomOutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:layout_below="@id/lytnamalengkap">
-                <LinearLayout
+                android:layout_marginTop="10dp">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/ETNamaEditAkun"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="+62"
-                        android:textSize="12sp"
-                        android:textColor="@color/white"/>
-                    <EditText
-                        android:id="@+id/ettelp"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:inputType="phone"
-                        android:hint="Telephone"/>
-
-                </LinearLayout>
+                    android:textColor="@color/black"
+                    android:inputType="textPersonName"
+                    android:hint="Nama Lengkap"/>
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/lytemail"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:id="@+id/TILNamaKantorEditAkun"
+                style="@style/CustomOutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:layout_below="@id/lyttelp">
-                <EditText
-                    android:id="@+id/etemail"
+                android:layout_marginTop="10dp">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/ETNamaKantorEditAkun"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:inputType="textPersonName"
+                    android:hint="Nama Kantor"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/TILNoTelpEditAkun"
+                style="@style/CustomOutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/ETNoTelpEditAkun"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:inputType="phone"
+                    android:hint="Telephone"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/TILEmailEditAkun"
+                style="@style/CustomOutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/ETEmailEditAkun"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
                     android:inputType="textEmailAddress"
                     android:hint="E-Mail"/>
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/lytpassword"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:id="@+id/TILAlamatDomisiliEditAkun"
+                style="@style/CustomOutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:layout_below="@id/lytemail"
-                app:passwordToggleEnabled="true">
-                <EditText
-                    android:id="@+id/etpassword"
+                android:layout_marginTop="10dp">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/ETAlamatDomisiliEditAkun"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="textPassword"
-                    android:hint="Password"/>
+                    android:textColor="@color/black"
+                    android:inputType="text"
+                    android:hint="Alamat Domisili"/>
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/lytrepassword"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:id="@+id/TILFacebookEditAkun"
+                style="@style/CustomOutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:layout_below="@id/lytpassword"
-                app:passwordToggleEnabled="true">
-                <EditText
-                    android:id="@+id/etrepassword"
+                android:layout_marginTop="10dp">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/ETFacebookEditAkun"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="textPassword"
-                    android:hint="Konfirmasi Password"/>
+                    android:textColor="@color/black"
+                    android:inputType="text"
+                    android:hint="Facebook"/>
             </com.google.android.material.textfield.TextInputLayout>
 
-            <ProgressBar
-                android:layout_width="35dp"
-                android:layout_height="35dp"
-                android:layout_gravity="center"
-                android:visibility="gone"
-                android:id="@+id/probar1"/>
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/TILInstagramEditAkun"
+                style="@style/CustomOutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/ETInstagramEditAkun"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:inputType="text"
+                    android:hint="Instagram"/>
+            </com.google.android.material.textfield.TextInputLayout>
 
-        </RelativeLayout>
+        </LinearLayout>
 
     </ScrollView>
 
-</RelativeLayout>
+</LinearLayout>

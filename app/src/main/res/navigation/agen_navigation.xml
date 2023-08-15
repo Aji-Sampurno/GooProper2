@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/agen_navigation"
+    app:startDestination="@id/homeAgen_nav">
+
+    <fragment
+        android:id="@+id/flowUpAgen_nav"
+        android:name="com.gooproper.agen.fragment.FlowUpAgenFragment"
+        tools:layout="@layout/fragment_flow_up_agen" />
+    <fragment
+        android:id="@+id/homeAgen_nav"
+        android:name="com.gooproper.agen.fragment.HomeAgenFragment"
+        tools:layout="@layout/fragment_home_agen" />
+
+    <fragment
+        android:id="@+id/akunAgen_nav"
+        android:name="com.gooproper.agen.fragment.AkunAgenFragment"
+        tools:layout="@layout/fragment_akun_agen" />
+</navigation>

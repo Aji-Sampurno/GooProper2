@@ -1,0 +1,58 @@
+<!-- res/layout/custom_dialog_layout.xml -->
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@android:color/transparent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@drawable/background_round"
+        android:backgroundTint="@color/white"
+        android:padding="16dp">
+
+        <ImageView
+            android:id="@+id/IVDialogEror"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:src="@mipmap/ic_eror_network_foreground"
+            android:layout_marginBottom="20dp"
+            android:layout_gravity="center"/>
+
+        <TextView
+            android:id="@+id/TVTitleEror"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Kesalahan Memuat Data"
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:paddingBottom="8dp" />
+
+        <TextView
+            android:id="@+id/TVSubtitleEror"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="Terdapat Kesalahan Jaringan Saat Memuat Data\n\nRefresh Halaman Untuk Memuat Ulang"
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            android:paddingBottom="8dp" />
+
+        <Button
+            android:id="@+id/BTNOkEror"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:layout_weight="1"
+            android:text="Ok"
+            android:backgroundTint="#43A047"/>
+
+    </LinearLayout>
+
+</RelativeLayout>

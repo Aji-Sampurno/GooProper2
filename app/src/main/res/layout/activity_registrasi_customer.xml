@@ -1,166 +1,160 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     android:padding="20dp"
-    android:background="@color/main"
-    tools:context=".RegistrasiCustomerActivity">
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="REGISTRASI"
-        android:textColor="@color/second"
-        android:textSize="20dp"
-        android:textAlignment="center"/>
+    tools:context=".ui.registrasi.RegistrasiCustomerActivity">
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="REGISTRASI"
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:textSize="20dp" />
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/lytusername"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                style="@style/CustomOutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="50dp">
+
                 <EditText
-                    android:id="@+id/etusername"
+                    android:id="@+id/ETUsernameRegistrasiCustomer"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:hint="Username"
                     android:inputType="textPersonName"
-                    android:hint="Username"/>
+                    android:textColor="@color/black" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/lytnamalengkap"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                style="@style/CustomOutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:layout_below="@id/lytusername">
+                android:layout_marginTop="10dp">
+
                 <EditText
-                    android:id="@+id/etnamalengkap"
+                    android:id="@+id/ETNamaLengkapRegistrasiCustomer"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:hint="Nama Lengkap"
                     android:inputType="textPersonName"
-                    android:hint="Nama Lengkap"/>
+                    android:textColor="@color/black" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <LinearLayout
-                android:id="@+id/lyttelp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
                 android:layout_marginTop="10dp"
-                android:layout_below="@id/lytnamalengkap">
+                android:orientation="horizontal">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:text="+62"
-                    android:textSize="15sp"
                     android:layout_marginEnd="10dp"
-                    android:textColor="@color/white"/>
+                    android:text="+62"
+                    android:textColor="@color/black"
+                    android:textSize="15sp" />
 
                 <com.google.android.material.textfield.TextInputLayout
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    style="@style/CustomOutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
+
                     <EditText
-                        android:id="@+id/ettelp"
+                        android:id="@+id/ETNoTelpRegistrasiCustomer"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:hint="Telephone"
                         android:inputType="phone"
-                        android:hint="Telephone"/>
+                        android:textColor="@color/black" />
                 </com.google.android.material.textfield.TextInputLayout>
 
             </LinearLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/lytemail"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                style="@style/CustomOutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:layout_below="@id/lyttelp">
+                android:layout_marginTop="10dp">
+
                 <EditText
-                    android:id="@+id/etemail"
+                    android:id="@+id/ETEmailRegistrasiCustomer"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:hint="E-Mail"
                     android:inputType="textEmailAddress"
-                    android:hint="E-Mail"/>
+                    android:textColor="@color/black" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/lytpassword"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                style="@style/CustomOutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:layout_below="@id/lytemail"
-                app:passwordToggleEnabled="true">
+                app:passwordToggleEnabled="true"
+                app:passwordToggleTint="@color/black">
+
                 <EditText
-                    android:id="@+id/etpassword"
+                    android:id="@+id/ETPasswordRegistrasiCustomer"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:hint="Password"
                     android:inputType="textPassword"
-                    android:hint="Password"/>
+                    android:textColor="@color/black" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/lytrepassword"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                style="@style/CustomOutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:layout_below="@id/lytpassword"
-                app:passwordToggleEnabled="true">
+                app:passwordToggleEnabled="true"
+                app:passwordToggleTint="@color/black">
+
                 <EditText
-                    android:id="@+id/etrepassword"
+                    android:id="@+id/ETRePasswordRegistrasiCustomer"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:hint="Konfirmasi Password"
                     android:inputType="textPassword"
-                    android:hint="Konfirmasi Password"/>
+                    android:textColor="@color/black" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <Button
-                android:id="@+id/btnregistrasi"
+                android:id="@+id/BtnSubmitRegistrasiCustomer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:backgroundTint="@color/second"
                 android:layout_marginTop="20dp"
+                android:backgroundTint="@color/second"
                 android:text="Daftar"
-                android:textColor="@color/main"
-                android:layout_below="@id/lytrepassword"/>
-
-            <ProgressBar
-                android:layout_width="35dp"
-                android:layout_height="35dp"
-                android:layout_gravity="center"
-                android:visibility="gone"
-                android:id="@+id/probar1"/>
+                android:textColor="@color/main" />
 
             <TextView
-                android:id="@+id/tvlogin"
+                android:id="@+id/TVLoginRegistrasiCustomer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Sudah punya akun? Login"
-                android:textColor="@color/second"
-                android:textSize="12dp"
-                android:layout_below="@id/btnregistrasi"
                 android:layout_marginTop="10dp"
-                android:textAlignment="center"/>
+                android:text="Sudah punya akun? Login"
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:textSize="12dp" />
 
-        </RelativeLayout>
+        </LinearLayout>
 
     </ScrollView>
 
