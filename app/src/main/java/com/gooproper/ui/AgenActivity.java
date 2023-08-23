@@ -83,28 +83,7 @@ public class AgenActivity extends AppCompatActivity {
                                 JSONObject data = response.getJSONObject(i);
                                 AgenModel md = new AgenModel();
                                 md.setIdAgen(data.getString("IdAgen"));
-                                md.setUsername(data.getString("Username"));
-                                md.setPassword(data.getString("Password"));
                                 md.setNama(data.getString("Nama"));
-                                md.setNoTelp(data.getString("NoTelp"));
-                                md.setEmail(data.getString("Email"));
-                                md.setTglLahir(data.getString("TglLahir"));
-                                md.setKotaKelahiran(data.getString("KotaKelahiran"));
-                                md.setPendidikan(data.getString("Pendidikan"));
-                                md.setNamaSekolah(data.getString("NamaSekolah"));
-                                md.setMasaKerja(data.getString("MasaKerja"));
-                                md.setJabatan(data.getString("Jabatan"));
-                                md.setStatus(data.getString("Status"));
-                                md.setAlamatDomisili(data.getString("AlamatDomisili"));
-                                md.setFacebook(data.getString("Facebook"));
-                                md.setInstagram(data.getString("Instagram"));
-                                md.setNoKtp(data.getString("NoKtp"));
-                                md.setImgKtp(data.getString("ImgKtp"));
-                                md.setImgTtd(data.getString("ImgTtd"));
-                                md.setNpwp(data.getString("Npwp"));
-                                md.setPhoto(data.getString("Photo"));
-                                md.setPoin(data.getString("Poin"));
-                                md.setIsAkses(data.getString("IsAkses"));
                                 mItems.add(md);
                                 progressDialog.dismiss();
                             } catch (JSONException e) {

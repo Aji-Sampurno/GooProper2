@@ -4,12 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/main"
     android:orientation="vertical"
-    android:background="@color/white"
     tools:context=".ui.DetailListingActivity">
 
     <ScrollView
-        android:id="@+id/svdetail"
+        android:id="@+id/SVDetailListing"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1">
@@ -17,26 +17,26 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="?attr/actionBarSize"
             android:orientation="vertical"
-            android:padding="5dp"
-            android:layout_marginBottom="?attr/actionBarSize">
+            android:padding="5dp">
 
             <androidx.viewpager.widget.ViewPager
-                android:id="@+id/viewpager"
+                android:id="@+id/VPDetailListing"
                 android:layout_width="match_parent"
                 android:layout_height="350dp"
-                android:overScrollMode="never"
-                android:clipToPadding="false"/>
+                android:clipToPadding="false"
+                android:overScrollMode="never" />
 
             <TextView
-                android:id="@+id/titleTxt"
+                android:id="@+id/TVNamaDetailListing"
+                style="@style/TextAppearance.AppCompat.Title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
                 android:layout_marginStart="5dp"
+                android:layout_marginTop="10dp"
                 android:text="Nama"
-                style="@style/TextAppearance.AppCompat.Title"
-                android:textColor="@color/black" />
+                android:textColor="@color/white" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -45,212 +45,201 @@
                 android:orientation="horizontal">
 
                 <ImageView
-                    android:id="@+id/imageView13"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_location"
                     android:layout_margin="5dp"
-                    app:tint="@color/black" />
+                    android:src="@drawable/ic_location"
+                    app:tint="@color/white" />
 
                 <TextView
-                    android:id="@+id/addressTxt"
+                    android:id="@+id/TVAlamatDetailListing"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:text="Addres"
-                    android:textColor="@color/black" />
+                    android:textColor="@color/white" />
 
             </LinearLayout>
 
             <TextView
-                android:id="@+id/priceTxt"
+                android:id="@+id/TVHargaDetailListing"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
                 android:layout_marginStart="5dp"
+                android:layout_marginTop="10dp"
                 android:text="Rp. 1.000.000"
-                android:textColor="?android:attr/colorActivatedHighlight"
+                android:textColor="@color/white"
                 android:textSize="24sp"
-                android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="@+id/agentTxt"
-                app:layout_constraintTop_toBottomOf="@+id/agentTxt" />
+                android:textStyle="bold" />
 
             <LinearLayout
-                android:id="@+id/layoutDetail1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:weightSum="3"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:weightSum="3">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
                     android:layout_margin="5dp"
                     android:layout_weight="1"
+                    android:background="@color/main"
                     android:elevation="3dp"
-                    android:background="@color/white">
+                    android:orientation="horizontal">
 
                     <ImageView
-                        android:id="@+id/bedPic"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
                         app:srcCompat="@drawable/ic_bed"
-                        android:layout_margin="5dp"
-                        app:tint="@color/black"/>
+                        app:tint="@color/white" />
 
                     <TextView
-                        android:id="@+id/bedTxt"
+                        android:id="@+id/TVBedDetailListing"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:textColor="@color/black"
-                        android:text="Bed" />
+                        android:text="Bed"
+                        android:textColor="@color/white" />
 
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
                     android:layout_margin="5dp"
                     android:layout_weight="1"
+                    android:background="@color/main"
                     android:elevation="3dp"
-                    android:background="@color/white">
+                    android:orientation="horizontal">
 
                     <ImageView
-                        android:id="@+id/bath_pic"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
                         app:srcCompat="@drawable/ic_bath"
-                        android:layout_margin="5dp"
-                        app:tint="@color/second"/>
+                        app:tint="@color/white" />
 
                     <TextView
-                        android:id="@+id/bathTxt"
+                        android:id="@+id/TVBathDetailListing"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:textColor="@color/black"
-                        android:text="bath" />
+                        android:text="bath"
+                        android:textColor="@color/white" />
 
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
                     android:layout_margin="5dp"
                     android:layout_weight="1"
+                    android:background="@color/main"
                     android:elevation="3dp"
-                    android:background="@color/white">
+                    android:orientation="horizontal">
 
                     <ImageView
-                        android:id="@+id/luasPic"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        app:srcCompat="@drawable/ic_luas"
                         android:layout_margin="5dp"
-                        app:tint="@color/second"/>
+                        app:srcCompat="@drawable/ic_luas"
+                        app:tint="@color/white" />
 
                     <TextView
-                        android:id="@+id/wideTxt"
+                        android:id="@+id/TVWideDetailListing"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:textColor="@color/black"
-                        android:text="Luas"/>
+                        android:text="Luas"
+                        android:textColor="@color/white" />
 
                 </LinearLayout>
 
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/layoutDetail2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:weightSum="3"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:weightSum="3">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
                     android:layout_margin="5dp"
                     android:layout_weight="1"
+                    android:background="@color/main"
                     android:elevation="3dp"
-                    android:background="@color/white">
+                    android:orientation="horizontal">
 
                     <ImageView
-                        android:id="@+id/lvlPic"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
                         app:srcCompat="@drawable/ic_lantai"
-                        android:layout_margin="5dp"
-                        app:tint="@color/second"/>
+                        app:tint="@color/white" />
 
                     <TextView
-                        android:id="@+id/levelTxt"
+                        android:id="@+id/TVLevelDetailListing"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:textColor="@color/black"
-                        android:text="Lantai"/>
+                        android:text="Lantai"
+                        android:textColor="@color/white" />
 
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
                     android:layout_margin="5dp"
                     android:layout_weight="1"
+                    android:background="@color/main"
                     android:elevation="3dp"
-                    android:background="@color/white">
+                    android:orientation="horizontal">
 
                     <ImageView
-                        android:id="@+id/listrikpic"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
                         app:srcCompat="@drawable/ic_listrik"
-                        android:layout_margin="5dp"
-                        app:tint="@color/second"/>
+                        app:tint="@color/white" />
 
                     <TextView
-                        android:id="@+id/electricTxt"
+                        android:id="@+id/TVListrikDetailListing"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:textColor="@color/black"
-                        android:text="Volt" />
+                        android:text="Volt"
+                        android:textColor="@color/white" />
 
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
                     android:layout_margin="5dp"
                     android:layout_weight="1"
+                    android:background="@color/main"
                     android:elevation="3dp"
-                    android:background="@color/white">
+                    android:orientation="horizontal">
 
                     <ImageView
-                        android:id="@+id/park_pic"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        app:srcCompat="@drawable/ic_garasi"
                         android:layout_margin="5dp"
-                        app:tint="@color/second"/>
+                        app:srcCompat="@drawable/ic_garasi"
+                        app:tint="@color/white" />
 
                     <TextView
-                        android:id="@+id/garageTxt"
+                        android:id="@+id/TVGasariDetailListing"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:textColor="@color/black"
-                        android:text="Garasi"/>
+                        android:text="Garasi"
+                        android:textColor="@color/white" />
 
                 </LinearLayout>
 
@@ -260,194 +249,203 @@
                 android:id="@+id/layoutDetail3"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:weightSum="3"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:weightSum="3">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
                     android:layout_margin="5dp"
                     android:layout_weight="1"
+                    android:background="@color/main"
                     android:elevation="3dp"
-                    android:background="@color/white">
+                    android:orientation="horizontal">
 
                     <ImageView
-                        android:id="@+id/carpotPic"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
                         app:srcCompat="@drawable/ic_carpot"
-                        android:layout_margin="5dp"
-                        app:tint="@color/second"/>
+                        app:tint="@color/white" />
 
                     <TextView
-                        android:id="@+id/carpotTxt"
+                        android:id="@+id/TVCarportDetailListing"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:textColor="@color/black"
-                        android:text="carpot"/>
+                        android:text="carpot"
+                        android:textColor="@color/white" />
 
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
                     android:layout_margin="5dp"
                     android:layout_weight="1"
+                    android:background="@color/main"
                     android:elevation="3dp"
-                    android:background="@color/white">
+                    android:orientation="horizontal">
 
                     <ImageView
-                        android:id="@+id/bedArtpic"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
                         app:srcCompat="@drawable/ic_bed_art"
-                        android:layout_margin="5dp"
-                        app:tint="@color/second"/>
+                        app:tint="@color/white" />
 
                     <TextView
-                        android:id="@+id/bedArtTxt"
+                        android:id="@+id/TVBedArtDetailListing"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:textColor="@color/black"
-                        android:text="Bed Art" />
+                        android:text="Bed Art"
+                        android:textColor="@color/white" />
 
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
                     android:layout_margin="5dp"
                     android:layout_weight="1"
+                    android:background="@color/main"
                     android:elevation="3dp"
-                    android:background="@color/white">
+                    android:orientation="horizontal">
 
                     <ImageView
-                        android:id="@+id/bathArtpic"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        app:srcCompat="@drawable/ic_bath_art"
                         android:layout_margin="5dp"
-                        app:tint="@color/second"/>
+                        app:srcCompat="@drawable/ic_bath_art"
+                        app:tint="@color/white" />
 
                     <TextView
-                        android:id="@+id/bathArtTxt"
+                        android:id="@+id/TVBathArtDetailListing"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:textColor="@color/black"
-                        android:text="bathArt"/>
+                        android:text="bathArt"
+                        android:textColor="@color/white" />
 
                 </LinearLayout>
 
             </LinearLayout>
 
             <TextView
-                android:id="@+id/descriptionTxt"
+                android:id="@+id/TVDeskripsiDetailListing"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
                 android:layout_marginTop="10dp"
-                android:textColor="@color/black"
-                android:text="Deskripsi" />
+                android:text="Deskripsi"
+                android:textColor="@color/white" />
 
             <TextView
-                android:id="@+id/sertifikatTxt"
+                android:id="@+id/TVSertifikatDetailListing"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
                 android:layout_marginTop="10dp"
                 android:text="Sertifikat"
-                android:textColor="@color/black"/>
+                android:textColor="@color/white" />
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/lyttambahagen"
+                android:id="@+id/LytTambahAgenDetailListing"
                 style="@style/CustomOutlinedBoxWhite"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:hint="Tambah Agen">
+
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/ettambahagen"
+                    android:id="@+id/ETTambahAgenDetailListing"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/black"
+                    android:focusable="false"
                     android:inputType="none"
-                    android:focusable="false"/>
+                    android:textColor="@color/white" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <Button
-                android:id="@+id/btnadmin"
+                android:id="@+id/BtnApproveAdminDetailListing"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Approve"
-                android:textColor="@color/main"
                 android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
                 android:layout_marginTop="10dp"
+                android:layout_marginRight="5dp"
                 android:layout_marginBottom="10dp"
-                android:visibility="gone"/>
+                android:text="Approve"
+                android:textColor="@color/black"
+                android:visibility="gone" />
 
             <Button
-                android:id="@+id/btnmanager"
+                android:id="@+id/BtnApproveManagerDetailListing"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Approve"
-                android:textColor="@color/main"
                 android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
                 android:layout_marginTop="10dp"
+                android:layout_marginRight="5dp"
                 android:layout_marginBottom="10dp"
-                android:visibility="gone"/>
+                android:text="Approve"
+                android:textColor="@color/black"
+                android:visibility="gone" />
 
         </LinearLayout>
 
     </ScrollView>
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/lytagen"
+        android:id="@+id/LytAgenDetailListing"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:elevation="4dp"
+        app:cardElevation="4dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:background="@color/second"
             android:orientation="horizontal"
-            android:background="@color/main"
-            android:weightSum="5"
             android:padding="20dp"
-            android:layout_gravity="bottom">
+            android:weightSum="8">
 
             <TextView
-                android:id="@+id/agentTxt"
+                android:id="@+id/TVNamaAgenDetailListing"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_weight="1"
-                android:textColor="@color/white"
-                android:text="Agent"/>
+                android:layout_weight="2"
+                android:text="Agent"
+                android:textColor="@color/black" />
 
             <ImageView
-                android:id="@+id/ivwa"
+                android:id="@+id/IVFlowUpAgenDetailListing"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="2"
+                android:src="@drawable/ic_flowup"
+                app:tint="@color/black" />
+
+            <ImageView
+                android:id="@+id/IVNoTelpAgenDetailListing"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_weight="2"
                 android:src="@drawable/ic_whatsapp"
-                app:tint="@color/second" />
+                app:tint="@color/black" />
 
             <ImageView
-                android:id="@+id/ivig"
+                android:id="@+id/IVInstagramAgenDetailListing"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_weight="2"
                 android:src="@drawable/ic_instagram"
-                app:tint="@color/second" />
+                app:tint="@color/black" />
 
         </LinearLayout>
 

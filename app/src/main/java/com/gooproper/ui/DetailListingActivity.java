@@ -11,6 +11,7 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -39,6 +40,7 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.gooproper.R;
 import com.gooproper.adapter.ViewPagerAdapter;
 import com.gooproper.model.ListingModel;
+import com.gooproper.ui.registrasi.RegistrasiAgenActivity;
 import com.gooproper.util.AgenManager;
 import com.gooproper.util.FormatCurrency;
 import com.gooproper.util.Preferences;
@@ -55,14 +57,16 @@ import java.util.Map;
 
 public class DetailListingActivity extends AppCompatActivity {
 
-    TextView titletop,titleTxt, addressTxt, bedTxt, bathTxt, descriptionTxt, levelTxt, garageTxt, priceTxt, electricTxt, wideTxt, carpotTxt, bedArtTxt, bathArtTxt, certifTxt;
+    TextView titletop, titleTxt, addressTxt, bedTxt, bathTxt, descriptionTxt, levelTxt, garageTxt, priceTxt, electricTxt, wideTxt, carpotTxt, bedArtTxt, bathArtTxt, certifTxt;
+    TextView TVNamaDetailListing, TVAlamatDetailListing, TVHargaDetailListing, TVBedDetailListing, TVNamaAgen;
+    ImageView IVFlowUp, IVWhatsapp, IVInstagram;
     Button admin, manager;
     TextInputEditText tambahagen;
     TextInputLayout lytambahagen;
     ScrollView scrollView;
     LinearLayout topbar;
     CardView agen;
-    String status,idpralisting,idagen,idlisting,agenid;
+    String status, idpralisting, idagen, idlisting, agenid;
     ProgressDialog pDialog;
     ListingModel lm;
     ViewPager viewPager;
@@ -78,33 +82,39 @@ public class DetailListingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail_listing);
 
-        tambahagen     = findViewById(R.id.ettambahagen);
-        titleTxt       = findViewById(R.id.titleTxt);
-        bedTxt         = findViewById(R.id.bedTxt);
-        bathTxt        = findViewById(R.id.bathTxt);
-        addressTxt     = findViewById(R.id.addressTxt);
-        levelTxt       = findViewById(R.id.levelTxt);
-        garageTxt      = findViewById(R.id.garageTxt);
-        electricTxt    = findViewById(R.id.electricTxt);
-        priceTxt       = findViewById(R.id.priceTxt);
-        wideTxt        = findViewById(R.id.wideTxt);
-        descriptionTxt = findViewById(R.id.descriptionTxt);
-        carpotTxt      = findViewById(R.id.carpotTxt);
-        bedArtTxt      = findViewById(R.id.bedArtTxt);
-        bathArtTxt     = findViewById(R.id.bathArtTxt);
-        certifTxt      = findViewById(R.id.sertifikatTxt);
-        viewPager      = findViewById(R.id.viewpager);
-        agen           = findViewById(R.id.lytagen);
-        lytambahagen   = findViewById(R.id.lyttambahagen);
-        admin          = findViewById(R.id.btnadmin);
-        manager        = findViewById(R.id.btnmanager);
-        scrollView     = findViewById(R.id.svdetail);
-        agenManager    = new AgenManager();
+        tambahagen = findViewById(R.id.ETTambahAgenDetailListing);
+        titleTxt = findViewById(R.id.TVNamaDetailListing);
+        bedTxt = findViewById(R.id.TVBedDetailListing);
+        bathTxt = findViewById(R.id.TVBathDetailListing);
+        addressTxt = findViewById(R.id.TVAlamatDetailListing);
+        levelTxt = findViewById(R.id.TVLevelDetailListing);
+        garageTxt = findViewById(R.id.TVGasariDetailListing);
+        electricTxt = findViewById(R.id.TVListrikDetailListing);
+        priceTxt = findViewById(R.id.TVHargaDetailListing);
+        wideTxt = findViewById(R.id.TVWideDetailListing);
+        descriptionTxt = findViewById(R.id.TVDeskripsiDetailListing);
+        carpotTxt = findViewById(R.id.TVCarportDetailListing);
+        bedArtTxt = findViewById(R.id.TVBedArtDetailListing);
+        bathArtTxt = findViewById(R.id.TVBathArtDetailListing);
+        certifTxt = findViewById(R.id.TVSertifikatDetailListing);
+        viewPager = findViewById(R.id.VPDetailListing);
+        agen = findViewById(R.id.LytAgenDetailListing);
+        lytambahagen = findViewById(R.id.LytTambahAgenDetailListing);
+        admin = findViewById(R.id.BtnApproveAdminDetailListing);
+        manager = findViewById(R.id.BtnApproveManagerDetailListing);
+        scrollView = findViewById(R.id.SVDetailListing);
+
+        TVNamaAgen = findViewById(R.id.TVNamaAgenDetailListing);
+        IVFlowUp = findViewById(R.id.IVFlowUpAgenDetailListing);
+        IVWhatsapp = findViewById(R.id.IVNoTelpAgenDetailListing);
+        IVInstagram = findViewById(R.id.IVInstagramAgenDetailListing);
+
+        agenManager = new AgenManager();
 
         FormatCurrency currency = new FormatCurrency();
 
         Intent data = getIntent();
-        final int update = data.getIntExtra("update",0);
+        final int update = data.getIntExtra("update", 0);
         String intentIdPraListing = data.getStringExtra("IdPraListing");
         String intentIdListing = data.getStringExtra("IdListing");
         String intentIdAgen = data.getStringExtra("IdAgen");
@@ -151,13 +161,16 @@ public class DetailListingActivity extends AppCompatActivity {
         String intentIsManager = data.getStringExtra("IsManager");
         String intentSold = data.getStringExtra("Sold");
         String intentView = data.getStringExtra("View");
+        String intentNama = data.getStringExtra("Nama");
+        String intentNoTelp = data.getStringExtra("NoTelp");
+        String intentInstagram = data.getStringExtra("Instagram");
 
-        adapter      = new ViewPagerAdapter(this,images);
-        pDialog      = new ProgressDialog(this);
-        status       = Preferences.getKeyStatus(this);
+        adapter = new ViewPagerAdapter(this, images);
+        pDialog = new ProgressDialog(this);
+        status = Preferences.getKeyStatus(this);
         idpralisting = intentIdPraListing;
-        idlisting    = intentIdListing;
-        idagen       = intentIdAgen;
+        idlisting = intentIdListing;
+        idagen = intentIdAgen;
 
         tambahagen.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -166,11 +179,50 @@ public class DetailListingActivity extends AppCompatActivity {
             }
         });
 
-        admin.setOnClickListener(v -> approveadmin());
+        admin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (lytambahagen.getVisibility() == View.VISIBLE){
+                    String input = tambahagen.getText().toString();
+                    if (input.isEmpty()){
+                        Dialog customDialog = new Dialog(DetailListingActivity.this);
+                        customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                        customDialog.setContentView(R.layout.custom_dialog_eror_input);
+
+                        if (customDialog.getWindow() != null) {
+                            customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                        }
+
+                        Button ok = customDialog.findViewById(R.id.BtnOkErorInput);
+                        TextView message = customDialog.findViewById(R.id.TVDialogErorInput);
+                        ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
+
+                        message.setText("Harap tambahkan agen terlebih dahulu");
+
+                        ok.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                customDialog.dismiss();
+                            }
+                        });
+
+                        Glide.with(DetailListingActivity.this)
+                                .load(R.drawable.alert) // You can also use a local resource like R.drawable.your_gif_resource
+                                .transition(DrawableTransitionOptions.withCrossFade())
+                                .into(gifImageView);
+
+                        customDialog.show();
+                    } else {
+                        approveadmin();
+                    }
+                } else {
+                    approveadmin();
+                }
+            }
+        });
         manager.setOnClickListener(v -> approvemanager());
 
-        if(update == 1)
-        {
+        if (update == 1) {
             titleTxt.setText(intentNamaListing);
             addressTxt.setText(intentAlamat);
             bedTxt.setText(intentBed);
@@ -183,8 +235,30 @@ public class DetailListingActivity extends AppCompatActivity {
             carpotTxt.setText(intentCarpot);
             descriptionTxt.setText(intentDeskripsi);
             priceTxt.setText(currency.formatRupiah(intentHarga));
+            TVNamaAgen.setText(intentNama);
 
-            if (intentIdAgen.equals("0")){
+            IVWhatsapp.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    String message = "Halo! Saya berminat dengan listingan anda yang beralamat di "+intentAlamat;
+                    String url = "https://api.whatsapp.com/send?phone=+62" + intentNoTelp + "&text=" + message;
+                    Intent i = new Intent(Intent.ACTION_VIEW);
+                    i.setData(Uri.parse(url));
+                    startActivity(i);
+                }
+            });
+
+            IVInstagram.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    String url = "http://instagram.com/_u/" + intentInstagram;
+                    Intent i = new Intent(Intent.ACTION_VIEW);
+                    i.setData(Uri.parse(url));
+                    startActivity(i);
+                }
+            });
+
+            if (intentIdAgen.equals("null")) {
                 agen.setVisibility(View.GONE);
                 lytambahagen.setVisibility(View.VISIBLE);
                 idagen = agenid;
@@ -194,8 +268,8 @@ public class DetailListingActivity extends AppCompatActivity {
                 idagen = intentIdAgen;
             }
 
-            if (status.equals("1")){
-                if (intentIsAdmin.equals("0")){
+            if (status.equals("1")) {
+                if (intentIsAdmin.equals("0")) {
                     admin.setVisibility(View.VISIBLE);
                     manager.setVisibility(View.GONE);
                 } else if (intentIsManager.equals("0")) {
@@ -206,7 +280,7 @@ public class DetailListingActivity extends AppCompatActivity {
                     manager.setVisibility(View.GONE);
                 }
             } else if (status.equals("2")) {
-                if (intentIsAdmin.equals("0")){
+                if (intentIsAdmin.equals("0")) {
                     admin.setVisibility(View.VISIBLE);
                     manager.setVisibility(View.GONE);
                 } else if (intentIsManager.equals("0")) {
@@ -224,47 +298,47 @@ public class DetailListingActivity extends AppCompatActivity {
                 manager.setVisibility(View.GONE);
             }
 
-            if (intentImg1.equals("0")){
+            if (intentImg1.equals("0")) {
             } else {
                 images.add(intentImg1);
             }
 
-            if (intentImg2.equals("0")){
+            if (intentImg2.equals("0")) {
             } else {
                 images.add(intentImg2);
             }
 
-            if (intentImg3.equals("0")){
+            if (intentImg3.equals("0")) {
             } else {
                 images.add(intentImg3);
             }
 
-            if (intentImg4.equals("0")){
+            if (intentImg4.equals("0")) {
             } else {
                 images.add(intentImg4);
             }
 
-            if (intentImg5.equals("0")){
+            if (intentImg5.equals("0")) {
             } else {
                 images.add(intentImg5);
             }
 
-            if (intentImg6.equals("0")){
+            if (intentImg6.equals("0")) {
             } else {
                 images.add(intentImg6);
             }
 
-            if (intentImg7.equals("0")){
+            if (intentImg7.equals("0")) {
             } else {
                 images.add(intentImg7);
             }
 
-            if (intentImg8.equals("0")){
+            if (intentImg8.equals("0")) {
             } else {
                 images.add(intentImg8);
             }
-            adapter = new ViewPagerAdapter(this,images);
-            viewPager.setPadding(0,0,0,0);
+            adapter = new ViewPagerAdapter(this, images);
+            viewPager.setPadding(0, 0, 0, 0);
             viewPager.setAdapter(adapter);
         }
 
@@ -336,7 +410,7 @@ public class DetailListingActivity extends AppCompatActivity {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
-    private void approveadmin(){
+    private void approveadmin() {
         pDialog.setMessage("Sedang Diproses...");
         pDialog.setCancelable(false);
         pDialog.show();
@@ -354,9 +428,9 @@ public class DetailListingActivity extends AppCompatActivity {
                 }
 
                 TextView dialogTitle = customDialog.findViewById(R.id.dialog_title);
-                Button ok            = customDialog.findViewById(R.id.btnya);
-                Button cobalagi      = customDialog.findViewById(R.id.btntidak);
-                ImageView gifimage   = customDialog.findViewById(R.id.ivdialog);
+                Button ok = customDialog.findViewById(R.id.btnya);
+                Button cobalagi = customDialog.findViewById(R.id.btntidak);
+                ImageView gifimage = customDialog.findViewById(R.id.ivdialog);
 
                 dialogTitle.setText("Berhasil Approve Listing");
                 cobalagi.setVisibility(View.GONE);
@@ -378,7 +452,8 @@ public class DetailListingActivity extends AppCompatActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                pDialog.cancel();Dialog customDialog = new Dialog(DetailListingActivity.this);
+                pDialog.cancel();
+                Dialog customDialog = new Dialog(DetailListingActivity.this);
                 customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                 customDialog.setContentView(R.layout.custom_dialog_sukses);
 
@@ -387,9 +462,9 @@ public class DetailListingActivity extends AppCompatActivity {
                 }
 
                 TextView dialogTitle = customDialog.findViewById(R.id.dialog_title);
-                Button ok            = customDialog.findViewById(R.id.btnya);
-                Button cobalagi      = customDialog.findViewById(R.id.btntidak);
-                ImageView gifimage   = customDialog.findViewById(R.id.ivdialog);
+                Button ok = customDialog.findViewById(R.id.btnya);
+                Button cobalagi = customDialog.findViewById(R.id.btntidak);
+                ImageView gifimage = customDialog.findViewById(R.id.ivdialog);
 
                 dialogTitle.setText("Gagal Approve Listing");
                 ok.setVisibility(View.GONE);
@@ -408,11 +483,11 @@ public class DetailListingActivity extends AppCompatActivity {
 
                 customDialog.show();
             }
-        }){
+        }) {
             @Nullable
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String,String> map = new HashMap<>();
+                Map<String, String> map = new HashMap<>();
                 System.out.println(map);
                 map.put("IdAgen", idagen);
                 map.put("IdPraListing", idpralisting);
@@ -424,7 +499,7 @@ public class DetailListingActivity extends AppCompatActivity {
         requestQueue.add(stringRequest);
     }
 
-    private void approvemanager(){
+    private void approvemanager() {
         pDialog.setMessage("Sedang Diproses...");
         pDialog.setCancelable(false);
         pDialog.show();
@@ -442,9 +517,9 @@ public class DetailListingActivity extends AppCompatActivity {
                 }
 
                 TextView dialogTitle = customDialog.findViewById(R.id.dialog_title);
-                Button ok            = customDialog.findViewById(R.id.btnya);
-                Button cobalagi      = customDialog.findViewById(R.id.btntidak);
-                ImageView gifimage   = customDialog.findViewById(R.id.ivdialog);
+                Button ok = customDialog.findViewById(R.id.btnya);
+                Button cobalagi = customDialog.findViewById(R.id.btntidak);
+                ImageView gifimage = customDialog.findViewById(R.id.ivdialog);
 
                 dialogTitle.setText("Berhasil Approve Listing");
                 cobalagi.setVisibility(View.GONE);
@@ -466,7 +541,8 @@ public class DetailListingActivity extends AppCompatActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                pDialog.cancel();Dialog customDialog = new Dialog(DetailListingActivity.this);
+                pDialog.cancel();
+                Dialog customDialog = new Dialog(DetailListingActivity.this);
                 customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                 customDialog.setContentView(R.layout.custom_dialog_sukses);
 
@@ -475,9 +551,9 @@ public class DetailListingActivity extends AppCompatActivity {
                 }
 
                 TextView dialogTitle = customDialog.findViewById(R.id.dialog_title);
-                Button ok            = customDialog.findViewById(R.id.btnya);
-                Button cobalagi      = customDialog.findViewById(R.id.btntidak);
-                ImageView gifimage   = customDialog.findViewById(R.id.ivdialog);
+                Button ok = customDialog.findViewById(R.id.btnya);
+                Button cobalagi = customDialog.findViewById(R.id.btntidak);
+                ImageView gifimage = customDialog.findViewById(R.id.ivdialog);
 
                 dialogTitle.setText("Gagal Approve Listing");
                 ok.setVisibility(View.GONE);
@@ -496,11 +572,11 @@ public class DetailListingActivity extends AppCompatActivity {
 
                 customDialog.show();
             }
-        }){
+        }) {
             @Nullable
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String,String> map = new HashMap<>();
+                Map<String, String> map = new HashMap<>();
                 System.out.println(map);
                 map.put("IdPraListing", idpralisting);
                 return map;
@@ -525,7 +601,7 @@ public class DetailListingActivity extends AppCompatActivity {
     }
 
     private void showAlertDialog(List<AgenManager.DataItem> dataList) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.CustomAlertDialogStyle);
         builder.setTitle("Daftar Agen");
 
         final String[] dataItems = new String[dataList.size()];

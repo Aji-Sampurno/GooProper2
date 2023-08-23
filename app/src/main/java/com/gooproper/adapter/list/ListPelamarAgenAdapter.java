@@ -14,12 +14,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.gooproper.R;
 import com.gooproper.model.AgenModel;
-import com.gooproper.ui.DetailListingActivity;
+import com.gooproper.ui.DetailAgenActivity;
 
 import java.util.List;
 
 public class ListPelamarAgenAdapter extends RecyclerView.Adapter<ListPelamarAgenAdapter.HolderData> {
-    private List<AgenModel> agenModels;
+    private List<AgenModel> models;
     private Context context;
     private static final int MAX_TEXT_LENGTH = 20;
 
@@ -32,13 +32,13 @@ public class ListPelamarAgenAdapter extends RecyclerView.Adapter<ListPelamarAgen
     }
 
     public ListPelamarAgenAdapter(Context context, List<AgenModel> list){
-        this.agenModels = list;
+        this.models = list;
         this.context = context;
     }
 
     @NonNull
     @Override
-    public HolderData onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public ListPelamarAgenAdapter.HolderData onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View layout = LayoutInflater.from(parent.getContext()).inflate(R.layout.viewholder_list_pelamar_agen,parent,false);
         HolderData holderData = new HolderData(layout);
         return holderData;
@@ -46,18 +46,19 @@ public class ListPelamarAgenAdapter extends RecyclerView.Adapter<ListPelamarAgen
 
     @Override
     public void onBindViewHolder(@NonNull HolderData holder, int position) {
-        AgenModel agenModel = agenModels.get(position);
+        AgenModel agenModel = models.get(position);
         holder.NamaPelamarAgen.setText(agenModel.getNama());
         holder.AlamatPelamarAgen.setText(agenModel.getAlamatDomisili());
         holder.PendidikanPelamarAgen.setText(agenModel.getPendidikan());
         holder.PengalamanPelamarAgen.setText(agenModel.getJabatan()+" ( "+agenModel.getMasaKerja()+"Tahun )");
         holder.TelpPelamarAgen.setText(agenModel.getNoTelp());
-        Glide.with(context).load(agenModels.get(position).getPhoto()).into(holder.GambarPelamarAgen);
+        Glide.with(context).load(models.get(position).getPhoto()).into(holder.GambarPelamarAgen);
+        holder.agenModel = agenModel;
     }
 
     @Override
     public int getItemCount() {
-        return agenModels.size();
+        return models.size();
     }
 
     class HolderData extends RecyclerView.ViewHolder{
@@ -76,7 +77,7 @@ public class ListPelamarAgenAdapter extends RecyclerView.Adapter<ListPelamarAgen
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent update = new Intent(context, DetailListingActivity.class);
+                    Intent update = new Intent(context, DetailAgenActivity.class);
                     update.putExtra("update",1);update.putExtra("update",1);
                     update.putExtra("IdAgen",agenModel.getIdAgen());
                     update.putExtra("Username",agenModel.getUsername());

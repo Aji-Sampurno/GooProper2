@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="11dp"
+    android:layout_marginEnd="11dp"
+    android:orientation="vertical"
+    app:cardBackgroundColor="@android:color/transparent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:layout_editor_absoluteX="51dp"
+        tools:layout_editor_absoluteY="0dp">
+
+        <TextView
+            android:id="@+id/textView49"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_gravity="center"
+            android:background="#FFFFFF"
+            android:gravity="center"
+            android:text="Filter"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/textView50"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="16dp"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:text="Price"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:weightSum="2"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/editTextMaxPrice"
+                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="@drawable/input_bg_2"
+                android:drawablePadding="10dp"
+                android:ems="10"
+                android:hint="Max Price"
+                android:inputType="number"
+                android:paddingLeft="20dp"
+                android:paddingTop="10dp"
+                android:paddingRight="10dp"
+                android:paddingBottom="10dp"
+                android:textColor="#000000"
+                android:textColorHint="#899499"
+                android:textSize="14sp"
+                tools:hint="Max Price" />
+
+            <EditText
+                android:id="@+id/editTextMinPrice"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_weight="1"
+                android:layout_marginStart="8dp"
+                android:background="@drawable/input_bg_2"
+                android:drawablePadding="10dp"
+                android:ems="10"
+                android:hint="Min Price"
+                android:inputType="number"
+                android:paddingLeft="20dp"
+                android:paddingTop="10dp"
+                android:paddingRight="10dp"
+                android:paddingBottom="10dp"
+                android:textColor="#000000"
+                android:textColorHint="#899499"
+                android:textSize="14sp"
+                tools:hint="Min Price" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/textView48"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="16dp"
+            android:text="Specification"
+            android:textSize="20dp"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="16dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:weightSum="2"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/BedSearch"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_weight="1"
+                android:background="@drawable/input_bg_2"
+                android:gravity="center"
+                android:hint="Bed"
+                android:textColor="#000000"
+                android:textColorHint="#899499" />
+
+            <EditText
+                android:id="@+id/BathSearch"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_weight="1"
+                android:layout_marginStart="8dp"
+                android:background="@drawable/input_bg_2"
+                android:gravity="center"
+                android:hint="Bath"
+                android:textColor="#000000"
+                android:textColorHint="#899499" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:weightSum="2"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/LandWideSearch"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_weight="1"
+                android:background="@drawable/input_bg_2"
+                android:gravity="center"
+                android:hint="Land Area"
+                android:textColor="#000000"
+                android:textColorHint="#899499" />
+
+            <EditText
+                android:id="@+id/BuildingWideSearch"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_weight="1"
+                android:background="@drawable/input_bg_2"
+                android:gravity="center"
+                android:layout_marginStart="8dp"
+                android:hint="Building Area"
+                android:textColor="#000000"
+                android:textColorHint="#899499" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:weightSum="2"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/garageSearch"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_weight="1"
+                android:background="@drawable/input_bg_2"
+                android:gravity="center"
+                android:hint="Garage"
+                android:textColor="#000000"
+                android:textColorHint="#899499" />
+
+            <EditText
+                android:id="@+id/carpotSearch"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_weight="1"
+                android:background="@drawable/input_bg_2"
+                android:gravity="center"
+                android:layout_marginStart="8dp"
+                android:hint="Carpot"
+                android:textColor="#000000"
+                android:textColorHint="#899499" />
+        </LinearLayout>
+
+        <EditText
+            android:id="@+id/levelSearch"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/input_bg_2"
+            android:gravity="center"
+            android:hint="Level"
+            android:textColor="#000000"
+            android:textColorHint="#899499" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:weightSum="2"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp">
+
+            <EditText
+                android:id="@+id/textViewSpec"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:background="@drawable/input_bg_2"
+                android:clickable="true"
+                android:focusable="false"
+                android:gravity="center"
+                android:onClick="showSpecPopUp"
+                android:hint="Tipe Hunian"
+                android:textColor="#1167b1" />
+
+            <EditText
+                android:id="@+id/textViewPropertyType"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_weight="1"
+                android:layout_marginStart="8dp"
+                android:background="@drawable/input_bg_2"
+                android:clickable="true"
+                android:focusable="false"
+                android:gravity="center"
+                android:onClick="showPropertyTypePopup"
+                android:hint="Tipe Sertifikat"
+                android:textColor="#1167b1"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/addressProperty" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            android:weightSum="2"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btnClear"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:text="Clear Filter" />
+
+            <Button
+                android:id="@+id/btnApply"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:layout_marginStart="8dp"
+                android:layout_weight="1"
+                android:text="Apply" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

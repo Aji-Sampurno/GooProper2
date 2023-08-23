@@ -91,17 +91,13 @@ public class ListingSoldAdapter extends RecyclerView.Adapter<ListingSoldAdapter.
             levelTxt=view.findViewById(R.id.levelTxt);
             garageTxt=view.findViewById(R.id.garageTxt);
             pic=view.findViewById(R.id.pic);
-            bathArtTxt=view.findViewById(R.id.bathArtTxt);
-            bedArtTxt=view.findViewById(R.id.bedArtTxt);
-            carpotTxt=view.findViewById(R.id.carpotTxt);
-            wideTxt=view.findViewById(R.id.wideTxt);
 
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     Intent update = new Intent(context, DetailListingActivity.class);
                     update.putExtra("update",1);
-                    update.putExtra("IdPraListing",listingModel.getIdPraListing());
+                    update.putExtra("IdListing",listingModel.getIdListing());
                     update.putExtra("IdAgen",listingModel.getIdAgen());
                     update.putExtra("IdInput",listingModel.getIdInput());
                     update.putExtra("NamaListing",listingModel.getNamaListing());
@@ -144,6 +140,11 @@ public class ListingSoldAdapter extends RecyclerView.Adapter<ListingSoldAdapter.
                     update.putExtra("LinkYoutube",listingModel.getLinkYoutube());
                     update.putExtra("IsAdmin",listingModel.getIsAdmin());
                     update.putExtra("IsManager",listingModel.getIsManager());
+                    update.putExtra("View",listingModel.getView());
+                    update.putExtra("Sold",listingModel.getSold());
+                    update.putExtra("Nama",listingModel.getNama());
+                    update.putExtra("NoTelp",listingModel.getNoTelp());
+                    update.putExtra("Instagram",listingModel.getInstagram());
                     context.startActivity(update);
                 }
             });

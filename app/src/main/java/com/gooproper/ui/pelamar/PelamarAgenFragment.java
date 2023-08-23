@@ -46,14 +46,14 @@ public class PelamarAgenFragment extends Fragment {
                              Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_pelamar_agen, container, false);
 
+        PDPelamarAgen = new ProgressDialog(getActivity());
         recyclerView = root.findViewById(R.id.RVPelamarAgenList);
         refreshLayout = root.findViewById(R.id.SRLPelamarAgen);
 
-        PDPelamarAgen = new ProgressDialog(getActivity());
         list = new ArrayList<>();
-        adapter = new ListPelamarAgenAdapter(getActivity(), list);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
+        adapter = new ListPelamarAgenAdapter(getActivity(), list);
         recyclerView.setAdapter(adapter);
 
         LoadPelamarAgen(true);
@@ -105,9 +105,7 @@ public class PelamarAgenFragment extends Fragment {
                                 agenModel.setNoKtp(data.getString("NoKtp"));
                                 agenModel.setImgKtp(data.getString("ImgKtp"));
                                 agenModel.setImgTtd(data.getString("ImgTtd"));
-                                agenModel.setNpwp (data.getString("Npwp "));
                                 agenModel.setPhoto(data.getString("Photo"));
-                                agenModel.setPoin(data.getString("Poin "));
                                 agenModel.setIsAkses(data.getString("IsAkses"));
                                 list.add(agenModel);
                             } catch (JSONException e) {

@@ -1,11 +1,12 @@
 package com.gooproper.admin.fragment;
 
-import android.app.AlertDialog;
-import android.app.ProgressDialog;
-import android.content.DialogInterface;
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -21,6 +22,14 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.gooproper.R;
 import com.gooproper.adapter.ListingAdapter;
 import com.gooproper.adapter.ListingPopulerAdapter;
@@ -38,8 +47,11 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-public class HomeAdminFragment extends Fragment {
+public class HomeAdminFragment extends Fragment implements OnMapReadyCallback {
 
+    private static final int REQUEST_LOCATION_PERMISSION = 1;
+    private MapView mapView;
+    private GoogleMap googleMap;
     private TextView SeeAllNew, SeeAllPopular, SeeAllSold, SeeAllAgentOM;
     private RecyclerView recycleListingSold, recycleListingNew, recycleListingPopular, recycleAgent;
     private RecyclerView.Adapter adapterSold, adapterNew, adapterPopular, adapterAgentOM;
@@ -57,6 +69,9 @@ public class HomeAdminFragment extends Fragment {
         SeeAllSold = root.findViewById(R.id.SeeAllSold);
         SeeAllNew = root.findViewById(R.id.SeeAllNew);
         SeeAllPopular = root.findViewById(R.id.SeeAllPopular);
+        mapView = root.findViewById(R.id.MVHomeAdmin);
+        mapView.onCreate(savedInstanceState);
+        mapView.getMapAsync(this);
 
         SeeAllSold.setOnClickListener(view -> startActivity(new Intent(getContext(), SoldActivity.class)));
         SeeAllNew.setOnClickListener(view -> startActivity(new Intent(getContext(), NewActivity.class)));
@@ -137,6 +152,9 @@ public class HomeAdminFragment extends Fragment {
                                 md.setLinkYoutube(data.getString("LinkYoutube"));
                                 md.setView(data.getString("View"));
                                 md.setSold(data.getString("Sold"));
+                                md.setNama(data.getString("Nama"));
+                                md.setNoTelp(data.getString("NoTelp"));
+                                md.setInstagram(data.getString("Instagram"));
                                 mItems.add(md);
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -210,6 +228,9 @@ public class HomeAdminFragment extends Fragment {
                                 md.setLinkYoutube(data.getString("LinkYoutube"));
                                 md.setView(data.getString("View"));
                                 md.setSold(data.getString("Sold"));
+                                md.setNama(data.getString("Nama"));
+                                md.setNoTelp(data.getString("NoTelp"));
+                                md.setInstagram(data.getString("Instagram"));
                                 mItems.add(md);
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -283,6 +304,9 @@ public class HomeAdminFragment extends Fragment {
                                 md.setLinkYoutube(data.getString("LinkYoutube"));
                                 md.setView(data.getString("View"));
                                 md.setSold(data.getString("Sold"));
+                                md.setNama(data.getString("Nama"));
+                                md.setNoTelp(data.getString("NoTelp"));
+                                md.setInstagram(data.getString("Instagram"));
                                 mItems.add(md);
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -300,5 +324,66 @@ public class HomeAdminFragment extends Fragment {
                 });
 
         queue.add(reqData);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mapView.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        mapView.onPause();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mapView.onDestroy();
+    }
+
+    @Override
+    public void onLowMemory() {
+        super.onLowMemory();
+        mapView.onLowMemory();
+    }
+
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == REQUEST_LOCATION_PERMISSION) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Permission granted, enable My Location
+                if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    // TODO: Consider calling
+                    //    ActivityCompat#requestPermissions
+                    return;
+                }
+                googleMap.setMyLocationEnabled(true);
+            }
+        }
+    }
+
+    @Override
+    public void onMapReady(@NonNull GoogleMap map) {
+        googleMap = map;
+
+        if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            googleMap.setMyLocationEnabled(true);
+            googleMap.getUiSettings().setMyLocationButtonEnabled(true);
+
+            FusedLocationProviderClient fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(requireContext());
+            fusedLocationProviderClient.getLastLocation()
+                    .addOnSuccessListener(location -> {
+                        if (location != null) {
+                            LatLng currentLocation = new LatLng(location.getLatitude(), location.getLongitude());
+                            googleMap.addMarker(new MarkerOptions()
+                                    .position(currentLocation)
+                                    .title("Your Location"));
+                            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 15f));
+                        }
+                    });
+        }
     }
 }

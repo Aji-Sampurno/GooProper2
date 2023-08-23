@@ -1,12 +1,12 @@
 package com.gooproper.model;
 
 public class ListingModel {
-    String IdPraListing, IdListing, IdAgen, IdInput, IdVendor, NamaListing, Alamat, Location, Wide, Level, Bed, Bath, BedArt, BathArt, Garage, Carpot, NoCertificate, Pbb, JenisProperti, JenisCertificate, SumberAir, Kondisi, Deskripsi, Prabot, KetPrabot, Priority, Ttd, Banner, Harga, TglInput, Img1, Img2, Img3, Img4, Img5, Img6, Img7, Img8, Video, LinkFacebook, LinkTiktok, LinkInstagram, LinkYoutube, IsAdmin, IsManager, View, Sold;
+    String IdPraListing, IdListing, IdAgen, IdInput, IdVendor, NamaListing, Alamat, Location, Wide, Level, Bed, Bath, BedArt, BathArt, Garage, Carpot, NoCertificate, Pbb, JenisProperti, JenisCertificate, SumberAir, Kondisi, Deskripsi, Prabot, KetPrabot, Priority, Ttd, Banner, Harga, TglInput, Img1, Img2, Img3, Img4, Img5, Img6, Img7, Img8, Video, LinkFacebook, LinkTiktok, LinkInstagram, LinkYoutube, IsAdmin, IsManager, View, Sold, Nama, NoTelp, Instagram, Latitude, Longitude;
 
     public ListingModel() {
     }
 
-    public ListingModel(String IdPraListing, String IdListing, String IdAgen, String IdInput, String IdVendor, String NamaListing, String Alamat, String Location, String Wide, String Level, String Bed, String Bath, String BedArt, String BathArt, String Garage, String Carpot, String NoCertificate, String Pbb, String JenisProperti, String JenisCertificate, String SumberAir, String Kondisi, String Deskripsi, String Prabot, String KetPrabot, String Priority, String Ttd, String Banner, String Harga, String TglInput, String Img1, String Img2, String Img3, String Img4, String Img5, String Img6, String Img7, String Img8, String Video, String LinkFacebook, String LinkTiktok, String LinkInstagram, String LinkYoutube, String IsAdmin, String IsManager, String View, String Sold) {
+    public ListingModel(String IdPraListing, String IdListing, String IdAgen, String IdInput, String IdVendor, String NamaListing, String Alamat, String Location, String Wide, String Level, String Bed, String Bath, String BedArt, String BathArt, String Garage, String Carpot, String NoCertificate, String Pbb, String JenisProperti, String JenisCertificate, String SumberAir, String Kondisi, String Deskripsi, String Prabot, String KetPrabot, String Priority, String Ttd, String Banner, String Harga, String TglInput, String Img1, String Img2, String Img3, String Img4, String Img5, String Img6, String Img7, String Img8, String Video, String LinkFacebook, String LinkTiktok, String LinkInstagram, String LinkYoutube, String IsAdmin, String IsManager, String View, String Sold, String Nama, String NoTelp, String Instagram, String Latitude, String Longitude) {
         this.IdPraListing = IdPraListing;
         this.IdListing = IdListing;
         this.IdAgen = IdAgen;
@@ -54,6 +54,11 @@ public class ListingModel {
         this.IsManager = IsManager;
         this.View = View;
         this.Sold = Sold;
+        this.Nama = Nama;
+        this.NoTelp = NoTelp;
+        this.Instagram = Instagram;
+        this.Latitude = Latitude;
+        this.Longitude = Longitude;
     }
 
     public String getIdPraListing() {
@@ -430,5 +435,45 @@ public class ListingModel {
 
     public void setSold(String sold) {
         Sold = sold;
+    }
+
+    public String getNama() {
+        return Nama;
+    }
+
+    public void setNama(String nama) {
+        Nama = nama;
+    }
+
+    public String getNoTelp() {
+        return NoTelp;
+    }
+
+    public void setNoTelp(String noTelp) {
+        NoTelp = noTelp;
+    }
+
+    public String getInstagram() {
+        return Instagram;
+    }
+
+    public void setInstagram(String instagram) {
+        Instagram = instagram;
+    }
+
+    public String getLatitude() {
+        return Latitude;
+    }
+
+    public void setLatitude(String latitude) {
+        Latitude = latitude;
+    }
+
+    public String getLongitude() {
+        return Longitude;
+    }
+
+    public void setLongitude(String longitude) {
+        Longitude = longitude;
     }
 }

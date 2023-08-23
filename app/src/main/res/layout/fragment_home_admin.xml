@@ -1,28 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_marginBottom="?attr/actionBarSize"
     android:background="@color/main"
     android:orientation="vertical"
-    android:layout_marginBottom="?attr/actionBarSize"
     tools:context=".admin.fragment.HomeAdminFragment">
 
     <LinearLayout
         android:id="@+id/lyt1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@drawable/top_bar"
         android:orientation="horizontal"
         android:padding="10dp"
-        android:background="@drawable/top_bar"
         android:weightSum="7">
 
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="3"
             android:layout_gravity="center"
+            android:layout_weight="3"
             android:adjustViewBounds="true"
             android:src="@mipmap/ic_icon_foreground"
             app:tint="@color/second" />
@@ -30,16 +30,16 @@
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:layout_gravity="center"
+            android:layout_weight="1"
             app:tint="@color/second" />
 
         <ImageView
             android:id="@+id/ivnotif"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="3"
             android:layout_gravity="center"
+            android:layout_weight="3"
             android:adjustViewBounds="true"
             android:padding="15dp"
             android:src="@drawable/ic_notification"
@@ -54,13 +54,20 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
             android:layout_marginTop="10dp"
+            android:orientation="vertical"
             android:padding="11dp">
+
+            <com.google.android.gms.maps.MapView
+                android:id="@+id/MVHomeAdmin"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                app:liteMode="false"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
                 android:orientation="horizontal"
                 android:weightSum="2">
 
@@ -71,16 +78,16 @@
                     android:layout_weight="1"
                     android:text="Listing Terjual"
                     android:textColor="@color/white"
-                    android:textStyle="bold"/>
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/SeeAllSold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:textAlignment="textEnd"
                     android:text="See All"
-                    android:textColor="@color/white"/>
+                    android:textAlignment="textEnd"
+                    android:textColor="@color/white" />
 
             </LinearLayout>
 
@@ -93,8 +100,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
                 android:layout_marginTop="20dp"
+                android:orientation="horizontal"
                 android:weightSum="2">
 
                 <TextView
@@ -104,16 +111,16 @@
                     android:layout_weight="1"
                     android:text="Agent Of The Month"
                     android:textColor="@color/white"
-                    android:textStyle="bold"/>
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/SeeAllAgentOM"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:textAlignment="textEnd"
                     android:text="See All"
-                    android:textColor="@color/white"/>
+                    android:textAlignment="textEnd"
+                    android:textColor="@color/white" />
 
             </LinearLayout>
 
@@ -121,7 +128,7 @@
                 android:id="@+id/ListingAgentOM"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="10dp"/>
+                android:layout_marginTop="10dp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -137,16 +144,16 @@
                     android:layout_weight="1"
                     android:text="Listing Terpopuler"
                     android:textColor="@color/white"
-                    android:textStyle="bold"/>
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/SeeAllPopular"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:textAlignment="textEnd"
                     android:text="See All"
-                    android:textColor="@color/white"/>
+                    android:textAlignment="textEnd"
+                    android:textColor="@color/white" />
 
             </LinearLayout>
 
@@ -154,7 +161,7 @@
                 android:id="@+id/ListingPopular"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"/>
+                android:layout_marginTop="10dp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -170,16 +177,16 @@
                     android:layout_weight="1"
                     android:text="Listing Terbaru"
                     android:textColor="@color/white"
-                    android:textStyle="bold"/>
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/SeeAllNew"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:textAlignment="textEnd"
                     android:text="see All"
-                    android:textColor="@color/white"/>
+                    android:textAlignment="textEnd"
+                    android:textColor="@color/white" />
 
             </LinearLayout>
 
@@ -187,7 +194,7 @@
                 android:id="@+id/ListingNew"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="10dp"/>
+                android:layout_marginTop="10dp" />
 
         </LinearLayout>
     </ScrollView>

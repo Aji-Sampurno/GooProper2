@@ -14,7 +14,8 @@ public class ServerApi {
     public static final String URL_UPDATE_KL              = BASE_URL + "/Api/UpdateKl";
     public static final String URL_UPDATE_ADMIN           = BASE_URL + "/Api/UpdateAdmin";
     public static final String URL_TAMBAH_PRALISTING      = BASE_URL + "/Api/PraListing";
-    public static final String URL_GET_PRALISTING         = BASE_URL + "/Api/GetPraListing";
+    public static final String URL_GET_PRALISTING_ADMIN   = BASE_URL + "/Api/GetPraListingAdmin";
+    public static final String URL_GET_PRALISTING_MANAGER = BASE_URL + "/Api/GetPraListingManager";
     public static final String URL_GET_LISTING            = BASE_URL + "/Api/GetListing";
     public static final String URL_GET_LISTING_AGEN       = BASE_URL + "/Api/GetListingAgen?IdAgen=";
     public static final String URL_GET_LISTING_SOLD       = BASE_URL + "/Api/GetListingSold";
@@ -23,7 +24,6 @@ public class ServerApi {
     public static final String URL_APPROVE_ADMIN          = BASE_URL + "/Api/ApproveAdmin";
     public static final String URL_APPROVE_MANAGER        = BASE_URL + "/Api/ApproveManager";
     public static final String URL_GET_AGEN               = BASE_URL + "/Api/GetAgen";
-    public static final String URL_GET_AGEN_NEW           = BASE_URL + "/Api/GetAgenNew";
     public static final String URL_CLOSING                = BASE_URL + "/Api/Closing";
     public static final String URL_GET_PELAMAR_AGEN       = BASE_URL + "/Api/GetPelamarAgen";
     public static final String URL_GET_PELAMAR_MITRA      = BASE_URL + "/Api/GetPelamarMitra";

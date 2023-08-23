@@ -59,6 +59,7 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
@@ -81,11 +82,25 @@ public class TambahListingActivity extends AppCompatActivity {
     SignaturePad signaturePad;
     String idagen, idnull, sstatus, priority, namalisting, isAdmin, idadmin, idinput;
     String image1, image2, image3, image4, image5, image6, image7, image8, ttd;
+    String latitudeStr, longitudeStr;
+    private static final int MAPS_ACTIVITY_REQUEST_CODE = 3;
+    private TextInputEditText longitudeTxt, latitudeTxt, addressTxt;
+    private Button maps;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tambah_listing);
+
+        longitudeTxt    = findViewById(R.id.etaLongitudeTxt);
+        latitudeTxt     = findViewById(R.id.etaLatitudeTxt);
+        addressTxt      = findViewById(R.id.etAddress);
+
+        latitudeTxt.setVisibility(View.INVISIBLE);
+        longitudeTxt.setVisibility(View.INVISIBLE);
+
+        maps = findViewById(R.id.map);
+        maps.setOnClickListener(view -> startActivity(new Intent(TambahListingActivity.this,LocationActivity.class)));
 
         pDialog = new ProgressDialog(TambahListingActivity.this);
 
@@ -247,6 +262,11 @@ public class TambahListingActivity extends AppCompatActivity {
         }
     }
 
+    public void startMapsActivityForResult() {
+        Intent intent = new Intent(this, LocationActivity.class);
+        startActivityForResult(intent, MAPS_ACTIVITY_REQUEST_CODE);
+    }
+
     private void showPhotoSelectionDialog() {
         androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this);
         builder.setTitle("Select Photo")
@@ -315,6 +335,21 @@ public class TambahListingActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == MAPS_ACTIVITY_REQUEST_CODE) {
+            if (resultCode == RESULT_OK && data != null) {
+
+                String latitudeStr  = data.getStringExtra("latitude");
+                String longitudeStr = data.getStringExtra("longitude");
+                String addressStr   = data.getStringExtra("address");
+
+                latitudeTxt.setText(latitudeStr);
+                longitudeTxt.setText(longitudeStr);
+                addressTxt.setText(addressStr);
+            }
+        }
+
         if (requestCode == CODE_GALLERY_REQUEST && resultCode == RESULT_OK && data != null) {
             Uri filePath = data.getData();
             cropImage(filePath);
@@ -375,10 +410,10 @@ public class TambahListingActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    private Uri getImageUri(Context context, Bitmap bitmap) {
+    public static Uri getImageUri(Context inContext, Bitmap inImage) {
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
-        String path = MediaStore.Images.Media.insertImage(context.getContentResolver(), bitmap, "Title", null);
+        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+        String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "IMG_" + Calendar.getInstance().getTime(), null);
         return Uri.parse(path);
     }
 
@@ -509,52 +544,52 @@ public class TambahListingActivity extends AppCompatActivity {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> map = new HashMap<>();
-                if (idagen.isEmpty()){
+                if (idagen.isEmpty()) {
                     idinput = idadmin;
                 } else {
                     idinput = idagen;
                 }
-                if (bitmap1 == null){
+                if (bitmap1 == null) {
                     image1 = "0";
                 } else {
                     image1 = imageToString(bitmap1);
                 }
-                if (bitmap2 == null){
+                if (bitmap2 == null) {
                     image2 = "0";
                 } else {
                     image2 = imageToString(bitmap2);
                 }
-                if (bitmap3 == null){
+                if (bitmap3 == null) {
                     image3 = "0";
                 } else {
                     image3 = imageToString(bitmap3);
                 }
-                if (bitmap4 == null){
+                if (bitmap4 == null) {
                     image4 = "0";
                 } else {
                     image4 = imageToString(bitmap4);
                 }
-                if (bitmap5 == null){
+                if (bitmap5 == null) {
                     image5 = "0";
                 } else {
                     image5 = imageToString(bitmap5);
                 }
-                if (bitmap6 == null){
+                if (bitmap6 == null) {
                     image6 = "0";
                 } else {
                     image6 = imageToString(bitmap6);
                 }
-                if (bitmap7 == null){
+                if (bitmap7 == null) {
                     image7 = "0";
                 } else {
                     image7 = imageToString(bitmap7);
                 }
-                if (bitmap8 == null){
+                if (bitmap8 == null) {
                     image8 = "0";
                 } else {
                     image8 = imageToString(bitmap8);
                 }
-                if (bitmapttd == null){
+                if (bitmapttd == null) {
                     ttd = "0";
                 } else {
                     ttd = imageToString(bitmapttd);
