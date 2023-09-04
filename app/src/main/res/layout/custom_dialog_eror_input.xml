@@ -40,7 +40,8 @@
             android:layout_margin="5dp"
             android:layout_weight="1"
             android:text="OK"
-            android:backgroundTint="#43A047"/>
+            android:textColor="@color/white"
+            android:backgroundTint="@color/second"/>
 
     </LinearLayout>
 

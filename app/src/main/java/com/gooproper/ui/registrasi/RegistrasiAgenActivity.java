@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import android.Manifest;
 import android.app.AlertDialog;
@@ -76,6 +77,10 @@ public class RegistrasiAgenActivity extends AppCompatActivity {
     final int CODE_GALLERY_REQUEST_KTP = 103;
     final int CODE_CAMERA_REQUEST_KTP = 104;
     final int KODE_REQUEST_KAMERA_KTP = 105;
+    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE_PAS = 123;
+    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES_PAS = 456;
+    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE_KTP = 123;
+    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES_KTP = 456;
     Bitmap bitmap, bitmappas, bitsig;
     String sktp, spas, sttd, Password, RePassword, RandomPassword;
     SignaturePad signaturePad;
@@ -165,35 +170,35 @@ public class RegistrasiAgenActivity extends AppCompatActivity {
         pas.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                 if (bitmap == null){
-                     Dialog customDialog = new Dialog(RegistrasiAgenActivity.this);
-                     customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                     customDialog.setContentView(R.layout.custom_dialog_eror_input);
+                if (bitmap == null) {
+                    Dialog customDialog = new Dialog(RegistrasiAgenActivity.this);
+                    customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                    customDialog.setContentView(R.layout.custom_dialog_eror_input);
 
-                     if (customDialog.getWindow() != null) {
-                         customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-                     }
+                    if (customDialog.getWindow() != null) {
+                        customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                    }
 
-                     Button ok = customDialog.findViewById(R.id.BtnOkErorInput);
+                    Button ok = customDialog.findViewById(R.id.BtnOkErorInput);
 
-                     ok.setOnClickListener(new View.OnClickListener() {
-                         @Override
-                         public void onClick(View view) {
-                             customDialog.dismiss();
-                         }
-                     });
+                    ok.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            customDialog.dismiss();
+                        }
+                    });
 
-                     ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
+                    ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
 
-                     Glide.with(RegistrasiAgenActivity.this)
-                             .load(R.drawable.alert) // You can also use a local resource like R.drawable.your_gif_resource
-                             .transition(DrawableTransitionOptions.withCrossFade())
-                             .into(gifImageView);
+                    Glide.with(RegistrasiAgenActivity.this)
+                            .load(R.drawable.alert) // You can also use a local resource like R.drawable.your_gif_resource
+                            .transition(DrawableTransitionOptions.withCrossFade())
+                            .into(gifImageView);
 
-                     customDialog.show();
-                 } else {
-                     showPhotoSelectionDialog();
-                 }
+                    customDialog.show();
+                } else {
+                    showPhotoSelectionDialog();
+                }
             }
         });
         UploadFotoMitra.setOnClickListener(new View.OnClickListener() {
@@ -205,15 +210,15 @@ public class RegistrasiAgenActivity extends AppCompatActivity {
         UploadFotoKantorLain.setOnClickListener(v -> showPhotoSelectionDialog());
         clear.setOnClickListener(v -> signaturePad.clear());
         submit.setOnClickListener(v -> {
-            if (validateAgent()){
+            if (validateAgent()) {
                 regisagen();
             }
         });
         SubmitMitra.setOnClickListener(v -> {
-            if (validateMitra()){
+            if (validateMitra()) {
                 Password = PasswordMitra.getText().toString();
                 RePassword = RePasswordMitra.getText().toString();
-                if (Password.length() >= 8){
+                if (Password.length() >= 8) {
                     if (RePassword.equals(Password)) {
                         regismitra();
                     } else {
@@ -228,10 +233,10 @@ public class RegistrasiAgenActivity extends AppCompatActivity {
             }
         });
         SubmitKantorLain.setOnClickListener(v -> {
-            if (validateKantorLain()){
+            if (validateKantorLain()) {
                 Password = PasswordKantorLain.getText().toString();
                 RePassword = RePasswordKantorLain.getText().toString();
-                if (Password.length() >= 8){
+                if (Password.length() >= 8) {
                     if (RePassword.equals(Password)) {
                         regiskl();
                     } else {
@@ -838,7 +843,7 @@ public class RegistrasiAgenActivity extends AppCompatActivity {
                                 ActivityCompat.requestPermissions(RegistrasiAgenActivity.this, new String[]{Manifest.permission.CAMERA}, CODE_CAMERA_REQUEST);
                                 break;
                             case 1:
-                                ActivityCompat.requestPermissions(RegistrasiAgenActivity.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, CODE_GALLERY_REQUEST);
+                                requestPermissionsPas();
                                 break;
                         }
                     }
@@ -858,7 +863,7 @@ public class RegistrasiAgenActivity extends AppCompatActivity {
                                 ActivityCompat.requestPermissions(RegistrasiAgenActivity.this, new String[]{Manifest.permission.CAMERA}, CODE_CAMERA_REQUEST_KTP);
                                 break;
                             case 1:
-                                ActivityCompat.requestPermissions(RegistrasiAgenActivity.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, CODE_GALLERY_REQUEST_KTP);
+                                requestPermissionsKtp();
                                 break;
                         }
                     }
@@ -881,8 +886,49 @@ public class RegistrasiAgenActivity extends AppCompatActivity {
         }
     }
 
+    private void requestPermissionsPas() {
+        boolean externalStoragePermissionGranted = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
+
+        if (externalStoragePermissionGranted) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE_PAS);
+        } else {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_MEDIA_IMAGES}, PERMISSION_REQUEST_CODE_MEDIA_IMAGES_PAS);
+        }
+    }
+
+    private void requestPermissionsKtp() {
+        boolean externalStoragePermissionGranted = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
+
+        if (externalStoragePermissionGranted) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE_KTP);
+        } else {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_MEDIA_IMAGES}, PERMISSION_REQUEST_CODE_MEDIA_IMAGES_KTP);
+        }
+    }
+
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if (requestCode == CODE_GALLERY_REQUEST) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE_PAS) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(intent, CODE_GALLERY_REQUEST);
+            }
+        } else if (requestCode == PERMISSION_REQUEST_CODE_MEDIA_IMAGES_PAS) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(intent, CODE_GALLERY_REQUEST);
+            }
+        } else if (requestCode == PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE_KTP) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(intent, CODE_GALLERY_REQUEST_KTP);
+            }
+        } else if (requestCode == PERMISSION_REQUEST_CODE_MEDIA_IMAGES_KTP) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(intent, CODE_GALLERY_REQUEST_KTP);
+            }
+        } else if (requestCode == CODE_GALLERY_REQUEST) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 Intent intent = new Intent(Intent.ACTION_PICK);
                 intent.setType("image/*");
@@ -896,7 +942,6 @@ public class RegistrasiAgenActivity extends AppCompatActivity {
                 AlertDialog alert11 = builder.create();
                 alert11.show();
             }
-
             return;
         } else if (requestCode == CODE_GALLERY_REQUEST_KTP) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -974,7 +1019,7 @@ public class RegistrasiAgenActivity extends AppCompatActivity {
             if (resultCode == RESULT_OK) {
                 Uri croppedUri = result.getUri();
                 try {
-                    if (agen.getVisibility() == View.VISIBLE){
+                    if (agen.getVisibility() == View.VISIBLE) {
                         if (bitmap == null) {
                             InputStream inputStream = getContentResolver().openInputStream(croppedUri);
                             bitmap = BitmapFactory.decodeStream(inputStream);
@@ -985,13 +1030,13 @@ public class RegistrasiAgenActivity extends AppCompatActivity {
                             imgpas.setImageBitmap(bitmappas);
                         }
                     } else if (Mitra.getVisibility() == View.VISIBLE) {
-                        if (bitmap == null){
+                        if (bitmap == null) {
                             InputStream inputStream = getContentResolver().openInputStream(croppedUri);
                             bitmap = BitmapFactory.decodeStream(inputStream);
                             IVFotoMitra.setImageBitmap(bitmap);
                         }
                     } else {
-                        if (bitmap == null){
+                        if (bitmap == null) {
                             InputStream inputStream = getContentResolver().openInputStream(croppedUri);
                             bitmap = BitmapFactory.decodeStream(inputStream);
                             IVFotoKantorLain.setImageBitmap(bitmap);
@@ -1013,7 +1058,7 @@ public class RegistrasiAgenActivity extends AppCompatActivity {
         Uri destinationUri = Uri.fromFile(new File(getCacheDir(), "cropped_image"));
         CropImage.activity(sourceUri)
                 .setGuidelines(CropImageView.Guidelines.ON)
-                .setAspectRatio(3,4)
+                .setAspectRatio(3, 4)
                 .setCropShape(CropImageView.CropShape.RECTANGLE)
                 .setOutputUri(destinationUri)
                 .start(this);
@@ -1023,7 +1068,7 @@ public class RegistrasiAgenActivity extends AppCompatActivity {
         Uri destinationUri = Uri.fromFile(new File(getCacheDir(), "cropped_image"));
         CropImage.activity(sourceUri)
                 .setGuidelines(CropImageView.Guidelines.ON)
-                .setAspectRatio(3,2)
+                .setAspectRatio(3, 2)
                 .setCropShape(CropImageView.CropShape.RECTANGLE)
                 .setOutputUri(destinationUri)
                 .start(this);

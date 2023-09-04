@@ -22,7 +22,6 @@ import java.util.List;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class AgenAdapter extends RecyclerView .Adapter<AgenAdapter.HolderData>{
-
     private List<AgenModel> models;
     private Context context;
     private static final int MAX_TEXT_LENGTH = 20;
@@ -38,6 +37,12 @@ public class AgenAdapter extends RecyclerView .Adapter<AgenAdapter.HolderData>{
         } else {
             return text;
         }
+    }
+
+    //searchView
+    public void setFilteredlist (List<AgenModel> filteredlist){
+        this.models = filteredlist;
+        notifyDataSetChanged();
     }
 
     @NonNull
@@ -58,11 +63,11 @@ public class AgenAdapter extends RecyclerView .Adapter<AgenAdapter.HolderData>{
 
         String namaagen = agenModel.getNama();
         String truncatedtitle = truncateTextWithEllipsis(namaagen);
-        holder.nama.setText(truncatedtitle);
+        holder.nama.setText(agenModel.getNama());
 
         String alamatagen = agenModel.getAlamatDomisili();
         String truncatedaddres = truncateTextWithEllipsis(alamatagen);
-        holder.alamat.setText(truncatedaddres);
+        holder.alamat.setText(agenModel.getAlamatDomisili());
 
         holder.agenModel = agenModel;
     }
@@ -112,6 +117,7 @@ public class AgenAdapter extends RecyclerView .Adapter<AgenAdapter.HolderData>{
                     update.putExtra("Photo",agenModel.getPhoto());
                     update.putExtra("Poin",agenModel.getPoin ());
                     update.putExtra("IsAkses",agenModel.getIsAkses());
+                    update.putExtra("Approve",agenModel.getApprove());
                     context.startActivity(update);
                 }
             });

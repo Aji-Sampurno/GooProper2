@@ -1,12 +1,12 @@
 package com.gooproper.model;
 
 public class ListingModel {
-    String IdPraListing, IdListing, IdAgen, IdInput, IdVendor, NamaListing, Alamat, Location, Wide, Level, Bed, Bath, BedArt, BathArt, Garage, Carpot, NoCertificate, Pbb, JenisProperti, JenisCertificate, SumberAir, Kondisi, Deskripsi, Prabot, KetPrabot, Priority, Ttd, Banner, Harga, TglInput, Img1, Img2, Img3, Img4, Img5, Img6, Img7, Img8, Video, LinkFacebook, LinkTiktok, LinkInstagram, LinkYoutube, IsAdmin, IsManager, View, Sold, Nama, NoTelp, Instagram, Latitude, Longitude;
+    String IdPraListing, IdListing, IdAgen, IdInput, IdVendor, NamaListing, Alamat, Location, Wide, Land, Listrik, Level, Bed, Bath, BedArt, BathArt, Garage, Carpot, NoCertificate, Pbb, JenisProperti, JenisCertificate, SumberAir, Kondisi, Deskripsi, Prabot, KetPrabot, Priority, Ttd, Banner, Harga, TglInput, Img1, Img2, Img3, Img4, Img5, Img6, Img7, Img8, Video, LinkFacebook, LinkTiktok, LinkInstagram, LinkYoutube, IsAdmin, IsManager, View, Sold, Nama, NoTelp, Instagram, Latitude, Longitude,Hadap,SHM,HGB,HSHP,PPJB,Stratatitle,NoSHM,NoHGB,NoHSHP,NoPPJB,NoStratatitle;
 
     public ListingModel() {
     }
 
-    public ListingModel(String IdPraListing, String IdListing, String IdAgen, String IdInput, String IdVendor, String NamaListing, String Alamat, String Location, String Wide, String Level, String Bed, String Bath, String BedArt, String BathArt, String Garage, String Carpot, String NoCertificate, String Pbb, String JenisProperti, String JenisCertificate, String SumberAir, String Kondisi, String Deskripsi, String Prabot, String KetPrabot, String Priority, String Ttd, String Banner, String Harga, String TglInput, String Img1, String Img2, String Img3, String Img4, String Img5, String Img6, String Img7, String Img8, String Video, String LinkFacebook, String LinkTiktok, String LinkInstagram, String LinkYoutube, String IsAdmin, String IsManager, String View, String Sold, String Nama, String NoTelp, String Instagram, String Latitude, String Longitude) {
+    public ListingModel(String IdPraListing, String IdListing, String IdAgen, String IdInput, String IdVendor, String NamaListing, String Alamat, String Location, String Wide, String Land, String Listrik, String Level, String Bed, String Bath, String BedArt, String BathArt, String Garage, String Carpot, String NoCertificate, String Pbb, String JenisProperti, String JenisCertificate, String SumberAir, String Kondisi, String Deskripsi, String Prabot, String KetPrabot, String Priority, String Ttd, String Banner, String Harga, String TglInput, String Img1, String Img2, String Img3, String Img4, String Img5, String Img6, String Img7, String Img8, String Video, String LinkFacebook, String LinkTiktok, String LinkInstagram, String LinkYoutube, String IsAdmin, String IsManager, String View, String Sold, String Nama, String NoTelp, String Instagram, String Latitude, String Longitude, String Hadap, String SHM, String HGB, String HSHP, String PPJB, String Stratatitle, String NoSHM, String NoHGB, String NoHSHP, String NoPPJB, String NoStratatitle) {
         this.IdPraListing = IdPraListing;
         this.IdListing = IdListing;
         this.IdAgen = IdAgen;
@@ -16,6 +16,8 @@ public class ListingModel {
         this.Alamat = Alamat;
         this.Location = Location;
         this.Wide = Wide;
+        this.Land = Land;
+        this.Listrik = Listrik;
         this.Level = Level;
         this.Bed = Bed;
         this.BedArt = BedArt;
@@ -23,6 +25,17 @@ public class ListingModel {
         this.BathArt = BathArt;
         this.Garage = Garage;
         this.Carpot = Carpot;
+        this.Hadap= Hadap;
+        this.SHM=SHM;
+        this.HGB=HGB;
+        this.HSHP=HSHP;
+        this.PPJB=PPJB;
+        this.Stratatitle=Stratatitle;
+        this.NoSHM=NoSHM;
+        this.NoHGB=NoHGB;
+        this.NoHSHP=NoHSHP;
+        this.NoPPJB=NoPPJB;
+        this.NoStratatitle=NoStratatitle;
         this.NoCertificate = NoCertificate;
         this.Pbb = Pbb;
         this.JenisProperti = JenisProperti;
@@ -187,6 +200,94 @@ public class ListingModel {
 
     public void setCarpot(String carpot) {
         Carpot = carpot;
+    }
+
+    public String getHadap() {
+        return Hadap;
+    }
+
+    public void setHadap(String hadap) {
+        Hadap = hadap;
+    }
+
+    public String getSHM() {
+        return SHM;
+    }
+
+    public void setSHM(String SHM) {
+        this.SHM = SHM;
+    }
+
+    public String getHGB() {
+        return HGB;
+    }
+
+    public void setHGB(String HGB) {
+        this.HGB = HGB;
+    }
+
+    public String getHSHP() {
+        return HSHP;
+    }
+
+    public void setHSHP(String HSHP) {
+        this.HSHP = HSHP;
+    }
+
+    public String getPPJB() {
+        return PPJB;
+    }
+
+    public void setPPJB(String PPJB) {
+        this.PPJB = PPJB;
+    }
+
+    public String getStratatitle() {
+        return Stratatitle;
+    }
+
+    public void setStratatitle(String stratatitle) {
+        Stratatitle = stratatitle;
+    }
+
+    public String getNoSHM() {
+        return NoSHM;
+    }
+
+    public void setNoSHM(String noSHM) {
+        NoSHM = noSHM;
+    }
+
+    public String getNoHGB() {
+        return NoHGB;
+    }
+
+    public void setNoHGB(String noHGB) {
+        NoHGB = noHGB;
+    }
+
+    public String getNoHSHP() {
+        return NoHSHP;
+    }
+
+    public void setNoHSHP(String noHSHP) {
+        NoHSHP = noHSHP;
+    }
+
+    public String getNoPPJB() {
+        return NoPPJB;
+    }
+
+    public void setNoPPJB(String noPPJB) {
+        NoPPJB = noPPJB;
+    }
+
+    public String getNoStratatitle() {
+        return NoStratatitle;
+    }
+
+    public void setNoStratatitle(String noStratatitle) {
+        NoStratatitle = noStratatitle;
     }
 
     public String getNoCertificate() {
@@ -475,5 +576,21 @@ public class ListingModel {
 
     public void setLongitude(String longitude) {
         Longitude = longitude;
+    }
+
+    public String getLand() {
+        return Land;
+    }
+
+    public void setLand(String land) {
+        Land = land;
+    }
+
+    public String getListrik() {
+        return Listrik;
+    }
+
+    public void setListrik(String listrik) {
+        Listrik = listrik;
     }
 }

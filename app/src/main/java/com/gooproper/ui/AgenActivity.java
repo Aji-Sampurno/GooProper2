@@ -1,6 +1,7 @@
 package com.gooproper.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -14,6 +15,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -24,6 +26,7 @@ import com.android.volley.toolbox.Volley;
 import com.gooproper.R;
 import com.gooproper.adapter.AgenAdapter;
 import com.gooproper.adapter.ListingSoldAdapter;
+import com.gooproper.adapter.list.ListPelamarAgenAdapter;
 import com.gooproper.model.AgenModel;
 import com.gooproper.model.ListingModel;
 import com.gooproper.util.ServerApi;
@@ -39,7 +42,8 @@ public class AgenActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
     SwipeRefreshLayout refreshLayout;
-    private RecyclerView.Adapter adapterAgen;
+    private AgenAdapter adapterAgen;
+    private SearchView searchView;
     List<AgenModel> mItems;
 
     @Override
@@ -47,12 +51,27 @@ public class AgenActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_agen);
 
+        searchView  = findViewById(R.id.searchView);
+        searchView.clearFocus();
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                filterList(newText);
+                return true;
+            }
+        });
+
         recyclerView = findViewById(R.id.RVAgenAdmin);
         refreshLayout = findViewById(R.id.SRLAgenAdmin);
 
         mItems = new ArrayList<>();
 
-        recyclerView.setLayoutManager(new GridLayoutManager(AgenActivity.this, 1));
+        recyclerView.setLayoutManager(new LinearLayoutManager(AgenActivity.this, LinearLayoutManager.VERTICAL, false));
         adapterAgen = new AgenAdapter(AgenActivity.this, mItems);
         recyclerView.setAdapter(adapterAgen);
 
@@ -63,6 +82,22 @@ public class AgenActivity extends AppCompatActivity {
         }
     }
 
+    //searchView
+    private void filterList(String text) {
+        List<AgenModel> filteredList = new ArrayList<>();
+        for (AgenModel item : mItems) {
+            if (item.getNama().toLowerCase().contains(text.toLowerCase())
+                    || item.getUsername().toLowerCase().contains(text.toLowerCase())
+                    || item.getAlamatDomisili().contains(text.toLowerCase())) {
+                filteredList.add(item);
+            }
+        }
+        if (filteredList.isEmpty()) {
+            Toast.makeText(this, "Not Found", Toast.LENGTH_SHORT).show();
+        }
+        adapterAgen.setFilteredlist(filteredList);
+    }
+
     private void LoadAgen(boolean showProgressDialog) {
         final ProgressDialog progressDialog = new ProgressDialog(AgenActivity.this);
         progressDialog.setMessage("Memuat Data Agen...");
@@ -71,7 +106,7 @@ public class AgenActivity extends AppCompatActivity {
         else progressDialog.cancel();
 
         RequestQueue queue = Volley.newRequestQueue(AgenActivity.this);
-        JsonArrayRequest reqData = new JsonArrayRequest(Request.Method.GET, ServerApi.URL_GET_AGEN, null,
+        JsonArrayRequest reqData = new JsonArrayRequest(Request.Method.GET, ServerApi.URL_GET_DAFTAR_AGEN, null,
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
@@ -81,10 +116,30 @@ public class AgenActivity extends AppCompatActivity {
                         for (int i = 0; i < response.length(); i++) {
                             try {
                                 JSONObject data = response.getJSONObject(i);
-                                AgenModel md = new AgenModel();
-                                md.setIdAgen(data.getString("IdAgen"));
-                                md.setNama(data.getString("Nama"));
-                                mItems.add(md);
+                                AgenModel agenModel = new AgenModel();
+                                agenModel.setIdAgen(data.getString("IdAgen"));
+                                agenModel.setUsername(data.getString("Username"));
+                                agenModel.setPassword(data.getString("Password"));
+                                agenModel.setNama(data.getString("Nama"));
+                                agenModel.setNoTelp(data.getString("NoTelp"));
+                                agenModel.setEmail(data.getString("Email"));
+                                agenModel.setTglLahir(data.getString("TglLahir"));
+                                agenModel.setKotaKelahiran(data.getString("KotaKelahiran"));
+                                agenModel.setPendidikan(data.getString("Pendidikan"));
+                                agenModel.setNamaSekolah(data.getString("NamaSekolah"));
+                                agenModel.setMasaKerja(data.getString("MasaKerja"));
+                                agenModel.setJabatan(data.getString("Jabatan"));
+                                agenModel.setStatus(data.getString("Status"));
+                                agenModel.setAlamatDomisili(data.getString("AlamatDomisili"));
+                                agenModel.setFacebook(data.getString("Facebook"));
+                                agenModel.setInstagram (data.getString("Instagram"));
+                                agenModel.setNoKtp(data.getString("NoKtp"));
+                                agenModel.setImgKtp(data.getString("ImgKtp"));
+                                agenModel.setImgTtd(data.getString("ImgTtd"));
+                                agenModel.setPhoto(data.getString("Photo"));
+                                agenModel.setIsAkses(data.getString("IsAkses"));
+                                agenModel.setApprove(data.getString("Approve"));
+                                mItems.add(agenModel);
                                 progressDialog.dismiss();
                             } catch (JSONException e) {
                                 e.printStackTrace();

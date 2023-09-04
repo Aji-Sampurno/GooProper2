@@ -1,7 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <style name="AppThemeActionBar" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="android:windowActionBarOverlay">true</item>
+        <item name="android:windowActionModeOverlay">true</item>
+    </style>
+    <style name="AppThemePopUp" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="popupMenuStyle">@style/PopupMenu</item>
+        <item name="android:popupMenuStyle">@style/PopupMenu</item>
+        <item name="popupTheme">@style/PopupOverlay</item>
+    </style>
+
+    <style name="PopupMenu" parent="Widget.AppCompat.PopupMenu">
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="PopupOverlay" parent="ThemeOverlay.AppCompat.Light">
+    </style>
+
     <style name="CustomOutlinedBox" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
-        <!-- Customize attributes as needed -->
         <item name="boxStrokeWidth">2dp</item>
         <item name="boxStrokeColor">@color/black</item>
         <item name="android:textColorHint">@color/black</item>
@@ -9,11 +25,9 @@
         <item name="helperTextTextColor">@color/black</item>
         <item name="boxStrokeErrorColor">@color/red_color</item>
         <item name="android:textColor">@color/black</item>
-        <!-- Add more customizations here -->
     </style>
 
     <style name="CustomOutlinedBoxWhite" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
-        <!-- Customize attributes as needed -->
         <item name="boxStrokeWidth">2dp</item>
         <item name="boxStrokeColor">@color/white</item>
         <item name="android:textColorHint">@color/white</item>
@@ -21,11 +35,9 @@
         <item name="helperTextTextColor">@color/white</item>
         <item name="boxStrokeErrorColor">@color/red_color</item>
         <item name="android:textColor">@color/white</item>
-        <!-- Add more customizations here -->
     </style>
 
     <style name="CustomOutlinedBoxSecond" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
-        <!-- Customize attributes as needed -->
         <item name="boxStrokeWidth">2dp</item>
         <item name="boxStrokeColor">@color/second</item>
         <item name="android:textColorHint">@color/second</item>
@@ -33,7 +45,6 @@
         <item name="helperTextTextColor">@color/second</item>
         <item name="boxStrokeErrorColor">@color/red_color</item>
         <item name="android:textColor">@color/white</item>
-        <!-- Add more customizations here -->
     </style>
 
     <style name="CustomButtonStyle" parent="Widget.AppCompat.Button">

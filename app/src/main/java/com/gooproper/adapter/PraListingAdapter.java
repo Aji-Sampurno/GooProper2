@@ -97,13 +97,17 @@ public class PraListingAdapter extends RecyclerView.Adapter<PraListingAdapter.Ho
                 public void onClick(View view) {
                     Intent update = new Intent(context, DetailListingActivity.class);
                     update.putExtra("update",1);
-                    update.putExtra("IdPraListing",listingModel.getIdPraListing());
+                    update.putExtra("IdPralisting",listingModel.getIdPraListing());
                     update.putExtra("IdAgen",listingModel.getIdAgen());
                     update.putExtra("IdInput",listingModel.getIdInput());
                     update.putExtra("NamaListing",listingModel.getNamaListing());
                     update.putExtra("Alamat",listingModel.getAlamat());
+                    update.putExtra("Latitude",listingModel.getLatitude());
+                    update.putExtra("Longitude",listingModel.getLongitude());
                     update.putExtra("Location",listingModel.getLocation());
                     update.putExtra("Wide",listingModel.getWide());
+                    update.putExtra("Land",listingModel.getLand());
+                    update.putExtra("Listrik",listingModel.getListrik());
                     update.putExtra("Level",listingModel.getLevel());
                     update.putExtra("Bed",listingModel.getBed());
                     update.putExtra("BedArt",listingModel.getBedArt());
@@ -111,6 +115,17 @@ public class PraListingAdapter extends RecyclerView.Adapter<PraListingAdapter.Ho
                     update.putExtra("BathArt",listingModel.getBathArt());
                     update.putExtra("Garage",listingModel.getGarage());
                     update.putExtra("Carpot",listingModel.getCarpot());
+                    update.putExtra("Hadap",listingModel.getHadap());
+                    update.putExtra("SHM",listingModel.getSHM());
+                    update.putExtra("HGB",listingModel.getHGB());
+                    update.putExtra("HSHP",listingModel.getHSHP());
+                    update.putExtra("PPJB",listingModel.getPPJB());
+                    update.putExtra("Stratatitle",listingModel.getStratatitle());
+                    update.putExtra("NoSHM",listingModel.getNoSHM());
+                    update.putExtra("NoHGB",listingModel.getNoHGB());
+                    update.putExtra("NoHSHP",listingModel.getNoHSHP());
+                    update.putExtra("NoPPJB",listingModel.getNoPPJB());
+                    update.putExtra("NoStratatitle",listingModel.getNoStratatitle());
                     update.putExtra("NoCertificate",listingModel.getNoCertificate());
                     update.putExtra("Pbb",listingModel.getPbb());
                     update.putExtra("JenisProperti",listingModel.getJenisProperti());
@@ -140,6 +155,8 @@ public class PraListingAdapter extends RecyclerView.Adapter<PraListingAdapter.Ho
                     update.putExtra("LinkYoutube",listingModel.getLinkYoutube());
                     update.putExtra("IsAdmin",listingModel.getIsAdmin());
                     update.putExtra("IsManager",listingModel.getIsManager());
+                    update.putExtra("View",listingModel.getView());
+                    update.putExtra("Sold",listingModel.getSold());
                     update.putExtra("Nama",listingModel.getNama());
                     update.putExtra("NoTelp",listingModel.getNoTelp());
                     update.putExtra("Instagram",listingModel.getInstagram());

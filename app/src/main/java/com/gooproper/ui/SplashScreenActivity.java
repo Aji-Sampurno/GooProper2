@@ -33,7 +33,7 @@ public class SplashScreenActivity extends AppCompatActivity {
                 } else if (status.equals("3")) {
                     startActivity(new Intent(SplashScreenActivity.this, MainAgenActivity.class));
                     finish();
-                } else if (status.equals("4")) {
+                } else if (status.equals("0")) {
                     startActivity(new Intent(SplashScreenActivity.this, MainCustomerActivity.class));
                     finish();
                 } else {

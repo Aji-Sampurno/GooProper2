@@ -1,12 +1,12 @@
 package com.gooproper.model;
 
 public class AgenModel {
-    String IdAgen, Username, Password, Nama, NoTelp, Email, TglLahir, KotaKelahiran, Pendidikan, NamaSekolah, MasaKerja, Jabatan, Status, AlamatDomisili, Facebook, Instagram, NoKtp, ImgKtp, ImgTtd, Npwp, Photo, Poin, IsAkses;
+    String IdAgen, Username, Password, Nama, NoTelp, Email, TglLahir, KotaKelahiran, Pendidikan, NamaSekolah, MasaKerja, Jabatan, Status, AlamatDomisili, Facebook, Instagram, NoKtp, ImgKtp, ImgTtd, Npwp, Photo, Poin, IsAkses, Approve;
 
     public AgenModel() {
     }
 
-    public AgenModel(String IdAgen, String Username, String Password, String Nama, String NoTelp, String Email, String TglLahir, String KotaKelahiran, String Pendidikan, String NamaSekolah, String MasaKerja, String Jabatan, String Status, String AlamatDomisili, String Facebook, String Instagram, String NoKtp, String ImgKtp, String ImgTtd, String Npwp, String Photo, String Poin, String IsAkses) {
+    public AgenModel(String IdAgen, String Username, String Password, String Nama, String NoTelp, String Email, String TglLahir, String KotaKelahiran, String Pendidikan, String NamaSekolah, String MasaKerja, String Jabatan, String Status, String AlamatDomisili, String Facebook, String Instagram, String NoKtp, String ImgKtp, String ImgTtd, String Npwp, String Photo, String Poin, String IsAkses, String Approve) {
         this.IdAgen = IdAgen;
         this.Username = Username;
         this.Password = Password;
@@ -30,6 +30,7 @@ public class AgenModel {
         this.Photo = Photo;
         this.Poin = Poin;
         this.IsAkses = IsAkses;
+        this.Approve = Approve;
     }
 
     public String getIdAgen() {
@@ -214,5 +215,13 @@ public class AgenModel {
 
     public void setIsAkses(String isAkses) {
         IsAkses = isAkses;
+    }
+
+    public String getApprove() {
+        return Approve;
+    }
+
+    public void setApprove(String approve) {
+        Approve = approve;
     }
 }

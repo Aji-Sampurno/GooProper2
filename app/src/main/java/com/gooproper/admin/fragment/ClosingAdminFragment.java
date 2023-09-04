@@ -25,16 +25,10 @@ import com.gooproper.util.Preferences;
 
 public class ClosingAdminFragment extends Fragment {
 
-    FloatingActionButton fabClosing;
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_closing_admin, container, false);
-
-        fabClosing = root.findViewById(R.id.FABClosingAdmin);
-
-        fabClosing.setOnClickListener(v -> startActivity(new Intent(getActivity(), ClosingActivity.class)));
 
         return root;
     }

@@ -102,6 +102,7 @@ public class ListPelamarAgenAdapter extends RecyclerView.Adapter<ListPelamarAgen
                     update.putExtra("Photo",agenModel.getPhoto());
                     update.putExtra("Poin",agenModel.getPoin ());
                     update.putExtra("IsAkses",agenModel.getIsAkses());
+                    update.putExtra("Approve",agenModel.getApprove());
                     context.startActivity(update);
                 }
             });

@@ -29,7 +29,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class AkunAdminFragment extends Fragment {
 
-    private LinearLayout pelamar, agen, listing, pengaturan, hubungikami, tentangkami;
+    private LinearLayout pelamar, agen, listing, karyawan, pengaturan, hubungikami, tentangkami;
     TextView nama, edit;
     CircleImageView cvadmin;
     View view;
@@ -48,6 +48,7 @@ public class AkunAdminFragment extends Fragment {
         View root = inflater.inflate(R.layout.fragment_akun_admin, container, false);
 
         listing = root.findViewById(R.id.LytListingAdmin);
+        karyawan = root.findViewById(R.id.LytTambahKaryawan);
         pelamar = root.findViewById(R.id.LytPelamarAdmin);
         agen = root.findViewById(R.id.LytAgenAdmin);
         pengaturan = root.findViewById(R.id.LytPengaturanAdmin);
@@ -64,7 +65,7 @@ public class AkunAdminFragment extends Fragment {
         profile = Preferences.getKeyPhoto(getActivity());
         status = Preferences.getKeyStatus(getActivity());
 
-        if (status.equals("1")){
+        if (status.equals("1")) {
             listing.setVisibility(View.GONE);
         } else {
             listing.setVisibility(View.VISIBLE);

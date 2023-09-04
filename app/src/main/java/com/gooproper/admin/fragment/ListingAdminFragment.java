@@ -81,46 +81,6 @@ public class ListingAdminFragment extends Fragment {
         adapter = new PraListingAdapter(getActivity(), list);
         rvgrid.setAdapter(adapter);
 
-        /*rvlist.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
-        adapter = new PraListingAdapter(getActivity(), list);
-        rvlist.setAdapter(adapter);*/
-
-
-        /*ivgrid.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (isGridChanged) {
-                    AnimatorSet animatorSet = (AnimatorSet) AnimatorInflater.loadAnimator(getActivity(), R.animator.crossfade);
-                    animatorSet.setTarget(ivgrid);
-                    animatorSet.addListener(new AnimatorListenerAdapter() {
-                        @Override
-                        public void onAnimationEnd(Animator animation) {
-                            super.onAnimationEnd(animation);
-                            ivgrid.setImageResource(R.drawable.ic_menu_grid);
-                            rvgrid.setVisibility(View.VISIBLE);
-                            rvlist.setVisibility(View.GONE);
-                        }
-                    });
-                    animatorSet.start();
-                    isGridChanged = false;
-                } else {
-                    AnimatorSet animatorSet = (AnimatorSet) AnimatorInflater.loadAnimator(getActivity(), R.animator.crossfade);
-                    animatorSet.setTarget(ivgrid);
-                    animatorSet.addListener(new AnimatorListenerAdapter() {
-                        @Override
-                        public void onAnimationEnd(Animator animation) {
-                            super.onAnimationEnd(animation);
-                            ivgrid.setImageResource(R.drawable.ic_menu_list);
-                            rvlist.setVisibility(View.VISIBLE);
-                            rvgrid.setVisibility(View.GONE);
-                        }
-                    });
-                    animatorSet.start();
-                    isGridChanged = true;
-                }
-            }
-        });*/
-
         srlistingadmin.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -138,16 +98,14 @@ public class ListingAdminFragment extends Fragment {
     private void LoadListingAdmin(boolean showProgressDialog) {
         PDListingAdmin.setMessage("Memuat Listingan Masuk...");
         PDListingAdmin.show();
-        if (showProgressDialog) PDListingAdmin.show();
-        else PDListingAdmin.cancel();
 
         RequestQueue queue = Volley.newRequestQueue(getActivity());
         JsonArrayRequest reqData = new JsonArrayRequest(Request.Method.GET, ServerApi.URL_GET_PRALISTING_ADMIN, null,
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
-                        if (showProgressDialog) PDListingAdmin.cancel();
-                        else srlistingadmin.setRefreshing(false);
+                        PDListingAdmin.cancel();
+                        srlistingadmin.setRefreshing(false);
                         list.clear();
                         for (int i = 0; i < response.length(); i++) {
                             try {
@@ -156,11 +114,14 @@ public class ListingAdminFragment extends Fragment {
                                 md.setIdPraListing(data.getString("IdPraListing"));
                                 md.setIdAgen(data.getString("IdAgen"));
                                 md.setIdInput(data.getString("IdInput"));
-                                md.setIdVendor(data.getString("IdVendor"));
                                 md.setNamaListing(data.getString("NamaListing"));
                                 md.setAlamat(data.getString("Alamat"));
+                                md.setLatitude(data.getString("Latitude"));
+                                md.setLongitude(data.getString("Longitude"));
                                 md.setLocation(data.getString("Location"));
                                 md.setWide(data.getString("Wide"));
+                                md.setLand(data.getString("Land"));
+                                md.setListrik(data.getString("Listrik"));
                                 md.setLevel(data.getString("Level"));
                                 md.setBed(data.getString("Bed"));
                                 md.setBath(data.getString("Bath"));
@@ -168,6 +129,17 @@ public class ListingAdminFragment extends Fragment {
                                 md.setBathArt(data.getString("BathArt"));
                                 md.setGarage(data.getString("Garage"));
                                 md.setCarpot(data.getString("Carpot"));
+                                md.setHadap(data.getString("Hadap"));
+                                md.setSHM(data.getString("SHM"));
+                                md.setHGB(data.getString("HGB"));
+                                md.setHSHP(data.getString("HSHP"));
+                                md.setPPJB(data.getString("PPJB"));
+                                md.setStratatitle(data.getString("Stratatitle"));
+                                md.setNoSHM(data.getString("NoSHM"));
+                                md.setNoHGB(data.getString("NoHGB"));
+                                md.setNoHSHP(data.getString("NoHSHP"));
+                                md.setNoPPJB(data.getString("NoPPJB"));
+                                md.setNoStratatitle(data.getString("NoStratatitle"));
                                 md.setNoCertificate(data.getString("NoCertificate"));
                                 md.setPbb(data.getString("Pbb"));
                                 md.setJenisProperti(data.getString("JenisProperti"));
@@ -197,6 +169,8 @@ public class ListingAdminFragment extends Fragment {
                                 md.setLinkYoutube(data.getString("LinkYoutube"));
                                 md.setIsAdmin(data.getString("IsAdmin"));
                                 md.setIsManager(data.getString("IsManager"));
+                                md.setSold(data.getString("Sold"));
+                                md.setView(data.getString("View"));
                                 md.setNama(data.getString("Nama"));
                                 md.setNoTelp(data.getString("NoTelp"));
                                 md.setInstagram(data.getString("Instagram"));
@@ -215,12 +189,20 @@ public class ListingAdminFragment extends Fragment {
                                 }
 
                                 Button ok = customDialog.findViewById(R.id.BTNOkEror);
+                                Button batal = customDialog.findViewById(R.id.BTNCloseEror);
 
                                 ok.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View view) {
                                         customDialog.dismiss();
                                         LoadListingAdmin(true);
+                                    }
+                                });
+
+                                batal.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        customDialog.dismiss();
                                     }
                                 });
 
@@ -246,12 +228,20 @@ public class ListingAdminFragment extends Fragment {
                         }
 
                         Button ok = customDialog.findViewById(R.id.BTNOkEror);
+                        Button batal = customDialog.findViewById(R.id.BTNCloseEror);
 
                         ok.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
                                 customDialog.dismiss();
                                 LoadListingAdmin(true);
+                            }
+                        });
+
+                        batal.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                customDialog.dismiss();
                             }
                         });
                         customDialog.show();
@@ -281,11 +271,14 @@ public class ListingAdminFragment extends Fragment {
                                 md.setIdPraListing(data.getString("IdPraListing"));
                                 md.setIdAgen(data.getString("IdAgen"));
                                 md.setIdInput(data.getString("IdInput"));
-                                md.setIdVendor(data.getString("IdVendor"));
                                 md.setNamaListing(data.getString("NamaListing"));
                                 md.setAlamat(data.getString("Alamat"));
+                                md.setLatitude(data.getString("Latitude"));
+                                md.setLongitude(data.getString("Longitude"));
                                 md.setLocation(data.getString("Location"));
                                 md.setWide(data.getString("Wide"));
+                                md.setLand(data.getString("Land"));
+                                md.setListrik(data.getString("Listrik"));
                                 md.setLevel(data.getString("Level"));
                                 md.setBed(data.getString("Bed"));
                                 md.setBath(data.getString("Bath"));
@@ -293,6 +286,17 @@ public class ListingAdminFragment extends Fragment {
                                 md.setBathArt(data.getString("BathArt"));
                                 md.setGarage(data.getString("Garage"));
                                 md.setCarpot(data.getString("Carpot"));
+                                md.setHadap(data.getString("Hadap"));
+                                md.setSHM(data.getString("SHM"));
+                                md.setHGB(data.getString("HGB"));
+                                md.setHSHP(data.getString("HSHP"));
+                                md.setPPJB(data.getString("PPJB"));
+                                md.setStratatitle(data.getString("Stratatitle"));
+                                md.setNoSHM(data.getString("NoSHM"));
+                                md.setNoHGB(data.getString("NoHGB"));
+                                md.setNoHSHP(data.getString("NoHSHP"));
+                                md.setNoPPJB(data.getString("NoPPJB"));
+                                md.setNoStratatitle(data.getString("NoStratatitle"));
                                 md.setNoCertificate(data.getString("NoCertificate"));
                                 md.setPbb(data.getString("Pbb"));
                                 md.setJenisProperti(data.getString("JenisProperti"));
@@ -322,6 +326,8 @@ public class ListingAdminFragment extends Fragment {
                                 md.setLinkYoutube(data.getString("LinkYoutube"));
                                 md.setIsAdmin(data.getString("IsAdmin"));
                                 md.setIsManager(data.getString("IsManager"));
+                                md.setSold(data.getString("Sold"));
+                                md.setView(data.getString("View"));
                                 md.setNama(data.getString("Nama"));
                                 md.setNoTelp(data.getString("NoTelp"));
                                 md.setInstagram(data.getString("Instagram"));
@@ -341,12 +347,20 @@ public class ListingAdminFragment extends Fragment {
                                 }
 
                                 Button ok = customDialog.findViewById(R.id.BTNOkEror);
+                                Button batal = customDialog.findViewById(R.id.BTNCloseEror);
 
                                 ok.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View view) {
                                         customDialog.dismiss();
                                         LoadListingManager(true);
+                                    }
+                                });
+
+                                batal.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        customDialog.dismiss();
                                     }
                                 });
 
@@ -373,12 +387,20 @@ public class ListingAdminFragment extends Fragment {
                         }
 
                         Button ok = customDialog.findViewById(R.id.BTNOkEror);
+                        Button batal = customDialog.findViewById(R.id.BTNCloseEror);
 
                         ok.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
                                 customDialog.dismiss();
                                 LoadListingManager(true);
+                            }
+                        });
+
+                        batal.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                customDialog.dismiss();
                             }
                         });
                         customDialog.show();

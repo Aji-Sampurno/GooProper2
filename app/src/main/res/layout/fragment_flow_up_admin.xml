@@ -1,48 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="@color/main"
+    android:orientation="vertical"
     tools:context=".admin.fragment.FlowUpAdminFragment">
 
     <LinearLayout
         android:id="@+id/LytTopFlowUpAdmin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@drawable/top_bar"
         android:orientation="horizontal"
         android:padding="10dp"
-        android:background="@drawable/top_bar"
         android:weightSum="7">
 
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="3"
             android:layout_gravity="center"
+            android:layout_weight="3"
             android:adjustViewBounds="true"
             android:src="@mipmap/ic_icon_foreground"
             app:tint="@color/second" />
 
         <TextView
+            style="@style/TextAppearance.Material3.TitleMedium"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:layout_gravity="center"
             android:layout_marginStart="10dp"
+            android:layout_weight="1"
             android:text="Flow Up"
-            android:textColor="@color/second"
-            style="@style/TextAppearance.Material3.TitleMedium"/>
+            android:textColor="@color/second" />
 
         <ImageView
             android:id="@+id/IVGridFlowUpAdmin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="3"
             android:layout_gravity="center"
+            android:layout_weight="3"
             android:adjustViewBounds="true"
             android:padding="15dp"
             app:tint="@color/second" />
@@ -55,53 +54,23 @@
         android:layout_height="wrap_content"
         android:layout_margin="11dp"
         android:background="@drawable/backgroundbox"
-        android:iconifiedByDefault="false"
-        android:hint="Jl...."/>
+        android:hint="Jl...."
+        android:iconifiedByDefault="false" />
 
-    <FrameLayout
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/SRFlowUpAdmin"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_marginBottom="?attr/actionBarSize">
 
-        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-            android:id="@+id/SRFlowUpAdmin"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/RVFlowUpListAdmin"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginBottom="?attr/actionBarSize">
+            android:layout_marginBottom="?attr/actionBarSize"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/RVFlowUpGridAdmin"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:paddingLeft="5dp"
-                android:paddingRight="5dp"
-                android:layout_marginBottom="?attr/actionBarSize"/>
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/RVFlowUpListAdmin"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:paddingLeft="5dp"
-                android:paddingRight="5dp"
-                android:layout_marginBottom="?attr/actionBarSize"
-                android:visibility="gone"/>
-
-        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|end"
-            android:orientation="vertical"
-            android:layout_marginBottom="?attr/actionBarSize">
-
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="20dp"
-                android:src="@android:drawable/ic_input_add"/>
-
-        </LinearLayout>
-
-    </FrameLayout>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 </LinearLayout>

@@ -3,10 +3,13 @@ package com.gooproper.admin.fragment;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -15,6 +18,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -28,6 +32,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.gooproper.R;
@@ -35,6 +40,8 @@ import com.gooproper.adapter.ListingAdapter;
 import com.gooproper.adapter.ListingPopulerAdapter;
 import com.gooproper.adapter.ListingSoldAdapter;
 import com.gooproper.model.ListingModel;
+import com.gooproper.ui.MapsActivity;
+import com.gooproper.ui.MapsFragment;
 import com.gooproper.ui.NewActivity;
 import com.gooproper.ui.PopularActivity;
 import com.gooproper.ui.SoldActivity;
@@ -55,7 +62,9 @@ public class HomeAdminFragment extends Fragment implements OnMapReadyCallback {
     private TextView SeeAllNew, SeeAllPopular, SeeAllSold, SeeAllAgentOM;
     private RecyclerView recycleListingSold, recycleListingNew, recycleListingPopular, recycleAgent;
     private RecyclerView.Adapter adapterSold, adapterNew, adapterPopular, adapterAgentOM;
-    List<ListingModel> mItems;
+    List<ListingModel> mItemsSold;
+    List<ListingModel> mItemsHot;
+    List<ListingModel> mItemsNew;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -77,23 +86,31 @@ public class HomeAdminFragment extends Fragment implements OnMapReadyCallback {
         SeeAllNew.setOnClickListener(view -> startActivity(new Intent(getContext(), NewActivity.class)));
         SeeAllPopular.setOnClickListener(view -> startActivity(new Intent(getContext(), PopularActivity.class)));
 
-        mItems = new ArrayList<>();
+        mItemsSold = new ArrayList<>();
+        mItemsHot = new ArrayList<>();
+        mItemsNew = new ArrayList<>();
 
         recycleListingSold.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false));
-        adapterSold = new ListingSoldAdapter(getActivity(), mItems);
+        adapterSold = new ListingSoldAdapter(getActivity(), mItemsSold);
         recycleListingSold.setAdapter(adapterSold);
 
         recycleListingPopular.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false));
-        adapterPopular = new ListingPopulerAdapter(getActivity(), mItems);
+        adapterPopular = new ListingPopulerAdapter(getActivity(), mItemsHot);
         recycleListingPopular.setAdapter(adapterPopular);
 
         recycleListingNew.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false));
-        adapterNew = new ListingAdapter(getActivity(), mItems);
+        adapterNew = new ListingAdapter(getActivity(), mItemsNew);
         recycleListingNew.setAdapter(adapterNew);
 
         LoadListingSold();
         LoadListingPopuler();
         LoadListing();
+
+        if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+                && ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+        } else {
+            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, REQUEST_LOCATION_PERMISSION);
+        }
 
         return root;
     }
@@ -104,7 +121,7 @@ public class HomeAdminFragment extends Fragment implements OnMapReadyCallback {
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
-                        mItems.clear();
+                        mItemsSold.clear();
                         for (int i = 0; i < response.length(); i++) {
                             try {
                                 JSONObject data = response.getJSONObject(i);
@@ -114,8 +131,12 @@ public class HomeAdminFragment extends Fragment implements OnMapReadyCallback {
                                 md.setIdInput(data.getString("IdInput"));
                                 md.setNamaListing(data.getString("NamaListing"));
                                 md.setAlamat(data.getString("Alamat"));
+                                md.setLatitude(data.getString("Latitude"));
+                                md.setLongitude(data.getString("Longitude"));
                                 md.setLocation(data.getString("Location"));
                                 md.setWide(data.getString("Wide"));
+                                md.setLand(data.getString("Land"));
+                                md.setListrik(data.getString("Listrik"));
                                 md.setLevel(data.getString("Level"));
                                 md.setBed(data.getString("Bed"));
                                 md.setBath(data.getString("Bath"));
@@ -123,6 +144,17 @@ public class HomeAdminFragment extends Fragment implements OnMapReadyCallback {
                                 md.setBathArt(data.getString("BathArt"));
                                 md.setGarage(data.getString("Garage"));
                                 md.setCarpot(data.getString("Carpot"));
+                                md.setHadap(data.getString("Hadap"));
+                                md.setSHM(data.getString("SHM"));
+                                md.setHGB(data.getString("HGB"));
+                                md.setHSHP(data.getString("HSHP"));
+                                md.setPPJB(data.getString("PPJB"));
+                                md.setStratatitle(data.getString("Stratatitle"));
+                                md.setNoSHM(data.getString("NoSHM"));
+                                md.setNoHGB(data.getString("NoHGB"));
+                                md.setNoHSHP(data.getString("NoHSHP"));
+                                md.setNoPPJB(data.getString("NoPPJB"));
+                                md.setNoStratatitle(data.getString("NoStratatitle"));
                                 md.setNoCertificate(data.getString("NoCertificate"));
                                 md.setPbb(data.getString("Pbb"));
                                 md.setJenisProperti(data.getString("JenisProperti"));
@@ -150,12 +182,14 @@ public class HomeAdminFragment extends Fragment implements OnMapReadyCallback {
                                 md.setLinkTiktok(data.getString("LinkTiktok"));
                                 md.setLinkInstagram(data.getString("LinkInstagram"));
                                 md.setLinkYoutube(data.getString("LinkYoutube"));
-                                md.setView(data.getString("View"));
+                                md.setIsAdmin(data.getString("IsAdmin"));
+                                md.setIsManager(data.getString("IsManager"));
                                 md.setSold(data.getString("Sold"));
+                                md.setView(data.getString("View"));
                                 md.setNama(data.getString("Nama"));
                                 md.setNoTelp(data.getString("NoTelp"));
                                 md.setInstagram(data.getString("Instagram"));
-                                mItems.add(md);
+                                mItemsSold.add(md);
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
@@ -180,7 +214,7 @@ public class HomeAdminFragment extends Fragment implements OnMapReadyCallback {
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
-                        mItems.clear();
+                        mItemsHot.clear();
                         for (int i = 0; i < response.length(); i++) {
                             try {
                                 JSONObject data = response.getJSONObject(i);
@@ -190,8 +224,12 @@ public class HomeAdminFragment extends Fragment implements OnMapReadyCallback {
                                 md.setIdInput(data.getString("IdInput"));
                                 md.setNamaListing(data.getString("NamaListing"));
                                 md.setAlamat(data.getString("Alamat"));
+                                md.setLatitude(data.getString("Latitude"));
+                                md.setLongitude(data.getString("Longitude"));
                                 md.setLocation(data.getString("Location"));
                                 md.setWide(data.getString("Wide"));
+                                md.setLand(data.getString("Land"));
+                                md.setListrik(data.getString("Listrik"));
                                 md.setLevel(data.getString("Level"));
                                 md.setBed(data.getString("Bed"));
                                 md.setBath(data.getString("Bath"));
@@ -199,6 +237,17 @@ public class HomeAdminFragment extends Fragment implements OnMapReadyCallback {
                                 md.setBathArt(data.getString("BathArt"));
                                 md.setGarage(data.getString("Garage"));
                                 md.setCarpot(data.getString("Carpot"));
+                                md.setHadap(data.getString("Hadap"));
+                                md.setSHM(data.getString("SHM"));
+                                md.setHGB(data.getString("HGB"));
+                                md.setHSHP(data.getString("HSHP"));
+                                md.setPPJB(data.getString("PPJB"));
+                                md.setStratatitle(data.getString("Stratatitle"));
+                                md.setNoSHM(data.getString("NoSHM"));
+                                md.setNoHGB(data.getString("NoHGB"));
+                                md.setNoHSHP(data.getString("NoHSHP"));
+                                md.setNoPPJB(data.getString("NoPPJB"));
+                                md.setNoStratatitle(data.getString("NoStratatitle"));
                                 md.setNoCertificate(data.getString("NoCertificate"));
                                 md.setPbb(data.getString("Pbb"));
                                 md.setJenisProperti(data.getString("JenisProperti"));
@@ -226,12 +275,14 @@ public class HomeAdminFragment extends Fragment implements OnMapReadyCallback {
                                 md.setLinkTiktok(data.getString("LinkTiktok"));
                                 md.setLinkInstagram(data.getString("LinkInstagram"));
                                 md.setLinkYoutube(data.getString("LinkYoutube"));
-                                md.setView(data.getString("View"));
+                                md.setIsAdmin(data.getString("IsAdmin"));
+                                md.setIsManager(data.getString("IsManager"));
                                 md.setSold(data.getString("Sold"));
+                                md.setView(data.getString("View"));
                                 md.setNama(data.getString("Nama"));
                                 md.setNoTelp(data.getString("NoTelp"));
                                 md.setInstagram(data.getString("Instagram"));
-                                mItems.add(md);
+                                mItemsHot.add(md);
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
@@ -256,7 +307,7 @@ public class HomeAdminFragment extends Fragment implements OnMapReadyCallback {
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
-                        mItems.clear();
+                        mItemsNew.clear();
                         for (int i = 0; i < response.length(); i++) {
                             try {
                                 JSONObject data = response.getJSONObject(i);
@@ -266,8 +317,12 @@ public class HomeAdminFragment extends Fragment implements OnMapReadyCallback {
                                 md.setIdInput(data.getString("IdInput"));
                                 md.setNamaListing(data.getString("NamaListing"));
                                 md.setAlamat(data.getString("Alamat"));
+                                md.setLatitude(data.getString("Latitude"));
+                                md.setLongitude(data.getString("Longitude"));
                                 md.setLocation(data.getString("Location"));
                                 md.setWide(data.getString("Wide"));
+                                md.setLand(data.getString("Land"));
+                                md.setListrik(data.getString("Listrik"));
                                 md.setLevel(data.getString("Level"));
                                 md.setBed(data.getString("Bed"));
                                 md.setBath(data.getString("Bath"));
@@ -275,6 +330,17 @@ public class HomeAdminFragment extends Fragment implements OnMapReadyCallback {
                                 md.setBathArt(data.getString("BathArt"));
                                 md.setGarage(data.getString("Garage"));
                                 md.setCarpot(data.getString("Carpot"));
+                                md.setHadap(data.getString("Hadap"));
+                                md.setSHM(data.getString("SHM"));
+                                md.setHGB(data.getString("HGB"));
+                                md.setHSHP(data.getString("HSHP"));
+                                md.setPPJB(data.getString("PPJB"));
+                                md.setStratatitle(data.getString("Stratatitle"));
+                                md.setNoSHM(data.getString("NoSHM"));
+                                md.setNoHGB(data.getString("NoHGB"));
+                                md.setNoHSHP(data.getString("NoHSHP"));
+                                md.setNoPPJB(data.getString("NoPPJB"));
+                                md.setNoStratatitle(data.getString("NoStratatitle"));
                                 md.setNoCertificate(data.getString("NoCertificate"));
                                 md.setPbb(data.getString("Pbb"));
                                 md.setJenisProperti(data.getString("JenisProperti"));
@@ -302,12 +368,14 @@ public class HomeAdminFragment extends Fragment implements OnMapReadyCallback {
                                 md.setLinkTiktok(data.getString("LinkTiktok"));
                                 md.setLinkInstagram(data.getString("LinkInstagram"));
                                 md.setLinkYoutube(data.getString("LinkYoutube"));
-                                md.setView(data.getString("View"));
+                                md.setIsAdmin(data.getString("IsAdmin"));
+                                md.setIsManager(data.getString("IsManager"));
                                 md.setSold(data.getString("Sold"));
+                                md.setView(data.getString("View"));
                                 md.setNama(data.getString("Nama"));
                                 md.setNoTelp(data.getString("NoTelp"));
                                 md.setInstagram(data.getString("Instagram"));
-                                mItems.add(md);
+                                mItemsNew.add(md);
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
@@ -350,17 +418,18 @@ public class HomeAdminFragment extends Fragment implements OnMapReadyCallback {
         mapView.onLowMemory();
     }
 
+    @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == REQUEST_LOCATION_PERMISSION) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                // Permission granted, enable My Location
-                if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                    // TODO: Consider calling
-                    //    ActivityCompat#requestPermissions
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED
+                    && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
+                if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                     return;
                 }
                 googleMap.setMyLocationEnabled(true);
+            } else {
+                Toast.makeText(getActivity(), "Izin lokasi ditolak", Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -380,10 +449,54 @@ public class HomeAdminFragment extends Fragment implements OnMapReadyCallback {
                             LatLng currentLocation = new LatLng(location.getLatitude(), location.getLongitude());
                             googleMap.addMarker(new MarkerOptions()
                                     .position(currentLocation)
-                                    .title("Your Location"));
+                                    .title("Lokasi Saya"));
                             googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 15f));
                         }
                     });
+
+            RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
+
+            JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, ServerApi.URL_GET_LISTING, null,
+                    new Response.Listener<JSONArray>() {
+                        @Override
+                        public void onResponse(JSONArray response) {
+                            googleMap.clear();
+
+                            try {
+                                for (int i = 0; i < response.length(); i++) {
+                                    JSONObject markerObject = response.getJSONObject(i);
+                                    double lat = markerObject.getDouble("Latitude");
+                                    double lng = markerObject.getDouble("Longitude");
+                                    String title = markerObject.getString("NamaListing");
+                                    String harga = markerObject.getString("Harga");
+
+                                    LatLng position = new LatLng(lat, lng);
+                                    googleMap.addMarker(new MarkerOptions()
+                                            .position(position)
+                                            .title(title)
+                                            .snippet(harga));
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            // Tangani kesalahan Volley
+                        }
+                    }
+            );
+
+            requestQueue.add(request);
+
+            googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+                @Override
+                public void onMapClick(LatLng latLng) {
+                    startActivity(new Intent(getActivity(), MapsActivity.class));
+                }
+            });
         }
     }
 }

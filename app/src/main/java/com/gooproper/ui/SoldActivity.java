@@ -47,11 +47,9 @@ import java.util.List;
 
 public class SoldActivity extends AppCompatActivity {
 
-    boolean isGridChanged = false;
     ProgressDialog PDSold;
-    ImageView ivgrid;
     SwipeRefreshLayout srsold;
-    RecyclerView rvgrid, rvlist;
+    RecyclerView rvgrid;
     RecyclerView.Adapter adapter;
     List<ListingModel> list;
 
@@ -61,10 +59,8 @@ public class SoldActivity extends AppCompatActivity {
         setContentView(R.layout.activity_sold);
 
         PDSold = new ProgressDialog(SoldActivity.this);
-        ivgrid = findViewById(R.id.IVGridSold);
         srsold = findViewById(R.id.SRSold);
         rvgrid = findViewById(R.id.RVListingSoldGrid);
-        rvlist = findViewById(R.id.RVListingSoldList);
 
         list = new ArrayList<>();
 
@@ -72,46 +68,7 @@ public class SoldActivity extends AppCompatActivity {
         adapter = new ListingSoldAdapter(this,list);
         rvgrid.setAdapter(adapter);
 
-        rvlist.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false));
-        adapter = new ListingSoldAdapter(this,list);
-        rvlist.setAdapter(adapter);
-
         LoadListing(true);
-
-        ivgrid.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (isGridChanged) {
-                    AnimatorSet animatorSet = (AnimatorSet) AnimatorInflater.loadAnimator(SoldActivity.this, R.animator.crossfade);
-                    animatorSet.setTarget(ivgrid);
-                    animatorSet.addListener(new AnimatorListenerAdapter() {
-                        @Override
-                        public void onAnimationEnd(Animator animation) {
-                            super.onAnimationEnd(animation);
-                            ivgrid.setImageResource(R.drawable.ic_menu_grid);
-                            rvgrid.setVisibility(View.VISIBLE);
-                            rvlist.setVisibility(View.GONE);
-                        }
-                    });
-                    animatorSet.start();
-                    isGridChanged = false;
-                } else {
-                    AnimatorSet animatorSet = (AnimatorSet) AnimatorInflater.loadAnimator(SoldActivity.this, R.animator.crossfade);
-                    animatorSet.setTarget(ivgrid);
-                    animatorSet.addListener(new AnimatorListenerAdapter() {
-                        @Override
-                        public void onAnimationEnd(Animator animation) {
-                            super.onAnimationEnd(animation);
-                            ivgrid.setImageResource(R.drawable.ic_menu_list);
-                            rvlist.setVisibility(View.VISIBLE);
-                            rvgrid.setVisibility(View.GONE);
-                        }
-                    });
-                    animatorSet.start();
-                    isGridChanged = true;
-                }
-            }
-        });
 
         srsold.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -126,7 +83,7 @@ public class SoldActivity extends AppCompatActivity {
     }
 
     private void LoadListing(boolean showProgressDialog) {
-        PDSold.setMessage("Memuat Data Listig Sold...");
+        PDSold.setMessage("Memuat Data...");
         PDSold.show();
         if (showProgressDialog) PDSold.show();
         else PDSold.cancel();
@@ -147,11 +104,14 @@ public class SoldActivity extends AppCompatActivity {
                                 md.setIdListing(data.getString("IdListing"));
                                 md.setIdAgen(data.getString("IdAgen"));
                                 md.setIdInput(data.getString("IdInput"));
-                                md.setIdVendor(data.getString("IdVendor"));
                                 md.setNamaListing(data.getString("NamaListing"));
                                 md.setAlamat(data.getString("Alamat"));
+                                md.setLatitude(data.getString("Latitude"));
+                                md.setLongitude(data.getString("Longitude"));
                                 md.setLocation(data.getString("Location"));
                                 md.setWide(data.getString("Wide"));
+                                md.setLand(data.getString("Land"));
+                                md.setListrik(data.getString("Listrik"));
                                 md.setLevel(data.getString("Level"));
                                 md.setBed(data.getString("Bed"));
                                 md.setBath(data.getString("Bath"));
@@ -186,8 +146,13 @@ public class SoldActivity extends AppCompatActivity {
                                 md.setLinkTiktok(data.getString("LinkTiktok"));
                                 md.setLinkInstagram(data.getString("LinkInstagram"));
                                 md.setLinkYoutube(data.getString("LinkYoutube"));
-                                md.setView(data.getString("View"));
+                                md.setIsAdmin(data.getString("IsAdmin"));
+                                md.setIsManager(data.getString("IsManager"));
                                 md.setSold(data.getString("Sold"));
+                                md.setView(data.getString("View"));
+                                md.setNama(data.getString("Nama"));
+                                md.setNoTelp(data.getString("NoTelp"));
+                                md.setInstagram(data.getString("Instagram"));
                                 list.add(md);
                                 PDSold.dismiss();
                             } catch (JSONException e) {
@@ -203,12 +168,19 @@ public class SoldActivity extends AppCompatActivity {
                                 }
 
                                 Button ok = customDialog.findViewById(R.id.BTNOkEror);
+                                Button batal = customDialog.findViewById(R.id.BTNCloseEror);
 
                                 ok.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View view) {
-                                        customDialog.dismiss();
                                         LoadListing(true);
+                                    }
+                                });
+
+                                batal.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        customDialog.dismiss();
                                     }
                                 });
 
@@ -234,12 +206,19 @@ public class SoldActivity extends AppCompatActivity {
                         }
 
                         Button ok = customDialog.findViewById(R.id.BTNOkEror);
+                        Button batal = customDialog.findViewById(R.id.BTNCloseEror);
 
                         ok.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
-                                customDialog.dismiss();
                                 LoadListing(true);
+                            }
+                        });
+
+                        batal.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                customDialog.dismiss();
                             }
                         });
 

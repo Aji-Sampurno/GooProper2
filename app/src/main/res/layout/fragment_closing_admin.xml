@@ -48,60 +48,12 @@
 
     </LinearLayout>
 
-    <androidx.appcompat.widget.SearchView
-        android:id="@+id/SClosingAdmin"
+    <TextView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="11dp"
-        android:background="@drawable/backgroundbox"
-        android:iconifiedByDefault="false"
-        android:hint="Jl...."/>
-
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-            android:id="@+id/SRClosingAdmin"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginBottom="?attr/actionBarSize">
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/RVClosingGridAdmin"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:paddingLeft="5dp"
-                android:paddingRight="5dp"
-                android:layout_marginBottom="?attr/actionBarSize"/>
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/RVClosingListAdmin"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:paddingLeft="5dp"
-                android:paddingRight="5dp"
-                android:layout_marginBottom="?attr/actionBarSize"
-                android:visibility="gone"/>
-
-        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|end"
-            android:orientation="vertical"
-            android:layout_marginBottom="?attr/actionBarSize">
-
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/FABClosingAdmin"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="20dp"
-                android:src="@android:drawable/ic_input_add"/>
-
-        </LinearLayout>
-
-    </FrameLayout>
+        android:layout_height="match_parent"
+        android:text="Fitur Dalam Proses Pengembangan"
+        android:textColor="@color/white"
+        android:layout_gravity="center"
+        android:gravity="center"/>
 
 </LinearLayout>

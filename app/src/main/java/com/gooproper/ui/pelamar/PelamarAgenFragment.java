@@ -71,16 +71,14 @@ public class PelamarAgenFragment extends Fragment {
     private void LoadPelamarAgen(boolean showProgressDialog) {
         PDPelamarAgen.setMessage("Memuat Data Pelamar...");
         PDPelamarAgen.show();
-        if (showProgressDialog) PDPelamarAgen.show();
-        else PDPelamarAgen.cancel();
 
         RequestQueue queue = Volley.newRequestQueue(getActivity());
         JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, ServerApi.URL_GET_PELAMAR_AGEN, null,
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
-                        if (showProgressDialog) PDPelamarAgen.cancel();
-                        else refreshLayout.setRefreshing(false);
+                        PDPelamarAgen.cancel();
+                        refreshLayout.setRefreshing(false);
                         list.clear();
                         for (int i = 0; i < response.length(); i++) {
                             try {
@@ -107,10 +105,12 @@ public class PelamarAgenFragment extends Fragment {
                                 agenModel.setImgTtd(data.getString("ImgTtd"));
                                 agenModel.setPhoto(data.getString("Photo"));
                                 agenModel.setIsAkses(data.getString("IsAkses"));
+                                agenModel.setApprove(data.getString("Approve"));
                                 list.add(agenModel);
                             } catch (JSONException e) {
                                 e.printStackTrace();
                                 PDPelamarAgen.dismiss();
+                                refreshLayout.setRefreshing(false);
 
                                 Dialog customDialog = new Dialog(getActivity());
                                 customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -121,12 +121,20 @@ public class PelamarAgenFragment extends Fragment {
                                 }
 
                                 Button ok = customDialog.findViewById(R.id.BTNOkEror);
+                                Button batal = customDialog.findViewById(R.id.BTNCloseEror);
 
                                 ok.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View view) {
                                         customDialog.dismiss();
                                         LoadPelamarAgen(true);
+                                    }
+                                });
+
+                                batal.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        customDialog.dismiss();
                                     }
                                 });
 
@@ -139,6 +147,7 @@ public class PelamarAgenFragment extends Fragment {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
+                        refreshLayout.setRefreshing(false);
                         PDPelamarAgen.dismiss();
                         error.printStackTrace();
 
@@ -151,12 +160,19 @@ public class PelamarAgenFragment extends Fragment {
                         }
 
                         Button ok = customDialog.findViewById(R.id.BTNOkEror);
+                        Button batal = customDialog.findViewById(R.id.BTNCloseEror);
 
                         ok.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
                                 customDialog.dismiss();
                                 LoadPelamarAgen(true);
+                            }
+                        });
+                        batal.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                customDialog.dismiss();
                             }
                         });
                         customDialog.show();

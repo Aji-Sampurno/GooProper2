@@ -24,6 +24,7 @@ import com.gooproper.ui.ListingTerakhirDilihatActivity;
 import com.gooproper.ui.LoginConditionActivity;
 import com.gooproper.ui.registrasi.RegistrasiAgenActivity;
 import com.gooproper.util.Preferences;
+import com.squareup.picasso.Picasso;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -69,6 +70,10 @@ public class AkunFragment extends Fragment {
         } else {
             imgurl = profile;
         }
+
+        Picasso.get()
+                .load(imgurl)
+                .into(cvcustomer);
 
         if (id.isEmpty()){
             startActivity(new Intent(getActivity(), LoginConditionActivity.class));

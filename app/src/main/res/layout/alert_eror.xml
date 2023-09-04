@@ -1,57 +1,75 @@
 <!-- res/layout/custom_dialog_layout.xml -->
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@android:color/transparent">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
         android:background="@drawable/background_round"
         android:backgroundTint="@color/white"
+        android:orientation="vertical"
         android:padding="16dp">
 
         <ImageView
             android:id="@+id/IVDialogEror"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:src="@mipmap/ic_eror_network_foreground"
+            android:layout_gravity="center"
             android:layout_marginBottom="20dp"
-            android:layout_gravity="center"/>
+            android:src="@mipmap/ic_eror_network_foreground" />
 
         <TextView
             android:id="@+id/TVTitleEror"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingBottom="8dp"
             android:text="Kesalahan Memuat Data"
             android:textAlignment="center"
             android:textColor="@color/black"
-            android:textStyle="bold"
             android:textSize="18sp"
-            android:paddingBottom="8dp" />
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/TVSubtitleEror"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
+            android:paddingBottom="8dp"
             android:text="Terdapat Kesalahan Jaringan Saat Memuat Data\n\nRefresh Halaman Untuk Memuat Ulang"
             android:textAlignment="center"
             android:textColor="@color/black"
-            android:textSize="16sp"
-            android:paddingBottom="8dp" />
+            android:textSize="16sp" />
 
-        <Button
-            android:id="@+id/BTNOkEror"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:layout_weight="1"
-            android:text="Ok"
-            android:backgroundTint="#43A047"/>
+            android:orientation="horizontal"
+            android:weightSum="2">
+
+            <Button
+                android:id="@+id/BTNOkEror"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layout_weight="1"
+                android:backgroundTint="#43A047"
+                android:text="Refresh"
+                android:textColor="@color/white" />
+
+            <Button
+                android:id="@+id/BTNCloseEror"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layout_weight="1"
+                android:backgroundTint="#E53935"
+                android:text="Batal"
+                android:textColor="@color/white" />
+
+        </LinearLayout>
 
     </LinearLayout>
 

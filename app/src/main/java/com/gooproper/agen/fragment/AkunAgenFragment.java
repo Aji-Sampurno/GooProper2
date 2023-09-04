@@ -20,15 +20,19 @@ import com.gooproper.EditAkunActivity;
 import com.gooproper.R;
 import com.gooproper.SettingActivity;
 import com.gooproper.TentangKamiActivity;
+import com.gooproper.ui.ListingFavoriteActivity;
+import com.gooproper.ui.ListingTerakhirDilihatActivity;
+import com.gooproper.ui.ListingkuActivity;
 import com.gooproper.ui.RewardActivity;
 import com.gooproper.ui.TambahListingActivity;
 import com.gooproper.util.Preferences;
+import com.squareup.picasso.Picasso;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class AkunAgenFragment extends Fragment {
 
-    private LinearLayout reward, listing, listingmitra, listingkl, agen, mitra, kl, login, pengaturan, pengaturanmitra, pengaturankl, hubungikami, hubungikamimitra, hubungikamikl, tentangkami, tentangkamimitra, tentangkamikl;
+    private LinearLayout reward, listing, listingmitra, listingkl, agen, mitra, kl, listingku, favorite, favoritemitra, favoritekl, seen, seenmitra, seenkl, pengaturan, pengaturanmitra, pengaturankl, hubungikami, hubungikamimitra, hubungikamikl, tentangkami, tentangkamimitra, tentangkamikl;
     TextView nama, edit;
     CircleImageView cvagen;
     String imgurl;
@@ -45,61 +49,74 @@ public class AkunAgenFragment extends Fragment {
                              Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_akun_agen, container, false);
 
-        listing          = root.findViewById(R.id.lytlisting);
-        listingmitra     = root.findViewById(R.id.lytlistingmitra);
-        listingkl        = root.findViewById(R.id.lytlistingkl);
-        reward           = root.findViewById(R.id.lytreward);
-        agen             = root.findViewById(R.id.lytagen);
-        mitra            = root.findViewById(R.id.lytkl);
-        kl               = root.findViewById(R.id.lytmitra);
-        login            = root.findViewById(R.id.lytlogin);
-        pengaturan       = root.findViewById(R.id.lytpengaturan);
-        pengaturanmitra  = root.findViewById(R.id.lytpengaturanmitra);
-        pengaturankl     = root.findViewById(R.id.lytpengaturankl);
-        hubungikami      = root.findViewById(R.id.lythubungikami);
+        agen = root.findViewById(R.id.lytagen);
+        mitra = root.findViewById(R.id.lytkl);
+        kl = root.findViewById(R.id.lytmitra);
+        reward = root.findViewById(R.id.lytreward);
+        listingku = root.findViewById(R.id.lytlistingku);
+        favorite = root.findViewById(R.id.lytfavorite);
+        favoritemitra = root.findViewById(R.id.lytfavoritemitra);
+        favoritekl = root.findViewById(R.id.lytfavoritekl);
+        seen = root.findViewById(R.id.lytterakhirdilihat);
+        seenmitra = root.findViewById(R.id.lytterakhirdilihatmitra);
+        seenkl = root.findViewById(R.id.lytterakhirdilihatkl);
+        listing = root.findViewById(R.id.lytlisting);
+        listingmitra = root.findViewById(R.id.lytlistingmitra);
+        listingkl = root.findViewById(R.id.lytlistingkl);
+        pengaturan = root.findViewById(R.id.lytpengaturan);
+        pengaturanmitra = root.findViewById(R.id.lytpengaturanmitra);
+        pengaturankl = root.findViewById(R.id.lytpengaturankl);
+        hubungikami = root.findViewById(R.id.lythubungikami);
         hubungikamimitra = root.findViewById(R.id.lythubungikamimitra);
-        hubungikamikl    = root.findViewById(R.id.lythubungikamikl);
-        tentangkami      = root.findViewById(R.id.lyttentangkami);
+        hubungikamikl = root.findViewById(R.id.lythubungikamikl);
+        tentangkami = root.findViewById(R.id.lyttentangkami);
         tentangkamimitra = root.findViewById(R.id.lyttentangkamimitra);
-        tentangkamikl    = root.findViewById(R.id.lyttentangkamikl);
-        nama             = root.findViewById(R.id.tvnamaakunagen);
-        edit             = root.findViewById(R.id.tveditakunagen);
-        cvagen           = root.findViewById(R.id.cvprofileagen);
+        tentangkamikl = root.findViewById(R.id.lyttentangkamikl);
+        nama = root.findViewById(R.id.tvnamaakunagen);
+        edit = root.findViewById(R.id.tveditakunagen);
+        cvagen = root.findViewById(R.id.cvprofileagen);
 
         nama.setText(Preferences.getKeyUsername(getActivity()));
         edit.setOnClickListener(view -> startActivity(new Intent(getActivity(), EditAkunActivity.class)));
 
-        status  = Preferences.getKeyIsAkses(getActivity());
+        status = Preferences.getKeyIsAkses(getActivity());
         profile = Preferences.getKeyPhoto(getActivity());
 
-        if (profile.isEmpty()){
+        if (profile.isEmpty()) {
             imgurl = "https://testingadnro.000webhostapp.com/gambar/profile/user%20default.png";
         } else {
             imgurl = profile;
         }
 
-        if (status.equals("1")){
+        Picasso.get()
+                .load(imgurl)
+                .into(cvagen);
+
+        if (status.equals("1")) {
             agen.setVisibility(View.VISIBLE);
             mitra.setVisibility(View.GONE);
             kl.setVisibility(View.GONE);
-            login.setVisibility(View.GONE);
         } else if (status.equals("2")) {
             agen.setVisibility(View.GONE);
             mitra.setVisibility(View.VISIBLE);
             kl.setVisibility(View.GONE);
-            login.setVisibility(View.GONE);
         } else if (status.equals("3")) {
             agen.setVisibility(View.GONE);
             mitra.setVisibility(View.GONE);
             kl.setVisibility(View.VISIBLE);
-            login.setVisibility(View.GONE);
         } else {
             agen.setVisibility(View.GONE);
             mitra.setVisibility(View.GONE);
             kl.setVisibility(View.GONE);
-            login.setVisibility(View.VISIBLE);
         }
 
+        listingku.setOnClickListener(view -> startActivity(new Intent(getContext(), ListingkuActivity.class)));
+        favorite.setOnClickListener(view -> startActivity(new Intent(getContext(), ListingFavoriteActivity.class)));
+        favoritemitra.setOnClickListener(view -> startActivity(new Intent(getContext(), ListingFavoriteActivity.class)));
+        favoritekl.setOnClickListener(view -> startActivity(new Intent(getContext(), ListingFavoriteActivity.class)));
+        seen.setOnClickListener(view -> startActivity(new Intent(getContext(), ListingTerakhirDilihatActivity.class)));
+        seenmitra.setOnClickListener(view -> startActivity(new Intent(getContext(), ListingTerakhirDilihatActivity.class)));
+        seenkl.setOnClickListener(view -> startActivity(new Intent(getContext(), ListingTerakhirDilihatActivity.class)));
         listing.setOnClickListener(view -> startActivity(new Intent(getContext(), TambahListingActivity.class)));
         listingmitra.setOnClickListener(view -> startActivity(new Intent(getContext(), TambahListingActivity.class)));
         listingkl.setOnClickListener(view -> startActivity(new Intent(getContext(), TambahListingActivity.class)));
@@ -138,7 +155,7 @@ public class AkunAgenFragment extends Fragment {
         lytwa.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String url = "https://api.whatsapp.com/send?phone="+wa;
+                String url = "https://api.whatsapp.com/send?phone=" + wa;
                 Intent i = new Intent(Intent.ACTION_VIEW);
                 i.setData(Uri.parse(url));
                 startActivity(i);
@@ -148,7 +165,7 @@ public class AkunAgenFragment extends Fragment {
         lytig.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String url = "http://instagram.com/_u/"+ig;
+                String url = "http://instagram.com/_u/" + ig;
                 Intent i = new Intent(Intent.ACTION_VIEW);
                 i.setData(Uri.parse(url));
                 startActivity(i);
@@ -158,7 +175,7 @@ public class AkunAgenFragment extends Fragment {
         lyttt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String url = "http://instagram.com/_u/"+tt;
+                String url = "http://instagram.com/_u/" + tt;
                 Intent i = new Intent(Intent.ACTION_VIEW);
                 i.setData(Uri.parse(url));
                 startActivity(i);
@@ -168,7 +185,7 @@ public class AkunAgenFragment extends Fragment {
         lytyt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String url = "http://instagram.com/_u/"+yt;
+                String url = "http://instagram.com/_u/" + yt;
                 Intent i = new Intent(Intent.ACTION_VIEW);
                 i.setData(Uri.parse(url));
                 startActivity(i);
@@ -178,7 +195,7 @@ public class AkunAgenFragment extends Fragment {
         lytem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String url = "http://instagram.com/_u/"+em;
+                String url = "http://instagram.com/_u/" + em;
                 Intent i = new Intent(Intent.ACTION_VIEW);
                 i.setData(Uri.parse(url));
                 startActivity(i);

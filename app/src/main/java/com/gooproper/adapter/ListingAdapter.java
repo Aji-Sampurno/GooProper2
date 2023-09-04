@@ -2,8 +2,6 @@ package com.gooproper.adapter;
 
 import android.content.Context;
 import android.content.Intent;
-import android.text.TextPaint;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,17 +17,20 @@ import com.gooproper.model.ListingModel;
 import com.gooproper.ui.DetailListingActivity;
 import com.gooproper.util.FormatCurrency;
 
-import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class ListingAdapter extends RecyclerView.Adapter<ListingAdapter.HolderData> {
 
-    private List<ListingModel> models;
+    List<ListingModel> models;
+    private List<ListingModel> originalList;
     private Context context;
     private static final int MAX_TEXT_LENGTH = 20;
 
     public ListingAdapter(Context context, List<ListingModel> list){
         this.models = list;
+        this.originalList = list;
         this.context = context;
     }
 
@@ -39,6 +40,48 @@ public class ListingAdapter extends RecyclerView.Adapter<ListingAdapter.HolderDa
         } else {
             return text;
         }
+    }
+
+    //searchView
+    public void setFilteredlist (List<ListingModel> filteredlist){
+        this.models = filteredlist;
+        notifyDataSetChanged();
+    }
+
+    //reset filter
+    public void resetFilter() {
+        models.clear();
+        models.addAll(originalList);
+        notifyDataSetChanged();
+    }
+
+    //asc - desc
+    private long parsePrice(String priceString) {
+        return Long.parseLong(priceString.replaceAll(",", "").trim());
+    }
+
+    public void sortAscending() {
+        Collections.sort(models, new Comparator<ListingModel>() {
+            @Override
+            public int compare(ListingModel item1, ListingModel item2) {
+                long price1 = parsePrice(item1.getHarga());
+                long price2 = parsePrice(item2.getHarga());
+                return Long.compare(price1, price2);
+            }
+        });
+        notifyDataSetChanged();
+    }
+
+    public void sortDescending() {
+        Collections.sort(models, new Comparator<ListingModel>() {
+            @Override
+            public int compare(ListingModel item1, ListingModel item2) {
+                long price1 = parsePrice(item1.getHarga());
+                long price2 = parsePrice(item2.getHarga());
+                return Long.compare(price2, price1);
+            }
+        });
+        notifyDataSetChanged();
     }
 
     @NonNull
@@ -101,13 +144,16 @@ public class ListingAdapter extends RecyclerView.Adapter<ListingAdapter.HolderDa
                     Intent update = new Intent(context, DetailListingActivity.class);
                     update.putExtra("update",1);
                     update.putExtra("IdListing",listingModel.getIdListing());
-                    update.putExtra("IdListing",listingModel.getIdListing());
                     update.putExtra("IdAgen",listingModel.getIdAgen());
                     update.putExtra("IdInput",listingModel.getIdInput());
                     update.putExtra("NamaListing",listingModel.getNamaListing());
                     update.putExtra("Alamat",listingModel.getAlamat());
+                    update.putExtra("Latitude",listingModel.getLatitude());
+                    update.putExtra("Longitude",listingModel.getLongitude());
                     update.putExtra("Location",listingModel.getLocation());
                     update.putExtra("Wide",listingModel.getWide());
+                    update.putExtra("Land",listingModel.getLand());
+                    update.putExtra("Listrik",listingModel.getListrik());
                     update.putExtra("Level",listingModel.getLevel());
                     update.putExtra("Bed",listingModel.getBed());
                     update.putExtra("BedArt",listingModel.getBedArt());
@@ -115,6 +161,17 @@ public class ListingAdapter extends RecyclerView.Adapter<ListingAdapter.HolderDa
                     update.putExtra("BathArt",listingModel.getBathArt());
                     update.putExtra("Garage",listingModel.getGarage());
                     update.putExtra("Carpot",listingModel.getCarpot());
+                    update.putExtra("Hadap",listingModel.getHadap());
+                    update.putExtra("SHM",listingModel.getSHM());
+                    update.putExtra("HGB",listingModel.getHGB());
+                    update.putExtra("HSHP",listingModel.getHSHP());
+                    update.putExtra("PPJB",listingModel.getPPJB());
+                    update.putExtra("Stratatitle",listingModel.getStratatitle());
+                    update.putExtra("NoSHM",listingModel.getNoSHM());
+                    update.putExtra("NoHGB",listingModel.getNoHGB());
+                    update.putExtra("NoHSHP",listingModel.getNoHSHP());
+                    update.putExtra("NoPPJB",listingModel.getNoPPJB());
+                    update.putExtra("NoStratatitle",listingModel.getNoStratatitle());
                     update.putExtra("NoCertificate",listingModel.getNoCertificate());
                     update.putExtra("Pbb",listingModel.getPbb());
                     update.putExtra("JenisProperti",listingModel.getJenisProperti());

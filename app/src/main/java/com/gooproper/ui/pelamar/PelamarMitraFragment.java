@@ -124,12 +124,19 @@ public class PelamarMitraFragment extends Fragment {
                                 }
 
                                 Button ok = customDialog.findViewById(R.id.BTNOkEror);
+                                Button batal = customDialog.findViewById(R.id.BTNCloseEror);
 
                                 ok.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View view) {
                                         customDialog.dismiss();
                                         LoadPelamarMitra(true);
+                                    }
+                                });
+                                batal.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        customDialog.dismiss();
                                     }
                                 });
 
@@ -154,12 +161,19 @@ public class PelamarMitraFragment extends Fragment {
                         }
 
                         Button ok = customDialog.findViewById(R.id.BTNOkEror);
+                        Button batal = customDialog.findViewById(R.id.BTNCloseEror);
 
                         ok.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
                                 customDialog.dismiss();
                                 LoadPelamarMitra(true);
+                            }
+                        });
+                        batal.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                customDialog.dismiss();
                             }
                         });
                         customDialog.show();

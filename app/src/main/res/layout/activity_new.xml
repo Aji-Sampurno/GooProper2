@@ -1,85 +1,82 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="@color/main"
+    android:orientation="vertical"
     tools:context=".ui.NewActivity">
 
     <LinearLayout
         android:id="@+id/LYTTopNew"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@drawable/top_bar"
         android:orientation="horizontal"
         android:padding="10dp"
-        android:background="@drawable/top_bar"
         android:weightSum="7">
 
-        <ImageView
+        <androidx.appcompat.widget.SearchView
+            android:id="@+id/searchView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="3"
-            android:layout_gravity="center"
-            android:adjustViewBounds="true"
-            android:src="@mipmap/ic_icon_foreground"
-            app:tint="@color/second" />
-
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginStart="8dp"
             android:layout_weight="1"
+            android:background="@drawable/backgroundbox"
+            android:iconifiedByDefault="false"
+            android:queryHint="Address" />
+
+        <ImageView
+            android:id="@+id/filterBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:layout_weight="3"
+            android:adjustViewBounds="true"
+            android:padding="10dp"
+            android:src="@drawable/ic_filter"
             app:tint="@color/second" />
 
         <ImageView
-            android:id="@+id/IVGridNew"
+            android:id="@+id/sortAscendingBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="3"
             android:layout_gravity="center"
+            android:layout_weight="3"
             android:adjustViewBounds="true"
-            android:padding="15dp"
-            android:src="@drawable/ic_menu_grid"
-            app:tint="@color/second"/>
+            android:padding="10dp"
+            android:src="@drawable/ic_sort"
+            app:tint="@color/second"
+            android:visibility="visible"/>
+
+        <ImageView
+            android:id="@+id/sortDescendingBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="3"
+            android:adjustViewBounds="true"
+            android:padding="10dp"
+            android:src="@drawable/ic_sort"
+            android:rotation="180"
+            app:tint="@color/second"
+            android:visibility="gone"/>
 
     </LinearLayout>
 
-    <ScrollView
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/SRNew"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <LinearLayout
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/RVListingGridNew"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginTop="5dp"
-            android:padding="11dp">
+            android:layout_height="match_parent"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp" />
 
-            <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-                android:id="@+id/SRNew"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginBottom="?attr/actionBarSize">
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/RVListingGridNew"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:visibility="visible"/>
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/RVListingListNew"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:visibility="gone"/>
-
-            </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-
-        </LinearLayout>
-
-    </ScrollView>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 </LinearLayout>
