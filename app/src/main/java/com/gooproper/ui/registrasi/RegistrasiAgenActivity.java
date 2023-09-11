@@ -996,59 +996,51 @@ public class RegistrasiAgenActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if (requestCode == CODE_GALLERY_REQUEST && resultCode == RESULT_OK && data != null) {
             Uri filePath = data.getData();
-            cropImage(filePath);
+            try {
+                InputStream inputStream = getContentResolver().openInputStream(filePath);
+                bitmappas = BitmapFactory.decodeStream(inputStream);
+                imgpas.setVisibility(View.VISIBLE);
+                imgpas.setImageBitmap(bitmappas);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
         } else if (requestCode == CODE_GALLERY_REQUEST_KTP && resultCode == RESULT_OK && data != null) {
             Uri filePath = data.getData();
-            cropImageKtp(filePath);
+            try {
+                InputStream inputStream = getContentResolver().openInputStream(filePath);
+                bitmap = BitmapFactory.decodeStream(inputStream);
+                imgktp.setVisibility(View.VISIBLE);
+                imgktp.setImageBitmap(bitmap);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
         } else if (requestCode == KODE_REQUEST_KAMERA && resultCode == RESULT_OK) {
             if (data != null && data.getExtras() != null) {
                 Bitmap imageBitmap = (Bitmap) data.getExtras().get("data");
                 if (imageBitmap != null) {
-                    cropImage(getImageUri(this, imageBitmap));
+                    try {
+                        InputStream inputStream = getContentResolver().openInputStream(getImageUri(this,imageBitmap));
+                        bitmappas = BitmapFactory.decodeStream(inputStream);
+                        imgpas.setVisibility(View.VISIBLE);
+                        imgpas.setImageBitmap(bitmappas);
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         } else if (requestCode == KODE_REQUEST_KAMERA_KTP && resultCode == RESULT_OK) {
             if (data != null && data.getExtras() != null) {
                 Bitmap imageBitmap = (Bitmap) data.getExtras().get("data");
                 if (imageBitmap != null) {
-                    cropImageKtp(getImageUri(this, imageBitmap));
-                }
-            }
-        } else if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
-            CropImage.ActivityResult result = CropImage.getActivityResult(data);
-            if (resultCode == RESULT_OK) {
-                Uri croppedUri = result.getUri();
-                try {
-                    if (agen.getVisibility() == View.VISIBLE) {
-                        if (bitmap == null) {
-                            InputStream inputStream = getContentResolver().openInputStream(croppedUri);
-                            bitmap = BitmapFactory.decodeStream(inputStream);
-                            imgktp.setImageBitmap(bitmap);
-                        } else {
-                            InputStream inputStream = getContentResolver().openInputStream(croppedUri);
-                            bitmappas = BitmapFactory.decodeStream(inputStream);
-                            imgpas.setImageBitmap(bitmappas);
-                        }
-                    } else if (Mitra.getVisibility() == View.VISIBLE) {
-                        if (bitmap == null) {
-                            InputStream inputStream = getContentResolver().openInputStream(croppedUri);
-                            bitmap = BitmapFactory.decodeStream(inputStream);
-                            IVFotoMitra.setImageBitmap(bitmap);
-                        }
-                    } else {
-                        if (bitmap == null) {
-                            InputStream inputStream = getContentResolver().openInputStream(croppedUri);
-                            bitmap = BitmapFactory.decodeStream(inputStream);
-                            IVFotoKantorLain.setImageBitmap(bitmap);
-                        }
+                    try {
+                        InputStream inputStream = getContentResolver().openInputStream(getImageUri(this,imageBitmap));
+                        bitmap = BitmapFactory.decodeStream(inputStream);
+                        imgktp.setVisibility(View.VISIBLE);
+                        imgktp.setImageBitmap(bitmap);
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
                     }
-
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
                 }
-            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
-                Exception error = result.getError();
-                error.printStackTrace();
             }
         }
         super.onActivityResult(requestCode, resultCode, data);

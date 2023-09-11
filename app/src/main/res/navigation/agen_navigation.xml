@@ -13,6 +13,10 @@
         android:id="@+id/homeAgen_nav"
         android:name="com.gooproper.agen.fragment.HomeAgenFragment"
         tools:layout="@layout/fragment_home_agen" />
+    <fragment
+        android:id="@+id/listingAgen_nav"
+        android:name="com.gooproper.agen.fragment.ListingAgenFragment"
+        tools:layout="@layout/fragment_listing_agen" />
 
     <fragment
         android:id="@+id/akunAgen_nav"

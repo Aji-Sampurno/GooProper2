@@ -1,14 +1,23 @@
 package com.gooproper.ui;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
+import android.Manifest;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.util.Base64;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -34,6 +43,9 @@ import com.gooproper.R;
 import com.gooproper.util.Preferences;
 import com.gooproper.util.ServerApi;
 
+import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -49,8 +61,10 @@ public class FollowUpActivity extends AppCompatActivity {
     EditText Nama, NoWa, Ket, Tgl, Jam;
     CheckBox Chat, Survei, Tawar, Lokasi, Deal;
     ImageView IVSurvei;
-    Bitmap Selfie;
-    String BuyerNama, BuyerTelp, BuyerKeterangan, BuyerTanggal, BuyerIdAgen, BuyerIdListing, BuyerIdInput, BuyerJam, StringNamaBuyer, PenggunaId, PenggunaStatus;
+    String BuyerNama, BuyerTelp, BuyerKeterangan, BuyerTanggal, BuyerIdAgen, BuyerIdListing, BuyerIdInput, BuyerJam, StringNamaBuyer, PenggunaId, PenggunaStatus, StringSelfie;
+    Bitmap BitmapSelfie;
+    final int CODE_CAMERA_REQUEST = 101;
+    final int KODE_REQUEST_KAMERA = 102;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +89,26 @@ public class FollowUpActivity extends AppCompatActivity {
         Intent data = getIntent();
         String intentIdListing = data.getStringExtra("IdListing");
         String intentIdAgen = data.getStringExtra("IdAgen");
+
+        BuyerIdAgen = intentIdAgen;
+        BuyerIdListing = intentIdListing;
+        BuyerNama = Nama.getText().toString();
+        BuyerTelp = NoWa.getText().toString();
+        BuyerKeterangan = Ket.getText().toString();
+        BuyerTanggal = Tgl.getText().toString();
+        BuyerJam = Jam.getText().toString();
+
+        PenggunaStatus = Preferences.getKeyStatus(this);
+
+        if (PenggunaStatus.equals("1")) {
+            PenggunaId = "0";
+        } else if (PenggunaStatus.equals("2")) {
+            PenggunaId = "0";
+        } else if (PenggunaStatus.equals("3")) {
+            PenggunaId = Preferences.getKeyIdAgen(this);
+        } else if (PenggunaStatus.equals("4")) {
+            PenggunaId = Preferences.getKeyIdCustomer(this);
+        }
 
         Tgl.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -119,26 +153,6 @@ public class FollowUpActivity extends AppCompatActivity {
             }
         });
 
-        BuyerIdAgen = intentIdAgen;
-        BuyerIdListing = intentIdListing;
-        BuyerNama = Nama.getText().toString();
-        BuyerTelp = NoWa.getText().toString();
-        BuyerKeterangan = Ket.getText().toString();
-        BuyerTanggal = Tgl.getText().toString();
-        BuyerJam = Jam.getText().toString();
-
-        PenggunaStatus = Preferences.getKeyStatus(this);
-
-        if (PenggunaStatus.equals("1")) {
-            PenggunaId = "0";
-        } else if (PenggunaStatus.equals("2")) {
-            PenggunaId = "0";
-        } else if (PenggunaStatus.equals("3")) {
-            PenggunaId = Preferences.getKeyIdAgen(this);
-        } else if (PenggunaStatus.equals("4")) {
-            PenggunaId = Preferences.getKeyIdCustomer(this);
-        }
-
         Survei.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
@@ -150,12 +164,7 @@ public class FollowUpActivity extends AppCompatActivity {
             }
         });
 
-        IVSurvei.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-            }
-        });
+        IVSurvei.setOnClickListener(view -> ActivityCompat.requestPermissions(FollowUpActivity.this, new String[]{Manifest.permission.CAMERA}, CODE_CAMERA_REQUEST));
 
         Batal.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -167,13 +176,135 @@ public class FollowUpActivity extends AppCompatActivity {
         Submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AddFlowup();
+                if (Survei.isChecked()){
+                    if (BitmapSelfie == null){
+                        Dialog customDialog = new Dialog(FollowUpActivity.this);
+                        customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                        customDialog.setContentView(R.layout.custom_dialog_eror_input);
+
+                        if (customDialog.getWindow() != null) {
+                            customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                        }
+
+                        Button ok = customDialog.findViewById(R.id.BtnOkErorInput);
+                        TextView tv = customDialog.findViewById(R.id.TVDialogErorInput);
+
+                        tv.setText("Harap Selfie Terlebih Dahulu");
+
+                        ok.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                customDialog.dismiss();
+                            }
+                        });
+
+                        ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
+
+                        Glide.with(FollowUpActivity.this)
+                                .load(R.drawable.alert)
+                                .transition(DrawableTransitionOptions.withCrossFade())
+                                .into(gifImageView);
+
+                        customDialog.show();
+                    } else {
+                        AddFlowup();
+                    }
+                } else {
+                    AddFlowup();
+                }
             }
         });
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
         }
+    }
+
+    private void bukaKamera() {
+        Intent intentKamera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (intentKamera.resolveActivity(getPackageManager()) != null) {
+            startActivityForResult(intentKamera, KODE_REQUEST_KAMERA);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if (requestCode == CODE_CAMERA_REQUEST) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                bukaKamera();
+            } else {
+                Dialog customDialog = new Dialog(FollowUpActivity.this);
+                customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                customDialog.setContentView(R.layout.custom_dialog_eror_input);
+
+                if (customDialog.getWindow() != null) {
+                    customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                }
+
+                Button ok = customDialog.findViewById(R.id.BtnOkErorInput);
+                TextView tv = customDialog.findViewById(R.id.TVDialogErorInput);
+
+                tv.setText("Akses Kamera Ditolak");
+
+                ok.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        customDialog.dismiss();
+                    }
+                });
+
+                ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
+
+                Glide.with(FollowUpActivity.this)
+                        .load(R.drawable.alert) // You can also use a local resource like R.drawable.your_gif_resource
+                        .transition(DrawableTransitionOptions.withCrossFade())
+                        .into(gifImageView);
+
+                customDialog.show();
+            }
+
+            return;
+        }
+
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == KODE_REQUEST_KAMERA && resultCode == RESULT_OK) {
+            if (data != null && data.getExtras() != null) {
+                Bitmap imageBitmap = (Bitmap) data.getExtras().get("data");
+                if (imageBitmap != null) {
+                    try {
+                        InputStream inputStream = getContentResolver().openInputStream(getImageUri(this,imageBitmap));
+                        BitmapSelfie = BitmapFactory.decodeStream(inputStream);
+                        IVSurvei.setImageBitmap(BitmapSelfie);
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    public static Uri getImageUri(Context inContext, Bitmap inImage) {
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        inImage.compress(Bitmap.CompressFormat.PNG, 100, bytes);
+        String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "IMG_" + Calendar.getInstance().getTime(), null);
+        return Uri.parse(path);
+    }
+
+    private String imageToString(Bitmap bitmap) {
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
+        byte[] imageBytes = outputStream.toByteArray();
+
+        String encodeImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);
+        return encodeImage;
     }
 
     private void AddFlowup() {
@@ -186,6 +317,11 @@ public class FollowUpActivity extends AppCompatActivity {
         final String StringTawar = Tawar.isChecked()?"1":"0";
         final String StringLokasi = Lokasi.isChecked()?"1":"0";
         final String StringDeal = Deal.isChecked()?"1":"0";
+        if (BitmapSelfie == null) {
+            StringSelfie = "0";
+        } else {
+            StringSelfie = imageToString(BitmapSelfie);
+        }
         StringRequest stringRequest = new StringRequest(Request.Method.POST, ServerApi.URL_ADD_FLOWUP, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -210,6 +346,7 @@ public class FollowUpActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View view) {
                         customDialog.dismiss();
+                        finish();
                     }
                 });
 
@@ -264,14 +401,16 @@ public class FollowUpActivity extends AppCompatActivity {
                 map.put("IdInput", PenggunaId);
                 map.put("IdListing", BuyerIdListing);
                 map.put("NamaBuyer", Nama.getText().toString());
+                map.put("TelpBuyer", NoWa.getText().toString());
+                map.put("SumberBuyer", Ket.getText().toString());
                 map.put("Tanggal", Tgl.getText().toString());
                 map.put("Jam", Jam.getText().toString());
-                map.put("Keterangan", Ket.getText().toString());
                 map.put("Chat", StringChat);
                 map.put("Survei", StringSurvei);
                 map.put("Tawar", StringTawar);
                 map.put("Lokasi", StringLokasi);
                 map.put("Deal", StringDeal);
+                map.put("Selfie", StringSelfie);
                 return map;
             }
         };

@@ -2,11 +2,14 @@ package com.gooproper.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
@@ -16,6 +19,9 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
+import com.gooproper.LoginActivity;
 import com.gooproper.R;
 import com.gooproper.ui.registrasi.RegistrasiCustomerActivity;
 import com.gooproper.admin.MainAdminActivity;
@@ -151,15 +157,63 @@ public class LoginConditionActivity extends AppCompatActivity {
                                     startActivity(intent);
                                 }
                             }else {
-                                androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(LoginConditionActivity.this);
-                                builder.setMessage("Username atau Password Anda salah!"+res)
-                                        .setNegativeButton("Retry", null).create().show();
+                                Dialog customDialog = new Dialog(LoginConditionActivity.this);
+                                customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                                customDialog.setContentView(R.layout.custom_dialog_login);
+
+                                if (customDialog.getWindow() != null) {
+                                    customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                                }
+
+                                TextView dialogTitle = customDialog.findViewById(R.id.TVStatusLogin);
+                                TextView dialogKet = customDialog.findViewById(R.id.TVKeteranganLogin);
+                                Button cobalagi = customDialog.findViewById(R.id.BtnCobalagiLogin);
+                                ImageView image = customDialog.findViewById(R.id.IVStatusLogin);
+
+                                dialogTitle.setText("Login Gagal");
+                                dialogKet.setText("Username atau Password Salah");
+                                cobalagi.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        customDialog.dismiss();
+                                    }
+                                });
+
+                                Glide.with(LoginConditionActivity.this)
+                                        .load(R.mipmap.ic_no)
+                                        .into(image);
+
+                                customDialog.show();
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
-                            androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(LoginConditionActivity.this);
-                            builder.setMessage("Username atau Password Anda salah!" +e)
-                                    .setNegativeButton("Retry", null).create().show();
+                            Dialog customDialog = new Dialog(LoginConditionActivity.this);
+                            customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                            customDialog.setContentView(R.layout.custom_dialog_login);
+
+                            if (customDialog.getWindow() != null) {
+                                customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                            }
+
+                            TextView dialogTitle = customDialog.findViewById(R.id.TVStatusLogin);
+                            TextView dialogKet = customDialog.findViewById(R.id.TVKeteranganLogin);
+                            Button cobalagi = customDialog.findViewById(R.id.BtnCobalagiLogin);
+                            ImageView image = customDialog.findViewById(R.id.IVStatusLogin);
+
+                            dialogTitle.setText("Login Gagal");
+                            dialogKet.setText("Username atau Password Salah");
+                            cobalagi.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    customDialog.dismiss();
+                                }
+                            });
+
+                            Glide.with(LoginConditionActivity.this)
+                                    .load(R.mipmap.ic_no)
+                                    .into(image);
+
+                            customDialog.show();
                         }
                     }
                 },
@@ -167,9 +221,33 @@ public class LoginConditionActivity extends AppCompatActivity {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         pDialog.cancel();
-                        androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(LoginConditionActivity.this);
-                        builder.setMessage("Terdapat Kesalahan Jaringan")
-                                .setNegativeButton("Retry", null).create().show();
+                        Dialog customDialog = new Dialog(LoginConditionActivity.this);
+                        customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                        customDialog.setContentView(R.layout.custom_dialog_login);
+
+                        if (customDialog.getWindow() != null) {
+                            customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                        }
+
+                        TextView dialogTitle = customDialog.findViewById(R.id.TVStatusLogin);
+                        TextView dialogKet = customDialog.findViewById(R.id.TVKeteranganLogin);
+                        Button cobalagi = customDialog.findViewById(R.id.BtnCobalagiLogin);
+                        ImageView image = customDialog.findViewById(R.id.IVStatusLogin);
+
+                        dialogTitle.setText("Login Gagal");
+                        dialogKet.setText("Terdapat Kesalahan Jaringan");
+                        cobalagi.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                customDialog.dismiss();
+                            }
+                        });
+
+                        Glide.with(LoginConditionActivity.this)
+                                .load(R.mipmap.ic_no)
+                                .into(image);
+
+                        customDialog.show();
                     }
                 }){
             @Override

@@ -16,6 +16,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -28,9 +29,18 @@ import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.gooproper.R;
+import com.gooproper.util.ServerApi;
+import com.squareup.picasso.Picasso;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
@@ -39,6 +49,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
 
 public class DetailFollowUpActivity extends AppCompatActivity {
 
@@ -48,12 +60,10 @@ public class DetailFollowUpActivity extends AppCompatActivity {
     ImageView IVBack, IVSelfie;
     Button BtnBatal, BtnUpdate;
     Bitmap BitmapSelfie;
-    String StringIdFollowUp;
-    final int CODE_GALLERY_REQUEST = 100;
+    Drawable DrawableSelfie;
+    String StringIdFollowUp, StringSelfie;
     final int CODE_CAMERA_REQUEST = 101;
     final int KODE_REQUEST_KAMERA = 102;
-    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE = 123;
-    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES = 456;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +71,7 @@ public class DetailFollowUpActivity extends AppCompatActivity {
         setContentView(R.layout.activity_detail_follow_up);
 
         PDFollowUp = new ProgressDialog(DetailFollowUpActivity.this);
+
         TVNamaListing = findViewById(R.id.TVNamaListingDetailFollowUp);
         TVAlamatListing = findViewById(R.id.TVAlamatListingDetailFollowUp);
         TVNamaBuyer = findViewById(R.id.TVNamaBuyerDetailFollowUp);
@@ -82,13 +93,17 @@ public class DetailFollowUpActivity extends AppCompatActivity {
         BtnBatal = findViewById(R.id.BtnBatalBuyer);
         BtnUpdate = findViewById(R.id.BtnSubmitBuyer);
 
+        DrawableSelfie = IVSelfie.getDrawable();
+
         Intent data = getIntent();
         final int update = data.getIntExtra("update",0);
         String intentIdFlowup = data.getStringExtra("IdFlowup");
         String intentIdAgen = data.getStringExtra("IdAgen");
         String intentIdInput = data.getStringExtra("IdInput");
-        String intentNamaBuyer = data.getStringExtra("NamaBuyer");
         String intentIdListing = data.getStringExtra("IdListing");
+        String intentNamaBuyer = data.getStringExtra("NamaBuyer");
+        String intentTelpBuyer = data.getStringExtra("TelpBuyer");
+        String intentSumberBuyer = data.getStringExtra("SumberBuyer");
         String intentTanggal = data.getStringExtra("Tanggal");
         String intentJam = data.getStringExtra("Jam");
         String intentKeterangan = data.getStringExtra("Keterangan");
@@ -97,6 +112,7 @@ public class DetailFollowUpActivity extends AppCompatActivity {
         String intentTawar = data.getStringExtra("Tawar");
         String intentLokasi = data.getStringExtra("Lokasi");
         String intentDeal = data.getStringExtra("Deal");
+        String intentSelfie = data.getStringExtra("Selfie");
         String intentNamaListing = data.getStringExtra("NamaListing");
         String intentAlamat = data.getStringExtra("Alamat");
         String intentLatitude = data.getStringExtra("Latitude");
@@ -117,13 +133,20 @@ public class DetailFollowUpActivity extends AppCompatActivity {
 
         StringIdFollowUp = intentIdFlowup;
 
+        if (!intentSelfie.equals("0")){
+            Picasso.get()
+                    .load(intentSelfie)
+                    .into(IVSelfie);
+        }
+
         TVNamaListing.setText(intentNamaListing);
         TVAlamatListing.setText(intentAlamat);
         TVNamaBuyer.setText(intentNamaBuyer);
-        //TVWaBuyer.setText(inten);
-        //TVSumber.setText();
+        TVWaBuyer.setText(intentTelpBuyer);
+        TVSumber.setText(intentSumberBuyer);
         TVTanggal.setText(intentTanggal);
         TVJam.setText(intentJam);
+
         if (intentDeal.equals("1")){
             TVStatus.setText("Deal");
             CBDeal.setChecked(true);
@@ -141,6 +164,23 @@ public class DetailFollowUpActivity extends AppCompatActivity {
             CBChat.setChecked(true);
         }
 
+        if (intentDeal.equals("1")){
+            CBDeal.setChecked(true);
+        }
+        if (intentLokasi.equals("1")) {
+            CBLokasi.setChecked(true);
+        }
+        if (intentTawar.equals("1")) {
+            CBTawar.setChecked(true);
+        }
+        if (intentSurvei.equals("1")) {
+            CBSurvei.setChecked(true);
+            IVSelfie.setVisibility(View.VISIBLE);
+        }
+        if (intentChat.equals("1")){
+            CBChat.setChecked(true);
+        }
+
         CBSurvei.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
@@ -153,14 +193,16 @@ public class DetailFollowUpActivity extends AppCompatActivity {
         });
 
         IVBack.setOnClickListener(view -> finish());
-        IVSelfie.setOnClickListener(view -> showPhotoSelectionDialog());
+        IVSelfie.setOnClickListener(view -> ActivityCompat.requestPermissions(DetailFollowUpActivity.this, new String[]{Manifest.permission.CAMERA}, CODE_CAMERA_REQUEST));
 
         BtnBatal.setOnClickListener(view -> finish());
         BtnUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (CBSurvei.isChecked()){
-                    if (BitmapSelfie == null){
+                    if (DrawableSelfie != null){
+                        AddFlowup();
+                    } else if (BitmapSelfie == null){
                         Dialog customDialog = new Dialog(DetailFollowUpActivity.this);
                         customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                         customDialog.setContentView(R.layout.custom_dialog_eror_input);
@@ -189,43 +231,17 @@ public class DetailFollowUpActivity extends AppCompatActivity {
                                 .into(gifImageView);
 
                         customDialog.show();
+                    } else {
+                        AddFlowup();
                     }
+                } else {
+                    AddFlowup();
                 }
             }
         });
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
-        }
-    }
-
-    private void showPhotoSelectionDialog() {
-        androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this);
-        builder.setTitle("Unggah Gambar")
-                .setItems(new CharSequence[]{"Ambil Foto", "Pilih Dari Galeri"}, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        switch (which) {
-                            case 0:
-                                ActivityCompat.requestPermissions(DetailFollowUpActivity.this, new String[]{Manifest.permission.CAMERA}, CODE_CAMERA_REQUEST);
-                                break;
-                            case 1:
-                                requestPermissions();
-                                break;
-                        }
-                    }
-                });
-
-        builder.show();
-    }
-
-    private void requestPermissions() {
-        boolean externalStoragePermissionGranted = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
-
-        if (externalStoragePermissionGranted) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE);
-        } else {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_MEDIA_IMAGES}, PERMISSION_REQUEST_CODE_MEDIA_IMAGES);
         }
     }
 
@@ -240,20 +256,9 @@ public class DetailFollowUpActivity extends AppCompatActivity {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
-        if (requestCode == PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE) {
+        if (requestCode == CODE_CAMERA_REQUEST) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                startActivityForResult(intent, CODE_GALLERY_REQUEST);
-            }
-        } else if (requestCode == PERMISSION_REQUEST_CODE_MEDIA_IMAGES) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                startActivityForResult(intent, CODE_GALLERY_REQUEST);
-            }
-        } else if (requestCode == CODE_GALLERY_REQUEST) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                startActivityForResult(intent, CODE_GALLERY_REQUEST);
+                bukaKamera();
             } else {
                 Dialog customDialog = new Dialog(DetailFollowUpActivity.this);
                 customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -266,7 +271,7 @@ public class DetailFollowUpActivity extends AppCompatActivity {
                 Button ok = customDialog.findViewById(R.id.BtnOkErorInput);
                 TextView tv = customDialog.findViewById(R.id.TVDialogErorInput);
 
-                tv.setText("Akses Galeri Ditolak");
+                tv.setText("Akses Kamera Ditolak");
 
                 ok.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -286,20 +291,6 @@ public class DetailFollowUpActivity extends AppCompatActivity {
             }
 
             return;
-        } else if (requestCode == CODE_CAMERA_REQUEST) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                bukaKamera();
-            } else {
-                AlertDialog.Builder builder = new AlertDialog.Builder(DetailFollowUpActivity.this);
-                builder.setTitle("Izin Kamera Ditolak").
-                        setMessage("Aplikasi memerlukan izin kamera untuk mengambil gambar.");
-                builder.setPositiveButton("OK",
-                        (dialog, id) -> dialog.cancel());
-                AlertDialog alert = builder.create();
-                alert.show();
-            }
-
-            return;
         }
 
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -308,16 +299,7 @@ public class DetailFollowUpActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == CODE_GALLERY_REQUEST && resultCode == RESULT_OK && data != null) {
-            Uri filePath = data.getData();
-            try {
-                InputStream inputStream = getContentResolver().openInputStream(filePath);
-                BitmapSelfie = BitmapFactory.decodeStream(inputStream);
-                IVSelfie.setImageBitmap(BitmapSelfie);
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
-        } else if (requestCode == KODE_REQUEST_KAMERA && resultCode == RESULT_OK) {
+        if (requestCode == KODE_REQUEST_KAMERA && resultCode == RESULT_OK) {
             if (data != null && data.getExtras() != null) {
                 Bitmap imageBitmap = (Bitmap) data.getExtras().get("data");
                 if (imageBitmap != null) {
@@ -341,16 +323,6 @@ public class DetailFollowUpActivity extends AppCompatActivity {
         return Uri.parse(path);
     }
 
-    private void cropImage(Uri sourceUri) {
-        Uri destinationUri = Uri.fromFile(new File(getCacheDir(), "cropped_image"));
-        CropImage.activity(sourceUri)
-                .setGuidelines(CropImageView.Guidelines.ON)
-                .setAspectRatio(1, 1)
-                .setCropShape(CropImageView.CropShape.RECTANGLE)
-                .setOutputUri(destinationUri)
-                .start(this);
-    }
-
     private String imageToString(Bitmap bitmap) {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
@@ -358,5 +330,110 @@ public class DetailFollowUpActivity extends AppCompatActivity {
 
         String encodeImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);
         return encodeImage;
+    }
+
+    private void AddFlowup() {
+        PDFollowUp.setMessage("Menyimpan Data...");
+        PDFollowUp.setCancelable(false);
+        PDFollowUp.show();
+
+        final String StringChat = CBChat.isChecked()?"1":"0";
+        final String StringSurvei = CBSurvei.isChecked()?"1":"0";
+        final String StringTawar = CBTawar.isChecked()?"1":"0";
+        final String StringLokasi = CBLokasi.isChecked()?"1":"0";
+        final String StringDeal = CBDeal.isChecked()?"1":"0";
+        if (BitmapSelfie == null) {
+            StringSelfie = "0";
+        } else {
+            StringSelfie = imageToString(BitmapSelfie);
+        }
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, ServerApi.URL_UPDATE_FLOWUP, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                PDFollowUp.cancel();
+                Dialog customDialog = new Dialog(DetailFollowUpActivity.this);
+                customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                customDialog.setContentView(R.layout.custom_dialog_sukses);
+
+                if (customDialog.getWindow() != null) {
+                    customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                }
+
+                TextView dialogTitle = customDialog.findViewById(R.id.dialog_title);
+                Button ok = customDialog.findViewById(R.id.btnya);
+                Button cobalagi = customDialog.findViewById(R.id.btntidak);
+                ImageView gifimage = customDialog.findViewById(R.id.ivdialog);
+
+                dialogTitle.setText("Berhasil Update Flowup");
+                cobalagi.setVisibility(View.GONE);
+
+                ok.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        customDialog.dismiss();
+                        finish();
+                    }
+                });
+
+                Glide.with(DetailFollowUpActivity.this)
+                        .load(R.mipmap.ic_yes) // You can also use a local resource like R.drawable.your_gif_resource
+                        .transition(DrawableTransitionOptions.withCrossFade())
+                        .into(gifimage);
+
+                customDialog.show();
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                PDFollowUp.cancel();
+                Dialog customDialog = new Dialog(DetailFollowUpActivity.this);
+                customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                customDialog.setContentView(R.layout.custom_dialog_sukses);
+
+                if (customDialog.getWindow() != null) {
+                    customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                }
+
+                TextView dialogTitle = customDialog.findViewById(R.id.dialog_title);
+                Button ok = customDialog.findViewById(R.id.btnya);
+                Button cobalagi = customDialog.findViewById(R.id.btntidak);
+                ImageView gifimage = customDialog.findViewById(R.id.ivdialog);
+
+                dialogTitle.setText("Gagal Tambah Data FlowUp");
+                ok.setVisibility(View.GONE);
+
+                cobalagi.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        customDialog.dismiss();
+                    }
+                });
+
+                Glide.with(DetailFollowUpActivity.this)
+                        .load(R.mipmap.ic_no) // You can also use a local resource like R.drawable.your_gif_resource
+                        .transition(DrawableTransitionOptions.withCrossFade())
+                        .into(gifimage);
+
+                customDialog.show();
+            }
+        }) {
+            @Nullable
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> map = new HashMap<>();
+                System.out.println(map);
+                map.put("IdFlowup", StringIdFollowUp);
+                map.put("Chat", StringChat);
+                map.put("Survei", StringSurvei);
+                map.put("Tawar", StringTawar);
+                map.put("Lokasi", StringLokasi);
+                map.put("Deal", StringDeal);
+                map.put("Selfie", StringSelfie);
+                return map;
+            }
+        };
+
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(stringRequest);
     }
 }

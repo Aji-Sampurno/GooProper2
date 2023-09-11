@@ -167,11 +167,11 @@ public class ListingPopulerAdapter extends RecyclerView.Adapter<ListingPopulerAd
                     update.putExtra("HSHP",listingModel.getHSHP());
                     update.putExtra("PPJB",listingModel.getPPJB());
                     update.putExtra("Stratatitle",listingModel.getStratatitle());
-                    update.putExtra("NoSHM",listingModel.getNoSHM());
-                    update.putExtra("NoHGB",listingModel.getNoHGB());
-                    update.putExtra("NoHSHP",listingModel.getNoHSHP());
-                    update.putExtra("NoPPJB",listingModel.getNoPPJB());
-                    update.putExtra("NoStratatitle",listingModel.getNoStratatitle());
+                    update.putExtra("ImgSHM",listingModel.getImgSHM());
+                    update.putExtra("ImgHGB",listingModel.getImgHGB());
+                    update.putExtra("ImgHSHP",listingModel.getImgHSHP());
+                    update.putExtra("ImgPPJB",listingModel.getImgPPJB());
+                    update.putExtra("ImgStratatitle",listingModel.getImgStratatitle());
                     update.putExtra("NoCertificate",listingModel.getNoCertificate());
                     update.putExtra("Pbb",listingModel.getPbb());
                     update.putExtra("JenisProperti",listingModel.getJenisProperti());
@@ -184,6 +184,7 @@ public class ListingPopulerAdapter extends RecyclerView.Adapter<ListingPopulerAd
                     update.putExtra("Priority",listingModel.getPriority());
                     update.putExtra("Ttd",listingModel.getTtd());
                     update.putExtra("Banner",listingModel.getBanner());
+                    update.putExtra("Size",listingModel.getSize());
                     update.putExtra("Harga",listingModel.getHarga());
                     update.putExtra("TglInput",listingModel.getTglInput());
                     update.putExtra("Img1",listingModel.getImg1());
@@ -203,6 +204,8 @@ public class ListingPopulerAdapter extends RecyclerView.Adapter<ListingPopulerAd
                     update.putExtra("IsManager",listingModel.getIsManager());
                     update.putExtra("View",listingModel.getView());
                     update.putExtra("Sold",listingModel.getSold());
+                    update.putExtra("Marketable",listingModel.getMarketable());
+                    update.putExtra("StatusHarga",listingModel.getStatusHarga());
                     update.putExtra("Nama",listingModel.getNama());
                     update.putExtra("NoTelp",listingModel.getNoTelp());
                     update.putExtra("Instagram",listingModel.getInstagram());

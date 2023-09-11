@@ -22,181 +22,205 @@
             app:cardElevation="4dp"
             app:cardCornerRadius="20dp">
 
-            <LinearLayout
+            <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:weightSum="2">
-
-                <ImageView
-                    android:id="@+id/pic"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:adjustViewBounds="true"
-                    android:layout_weight="1"
-                    app:srcCompat="@mipmap/ic_icon_foreground" />
+                android:layout_height="wrap_content">
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:padding="10dp"
-                    android:background="@color/third"
-                    android:layout_weight="1"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:orientation="vertical">
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="2">
 
-                    <TextView
-                        android:id="@+id/titleTxt"
+                    <ImageView
+                        android:id="@+id/pic"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="title"
-                        android:textSize="12sp"
-                        android:textColor="@color/white"/>
-
-                    <TextView
-                        android:id="@+id/addressTxt"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:text="address"
-                        android:textSize="12sp"
-                        android:textColor="@color/white"/>
+                        android:layout_height="match_parent"
+                        android:adjustViewBounds="true"
+                        android:layout_weight="1"
+                        android:scaleType="centerCrop"
+                        app:srcCompat="@mipmap/ic_icon_foreground" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:weightSum="2"
-                        android:layout_marginTop="8dp"
-                        android:orientation="horizontal">
+                        android:layout_height="match_parent"
+                        android:padding="10dp"
+                        android:background="@color/third"
+                        android:layout_weight="1"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/titleTxt"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="title"
+                            android:textSize="12sp"
+                            android:textColor="@color/white"/>
+
+                        <TextView
+                            android:id="@+id/addressTxt"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:text="address"
+                            android:textSize="12sp"
+                            android:textColor="@color/white"/>
 
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:layout_weight="1"
-                            android:gravity="start">
+                            android:weightSum="2"
+                            android:layout_marginTop="8dp"
+                            android:orientation="horizontal">
 
-                            <ImageView
-                                android:id="@+id/imageView17"
-                                android:layout_width="wrap_content"
+                            <LinearLayout
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_marginEnd="8dp"
-                                android:src="@drawable/ic_bed"
-                                app:tint="@color/white" />
+                                android:orientation="horizontal"
+                                android:layout_weight="1"
+                                android:gravity="start">
 
-                            <TextView
-                                android:id="@+id/bedTxt"
-                                android:layout_width="wrap_content"
+                                <ImageView
+                                    android:id="@+id/imageView17"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginEnd="8dp"
+                                    android:src="@drawable/ic_bed"
+                                    app:tint="@color/white" />
+
+                                <TextView
+                                    android:id="@+id/bedTxt"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:text="bed"
+                                    android:textColor="@color/white"
+                                    android:textSize="12sp"/>
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:text="bed"
-                                android:textColor="@color/white"
-                                android:textSize="12sp"/>
+                                android:orientation="horizontal"
+                                android:layout_weight="1"
+                                android:gravity="start">
+
+                                <ImageView
+                                    android:id="@+id/imageView21"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginEnd="8dp"
+                                    app:srcCompat="@drawable/ic_lantai"
+                                    app:tint="@color/white" />
+
+                                <TextView
+                                    android:id="@+id/levelTxt"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:text="lantai"
+                                    android:textColor="@color/white"
+                                    android:textSize="12sp"/>
+
+                            </LinearLayout>
 
                         </LinearLayout>
 
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:layout_weight="1"
-                            android:gravity="start">
+                            android:weightSum="2"
+                            android:layout_marginTop="8dp"
+                            android:orientation="horizontal">
 
-                            <ImageView
-                                android:id="@+id/imageView21"
-                                android:layout_width="wrap_content"
+                            <LinearLayout
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_marginEnd="8dp"
-                                app:srcCompat="@drawable/ic_lantai"
-                                app:tint="@color/white" />
+                                android:orientation="horizontal"
+                                android:layout_weight="1"
+                                android:gravity="start">
 
-                            <TextView
-                                android:id="@+id/levelTxt"
-                                android:layout_width="wrap_content"
+                                <ImageView
+                                    android:id="@+id/imageView20"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginEnd="8dp"
+                                    app:srcCompat="@drawable/ic_garasi"
+                                    app:tint="@color/white" />
+
+                                <TextView
+                                    android:id="@+id/garageTxt"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:text="Garasi"
+                                    android:textColor="@color/white"
+                                    android:textSize="12sp"/>
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:text="lantai"
-                                android:textColor="@color/white"
-                                android:textSize="12sp"/>
+                                android:orientation="horizontal"
+                                android:layout_weight="1"
+                                android:gravity="start">
+
+                                <ImageView
+                                    android:id="@+id/imageView18"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginEnd="8dp"
+                                    app:srcCompat="@drawable/ic_bath"
+                                    app:tint="@color/white" />
+
+                                <TextView
+                                    android:id="@+id/bathTxt"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:text="bath"
+                                    android:textSize="12sp"
+                                    android:textColor="@color/white"/>
+
+                            </LinearLayout>
 
                         </LinearLayout>
+
+                        <TextView
+                            android:id="@+id/priceTxt"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:text="Rp. 2.576.000"
+                            android:textColor="@color/second"
+                            android:textSize="12sp"/>
 
                     </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:weightSum="2"
-                        android:layout_marginTop="8dp"
-                        android:orientation="horizontal">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:layout_weight="1"
-                            android:gravity="start">
-
-                            <ImageView
-                                android:id="@+id/imageView20"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginEnd="8dp"
-                                app:srcCompat="@drawable/ic_garasi"
-                                app:tint="@color/white" />
-
-                            <TextView
-                                android:id="@+id/garageTxt"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:text="Garasi"
-                                android:textColor="@color/white"
-                                android:textSize="12sp"/>
-
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:layout_weight="1"
-                            android:gravity="start">
-
-                            <ImageView
-                                android:id="@+id/imageView18"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginEnd="8dp"
-                                app:srcCompat="@drawable/ic_bath"
-                                app:tint="@color/white" />
-
-                            <TextView
-                                android:id="@+id/bathTxt"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:text="bath"
-                                android:textSize="12sp"
-                                android:textColor="@color/white"/>
-
-                        </LinearLayout>
-
-                    </LinearLayout>
-
-                    <TextView
-                        android:id="@+id/priceTxt"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:text="Rp. 2.576.000"
-                        android:textColor="@color/second"
-                        android:textSize="12sp"/>
 
                 </LinearLayout>
 
-            </LinearLayout>
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:orientation="vertical"
+                    android:background="@color/second">
+
+                    <TextView
+                        android:id="@+id/TVPriority"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:text="Exclusive"
+                        android:textColor="@color/main"/>
+
+                </LinearLayout>
+
+            </FrameLayout>
 
         </androidx.cardview.widget.CardView>
 

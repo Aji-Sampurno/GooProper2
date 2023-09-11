@@ -118,11 +118,11 @@ public class ListingTerakhirDilihatActivity extends AppCompatActivity {
                                 md.setHSHP(data.getString("HSHP"));
                                 md.setPPJB(data.getString("PPJB"));
                                 md.setStratatitle(data.getString("Stratatitle"));
-                                md.setNoSHM(data.getString("NoSHM"));
-                                md.setNoHGB(data.getString("NoHGB"));
-                                md.setNoHSHP(data.getString("NoHSHP"));
-                                md.setNoPPJB(data.getString("NoPPJB"));
-                                md.setNoStratatitle(data.getString("NoStratatitle"));
+                                md.setImgSHM(data.getString("ImgSHM"));
+                                md.setImgHGB(data.getString("ImgHGB"));
+                                md.setImgHSHP(data.getString("ImgHSHP"));
+                                md.setImgPPJB(data.getString("ImgPPJB"));
+                                md.setImgStratatitle(data.getString("ImgStratatitle"));
                                 md.setNoCertificate(data.getString("NoCertificate"));
                                 md.setPbb(data.getString("Pbb"));
                                 md.setJenisProperti(data.getString("JenisProperti"));
@@ -135,6 +135,7 @@ public class ListingTerakhirDilihatActivity extends AppCompatActivity {
                                 md.setPriority(data.getString("Priority"));
                                 md.setTtd(data.getString("Ttd"));
                                 md.setBanner(data.getString("Banner"));
+                                md.setSize(data.getString("Size"));
                                 md.setHarga(data.getString("Harga"));
                                 md.setTglInput(data.getString("TglInput"));
                                 md.setImg1(data.getString("Img1"));
@@ -154,6 +155,8 @@ public class ListingTerakhirDilihatActivity extends AppCompatActivity {
                                 md.setIsManager(data.getString("IsManager"));
                                 md.setSold(data.getString("Sold"));
                                 md.setView(data.getString("View"));
+                                md.setMarketable(data.getString("Marketable"));
+                                md.setStatusHarga(data.getString("StatusHarga"));
                                 md.setNama(data.getString("Nama"));
                                 md.setNoTelp(data.getString("NoTelp"));
                                 md.setInstagram(data.getString("Instagram"));
@@ -274,11 +277,11 @@ public class ListingTerakhirDilihatActivity extends AppCompatActivity {
                                 md.setHSHP(data.getString("HSHP"));
                                 md.setPPJB(data.getString("PPJB"));
                                 md.setStratatitle(data.getString("Stratatitle"));
-                                md.setNoSHM(data.getString("NoSHM"));
-                                md.setNoHGB(data.getString("NoHGB"));
-                                md.setNoHSHP(data.getString("NoHSHP"));
-                                md.setNoPPJB(data.getString("NoPPJB"));
-                                md.setNoStratatitle(data.getString("NoStratatitle"));
+                                md.setImgSHM(data.getString("ImgSHM"));
+                                md.setImgHGB(data.getString("ImgHGB"));
+                                md.setImgHSHP(data.getString("ImgHSHP"));
+                                md.setImgPPJB(data.getString("ImgPPJB"));
+                                md.setImgStratatitle(data.getString("ImgStratatitle"));
                                 md.setNoCertificate(data.getString("NoCertificate"));
                                 md.setPbb(data.getString("Pbb"));
                                 md.setJenisProperti(data.getString("JenisProperti"));
@@ -291,6 +294,7 @@ public class ListingTerakhirDilihatActivity extends AppCompatActivity {
                                 md.setPriority(data.getString("Priority"));
                                 md.setTtd(data.getString("Ttd"));
                                 md.setBanner(data.getString("Banner"));
+                                md.setSize(data.getString("Size"));
                                 md.setHarga(data.getString("Harga"));
                                 md.setTglInput(data.getString("TglInput"));
                                 md.setImg1(data.getString("Img1"));
@@ -310,6 +314,8 @@ public class ListingTerakhirDilihatActivity extends AppCompatActivity {
                                 md.setIsManager(data.getString("IsManager"));
                                 md.setSold(data.getString("Sold"));
                                 md.setView(data.getString("View"));
+                                md.setMarketable(data.getString("Marketable"));
+                                md.setStatusHarga(data.getString("StatusHarga"));
                                 md.setNama(data.getString("Nama"));
                                 md.setNoTelp(data.getString("NoTelp"));
                                 md.setInstagram(data.getString("Instagram"));

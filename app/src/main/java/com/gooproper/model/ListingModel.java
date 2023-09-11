@@ -1,12 +1,12 @@
 package com.gooproper.model;
 
 public class ListingModel {
-    String IdPraListing, IdListing, IdAgen, IdInput, IdVendor, NamaListing, Alamat, Location, Wide, Land, Listrik, Level, Bed, Bath, BedArt, BathArt, Garage, Carpot, NoCertificate, Pbb, JenisProperti, JenisCertificate, SumberAir, Kondisi, Deskripsi, Prabot, KetPrabot, Priority, Ttd, Banner, Harga, TglInput, Img1, Img2, Img3, Img4, Img5, Img6, Img7, Img8, Video, LinkFacebook, LinkTiktok, LinkInstagram, LinkYoutube, IsAdmin, IsManager, View, Sold, Nama, NoTelp, Instagram, Latitude, Longitude,Hadap,SHM,HGB,HSHP,PPJB,Stratatitle,NoSHM,NoHGB,NoHSHP,NoPPJB,NoStratatitle;
+    String IdPraListing, IdListing, IdAgen, IdInput, IdVendor, NamaListing, Alamat, Location, Wide, Land, Listrik, Level, Bed, Bath, BedArt, BathArt, Garage, Carpot, NoCertificate, Pbb, JenisProperti, JenisCertificate, SumberAir, Kondisi, Deskripsi, Prabot, KetPrabot, Priority, Ttd, Banner, Harga, TglInput, Img1, Img2, Img3, Img4, Img5, Img6, Img7, Img8, Video, LinkFacebook, LinkTiktok, LinkInstagram, LinkYoutube, IsAdmin, IsManager, View, Sold, Nama, NoTelp, Instagram, Latitude, Longitude, Hadap, SHM, HGB, HSHP, PPJB, Stratatitle, ImgSHM, ImgHGB, ImgHSHP, ImgPPJB, ImgStratatitle, Size, Marketable, StatusHarga;
 
     public ListingModel() {
     }
 
-    public ListingModel(String IdPraListing, String IdListing, String IdAgen, String IdInput, String IdVendor, String NamaListing, String Alamat, String Location, String Wide, String Land, String Listrik, String Level, String Bed, String Bath, String BedArt, String BathArt, String Garage, String Carpot, String NoCertificate, String Pbb, String JenisProperti, String JenisCertificate, String SumberAir, String Kondisi, String Deskripsi, String Prabot, String KetPrabot, String Priority, String Ttd, String Banner, String Harga, String TglInput, String Img1, String Img2, String Img3, String Img4, String Img5, String Img6, String Img7, String Img8, String Video, String LinkFacebook, String LinkTiktok, String LinkInstagram, String LinkYoutube, String IsAdmin, String IsManager, String View, String Sold, String Nama, String NoTelp, String Instagram, String Latitude, String Longitude, String Hadap, String SHM, String HGB, String HSHP, String PPJB, String Stratatitle, String NoSHM, String NoHGB, String NoHSHP, String NoPPJB, String NoStratatitle) {
+    public ListingModel(String IdPraListing, String IdListing, String IdAgen, String IdInput, String IdVendor, String NamaListing, String Alamat, String Location, String Wide, String Land, String Listrik, String Level, String Bed, String Bath, String BedArt, String BathArt, String Garage, String Carpot, String NoCertificate, String Pbb, String JenisProperti, String JenisCertificate, String SumberAir, String Kondisi, String Deskripsi, String Prabot, String KetPrabot, String Priority, String Ttd, String Banner, String Harga, String TglInput, String Img1, String Img2, String Img3, String Img4, String Img5, String Img6, String Img7, String Img8, String Video, String LinkFacebook, String LinkTiktok, String LinkInstagram, String LinkYoutube, String IsAdmin, String IsManager, String View, String Sold, String Nama, String NoTelp, String Instagram, String Latitude, String Longitude, String Hadap, String SHM, String HGB, String HSHP, String PPJB, String Stratatitle, String ImgSHM, String ImgHGB, String ImgHSHP, String ImgPPJB, String ImgStratatitle, String Size, String Marketable, String StatusHarga) {
         this.IdPraListing = IdPraListing;
         this.IdListing = IdListing;
         this.IdAgen = IdAgen;
@@ -25,17 +25,17 @@ public class ListingModel {
         this.BathArt = BathArt;
         this.Garage = Garage;
         this.Carpot = Carpot;
-        this.Hadap= Hadap;
-        this.SHM=SHM;
-        this.HGB=HGB;
-        this.HSHP=HSHP;
-        this.PPJB=PPJB;
-        this.Stratatitle=Stratatitle;
-        this.NoSHM=NoSHM;
-        this.NoHGB=NoHGB;
-        this.NoHSHP=NoHSHP;
-        this.NoPPJB=NoPPJB;
-        this.NoStratatitle=NoStratatitle;
+        this.Hadap = Hadap;
+        this.SHM = SHM;
+        this.HGB = HGB;
+        this.HSHP = HSHP;
+        this.PPJB = PPJB;
+        this.Stratatitle = Stratatitle;
+        this.ImgSHM = ImgSHM;
+        this.ImgHGB = ImgHGB;
+        this.ImgHSHP = ImgHSHP;
+        this.ImgPPJB = ImgPPJB;
+        this.ImgStratatitle = ImgStratatitle;
         this.NoCertificate = NoCertificate;
         this.Pbb = Pbb;
         this.JenisProperti = JenisProperti;
@@ -72,6 +72,9 @@ public class ListingModel {
         this.Instagram = Instagram;
         this.Latitude = Latitude;
         this.Longitude = Longitude;
+        this.Size = Size;
+        this.Marketable = Marketable;
+        this.StatusHarga = StatusHarga;
     }
 
     public String getIdPraListing() {
@@ -250,44 +253,44 @@ public class ListingModel {
         Stratatitle = stratatitle;
     }
 
-    public String getNoSHM() {
-        return NoSHM;
+    public String getImgSHM() {
+        return ImgSHM;
     }
 
-    public void setNoSHM(String noSHM) {
-        NoSHM = noSHM;
+    public void setImgSHM(String imgSHM) {
+        ImgSHM = imgSHM;
     }
 
-    public String getNoHGB() {
-        return NoHGB;
+    public String getImgHGB() {
+        return ImgHGB;
     }
 
-    public void setNoHGB(String noHGB) {
-        NoHGB = noHGB;
+    public void setImgHGB(String imgHGB) {
+        ImgHGB = imgHGB;
     }
 
-    public String getNoHSHP() {
-        return NoHSHP;
+    public String getImgHSHP() {
+        return ImgHSHP;
     }
 
-    public void setNoHSHP(String noHSHP) {
-        NoHSHP = noHSHP;
+    public void setImgHSHP(String imgHSHP) {
+        ImgHSHP = imgHSHP;
     }
 
-    public String getNoPPJB() {
-        return NoPPJB;
+    public String getImgPPJB() {
+        return ImgPPJB;
     }
 
-    public void setNoPPJB(String noPPJB) {
-        NoPPJB = noPPJB;
+    public void setImgPPJB(String imgPPJB) {
+        ImgPPJB = imgPPJB;
     }
 
-    public String getNoStratatitle() {
-        return NoStratatitle;
+    public String getImgStratatitle() {
+        return ImgStratatitle;
     }
 
-    public void setNoStratatitle(String noStratatitle) {
-        NoStratatitle = noStratatitle;
+    public void setImgStratatitle(String imgStratatitle) {
+        ImgStratatitle = imgStratatitle;
     }
 
     public String getNoCertificate() {
@@ -592,5 +595,29 @@ public class ListingModel {
 
     public void setListrik(String listrik) {
         Listrik = listrik;
+    }
+
+    public String getSize() {
+        return Size;
+    }
+
+    public void setSize(String size) {
+        Size = size;
+    }
+
+    public String getMarketable() {
+        return Marketable;
+    }
+
+    public void setMarketable(String marketable) {
+        Marketable = marketable;
+    }
+
+    public String getStatusHarga() {
+        return StatusHarga;
+    }
+
+    public void setStatusHarga(String statusHarga) {
+        StatusHarga = statusHarga;
     }
 }

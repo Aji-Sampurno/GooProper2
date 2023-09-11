@@ -29,6 +29,15 @@
         android:theme="@style/Theme.GooProper"
         tools:targetApi="31">
         <activity
+            android:name=".ui.PelamarAgenActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.ImageViewActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.EditListingActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.DetailFollowUpActivity"
             android:exported="false" />
         <activity

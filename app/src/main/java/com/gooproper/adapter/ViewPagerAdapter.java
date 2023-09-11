@@ -1,27 +1,23 @@
 package com.gooproper.adapter;
 
-import android.Manifest;
+import android.app.AlertDialog;
 import android.content.Context;
-import android.content.pm.PackageManager;
+import android.content.Intent;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
-import android.text.style.IconMarginSpan;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.viewpager.widget.PagerAdapter;
 
-import com.bumptech.glide.Glide;
 import com.gooproper.R;
+import com.gooproper.ui.ImageViewActivity;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
@@ -36,6 +32,7 @@ public class ViewPagerAdapter extends PagerAdapter {
 
     Context context;
     ArrayList<String> images;
+    GestureDetector gestureDetector;
 
     public ViewPagerAdapter(Context context, ArrayList<String> images) {
         this.context = context;
@@ -62,21 +59,29 @@ public class ViewPagerAdapter extends PagerAdapter {
                 .load(images.get(position))
                 .into(imageView);
         container.addView(view, 0);
-        /*imageView.setOnClickListener(new View.OnClickListener() {
+        imageView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext(),R.style.CustomAlertDialogStyle);
+                builder.setTitle("Konfirmasi Unduhan");
+                builder.setMessage("Apakah Anda ingin mengunduh gambar ini?");
+                builder.setPositiveButton("Ya", (dialog, which) -> {
+                    downloadImage(images.get(position));
+                });
+                builder.setNegativeButton("Batal", (dialog, which) -> {
+                    dialog.dismiss();
+                });
+                builder.create().show();
+                return true;
+            }
+        });
+
+        imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                downloadImage(images.get(position));
-            }
-        });*/
-        imageView.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
-                    // Panggil metode untuk memulai pengunduhan di sini
-                    downloadImage(images.get(position));
-                    return true; // Konsumsi acara sentuhan
-                }
-                return false;
+                Intent intent = new Intent(context, ImageViewActivity.class);
+                intent.putExtra("imageResources", images); // Mengirim seluruh daftar sumber gambar
+                context.startActivity(intent);
             }
         });
         return view;

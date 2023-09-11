@@ -20,6 +20,7 @@ import com.gooproper.SettingActivity;
 import com.gooproper.TentangKamiActivity;
 import com.gooproper.ui.AgenActivity;
 import com.gooproper.ui.LamarActivity;
+import com.gooproper.ui.PelamarAgenActivity;
 import com.gooproper.ui.RewardActivity;
 import com.gooproper.ui.TambahListingActivity;
 import com.gooproper.util.Preferences;
@@ -79,7 +80,7 @@ public class AkunAdminFragment extends Fragment {
 
         edit.setOnClickListener(view -> startActivity(new Intent(getContext(), EditAkunActivity.class)));
         listing.setOnClickListener(view -> startActivity(new Intent(getContext(), TambahListingActivity.class)));
-        pelamar.setOnClickListener(view -> startActivity(new Intent(getContext(), LamarActivity.class)));
+        pelamar.setOnClickListener(view -> startActivity(new Intent(getContext(), PelamarAgenActivity.class)));
         agen.setOnClickListener(view -> startActivity(new Intent(getContext(), AgenActivity.class)));
         pengaturan.setOnClickListener(view -> startActivity(new Intent(getContext(), SettingActivity.class)));
         tentangkami.setOnClickListener(view -> startActivity(new Intent(getContext(), TentangKamiActivity.class)));

@@ -22,7 +22,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
-        android:text="Price"
+        android:text="Harga"
         android:textColor="@color/black"
         android:textSize="20sp"
         android:textStyle="bold" />
@@ -46,16 +46,16 @@
             android:background="@drawable/input_bg_2"
             android:drawablePadding="10dp"
             android:ems="10"
-            android:hint="Max Price"
+            android:hint="Harga Tertinggi"
             android:inputType="number"
             android:paddingLeft="20dp"
             android:paddingTop="10dp"
             android:paddingRight="10dp"
             android:paddingBottom="10dp"
             android:textColor="#000000"
-            android:textColorHint="#899499"
+            android:textColorHint="@color/black"
             android:textSize="14sp"
-            tools:hint="Max Price" />
+            tools:hint="Harga Tertinggi" />
 
         <EditText
             android:id="@+id/editTextMinPrice"
@@ -66,16 +66,16 @@
             android:background="@drawable/input_bg_2"
             android:drawablePadding="10dp"
             android:ems="10"
-            android:hint="Min Price"
+            android:hint="Harga Terendah"
             android:inputType="number"
             android:paddingLeft="20dp"
             android:paddingTop="10dp"
             android:paddingRight="10dp"
             android:paddingBottom="10dp"
             android:textColor="#000000"
-            android:textColorHint="#899499"
+            android:textColorHint="@color/black"
             android:textSize="14sp"
-            tools:hint="Min Price" />
+            tools:hint="Harga Terendah" />
     </LinearLayout>
 
     <TextView
@@ -131,7 +131,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
-        android:text="Specification"
+        android:text="Spesifikasi"
         android:textColor="@color/black"
         android:textSize="20dp"
         android:textStyle="bold" />
@@ -154,10 +154,10 @@
             android:layout_weight="1"
             android:background="@drawable/input_bg_2"
             android:gravity="center"
-            android:hint="Bed"
+            android:hint="Kamar Tidur"
             android:inputType="number"
             android:textColor="@color/black"
-            android:textColorHint="#899499" />
+            android:textColorHint="@color/black" />
 
         <EditText
             android:id="@+id/BathSearch"
@@ -167,10 +167,10 @@
             android:layout_weight="1"
             android:background="@drawable/input_bg_2"
             android:gravity="center"
-            android:hint="Bath"
+            android:hint="Kamar Mandi"
             android:inputType="number"
             android:textColor="@color/black"
-            android:textColorHint="#899499" />
+            android:textColorHint="@color/black" />
     </LinearLayout>
 
     <LinearLayout
@@ -191,10 +191,10 @@
             android:layout_weight="1"
             android:background="@drawable/input_bg_2"
             android:gravity="center"
-            android:hint="Land Area"
+            android:hint="Luas Tanah"
             android:inputType="number"
             android:textColor="@color/black"
-            android:textColorHint="#899499" />
+            android:textColorHint="@color/black" />
 
         <EditText
             android:id="@+id/BuildingWideSearch"
@@ -204,10 +204,10 @@
             android:layout_weight="1"
             android:background="@drawable/input_bg_2"
             android:gravity="center"
-            android:hint="Building Area"
+            android:hint="Luas Bangunan"
             android:inputType="number"
             android:textColor="@color/black"
-            android:textColorHint="#899499" />
+            android:textColorHint="@color/black" />
     </LinearLayout>
 
     <LinearLayout
@@ -228,10 +228,10 @@
             android:layout_weight="1"
             android:background="@drawable/input_bg_2"
             android:gravity="center"
-            android:hint="Garage"
+            android:hint="Garasi"
             android:inputType="number"
             android:textColor="@color/black"
-            android:textColorHint="#899499" />
+            android:textColorHint="@color/black" />
 
         <EditText
             android:id="@+id/carpotSearch"
@@ -244,22 +244,8 @@
             android:hint="Carpot"
             android:inputType="number"
             android:textColor="@color/black"
-            android:textColorHint="#899499" />
+            android:textColorHint="@color/black" />
     </LinearLayout>
-
-    <EditText
-        android:id="@+id/levelSearch"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:background="@drawable/input_bg_2"
-        android:gravity="center"
-        android:hint="Level"
-        android:inputType="number"
-        android:textColor="@color/black"
-        android:textColorHint="#899499" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -271,11 +257,24 @@
         android:weightSum="2">
 
         <EditText
+            android:id="@+id/levelSearch"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginEnd="2dp"
+            android:layout_weight="1"
+            android:background="@drawable/input_bg_2"
+            android:gravity="center"
+            android:hint="Lantai"
+            android:inputType="number"
+            android:textColor="@color/black"
+            android:textColorHint="@color/black" />
+
+        <EditText
             android:id="@+id/textViewSpec"
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:layout_gravity="center"
-            android:layout_marginEnd="2dp"
+            android:layout_marginStart="2dp"
             android:layout_weight="1"
             android:background="@drawable/input_bg_2"
             android:clickable="true"
@@ -300,6 +299,7 @@
             android:onClick="showPropertyTypePopup"
             android:textColor="@color/black"
             android:textColorHint="@color/black"
+            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/addressProperty" />
     </LinearLayout>
@@ -319,7 +319,7 @@
             android:layout_gravity="center"
             android:layout_marginEnd="2dp"
             android:layout_weight="1"
-            android:text="Clear Filter" />
+            android:text="Hapus Filter" />
 
         <Button
             android:id="@+id/btnApply"
@@ -328,6 +328,6 @@
             android:layout_gravity="center"
             android:layout_marginStart="2dp"
             android:layout_weight="1"
-            android:text="Apply" />
+            android:text="Terapkan" />
     </LinearLayout>
 </LinearLayout>

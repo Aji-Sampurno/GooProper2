@@ -1,17 +1,19 @@
 package com.gooproper.model;
 
 public class FlowUpModel {
-    String IdFlowup, IdAgen, IdInput, NamaBuyer, IdListing, Tanggal, Jam, Keterangan, Chat, Survei, Tawar, Lokasi, Deal, NamaListing, Alamat, Latitude, Longitude, Harga, NamaInput, TelpInput, NamaAgen, TelpAgen, Img1, Img2, Img3, Img4, Img5, Img6, Img7, Img8;
+    String IdFlowup, IdAgen, IdInput, IdListing, NamaBuyer, TelpBuyer, SumberBuyer, Tanggal, Jam, Keterangan, Chat, Survei, Tawar, Lokasi, Deal, Selfie, NamaListing, Alamat, Latitude, Longitude, Harga, NamaInput, TelpInput, NamaAgen, TelpAgen, Img1, Img2, Img3, Img4, Img5, Img6, Img7, Img8;
 
     public FlowUpModel() {
     }
 
-    public FlowUpModel(String IdFlowup, String IdAgen, String IdInput, String NamaBuyer, String IdListing, String Tanggal, String Jam, String Keterangan, String Chat, String Survei, String Tawar, String Lokasi, String Deal, String NamaListing, String Alamat, String Latitude, String Longitude, String Harga, String NamaInput, String TelpInput, String NamaAgen, String TelpAgen, String Img1, String Img2, String Img3, String Img4, String Img5, String Img6, String Img7, String Img8) {
+    public FlowUpModel(String IdFlowup, String IdAgen, String IdInput, String IdListing, String NamaBuyer, String TelpBuyer, String SumberBuyer, String Tanggal, String Jam, String Keterangan, String Chat, String Survei, String Tawar, String Lokasi, String Deal, String Selfie, String NamaListing, String Alamat, String Latitude, String Longitude, String Harga, String NamaInput, String TelpInput, String NamaAgen, String TelpAgen, String Img1, String Img2, String Img3, String Img4, String Img5, String Img6, String Img7, String Img8) {
         this.IdFlowup = IdFlowup;
         this.IdAgen = IdAgen;
         this.IdInput = IdInput;
-        this.NamaBuyer = NamaBuyer;
         this.IdListing = IdListing;
+        this.NamaBuyer = NamaBuyer;
+        this.TelpBuyer = TelpBuyer;
+        this.SumberBuyer = SumberBuyer;
         this.Tanggal = Tanggal;
         this.Jam = Jam;
         this.Keterangan = Keterangan;
@@ -20,6 +22,7 @@ public class FlowUpModel {
         this.Tawar = Tawar;
         this.Lokasi = Lokasi;
         this.Deal = Deal;
+        this.Selfie = Selfie;
         this.NamaListing = NamaListing;
         this.Alamat = Alamat;
         this.Latitude = Latitude;
@@ -63,6 +66,14 @@ public class FlowUpModel {
         IdInput = idInput;
     }
 
+    public String getIdListing() {
+        return IdListing;
+    }
+
+    public void setIdListing(String idListing) {
+        IdListing = idListing;
+    }
+
     public String getNamaBuyer() {
         return NamaBuyer;
     }
@@ -71,12 +82,20 @@ public class FlowUpModel {
         NamaBuyer = namaBuyer;
     }
 
-    public String getIdListing() {
-        return IdListing;
+    public String getTelpBuyer() {
+        return TelpBuyer;
     }
 
-    public void setIdListing(String idListing) {
-        IdListing = idListing;
+    public void setTelpBuyer(String telpBuyer) {
+        TelpBuyer = telpBuyer;
+    }
+
+    public String getSumberBuyer() {
+        return SumberBuyer;
+    }
+
+    public void setSumberBuyer(String sumberBuyer) {
+        SumberBuyer = sumberBuyer;
     }
 
     public String getTanggal() {
@@ -141,6 +160,14 @@ public class FlowUpModel {
 
     public void setDeal(String deal) {
         Deal = deal;
+    }
+
+    public String getSelfie() {
+        return Selfie;
+    }
+
+    public void setSelfie(String selfie) {
+        Selfie = selfie;
     }
 
     public String getNamaListing() {

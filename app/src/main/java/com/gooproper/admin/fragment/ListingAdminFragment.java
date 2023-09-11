@@ -135,11 +135,11 @@ public class ListingAdminFragment extends Fragment {
                                 md.setHSHP(data.getString("HSHP"));
                                 md.setPPJB(data.getString("PPJB"));
                                 md.setStratatitle(data.getString("Stratatitle"));
-                                md.setNoSHM(data.getString("NoSHM"));
-                                md.setNoHGB(data.getString("NoHGB"));
-                                md.setNoHSHP(data.getString("NoHSHP"));
-                                md.setNoPPJB(data.getString("NoPPJB"));
-                                md.setNoStratatitle(data.getString("NoStratatitle"));
+                                md.setImgSHM(data.getString("ImgSHM"));
+                                md.setImgHGB(data.getString("ImgHGB"));
+                                md.setImgHSHP(data.getString("ImgHSHP"));
+                                md.setImgPPJB(data.getString("ImgPPJB"));
+                                md.setImgStratatitle(data.getString("ImgStratatitle"));
                                 md.setNoCertificate(data.getString("NoCertificate"));
                                 md.setPbb(data.getString("Pbb"));
                                 md.setJenisProperti(data.getString("JenisProperti"));
@@ -152,6 +152,7 @@ public class ListingAdminFragment extends Fragment {
                                 md.setPriority(data.getString("Priority"));
                                 md.setTtd(data.getString("Ttd"));
                                 md.setBanner(data.getString("Banner"));
+                                md.setSize(data.getString("Size"));
                                 md.setHarga(data.getString("Harga"));
                                 md.setTglInput(data.getString("TglInput"));
                                 md.setImg1(data.getString("Img1"));
@@ -171,6 +172,8 @@ public class ListingAdminFragment extends Fragment {
                                 md.setIsManager(data.getString("IsManager"));
                                 md.setSold(data.getString("Sold"));
                                 md.setView(data.getString("View"));
+                                md.setMarketable(data.getString("Marketable"));
+                                md.setStatusHarga(data.getString("StatusHarga"));
                                 md.setNama(data.getString("Nama"));
                                 md.setNoTelp(data.getString("NoTelp"));
                                 md.setInstagram(data.getString("Instagram"));
@@ -253,16 +256,14 @@ public class ListingAdminFragment extends Fragment {
     private void LoadListingManager(boolean showProgressDialog) {
         PDListingAdmin.setMessage("Memuat Listingan Masuk...");
         PDListingAdmin.show();
-        if (showProgressDialog) PDListingAdmin.show();
-        else PDListingAdmin.cancel();
 
         RequestQueue queue = Volley.newRequestQueue(getActivity());
         JsonArrayRequest reqData = new JsonArrayRequest(Request.Method.GET, ServerApi.URL_GET_PRALISTING_MANAGER, null,
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
-                        if (showProgressDialog) PDListingAdmin.cancel();
-                        else srlistingadmin.setRefreshing(false);
+                        PDListingAdmin.cancel();
+                        srlistingadmin.setRefreshing(false);
                         list.clear();
                         for (int i = 0; i < response.length(); i++) {
                             try {
@@ -292,11 +293,11 @@ public class ListingAdminFragment extends Fragment {
                                 md.setHSHP(data.getString("HSHP"));
                                 md.setPPJB(data.getString("PPJB"));
                                 md.setStratatitle(data.getString("Stratatitle"));
-                                md.setNoSHM(data.getString("NoSHM"));
-                                md.setNoHGB(data.getString("NoHGB"));
-                                md.setNoHSHP(data.getString("NoHSHP"));
-                                md.setNoPPJB(data.getString("NoPPJB"));
-                                md.setNoStratatitle(data.getString("NoStratatitle"));
+                                md.setImgSHM(data.getString("ImgSHM"));
+                                md.setImgHGB(data.getString("ImgHGB"));
+                                md.setImgHSHP(data.getString("ImgHSHP"));
+                                md.setImgPPJB(data.getString("ImgPPJB"));
+                                md.setImgStratatitle(data.getString("ImgStratatitle"));
                                 md.setNoCertificate(data.getString("NoCertificate"));
                                 md.setPbb(data.getString("Pbb"));
                                 md.setJenisProperti(data.getString("JenisProperti"));
@@ -309,6 +310,7 @@ public class ListingAdminFragment extends Fragment {
                                 md.setPriority(data.getString("Priority"));
                                 md.setTtd(data.getString("Ttd"));
                                 md.setBanner(data.getString("Banner"));
+                                md.setSize(data.getString("Size"));
                                 md.setHarga(data.getString("Harga"));
                                 md.setTglInput(data.getString("TglInput"));
                                 md.setImg1(data.getString("Img1"));
@@ -328,6 +330,8 @@ public class ListingAdminFragment extends Fragment {
                                 md.setIsManager(data.getString("IsManager"));
                                 md.setSold(data.getString("Sold"));
                                 md.setView(data.getString("View"));
+                                md.setMarketable(data.getString("Marketable"));
+                                md.setStatusHarga(data.getString("StatusHarga"));
                                 md.setNama(data.getString("Nama"));
                                 md.setNoTelp(data.getString("NoTelp"));
                                 md.setInstagram(data.getString("Instagram"));

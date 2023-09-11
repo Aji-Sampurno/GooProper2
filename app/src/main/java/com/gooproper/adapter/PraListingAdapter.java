@@ -50,6 +50,7 @@ public class PraListingAdapter extends RecyclerView.Adapter<PraListingAdapter.Ho
     public void onBindViewHolder(@NonNull HolderData holder, int position) {
         FormatCurrency currency = new FormatCurrency();
         ListingModel listingModel = models.get(position);
+        holder.priorityTxt.setText(listingModel.getPriority());
         holder.bedTxt.setText(listingModel.getBed());
         holder.bathTxt.setText(listingModel.getBath());
         holder.levelTxt.setText(listingModel.getLevel());
@@ -77,7 +78,7 @@ public class PraListingAdapter extends RecyclerView.Adapter<PraListingAdapter.Ho
     }
 
     class HolderData extends RecyclerView.ViewHolder{
-        TextView titleTxt, addressTxt, priceTxt, bedTxt, bathTxt, levelTxt, garageTxt, bathArtTxt, bedArtTxt, carpotTxt, wideTxt;
+        TextView titleTxt, addressTxt, priceTxt, bedTxt, bathTxt, levelTxt, garageTxt, bathArtTxt, bedArtTxt, carpotTxt, wideTxt, priorityTxt;
         ImageView pic;
         public ListingModel listingModel;
 
@@ -90,6 +91,7 @@ public class PraListingAdapter extends RecyclerView.Adapter<PraListingAdapter.Ho
             priceTxt=view.findViewById(R.id.priceTxt);
             levelTxt=view.findViewById(R.id.levelTxt);
             garageTxt=view.findViewById(R.id.garageTxt);
+            priorityTxt=view.findViewById(R.id.TVPriority);
             pic=view.findViewById(R.id.pic);
 
             view.setOnClickListener(new View.OnClickListener() {
@@ -97,7 +99,7 @@ public class PraListingAdapter extends RecyclerView.Adapter<PraListingAdapter.Ho
                 public void onClick(View view) {
                     Intent update = new Intent(context, DetailListingActivity.class);
                     update.putExtra("update",1);
-                    update.putExtra("IdPralisting",listingModel.getIdPraListing());
+                    update.putExtra("IdPraListing",listingModel.getIdPraListing());
                     update.putExtra("IdAgen",listingModel.getIdAgen());
                     update.putExtra("IdInput",listingModel.getIdInput());
                     update.putExtra("NamaListing",listingModel.getNamaListing());
@@ -121,11 +123,11 @@ public class PraListingAdapter extends RecyclerView.Adapter<PraListingAdapter.Ho
                     update.putExtra("HSHP",listingModel.getHSHP());
                     update.putExtra("PPJB",listingModel.getPPJB());
                     update.putExtra("Stratatitle",listingModel.getStratatitle());
-                    update.putExtra("NoSHM",listingModel.getNoSHM());
-                    update.putExtra("NoHGB",listingModel.getNoHGB());
-                    update.putExtra("NoHSHP",listingModel.getNoHSHP());
-                    update.putExtra("NoPPJB",listingModel.getNoPPJB());
-                    update.putExtra("NoStratatitle",listingModel.getNoStratatitle());
+                    update.putExtra("ImgSHM",listingModel.getImgSHM());
+                    update.putExtra("ImgHGB",listingModel.getImgHGB());
+                    update.putExtra("ImgHSHP",listingModel.getImgHSHP());
+                    update.putExtra("ImgPPJB",listingModel.getImgPPJB());
+                    update.putExtra("ImgStratatitle",listingModel.getImgStratatitle());
                     update.putExtra("NoCertificate",listingModel.getNoCertificate());
                     update.putExtra("Pbb",listingModel.getPbb());
                     update.putExtra("JenisProperti",listingModel.getJenisProperti());
@@ -138,6 +140,7 @@ public class PraListingAdapter extends RecyclerView.Adapter<PraListingAdapter.Ho
                     update.putExtra("Priority",listingModel.getPriority());
                     update.putExtra("Ttd",listingModel.getTtd());
                     update.putExtra("Banner",listingModel.getBanner());
+                    update.putExtra("Size",listingModel.getSize());
                     update.putExtra("Harga",listingModel.getHarga());
                     update.putExtra("TglInput",listingModel.getTglInput());
                     update.putExtra("Img1",listingModel.getImg1());
@@ -157,6 +160,8 @@ public class PraListingAdapter extends RecyclerView.Adapter<PraListingAdapter.Ho
                     update.putExtra("IsManager",listingModel.getIsManager());
                     update.putExtra("View",listingModel.getView());
                     update.putExtra("Sold",listingModel.getSold());
+                    update.putExtra("Marketable",listingModel.getMarketable());
+                    update.putExtra("StatusHarga",listingModel.getStatusHarga());
                     update.putExtra("Nama",listingModel.getNama());
                     update.putExtra("NoTelp",listingModel.getNoTelp());
                     update.putExtra("Instagram",listingModel.getInstagram());

@@ -18,16 +18,21 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.text.Editable;
 import android.text.Html;
+import android.text.TextWatcher;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -49,6 +54,7 @@ import com.github.gcacace.signaturepad.views.SignaturePad;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.gooproper.R;
 import com.gooproper.ui.registrasi.RegistrasiAgenActivity;
 import com.gooproper.util.Preferences;
@@ -78,21 +84,49 @@ public class TambahListingActivity extends AppCompatActivity {
     final int CODE_GALLERY_REQUEST = 100;
     final int CODE_CAMERA_REQUEST = 101;
     final int KODE_REQUEST_KAMERA = 102;
+    final int CODE_GALLERY_REQUEST_SHM = 103;
+    final int CODE_CAMERA_REQUEST_SHM = 104;
+    final int KODE_REQUEST_KAMERA_SHM = 105;
+    final int CODE_GALLERY_REQUEST_HGB = 106;
+    final int CODE_CAMERA_REQUEST_HGB = 107;
+    final int KODE_REQUEST_KAMERA_HGB = 108;
+    final int CODE_GALLERY_REQUEST_HSHP = 109;
+    final int CODE_CAMERA_REQUEST_HSHP = 110;
+    final int KODE_REQUEST_KAMERA_HSHP = 111;
+    final int CODE_GALLERY_REQUEST_PPJB = 112;
+    final int CODE_CAMERA_REQUEST_PPJB = 113;
+    final int KODE_REQUEST_KAMERA_PPJB = 114;
+    final int CODE_GALLERY_REQUEST_STRA = 115;
+    final int CODE_CAMERA_REQUEST_STRA = 116;
+    final int KODE_REQUEST_KAMERA_STRA = 117;
     private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE = 123;
     private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES = 456;
+    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE_SHM = 124;
+    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES_SHM = 457;
+    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE_HGB = 125;
+    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES_HGB = 458;
+    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE_HSHP = 126;
+    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES_HSHP = 459;
+    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE_PPJB = 127;
+    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES_PPJB = 450;
+    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE_STRA = 128;
+    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES_STRA = 455;
     private static final int MAPS_ACTIVITY_REQUEST_CODE = 3;
-    Bitmap bitmap1, bitmap2, bitmap3, bitmap4, bitmap5, bitmap6, bitmap7, bitmap8, bitmapttd;
+    Bitmap bitmap1, bitmap2, bitmap3, bitmap4, bitmap5, bitmap6, bitmap7, bitmap8, bitmapttd, bitmapSHM, bitmapHGB, bitmapHSHP, bitmapPPJB, bitmapSTRA;
     LinearLayout lyt1, lyt2, lyt3, lyt4, lyt5, lyt6, lyt7, lyt8;
-    ImageView back, iv1, iv2, iv3, iv4, iv5, iv6, iv7, iv8;
-    Button batal, submit, select, clear, maps;
+    ImageView back, iv1, iv2, iv3, iv4, iv5, iv6, iv7, iv8, IVShm, IVHgb, IVHshp, IVPpjb, IVStratatitle;
+    Button batal, submit, select, clear, maps, BtnSHM, BtnHGB, BtnHSHP, BtnPPJB, BtnSTRA;
     ImageView hps1, hps2, hps3, hps4, hps5, hps6, hps7, hps8;
-    TextInputEditText namalengkap, nohp, nik, alamat, tgllhir, rekening, bank, atasnama, jenisproperti, namaproperti, alamatproperti, sertifikat, nosertif, luas, land, lantai, bed, bath, bedart, bathart, garasi, carpot, listrik, air, perabot, ketperabot, banner, status, harga, keterangan;
+    TextInputEditText namalengkap, nohp, nik, alamat, tgllhir, rekening, bank, atasnama, jenisproperti, namaproperti, alamatproperti, sertifikat, nosertif, luas, land, lantai, bed, bath, bedart, bathart, garasi, carpot, listrik, air, perabot, ketperabot, banner, status, harga, keterangan, hadap, size;
+    TextInputLayout LytSize;
     RadioButton open, exclusive;
     RadioGroup rgpriority;
+    CheckBox CBSHM, CBHGB, CBHSHP, CBPPJB, CBSTRA;
     SignaturePad signaturePad;
     String idagen, idnull, sstatus, priority, namalisting, isAdmin, idadmin, idinput;
-    String image1, image2, image3, image4, image5, image6, image7, image8, ttd;
+    String image1, image2, image3, image4, image5, image6, image7, image8, ttd, SHM, HGB, HSHP, PPJB, STRA;
     String latitudeStr, longitudeStr, addressStr;
+    Drawable DrawableSHM,DrawableHGB,DrawableHSHP,DrawablePPJB,DrawableSTRA;
 
 
     @Override
@@ -103,8 +137,10 @@ public class TambahListingActivity extends AppCompatActivity {
         pDialog = new ProgressDialog(TambahListingActivity.this);
 
         rgpriority = findViewById(R.id.rgstatus);
+
         open = findViewById(R.id.rbopen);
         exclusive = findViewById(R.id.rbexclusive);
+
         iv1 = findViewById(R.id.ivs1);
         iv2 = findViewById(R.id.ivs2);
         iv3 = findViewById(R.id.ivs3);
@@ -121,11 +157,15 @@ public class TambahListingActivity extends AppCompatActivity {
         lyt6 = findViewById(R.id.lyts6);
         lyt7 = findViewById(R.id.lyts7);
         lyt8 = findViewById(R.id.lyts8);
+        LytSize = findViewById(R.id.lytUkuranBanner);
+
         back = findViewById(R.id.backFormBtn);
+
         batal = findViewById(R.id.btnbatal);
         submit = findViewById(R.id.btnsubmit);
         select = findViewById(R.id.btnSelectImage);
         clear = findViewById(R.id.BtnClearTTD);
+
         hps1 = findViewById(R.id.IVDelete1);
         hps2 = findViewById(R.id.IVDelete2);
         hps3 = findViewById(R.id.IVDelete3);
@@ -134,6 +174,7 @@ public class TambahListingActivity extends AppCompatActivity {
         hps6 = findViewById(R.id.IVDelete6);
         hps7 = findViewById(R.id.IVDelete7);
         hps8 = findViewById(R.id.IVDelete8);
+
         namalengkap = findViewById(R.id.etnamavendor);
         nohp = findViewById(R.id.etnohpvendor);
         nik = findViewById(R.id.etnikvendor);
@@ -164,8 +205,30 @@ public class TambahListingActivity extends AppCompatActivity {
         status = findViewById(R.id.etstatusproperti);
         harga = findViewById(R.id.etharga);
         keterangan = findViewById(R.id.etketerangan);
+        hadap = findViewById(R.id.ethadap);
+        size = findViewById(R.id.etukuranbanner);
+
         signaturePad = findViewById(R.id.signature);
+
         maps = findViewById(R.id.map);
+
+        IVShm = findViewById(R.id.IVSHM);
+        IVHgb = findViewById(R.id.IVHGB);
+        IVHshp = findViewById(R.id.IVHSHP);
+        IVPpjb = findViewById(R.id.IVPPJB);
+        IVStratatitle = findViewById(R.id.IVStratatitle);
+
+        CBSHM = findViewById(R.id.CBSHM);
+        CBHGB = findViewById(R.id.CBHGB);
+        CBHSHP = findViewById(R.id.CBHSHP);
+        CBPPJB = findViewById(R.id.CBPPJB);
+        CBSTRA = findViewById(R.id.CBStratatitle);
+
+        BtnSHM = findViewById(R.id.BtnSHM);
+        BtnHGB = findViewById(R.id.BtnHGB);
+        BtnHSHP = findViewById(R.id.BtnHSHP);
+        BtnPPJB = findViewById(R.id.BtnPPJB);
+        BtnSTRA = findViewById(R.id.BtnStratatitle);
 
         namalisting = namaproperti.getText().toString();
         sstatus = Preferences.getKeyIsAkses(TambahListingActivity.this);
@@ -173,109 +236,13 @@ public class TambahListingActivity extends AppCompatActivity {
         idadmin = Preferences.getKeyIdAdmin(TambahListingActivity.this);
         idagen = Preferences.getKeyIdAgen(TambahListingActivity.this);
         idnull = "0";
+        DrawableSHM = IVShm.getDrawable();
+        DrawableHGB = IVHgb.getDrawable();
+        DrawableHSHP = IVHshp.getDrawable();
+        DrawablePPJB = IVPpjb.getDrawable();
+        DrawableSTRA = IVStratatitle.getDrawable();
 
-        if (sstatus.equals("1")) {
-            submit.setOnClickListener(view -> {
-                int checkedRadioButtonId = rgpriority.getCheckedRadioButtonId();
-
-                if (checkedRadioButtonId == -1) {
-                    Dialog customDialog = new Dialog(TambahListingActivity.this);
-                    customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                    customDialog.setContentView(R.layout.custom_dialog_eror_input);
-
-                    if (customDialog.getWindow() != null) {
-                        customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-                    }
-
-                    Button ok = customDialog.findViewById(R.id.BtnOkErorInput);
-                    TextView tv = customDialog.findViewById(R.id.TVDialogErorInput);
-
-                    tv.setText("Harap pilih Open atau Exclusive pada bagian atas form");
-
-                    ok.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            customDialog.dismiss();
-                        }
-                    });
-
-                    ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
-
-                    Glide.with(TambahListingActivity.this)
-                            .load(R.drawable.alert) // You can also use a local resource like R.drawable.your_gif_resource
-                            .transition(DrawableTransitionOptions.withCrossFade())
-                            .into(gifImageView);
-
-                    customDialog.show();
-                } else {
-                    if (longitudeStr == null && latitudeStr == null) {
-                        Dialog customDialog = new Dialog(TambahListingActivity.this);
-                        customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                        customDialog.setContentView(R.layout.custom_dialog_eror_input);
-
-                        if (customDialog.getWindow() != null) {
-                            customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-                        }
-
-                        Button ok = customDialog.findViewById(R.id.BtnOkErorInput);
-                        TextView tv = customDialog.findViewById(R.id.TVDialogErorInput);
-
-                        tv.setText("Harap tambah lokasi terlebih dahulu");
-
-                        ok.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                customDialog.dismiss();
-                            }
-                        });
-
-                        ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
-
-                        Glide.with(TambahListingActivity.this)
-                                .load(R.drawable.alert) // You can also use a local resource like R.drawable.your_gif_resource
-                                .transition(DrawableTransitionOptions.withCrossFade())
-                                .into(gifImageView);
-
-                        customDialog.show();
-                    } else {
-                        if (Validate()) {
-                            if (bitmap1 == null) {
-                                Dialog customDialog = new Dialog(TambahListingActivity.this);
-                                customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                                customDialog.setContentView(R.layout.custom_dialog_eror_input);
-
-                                if (customDialog.getWindow() != null) {
-                                    customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-                                }
-
-                                Button ok = customDialog.findViewById(R.id.BtnOkErorInput);
-                                TextView tv = customDialog.findViewById(R.id.TVDialogErorInput);
-
-                                tv.setText("Harap Tambahkan Gambar");
-
-                                ok.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View view) {
-                                        customDialog.dismiss();
-                                    }
-                                });
-
-                                ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
-
-                                Glide.with(TambahListingActivity.this)
-                                        .load(R.drawable.alert) // You can also use a local resource like R.drawable.your_gif_resource
-                                        .transition(DrawableTransitionOptions.withCrossFade())
-                                        .into(gifImageView);
-
-                                customDialog.show();
-                            } else {
-                                simpanDataAgen();
-                            }
-                        }
-                    }
-                }
-            });
-        } else if (isAdmin.equals("2")) {
+        if (isAdmin.equals("2")){
             submit.setOnClickListener(view -> {
                 int checkedRadioButtonId = rgpriority.getCheckedRadioButtonId();
 
@@ -376,41 +343,12 @@ public class TambahListingActivity extends AppCompatActivity {
                     }
                 }
             });
-        } else {
-            submit.setOnClickListener(view -> {
-                int checkedRadioButtonId = rgpriority.getCheckedRadioButtonId();
+        } else if (isAdmin.equals("3")) {
+            if (sstatus.equals("1")){
+                submit.setOnClickListener(view -> {
+                    int checkedRadioButtonId = rgpriority.getCheckedRadioButtonId();
 
-                if (checkedRadioButtonId == -1) {
-                    Dialog customDialog = new Dialog(TambahListingActivity.this);
-                    customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                    customDialog.setContentView(R.layout.custom_dialog_eror_input);
-
-                    if (customDialog.getWindow() != null) {
-                        customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-                    }
-
-                    Button ok = customDialog.findViewById(R.id.BtnOkErorInput);
-                    TextView tv = customDialog.findViewById(R.id.TVDialogErorInput);
-
-                    tv.setText("Harap pilih Open atau Exclusive pada bagian atas form");
-
-                    ok.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            customDialog.dismiss();
-                        }
-                    });
-
-                    ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
-
-                    Glide.with(TambahListingActivity.this)
-                            .load(R.drawable.alert) // You can also use a local resource like R.drawable.your_gif_resource
-                            .transition(DrawableTransitionOptions.withCrossFade())
-                            .into(gifImageView);
-
-                    customDialog.show();
-                } else {
-                    if (longitudeStr == null && latitudeStr == null) {
+                    if (checkedRadioButtonId == -1) {
                         Dialog customDialog = new Dialog(TambahListingActivity.this);
                         customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                         customDialog.setContentView(R.layout.custom_dialog_eror_input);
@@ -422,7 +360,7 @@ public class TambahListingActivity extends AppCompatActivity {
                         Button ok = customDialog.findViewById(R.id.BtnOkErorInput);
                         TextView tv = customDialog.findViewById(R.id.TVDialogErorInput);
 
-                        tv.setText("Harap tambah lokasi terlebih dahulu");
+                        tv.setText("Harap pilih Open atau Exclusive pada bagian atas form");
 
                         ok.setOnClickListener(new View.OnClickListener() {
                             @Override
@@ -439,44 +377,286 @@ public class TambahListingActivity extends AppCompatActivity {
                                 .into(gifImageView);
 
                         customDialog.show();
-                    } else {
-                        if (Validate()) {
-                            if (bitmap1 != null) {
-                                Dialog customDialog = new Dialog(TambahListingActivity.this);
-                                customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                                customDialog.setContentView(R.layout.custom_dialog_eror_input);
+                    }
+                    else {
+                        if (longitudeStr == null && latitudeStr == null) {
+                            Dialog customDialog = new Dialog(TambahListingActivity.this);
+                            customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                            customDialog.setContentView(R.layout.custom_dialog_eror_input);
 
-                                if (customDialog.getWindow() != null) {
-                                    customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                            if (customDialog.getWindow() != null) {
+                                customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                            }
+
+                            Button ok = customDialog.findViewById(R.id.BtnOkErorInput);
+                            TextView tv = customDialog.findViewById(R.id.TVDialogErorInput);
+
+                            tv.setText("Harap tambah lokasi terlebih dahulu");
+
+                            ok.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    customDialog.dismiss();
                                 }
+                            });
 
-                                Button ok = customDialog.findViewById(R.id.BtnOkErorInput);
-                                TextView tv = customDialog.findViewById(R.id.TVDialogErorInput);
+                            ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
 
-                                tv.setText("Harap Tambahkan Gambar");
+                            Glide.with(TambahListingActivity.this)
+                                    .load(R.drawable.alert) // You can also use a local resource like R.drawable.your_gif_resource
+                                    .transition(DrawableTransitionOptions.withCrossFade())
+                                    .into(gifImageView);
 
-                                ok.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View view) {
-                                        customDialog.dismiss();
+                            customDialog.show();
+                        }
+                        else {
+                            if (Validate()) {
+                                if (bitmap1 == null) {
+                                    Dialog customDialog = new Dialog(TambahListingActivity.this);
+                                    customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                                    customDialog.setContentView(R.layout.custom_dialog_eror_input);
+
+                                    if (customDialog.getWindow() != null) {
+                                        customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
                                     }
-                                });
 
-                                ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
+                                    Button ok = customDialog.findViewById(R.id.BtnOkErorInput);
+                                    TextView tv = customDialog.findViewById(R.id.TVDialogErorInput);
 
-                                Glide.with(TambahListingActivity.this)
-                                        .load(R.drawable.alert) // You can also use a local resource like R.drawable.your_gif_resource
-                                        .transition(DrawableTransitionOptions.withCrossFade())
-                                        .into(gifImageView);
+                                    tv.setText("Harap Tambahkan Gambar");
 
-                                customDialog.show();
-                            } else {
-                                simpanDataNonAgen();
+                                    ok.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View view) {
+                                            customDialog.dismiss();
+                                        }
+                                    });
+
+                                    ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
+
+                                    Glide.with(TambahListingActivity.this)
+                                            .load(R.drawable.alert) // You can also use a local resource like R.drawable.your_gif_resource
+                                            .transition(DrawableTransitionOptions.withCrossFade())
+                                            .into(gifImageView);
+
+                                    customDialog.show();
+                                }
+                                else {
+                                    simpanDataAgen();
+                                }
                             }
                         }
                     }
-                }
-            });
+                });
+            } else if (sstatus.equals("2")) {
+                submit.setOnClickListener(view -> {
+                    int checkedRadioButtonId = rgpriority.getCheckedRadioButtonId();
+
+                    if (checkedRadioButtonId == -1) {
+                        Dialog customDialog = new Dialog(TambahListingActivity.this);
+                        customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                        customDialog.setContentView(R.layout.custom_dialog_eror_input);
+
+                        if (customDialog.getWindow() != null) {
+                            customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                        }
+
+                        Button ok = customDialog.findViewById(R.id.BtnOkErorInput);
+                        TextView tv = customDialog.findViewById(R.id.TVDialogErorInput);
+
+                        tv.setText("Harap pilih Open atau Exclusive pada bagian atas form");
+
+                        ok.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                customDialog.dismiss();
+                            }
+                        });
+
+                        ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
+
+                        Glide.with(TambahListingActivity.this)
+                                .load(R.drawable.alert) // You can also use a local resource like R.drawable.your_gif_resource
+                                .transition(DrawableTransitionOptions.withCrossFade())
+                                .into(gifImageView);
+
+                        customDialog.show();
+                    }
+                    else {
+                        if (longitudeStr == null && latitudeStr == null) {
+                            Dialog customDialog = new Dialog(TambahListingActivity.this);
+                            customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                            customDialog.setContentView(R.layout.custom_dialog_eror_input);
+
+                            if (customDialog.getWindow() != null) {
+                                customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                            }
+
+                            Button ok = customDialog.findViewById(R.id.BtnOkErorInput);
+                            TextView tv = customDialog.findViewById(R.id.TVDialogErorInput);
+
+                            tv.setText("Harap tambah lokasi terlebih dahulu");
+
+                            ok.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    customDialog.dismiss();
+                                }
+                            });
+
+                            ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
+
+                            Glide.with(TambahListingActivity.this)
+                                    .load(R.drawable.alert) // You can also use a local resource like R.drawable.your_gif_resource
+                                    .transition(DrawableTransitionOptions.withCrossFade())
+                                    .into(gifImageView);
+
+                            customDialog.show();
+                        }
+                        else {
+                            if (Validate()) {
+                                if (bitmap1 == null) {
+                                    Dialog customDialog = new Dialog(TambahListingActivity.this);
+                                    customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                                    customDialog.setContentView(R.layout.custom_dialog_eror_input);
+
+                                    if (customDialog.getWindow() != null) {
+                                        customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                                    }
+
+                                    Button ok = customDialog.findViewById(R.id.BtnOkErorInput);
+                                    TextView tv = customDialog.findViewById(R.id.TVDialogErorInput);
+
+                                    tv.setText("Harap Tambahkan Gambar");
+
+                                    ok.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View view) {
+                                            customDialog.dismiss();
+                                        }
+                                    });
+
+                                    ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
+
+                                    Glide.with(TambahListingActivity.this)
+                                            .load(R.drawable.alert) // You can also use a local resource like R.drawable.your_gif_resource
+                                            .transition(DrawableTransitionOptions.withCrossFade())
+                                            .into(gifImageView);
+
+                                    customDialog.show();
+                                }
+                                else {
+                                    simpanDataNonAgen();
+                                }
+                            }
+                        }
+                    }
+                });
+            } else if (sstatus.equals("3")) {
+                submit.setOnClickListener(view -> {
+                    int checkedRadioButtonId = rgpriority.getCheckedRadioButtonId();
+
+                    if (checkedRadioButtonId == -1) {
+                        Dialog customDialog = new Dialog(TambahListingActivity.this);
+                        customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                        customDialog.setContentView(R.layout.custom_dialog_eror_input);
+
+                        if (customDialog.getWindow() != null) {
+                            customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                        }
+
+                        Button ok = customDialog.findViewById(R.id.BtnOkErorInput);
+                        TextView tv = customDialog.findViewById(R.id.TVDialogErorInput);
+
+                        tv.setText("Harap pilih Open atau Exclusive pada bagian atas form");
+
+                        ok.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                customDialog.dismiss();
+                            }
+                        });
+
+                        ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
+
+                        Glide.with(TambahListingActivity.this)
+                                .load(R.drawable.alert) // You can also use a local resource like R.drawable.your_gif_resource
+                                .transition(DrawableTransitionOptions.withCrossFade())
+                                .into(gifImageView);
+
+                        customDialog.show();
+                    }
+                    else {
+                        if (longitudeStr == null && latitudeStr == null) {
+                            Dialog customDialog = new Dialog(TambahListingActivity.this);
+                            customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                            customDialog.setContentView(R.layout.custom_dialog_eror_input);
+
+                            if (customDialog.getWindow() != null) {
+                                customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                            }
+
+                            Button ok = customDialog.findViewById(R.id.BtnOkErorInput);
+                            TextView tv = customDialog.findViewById(R.id.TVDialogErorInput);
+
+                            tv.setText("Harap tambah lokasi terlebih dahulu");
+
+                            ok.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    customDialog.dismiss();
+                                }
+                            });
+
+                            ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
+
+                            Glide.with(TambahListingActivity.this)
+                                    .load(R.drawable.alert) // You can also use a local resource like R.drawable.your_gif_resource
+                                    .transition(DrawableTransitionOptions.withCrossFade())
+                                    .into(gifImageView);
+
+                            customDialog.show();
+                        }
+                        else {
+                            if (Validate()) {
+                                if (bitmap1 == null) {
+                                    Dialog customDialog = new Dialog(TambahListingActivity.this);
+                                    customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                                    customDialog.setContentView(R.layout.custom_dialog_eror_input);
+
+                                    if (customDialog.getWindow() != null) {
+                                        customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                                    }
+
+                                    Button ok = customDialog.findViewById(R.id.BtnOkErorInput);
+                                    TextView tv = customDialog.findViewById(R.id.TVDialogErorInput);
+
+                                    tv.setText("Harap Tambahkan Gambar");
+
+                                    ok.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View view) {
+                                            customDialog.dismiss();
+                                        }
+                                    });
+
+                                    ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
+
+                                    Glide.with(TambahListingActivity.this)
+                                            .load(R.drawable.alert) // You can also use a local resource like R.drawable.your_gif_resource
+                                            .transition(DrawableTransitionOptions.withCrossFade())
+                                            .into(gifImageView);
+
+                                    customDialog.show();
+                                }
+                                else {
+                                    simpanDataNonAgen();
+                                }
+                            }
+                        }
+                    }
+                });
+            }
         }
 
         maps.setOnClickListener(view -> startMapsActivityForResult());
@@ -488,6 +668,7 @@ public class TambahListingActivity extends AppCompatActivity {
         air.setOnClickListener(view -> ShowSumberAir(view));
         perabot.setOnClickListener(view -> ShowPerabot(view));
         banner.setOnClickListener(view -> ShowBanner(view));
+        size.setOnClickListener(view -> ShowSize(view));
         status.setOnClickListener(view -> ShowStatus(view));
         hps1.setOnClickListener(view -> clearBitmap1());
         hps2.setOnClickListener(view -> clearBitmap2());
@@ -497,6 +678,97 @@ public class TambahListingActivity extends AppCompatActivity {
         hps6.setOnClickListener(view -> clearBitmap6());
         hps7.setOnClickListener(view -> clearBitmap7());
         hps8.setOnClickListener(view -> clearBitmap8());
+        banner.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if (editable.toString().equalsIgnoreCase("Ya")) {
+                    LytSize.setVisibility(View.VISIBLE);
+                } else {
+                    LytSize.setVisibility(View.GONE);
+                }
+            }
+        });
+
+        CBSHM.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if (b) {
+                    IVShm.setVisibility(View.VISIBLE);
+                    BtnSHM.setVisibility(View.VISIBLE);
+                } else {
+                    IVShm.setVisibility(View.GONE);
+                    BtnSHM.setVisibility(View.GONE);
+                }
+            }
+        });
+
+        CBHGB.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if (b) {
+                    IVHgb.setVisibility(View.VISIBLE);
+                    BtnHGB.setVisibility(View.VISIBLE);
+                } else {
+                    IVHgb.setVisibility(View.GONE);
+                    BtnHGB.setVisibility(View.GONE);
+                }
+            }
+        });
+
+        CBHSHP.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if (b) {
+                    IVHshp.setVisibility(View.VISIBLE);
+                    BtnHSHP.setVisibility(View.VISIBLE);
+                } else {
+                    IVHshp.setVisibility(View.GONE);
+                    BtnHSHP.setVisibility(View.GONE);
+                }
+            }
+        });
+
+        CBPPJB.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if (b) {
+                    IVPpjb.setVisibility(View.VISIBLE);
+                    BtnPPJB.setVisibility(View.VISIBLE);
+                } else {
+                    IVPpjb.setVisibility(View.GONE);
+                    BtnPPJB.setVisibility(View.GONE);
+                }
+            }
+        });
+
+        CBSTRA.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if (b) {
+                    IVStratatitle.setVisibility(View.VISIBLE);
+                    BtnSTRA.setVisibility(View.VISIBLE);
+                } else {
+                    IVStratatitle.setVisibility(View.GONE);
+                    BtnSTRA.setVisibility(View.GONE);
+                }
+            }
+        });
+
+        BtnSHM.setOnClickListener(view -> showPhotoSHM());
+        BtnHGB.setOnClickListener(view -> showPhotoHGB());
+        BtnHSHP.setOnClickListener(view -> showPhotoHSHP());
+        BtnPPJB.setOnClickListener(view -> showPhotoPPJB());
+        BtnSTRA.setOnClickListener(view -> showPhotoSTRA());
 
         select.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -585,6 +857,106 @@ public class TambahListingActivity extends AppCompatActivity {
         builder.show();
     }
 
+    private void showPhotoSHM() {
+        androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this);
+        builder.setTitle("Unggah Gambar")
+                .setItems(new CharSequence[]{"Ambil Foto", "Pilih Dari Galeri"}, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which) {
+                            case 0:
+                                ActivityCompat.requestPermissions(TambahListingActivity.this, new String[]{Manifest.permission.CAMERA}, CODE_CAMERA_REQUEST_SHM);
+                                break;
+                            case 1:
+                                requestPermissionsSHM();
+                                break;
+                        }
+                    }
+                });
+
+        builder.show();
+    }
+
+    private void showPhotoHGB() {
+        androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this);
+        builder.setTitle("Unggah Gambar")
+                .setItems(new CharSequence[]{"Ambil Foto", "Pilih Dari Galeri"}, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which) {
+                            case 0:
+                                ActivityCompat.requestPermissions(TambahListingActivity.this, new String[]{Manifest.permission.CAMERA}, CODE_CAMERA_REQUEST_HGB);
+                                break;
+                            case 1:
+                                requestPermissionsHGB();
+                                break;
+                        }
+                    }
+                });
+
+        builder.show();
+    }
+
+    private void showPhotoHSHP() {
+        androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this);
+        builder.setTitle("Unggah Gambar")
+                .setItems(new CharSequence[]{"Ambil Foto", "Pilih Dari Galeri"}, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which) {
+                            case 0:
+                                ActivityCompat.requestPermissions(TambahListingActivity.this, new String[]{Manifest.permission.CAMERA}, CODE_CAMERA_REQUEST_HSHP);
+                                break;
+                            case 1:
+                                requestPermissionsHSHP();
+                                break;
+                        }
+                    }
+                });
+
+        builder.show();
+    }
+
+    private void showPhotoPPJB() {
+        androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this);
+        builder.setTitle("Unggah Gambar")
+                .setItems(new CharSequence[]{"Ambil Foto", "Pilih Dari Galeri"}, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which) {
+                            case 0:
+                                ActivityCompat.requestPermissions(TambahListingActivity.this, new String[]{Manifest.permission.CAMERA}, CODE_CAMERA_REQUEST_PPJB);
+                                break;
+                            case 1:
+                                requestPermissionsPPJB();
+                                break;
+                        }
+                    }
+                });
+
+        builder.show();
+    }
+
+    private void showPhotoSTRA() {
+        androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this);
+        builder.setTitle("Unggah Gambar")
+                .setItems(new CharSequence[]{"Ambil Foto", "Pilih Dari Galeri"}, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which) {
+                            case 0:
+                                ActivityCompat.requestPermissions(TambahListingActivity.this, new String[]{Manifest.permission.CAMERA}, CODE_CAMERA_REQUEST_STRA);
+                                break;
+                            case 1:
+                                requestPermissionsSTRA();
+                                break;
+                        }
+                    }
+                });
+
+        builder.show();
+    }
+
     private void requestPermissions() {
         boolean externalStoragePermissionGranted = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
 
@@ -595,10 +967,95 @@ public class TambahListingActivity extends AppCompatActivity {
         }
     }
 
+    private void requestPermissionsSHM() {
+        boolean externalStoragePermissionGranted = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
+
+        if (externalStoragePermissionGranted) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE_SHM);
+        } else {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_MEDIA_IMAGES}, PERMISSION_REQUEST_CODE_MEDIA_IMAGES_SHM);
+        }
+    }
+
+    private void requestPermissionsHGB() {
+        boolean externalStoragePermissionGranted = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
+
+        if (externalStoragePermissionGranted) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE_HGB);
+        } else {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_MEDIA_IMAGES}, PERMISSION_REQUEST_CODE_MEDIA_IMAGES_HGB);
+        }
+    }
+
+    private void requestPermissionsHSHP() {
+        boolean externalStoragePermissionGranted = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
+
+        if (externalStoragePermissionGranted) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE_HSHP);
+        } else {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_MEDIA_IMAGES}, PERMISSION_REQUEST_CODE_MEDIA_IMAGES_HSHP);
+        }
+    }
+
+    private void requestPermissionsPPJB() {
+        boolean externalStoragePermissionGranted = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
+
+        if (externalStoragePermissionGranted) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE_PPJB);
+        } else {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_MEDIA_IMAGES}, PERMISSION_REQUEST_CODE_MEDIA_IMAGES_PPJB);
+        }
+    }
+
+    private void requestPermissionsSTRA() {
+        boolean externalStoragePermissionGranted = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
+
+        if (externalStoragePermissionGranted) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE_STRA);
+        } else {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_MEDIA_IMAGES}, PERMISSION_REQUEST_CODE_MEDIA_IMAGES_STRA);
+        }
+    }
+
     private void bukaKamera() {
         Intent intentKamera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (intentKamera.resolveActivity(getPackageManager()) != null) {
             startActivityForResult(intentKamera, KODE_REQUEST_KAMERA);
+        }
+    }
+
+    private void bukaKameraSHM() {
+        Intent intentKamera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (intentKamera.resolveActivity(getPackageManager()) != null) {
+            startActivityForResult(intentKamera, KODE_REQUEST_KAMERA_SHM);
+        }
+    }
+
+    private void bukaKameraHGB() {
+        Intent intentKamera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (intentKamera.resolveActivity(getPackageManager()) != null) {
+            startActivityForResult(intentKamera, KODE_REQUEST_KAMERA_HGB);
+        }
+    }
+
+    private void bukaKameraHSHP() {
+        Intent intentKamera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (intentKamera.resolveActivity(getPackageManager()) != null) {
+            startActivityForResult(intentKamera, KODE_REQUEST_KAMERA_HSHP);
+        }
+    }
+
+    private void bukaKameraPPJB() {
+        Intent intentKamera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (intentKamera.resolveActivity(getPackageManager()) != null) {
+            startActivityForResult(intentKamera, KODE_REQUEST_KAMERA_PPJB);
+        }
+    }
+
+    private void bukaKameraSTRA() {
+        Intent intentKamera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (intentKamera.resolveActivity(getPackageManager()) != null) {
+            startActivityForResult(intentKamera, KODE_REQUEST_KAMERA_STRA);
         }
     }
 
@@ -611,15 +1068,245 @@ public class TambahListingActivity extends AppCompatActivity {
                 Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 startActivityForResult(intent, CODE_GALLERY_REQUEST);
             }
+        } else if (requestCode == PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE_SHM) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(intent, CODE_GALLERY_REQUEST_SHM);
+            }
+        } else if (requestCode == PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE_HGB) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(intent, CODE_GALLERY_REQUEST_HGB);
+            }
+        } else if (requestCode == PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE_HSHP) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(intent, CODE_GALLERY_REQUEST_HSHP);
+            }
+        } else if (requestCode == PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE_PPJB) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(intent, CODE_GALLERY_REQUEST_PPJB);
+            }
+        } else if (requestCode == PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE_STRA) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(intent, CODE_GALLERY_REQUEST_STRA);
+            }
         } else if (requestCode == PERMISSION_REQUEST_CODE_MEDIA_IMAGES) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 startActivityForResult(intent, CODE_GALLERY_REQUEST);
             }
+        } else if (requestCode == PERMISSION_REQUEST_CODE_MEDIA_IMAGES_SHM) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(intent, CODE_GALLERY_REQUEST_SHM);
+            }
+        } else if (requestCode == PERMISSION_REQUEST_CODE_MEDIA_IMAGES_HGB) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(intent, CODE_GALLERY_REQUEST_HGB);
+            }
+        } else if (requestCode == PERMISSION_REQUEST_CODE_MEDIA_IMAGES_HSHP) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(intent, CODE_GALLERY_REQUEST_HSHP);
+            }
+        } else if (requestCode == PERMISSION_REQUEST_CODE_MEDIA_IMAGES_PPJB) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(intent, CODE_GALLERY_REQUEST_PPJB);
+            }
+        } else if (requestCode == PERMISSION_REQUEST_CODE_MEDIA_IMAGES_STRA) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(intent, CODE_GALLERY_REQUEST_STRA);
+            }
         } else if (requestCode == CODE_GALLERY_REQUEST) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 startActivityForResult(intent, CODE_GALLERY_REQUEST);
+            } else {
+                Dialog customDialog = new Dialog(TambahListingActivity.this);
+                customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                customDialog.setContentView(R.layout.custom_dialog_eror_input);
+
+                if (customDialog.getWindow() != null) {
+                    customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                }
+
+                Button ok = customDialog.findViewById(R.id.BtnOkErorInput);
+                TextView tv = customDialog.findViewById(R.id.TVDialogErorInput);
+
+                tv.setText("Akses Galeri Ditolak");
+
+                ok.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        customDialog.dismiss();
+                    }
+                });
+
+                ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
+
+                Glide.with(TambahListingActivity.this)
+                        .load(R.drawable.alert) // You can also use a local resource like R.drawable.your_gif_resource
+                        .transition(DrawableTransitionOptions.withCrossFade())
+                        .into(gifImageView);
+
+                customDialog.show();
+            }
+
+            return;
+        } else if (requestCode == CODE_GALLERY_REQUEST_SHM) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(intent, CODE_GALLERY_REQUEST_SHM);
+            } else {
+                Dialog customDialog = new Dialog(TambahListingActivity.this);
+                customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                customDialog.setContentView(R.layout.custom_dialog_eror_input);
+
+                if (customDialog.getWindow() != null) {
+                    customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                }
+
+                Button ok = customDialog.findViewById(R.id.BtnOkErorInput);
+                TextView tv = customDialog.findViewById(R.id.TVDialogErorInput);
+
+                tv.setText("Akses Galeri Ditolak");
+
+                ok.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        customDialog.dismiss();
+                    }
+                });
+
+                ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
+
+                Glide.with(TambahListingActivity.this)
+                        .load(R.drawable.alert) // You can also use a local resource like R.drawable.your_gif_resource
+                        .transition(DrawableTransitionOptions.withCrossFade())
+                        .into(gifImageView);
+
+                customDialog.show();
+            }
+
+            return;
+        } else if (requestCode == CODE_GALLERY_REQUEST_HGB) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(intent, CODE_GALLERY_REQUEST_HGB);
+            } else {
+                Dialog customDialog = new Dialog(TambahListingActivity.this);
+                customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                customDialog.setContentView(R.layout.custom_dialog_eror_input);
+
+                if (customDialog.getWindow() != null) {
+                    customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                }
+
+                Button ok = customDialog.findViewById(R.id.BtnOkErorInput);
+                TextView tv = customDialog.findViewById(R.id.TVDialogErorInput);
+
+                tv.setText("Akses Galeri Ditolak");
+
+                ok.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        customDialog.dismiss();
+                    }
+                });
+
+                ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
+
+                Glide.with(TambahListingActivity.this)
+                        .load(R.drawable.alert) // You can also use a local resource like R.drawable.your_gif_resource
+                        .transition(DrawableTransitionOptions.withCrossFade())
+                        .into(gifImageView);
+
+                customDialog.show();
+            }
+
+            return;
+        } else if (requestCode == CODE_GALLERY_REQUEST_HSHP) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(intent, CODE_GALLERY_REQUEST_HSHP);
+            } else {
+                Dialog customDialog = new Dialog(TambahListingActivity.this);
+                customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                customDialog.setContentView(R.layout.custom_dialog_eror_input);
+
+                if (customDialog.getWindow() != null) {
+                    customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                }
+
+                Button ok = customDialog.findViewById(R.id.BtnOkErorInput);
+                TextView tv = customDialog.findViewById(R.id.TVDialogErorInput);
+
+                tv.setText("Akses Galeri Ditolak");
+
+                ok.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        customDialog.dismiss();
+                    }
+                });
+
+                ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
+
+                Glide.with(TambahListingActivity.this)
+                        .load(R.drawable.alert) // You can also use a local resource like R.drawable.your_gif_resource
+                        .transition(DrawableTransitionOptions.withCrossFade())
+                        .into(gifImageView);
+
+                customDialog.show();
+            }
+
+            return;
+        } else if (requestCode == CODE_GALLERY_REQUEST_PPJB) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(intent, CODE_GALLERY_REQUEST_PPJB);
+            } else {
+                Dialog customDialog = new Dialog(TambahListingActivity.this);
+                customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                customDialog.setContentView(R.layout.custom_dialog_eror_input);
+
+                if (customDialog.getWindow() != null) {
+                    customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                }
+
+                Button ok = customDialog.findViewById(R.id.BtnOkErorInput);
+                TextView tv = customDialog.findViewById(R.id.TVDialogErorInput);
+
+                tv.setText("Akses Galeri Ditolak");
+
+                ok.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        customDialog.dismiss();
+                    }
+                });
+
+                ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
+
+                Glide.with(TambahListingActivity.this)
+                        .load(R.drawable.alert) // You can also use a local resource like R.drawable.your_gif_resource
+                        .transition(DrawableTransitionOptions.withCrossFade())
+                        .into(gifImageView);
+
+                customDialog.show();
+            }
+
+            return;
+        } else if (requestCode == CODE_GALLERY_REQUEST_STRA) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(intent, CODE_GALLERY_REQUEST_STRA);
             } else {
                 Dialog customDialog = new Dialog(TambahListingActivity.this);
                 customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -666,6 +1353,76 @@ public class TambahListingActivity extends AppCompatActivity {
             }
 
             return;
+        } else if (requestCode == CODE_CAMERA_REQUEST_SHM) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                bukaKameraSHM();
+            } else {
+                AlertDialog.Builder builder = new AlertDialog.Builder(TambahListingActivity.this);
+                builder.setTitle("Izin Kamera Ditolak").
+                        setMessage("Aplikasi memerlukan izin kamera untuk mengambil gambar.");
+                builder.setPositiveButton("OK",
+                        (dialog, id) -> dialog.cancel());
+                AlertDialog alert = builder.create();
+                alert.show();
+            }
+
+            return;
+        } else if (requestCode == CODE_CAMERA_REQUEST_HGB) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                bukaKameraHGB();
+            } else {
+                AlertDialog.Builder builder = new AlertDialog.Builder(TambahListingActivity.this);
+                builder.setTitle("Izin Kamera Ditolak").
+                        setMessage("Aplikasi memerlukan izin kamera untuk mengambil gambar.");
+                builder.setPositiveButton("OK",
+                        (dialog, id) -> dialog.cancel());
+                AlertDialog alert = builder.create();
+                alert.show();
+            }
+
+            return;
+        } else if (requestCode == CODE_CAMERA_REQUEST_HSHP) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                bukaKameraHSHP();
+            } else {
+                AlertDialog.Builder builder = new AlertDialog.Builder(TambahListingActivity.this);
+                builder.setTitle("Izin Kamera Ditolak").
+                        setMessage("Aplikasi memerlukan izin kamera untuk mengambil gambar.");
+                builder.setPositiveButton("OK",
+                        (dialog, id) -> dialog.cancel());
+                AlertDialog alert = builder.create();
+                alert.show();
+            }
+
+            return;
+        } else if (requestCode == CODE_CAMERA_REQUEST_PPJB) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                bukaKameraPPJB();
+            } else {
+                AlertDialog.Builder builder = new AlertDialog.Builder(TambahListingActivity.this);
+                builder.setTitle("Izin Kamera Ditolak").
+                        setMessage("Aplikasi memerlukan izin kamera untuk mengambil gambar.");
+                builder.setPositiveButton("OK",
+                        (dialog, id) -> dialog.cancel());
+                AlertDialog alert = builder.create();
+                alert.show();
+            }
+
+            return;
+        } else if (requestCode == CODE_CAMERA_REQUEST_STRA) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                bukaKameraSTRA();
+            } else {
+                AlertDialog.Builder builder = new AlertDialog.Builder(TambahListingActivity.this);
+                builder.setTitle("Izin Kamera Ditolak").
+                        setMessage("Aplikasi memerlukan izin kamera untuk mengambil gambar.");
+                builder.setPositiveButton("OK",
+                        (dialog, id) -> dialog.cancel());
+                AlertDialog alert = builder.create();
+                alert.show();
+            }
+
+            return;
         }
 
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -686,62 +1443,213 @@ public class TambahListingActivity extends AppCompatActivity {
 
         if (requestCode == CODE_GALLERY_REQUEST && resultCode == RESULT_OK && data != null) {
             Uri filePath = data.getData();
-            cropImage(filePath);
+            try {
+                InputStream inputStream = getContentResolver().openInputStream(filePath);
+                if (bitmap1 == null) {
+                    bitmap1 = BitmapFactory.decodeStream(inputStream);
+                    lyt1.setVisibility(View.VISIBLE);
+                    iv1.setImageBitmap(bitmap1);
+                } else if (bitmap2 == null) {
+                    bitmap2 = BitmapFactory.decodeStream(inputStream);
+                    lyt2.setVisibility(View.VISIBLE);
+                    iv2.setImageBitmap(bitmap2);
+                } else if (bitmap3 == null) {
+                    bitmap3 = BitmapFactory.decodeStream(inputStream);
+                    lyt3.setVisibility(View.VISIBLE);
+                    iv3.setImageBitmap(bitmap3);
+                } else if (bitmap4 == null) {
+                    bitmap4 = BitmapFactory.decodeStream(inputStream);
+                    lyt4.setVisibility(View.VISIBLE);
+                    iv4.setImageBitmap(bitmap4);
+                } else if (bitmap5 == null) {
+                    bitmap5 = BitmapFactory.decodeStream(inputStream);
+                    lyt5.setVisibility(View.VISIBLE);
+                    iv5.setImageBitmap(bitmap5);
+                } else if (bitmap6 == null) {
+                    bitmap6 = BitmapFactory.decodeStream(inputStream);
+                    lyt6.setVisibility(View.VISIBLE);
+                    iv6.setImageBitmap(bitmap6);
+                } else if (bitmap7 == null) {
+                    bitmap7 = BitmapFactory.decodeStream(inputStream);
+                    lyt7.setVisibility(View.VISIBLE);
+                    iv7.setImageBitmap(bitmap7);
+                } else if (bitmap8 == null) {
+                    bitmap8 = BitmapFactory.decodeStream(inputStream);
+                    lyt8.setVisibility(View.VISIBLE);
+                    iv8.setImageBitmap(bitmap8);
+                } else {
+
+                    select.setVisibility(View.GONE);
+                }
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+        } else if (requestCode == CODE_GALLERY_REQUEST_SHM && resultCode == RESULT_OK && data != null) {
+            Uri filePath = data.getData();
+            try {
+                InputStream inputStream = getContentResolver().openInputStream(filePath);
+                if (bitmapSHM == null) {
+                    bitmapSHM = BitmapFactory.decodeStream(inputStream);
+                    IVShm.setImageBitmap(bitmapSHM);
+                }
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+        } else if (requestCode == CODE_GALLERY_REQUEST_HGB && resultCode == RESULT_OK && data != null) {
+            Uri filePath = data.getData();
+            try {
+                InputStream inputStream = getContentResolver().openInputStream(filePath);
+                if (bitmapHGB == null) {
+                    bitmapHGB = BitmapFactory.decodeStream(inputStream);
+                    IVHgb.setImageBitmap(bitmapHGB);
+                }
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+        } else if (requestCode == CODE_GALLERY_REQUEST_HSHP && resultCode == RESULT_OK && data != null) {
+            Uri filePath = data.getData();
+            try {
+                InputStream inputStream = getContentResolver().openInputStream(filePath);
+                if (bitmapHSHP == null) {
+                    bitmapHSHP = BitmapFactory.decodeStream(inputStream);
+                    IVHshp.setImageBitmap(bitmapHSHP);
+                }
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+        } else if (requestCode == CODE_GALLERY_REQUEST_PPJB && resultCode == RESULT_OK && data != null) {
+            Uri filePath = data.getData();
+            try {
+                InputStream inputStream = getContentResolver().openInputStream(filePath);
+                if (bitmapPPJB == null) {
+                    bitmapPPJB = BitmapFactory.decodeStream(inputStream);
+                    IVPpjb.setImageBitmap(bitmapPPJB);
+                }
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+        } else if (requestCode == CODE_GALLERY_REQUEST_STRA && resultCode == RESULT_OK && data != null) {
+            Uri filePath = data.getData();
+            try {
+                InputStream inputStream = getContentResolver().openInputStream(filePath);
+                if (bitmapSTRA == null) {
+                    bitmapSTRA = BitmapFactory.decodeStream(inputStream);
+                    IVStratatitle.setImageBitmap(bitmapSTRA);
+                }
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
         } else if (requestCode == KODE_REQUEST_KAMERA && resultCode == RESULT_OK) {
             if (data != null && data.getExtras() != null) {
                 Bitmap imageBitmap = (Bitmap) data.getExtras().get("data");
                 if (imageBitmap != null) {
-                    cropImage(getImageUri(this, imageBitmap));
+                    try {
+                        InputStream inputStream = getContentResolver().openInputStream(getImageUri(this, imageBitmap));
+                        if (bitmap1 == null) {
+                            bitmap1 = BitmapFactory.decodeStream(inputStream);
+                            lyt1.setVisibility(View.VISIBLE);
+                            iv1.setImageBitmap(bitmap1);
+                        } else if (bitmap2 == null) {
+                            bitmap2 = BitmapFactory.decodeStream(inputStream);
+                            lyt2.setVisibility(View.VISIBLE);
+                            iv2.setImageBitmap(bitmap2);
+                        } else if (bitmap3 == null) {
+                            bitmap3 = BitmapFactory.decodeStream(inputStream);
+                            lyt3.setVisibility(View.VISIBLE);
+                            iv3.setImageBitmap(bitmap3);
+                        } else if (bitmap4 == null) {
+                            bitmap4 = BitmapFactory.decodeStream(inputStream);
+                            lyt4.setVisibility(View.VISIBLE);
+                            iv4.setImageBitmap(bitmap4);
+                        } else if (bitmap5 == null) {
+                            bitmap5 = BitmapFactory.decodeStream(inputStream);
+                            lyt5.setVisibility(View.VISIBLE);
+                            iv5.setImageBitmap(bitmap5);
+                        } else if (bitmap6 == null) {
+                            bitmap6 = BitmapFactory.decodeStream(inputStream);
+                            lyt6.setVisibility(View.VISIBLE);
+                            iv6.setImageBitmap(bitmap6);
+                        } else if (bitmap7 == null) {
+                            bitmap7 = BitmapFactory.decodeStream(inputStream);
+                            lyt7.setVisibility(View.VISIBLE);
+                            iv7.setImageBitmap(bitmap7);
+                        } else if (bitmap8 == null) {
+                            bitmap8 = BitmapFactory.decodeStream(inputStream);
+                            lyt8.setVisibility(View.VISIBLE);
+                            iv8.setImageBitmap(bitmap8);
+                        } else {
+
+                            select.setVisibility(View.GONE);
+                        }
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
-        } else if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
-            CropImage.ActivityResult result = CropImage.getActivityResult(data);
-            if (resultCode == RESULT_OK) {
-                Uri croppedUri = result.getUri();
-                try {
-                    InputStream inputStream = getContentResolver().openInputStream(croppedUri);
-                    if (bitmap1 == null) {
-                        bitmap1 = BitmapFactory.decodeStream(inputStream);
-                        lyt1.setVisibility(View.VISIBLE);
-                        iv1.setImageBitmap(bitmap1);
-                    } else if (bitmap2 == null) {
-                        bitmap2 = BitmapFactory.decodeStream(inputStream);
-                        lyt2.setVisibility(View.VISIBLE);
-                        iv2.setImageBitmap(bitmap2);
-                    } else if (bitmap3 == null) {
-                        bitmap3 = BitmapFactory.decodeStream(inputStream);
-                        lyt3.setVisibility(View.VISIBLE);
-                        iv3.setImageBitmap(bitmap3);
-                    } else if (bitmap4 == null) {
-                        bitmap4 = BitmapFactory.decodeStream(inputStream);
-                        lyt4.setVisibility(View.VISIBLE);
-                        iv4.setImageBitmap(bitmap4);
-                    } else if (bitmap5 == null) {
-                        bitmap5 = BitmapFactory.decodeStream(inputStream);
-                        lyt5.setVisibility(View.VISIBLE);
-                        iv5.setImageBitmap(bitmap5);
-                    } else if (bitmap6 == null) {
-                        bitmap6 = BitmapFactory.decodeStream(inputStream);
-                        lyt6.setVisibility(View.VISIBLE);
-                        iv6.setImageBitmap(bitmap6);
-                    } else if (bitmap7 == null) {
-                        bitmap7 = BitmapFactory.decodeStream(inputStream);
-                        lyt7.setVisibility(View.VISIBLE);
-                        iv7.setImageBitmap(bitmap7);
-                    } else if (bitmap8 == null) {
-                        bitmap8 = BitmapFactory.decodeStream(inputStream);
-                        lyt8.setVisibility(View.VISIBLE);
-                        iv8.setImageBitmap(bitmap8);
-                    } else {
-
-                        select.setVisibility(View.GONE);
+        } else if (requestCode == KODE_REQUEST_KAMERA_SHM && resultCode == RESULT_OK) {
+            if (data != null && data.getExtras() != null) {
+                Bitmap imageBitmap = (Bitmap) data.getExtras().get("data");
+                if (imageBitmap != null) {
+                    try {
+                        InputStream inputStream = getContentResolver().openInputStream(getImageUri(this, imageBitmap));
+                        bitmapSHM = BitmapFactory.decodeStream(inputStream);
+                        IVShm.setImageBitmap(bitmapSHM);
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
                     }
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
                 }
-            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
-                Exception error = result.getError();
-                error.printStackTrace();
+            }
+        } else if (requestCode == KODE_REQUEST_KAMERA_HGB && resultCode == RESULT_OK) {
+            if (data != null && data.getExtras() != null) {
+                Bitmap imageBitmap = (Bitmap) data.getExtras().get("data");
+                if (imageBitmap != null) {
+                    try {
+                        InputStream inputStream = getContentResolver().openInputStream(getImageUri(this, imageBitmap));
+                        bitmapHGB = BitmapFactory.decodeStream(inputStream);
+                        IVHgb.setImageBitmap(bitmapHGB);
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        } else if (requestCode == KODE_REQUEST_KAMERA_HSHP && resultCode == RESULT_OK) {
+            if (data != null && data.getExtras() != null) {
+                Bitmap imageBitmap = (Bitmap) data.getExtras().get("data");
+                if (imageBitmap != null) {
+                    try {
+                        InputStream inputStream = getContentResolver().openInputStream(getImageUri(this, imageBitmap));
+                        bitmapHSHP = BitmapFactory.decodeStream(inputStream);
+                        IVHshp.setImageBitmap(bitmapHSHP);
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        } else if (requestCode == KODE_REQUEST_KAMERA_PPJB && resultCode == RESULT_OK) {
+            if (data != null && data.getExtras() != null) {
+                Bitmap imageBitmap = (Bitmap) data.getExtras().get("data");
+                if (imageBitmap != null) {
+                    try {
+                        InputStream inputStream = getContentResolver().openInputStream(getImageUri(this, imageBitmap));
+                        bitmapPPJB = BitmapFactory.decodeStream(inputStream);
+                        IVPpjb.setImageBitmap(bitmapPPJB);
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        } else if (requestCode == KODE_REQUEST_KAMERA_STRA && resultCode == RESULT_OK) {
+            if (data != null && data.getExtras() != null) {
+                Bitmap imageBitmap = (Bitmap) data.getExtras().get("data");
+                if (imageBitmap != null) {
+                    try {
+                        InputStream inputStream = getContentResolver().openInputStream(getImageUri(this, imageBitmap));
+                        bitmapSTRA = BitmapFactory.decodeStream(inputStream);
+                        IVStratatitle.setImageBitmap(bitmapSTRA);
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                }
             }
         }
         super.onActivityResult(requestCode, resultCode, data);
@@ -849,17 +1757,36 @@ public class TambahListingActivity extends AppCompatActivity {
                         pDialog.cancel();
                         try {
                             JSONObject res = new JSONObject(response);
-                            AlertDialog.Builder builder = new AlertDialog.Builder(TambahListingActivity.this);
-                            builder.setTitle("Berhasil").
-                                    setMessage("Produk berhasil ditambahkan");
-                            builder.setPositiveButton("OK",
-                                    new DialogInterface.OnClickListener() {
-                                        public void onClick(DialogInterface dialog, int id) {
-                                            finish();
-                                        }
-                                    });
-                            AlertDialog alert11 = builder.create();
-                            alert11.show();
+                            Dialog customDialog = new Dialog(TambahListingActivity.this);
+                            customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                            customDialog.setContentView(R.layout.custom_dialog_sukses);
+
+                            if (customDialog.getWindow() != null) {
+                                customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                            }
+
+                            TextView dialogTitle = customDialog.findViewById(R.id.dialog_title);
+                            Button ok = customDialog.findViewById(R.id.btnya);
+                            Button cobalagi = customDialog.findViewById(R.id.btntidak);
+                            ImageView gifimage = customDialog.findViewById(R.id.ivdialog);
+
+                            dialogTitle.setText("Berhasil Menambahkan Listingan");
+                            cobalagi.setVisibility(View.GONE);
+
+                            ok.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    customDialog.dismiss();
+                                    finish();
+                                }
+                            });
+
+                            Glide.with(TambahListingActivity.this)
+                                    .load(R.mipmap.ic_yes) // You can also use a local resource like R.drawable.your_gif_resource
+                                    .transition(DrawableTransitionOptions.withCrossFade())
+                                    .into(gifimage);
+
+                            customDialog.show();
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -869,13 +1796,35 @@ public class TambahListingActivity extends AppCompatActivity {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         pDialog.cancel();
-                        AlertDialog.Builder builder = new AlertDialog.Builder(TambahListingActivity.this);
-                        builder.setTitle("Gagal").
-                                setMessage("Produk gagal ditambahkan" + error);
-                        builder.setPositiveButton("Coba Lagi",
-                                (dialog, id) -> dialog.cancel());
-                        AlertDialog alert11 = builder.create();
-                        alert11.show();
+                        Dialog customDialog = new Dialog(TambahListingActivity.this);
+                        customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                        customDialog.setContentView(R.layout.custom_dialog_sukses);
+
+                        if (customDialog.getWindow() != null) {
+                            customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                        }
+
+                        TextView dialogTitle = customDialog.findViewById(R.id.dialog_title);
+                        Button ok = customDialog.findViewById(R.id.btnya);
+                        Button cobalagi = customDialog.findViewById(R.id.btntidak);
+                        ImageView gifimage = customDialog.findViewById(R.id.ivdialog);
+
+                        dialogTitle.setText("Gagal Tambah Listingan");
+                        ok.setVisibility(View.GONE);
+
+                        cobalagi.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                customDialog.dismiss();
+                            }
+                        });
+
+                        Glide.with(TambahListingActivity.this)
+                                .load(R.mipmap.ic_no) // You can also use a local resource like R.drawable.your_gif_resource
+                                .transition(DrawableTransitionOptions.withCrossFade())
+                                .into(gifimage);
+
+                        customDialog.show();
                     }
                 }) {
             @Override
@@ -931,6 +1880,38 @@ public class TambahListingActivity extends AppCompatActivity {
                 } else {
                     ttd = imageToString(bitmapttd);
                 }
+                if (bitmapSHM == null) {
+                    SHM = "0";
+                } else {
+                    SHM = imageToString(bitmapSHM);
+                }
+                if (bitmapHGB == null) {
+                    HGB = "0";
+                } else {
+                    HGB = imageToString(bitmapHGB);
+                }
+                if (bitmapHSHP == null) {
+                    HSHP = "0";
+                } else {
+                    HSHP = imageToString(bitmapHSHP);
+                }
+                if (bitmapPPJB == null) {
+                    PPJB = "0";
+                } else {
+                    PPJB = imageToString(bitmapPPJB);
+                }
+                if (bitmapSTRA == null) {
+                    STRA = "0";
+                } else {
+                    STRA = imageToString(bitmapSTRA);
+                }
+
+                final String StringSHM = CBSHM.isChecked() ? "1" : "0";
+                final String StringHGB = CBHGB.isChecked() ? "1" : "0";
+                final String StringHSHP = CBHSHP.isChecked() ? "1" : "0";
+                final String StringPPJB = CBPPJB.isChecked() ? "1" : "0";
+                final String StringSTRA = CBSTRA.isChecked() ? "1" : "0";
+
                 map.put("NamaLengkap", namalengkap.getText().toString());
                 map.put("NoTelp", nohp.getText().toString());
                 map.put("Alamat", alamat.getText().toString());
@@ -956,10 +1937,18 @@ public class TambahListingActivity extends AppCompatActivity {
                 map.put("BathArt", bathart.getText().toString());
                 map.put("Garage", garasi.getText().toString());
                 map.put("Carpot", carpot.getText().toString());
-                map.put("NoCertificate", nosertif.getText().toString());
-                map.put("Pbb", nosertif.getText().toString());
+                map.put("Hadap", hadap.getText().toString());
+                map.put("SHM", StringSHM);
+                map.put("HGB", StringHGB);
+                map.put("HSHP", StringHSHP);
+                map.put("PPJB", StringPPJB);
+                map.put("Stratatitle", StringSTRA);
+                map.put("ImgSHM", SHM);
+                map.put("ImgHGB", HGB);
+                map.put("ImgHSHP", HSHP);
+                map.put("ImgPPJB", PPJB);
+                map.put("ImgStratatitle", STRA);
                 map.put("JenisProperti", jenisproperti.getText().toString());
-                map.put("JenisCertificate", sertifikat.getText().toString());
                 map.put("SumberAir", air.getText().toString());
                 map.put("Kondisi", status.getText().toString());
                 map.put("Deskripsi", keterangan.getText().toString());
@@ -968,6 +1957,7 @@ public class TambahListingActivity extends AppCompatActivity {
                 map.put("Priority", priority);
                 map.put("Ttd", ttd);
                 map.put("Banner", banner.getText().toString());
+                map.put("Size", size.getText().toString());
                 map.put("Harga", harga.getText().toString());
                 map.put("TglInput", idnull);
                 map.put("Img1", image1);
@@ -1005,17 +1995,36 @@ public class TambahListingActivity extends AppCompatActivity {
                         pDialog.cancel();
                         try {
                             JSONObject res = new JSONObject(response);
-                            AlertDialog.Builder builder = new AlertDialog.Builder(TambahListingActivity.this);
-                            builder.setTitle("Berhasil").
-                                    setMessage("Produk berhasil ditambahkan");
-                            builder.setPositiveButton("OK",
-                                    new DialogInterface.OnClickListener() {
-                                        public void onClick(DialogInterface dialog, int id) {
-                                            finish();
-                                        }
-                                    });
-                            AlertDialog alert11 = builder.create();
-                            alert11.show();
+                            Dialog customDialog = new Dialog(TambahListingActivity.this);
+                            customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                            customDialog.setContentView(R.layout.custom_dialog_sukses);
+
+                            if (customDialog.getWindow() != null) {
+                                customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                            }
+
+                            TextView dialogTitle = customDialog.findViewById(R.id.dialog_title);
+                            Button ok = customDialog.findViewById(R.id.btnya);
+                            Button cobalagi = customDialog.findViewById(R.id.btntidak);
+                            ImageView gifimage = customDialog.findViewById(R.id.ivdialog);
+
+                            dialogTitle.setText("Berhasil Menambahkan Listingan");
+                            cobalagi.setVisibility(View.GONE);
+
+                            ok.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    customDialog.dismiss();
+                                    finish();
+                                }
+                            });
+
+                            Glide.with(TambahListingActivity.this)
+                                    .load(R.mipmap.ic_yes) // You can also use a local resource like R.drawable.your_gif_resource
+                                    .transition(DrawableTransitionOptions.withCrossFade())
+                                    .into(gifimage);
+
+                            customDialog.show();
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -1025,13 +2034,35 @@ public class TambahListingActivity extends AppCompatActivity {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         pDialog.cancel();
-                        AlertDialog.Builder builder = new AlertDialog.Builder(TambahListingActivity.this);
-                        builder.setTitle("Gagal").
-                                setMessage("Produk gagal ditambahkan" + error);
-                        builder.setPositiveButton("Coba Lagi",
-                                (dialog, id) -> dialog.cancel());
-                        AlertDialog alert11 = builder.create();
-                        alert11.show();
+                        Dialog customDialog = new Dialog(TambahListingActivity.this);
+                        customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                        customDialog.setContentView(R.layout.custom_dialog_sukses);
+
+                        if (customDialog.getWindow() != null) {
+                            customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                        }
+
+                        TextView dialogTitle = customDialog.findViewById(R.id.dialog_title);
+                        Button ok = customDialog.findViewById(R.id.btnya);
+                        Button cobalagi = customDialog.findViewById(R.id.btntidak);
+                        ImageView gifimage = customDialog.findViewById(R.id.ivdialog);
+
+                        dialogTitle.setText("Gagal Tambah Listingan");
+                        ok.setVisibility(View.GONE);
+
+                        cobalagi.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                customDialog.dismiss();
+                            }
+                        });
+
+                        Glide.with(TambahListingActivity.this)
+                                .load(R.mipmap.ic_no) // You can also use a local resource like R.drawable.your_gif_resource
+                                .transition(DrawableTransitionOptions.withCrossFade())
+                                .into(gifimage);
+
+                        customDialog.show();
                     }
                 }) {
             @Override
@@ -1087,6 +2118,38 @@ public class TambahListingActivity extends AppCompatActivity {
                 } else {
                     ttd = imageToString(bitmapttd);
                 }
+                if (bitmapSHM == null) {
+                    SHM = "0";
+                } else {
+                    SHM = imageToString(bitmapSHM);
+                }
+                if (bitmapHGB == null) {
+                    HGB = "0";
+                } else {
+                    HGB = imageToString(bitmapHGB);
+                }
+                if (bitmapHSHP == null) {
+                    HSHP = "0";
+                } else {
+                    HSHP = imageToString(bitmapHSHP);
+                }
+                if (bitmapPPJB == null) {
+                    PPJB = "0";
+                } else {
+                    PPJB = imageToString(bitmapPPJB);
+                }
+                if (bitmapSTRA == null) {
+                    STRA = "0";
+                } else {
+                    STRA = imageToString(bitmapSTRA);
+                }
+
+                final String StringSHM = CBSHM.isChecked() ? "1" : "0";
+                final String StringHGB = CBHGB.isChecked() ? "1" : "0";
+                final String StringHSHP = CBHSHP.isChecked() ? "1" : "0";
+                final String StringPPJB = CBPPJB.isChecked() ? "1" : "0";
+                final String StringSTRA = CBSTRA.isChecked() ? "1" : "0";
+
                 map.put("NamaLengkap", namalengkap.getText().toString());
                 map.put("NoTelp", nohp.getText().toString());
                 map.put("Alamat", alamat.getText().toString());
@@ -1112,10 +2175,18 @@ public class TambahListingActivity extends AppCompatActivity {
                 map.put("BathArt", bathart.getText().toString());
                 map.put("Garage", garasi.getText().toString());
                 map.put("Carpot", carpot.getText().toString());
-                map.put("NoCertificate", nosertif.getText().toString());
-                map.put("Pbb", nosertif.getText().toString());
+                map.put("Hadap", hadap.getText().toString());
+                map.put("SHM", StringSHM);
+                map.put("HGB", StringHGB);
+                map.put("HSHP", StringHSHP);
+                map.put("PPJB", StringPPJB);
+                map.put("Stratatitle", StringSTRA);
+                map.put("ImgSHM", SHM);
+                map.put("ImgHGB", HGB);
+                map.put("ImgHSHP", HSHP);
+                map.put("ImgPPJB", PPJB);
+                map.put("ImgStratatitle", STRA);
                 map.put("JenisProperti", jenisproperti.getText().toString());
-                map.put("JenisCertificate", sertifikat.getText().toString());
                 map.put("SumberAir", air.getText().toString());
                 map.put("Kondisi", status.getText().toString());
                 map.put("Deskripsi", keterangan.getText().toString());
@@ -1124,6 +2195,7 @@ public class TambahListingActivity extends AppCompatActivity {
                 map.put("Priority", priority);
                 map.put("Ttd", ttd);
                 map.put("Banner", banner.getText().toString());
+                map.put("Size", size.getText().toString());
                 map.put("Harga", harga.getText().toString());
                 map.put("TglInput", idnull);
                 map.put("Img1", image1);
@@ -1161,17 +2233,36 @@ public class TambahListingActivity extends AppCompatActivity {
                         pDialog.cancel();
                         try {
                             JSONObject res = new JSONObject(response);
-                            AlertDialog.Builder builder = new AlertDialog.Builder(TambahListingActivity.this);
-                            builder.setTitle("Berhasil").
-                                    setMessage("Produk berhasil ditambahkan");
-                            builder.setPositiveButton("OK",
-                                    new DialogInterface.OnClickListener() {
-                                        public void onClick(DialogInterface dialog, int id) {
-                                            finish();
-                                        }
-                                    });
-                            AlertDialog alert11 = builder.create();
-                            alert11.show();
+                            Dialog customDialog = new Dialog(TambahListingActivity.this);
+                            customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                            customDialog.setContentView(R.layout.custom_dialog_sukses);
+
+                            if (customDialog.getWindow() != null) {
+                                customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                            }
+
+                            TextView dialogTitle = customDialog.findViewById(R.id.dialog_title);
+                            Button ok = customDialog.findViewById(R.id.btnya);
+                            Button cobalagi = customDialog.findViewById(R.id.btntidak);
+                            ImageView gifimage = customDialog.findViewById(R.id.ivdialog);
+
+                            dialogTitle.setText("Berhasil Menambahkan Listingan");
+                            cobalagi.setVisibility(View.GONE);
+
+                            ok.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    customDialog.dismiss();
+                                    finish();
+                                }
+                            });
+
+                            Glide.with(TambahListingActivity.this)
+                                    .load(R.mipmap.ic_yes) // You can also use a local resource like R.drawable.your_gif_resource
+                                    .transition(DrawableTransitionOptions.withCrossFade())
+                                    .into(gifimage);
+
+                            customDialog.show();
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -1181,13 +2272,35 @@ public class TambahListingActivity extends AppCompatActivity {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         pDialog.cancel();
-                        AlertDialog.Builder builder = new AlertDialog.Builder(TambahListingActivity.this);
-                        builder.setTitle("Gagal").
-                                setMessage("Produk gagal ditambahkan" + error);
-                        builder.setPositiveButton("Coba Lagi",
-                                (dialog, id) -> dialog.cancel());
-                        AlertDialog alert11 = builder.create();
-                        alert11.show();
+                        Dialog customDialog = new Dialog(TambahListingActivity.this);
+                        customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                        customDialog.setContentView(R.layout.custom_dialog_sukses);
+
+                        if (customDialog.getWindow() != null) {
+                            customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                        }
+
+                        TextView dialogTitle = customDialog.findViewById(R.id.dialog_title);
+                        Button ok = customDialog.findViewById(R.id.btnya);
+                        Button cobalagi = customDialog.findViewById(R.id.btntidak);
+                        ImageView gifimage = customDialog.findViewById(R.id.ivdialog);
+
+                        dialogTitle.setText("Gagal Tambah Listingan");
+                        ok.setVisibility(View.GONE);
+
+                        cobalagi.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                customDialog.dismiss();
+                            }
+                        });
+
+                        Glide.with(TambahListingActivity.this)
+                                .load(R.mipmap.ic_no) // You can also use a local resource like R.drawable.your_gif_resource
+                                .transition(DrawableTransitionOptions.withCrossFade())
+                                .into(gifimage);
+
+                        customDialog.show();
                     }
                 }) {
             @Override
@@ -1243,6 +2356,38 @@ public class TambahListingActivity extends AppCompatActivity {
                 } else {
                     ttd = imageToString(bitmapttd);
                 }
+                if (bitmapSHM == null) {
+                    SHM = "0";
+                } else {
+                    SHM = imageToString(bitmapSHM);
+                }
+                if (bitmapHGB == null) {
+                    HGB = "0";
+                } else {
+                    HGB = imageToString(bitmapHGB);
+                }
+                if (bitmapHSHP == null) {
+                    HSHP = "0";
+                } else {
+                    HSHP = imageToString(bitmapHSHP);
+                }
+                if (bitmapPPJB == null) {
+                    PPJB = "0";
+                } else {
+                    PPJB = imageToString(bitmapPPJB);
+                }
+                if (bitmapSTRA == null) {
+                    STRA = "0";
+                } else {
+                    STRA = imageToString(bitmapSTRA);
+                }
+
+                final String StringSHM = CBSHM.isChecked() ? "1" : "0";
+                final String StringHGB = CBHGB.isChecked() ? "1" : "0";
+                final String StringHSHP = CBHSHP.isChecked() ? "1" : "0";
+                final String StringPPJB = CBPPJB.isChecked() ? "1" : "0";
+                final String StringSTRA = CBSTRA.isChecked() ? "1" : "0";
+
                 map.put("NamaLengkap", namalengkap.getText().toString());
                 map.put("NoTelp", nohp.getText().toString());
                 map.put("Alamat", alamat.getText().toString());
@@ -1268,10 +2413,18 @@ public class TambahListingActivity extends AppCompatActivity {
                 map.put("BathArt", bathart.getText().toString());
                 map.put("Garage", garasi.getText().toString());
                 map.put("Carpot", carpot.getText().toString());
-                map.put("NoCertificate", nosertif.getText().toString());
-                map.put("Pbb", nosertif.getText().toString());
+                map.put("Hadap", hadap.getText().toString());
+                map.put("SHM", StringSHM);
+                map.put("HGB", StringHGB);
+                map.put("HSHP", StringHSHP);
+                map.put("PPJB", StringPPJB);
+                map.put("Stratatitle", StringSTRA);
+                map.put("ImgSHM", SHM);
+                map.put("ImgHGB", HGB);
+                map.put("ImgHSHP", HSHP);
+                map.put("ImgPPJB", PPJB);
+                map.put("ImgStratatitle", STRA);
                 map.put("JenisProperti", jenisproperti.getText().toString());
-                map.put("JenisCertificate", sertifikat.getText().toString());
                 map.put("SumberAir", air.getText().toString());
                 map.put("Kondisi", status.getText().toString());
                 map.put("Deskripsi", keterangan.getText().toString());
@@ -1280,6 +2433,7 @@ public class TambahListingActivity extends AppCompatActivity {
                 map.put("Priority", priority);
                 map.put("Ttd", ttd);
                 map.put("Banner", banner.getText().toString());
+                map.put("Size", size.getText().toString());
                 map.put("Harga", harga.getText().toString());
                 map.put("TglInput", idnull);
                 map.put("Img1", image1);
@@ -1306,7 +2460,7 @@ public class TambahListingActivity extends AppCompatActivity {
     }
 
     public void ShowBank(View view) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this,R.style.CustomAlertDialogStyle);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.CustomAlertDialogStyle);
         builder.setTitle("Silahkan Pilih Bank");
 
         final CharSequence[] Bank = {"BCA", "BRI"};
@@ -1333,7 +2487,7 @@ public class TambahListingActivity extends AppCompatActivity {
     }
 
     public void ShowJenisProperti(View view) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this,R.style.CustomAlertDialogStyle);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.CustomAlertDialogStyle);
         builder.setTitle("Silahkan Pilih Jenis Properti");
 
         final CharSequence[] JenisProperti = {"Rumah", "Ruko", "Tanah", "Gudang", "Ruang Usaha", "Villa", "Apartemen", "Pabrik", "Kantor", "Hotel", "Kondohotel"};
@@ -1360,20 +2514,11 @@ public class TambahListingActivity extends AppCompatActivity {
     }
 
     public void ShowTipeSertifikat(View view) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this,R.style.CustomAlertDialogStyle);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.CustomAlertDialogStyle);
         builder.setTitle("Silahkan Pilih Tipe Sertifikat");
 
         final CharSequence[] TipeSertifikat = {"SHM", "HGB", "Custom"};
-        //final int[] SelectedTipeSertifikat = {0};
         final int SelectedTipeSertifikat = -1;
-/*
-        builder.setSingleChoiceItems(TipeSertifikat, SelectedTipeSertifikat[0], new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                SelectedTipeSertifikat[0] = which;
-            }
-        });
- */
 
         builder.setSingleChoiceItems(TipeSertifikat, SelectedTipeSertifikat, new DialogInterface.OnClickListener() {
             @Override
@@ -1386,14 +2531,6 @@ public class TambahListingActivity extends AppCompatActivity {
                 dialog.dismiss();
             }
         });
-/*
-        builder.setPositiveButton("Pilih", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                sertifikat.setText(TipeSertifikat[SelectedTipeSertifikat[0]]);
-            }
-        });
- */
 
         builder.setNegativeButton("Batal", null);
 
@@ -1405,7 +2542,7 @@ public class TambahListingActivity extends AppCompatActivity {
         final EditText editTextCustomType = new EditText(this);
         editTextCustomType.setHint("Masukkan Tipe Sertifikat");
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(this,R.style.CustomAlertDialogStyle);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.CustomAlertDialogStyle);
         builder.setTitle("Tipe Sertifikat")
                 .setView(editTextCustomType)
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -1430,7 +2567,7 @@ public class TambahListingActivity extends AppCompatActivity {
     }
 
     public void ShowSumberAir(View view) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this,R.style.CustomAlertDialogStyle);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.CustomAlertDialogStyle);
         builder.setTitle("Silahkan Pilih Sumber Air");
 
         final CharSequence[] SumberAir = {"PAM atau PDAM", "Sumur Pompa", "Sumur Bor", "Sumur Resapan", "Sumur Galian"};
@@ -1457,7 +2594,7 @@ public class TambahListingActivity extends AppCompatActivity {
     }
 
     public void ShowPerabot(View view) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this,R.style.CustomAlertDialogStyle);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.CustomAlertDialogStyle);
         builder.setTitle("Ketersediaan Prabot");
 
         final CharSequence[] Perabot = {"Ada", "Tidak"};
@@ -1484,7 +2621,7 @@ public class TambahListingActivity extends AppCompatActivity {
     }
 
     public void ShowBanner(View view) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this,R.style.CustomAlertDialogStyle);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.CustomAlertDialogStyle);
         builder.setTitle("Pemasangan Banner");
 
         final CharSequence[] Banner = {"Ya", "Tidak"};
@@ -1501,6 +2638,12 @@ public class TambahListingActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 banner.setText(Banner[SelectedBanner[0]]);
+                if (Banner[SelectedBanner[0]].equals("Ya")){
+                    size.setVisibility(View.VISIBLE);
+                }
+                /*if (Banner[SelectedBanner[0]] == "Ya"){
+                    size.setVisibility(View.VISIBLE);
+                }*/
             }
         });
 
@@ -1510,8 +2653,65 @@ public class TambahListingActivity extends AppCompatActivity {
         dialog.show();
     }
 
+    public void ShowSize(View view) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.CustomAlertDialogStyle);
+        builder.setTitle("Ukuran Banner");
+
+        final CharSequence[] Banner = {"80 X 90", "100 X 125", "180 X 80", "Lainnya"};
+        final int[] SelectedBanner = {0};
+
+        builder.setSingleChoiceItems(Banner, SelectedBanner[0], new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (which == Banner.length - 1) {
+                    ShowCustomSize();
+                } else {
+                    size.setText(Banner[which]);
+                }
+                dialog.dismiss();
+            }
+        });
+
+        builder.setNegativeButton("Batal", null);
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    private void ShowCustomSize() {
+        final EditText editTextCustomType = new EditText(this);
+        editTextCustomType.setHint("Masukkan Ukuran Banner");
+        editTextCustomType.setTextColor(getResources().getColor(android.R.color.black));
+        editTextCustomType.setHintTextColor(getResources().getColor(android.R.color.black));
+        editTextCustomType.setBackgroundColor(getResources().getColor(android.R.color.white));
+        editTextCustomType.setPadding(50,20,50,0);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.CustomAlertDialogStyle);
+        builder.setTitle("Ukuran Banner")
+                .setView(editTextCustomType)
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        String customType = editTextCustomType.getText().toString().trim();
+                        if (!customType.isEmpty()) {
+                            size.setText(customType);
+                        }
+                        dialog.dismiss();
+                    }
+                })
+                .setNegativeButton("Batal", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
     public void ShowStatus(View view) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this,R.style.CustomAlertDialogStyle);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.CustomAlertDialogStyle);
         builder.setTitle("Silahkan Pilih Status Properti");
 
         final CharSequence[] Status = {"Jual", "Sewa"};
@@ -1594,20 +2794,20 @@ public class TambahListingActivity extends AppCompatActivity {
             alamatproperti.requestFocus();
             return false;
         }
-        if (sertifikat.getText().toString().equals("")) {
-            sertifikat.setError("Harap Isi Jenis Sertifikat Properti");
-            sertifikat.requestFocus();
-            return false;
-        }
-        if (nosertif.getText().toString().equals("")) {
-            nosertif.setError("Harap Isi Nomor Sertifikat Properti");
-            nosertif.requestFocus();
-            return false;
-        }
         if (status.getText().toString().equals("")) {
             status.setError("Harap Isi Status Properti");
             status.requestFocus();
             return false;
+        }
+        if (banner.getText().toString().equals("")) {
+            banner.setError("Harap Isi Pemasangan Banner");
+            banner.requestFocus();
+            return false;
+        } else if (banner.getText().toString().equals("Ya")) {
+            if (size.getText().toString().equals("")){
+                size.setError("Harap Isi Ukuran Banner");
+                banner.requestFocus();
+            }
         }
         if (harga.getText().toString().equals("")) {
             harga.setError("Harap Isi Harga Properti");
@@ -1618,6 +2818,171 @@ public class TambahListingActivity extends AppCompatActivity {
             keterangan.setError("Harap Isi Deskripsi Properti");
             keterangan.requestFocus();
             return false;
+        }
+        if (CBSHM.isChecked()){
+            if (bitmapSHM == null){
+                Dialog customDialog = new Dialog(TambahListingActivity.this);
+                customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                customDialog.setContentView(R.layout.custom_dialog_eror_input);
+
+                if (customDialog.getWindow() != null) {
+                    customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                }
+
+                Button ok = customDialog.findViewById(R.id.BtnOkErorInput);
+                TextView tv = customDialog.findViewById(R.id.TVDialogErorInput);
+
+                tv.setText("Harap Tambahkan Gambar SHM");
+
+                ok.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        customDialog.dismiss();
+                    }
+                });
+
+                ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
+
+                Glide.with(TambahListingActivity.this)
+                        .load(R.drawable.alert) // You can also use a local resource like R.drawable.your_gif_resource
+                        .transition(DrawableTransitionOptions.withCrossFade())
+                        .into(gifImageView);
+
+                customDialog.show();
+                return false;
+            }
+        }
+        if (CBHGB.isChecked()){
+            if (bitmapHGB == null){
+                Dialog customDialog = new Dialog(TambahListingActivity.this);
+                customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                customDialog.setContentView(R.layout.custom_dialog_eror_input);
+
+                if (customDialog.getWindow() != null) {
+                    customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                }
+
+                Button ok = customDialog.findViewById(R.id.BtnOkErorInput);
+                TextView tv = customDialog.findViewById(R.id.TVDialogErorInput);
+
+                tv.setText("Harap Tambahkan Gambar HGB");
+
+                ok.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        customDialog.dismiss();
+                    }
+                });
+
+                ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
+
+                Glide.with(TambahListingActivity.this)
+                        .load(R.drawable.alert) // You can also use a local resource like R.drawable.your_gif_resource
+                        .transition(DrawableTransitionOptions.withCrossFade())
+                        .into(gifImageView);
+
+                customDialog.show();
+                return false;
+            }
+        }
+        if (CBHSHP.isChecked()){
+            if (bitmapHSHP == null){
+                Dialog customDialog = new Dialog(TambahListingActivity.this);
+                customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                customDialog.setContentView(R.layout.custom_dialog_eror_input);
+
+                if (customDialog.getWindow() != null) {
+                    customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                }
+
+                Button ok = customDialog.findViewById(R.id.BtnOkErorInput);
+                TextView tv = customDialog.findViewById(R.id.TVDialogErorInput);
+
+                tv.setText("Harap Tambahkan Gambar HS/HP");
+
+                ok.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        customDialog.dismiss();
+                    }
+                });
+
+                ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
+
+                Glide.with(TambahListingActivity.this)
+                        .load(R.drawable.alert) // You can also use a local resource like R.drawable.your_gif_resource
+                        .transition(DrawableTransitionOptions.withCrossFade())
+                        .into(gifImageView);
+
+                customDialog.show();
+                return false;
+            }
+        }
+        if (CBPPJB.isChecked()){
+            if (bitmapPPJB == null){
+                Dialog customDialog = new Dialog(TambahListingActivity.this);
+                customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                customDialog.setContentView(R.layout.custom_dialog_eror_input);
+
+                if (customDialog.getWindow() != null) {
+                    customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                }
+
+                Button ok = customDialog.findViewById(R.id.BtnOkErorInput);
+                TextView tv = customDialog.findViewById(R.id.TVDialogErorInput);
+
+                tv.setText("Harap Tambahkan Gambar PPJB");
+
+                ok.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        customDialog.dismiss();
+                    }
+                });
+
+                ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
+
+                Glide.with(TambahListingActivity.this)
+                        .load(R.drawable.alert) // You can also use a local resource like R.drawable.your_gif_resource
+                        .transition(DrawableTransitionOptions.withCrossFade())
+                        .into(gifImageView);
+
+                customDialog.show();
+                return false;
+            }
+        }
+        if (CBSTRA.isChecked()){
+            if (bitmapSTRA == null){
+                Dialog customDialog = new Dialog(TambahListingActivity.this);
+                customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                customDialog.setContentView(R.layout.custom_dialog_eror_input);
+
+                if (customDialog.getWindow() != null) {
+                    customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                }
+
+                Button ok = customDialog.findViewById(R.id.BtnOkErorInput);
+                TextView tv = customDialog.findViewById(R.id.TVDialogErorInput);
+
+                tv.setText("Harap Tambahkan Gambar STratatitle");
+
+                ok.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        customDialog.dismiss();
+                    }
+                });
+
+                ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
+
+                Glide.with(TambahListingActivity.this)
+                        .load(R.drawable.alert) // You can also use a local resource like R.drawable.your_gif_resource
+                        .transition(DrawableTransitionOptions.withCrossFade())
+                        .into(gifImageView);
+
+                customDialog.show();
+                return false;
+            }
         }
         return true;
     }

@@ -2,7 +2,7 @@ package com.gooproper.util;
 
 public class ServerApi {
 
-    private static final String BASE_URL = "https://testingadnro.000webhostapp.com/";
+    private static final String BASE_URL = "https://app.gooproper.com/";
     public static final String URL_LOGIN = BASE_URL + "/Api/Login";
     public static final String URL_REGISTRASI = BASE_URL + "/Api/Register";
     public static final String URL_REGISTRASI_AGEN = BASE_URL + "/Api/RegisterAgen";
@@ -14,6 +14,8 @@ public class ServerApi {
     public static final String URL_UPDATE_KL = BASE_URL + "/Api/UpdateKl";
     public static final String URL_UPDATE_ADMIN = BASE_URL + "/Api/UpdateAdmin";
     public static final String URL_TAMBAH_PRALISTING = BASE_URL + "/Api/PraListing";
+    public static final String URL_UPDATE_PRALISTING = BASE_URL + "/Api/UpdatePraListing";
+    public static final String URL_TAMBAH_KARYAWAN = BASE_URL + "/Api/AddKaryawan";
     public static final String URL_GET_PRALISTING_ADMIN = BASE_URL + "/Api/GetPraListingAdmin";
     public static final String URL_GET_PRALISTING_MANAGER = BASE_URL + "/Api/GetPraListingManager";
     public static final String URL_GET_LISTING = BASE_URL + "/Api/GetListing";
@@ -29,6 +31,7 @@ public class ServerApi {
     public static final String URL_ADD_SEEN = BASE_URL + "/Api/AddSeen";
     public static final String URL_ADD_FAVORITE = BASE_URL + "/Api/AddFavorite";
     public static final String URL_ADD_FLOWUP = BASE_URL + "/Api/AddFlowup";
+    public static final String URL_UPDATE_FLOWUP = BASE_URL + "/Api/UpdateFlowup";
     public static final String URL_APPROVE_ADMIN = BASE_URL + "/Api/ApproveAdmin";
     public static final String URL_APPROVE_MANAGER = BASE_URL + "/Api/ApproveManager";
     public static final String URL_APPROVE_AGEN = BASE_URL + "/Api/ApproveAgen";

@@ -31,8 +31,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
                 android:layout_marginTop="10dp"
+                android:orientation="horizontal"
                 android:weightSum="7">
 
                 <TextView
@@ -41,35 +41,45 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="5dp"
-                    android:text="Nama"
                     android:layout_weight="5"
+                    android:text="Nama"
                     android:textColor="@color/white" />
 
                 <ImageView
                     android:id="@+id/IVShareDetailListing"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_share"
                     android:layout_weight="1"
-                    app:tint="@color/white"/>
+                    android:src="@drawable/ic_share"
+                    app:tint="@color/white" />
 
                 <ImageView
                     android:id="@+id/IVFavoriteDetailListing"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_favorite"
                     android:layout_gravity="center"
                     android:layout_weight="1"
-                    app:tint="@color/white"/>
+                    android:src="@drawable/ic_favorite"
+                    app:tint="@color/white" />
 
                 <ImageView
                     android:id="@+id/IVFavoriteOnDetailListing"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_favorite_on"
                     android:layout_gravity="center"
                     android:layout_weight="1"
-                    android:visibility="gone"/>
+                    android:src="@drawable/ic_favorite_on"
+                    android:visibility="gone" />
+
+                <ImageView
+                    android:id="@+id/IVEditDetailListing"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:src="@drawable/ic_edit"
+                    android:visibility="gone"
+                    app:tint="@color/white" />
 
             </LinearLayout>
 
@@ -106,6 +116,97 @@
                 android:textColor="@color/white"
                 android:textSize="24sp"
                 android:textStyle="bold" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="2">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/Star1"
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
+                        android:layout_marginStart="5dp"
+                        android:layout_marginTop="10dp"
+                        android:src="@drawable/ic_star"
+                        android:visibility="invisible" />
+
+                    <ImageView
+                        android:id="@+id/Star2"
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
+                        android:layout_marginStart="3dp"
+                        android:layout_marginTop="10dp"
+                        android:src="@drawable/ic_star"
+                        android:visibility="invisible" />
+
+                    <ImageView
+                        android:id="@+id/Star3"
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
+                        android:layout_marginStart="3dp"
+                        android:layout_marginTop="10dp"
+                        android:src="@drawable/ic_star"
+                        android:visibility="invisible" />
+
+                    <ImageView
+                        android:id="@+id/Star4"
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
+                        android:layout_marginStart="3dp"
+                        android:layout_marginTop="10dp"
+                        android:src="@drawable/ic_star"
+                        android:visibility="invisible" />
+
+                    <ImageView
+                        android:id="@+id/Star5"
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
+                        android:layout_marginStart="3dp"
+                        android:layout_marginTop="10dp"
+                        android:src="@drawable/ic_star"
+                        android:visibility="invisible" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="horizontal"
+                    android:weightSum="2">
+
+                    <CheckBox
+                        android:id="@+id/CBMarketable"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:buttonTint="@color/white"
+                        android:text="Maketable"
+                        android:textColor="@color/white"
+                        android:visibility="invisible" />
+
+                    <CheckBox
+                        android:id="@+id/CBHarga"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:buttonTint="@color/white"
+                        android:text="Harga"
+                        android:textColor="@color/white"
+                        android:visibility="invisible" />
+
+                </LinearLayout>
+
+            </LinearLayout>
 
             <TextView
                 android:id="@+id/TVViewsDetailListing"
@@ -232,13 +333,13 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
                 android:layout_marginStart="5dp"
+                android:layout_marginTop="10dp"
                 android:layout_marginEnd="5dp"
-                android:padding="10dp"
-                android:orientation="vertical"
                 android:background="@color/main"
-                android:elevation="3dp">
+                android:elevation="3dp"
+                android:orientation="vertical"
+                android:padding="10dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -250,16 +351,16 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:textColor="@color/white"
-                        android:text="Tipe Hunian"/>
+                        android:text="Tipe Hunian"
+                        android:textColor="@color/white" />
 
                     <TextView
                         android:id="@+id/TVTipeHunianDetailListing"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/white"
                         android:layout_weight="1"
-                        android:text=": Tipe"/>
+                        android:text=": Tipe"
+                        android:textColor="@color/white" />
 
                 </LinearLayout>
 
@@ -272,17 +373,17 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/white"
                         android:layout_weight="1"
-                        android:text="Status Hunian"/>
+                        android:text="Status Hunian"
+                        android:textColor="@color/white" />
 
                     <TextView
                         android:id="@+id/TVStatusHunianDetailListing"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/white"
                         android:layout_weight="1"
-                        android:text=": Status"/>
+                        android:text=": Status"
+                        android:textColor="@color/white" />
 
                 </LinearLayout>
 
@@ -296,16 +397,16 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:textColor="@color/white"
-                        android:text="Sertifikat"/>
+                        android:text="Sertifikat"
+                        android:textColor="@color/white" />
 
                     <TextView
                         android:id="@+id/TVSertifikatDetailListing"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:textColor="@color/white"
-                        android:text=": Sertifikat"/>
+                        android:text=": Sertifikat"
+                        android:textColor="@color/white" />
 
                 </LinearLayout>
 
@@ -319,16 +420,16 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:textColor="@color/white"
-                        android:text="Luas Bangunan/Luas Tanah"/>
+                        android:text="Luas Bangunan/Luas Tanah"
+                        android:textColor="@color/white" />
 
                     <TextView
                         android:id="@+id/TVLuasHunianDetailListing"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:textColor="@color/white"
-                        android:text=": Luas Bangunan/Luas Tanah"/>
+                        android:text=": Luas Bangunan/Luas Tanah"
+                        android:textColor="@color/white" />
 
                 </LinearLayout>
 
@@ -342,16 +443,16 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:textColor="@color/white"
-                        android:text="Kamar Tidur"/>
+                        android:text="Kamar Tidur"
+                        android:textColor="@color/white" />
 
                     <TextView
                         android:id="@+id/TVKamarTidurHunianDetailListing"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:textColor="@color/white"
-                        android:text=": Kamar Tidur"/>
+                        android:text=": Kamar Tidur"
+                        android:textColor="@color/white" />
 
                 </LinearLayout>
 
@@ -365,16 +466,16 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:textColor="@color/white"
-                        android:text="Kamar Mandi"/>
+                        android:text="Kamar Mandi"
+                        android:textColor="@color/white" />
 
                     <TextView
                         android:id="@+id/TVKamarMandiHunianDetailListing"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:textColor="@color/white"
-                        android:text=": Kamar Mandi"/>
+                        android:text=": Kamar Mandi"
+                        android:textColor="@color/white" />
 
                 </LinearLayout>
 
@@ -388,16 +489,16 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:textColor="@color/white"
-                        android:text="Lantai"/>
+                        android:text="Lantai"
+                        android:textColor="@color/white" />
 
                     <TextView
                         android:id="@+id/TVLevelDetailListing"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/white"
                         android:layout_weight="1"
-                        android:text=": -"/>
+                        android:text=": -"
+                        android:textColor="@color/white" />
 
                 </LinearLayout>
 
@@ -411,16 +512,16 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:textColor="@color/white"
-                        android:text="Garasi"/>
+                        android:text="Garasi"
+                        android:textColor="@color/white" />
 
                     <TextView
                         android:id="@+id/TVGarasiDetailListing"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:textColor="@color/white"
-                        android:text=": -"/>
+                        android:text=": -"
+                        android:textColor="@color/white" />
 
                 </LinearLayout>
 
@@ -434,8 +535,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:textColor="@color/white"
-                        android:text="Carpot"/>
+                        android:text="Carpot"
+                        android:textColor="@color/white" />
 
                     <TextView
                         android:id="@+id/TVCarportDetailListing"
@@ -443,7 +544,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text=": -"
-                        android:textColor="@color/white"/>
+                        android:textColor="@color/white" />
 
                 </LinearLayout>
 
@@ -457,16 +558,16 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:textColor="@color/white"
-                        android:text="Listrik"/>
+                        android:text="Listrik"
+                        android:textColor="@color/white" />
 
                     <TextView
                         android:id="@+id/TVListrikDetailListing"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/white"
                         android:layout_weight="1"
-                        android:text=": -"/>
+                        android:text=": -"
+                        android:textColor="@color/white" />
 
                 </LinearLayout>
 
@@ -480,40 +581,104 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:textColor="@color/white"
-                        android:text="Sumber Air"/>
+                        android:text="Sumber Air"
+                        android:textColor="@color/white" />
 
                     <TextView
                         android:id="@+id/TVSumberAirDetailListing"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/white"
                         android:layout_weight="1"
-                        android:text=": -"/>
+                        android:text=": -"
+                        android:textColor="@color/white" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:weightSum="2">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Ukuran Banner"
+                        android:textColor="@color/white" />
+
+                    <TextView
+                        android:id="@+id/TVUkuranBannerDetailListing"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text=": -"
+                        android:textColor="@color/white" />
 
                 </LinearLayout>
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/white"
                     android:layout_marginTop="10dp"
-                    android:text="Deskripsi"/>
+                    android:text="Deskripsi"
+                    android:textColor="@color/white" />
 
                 <TextView
                     android:id="@+id/TVDeskripsiDetailListing"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
+                    android:text="Deskripsi"
+                    android:textColor="@color/white" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/LytSertifikat"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="5dp"
+                android:background="@color/main"
+                android:elevation="3dp"
+                android:orientation="vertical"
+                android:padding="10dp"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Sertifikat"
+                    android:textColor="@color/white" />
+
+                <TextView
+                    android:id="@+id/TVNoData"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:gravity="center"
+                    android:text="Tidak Ada Sertifikat"
                     android:textColor="@color/white"
-                    android:text="Deskripsi"/>
+                    android:visibility="gone" />
+
+                <androidx.viewpager.widget.ViewPager
+                    android:id="@+id/VPSertifikatDetailListing"
+                    android:layout_width="match_parent"
+                    android:layout_height="350dp"
+                    android:layout_marginTop="10dp"
+                    android:clipToPadding="false"
+                    android:overScrollMode="never" />
 
             </LinearLayout>
 
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
                 android:layout_marginTop="10dp"
+                android:layout_marginEnd="5dp"
                 android:layout_marginBottom="10dp"
                 android:elevation="4dp"
                 app:cardCornerRadius="20dp"
@@ -533,7 +698,9 @@
                 style="@style/CustomOutlinedBoxWhite"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
                 android:layout_marginTop="10dp"
+                android:layout_marginEnd="5dp"
                 android:hint="Tambah Agen">
 
                 <com.google.android.material.textfield.TextInputEditText

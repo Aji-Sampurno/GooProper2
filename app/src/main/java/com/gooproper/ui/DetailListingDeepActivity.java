@@ -227,11 +227,11 @@ public class DetailListingDeepActivity extends AppCompatActivity implements OnMa
                                 String intentHSHP = data.getString("HSHP");
                                 String intentPPJB = data.getString("PPJB");
                                 String intentStratatitle = data.getString("Stratatitle");
-                                String intentNoSHM = data.getString("NoSHM");
-                                String intentNoHGB = data.getString("NoHGB");
-                                String intentNoHSHP = data.getString("NoHSHP");
-                                String intentNoPPJB = data.getString("NoPPJB");
-                                String intentNoStratatitle = data.getString("NoStratatitle");
+                                String intentImgSHM = data.getString("ImgSHM");
+                                String intentImgHGB = data.getString("ImgHGB");
+                                String intentImgHSHP = data.getString("ImgHSHP");
+                                String intentImgPPJB = data.getString("ImgPPJB");
+                                String intentImgStratatitle = data.getString("ImgStratatitle");
                                 String intentNoCertificate = data.getString("NoCertificate");
                                 String intentPbb = data.getString("Pbb");
                                 String intentJenisProperti = data.getString("JenisProperti");
@@ -244,6 +244,7 @@ public class DetailListingDeepActivity extends AppCompatActivity implements OnMa
                                 String intentPriority = data.getString("Priority");
                                 String intentTtd = data.getString("Ttd");
                                 String intentBanner = data.getString("Banner");
+                                String intentSize = data.getString("Size");
                                 String intentHarga = data.getString("Harga");
                                 String intentTglInput = data.getString("TglInput");
                                 String intentImg1 = data.getString("Img1");
@@ -263,6 +264,8 @@ public class DetailListingDeepActivity extends AppCompatActivity implements OnMa
                                 String intentIsManager = data.getString("IsManager");
                                 String intentSold = data.getString("Sold");
                                 String intentView = data.getString("View");
+                                String intentMarketable = data.getString("Marketable");
+                                String intentStatusHarga = data.getString("StatusHarga");
                                 String intentNama = data.getString("Nama");
                                 String intentNoTelp = data.getString("NoTelp");
                                 String intentInstagram = data.getString("Instagram");
@@ -653,11 +656,40 @@ public class DetailListingDeepActivity extends AppCompatActivity implements OnMa
             FusedLocationProviderClient fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
             fusedLocationProviderClient.getLastLocation().addOnSuccessListener(location -> {
                 if (location != null) {
-                    LatLng currentLocation = new LatLng(lat, lng);
-                    googleMap.addMarker(new MarkerOptions()
-                            .position(currentLocation)
-                            .title(NamaMaps));
-                    googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 15f));
+                    RequestQueue queue = Volley.newRequestQueue(this);
+                    JsonArrayRequest reqData = new JsonArrayRequest(Request.Method.GET, ServerApi.URL_GET_LISTING_DEEP+productId,null,
+                            new Response.Listener<JSONArray>() {
+                                @Override
+                                public void onResponse(JSONArray response) {
+                                    for(int i = 0 ; i < response.length(); i++)
+                                    {
+                                        try {
+                                            JSONObject data = response.getJSONObject(i);
+                                            String intentLatitude = data.getString("Latitude");
+                                            String intentLongitude = data.getString("Longitude");
+
+                                            lat = Double.parseDouble(intentLatitude);
+                                            lng = Double.parseDouble(intentLongitude);
+
+                                            LatLng currentLocation = new LatLng(lat, lng);
+                                            googleMap.addMarker(new MarkerOptions()
+                                                    .position(currentLocation)
+                                                    .title(NamaMaps));
+                                            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 15f));
+
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+                                }
+                            },
+                            new Response.ErrorListener() {
+                                @Override
+                                public void onErrorResponse(VolleyError error) {
+                                    error.printStackTrace();
+                                }
+                            });
+                    queue.add(reqData);
                 }
             });
 

@@ -122,8 +122,10 @@ public class FlowUpAdapter extends RecyclerView.Adapter<FlowUpAdapter.HolderData
                     update.putExtra("IdFlowup",flowUpModel.getIdFlowup());
                     update.putExtra("IdAgen",flowUpModel.getIdAgen());
                     update.putExtra("IdInput",flowUpModel.getIdInput());
-                    update.putExtra("NamaBuyer",flowUpModel.getNamaBuyer());
                     update.putExtra("IdListing",flowUpModel.getIdListing());
+                    update.putExtra("NamaBuyer",flowUpModel.getNamaBuyer());
+                    update.putExtra("TelpBuyer",flowUpModel.getTelpBuyer());
+                    update.putExtra("SumberBuyer",flowUpModel.getSumberBuyer());
                     update.putExtra("Tanggal",flowUpModel.getTanggal());
                     update.putExtra("Jam",flowUpModel.getJam());
                     update.putExtra("Keterangan",flowUpModel.getKeterangan());
@@ -132,6 +134,7 @@ public class FlowUpAdapter extends RecyclerView.Adapter<FlowUpAdapter.HolderData
                     update.putExtra("Tawar",flowUpModel.getTawar());
                     update.putExtra("Lokasi",flowUpModel.getLokasi());
                     update.putExtra("Deal",flowUpModel.getDeal());
+                    update.putExtra("Selfie",flowUpModel.getSelfie());
                     update.putExtra("NamaListing",flowUpModel.getNamaListing());
                     update.putExtra("Alamat",flowUpModel.getAlamat());
                     update.putExtra("Latitude",flowUpModel.getLatitude());

@@ -88,8 +88,10 @@ public class FlowUpAgenFragment extends Fragment {
                                 md.setIdFlowup(data.getString("IdFlowup"));
                                 md.setIdAgen(data.getString("IdAgen"));
                                 md.setIdInput(data.getString("IdInput"));
-                                md.setNamaBuyer(data.getString("NamaBuyer"));
                                 md.setIdListing(data.getString("IdListing"));
+                                md.setNamaBuyer(data.getString("NamaBuyer"));
+                                md.setTelpBuyer(data.getString("TelpBuyer"));
+                                md.setSumberBuyer(data.getString("SumberBuyer"));
                                 md.setTanggal(data.getString("Tanggal"));
                                 md.setJam(data.getString("Jam"));
                                 md.setKeterangan(data.getString("Keterangan"));
@@ -98,6 +100,7 @@ public class FlowUpAgenFragment extends Fragment {
                                 md.setTawar(data.getString("Tawar"));
                                 md.setLokasi(data.getString("Lokasi"));
                                 md.setDeal(data.getString("Deal"));
+                                md.setSelfie(data.getString("Selfie"));
                                 md.setNamaListing(data.getString("NamaListing"));
                                 md.setAlamat(data.getString("Alamat"));
                                 md.setLatitude(data.getString("Latitude"));
