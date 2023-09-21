@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -33,6 +34,7 @@ public class TambahKaryawanActivity extends AppCompatActivity {
     Button Batal, Submit;
     ImageView IVBack;
     String StringIdAgen;
+    private static final int MAPS_ACTIVITY_REQUEST_CODE = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

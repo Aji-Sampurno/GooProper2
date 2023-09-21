@@ -32,6 +32,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.gooproper.R;
 import com.gooproper.SettingActivity;
+import com.gooproper.adapter.ListingAdapter;
 import com.gooproper.adapter.ListingSoldAdapter;
 import com.gooproper.customer.MainCustomerActivity;
 import com.gooproper.model.ListingModel;
@@ -64,7 +65,7 @@ public class SoldActivity extends AppCompatActivity {
 
         list = new ArrayList<>();
 
-        rvgrid.setLayoutManager(new GridLayoutManager(SoldActivity.this,2));
+        rvgrid.setLayoutManager(new LinearLayoutManager(SoldActivity.this, LinearLayoutManager.VERTICAL, false));
         adapter = new ListingSoldAdapter(this,list);
         rvgrid.setAdapter(adapter);
 

@@ -133,7 +133,7 @@ public class DetailFollowUpActivity extends AppCompatActivity {
 
         StringIdFollowUp = intentIdFlowup;
 
-        if (!intentSelfie.equals("0")){
+        if (!intentSelfie.equals("0") && !intentSelfie.isEmpty()){
             Picasso.get()
                     .load(intentSelfie)
                     .into(IVSelfie);

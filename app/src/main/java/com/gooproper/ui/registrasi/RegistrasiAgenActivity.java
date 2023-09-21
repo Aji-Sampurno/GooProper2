@@ -71,34 +71,32 @@ import java.util.Map;
 public class RegistrasiAgenActivity extends AppCompatActivity {
 
     private ProgressDialog pDialog;
-    final int CODE_GALLERY_REQUEST = 100;
-    final int CODE_CAMERA_REQUEST = 101;
-    final int KODE_REQUEST_KAMERA = 102;
-    final int CODE_GALLERY_REQUEST_KTP = 103;
-    final int CODE_CAMERA_REQUEST_KTP = 104;
-    final int KODE_REQUEST_KAMERA_KTP = 105;
-    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE_PAS = 123;
-    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES_PAS = 456;
-    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE_KTP = 123;
-    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES_KTP = 456;
-    Bitmap bitmap, bitmappas, bitsig;
-    String sktp, spas, sttd, Password, RePassword, RandomPassword;
-    SignaturePad signaturePad;
+    final int CODE_GALLERY_REQUEST = 1;
+    final int CODE_CAMERA_REQUEST = 2;
+    final int KODE_REQUEST_KAMERA = 3;
+    final int CODE_GALLERY_REQUEST_KTP = 4;
+    final int CODE_CAMERA_REQUEST_KTP = 5;
+    final int KODE_REQUEST_KAMERA_KTP = 6;
+    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE= 7;
+    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES = 8;
+    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE_KTP = 9;
+    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES_KTP = 10;
+    Bitmap bitmap, bitmappas;
+    String sktp, spas, Password, RePassword, RandomPassword;
     LinearLayout agen, Mitra, KantorLain;
     EditText namalengkap, nowa, email, kotakelahiran, tglkelahiran, pendterakhir, sekolahterakhir, masakerja, jabatan, konfirmasi, domisili, facebook, instagram, noktp;
     EditText UsernameKantorLain, NamaKantorLain, NoTelpKantorLain, EmailKantorLain, NPWP, PasswordKantorLain, RePasswordKantorLain;
     EditText UsernameMitra, NamaLengkapMitra, NoTelpMitra, EmailMitra, KotaKelahiranMitra, TglKelahiranMitra, PasswordMitra, RePasswordMitra;
     RadioGroup radioGroup;
     RadioButton rbagen, rbmitra, rbkantorlain;
-    Button submit, batal, SubmitMitra, BatalMitra, UploadFotoMitra, SubmitKantorLain, BatalKantroLain, UploadFotoKantorLain, upload, pas, clear;
-    ImageView back, imgktp, imgpas, IVFotoMitra, IVFotoKantorLain;
+    Button submit, batal, SubmitMitra, BatalMitra, SubmitKantorLain, BatalKantroLain, upload, pas;
+    ImageView back, imgktp, imgpas;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registrasi_agen);
 
-        signaturePad = findViewById(R.id.signature);
         radioGroup = findViewById(R.id.rgakses);
         rbagen = findViewById(R.id.rbagen);
         rbmitra = findViewById(R.id.rbmitra);
@@ -106,7 +104,6 @@ public class RegistrasiAgenActivity extends AppCompatActivity {
         agen = findViewById(R.id.lytregisagen);
         upload = findViewById(R.id.uploadktp);
         pas = findViewById(R.id.uploadpasfoto);
-        clear = findViewById(R.id.clearsignature);
         submit = findViewById(R.id.btnsubmit);
         batal = findViewById(R.id.btnbatal);
         back = findViewById(R.id.backFormBtn);
@@ -136,10 +133,8 @@ public class RegistrasiAgenActivity extends AppCompatActivity {
         TglKelahiranMitra = findViewById(R.id.ETTglLahirRegistrasiMitra);
         PasswordMitra = findViewById(R.id.ETPasswordRegistrasiMitra);
         RePasswordMitra = findViewById(R.id.ETRePasswordRegistrasiMitra);
-        UploadFotoMitra = findViewById(R.id.BtnUploadFotoRegistrasiMitra);
         SubmitMitra = findViewById(R.id.BtnSubmitRegistrasiMitra);
         BatalMitra = findViewById(R.id.BtnBatalRegistrasiMitra);
-        IVFotoMitra = findViewById(R.id.IVFotoRegistrasiMitra);
 
         KantorLain = findViewById(R.id.LytRegistrasiKantorLain);
         UsernameKantorLain = findViewById(R.id.ETUsernameRegistrasiKantorLain);
@@ -151,8 +146,6 @@ public class RegistrasiAgenActivity extends AppCompatActivity {
         RePasswordKantorLain = findViewById(R.id.ETRePasswordRegistrasiKantorLain);
         SubmitKantorLain = findViewById(R.id.BtnSubmitRegistrasiKantorLain);
         BatalKantroLain = findViewById(R.id.BtnBatalRegistrasiKantorLain);
-        UploadFotoKantorLain = findViewById(R.id.BtnUploadFotoRegistrasiKantorLain);
-        IVFotoKantorLain = findViewById(R.id.IVFotoRegistrasiKantorLain);
 
         pDialog = new ProgressDialog(RegistrasiAgenActivity.this);
 
@@ -201,14 +194,6 @@ public class RegistrasiAgenActivity extends AppCompatActivity {
                 }
             }
         });
-        UploadFotoMitra.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showPhotoSelectionDialog();
-            }
-        });
-        UploadFotoKantorLain.setOnClickListener(v -> showPhotoSelectionDialog());
-        clear.setOnClickListener(v -> signaturePad.clear());
         submit.setOnClickListener(v -> {
             if (validateAgent()) {
                 regisagen();
@@ -290,39 +275,19 @@ public class RegistrasiAgenActivity extends AppCompatActivity {
             }
         });
 
-        signaturePad.setOnSignedListener(new SignaturePad.OnSignedListener() {
-            @Override
-            public void onStartSigning() {
-
-            }
-
-            @Override
-            public void onSigned() {
-                bitsig = signaturePad.getSignatureBitmap();
-            }
-
-            @Override
-            public void onClear() {
-                signaturePad.clear();
-            }
-        });
-
         radioGroup.setOnCheckedChangeListener((group, checkedId) -> {
             if (checkedId == R.id.rbagen) {
                 agen.setVisibility(View.VISIBLE);
                 Mitra.setVisibility(View.GONE);
                 KantorLain.setVisibility(View.GONE);
-                signaturePad.setVisibility(View.VISIBLE);
             } else if (checkedId == R.id.rbmitra) {
                 agen.setVisibility(View.GONE);
                 Mitra.setVisibility(View.VISIBLE);
                 KantorLain.setVisibility(View.GONE);
-                signaturePad.setVisibility(View.GONE);
             } else if (checkedId == R.id.rbkantorlain) {
                 agen.setVisibility(View.GONE);
                 Mitra.setVisibility(View.GONE);
                 KantorLain.setVisibility(View.VISIBLE);
-                signaturePad.setVisibility(View.GONE);
             }
         });
 
@@ -428,11 +393,6 @@ public class RegistrasiAgenActivity extends AppCompatActivity {
                 } else {
                     spas = imageToString(bitmappas);
                 }
-                if (bitsig == null) {
-                    sttd = "0";
-                } else {
-                    sttd = imageToString(bitsig);
-                }
                 map.put("Username", namalengkap.getText().toString().trim());
                 map.put("Password", RandomPassword);
                 map.put("Nama", namalengkap.getText().toString().trim());
@@ -449,7 +409,6 @@ public class RegistrasiAgenActivity extends AppCompatActivity {
                 map.put("Instagram", instagram.getText().toString().trim());
                 map.put("NoKtp", noktp.getText().toString().trim());
                 map.put("ImgKtp", sktp);
-                map.put("ImgTtd", sttd);
                 map.put("Photo", spas);
                 System.out.println(map);
 
@@ -540,11 +499,6 @@ public class RegistrasiAgenActivity extends AppCompatActivity {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> map = new HashMap<>();
-                if (bitmap == null) {
-                    spas = "0";
-                } else {
-                    spas = imageToString(bitmappas);
-                }
                 map.put("Username", UsernameMitra.getText().toString().trim());
                 map.put("Nama", NamaLengkapMitra.getText().toString().trim());
                 map.put("NoTelp", NoTelpMitra.getText().toString().trim());
@@ -552,7 +506,6 @@ public class RegistrasiAgenActivity extends AppCompatActivity {
                 map.put("KotaKelahiran", KotaKelahiranMitra.getText().toString().trim());
                 map.put("TglLahir", TglKelahiranMitra.getText().toString().trim());
                 map.put("Password", PasswordMitra.getText().toString().trim());
-                map.put("Photo", spas);
                 System.out.println(map);
                 return map;
             }
@@ -641,17 +594,11 @@ public class RegistrasiAgenActivity extends AppCompatActivity {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> map = new HashMap<>();
-                if (bitmap == null) {
-                    spas = "0";
-                } else {
-                    spas = imageToString(bitmappas);
-                }
                 map.put("Username", UsernameKantorLain.getText().toString().trim());
                 map.put("Nama", NamaKantorLain.getText().toString().trim());
                 map.put("NoTelp", NoTelpKantorLain.getText().toString().trim());
                 map.put("Email", EmailKantorLain.getText().toString().trim());
                 map.put("Npwp", NPWP.getText().toString().trim());
-                map.put("Photo", spas);
                 map.put("Password", PasswordKantorLain.getText().toString().trim());
                 System.out.println(map);
                 return map;
@@ -890,9 +837,9 @@ public class RegistrasiAgenActivity extends AppCompatActivity {
         boolean externalStoragePermissionGranted = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
 
         if (externalStoragePermissionGranted) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE_PAS);
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE);
         } else {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_MEDIA_IMAGES}, PERMISSION_REQUEST_CODE_MEDIA_IMAGES_PAS);
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_MEDIA_IMAGES}, PERMISSION_REQUEST_CODE_MEDIA_IMAGES);
         }
     }
 
@@ -908,12 +855,12 @@ public class RegistrasiAgenActivity extends AppCompatActivity {
 
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE_PAS) {
+        if (requestCode == PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 startActivityForResult(intent, CODE_GALLERY_REQUEST);
             }
-        } else if (requestCode == PERMISSION_REQUEST_CODE_MEDIA_IMAGES_PAS) {
+        } else if (requestCode == PERMISSION_REQUEST_CODE_MEDIA_IMAGES) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 startActivityForResult(intent, CODE_GALLERY_REQUEST);

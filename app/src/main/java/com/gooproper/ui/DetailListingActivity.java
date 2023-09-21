@@ -462,19 +462,46 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                         IVStar4.setVisibility(View.VISIBLE);
                     }
                 } else {
-                    CBMarketable.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                        @Override
-                        public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                            if (b) {
-                                IVStar4.setVisibility(View.VISIBLE);
-                            } else {
-                                IVStar4.setVisibility(View.GONE);
+                    if (intentStatusHarga.equals("1")){
+                        CBMarketable.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                            @Override
+                            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                                if (b) {
+                                    IVStar5.setVisibility(View.VISIBLE);
+                                } else {
+                                    IVStar5.setVisibility(View.GONE);
+                                }
                             }
-                        }
-                    });
-                    IVStar1.setVisibility(View.VISIBLE);
-                    IVStar2.setVisibility(View.VISIBLE);
-                    IVStar3.setVisibility(View.VISIBLE);
+                        });
+                        IVStar1.setVisibility(View.VISIBLE);
+                        IVStar2.setVisibility(View.VISIBLE);
+                        IVStar3.setVisibility(View.VISIBLE);
+                        IVStar4.setVisibility(View.VISIBLE);
+                    } else {
+                        CBMarketable.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                            @Override
+                            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                                if (b) {
+                                    IVStar4.setVisibility(View.VISIBLE);
+                                } else {
+                                    IVStar4.setVisibility(View.GONE);
+                                }
+                            }
+                        });
+                        CBHarga.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                            @Override
+                            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                                if (b) {
+                                    IVStar5.setVisibility(View.VISIBLE);
+                                } else {
+                                    IVStar5.setVisibility(View.GONE);
+                                }
+                            }
+                        });
+                        IVStar1.setVisibility(View.VISIBLE);
+                        IVStar2.setVisibility(View.VISIBLE);
+                        IVStar3.setVisibility(View.VISIBLE);
+                    }
                 }
             } else {
                 IVStar1.setVisibility(View.VISIBLE);
@@ -697,7 +724,7 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                 TVStatusDetailListing.setText(": " + intentKondisi);
             }
 
-            if (intentJenisCertificate.isEmpty()) {
+            if (intentSHM.isEmpty()||intentSHM.equals("0")) {
                 TVSertifikatDetailListing.setText(": -");
             } else {
                 TVSertifikatDetailListing.setText(": " + intentJenisCertificate);
@@ -714,7 +741,6 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                     TVLuasDetailListing.setText(": " + intentWide + " m2/- m2");
                 } else {
                     TVLuasDetailListing.setText(": " + intentWide + " m2/" + intentLand + " m2");
-
                 }
             }
 

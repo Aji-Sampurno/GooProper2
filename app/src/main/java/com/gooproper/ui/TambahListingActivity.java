@@ -112,19 +112,18 @@ public class TambahListingActivity extends AppCompatActivity {
     private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE_STRA = 128;
     private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES_STRA = 455;
     private static final int MAPS_ACTIVITY_REQUEST_CODE = 3;
-    Bitmap bitmap1, bitmap2, bitmap3, bitmap4, bitmap5, bitmap6, bitmap7, bitmap8, bitmapttd, bitmapSHM, bitmapHGB, bitmapHSHP, bitmapPPJB, bitmapSTRA;
+    Bitmap bitmap1, bitmap2, bitmap3, bitmap4, bitmap5, bitmap6, bitmap7, bitmap8, bitmapSHM, bitmapHGB, bitmapHSHP, bitmapPPJB, bitmapSTRA;
     LinearLayout lyt1, lyt2, lyt3, lyt4, lyt5, lyt6, lyt7, lyt8;
     ImageView back, iv1, iv2, iv3, iv4, iv5, iv6, iv7, iv8, IVShm, IVHgb, IVHshp, IVPpjb, IVStratatitle;
-    Button batal, submit, select, clear, maps, BtnSHM, BtnHGB, BtnHSHP, BtnPPJB, BtnSTRA;
+    Button batal, submit, select, maps, BtnSHM, BtnHGB, BtnHSHP, BtnPPJB, BtnSTRA;
     ImageView hps1, hps2, hps3, hps4, hps5, hps6, hps7, hps8;
     TextInputEditText namalengkap, nohp, nik, alamat, tgllhir, rekening, bank, atasnama, jenisproperti, namaproperti, alamatproperti, sertifikat, nosertif, luas, land, lantai, bed, bath, bedart, bathart, garasi, carpot, listrik, air, perabot, ketperabot, banner, status, harga, keterangan, hadap, size;
     TextInputLayout LytSize;
     RadioButton open, exclusive;
     RadioGroup rgpriority;
     CheckBox CBSHM, CBHGB, CBHSHP, CBPPJB, CBSTRA;
-    SignaturePad signaturePad;
     String idagen, idnull, sstatus, priority, namalisting, isAdmin, idadmin, idinput;
-    String image1, image2, image3, image4, image5, image6, image7, image8, ttd, SHM, HGB, HSHP, PPJB, STRA;
+    String image1, image2, image3, image4, image5, image6, image7, image8, SHM, HGB, HSHP, PPJB, STRA;
     String latitudeStr, longitudeStr, addressStr;
     Drawable DrawableSHM,DrawableHGB,DrawableHSHP,DrawablePPJB,DrawableSTRA;
 
@@ -164,7 +163,6 @@ public class TambahListingActivity extends AppCompatActivity {
         batal = findViewById(R.id.btnbatal);
         submit = findViewById(R.id.btnsubmit);
         select = findViewById(R.id.btnSelectImage);
-        clear = findViewById(R.id.BtnClearTTD);
 
         hps1 = findViewById(R.id.IVDelete1);
         hps2 = findViewById(R.id.IVDelete2);
@@ -207,8 +205,6 @@ public class TambahListingActivity extends AppCompatActivity {
         keterangan = findViewById(R.id.etketerangan);
         hadap = findViewById(R.id.ethadap);
         size = findViewById(R.id.etukuranbanner);
-
-        signaturePad = findViewById(R.id.signature);
 
         maps = findViewById(R.id.map);
 
@@ -800,30 +796,6 @@ public class TambahListingActivity extends AppCompatActivity {
                     }
                 });
                 materialDatePicker.show(getSupportFragmentManager(), "tag");
-            }
-        });
-
-        clear.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                signaturePad.clear();
-            }
-        });
-
-        signaturePad.setOnSignedListener(new SignaturePad.OnSignedListener() {
-            @Override
-            public void onStartSigning() {
-
-            }
-
-            @Override
-            public void onSigned() {
-                bitmapttd = signaturePad.getSignatureBitmap();
-            }
-
-            @Override
-            public void onClear() {
-
             }
         });
 
@@ -1490,7 +1462,7 @@ public class TambahListingActivity extends AppCompatActivity {
                 InputStream inputStream = getContentResolver().openInputStream(filePath);
                 if (bitmapSHM == null) {
                     bitmapSHM = BitmapFactory.decodeStream(inputStream);
-                    IVShm.setImageBitmap(bitmapSHM);
+                    //IVShm.setImageBitmap(bitmapSHM);
                 }
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
@@ -1501,7 +1473,7 @@ public class TambahListingActivity extends AppCompatActivity {
                 InputStream inputStream = getContentResolver().openInputStream(filePath);
                 if (bitmapHGB == null) {
                     bitmapHGB = BitmapFactory.decodeStream(inputStream);
-                    IVHgb.setImageBitmap(bitmapHGB);
+                    //IVHgb.setImageBitmap(bitmapHGB);
                 }
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
@@ -1512,7 +1484,7 @@ public class TambahListingActivity extends AppCompatActivity {
                 InputStream inputStream = getContentResolver().openInputStream(filePath);
                 if (bitmapHSHP == null) {
                     bitmapHSHP = BitmapFactory.decodeStream(inputStream);
-                    IVHshp.setImageBitmap(bitmapHSHP);
+                    //IVHshp.setImageBitmap(bitmapHSHP);
                 }
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
@@ -1523,7 +1495,7 @@ public class TambahListingActivity extends AppCompatActivity {
                 InputStream inputStream = getContentResolver().openInputStream(filePath);
                 if (bitmapPPJB == null) {
                     bitmapPPJB = BitmapFactory.decodeStream(inputStream);
-                    IVPpjb.setImageBitmap(bitmapPPJB);
+                    //IVPpjb.setImageBitmap(bitmapPPJB);
                 }
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
@@ -1534,7 +1506,7 @@ public class TambahListingActivity extends AppCompatActivity {
                 InputStream inputStream = getContentResolver().openInputStream(filePath);
                 if (bitmapSTRA == null) {
                     bitmapSTRA = BitmapFactory.decodeStream(inputStream);
-                    IVStratatitle.setImageBitmap(bitmapSTRA);
+                    //IVStratatitle.setImageBitmap(bitmapSTRA);
                 }
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
@@ -1593,7 +1565,7 @@ public class TambahListingActivity extends AppCompatActivity {
                     try {
                         InputStream inputStream = getContentResolver().openInputStream(getImageUri(this, imageBitmap));
                         bitmapSHM = BitmapFactory.decodeStream(inputStream);
-                        IVShm.setImageBitmap(bitmapSHM);
+                        //IVShm.setImageBitmap(bitmapSHM);
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
                     }
@@ -1606,7 +1578,7 @@ public class TambahListingActivity extends AppCompatActivity {
                     try {
                         InputStream inputStream = getContentResolver().openInputStream(getImageUri(this, imageBitmap));
                         bitmapHGB = BitmapFactory.decodeStream(inputStream);
-                        IVHgb.setImageBitmap(bitmapHGB);
+                        //IVHgb.setImageBitmap(bitmapHGB);
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
                     }
@@ -1619,7 +1591,7 @@ public class TambahListingActivity extends AppCompatActivity {
                     try {
                         InputStream inputStream = getContentResolver().openInputStream(getImageUri(this, imageBitmap));
                         bitmapHSHP = BitmapFactory.decodeStream(inputStream);
-                        IVHshp.setImageBitmap(bitmapHSHP);
+                        //IVHshp.setImageBitmap(bitmapHSHP);
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
                     }
@@ -1632,7 +1604,7 @@ public class TambahListingActivity extends AppCompatActivity {
                     try {
                         InputStream inputStream = getContentResolver().openInputStream(getImageUri(this, imageBitmap));
                         bitmapPPJB = BitmapFactory.decodeStream(inputStream);
-                        IVPpjb.setImageBitmap(bitmapPPJB);
+                        //IVPpjb.setImageBitmap(bitmapPPJB);
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
                     }
@@ -1645,7 +1617,7 @@ public class TambahListingActivity extends AppCompatActivity {
                     try {
                         InputStream inputStream = getContentResolver().openInputStream(getImageUri(this, imageBitmap));
                         bitmapSTRA = BitmapFactory.decodeStream(inputStream);
-                        IVStratatitle.setImageBitmap(bitmapSTRA);
+                        //IVStratatitle.setImageBitmap(bitmapSTRA);
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
                     }
@@ -1875,11 +1847,6 @@ public class TambahListingActivity extends AppCompatActivity {
                 } else {
                     image8 = imageToString(bitmap8);
                 }
-                if (bitmapttd == null) {
-                    ttd = "0";
-                } else {
-                    ttd = imageToString(bitmapttd);
-                }
                 if (bitmapSHM == null) {
                     SHM = "0";
                 } else {
@@ -1955,7 +1922,6 @@ public class TambahListingActivity extends AppCompatActivity {
                 map.put("Prabot", perabot.getText().toString());
                 map.put("KetPrabot", ketperabot.getText().toString());
                 map.put("Priority", priority);
-                map.put("Ttd", ttd);
                 map.put("Banner", banner.getText().toString());
                 map.put("Size", size.getText().toString());
                 map.put("Harga", harga.getText().toString());
@@ -2113,11 +2079,6 @@ public class TambahListingActivity extends AppCompatActivity {
                 } else {
                     image8 = imageToString(bitmap8);
                 }
-                if (bitmapttd == null) {
-                    ttd = "0";
-                } else {
-                    ttd = imageToString(bitmapttd);
-                }
                 if (bitmapSHM == null) {
                     SHM = "0";
                 } else {
@@ -2193,7 +2154,6 @@ public class TambahListingActivity extends AppCompatActivity {
                 map.put("Prabot", perabot.getText().toString());
                 map.put("KetPrabot", ketperabot.getText().toString());
                 map.put("Priority", priority);
-                map.put("Ttd", ttd);
                 map.put("Banner", banner.getText().toString());
                 map.put("Size", size.getText().toString());
                 map.put("Harga", harga.getText().toString());
@@ -2351,11 +2311,6 @@ public class TambahListingActivity extends AppCompatActivity {
                 } else {
                     image8 = imageToString(bitmap8);
                 }
-                if (bitmapttd == null) {
-                    ttd = "0";
-                } else {
-                    ttd = imageToString(bitmapttd);
-                }
                 if (bitmapSHM == null) {
                     SHM = "0";
                 } else {
@@ -2431,7 +2386,6 @@ public class TambahListingActivity extends AppCompatActivity {
                 map.put("Prabot", perabot.getText().toString());
                 map.put("KetPrabot", ketperabot.getText().toString());
                 map.put("Priority", priority);
-                map.put("Ttd", ttd);
                 map.put("Banner", banner.getText().toString());
                 map.put("Size", size.getText().toString());
                 map.put("Harga", harga.getText().toString());

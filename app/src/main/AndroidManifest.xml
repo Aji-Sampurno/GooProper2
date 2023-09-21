@@ -29,6 +29,12 @@
         android:theme="@style/Theme.GooProper"
         tools:targetApi="31">
         <activity
+            android:name=".ui.AddListingActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.PralistingActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.PelamarAgenActivity"
             android:exported="false" />
         <activity
@@ -59,8 +65,8 @@
                 <category android:name="android.intent.category.BROWSABLE" />
 
                 <data
-                    android:host="gooproper.com"
-                    android:pathPrefix="/agen"
+                    android:host="app.gooproper.com"
+                    android:pathPrefix="/detailagen"
                     android:scheme="https" />
             </intent-filter>
         </activity>
@@ -74,8 +80,8 @@
                 <category android:name="android.intent.category.BROWSABLE" />
 
                 <data
-                    android:host="gooproper.com"
-                    android:pathPrefix="/listing"
+                    android:host="app.gooproper.com"
+                    android:pathPrefix="/detail"
                     android:scheme="https" />
             </intent-filter>
         </activity>
@@ -92,7 +98,7 @@
         -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyDJ7p13gxken42keXMq9coZ6tjpRiuJFZU" />
+            android:value="AIzaSyCuyOSWtKB6MkImunWQof3fDRY8ELG8BUk" />
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />

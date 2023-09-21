@@ -33,6 +33,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
 import com.gooproper.R;
+import com.gooproper.adapter.ListingAdapter;
 import com.gooproper.adapter.ListingPopulerAdapter;
 import com.gooproper.adapter.ListingSoldAdapter;
 import com.gooproper.model.ListingModel;
@@ -82,7 +83,7 @@ public class PopularActivity extends AppCompatActivity {
 
         list = new ArrayList<>();
 
-        rvgrid.setLayoutManager(new GridLayoutManager(PopularActivity.this,2));
+        rvgrid.setLayoutManager(new LinearLayoutManager(PopularActivity.this, LinearLayoutManager.VERTICAL, false));
         adapter = new ListingPopulerAdapter(this,list);
         rvgrid.setAdapter(adapter);
 
