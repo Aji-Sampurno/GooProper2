@@ -29,6 +29,7 @@ import com.android.volley.toolbox.Volley;
 import com.gooproper.LoginActivity;
 import com.gooproper.R;
 import com.gooproper.adapter.AgenAdapter;
+import com.gooproper.adapter.AgenAdminAdapter;
 import com.gooproper.adapter.PraListingAdapter;
 import com.gooproper.model.AgenModel;
 import com.gooproper.model.ListingModel;
@@ -50,7 +51,7 @@ public class AgentFragment extends Fragment {
     ImageView ivgrid;
     SwipeRefreshLayout sragencustomer;
     RecyclerView rvlist;
-    AgenAdapter adapter;
+    AgenAdminAdapter adapter;
     SearchView searchView;
     List<AgenModel> list;
     String id;
@@ -86,7 +87,7 @@ public class AgentFragment extends Fragment {
         list = new ArrayList<>();
 
         rvlist.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
-        adapter = new AgenAdapter(getActivity(), list);
+        adapter = new AgenAdminAdapter(getActivity(), list);
         rvlist.setAdapter(adapter);
 
         sragencustomer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -150,6 +151,7 @@ public class AgentFragment extends Fragment {
                                 agenModel.setNamaSekolah(data.getString("NamaSekolah"));
                                 agenModel.setMasaKerja(data.getString("MasaKerja"));
                                 agenModel.setJabatan(data.getString("Jabatan"));
+                                agenModel.setKonfirmasi(data.getString("Konfirmasi"));
                                 agenModel.setStatus(data.getString("Status"));
                                 agenModel.setAlamatDomisili(data.getString("AlamatDomisili"));
                                 agenModel.setFacebook(data.getString("Facebook"));
@@ -159,6 +161,8 @@ public class AgentFragment extends Fragment {
                                 agenModel.setImgTtd(data.getString("ImgTtd"));
                                 agenModel.setPhoto(data.getString("Photo"));
                                 agenModel.setIsAkses(data.getString("IsAkses"));
+                                agenModel.setApprove(data.getString("Approve"));
+                                agenModel.setNoKaryawan(data.getString("NoKaryawan"));
                                 list.add(agenModel);
                                 progressDialog.dismiss();
                             } catch (JSONException e) {

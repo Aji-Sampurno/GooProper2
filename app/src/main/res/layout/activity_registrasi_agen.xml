@@ -285,13 +285,14 @@
                     style="@style/CustomOutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp">
+                    android:layout_marginTop="10dp"
+                    app:helperText="cth: 1 (Dalam Tahun)">
 
                     <EditText
                         android:id="@+id/etmasakerja"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Masa Kerja"
+                        android:hint="Pengalaman Kerja"
                         android:inputType="number"
                         android:textColor="@color/black" />
                 </com.google.android.material.textfield.TextInputLayout>
@@ -307,7 +308,7 @@
                         android:id="@+id/etjabatan"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Jabatan"
+                        android:hint="Pengalaman Kerja Sebagai"
                         android:inputType="text"
                         android:textColor="@color/black" />
                 </com.google.android.material.textfield.TextInputLayout>
@@ -394,6 +395,41 @@
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/lytkonfirmasinpwp"
+                    style="@style/CustomOutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="5dp"
+                    android:hint="Apakah Anda Memiliki NPWP?">
+
+                    <EditText
+                        android:id="@+id/etkonfirmasinpwp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:focusable="false"
+                        android:inputType="none"
+                        android:textColor="@color/black" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/lytnonpwp"
+                    style="@style/CustomOutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:visibility="gone">
+
+                    <EditText
+                        android:id="@+id/etnonpwp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="No NPWP"
+                        android:inputType="number"
+                        android:textColor="@color/black" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/lytnoktp"
                     style="@style/CustomOutlinedBox"
                     android:layout_width="match_parent"
@@ -405,7 +441,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="No KTP"
-                        android:inputType="text"
+                        android:inputType="number"
                         android:textColor="@color/black" />
                 </com.google.android.material.textfield.TextInputLayout>
 

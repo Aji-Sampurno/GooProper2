@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -50,7 +51,11 @@ public class PraListingAdapter extends RecyclerView.Adapter<PraListingAdapter.Ho
     public void onBindViewHolder(@NonNull HolderData holder, int position) {
         FormatCurrency currency = new FormatCurrency();
         ListingModel listingModel = models.get(position);
-        holder.priorityTxt.setText(listingModel.getPriority());
+        if (listingModel.getPriority().equals("open")){
+            holder.Lytpriority.setVisibility(View.INVISIBLE);
+        } else {
+            holder.Lytpriority.setVisibility(View.VISIBLE);
+        }
         holder.bedTxt.setText(listingModel.getBed());
         holder.bathTxt.setText(listingModel.getBath());
         holder.levelTxt.setText(listingModel.getLevel());
@@ -80,6 +85,7 @@ public class PraListingAdapter extends RecyclerView.Adapter<PraListingAdapter.Ho
     class HolderData extends RecyclerView.ViewHolder{
         TextView titleTxt, addressTxt, priceTxt, bedTxt, bathTxt, levelTxt, garageTxt, bathArtTxt, bedArtTxt, carpotTxt, wideTxt, priorityTxt;
         ImageView pic;
+        LinearLayout Lytpriority;
         public ListingModel listingModel;
 
         public HolderData(View view){
@@ -93,6 +99,7 @@ public class PraListingAdapter extends RecyclerView.Adapter<PraListingAdapter.Ho
             garageTxt=view.findViewById(R.id.garageTxt);
             priorityTxt=view.findViewById(R.id.TVPriority);
             pic=view.findViewById(R.id.pic);
+            Lytpriority=view.findViewById(R.id.LytBadge);
 
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -101,12 +108,14 @@ public class PraListingAdapter extends RecyclerView.Adapter<PraListingAdapter.Ho
                     update.putExtra("update",1);
                     update.putExtra("IdPraListing",listingModel.getIdPraListing());
                     update.putExtra("IdAgen",listingModel.getIdAgen());
+                    update.putExtra("IdAgenCo",listingModel.getIdAgenCo());
                     update.putExtra("IdInput",listingModel.getIdInput());
                     update.putExtra("NamaListing",listingModel.getNamaListing());
                     update.putExtra("Alamat",listingModel.getAlamat());
                     update.putExtra("Latitude",listingModel.getLatitude());
                     update.putExtra("Longitude",listingModel.getLongitude());
                     update.putExtra("Location",listingModel.getLocation());
+                    update.putExtra("Selfie",listingModel.getSelfie());
                     update.putExtra("Wide",listingModel.getWide());
                     update.putExtra("Land",listingModel.getLand());
                     update.putExtra("Listrik",listingModel.getListrik());
@@ -123,11 +132,14 @@ public class PraListingAdapter extends RecyclerView.Adapter<PraListingAdapter.Ho
                     update.putExtra("HSHP",listingModel.getHSHP());
                     update.putExtra("PPJB",listingModel.getPPJB());
                     update.putExtra("Stratatitle",listingModel.getStratatitle());
+                    update.putExtra("Pjp",listingModel.getPjp());
                     update.putExtra("ImgSHM",listingModel.getImgSHM());
                     update.putExtra("ImgHGB",listingModel.getImgHGB());
                     update.putExtra("ImgHSHP",listingModel.getImgHSHP());
                     update.putExtra("ImgPPJB",listingModel.getImgPPJB());
                     update.putExtra("ImgStratatitle",listingModel.getImgStratatitle());
+                    update.putExtra("ImgPjp",listingModel.getImgPjp());
+                    update.putExtra("ImgPjp1",listingModel.getImgPjp1());
                     update.putExtra("NoCertificate",listingModel.getNoCertificate());
                     update.putExtra("Pbb",listingModel.getPbb());
                     update.putExtra("JenisProperti",listingModel.getJenisProperti());
@@ -142,6 +154,7 @@ public class PraListingAdapter extends RecyclerView.Adapter<PraListingAdapter.Ho
                     update.putExtra("Banner",listingModel.getBanner());
                     update.putExtra("Size",listingModel.getSize());
                     update.putExtra("Harga",listingModel.getHarga());
+                    update.putExtra("HargaSewa",listingModel.getHargaSewa());
                     update.putExtra("TglInput",listingModel.getTglInput());
                     update.putExtra("Img1",listingModel.getImg1());
                     update.putExtra("Img2",listingModel.getImg2());

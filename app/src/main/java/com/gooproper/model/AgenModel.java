@@ -1,12 +1,12 @@
 package com.gooproper.model;
 
 public class AgenModel {
-    String IdAgen, Username, Password, Nama, NoTelp, Email, TglLahir, KotaKelahiran, Pendidikan, NamaSekolah, MasaKerja, Jabatan, Status, AlamatDomisili, Facebook, Instagram, NoKtp, ImgKtp, ImgTtd, Npwp, Photo, Poin, IsAkses, Approve;
+    String IdAgen, Username, Password, Nama, NoTelp, Email, TglLahir, KotaKelahiran, Pendidikan, NamaSekolah, MasaKerja, Jabatan, Konfirmasi, Status, AlamatDomisili, Facebook, Instagram, NoKtp, ImgKtp, ImgTtd, Npwp, Photo, Poin, IsAkses, Approve, NoKaryawan;
 
     public AgenModel() {
     }
 
-    public AgenModel(String IdAgen, String Username, String Password, String Nama, String NoTelp, String Email, String TglLahir, String KotaKelahiran, String Pendidikan, String NamaSekolah, String MasaKerja, String Jabatan, String Status, String AlamatDomisili, String Facebook, String Instagram, String NoKtp, String ImgKtp, String ImgTtd, String Npwp, String Photo, String Poin, String IsAkses, String Approve) {
+    public AgenModel(String IdAgen, String Username, String Password, String Nama, String NoTelp, String Email, String TglLahir, String KotaKelahiran, String Pendidikan, String NamaSekolah, String MasaKerja, String Jabatan, String Konfirmasi, String Status, String AlamatDomisili, String Facebook, String Instagram, String NoKtp, String ImgKtp, String ImgTtd, String Npwp, String Photo, String Poin, String IsAkses, String Approve, String NoKaryawan) {
         this.IdAgen = IdAgen;
         this.Username = Username;
         this.Password = Password;
@@ -19,6 +19,7 @@ public class AgenModel {
         this.NamaSekolah = NamaSekolah;
         this.MasaKerja = MasaKerja;
         this.Jabatan = Jabatan;
+        this.Konfirmasi = Konfirmasi;
         this.Status = Status;
         this.AlamatDomisili = AlamatDomisili;
         this.Facebook = Facebook;
@@ -31,6 +32,7 @@ public class AgenModel {
         this.Poin = Poin;
         this.IsAkses = IsAkses;
         this.Approve = Approve;
+        this.NoKaryawan = NoKaryawan;
     }
 
     public String getIdAgen() {
@@ -129,6 +131,14 @@ public class AgenModel {
         Jabatan = jabatan;
     }
 
+    public String getKonfirmasi() {
+        return Konfirmasi;
+    }
+
+    public void setKonfirmasi(String konfirmasi) {
+        Konfirmasi = konfirmasi;
+    }
+
     public String getStatus() {
         return Status;
     }
@@ -223,5 +233,13 @@ public class AgenModel {
 
     public void setApprove(String approve) {
         Approve = approve;
+    }
+
+    public String getNoKaryawan() {
+        return NoKaryawan;
+    }
+
+    public void setNoKaryawan(String noKaryawan) {
+        NoKaryawan = noKaryawan;
     }
 }

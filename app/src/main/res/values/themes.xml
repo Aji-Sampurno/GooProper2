@@ -17,6 +17,7 @@
         <item name="popupMenuStyle">@style/PopupMenu</item>
         <item name="android:popupMenuStyle">@style/PopupMenu</item>
         <item name="popupTheme">@style/PopupOverlay</item>
+        <item name="searchViewStyle">@style/MySearchViewStyle</item>
     </style>
 
 </resources>

@@ -33,7 +33,7 @@
             android:layout_gravity="center"
             android:layout_marginStart="10dp"
             android:layout_weight="1"
-            android:text="Flow Up"
+            android:text="Follow Up"
             android:textColor="@color/second" />
 
         <ImageView
@@ -47,15 +47,6 @@
             app:tint="@color/second" />
 
     </LinearLayout>
-
-    <androidx.appcompat.widget.SearchView
-        android:id="@+id/SFlowUpAgen"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="11dp"
-        android:background="@drawable/backgroundbox"
-        android:hint="Jl...."
-        android:iconifiedByDefault="false" />
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/SRFlowUpAgen"

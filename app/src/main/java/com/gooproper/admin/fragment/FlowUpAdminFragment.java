@@ -81,7 +81,7 @@ public class FlowUpAdminFragment extends Fragment {
         PDFlowUpAdmin.show();
 
         RequestQueue queue = Volley.newRequestQueue(getActivity());
-        JsonArrayRequest reqData = new JsonArrayRequest(Request.Method.GET, ServerApi.URL_GET_FLOWUP+PenggunaId, null,
+        JsonArrayRequest reqData = new JsonArrayRequest(Request.Method.GET, ServerApi.URL_GET_FLOWUP_AGEN, null,
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {

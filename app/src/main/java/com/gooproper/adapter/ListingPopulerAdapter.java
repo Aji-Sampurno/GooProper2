@@ -96,6 +96,7 @@ public class ListingPopulerAdapter extends RecyclerView.Adapter<ListingPopulerAd
     public void onBindViewHolder(@NonNull ListingPopulerAdapter.HolderData holder, int position) {
         FormatCurrency currency = new FormatCurrency();
         ListingModel listingModel = models.get(position);
+        holder.priorityTxt.setText(listingModel.getPriority());
         holder.bedTxt.setText(listingModel.getBed());
         holder.bathTxt.setText(listingModel.getBath());
         holder.levelTxt.setText(listingModel.getLevel());
@@ -123,7 +124,7 @@ public class ListingPopulerAdapter extends RecyclerView.Adapter<ListingPopulerAd
     }
 
     class HolderData extends RecyclerView.ViewHolder{
-        TextView titleTxt, addressTxt, priceTxt, bedTxt, bathTxt, levelTxt, garageTxt, bathArtTxt, bedArtTxt, carpotTxt, wideTxt;
+        TextView titleTxt, addressTxt, priceTxt, bedTxt, bathTxt, levelTxt, garageTxt, bathArtTxt, bedArtTxt, carpotTxt, wideTxt, priorityTxt;
         ImageView pic;
         public ListingModel listingModel;
 
@@ -136,6 +137,7 @@ public class ListingPopulerAdapter extends RecyclerView.Adapter<ListingPopulerAd
             priceTxt=view.findViewById(R.id.priceTxt);
             levelTxt=view.findViewById(R.id.levelTxt);
             garageTxt=view.findViewById(R.id.garageTxt);
+            priorityTxt=view.findViewById(R.id.TVPriority);
             pic=view.findViewById(R.id.pic);
 
             view.setOnClickListener(new View.OnClickListener() {
@@ -145,12 +147,14 @@ public class ListingPopulerAdapter extends RecyclerView.Adapter<ListingPopulerAd
                     update.putExtra("update",1);
                     update.putExtra("IdListing",listingModel.getIdListing());
                     update.putExtra("IdAgen",listingModel.getIdAgen());
+                    update.putExtra("IdAgenCo",listingModel.getIdAgenCo());
                     update.putExtra("IdInput",listingModel.getIdInput());
                     update.putExtra("NamaListing",listingModel.getNamaListing());
                     update.putExtra("Alamat",listingModel.getAlamat());
                     update.putExtra("Latitude",listingModel.getLatitude());
                     update.putExtra("Longitude",listingModel.getLongitude());
                     update.putExtra("Location",listingModel.getLocation());
+                    update.putExtra("Selfie",listingModel.getSelfie());
                     update.putExtra("Wide",listingModel.getWide());
                     update.putExtra("Land",listingModel.getLand());
                     update.putExtra("Listrik",listingModel.getListrik());
@@ -167,11 +171,14 @@ public class ListingPopulerAdapter extends RecyclerView.Adapter<ListingPopulerAd
                     update.putExtra("HSHP",listingModel.getHSHP());
                     update.putExtra("PPJB",listingModel.getPPJB());
                     update.putExtra("Stratatitle",listingModel.getStratatitle());
+                    update.putExtra("Pjp",listingModel.getPjp());
                     update.putExtra("ImgSHM",listingModel.getImgSHM());
                     update.putExtra("ImgHGB",listingModel.getImgHGB());
                     update.putExtra("ImgHSHP",listingModel.getImgHSHP());
                     update.putExtra("ImgPPJB",listingModel.getImgPPJB());
                     update.putExtra("ImgStratatitle",listingModel.getImgStratatitle());
+                    update.putExtra("ImgPjp",listingModel.getImgPjp());
+                    update.putExtra("ImgPjp1",listingModel.getImgPjp1());
                     update.putExtra("NoCertificate",listingModel.getNoCertificate());
                     update.putExtra("Pbb",listingModel.getPbb());
                     update.putExtra("JenisProperti",listingModel.getJenisProperti());
@@ -186,6 +193,7 @@ public class ListingPopulerAdapter extends RecyclerView.Adapter<ListingPopulerAd
                     update.putExtra("Banner",listingModel.getBanner());
                     update.putExtra("Size",listingModel.getSize());
                     update.putExtra("Harga",listingModel.getHarga());
+                    update.putExtra("HargaSewa",listingModel.getHargaSewa());
                     update.putExtra("TglInput",listingModel.getTglInput());
                     update.putExtra("Img1",listingModel.getImg1());
                     update.putExtra("Img2",listingModel.getImg2());

@@ -57,7 +57,7 @@ import java.util.Map;
 public class FollowUpActivity extends AppCompatActivity {
 
     ProgressDialog PDFollowUp;
-    Button Submit, Batal;
+    Button Submit, Batal, Selfie, Delete;
     EditText Nama, NoWa, Ket, Tgl, Jam;
     CheckBox Chat, Survei, Tawar, Lokasi, Deal;
     ImageView IVSurvei;
@@ -74,6 +74,8 @@ public class FollowUpActivity extends AppCompatActivity {
         PDFollowUp = new ProgressDialog(FollowUpActivity.this);
         Submit = findViewById(R.id.BtnSubmitBuyer);
         Batal = findViewById(R.id.BtnBatalBuyer);
+        Selfie = findViewById(R.id.BtnSelfie);
+        Delete = findViewById(R.id.BtnDelete);
         Nama = findViewById(R.id.ETNamaBuyer);
         NoWa = findViewById(R.id.ETTelpBuyer);
         Ket = findViewById(R.id.ETKeteranganBuyer);
@@ -109,6 +111,8 @@ public class FollowUpActivity extends AppCompatActivity {
         } else if (PenggunaStatus.equals("4")) {
             PenggunaId = Preferences.getKeyIdCustomer(this);
         }
+
+        Delete.setOnClickListener(v -> clearBitmapSelfie());
 
         Tgl.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -157,9 +161,9 @@ public class FollowUpActivity extends AppCompatActivity {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if (b) {
-                    IVSurvei.setVisibility(View.VISIBLE);
+                    Selfie.setVisibility(View.VISIBLE);
                 } else {
-                    IVSurvei.setVisibility(View.GONE);
+                    Selfie.setVisibility(View.GONE);
                 }
             }
         });
@@ -282,6 +286,9 @@ public class FollowUpActivity extends AppCompatActivity {
                         InputStream inputStream = getContentResolver().openInputStream(getImageUri(this,imageBitmap));
                         BitmapSelfie = BitmapFactory.decodeStream(inputStream);
                         IVSurvei.setImageBitmap(BitmapSelfie);
+                        IVSurvei.setVisibility(View.VISIBLE);
+                        Selfie.setVisibility(View.GONE);
+                        Delete.setVisibility(View.VISIBLE);
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
                     }
@@ -305,6 +312,15 @@ public class FollowUpActivity extends AppCompatActivity {
 
         String encodeImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);
         return encodeImage;
+    }
+
+    private void clearBitmapSelfie() {
+        if (BitmapSelfie != null && !BitmapSelfie.isRecycled()) {
+            BitmapSelfie.recycle();
+            BitmapSelfie = null;
+            Delete.setVisibility(View.GONE);
+            Selfie.setVisibility(View.VISIBLE);
+        }
     }
 
     private void AddFlowup() {

@@ -19,6 +19,8 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Base64;
 import android.view.View;
 import android.view.Window;
@@ -43,6 +45,7 @@ import com.github.gcacace.signaturepad.views.SignaturePad;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.android.material.textfield.TextInputLayout;
 import com.gooproper.LoginActivity;
 import com.gooproper.R;
 import com.gooproper.SettingActivity;
@@ -84,13 +87,14 @@ public class RegistrasiAgenActivity extends AppCompatActivity {
     Bitmap bitmap, bitmappas;
     String sktp, spas, Password, RePassword, RandomPassword;
     LinearLayout agen, Mitra, KantorLain;
-    EditText namalengkap, nowa, email, kotakelahiran, tglkelahiran, pendterakhir, sekolahterakhir, masakerja, jabatan, konfirmasi, domisili, facebook, instagram, noktp;
+    EditText namalengkap, nowa, email, kotakelahiran, tglkelahiran, pendterakhir, sekolahterakhir, masakerja, jabatan, konfirmasi, domisili, facebook, instagram, noktp, konfirmasinpwp, nonpwp;
     EditText UsernameKantorLain, NamaKantorLain, NoTelpKantorLain, EmailKantorLain, NPWP, PasswordKantorLain, RePasswordKantorLain;
     EditText UsernameMitra, NamaLengkapMitra, NoTelpMitra, EmailMitra, KotaKelahiranMitra, TglKelahiranMitra, PasswordMitra, RePasswordMitra;
     RadioGroup radioGroup;
     RadioButton rbagen, rbmitra, rbkantorlain;
     Button submit, batal, SubmitMitra, BatalMitra, SubmitKantorLain, BatalKantroLain, upload, pas;
     ImageView back, imgktp, imgpas;
+    TextInputLayout LytNpwp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,7 +105,9 @@ public class RegistrasiAgenActivity extends AppCompatActivity {
         rbagen = findViewById(R.id.rbagen);
         rbmitra = findViewById(R.id.rbmitra);
         rbkantorlain = findViewById(R.id.rbkantorlain);
+
         agen = findViewById(R.id.lytregisagen);
+        LytNpwp = findViewById(R.id.lytnonpwp);
         upload = findViewById(R.id.uploadktp);
         pas = findViewById(R.id.uploadpasfoto);
         submit = findViewById(R.id.btnsubmit);
@@ -122,6 +128,8 @@ public class RegistrasiAgenActivity extends AppCompatActivity {
         facebook = findViewById(R.id.etfacebook);
         instagram = findViewById(R.id.etinstagram);
         noktp = findViewById(R.id.etnoktp);
+        konfirmasinpwp = findViewById(R.id.etkonfirmasinpwp);
+        nonpwp = findViewById(R.id.etnonpwp);
         pendterakhir = findViewById(R.id.etpendidikanterakhir);
 
         Mitra = findViewById(R.id.LytRegistrasiMitra);
@@ -153,6 +161,7 @@ public class RegistrasiAgenActivity extends AppCompatActivity {
 
         pendterakhir.setOnClickListener(v -> showEducationPopup(v));
         konfirmasi.setOnClickListener(v -> showKonfirmasiPopup(v));
+        konfirmasinpwp.setOnClickListener(v -> showKonfirmasiNpwpPopup(v));
         back.setOnClickListener(v -> finish());
         upload.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -291,6 +300,27 @@ public class RegistrasiAgenActivity extends AppCompatActivity {
             }
         });
 
+        konfirmasinpwp.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if (editable.toString().equalsIgnoreCase("Ya")) {
+                    LytNpwp.setVisibility(View.VISIBLE);
+                } else {
+                    LytNpwp.setVisibility(View.GONE);
+                }
+            }
+        });
+
         if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
         }
@@ -341,6 +371,37 @@ public class RegistrasiAgenActivity extends AppCompatActivity {
                             customDialog.show();
                         } catch (JSONException e) {
                             e.printStackTrace();
+                            pDialog.cancel();
+                            pDialog.cancel();
+                            Dialog customDialog = new Dialog(RegistrasiAgenActivity.this);
+                            customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                            customDialog.setContentView(R.layout.custom_dialog_sukses);
+
+                            if (customDialog.getWindow() != null) {
+                                customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                            }
+
+                            TextView dialogTitle = customDialog.findViewById(R.id.dialog_title);
+                            Button ok = customDialog.findViewById(R.id.btnya);
+                            Button cobalagi = customDialog.findViewById(R.id.btntidak);
+                            ImageView gifimage = customDialog.findViewById(R.id.ivdialog);
+
+                            dialogTitle.setText("Registrasi Gagal");
+                            ok.setVisibility(View.GONE);
+
+                            cobalagi.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    customDialog.dismiss();
+                                }
+                            });
+
+                            Glide.with(RegistrasiAgenActivity.this)
+                                    .load(R.mipmap.ic_no) // You can also use a local resource like R.drawable.your_gif_resource
+                                    .transition(DrawableTransitionOptions.withCrossFade())
+                                    .into(gifimage);
+
+                            customDialog.show();
                         }
                     }
                 },
@@ -404,6 +465,7 @@ public class RegistrasiAgenActivity extends AppCompatActivity {
                 map.put("NamaSekolah", sekolahterakhir.getText().toString().trim());
                 map.put("MasaKerja", masakerja.getText().toString().trim());
                 map.put("Jabatan", jabatan.getText().toString().trim());
+                map.put("Konfirmasi", konfirmasi.getText().toString().trim());
                 map.put("AlamatDomisili", domisili.getText().toString().trim());
                 map.put("Facebook", facebook.getText().toString().trim());
                 map.put("Instagram", instagram.getText().toString().trim());
@@ -769,6 +831,35 @@ public class RegistrasiAgenActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which) {
                 // Update the TextView with the selected education
                 TextView textViewEducation = findViewById(R.id.etkonfirmasi);
+                textViewEducation.setText(educations[selectedKonfirmasiIndex[0]]);
+            }
+        });
+
+        builder.setNegativeButton("Batal", null);
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    public void showKonfirmasiNpwpPopup(View view) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Apakah Anda Memiliki NPWP?");
+
+        final CharSequence[] educations = {"Ya", "Tidak"};
+        final int[] selectedKonfirmasiIndex = {0}; // to store the index of the selected education
+
+        builder.setSingleChoiceItems(educations, selectedKonfirmasiIndex[0], new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                selectedKonfirmasiIndex[0] = which; // update the selected education index
+            }
+        });
+
+        builder.setPositiveButton("Pilih", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // Update the TextView with the selected education
+                TextView textViewEducation = findViewById(R.id.etkonfirmasinpwp);
                 textViewEducation.setText(educations[selectedKonfirmasiIndex[0]]);
             }
         });

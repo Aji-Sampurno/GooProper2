@@ -23,6 +23,7 @@ import com.gooproper.TentangKamiActivity;
 import com.gooproper.ui.ListingFavoriteActivity;
 import com.gooproper.ui.ListingTerakhirDilihatActivity;
 import com.gooproper.ui.ListingkuActivity;
+import com.gooproper.ui.PraListingAgenActivity;
 import com.gooproper.ui.RewardActivity;
 import com.gooproper.ui.TambahListingActivity;
 import com.gooproper.util.Preferences;
@@ -32,17 +33,18 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class AkunAgenFragment extends Fragment {
 
-    private LinearLayout reward, listing, listingmitra, listingkl, agen, mitra, kl, listingku, favorite, favoritemitra, favoritekl, seen, seenmitra, seenkl, pengaturan, pengaturanmitra, pengaturankl, hubungikami, hubungikamimitra, hubungikamikl, tentangkami, tentangkamimitra, tentangkamikl;
+    private LinearLayout reward, listing, listingmitra, listingkl, agen, mitra, kl, listingku, favorite, favoritemitra, favoritekl, seen, seenmitra, seenkl, pengaturan, pengaturanmitra, pengaturankl, hubungikami, hubungikamimitra, hubungikamikl, tentangkami, tentangkamimitra, tentangkamikl, pralising;
     TextView nama, edit;
     CircleImageView cvagen;
     String imgurl;
     String profile;
     String status;
-    String wa = "";
-    String ig = "";
-    String tt = "";
-    String yt = "";
-    String em = "";
+    String wa = "811 333 8838";
+    String fb = "100085562741346";
+    String ig = "gooproper.oficial";
+    String tt = "@gooproper";
+    String yt = "@gooproperofficial";
+    String em = "goopropermalang09@gmail.com";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -72,6 +74,7 @@ public class AkunAgenFragment extends Fragment {
         tentangkami = root.findViewById(R.id.lyttentangkami);
         tentangkamimitra = root.findViewById(R.id.lyttentangkamimitra);
         tentangkamikl = root.findViewById(R.id.lyttentangkamikl);
+        pralising = root.findViewById(R.id.lytpralisting);
         nama = root.findViewById(R.id.tvnamaakunagen);
         edit = root.findViewById(R.id.tveditakunagen);
         cvagen = root.findViewById(R.id.cvprofileagen);
@@ -130,6 +133,7 @@ public class AkunAgenFragment extends Fragment {
         hubungikamimitra.setOnClickListener(view -> showCustomAlertDialog(view));
         hubungikamikl.setOnClickListener(view -> showCustomAlertDialog(view));
         reward.setOnClickListener(view -> startActivity(new Intent(getContext(), RewardActivity.class)));
+        pralising.setOnClickListener(v -> startActivity(new Intent(getContext(), PraListingAgenActivity.class)));
 
         return root;
     }
@@ -148,6 +152,7 @@ public class AkunAgenFragment extends Fragment {
 
         LinearLayout lytwa = customDialog.findViewById(R.id.lytwa);
         LinearLayout lytig = customDialog.findViewById(R.id.lytig);
+        LinearLayout lytfb = customDialog.findViewById(R.id.lytfacebook);
         LinearLayout lyttt = customDialog.findViewById(R.id.lyttiktok);
         LinearLayout lytyt = customDialog.findViewById(R.id.lytyt);
         LinearLayout lytem = customDialog.findViewById(R.id.lytemail);
@@ -156,6 +161,16 @@ public class AkunAgenFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 String url = "https://api.whatsapp.com/send?phone=" + wa;
+                Intent i = new Intent(Intent.ACTION_VIEW);
+                i.setData(Uri.parse(url));
+                startActivity(i);
+            }
+        });
+
+        lytfb.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String url = "https://www.facebook.com/profile.php?id=" + fb;
                 Intent i = new Intent(Intent.ACTION_VIEW);
                 i.setData(Uri.parse(url));
                 startActivity(i);
@@ -175,7 +190,7 @@ public class AkunAgenFragment extends Fragment {
         lyttt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String url = "http://instagram.com/_u/" + tt;
+                String url = "https://www.tiktok.com/" + tt;
                 Intent i = new Intent(Intent.ACTION_VIEW);
                 i.setData(Uri.parse(url));
                 startActivity(i);
@@ -185,7 +200,7 @@ public class AkunAgenFragment extends Fragment {
         lytyt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String url = "http://instagram.com/_u/" + yt;
+                String url = "https://www.youtube.com/" + yt;
                 Intent i = new Intent(Intent.ACTION_VIEW);
                 i.setData(Uri.parse(url));
                 startActivity(i);
@@ -195,10 +210,15 @@ public class AkunAgenFragment extends Fragment {
         lytem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String url = "http://instagram.com/_u/" + em;
-                Intent i = new Intent(Intent.ACTION_VIEW);
-                i.setData(Uri.parse(url));
-                startActivity(i);
+                Intent intent = new Intent(Intent.ACTION_SEND);
+                intent.setType("text/plain");
+                intent.putExtra(Intent.EXTRA_EMAIL, new String[] {em});
+                intent.setPackage("com.google.android.gm");
+
+                try {
+                    startActivity(intent);
+                } catch (android.content.ActivityNotFoundException ex) {
+                }
             }
         });
 

@@ -99,6 +99,7 @@ public class PelamarMitraFragment extends Fragment {
                                 agenModel.setNamaSekolah(data.getString("NamaSekolah"));
                                 agenModel.setMasaKerja(data.getString("MasaKerja"));
                                 agenModel.setJabatan(data.getString("Jabatan"));
+                                agenModel.setKonfirmasi(data.getString("Konfirmasi"));
                                 agenModel.setStatus(data.getString("Status"));
                                 agenModel.setAlamatDomisili(data.getString("AlamatDomisili"));
                                 agenModel.setFacebook(data.getString("Facebook"));

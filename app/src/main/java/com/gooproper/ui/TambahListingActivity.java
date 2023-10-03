@@ -17,6 +17,9 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.media.Image;
@@ -99,33 +102,44 @@ public class TambahListingActivity extends AppCompatActivity {
     final int CODE_GALLERY_REQUEST_STRA = 115;
     final int CODE_CAMERA_REQUEST_STRA = 116;
     final int KODE_REQUEST_KAMERA_STRA = 117;
-    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE = 123;
-    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES = 456;
-    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE_SHM = 124;
-    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES_SHM = 457;
-    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE_HGB = 125;
-    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES_HGB = 458;
-    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE_HSHP = 126;
-    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES_HSHP = 459;
-    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE_PPJB = 127;
-    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES_PPJB = 450;
-    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE_STRA = 128;
+    final int CODE_GALLERY_REQUEST_PJP = 118;
+    final int CODE_CAMERA_REQUEST_PJP = 119;
+    final int KODE_REQUEST_KAMERA_PJP = 120;
+    final int CODE_GALLERY_REQUEST_PJP1 = 121;
+    final int CODE_CAMERA_REQUEST_PJP1 = 122;
+    final int KODE_REQUEST_KAMERA_PJP1 = 123;
+    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE = 124;
+    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES = 450;
+    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE_SHM = 125;
+    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES_SHM = 451;
+    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE_HGB = 126;
+    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES_HGB = 452;
+    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE_HSHP = 127;
+    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES_HSHP = 453;
+    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE_PPJB = 128;
+    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES_PPJB = 454;
+    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE_STRA = 129;
     private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES_STRA = 455;
+    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE_PJP = 130;
+    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES_PJP = 456;
+    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE_PJP1 = 131;
+    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES_PJP1 = 457;
     private static final int MAPS_ACTIVITY_REQUEST_CODE = 3;
-    Bitmap bitmap1, bitmap2, bitmap3, bitmap4, bitmap5, bitmap6, bitmap7, bitmap8, bitmapSHM, bitmapHGB, bitmapHSHP, bitmapPPJB, bitmapSTRA;
-    LinearLayout lyt1, lyt2, lyt3, lyt4, lyt5, lyt6, lyt7, lyt8;
-    ImageView back, iv1, iv2, iv3, iv4, iv5, iv6, iv7, iv8, IVShm, IVHgb, IVHshp, IVPpjb, IVStratatitle;
-    Button batal, submit, select, maps, BtnSHM, BtnHGB, BtnHSHP, BtnPPJB, BtnSTRA;
-    ImageView hps1, hps2, hps3, hps4, hps5, hps6, hps7, hps8;
-    TextInputEditText namalengkap, nohp, nik, alamat, tgllhir, rekening, bank, atasnama, jenisproperti, namaproperti, alamatproperti, sertifikat, nosertif, luas, land, lantai, bed, bath, bedart, bathart, garasi, carpot, listrik, air, perabot, ketperabot, banner, status, harga, keterangan, hadap, size;
-    TextInputLayout LytSize;
+    Bitmap bitmap1, bitmap2, bitmap3, bitmap4, bitmap5, bitmap6, bitmap7, bitmap8, bitmapSHM, bitmapHGB, bitmapHSHP, bitmapPPJB, bitmapSTRA, BitmapWatermark, BitmapPjp, BitmapPjp1;
+    Drawable WatermarkDrawable;
+    LinearLayout lyt1, lyt2, lyt3, lyt4, lyt5, lyt6, lyt7, lyt8, LytSHM, LytHGB, LytHSHP, LytPPJB, LytStratatitle, LytPjp, LytPjp1;
+    ImageView back, iv1, iv2, iv3, iv4, iv5, iv6, iv7, iv8, IVShm, IVHgb, IVHshp, IVPpjb, IVStratatitle, IVPjp, IVPjp1;
+    Button batal, submit, select, maps, BtnSHM, BtnHGB, BtnHSHP, BtnPPJB, BtnSTRA, BtnPjp, BtnPjp1;
+    ImageView hps1, hps2, hps3, hps4, hps5, hps6, hps7, hps8, HpsSHM, HpsHGB, HpsHSHP, HpsPPJB, HpsStratatitle, HpsPjp, HpsPjp1;
+    TextInputEditText namalengkap, nohp, nik, alamat, tgllhir, rekening, bank, atasnama, jenisproperti, namaproperti, alamatproperti, sertifikat, nosertif, luas, land, lantai, bed, bath, bedart, bathart, garasi, carpot, listrik, air, pjp, perabot, ketperabot, banner, status, harga, hargasewa, keterangan, hadap, size, EtTglInput;
+    TextInputLayout LytSize, LytTglInput, LytHargaJual, LytHargaSewa;
     RadioButton open, exclusive;
     RadioGroup rgpriority;
     CheckBox CBSHM, CBHGB, CBHSHP, CBPPJB, CBSTRA;
     String idagen, idnull, sstatus, priority, namalisting, isAdmin, idadmin, idinput;
-    String image1, image2, image3, image4, image5, image6, image7, image8, SHM, HGB, HSHP, PPJB, STRA;
-    String latitudeStr, longitudeStr, addressStr;
-    Drawable DrawableSHM,DrawableHGB,DrawableHSHP,DrawablePPJB,DrawableSTRA;
+    String image1, image2, image3, image4, image5, image6, image7, image8, SHM, HGB, HSHP, PPJB, STRA, PJPHal1, PJPHal2;
+    String latitudeStr, longitudeStr, addressStr, Lat, Lng;
+    Drawable DrawableSHM, DrawableHGB, DrawableHSHP, DrawablePPJB, DrawableSTRA;
 
 
     @Override
@@ -134,6 +148,8 @@ public class TambahListingActivity extends AppCompatActivity {
         setContentView(R.layout.activity_tambah_listing);
 
         pDialog = new ProgressDialog(TambahListingActivity.this);
+        WatermarkDrawable = getResources().getDrawable(R.drawable.watermark);
+        BitmapWatermark = ((BitmapDrawable) WatermarkDrawable).getBitmap();
 
         rgpriority = findViewById(R.id.rgstatus);
 
@@ -148,6 +164,14 @@ public class TambahListingActivity extends AppCompatActivity {
         iv6 = findViewById(R.id.ivs6);
         iv7 = findViewById(R.id.ivs7);
         iv8 = findViewById(R.id.ivs8);
+        IVShm = findViewById(R.id.IVSHM);
+        IVHgb = findViewById(R.id.IVHGB);
+        IVHshp = findViewById(R.id.IVHSHP);
+        IVPpjb = findViewById(R.id.IVPPJB);
+        IVStratatitle = findViewById(R.id.IVStratatitle);
+        IVPjp = findViewById(R.id.IVPjp);
+        IVPjp1 = findViewById(R.id.IVPjp1);
+
         lyt1 = findViewById(R.id.lyts1);
         lyt2 = findViewById(R.id.lyts2);
         lyt3 = findViewById(R.id.lyts3);
@@ -157,6 +181,16 @@ public class TambahListingActivity extends AppCompatActivity {
         lyt7 = findViewById(R.id.lyts7);
         lyt8 = findViewById(R.id.lyts8);
         LytSize = findViewById(R.id.lytUkuranBanner);
+        LytTglInput = findViewById(R.id.lyttglinputproperti);
+        LytHargaJual = findViewById(R.id.lytharga);
+        LytHargaSewa = findViewById(R.id.lythargasewa);
+        LytSHM = findViewById(R.id.LytSHM);
+        LytHGB = findViewById(R.id.LytHGB);
+        LytHSHP = findViewById(R.id.LytHSHP);
+        LytPPJB = findViewById(R.id.LytPPJB);
+        LytStratatitle = findViewById(R.id.LytStratatitle);
+        LytPjp = findViewById(R.id.LytPjp);
+        LytPjp1 = findViewById(R.id.LytPjp1);
 
         back = findViewById(R.id.backFormBtn);
 
@@ -172,6 +206,13 @@ public class TambahListingActivity extends AppCompatActivity {
         hps6 = findViewById(R.id.IVDelete6);
         hps7 = findViewById(R.id.IVDelete7);
         hps8 = findViewById(R.id.IVDelete8);
+        HpsSHM = findViewById(R.id.IVDeleteSHM);
+        HpsHGB = findViewById(R.id.IVDeleteHGB);
+        HpsHSHP = findViewById(R.id.IVDeleteHSHP);
+        HpsPPJB = findViewById(R.id.IVDeletePPJB);
+        HpsStratatitle = findViewById(R.id.IVDeleteStratatitle);
+        HpsPjp = findViewById(R.id.IVDeletePjp);
+        HpsPjp1 = findViewById(R.id.IVDeletePjp1);
 
         namalengkap = findViewById(R.id.etnamavendor);
         nohp = findViewById(R.id.etnohpvendor);
@@ -185,6 +226,7 @@ public class TambahListingActivity extends AppCompatActivity {
         namaproperti = findViewById(R.id.etnamaproperti);
         alamatproperti = findViewById(R.id.etalamatproperti);
         sertifikat = findViewById(R.id.ettipesertifikat);
+        pjp = findViewById(R.id.etkonfirmasipjp);
         nosertif = findViewById(R.id.etnomorsertifikat);
         luas = findViewById(R.id.etluastanah);
         land = findViewById(R.id.etluasbangunan);
@@ -202,17 +244,13 @@ public class TambahListingActivity extends AppCompatActivity {
         banner = findViewById(R.id.etbanner);
         status = findViewById(R.id.etstatusproperti);
         harga = findViewById(R.id.etharga);
+        hargasewa = findViewById(R.id.ethargasewa);
         keterangan = findViewById(R.id.etketerangan);
         hadap = findViewById(R.id.ethadap);
         size = findViewById(R.id.etukuranbanner);
+        EtTglInput = findViewById(R.id.ettglinputproperti);
 
         maps = findViewById(R.id.map);
-
-        IVShm = findViewById(R.id.IVSHM);
-        IVHgb = findViewById(R.id.IVHGB);
-        IVHshp = findViewById(R.id.IVHSHP);
-        IVPpjb = findViewById(R.id.IVPPJB);
-        IVStratatitle = findViewById(R.id.IVStratatitle);
 
         CBSHM = findViewById(R.id.CBSHM);
         CBHGB = findViewById(R.id.CBHGB);
@@ -225,6 +263,8 @@ public class TambahListingActivity extends AppCompatActivity {
         BtnHSHP = findViewById(R.id.BtnHSHP);
         BtnPPJB = findViewById(R.id.BtnPPJB);
         BtnSTRA = findViewById(R.id.BtnStratatitle);
+        BtnPjp = findViewById(R.id.BtnPjp);
+        BtnPjp1 = findViewById(R.id.BtnPjp1);
 
         namalisting = namaproperti.getText().toString();
         sstatus = Preferences.getKeyIsAkses(TambahListingActivity.this);
@@ -239,6 +279,12 @@ public class TambahListingActivity extends AppCompatActivity {
         DrawableSTRA = IVStratatitle.getDrawable();
 
         if (isAdmin.equals("2")){
+            LytTglInput.setVisibility(View.VISIBLE);
+        } else {
+            LytTglInput.setVisibility(View.GONE);
+        }
+
+        if (isAdmin.equals("2")) {
             submit.setOnClickListener(view -> {
                 int checkedRadioButtonId = rgpriority.getCheckedRadioButtonId();
 
@@ -272,7 +318,48 @@ public class TambahListingActivity extends AppCompatActivity {
 
                     customDialog.show();
                 } else {
-                    if (longitudeStr == null && latitudeStr == null) {
+                    if (Validate()) {
+                        if (bitmap1 == null) {
+                            Dialog customDialog = new Dialog(TambahListingActivity.this);
+                            customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                            customDialog.setContentView(R.layout.custom_dialog_eror_input);
+
+                            if (customDialog.getWindow() != null) {
+                                customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                            }
+
+                            Button ok = customDialog.findViewById(R.id.BtnOkErorInput);
+                            TextView tv = customDialog.findViewById(R.id.TVDialogErorInput);
+
+                            tv.setText("Harap Tambahkan Gambar");
+
+                            ok.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    customDialog.dismiss();
+                                }
+                            });
+
+                            ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
+
+                            Glide.with(TambahListingActivity.this)
+                                    .load(R.drawable.alert) // You can also use a local resource like R.drawable.your_gif_resource
+                                    .transition(DrawableTransitionOptions.withCrossFade())
+                                    .into(gifImageView);
+
+                            customDialog.show();
+                        } else {
+                            simpanData();
+                        }
+                    }
+                }
+            });
+        } else if (isAdmin.equals("3")) {
+            if (sstatus.equals("1")) {
+                submit.setOnClickListener(view -> {
+                    int checkedRadioButtonId = rgpriority.getCheckedRadioButtonId();
+
+                    if (checkedRadioButtonId == -1) {
                         Dialog customDialog = new Dialog(TambahListingActivity.this);
                         customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                         customDialog.setContentView(R.layout.custom_dialog_eror_input);
@@ -284,7 +371,7 @@ public class TambahListingActivity extends AppCompatActivity {
                         Button ok = customDialog.findViewById(R.id.BtnOkErorInput);
                         TextView tv = customDialog.findViewById(R.id.TVDialogErorInput);
 
-                        tv.setText("Harap tambah lokasi terlebih dahulu");
+                        tv.setText("Harap pilih Open atau Exclusive pada bagian atas form");
 
                         ok.setOnClickListener(new View.OnClickListener() {
                             @Override
@@ -333,113 +420,7 @@ public class TambahListingActivity extends AppCompatActivity {
 
                                 customDialog.show();
                             } else {
-                                simpanData();
-                            }
-                        }
-                    }
-                }
-            });
-        } else if (isAdmin.equals("3")) {
-            if (sstatus.equals("1")){
-                submit.setOnClickListener(view -> {
-                    int checkedRadioButtonId = rgpriority.getCheckedRadioButtonId();
-
-                    if (checkedRadioButtonId == -1) {
-                        Dialog customDialog = new Dialog(TambahListingActivity.this);
-                        customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                        customDialog.setContentView(R.layout.custom_dialog_eror_input);
-
-                        if (customDialog.getWindow() != null) {
-                            customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-                        }
-
-                        Button ok = customDialog.findViewById(R.id.BtnOkErorInput);
-                        TextView tv = customDialog.findViewById(R.id.TVDialogErorInput);
-
-                        tv.setText("Harap pilih Open atau Exclusive pada bagian atas form");
-
-                        ok.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                customDialog.dismiss();
-                            }
-                        });
-
-                        ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
-
-                        Glide.with(TambahListingActivity.this)
-                                .load(R.drawable.alert) // You can also use a local resource like R.drawable.your_gif_resource
-                                .transition(DrawableTransitionOptions.withCrossFade())
-                                .into(gifImageView);
-
-                        customDialog.show();
-                    }
-                    else {
-                        if (longitudeStr == null && latitudeStr == null) {
-                            Dialog customDialog = new Dialog(TambahListingActivity.this);
-                            customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                            customDialog.setContentView(R.layout.custom_dialog_eror_input);
-
-                            if (customDialog.getWindow() != null) {
-                                customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-                            }
-
-                            Button ok = customDialog.findViewById(R.id.BtnOkErorInput);
-                            TextView tv = customDialog.findViewById(R.id.TVDialogErorInput);
-
-                            tv.setText("Harap tambah lokasi terlebih dahulu");
-
-                            ok.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    customDialog.dismiss();
-                                }
-                            });
-
-                            ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
-
-                            Glide.with(TambahListingActivity.this)
-                                    .load(R.drawable.alert) // You can also use a local resource like R.drawable.your_gif_resource
-                                    .transition(DrawableTransitionOptions.withCrossFade())
-                                    .into(gifImageView);
-
-                            customDialog.show();
-                        }
-                        else {
-                            if (Validate()) {
-                                if (bitmap1 == null) {
-                                    Dialog customDialog = new Dialog(TambahListingActivity.this);
-                                    customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                                    customDialog.setContentView(R.layout.custom_dialog_eror_input);
-
-                                    if (customDialog.getWindow() != null) {
-                                        customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-                                    }
-
-                                    Button ok = customDialog.findViewById(R.id.BtnOkErorInput);
-                                    TextView tv = customDialog.findViewById(R.id.TVDialogErorInput);
-
-                                    tv.setText("Harap Tambahkan Gambar");
-
-                                    ok.setOnClickListener(new View.OnClickListener() {
-                                        @Override
-                                        public void onClick(View view) {
-                                            customDialog.dismiss();
-                                        }
-                                    });
-
-                                    ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
-
-                                    Glide.with(TambahListingActivity.this)
-                                            .load(R.drawable.alert) // You can also use a local resource like R.drawable.your_gif_resource
-                                            .transition(DrawableTransitionOptions.withCrossFade())
-                                            .into(gifImageView);
-
-                                    customDialog.show();
-                                }
-                                else {
-                                    simpanDataAgen();
-                                }
+                                simpanDataAgen();
                             }
                         }
                     }
@@ -477,73 +458,39 @@ public class TambahListingActivity extends AppCompatActivity {
                                 .into(gifImageView);
 
                         customDialog.show();
-                    }
-                    else {
-                        if (longitudeStr == null && latitudeStr == null) {
-                            Dialog customDialog = new Dialog(TambahListingActivity.this);
-                            customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                            customDialog.setContentView(R.layout.custom_dialog_eror_input);
+                    } else {
+                        if (Validate()) {
+                            if (bitmap1 == null) {
+                                Dialog customDialog = new Dialog(TambahListingActivity.this);
+                                customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                                customDialog.setContentView(R.layout.custom_dialog_eror_input);
 
-                            if (customDialog.getWindow() != null) {
-                                customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-                            }
-
-                            Button ok = customDialog.findViewById(R.id.BtnOkErorInput);
-                            TextView tv = customDialog.findViewById(R.id.TVDialogErorInput);
-
-                            tv.setText("Harap tambah lokasi terlebih dahulu");
-
-                            ok.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    customDialog.dismiss();
+                                if (customDialog.getWindow() != null) {
+                                    customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
                                 }
-                            });
 
-                            ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
+                                Button ok = customDialog.findViewById(R.id.BtnOkErorInput);
+                                TextView tv = customDialog.findViewById(R.id.TVDialogErorInput);
 
-                            Glide.with(TambahListingActivity.this)
-                                    .load(R.drawable.alert) // You can also use a local resource like R.drawable.your_gif_resource
-                                    .transition(DrawableTransitionOptions.withCrossFade())
-                                    .into(gifImageView);
+                                tv.setText("Harap Tambahkan Gambar");
 
-                            customDialog.show();
-                        }
-                        else {
-                            if (Validate()) {
-                                if (bitmap1 == null) {
-                                    Dialog customDialog = new Dialog(TambahListingActivity.this);
-                                    customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                                    customDialog.setContentView(R.layout.custom_dialog_eror_input);
-
-                                    if (customDialog.getWindow() != null) {
-                                        customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                                ok.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        customDialog.dismiss();
                                     }
+                                });
 
-                                    Button ok = customDialog.findViewById(R.id.BtnOkErorInput);
-                                    TextView tv = customDialog.findViewById(R.id.TVDialogErorInput);
+                                ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
 
-                                    tv.setText("Harap Tambahkan Gambar");
+                                Glide.with(TambahListingActivity.this)
+                                        .load(R.drawable.alert) // You can also use a local resource like R.drawable.your_gif_resource
+                                        .transition(DrawableTransitionOptions.withCrossFade())
+                                        .into(gifImageView);
 
-                                    ok.setOnClickListener(new View.OnClickListener() {
-                                        @Override
-                                        public void onClick(View view) {
-                                            customDialog.dismiss();
-                                        }
-                                    });
-
-                                    ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
-
-                                    Glide.with(TambahListingActivity.this)
-                                            .load(R.drawable.alert) // You can also use a local resource like R.drawable.your_gif_resource
-                                            .transition(DrawableTransitionOptions.withCrossFade())
-                                            .into(gifImageView);
-
-                                    customDialog.show();
-                                }
-                                else {
-                                    simpanDataNonAgen();
-                                }
+                                customDialog.show();
+                            } else {
+                                simpanDataNonAgen();
                             }
                         }
                     }
@@ -581,73 +528,39 @@ public class TambahListingActivity extends AppCompatActivity {
                                 .into(gifImageView);
 
                         customDialog.show();
-                    }
-                    else {
-                        if (longitudeStr == null && latitudeStr == null) {
-                            Dialog customDialog = new Dialog(TambahListingActivity.this);
-                            customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                            customDialog.setContentView(R.layout.custom_dialog_eror_input);
+                    } else {
+                        if (Validate()) {
+                            if (bitmap1 == null) {
+                                Dialog customDialog = new Dialog(TambahListingActivity.this);
+                                customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                                customDialog.setContentView(R.layout.custom_dialog_eror_input);
 
-                            if (customDialog.getWindow() != null) {
-                                customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-                            }
-
-                            Button ok = customDialog.findViewById(R.id.BtnOkErorInput);
-                            TextView tv = customDialog.findViewById(R.id.TVDialogErorInput);
-
-                            tv.setText("Harap tambah lokasi terlebih dahulu");
-
-                            ok.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    customDialog.dismiss();
+                                if (customDialog.getWindow() != null) {
+                                    customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
                                 }
-                            });
 
-                            ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
+                                Button ok = customDialog.findViewById(R.id.BtnOkErorInput);
+                                TextView tv = customDialog.findViewById(R.id.TVDialogErorInput);
 
-                            Glide.with(TambahListingActivity.this)
-                                    .load(R.drawable.alert) // You can also use a local resource like R.drawable.your_gif_resource
-                                    .transition(DrawableTransitionOptions.withCrossFade())
-                                    .into(gifImageView);
+                                tv.setText("Harap Tambahkan Gambar");
 
-                            customDialog.show();
-                        }
-                        else {
-                            if (Validate()) {
-                                if (bitmap1 == null) {
-                                    Dialog customDialog = new Dialog(TambahListingActivity.this);
-                                    customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                                    customDialog.setContentView(R.layout.custom_dialog_eror_input);
-
-                                    if (customDialog.getWindow() != null) {
-                                        customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                                ok.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        customDialog.dismiss();
                                     }
+                                });
 
-                                    Button ok = customDialog.findViewById(R.id.BtnOkErorInput);
-                                    TextView tv = customDialog.findViewById(R.id.TVDialogErorInput);
+                                ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
 
-                                    tv.setText("Harap Tambahkan Gambar");
+                                Glide.with(TambahListingActivity.this)
+                                        .load(R.drawable.alert) // You can also use a local resource like R.drawable.your_gif_resource
+                                        .transition(DrawableTransitionOptions.withCrossFade())
+                                        .into(gifImageView);
 
-                                    ok.setOnClickListener(new View.OnClickListener() {
-                                        @Override
-                                        public void onClick(View view) {
-                                            customDialog.dismiss();
-                                        }
-                                    });
-
-                                    ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
-
-                                    Glide.with(TambahListingActivity.this)
-                                            .load(R.drawable.alert) // You can also use a local resource like R.drawable.your_gif_resource
-                                            .transition(DrawableTransitionOptions.withCrossFade())
-                                            .into(gifImageView);
-
-                                    customDialog.show();
-                                }
-                                else {
-                                    simpanDataNonAgen();
-                                }
+                                customDialog.show();
+                            } else {
+                                simpanDataNonAgen();
                             }
                         }
                     }
@@ -659,6 +572,7 @@ public class TambahListingActivity extends AppCompatActivity {
         back.setOnClickListener(view -> finish());
         batal.setOnClickListener(view -> finish());
         bank.setOnClickListener(view -> ShowBank(view));
+        pjp.setOnClickListener(view -> ShowPjp(view));
         jenisproperti.setOnClickListener(view -> ShowJenisProperti(view));
         sertifikat.setOnClickListener(view -> ShowTipeSertifikat(view));
         air.setOnClickListener(view -> ShowSumberAir(view));
@@ -674,6 +588,13 @@ public class TambahListingActivity extends AppCompatActivity {
         hps6.setOnClickListener(view -> clearBitmap6());
         hps7.setOnClickListener(view -> clearBitmap7());
         hps8.setOnClickListener(view -> clearBitmap8());
+        HpsSHM.setOnClickListener(view -> clearBitmapSHM());
+        HpsHGB.setOnClickListener(view -> clearBitmapHGB());
+        HpsHSHP.setOnClickListener(view -> clearBitmapHSHP());
+        HpsPPJB.setOnClickListener(view -> clearBitmapPPJB());
+        HpsStratatitle.setOnClickListener(view -> clearBitmapSTRA());
+        HpsPjp.setOnClickListener(view -> clearBitmapPJP());
+        HpsPjp1.setOnClickListener(view -> clearBitmapPJP1());
         banner.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -695,15 +616,84 @@ public class TambahListingActivity extends AppCompatActivity {
             }
         });
 
+        status.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if (editable.toString().equalsIgnoreCase("Jual")) {
+                    LytHargaJual.setVisibility(View.VISIBLE);
+                    LytHargaSewa.setVisibility(View.GONE);
+                } else if (editable.toString().equalsIgnoreCase("Sewa")) {
+                    LytHargaSewa.setVisibility(View.VISIBLE);
+                    LytHargaJual.setVisibility(View.GONE);
+                } else if (editable.toString().equalsIgnoreCase("Jual/Sewa")) {
+                    LytHargaJual.setVisibility(View.VISIBLE);
+                    LytHargaSewa.setVisibility(View.VISIBLE);
+                } else {
+                    LytHargaJual.setVisibility(View.GONE);
+                    LytHargaSewa.setVisibility(View.GONE);
+                }
+            }
+        });
+
+        pjp.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if (editable.toString().equalsIgnoreCase("Ya")) {
+                    if (BitmapPjp == null){
+                        BtnPjp.setVisibility(View.VISIBLE);
+                    } else {
+                        BtnPjp.setVisibility(View.GONE);
+                    }
+                    if (BitmapPjp1 == null){
+                        BtnPjp1.setVisibility(View.VISIBLE);
+                    } else {
+                        BtnPjp1.setVisibility(View.GONE);
+                    }
+                } else if (editable.toString().equalsIgnoreCase("Tidak")) {
+                    BtnPjp.setVisibility(View.GONE);
+                    BtnPjp1.setVisibility(View.GONE);
+                } else {
+                    BtnPjp.setVisibility(View.GONE);
+                    BtnPjp1.setVisibility(View.GONE);
+                }
+            }
+        });
+
         CBSHM.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if (b) {
                     IVShm.setVisibility(View.VISIBLE);
-                    BtnSHM.setVisibility(View.VISIBLE);
+                    HpsSHM.setVisibility(View.VISIBLE);
+                    if (bitmapSHM == null){
+                        BtnSHM.setVisibility(View.VISIBLE);
+                    } else {
+                        BtnSHM.setVisibility(View.GONE);
+                    }
                 } else {
                     IVShm.setVisibility(View.GONE);
                     BtnSHM.setVisibility(View.GONE);
+                    HpsSHM.setVisibility(View.GONE);
                 }
             }
         });
@@ -713,10 +703,16 @@ public class TambahListingActivity extends AppCompatActivity {
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if (b) {
                     IVHgb.setVisibility(View.VISIBLE);
-                    BtnHGB.setVisibility(View.VISIBLE);
+                    HpsHGB.setVisibility(View.VISIBLE);
+                    if (bitmapHGB == null){
+                        BtnHGB.setVisibility(View.VISIBLE);
+                    } else {
+                        BtnHGB.setVisibility(View.GONE);
+                    }
                 } else {
                     IVHgb.setVisibility(View.GONE);
                     BtnHGB.setVisibility(View.GONE);
+                    HpsHGB.setVisibility(View.GONE);
                 }
             }
         });
@@ -726,10 +722,16 @@ public class TambahListingActivity extends AppCompatActivity {
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if (b) {
                     IVHshp.setVisibility(View.VISIBLE);
-                    BtnHSHP.setVisibility(View.VISIBLE);
+                    HpsHSHP.setVisibility(View.VISIBLE);
+                    if (bitmapHSHP == null){
+                        BtnHSHP.setVisibility(View.VISIBLE);
+                    } else {
+                        BtnHSHP.setVisibility(View.GONE);
+                    }
                 } else {
                     IVHshp.setVisibility(View.GONE);
                     BtnHSHP.setVisibility(View.GONE);
+                    HpsHSHP.setVisibility(View.GONE);
                 }
             }
         });
@@ -739,10 +741,16 @@ public class TambahListingActivity extends AppCompatActivity {
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if (b) {
                     IVPpjb.setVisibility(View.VISIBLE);
-                    BtnPPJB.setVisibility(View.VISIBLE);
+                    HpsPPJB.setVisibility(View.VISIBLE);
+                    if (bitmapPPJB == null){
+                        BtnPPJB.setVisibility(View.VISIBLE);
+                    } else {
+                        BtnPPJB.setVisibility(View.GONE);
+                    }
                 } else {
                     IVPpjb.setVisibility(View.GONE);
                     BtnPPJB.setVisibility(View.GONE);
+                    HpsPPJB.setVisibility(View.GONE);
                 }
             }
         });
@@ -752,10 +760,16 @@ public class TambahListingActivity extends AppCompatActivity {
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if (b) {
                     IVStratatitle.setVisibility(View.VISIBLE);
-                    BtnSTRA.setVisibility(View.VISIBLE);
+                    HpsStratatitle.setVisibility(View.VISIBLE);
+                    if (bitmapSTRA == null){
+                        BtnSTRA.setVisibility(View.VISIBLE);
+                    } else {
+                        BtnSTRA.setVisibility(View.GONE);
+                    }
                 } else {
                     IVStratatitle.setVisibility(View.GONE);
                     BtnSTRA.setVisibility(View.GONE);
+                    HpsStratatitle.setVisibility(View.GONE);
                 }
             }
         });
@@ -765,6 +779,8 @@ public class TambahListingActivity extends AppCompatActivity {
         BtnHSHP.setOnClickListener(view -> showPhotoHSHP());
         BtnPPJB.setOnClickListener(view -> showPhotoPPJB());
         BtnSTRA.setOnClickListener(view -> showPhotoSTRA());
+        BtnPjp.setOnClickListener(view -> showPhotoPJP());
+        BtnPjp1.setOnClickListener(view -> showPhotoPJP1());
 
         select.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -793,6 +809,24 @@ public class TambahListingActivity extends AppCompatActivity {
                     public void onPositiveButtonClick(Long selection) {
                         String tanggal = new SimpleDateFormat("yyyy-dd-MM", Locale.getDefault()).format(new Date(selection));
                         tgllhir.setText(MessageFormat.format("{0}", tanggal));
+                    }
+                });
+                materialDatePicker.show(getSupportFragmentManager(), "tag");
+            }
+        });
+
+        EtTglInput.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                MaterialDatePicker<Long> materialDatePicker = MaterialDatePicker.Builder.datePicker()
+                        .setTitleText("Pilih Tanggal")
+                        .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
+                        .build();
+                materialDatePicker.addOnPositiveButtonClickListener(new MaterialPickerOnPositiveButtonClickListener<Long>() {
+                    @Override
+                    public void onPositiveButtonClick(Long selection) {
+                        String tanggal = new SimpleDateFormat("yyyy-dd-MM", Locale.getDefault()).format(new Date(selection));
+                        EtTglInput.setText(MessageFormat.format("{0}", tanggal));
                     }
                 });
                 materialDatePicker.show(getSupportFragmentManager(), "tag");
@@ -929,6 +963,46 @@ public class TambahListingActivity extends AppCompatActivity {
         builder.show();
     }
 
+    private void showPhotoPJP() {
+        androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this);
+        builder.setTitle("Unggah Gambar")
+                .setItems(new CharSequence[]{"Ambil Foto", "Pilih Dari Galeri"}, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which) {
+                            case 0:
+                                ActivityCompat.requestPermissions(TambahListingActivity.this, new String[]{Manifest.permission.CAMERA}, CODE_CAMERA_REQUEST_PJP);
+                                break;
+                            case 1:
+                                requestPermissionsPjp();
+                                break;
+                        }
+                    }
+                });
+
+        builder.show();
+    }
+
+    private void showPhotoPJP1() {
+        androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this);
+        builder.setTitle("Unggah Gambar")
+                .setItems(new CharSequence[]{"Ambil Foto", "Pilih Dari Galeri"}, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which) {
+                            case 0:
+                                ActivityCompat.requestPermissions(TambahListingActivity.this, new String[]{Manifest.permission.CAMERA}, CODE_CAMERA_REQUEST_PJP1);
+                                break;
+                            case 1:
+                                requestPermissionsPjp1();
+                                break;
+                        }
+                    }
+                });
+
+        builder.show();
+    }
+
     private void requestPermissions() {
         boolean externalStoragePermissionGranted = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
 
@@ -989,6 +1063,26 @@ public class TambahListingActivity extends AppCompatActivity {
         }
     }
 
+    private void requestPermissionsPjp() {
+        boolean externalStoragePermissionGranted = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
+
+        if (externalStoragePermissionGranted) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE_PJP);
+        } else {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_MEDIA_IMAGES}, PERMISSION_REQUEST_CODE_MEDIA_IMAGES_PJP);
+        }
+    }
+
+    private void requestPermissionsPjp1() {
+        boolean externalStoragePermissionGranted = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
+
+        if (externalStoragePermissionGranted) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE_PJP1);
+        } else {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_MEDIA_IMAGES}, PERMISSION_REQUEST_CODE_MEDIA_IMAGES_PJP1);
+        }
+    }
+
     private void bukaKamera() {
         Intent intentKamera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (intentKamera.resolveActivity(getPackageManager()) != null) {
@@ -1031,6 +1125,20 @@ public class TambahListingActivity extends AppCompatActivity {
         }
     }
 
+    private void bukaKameraPjp() {
+        Intent intentKamera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (intentKamera.resolveActivity(getPackageManager()) != null) {
+            startActivityForResult(intentKamera, KODE_REQUEST_KAMERA_PJP);
+        }
+    }
+
+    private void bukaKameraPjp1() {
+        Intent intentKamera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (intentKamera.resolveActivity(getPackageManager()) != null) {
+            startActivityForResult(intentKamera, KODE_REQUEST_KAMERA_PJP1);
+        }
+    }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -1065,6 +1173,16 @@ public class TambahListingActivity extends AppCompatActivity {
                 Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 startActivityForResult(intent, CODE_GALLERY_REQUEST_STRA);
             }
+        }  else if (requestCode == PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE_PJP) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(intent, CODE_GALLERY_REQUEST_PJP);
+            }
+        }  else if (requestCode == PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE_PJP1) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(intent, CODE_GALLERY_REQUEST_PJP1);
+            }
         } else if (requestCode == PERMISSION_REQUEST_CODE_MEDIA_IMAGES) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
@@ -1094,6 +1212,16 @@ public class TambahListingActivity extends AppCompatActivity {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 startActivityForResult(intent, CODE_GALLERY_REQUEST_STRA);
+            }
+        }  else if (requestCode == PERMISSION_REQUEST_CODE_MEDIA_IMAGES_PJP) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(intent, CODE_GALLERY_REQUEST_PJP);
+            }
+        }  else if (requestCode == PERMISSION_REQUEST_CODE_MEDIA_IMAGES_PJP1) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(intent, CODE_GALLERY_REQUEST_PJP1);
             }
         } else if (requestCode == CODE_GALLERY_REQUEST) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -1311,6 +1439,78 @@ public class TambahListingActivity extends AppCompatActivity {
             }
 
             return;
+        } else if (requestCode == CODE_GALLERY_REQUEST_PJP) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(intent, CODE_GALLERY_REQUEST_PJP);
+            } else {
+                Dialog customDialog = new Dialog(TambahListingActivity.this);
+                customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                customDialog.setContentView(R.layout.custom_dialog_eror_input);
+
+                if (customDialog.getWindow() != null) {
+                    customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                }
+
+                Button ok = customDialog.findViewById(R.id.BtnOkErorInput);
+                TextView tv = customDialog.findViewById(R.id.TVDialogErorInput);
+
+                tv.setText("Akses Galeri Ditolak");
+
+                ok.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        customDialog.dismiss();
+                    }
+                });
+
+                ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
+
+                Glide.with(TambahListingActivity.this)
+                        .load(R.drawable.alert) // You can also use a local resource like R.drawable.your_gif_resource
+                        .transition(DrawableTransitionOptions.withCrossFade())
+                        .into(gifImageView);
+
+                customDialog.show();
+            }
+
+            return;
+        } else if (requestCode == CODE_GALLERY_REQUEST_PJP1) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(intent, CODE_GALLERY_REQUEST_PJP1);
+            } else {
+                Dialog customDialog = new Dialog(TambahListingActivity.this);
+                customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                customDialog.setContentView(R.layout.custom_dialog_eror_input);
+
+                if (customDialog.getWindow() != null) {
+                    customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                }
+
+                Button ok = customDialog.findViewById(R.id.BtnOkErorInput);
+                TextView tv = customDialog.findViewById(R.id.TVDialogErorInput);
+
+                tv.setText("Akses Galeri Ditolak");
+
+                ok.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        customDialog.dismiss();
+                    }
+                });
+
+                ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
+
+                Glide.with(TambahListingActivity.this)
+                        .load(R.drawable.alert) // You can also use a local resource like R.drawable.your_gif_resource
+                        .transition(DrawableTransitionOptions.withCrossFade())
+                        .into(gifImageView);
+
+                customDialog.show();
+            }
+
+            return;
         } else if (requestCode == CODE_CAMERA_REQUEST) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 bukaKamera();
@@ -1395,6 +1595,34 @@ public class TambahListingActivity extends AppCompatActivity {
             }
 
             return;
+        } else if (requestCode == CODE_CAMERA_REQUEST_PJP) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                bukaKameraPjp();
+            } else {
+                AlertDialog.Builder builder = new AlertDialog.Builder(TambahListingActivity.this);
+                builder.setTitle("Izin Kamera Ditolak").
+                        setMessage("Aplikasi memerlukan izin kamera untuk mengambil gambar.");
+                builder.setPositiveButton("OK",
+                        (dialog, id) -> dialog.cancel());
+                AlertDialog alert = builder.create();
+                alert.show();
+            }
+
+            return;
+        } else if (requestCode == CODE_CAMERA_REQUEST_PJP1) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                bukaKameraPjp1();
+            } else {
+                AlertDialog.Builder builder = new AlertDialog.Builder(TambahListingActivity.this);
+                builder.setTitle("Izin Kamera Ditolak").
+                        setMessage("Aplikasi memerlukan izin kamera untuk mengambil gambar.");
+                builder.setPositiveButton("OK",
+                        (dialog, id) -> dialog.cancel());
+                AlertDialog alert = builder.create();
+                alert.show();
+            }
+
+            return;
         }
 
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -1409,7 +1637,6 @@ public class TambahListingActivity extends AppCompatActivity {
                 latitudeStr = data.getStringExtra("latitude");
                 longitudeStr = data.getStringExtra("longitude");
                 addressStr = data.getStringExtra("address");
-                alamatproperti.setText(addressStr);
             }
         }
 
@@ -1421,36 +1648,131 @@ public class TambahListingActivity extends AppCompatActivity {
                     bitmap1 = BitmapFactory.decodeStream(inputStream);
                     lyt1.setVisibility(View.VISIBLE);
                     iv1.setImageBitmap(bitmap1);
+                    int opacity = 128;
+                    int watermarkWidth = (int)(bitmap1.getWidth() * 0.2);
+                    int watermarkHeight = (int)(bitmap1.getHeight() * 0.1);
+                    Bitmap scaledWatermark = Bitmap.createScaledBitmap(BitmapWatermark, watermarkWidth, watermarkHeight, true);
+                    int x = (bitmap1.getWidth() - scaledWatermark.getWidth()) / 3;
+                    int y = (bitmap1.getHeight() - scaledWatermark.getHeight()) / 2;
+                    bitmap1 = bitmap1.copy(Bitmap.Config.ARGB_8888, true);
+                    Canvas canvas = new Canvas(bitmap1);
+                    Paint paint = new Paint();
+                    paint.setAlpha(opacity);
+                    canvas.drawBitmap(scaledWatermark, x, y, paint);
+                    iv1.setImageBitmap(bitmap1);
                 } else if (bitmap2 == null) {
                     bitmap2 = BitmapFactory.decodeStream(inputStream);
                     lyt2.setVisibility(View.VISIBLE);
+                    iv2.setImageBitmap(bitmap2);
+                    int opacity = 128;
+                    int watermarkWidth = (int)(bitmap2.getWidth() * 0.2);
+                    int watermarkHeight = (int)(bitmap2.getHeight() * 0.1);
+                    Bitmap scaledWatermark = Bitmap.createScaledBitmap(BitmapWatermark, watermarkWidth, watermarkHeight, true);
+                    int x = (bitmap2.getWidth() - scaledWatermark.getWidth()) / 3;
+                    int y = (bitmap2.getHeight() - scaledWatermark.getHeight()) / 2;
+                    bitmap2 = bitmap2.copy(Bitmap.Config.ARGB_8888, true);
+                    Canvas canvas = new Canvas(bitmap2);
+                    Paint paint = new Paint();
+                    paint.setAlpha(opacity);
+                    canvas.drawBitmap(scaledWatermark, x, y, paint);
                     iv2.setImageBitmap(bitmap2);
                 } else if (bitmap3 == null) {
                     bitmap3 = BitmapFactory.decodeStream(inputStream);
                     lyt3.setVisibility(View.VISIBLE);
                     iv3.setImageBitmap(bitmap3);
+                    int opacity = 128;
+                    int watermarkWidth = (int)(bitmap3.getWidth() * 0.2);
+                    int watermarkHeight = (int)(bitmap3.getHeight() * 0.1);
+                    Bitmap scaledWatermark = Bitmap.createScaledBitmap(BitmapWatermark, watermarkWidth, watermarkHeight, true);
+                    int x = (bitmap3.getWidth() - scaledWatermark.getWidth()) / 3;
+                    int y = (bitmap3.getHeight() - scaledWatermark.getHeight()) / 2;
+                    bitmap3 = bitmap3.copy(Bitmap.Config.ARGB_8888, true);
+                    Canvas canvas = new Canvas(bitmap3);
+                    Paint paint = new Paint();
+                    paint.setAlpha(opacity);
+                    canvas.drawBitmap(scaledWatermark, x, y, paint);
+                    iv3.setImageBitmap(bitmap3);
                 } else if (bitmap4 == null) {
                     bitmap4 = BitmapFactory.decodeStream(inputStream);
                     lyt4.setVisibility(View.VISIBLE);
+                    iv4.setImageBitmap(bitmap4);
+                    int opacity = 128;
+                    int watermarkWidth = (int)(bitmap4.getWidth() * 0.2);
+                    int watermarkHeight = (int)(bitmap4.getHeight() * 0.1);
+                    Bitmap scaledWatermark = Bitmap.createScaledBitmap(BitmapWatermark, watermarkWidth, watermarkHeight, true);
+                    int x = (bitmap4.getWidth() - scaledWatermark.getWidth()) / 3;
+                    int y = (bitmap4.getHeight() - scaledWatermark.getHeight()) / 2;
+                    bitmap4 = bitmap4.copy(Bitmap.Config.ARGB_8888, true);
+                    Canvas canvas = new Canvas(bitmap4);
+                    Paint paint = new Paint();
+                    paint.setAlpha(opacity);
+                    canvas.drawBitmap(scaledWatermark, x, y, paint);
                     iv4.setImageBitmap(bitmap4);
                 } else if (bitmap5 == null) {
                     bitmap5 = BitmapFactory.decodeStream(inputStream);
                     lyt5.setVisibility(View.VISIBLE);
                     iv5.setImageBitmap(bitmap5);
+                    int opacity = 128;
+                    int watermarkWidth = (int)(bitmap5.getWidth() * 0.2);
+                    int watermarkHeight = (int)(bitmap5.getHeight() * 0.1);
+                    Bitmap scaledWatermark = Bitmap.createScaledBitmap(BitmapWatermark, watermarkWidth, watermarkHeight, true);
+                    int x = (bitmap5.getWidth() - scaledWatermark.getWidth()) / 3;
+                    int y = (bitmap5.getHeight() - scaledWatermark.getHeight()) / 2;
+                    bitmap5 = bitmap5.copy(Bitmap.Config.ARGB_8888, true);
+                    Canvas canvas = new Canvas(bitmap5);
+                    Paint paint = new Paint();
+                    paint.setAlpha(opacity);
+                    canvas.drawBitmap(scaledWatermark, x, y, paint);
+                    iv5.setImageBitmap(bitmap5);
                 } else if (bitmap6 == null) {
                     bitmap6 = BitmapFactory.decodeStream(inputStream);
                     lyt6.setVisibility(View.VISIBLE);
+                    iv6.setImageBitmap(bitmap6);
+                    int opacity = 128;
+                    int watermarkWidth = (int)(bitmap6.getWidth() * 0.2);
+                    int watermarkHeight = (int)(bitmap6.getHeight() * 0.1);
+                    Bitmap scaledWatermark = Bitmap.createScaledBitmap(BitmapWatermark, watermarkWidth, watermarkHeight, true);
+                    int x = (bitmap6.getWidth() - scaledWatermark.getWidth()) / 3;
+                    int y = (bitmap6.getHeight() - scaledWatermark.getHeight()) / 2;
+                    bitmap6 = bitmap6.copy(Bitmap.Config.ARGB_8888, true);
+                    Canvas canvas = new Canvas(bitmap6);
+                    Paint paint = new Paint();
+                    paint.setAlpha(opacity);
+                    canvas.drawBitmap(scaledWatermark, x, y, paint);
                     iv6.setImageBitmap(bitmap6);
                 } else if (bitmap7 == null) {
                     bitmap7 = BitmapFactory.decodeStream(inputStream);
                     lyt7.setVisibility(View.VISIBLE);
                     iv7.setImageBitmap(bitmap7);
+                    int opacity = 128;
+                    int watermarkWidth = (int)(bitmap7.getWidth() * 0.2);
+                    int watermarkHeight = (int)(bitmap7.getHeight() * 0.1);
+                    Bitmap scaledWatermark = Bitmap.createScaledBitmap(BitmapWatermark, watermarkWidth, watermarkHeight, true);
+                    int x = (bitmap7.getWidth() - scaledWatermark.getWidth()) / 3;
+                    int y = (bitmap7.getHeight() - scaledWatermark.getHeight()) / 2;
+                    bitmap7 = bitmap7.copy(Bitmap.Config.ARGB_8888, true);
+                    Canvas canvas = new Canvas(bitmap7);
+                    Paint paint = new Paint();
+                    paint.setAlpha(opacity);
+                    canvas.drawBitmap(scaledWatermark, x, y, paint);
+                    iv7.setImageBitmap(bitmap7);
                 } else if (bitmap8 == null) {
                     bitmap8 = BitmapFactory.decodeStream(inputStream);
                     lyt8.setVisibility(View.VISIBLE);
                     iv8.setImageBitmap(bitmap8);
+                    int opacity = 128;
+                    int watermarkWidth = (int)(bitmap8.getWidth() * 0.2);
+                    int watermarkHeight = (int)(bitmap8.getHeight() * 0.1);
+                    Bitmap scaledWatermark = Bitmap.createScaledBitmap(BitmapWatermark, watermarkWidth, watermarkHeight, true);
+                    int x = (bitmap8.getWidth() - scaledWatermark.getWidth()) / 3;
+                    int y = (bitmap8.getHeight() - scaledWatermark.getHeight()) / 2;
+                    bitmap8 = bitmap8.copy(Bitmap.Config.ARGB_8888, true);
+                    Canvas canvas = new Canvas(bitmap8);
+                    Paint paint = new Paint();
+                    paint.setAlpha(opacity);
+                    canvas.drawBitmap(scaledWatermark, x, y, paint);
+                    iv8.setImageBitmap(bitmap8);
                 } else {
-
                     select.setVisibility(View.GONE);
                 }
             } catch (FileNotFoundException e) {
@@ -1462,7 +1784,9 @@ public class TambahListingActivity extends AppCompatActivity {
                 InputStream inputStream = getContentResolver().openInputStream(filePath);
                 if (bitmapSHM == null) {
                     bitmapSHM = BitmapFactory.decodeStream(inputStream);
-                    //IVShm.setImageBitmap(bitmapSHM);
+                    IVShm.setImageBitmap(bitmapSHM);
+                    LytSHM.setVisibility(View.VISIBLE);
+                    BtnSHM.setVisibility(View.GONE);
                 }
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
@@ -1473,7 +1797,9 @@ public class TambahListingActivity extends AppCompatActivity {
                 InputStream inputStream = getContentResolver().openInputStream(filePath);
                 if (bitmapHGB == null) {
                     bitmapHGB = BitmapFactory.decodeStream(inputStream);
-                    //IVHgb.setImageBitmap(bitmapHGB);
+                    IVHgb.setImageBitmap(bitmapHGB);
+                    LytHGB.setVisibility(View.VISIBLE);
+                    BtnHGB.setVisibility(View.GONE);
                 }
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
@@ -1484,7 +1810,9 @@ public class TambahListingActivity extends AppCompatActivity {
                 InputStream inputStream = getContentResolver().openInputStream(filePath);
                 if (bitmapHSHP == null) {
                     bitmapHSHP = BitmapFactory.decodeStream(inputStream);
-                    //IVHshp.setImageBitmap(bitmapHSHP);
+                    IVHshp.setImageBitmap(bitmapHSHP);
+                    LytHSHP.setVisibility(View.VISIBLE);
+                    BtnHSHP.setVisibility(View.GONE);
                 }
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
@@ -1495,7 +1823,9 @@ public class TambahListingActivity extends AppCompatActivity {
                 InputStream inputStream = getContentResolver().openInputStream(filePath);
                 if (bitmapPPJB == null) {
                     bitmapPPJB = BitmapFactory.decodeStream(inputStream);
-                    //IVPpjb.setImageBitmap(bitmapPPJB);
+                    IVPpjb.setImageBitmap(bitmapPPJB);
+                    LytPPJB.setVisibility(View.VISIBLE);
+                    BtnPPJB.setVisibility(View.GONE);
                 }
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
@@ -1506,7 +1836,35 @@ public class TambahListingActivity extends AppCompatActivity {
                 InputStream inputStream = getContentResolver().openInputStream(filePath);
                 if (bitmapSTRA == null) {
                     bitmapSTRA = BitmapFactory.decodeStream(inputStream);
-                    //IVStratatitle.setImageBitmap(bitmapSTRA);
+                    IVStratatitle.setImageBitmap(bitmapSTRA);
+                    LytStratatitle.setVisibility(View.VISIBLE);
+                    BtnSTRA.setVisibility(View.GONE);
+                }
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+        } else if (requestCode == CODE_GALLERY_REQUEST_PJP && resultCode == RESULT_OK && data != null) {
+            Uri filePath = data.getData();
+            try {
+                InputStream inputStream = getContentResolver().openInputStream(filePath);
+                if (BitmapPjp == null) {
+                    BitmapPjp = BitmapFactory.decodeStream(inputStream);
+                    IVPjp.setImageBitmap(BitmapPjp);
+                    LytPjp.setVisibility(View.VISIBLE);
+                    BtnPjp.setVisibility(View.GONE);
+                }
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+        } else if (requestCode == CODE_GALLERY_REQUEST_PJP1 && resultCode == RESULT_OK && data != null) {
+            Uri filePath = data.getData();
+            try {
+                InputStream inputStream = getContentResolver().openInputStream(filePath);
+                if (BitmapPjp1 == null) {
+                    BitmapPjp1 = BitmapFactory.decodeStream(inputStream);
+                    IVPjp1.setImageBitmap(BitmapPjp1);
+                    LytPjp1.setVisibility(View.VISIBLE);
+                    BtnPjp1.setVisibility(View.GONE);
                 }
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
@@ -1521,36 +1879,131 @@ public class TambahListingActivity extends AppCompatActivity {
                             bitmap1 = BitmapFactory.decodeStream(inputStream);
                             lyt1.setVisibility(View.VISIBLE);
                             iv1.setImageBitmap(bitmap1);
+                            int opacity = 128;
+                            int watermarkWidth = (int)(bitmap1.getWidth() * 0.2);
+                            int watermarkHeight = (int)(bitmap1.getHeight() * 0.1);
+                            Bitmap scaledWatermark = Bitmap.createScaledBitmap(BitmapWatermark, watermarkWidth, watermarkHeight, true);
+                            int x = (bitmap1.getWidth() - scaledWatermark.getWidth()) / 3;
+                            int y = (bitmap1.getHeight() - scaledWatermark.getHeight()) / 2;
+                            bitmap1 = bitmap1.copy(Bitmap.Config.ARGB_8888, true);
+                            Canvas canvas = new Canvas(bitmap1);
+                            Paint paint = new Paint();
+                            paint.setAlpha(opacity);
+                            canvas.drawBitmap(scaledWatermark, x, y, paint);
+                            iv1.setImageBitmap(bitmap1);
                         } else if (bitmap2 == null) {
                             bitmap2 = BitmapFactory.decodeStream(inputStream);
                             lyt2.setVisibility(View.VISIBLE);
+                            iv2.setImageBitmap(bitmap2);
+                            int opacity = 128;
+                            int watermarkWidth = (int)(bitmap2.getWidth() * 0.2);
+                            int watermarkHeight = (int)(bitmap2.getHeight() * 0.1);
+                            Bitmap scaledWatermark = Bitmap.createScaledBitmap(BitmapWatermark, watermarkWidth, watermarkHeight, true);
+                            int x = (bitmap2.getWidth() - scaledWatermark.getWidth()) / 3;
+                            int y = (bitmap2.getHeight() - scaledWatermark.getHeight()) / 2;
+                            bitmap2 = bitmap2.copy(Bitmap.Config.ARGB_8888, true);
+                            Canvas canvas = new Canvas(bitmap2);
+                            Paint paint = new Paint();
+                            paint.setAlpha(opacity);
+                            canvas.drawBitmap(scaledWatermark, x, y, paint);
                             iv2.setImageBitmap(bitmap2);
                         } else if (bitmap3 == null) {
                             bitmap3 = BitmapFactory.decodeStream(inputStream);
                             lyt3.setVisibility(View.VISIBLE);
                             iv3.setImageBitmap(bitmap3);
+                            int opacity = 128;
+                            int watermarkWidth = (int)(bitmap3.getWidth() * 0.2);
+                            int watermarkHeight = (int)(bitmap3.getHeight() * 0.1);
+                            Bitmap scaledWatermark = Bitmap.createScaledBitmap(BitmapWatermark, watermarkWidth, watermarkHeight, true);
+                            int x = (bitmap3.getWidth() - scaledWatermark.getWidth()) / 3;
+                            int y = (bitmap3.getHeight() - scaledWatermark.getHeight()) / 2;
+                            bitmap3 = bitmap3.copy(Bitmap.Config.ARGB_8888, true);
+                            Canvas canvas = new Canvas(bitmap3);
+                            Paint paint = new Paint();
+                            paint.setAlpha(opacity);
+                            canvas.drawBitmap(scaledWatermark, x, y, paint);
+                            iv3.setImageBitmap(bitmap3);
                         } else if (bitmap4 == null) {
                             bitmap4 = BitmapFactory.decodeStream(inputStream);
                             lyt4.setVisibility(View.VISIBLE);
+                            iv4.setImageBitmap(bitmap4);
+                            int opacity = 128;
+                            int watermarkWidth = (int)(bitmap4.getWidth() * 0.2);
+                            int watermarkHeight = (int)(bitmap4.getHeight() * 0.1);
+                            Bitmap scaledWatermark = Bitmap.createScaledBitmap(BitmapWatermark, watermarkWidth, watermarkHeight, true);
+                            int x = (bitmap4.getWidth() - scaledWatermark.getWidth()) / 3;
+                            int y = (bitmap4.getHeight() - scaledWatermark.getHeight()) / 2;
+                            bitmap4 = bitmap4.copy(Bitmap.Config.ARGB_8888, true);
+                            Canvas canvas = new Canvas(bitmap4);
+                            Paint paint = new Paint();
+                            paint.setAlpha(opacity);
+                            canvas.drawBitmap(scaledWatermark, x, y, paint);
                             iv4.setImageBitmap(bitmap4);
                         } else if (bitmap5 == null) {
                             bitmap5 = BitmapFactory.decodeStream(inputStream);
                             lyt5.setVisibility(View.VISIBLE);
                             iv5.setImageBitmap(bitmap5);
+                            int opacity = 128;
+                            int watermarkWidth = (int)(bitmap5.getWidth() * 0.2);
+                            int watermarkHeight = (int)(bitmap5.getHeight() * 0.1);
+                            Bitmap scaledWatermark = Bitmap.createScaledBitmap(BitmapWatermark, watermarkWidth, watermarkHeight, true);
+                            int x = (bitmap5.getWidth() - scaledWatermark.getWidth()) / 3;
+                            int y = (bitmap5.getHeight() - scaledWatermark.getHeight()) / 2;
+                            bitmap5 = bitmap5.copy(Bitmap.Config.ARGB_8888, true);
+                            Canvas canvas = new Canvas(bitmap5);
+                            Paint paint = new Paint();
+                            paint.setAlpha(opacity);
+                            canvas.drawBitmap(scaledWatermark, x, y, paint);
+                            iv5.setImageBitmap(bitmap5);
                         } else if (bitmap6 == null) {
                             bitmap6 = BitmapFactory.decodeStream(inputStream);
                             lyt6.setVisibility(View.VISIBLE);
+                            iv6.setImageBitmap(bitmap6);
+                            int opacity = 128;
+                            int watermarkWidth = (int)(bitmap6.getWidth() * 0.2);
+                            int watermarkHeight = (int)(bitmap6.getHeight() * 0.1);
+                            Bitmap scaledWatermark = Bitmap.createScaledBitmap(BitmapWatermark, watermarkWidth, watermarkHeight, true);
+                            int x = (bitmap6.getWidth() - scaledWatermark.getWidth()) / 3;
+                            int y = (bitmap6.getHeight() - scaledWatermark.getHeight()) / 2;
+                            bitmap6 = bitmap6.copy(Bitmap.Config.ARGB_8888, true);
+                            Canvas canvas = new Canvas(bitmap6);
+                            Paint paint = new Paint();
+                            paint.setAlpha(opacity);
+                            canvas.drawBitmap(scaledWatermark, x, y, paint);
                             iv6.setImageBitmap(bitmap6);
                         } else if (bitmap7 == null) {
                             bitmap7 = BitmapFactory.decodeStream(inputStream);
                             lyt7.setVisibility(View.VISIBLE);
                             iv7.setImageBitmap(bitmap7);
+                            int opacity = 128;
+                            int watermarkWidth = (int)(bitmap7.getWidth() * 0.2);
+                            int watermarkHeight = (int)(bitmap7.getHeight() * 0.1);
+                            Bitmap scaledWatermark = Bitmap.createScaledBitmap(BitmapWatermark, watermarkWidth, watermarkHeight, true);
+                            int x = (bitmap7.getWidth() - scaledWatermark.getWidth()) / 3;
+                            int y = (bitmap7.getHeight() - scaledWatermark.getHeight()) / 2;
+                            bitmap7 = bitmap7.copy(Bitmap.Config.ARGB_8888, true);
+                            Canvas canvas = new Canvas(bitmap7);
+                            Paint paint = new Paint();
+                            paint.setAlpha(opacity);
+                            canvas.drawBitmap(scaledWatermark, x, y, paint);
+                            iv7.setImageBitmap(bitmap7);
                         } else if (bitmap8 == null) {
                             bitmap8 = BitmapFactory.decodeStream(inputStream);
                             lyt8.setVisibility(View.VISIBLE);
                             iv8.setImageBitmap(bitmap8);
+                            int opacity = 128;
+                            int watermarkWidth = (int)(bitmap8.getWidth() * 0.2);
+                            int watermarkHeight = (int)(bitmap8.getHeight() * 0.1);
+                            Bitmap scaledWatermark = Bitmap.createScaledBitmap(BitmapWatermark, watermarkWidth, watermarkHeight, true);
+                            int x = (bitmap8.getWidth() - scaledWatermark.getWidth()) / 3;
+                            int y = (bitmap8.getHeight() - scaledWatermark.getHeight()) / 2;
+                            bitmap8 = bitmap8.copy(Bitmap.Config.ARGB_8888, true);
+                            Canvas canvas = new Canvas(bitmap8);
+                            Paint paint = new Paint();
+                            paint.setAlpha(opacity);
+                            canvas.drawBitmap(scaledWatermark, x, y, paint);
+                            iv8.setImageBitmap(bitmap8);
                         } else {
-
                             select.setVisibility(View.GONE);
                         }
                     } catch (FileNotFoundException e) {
@@ -1565,7 +2018,9 @@ public class TambahListingActivity extends AppCompatActivity {
                     try {
                         InputStream inputStream = getContentResolver().openInputStream(getImageUri(this, imageBitmap));
                         bitmapSHM = BitmapFactory.decodeStream(inputStream);
-                        //IVShm.setImageBitmap(bitmapSHM);
+                        IVShm.setImageBitmap(bitmapSHM);
+                        LytSHM.setVisibility(View.VISIBLE);
+                        BtnSHM.setVisibility(View.GONE);
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
                     }
@@ -1578,7 +2033,9 @@ public class TambahListingActivity extends AppCompatActivity {
                     try {
                         InputStream inputStream = getContentResolver().openInputStream(getImageUri(this, imageBitmap));
                         bitmapHGB = BitmapFactory.decodeStream(inputStream);
-                        //IVHgb.setImageBitmap(bitmapHGB);
+                        IVHgb.setImageBitmap(bitmapHGB);
+                        LytHGB.setVisibility(View.VISIBLE);
+                        BtnHGB.setVisibility(View.GONE);
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
                     }
@@ -1591,7 +2048,9 @@ public class TambahListingActivity extends AppCompatActivity {
                     try {
                         InputStream inputStream = getContentResolver().openInputStream(getImageUri(this, imageBitmap));
                         bitmapHSHP = BitmapFactory.decodeStream(inputStream);
-                        //IVHshp.setImageBitmap(bitmapHSHP);
+                        IVHshp.setImageBitmap(bitmapHSHP);
+                        LytHSHP.setVisibility(View.VISIBLE);
+                        BtnHSHP.setVisibility(View.GONE);
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
                     }
@@ -1604,7 +2063,9 @@ public class TambahListingActivity extends AppCompatActivity {
                     try {
                         InputStream inputStream = getContentResolver().openInputStream(getImageUri(this, imageBitmap));
                         bitmapPPJB = BitmapFactory.decodeStream(inputStream);
-                        //IVPpjb.setImageBitmap(bitmapPPJB);
+                        IVPpjb.setImageBitmap(bitmapPPJB);
+                        LytPPJB.setVisibility(View.VISIBLE);
+                        BtnPPJB.setVisibility(View.GONE);
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
                     }
@@ -1617,7 +2078,39 @@ public class TambahListingActivity extends AppCompatActivity {
                     try {
                         InputStream inputStream = getContentResolver().openInputStream(getImageUri(this, imageBitmap));
                         bitmapSTRA = BitmapFactory.decodeStream(inputStream);
-                        //IVStratatitle.setImageBitmap(bitmapSTRA);
+                        IVStratatitle.setImageBitmap(bitmapSTRA);
+                        LytStratatitle.setVisibility(View.VISIBLE);
+                        BtnSTRA.setVisibility(View.GONE);
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        } else if (requestCode == KODE_REQUEST_KAMERA_PJP && resultCode == RESULT_OK) {
+            if (data != null && data.getExtras() != null) {
+                Bitmap imageBitmap = (Bitmap) data.getExtras().get("data");
+                if (imageBitmap != null) {
+                    try {
+                        InputStream inputStream = getContentResolver().openInputStream(getImageUri(this, imageBitmap));
+                        BitmapPjp = BitmapFactory.decodeStream(inputStream);
+                        IVPjp.setImageBitmap(BitmapPjp);
+                        LytPjp.setVisibility(View.VISIBLE);
+                        BtnPjp.setVisibility(View.GONE);
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        } else if (requestCode == KODE_REQUEST_KAMERA_PJP1 && resultCode == RESULT_OK) {
+            if (data != null && data.getExtras() != null) {
+                Bitmap imageBitmap = (Bitmap) data.getExtras().get("data");
+                if (imageBitmap != null) {
+                    try {
+                        InputStream inputStream = getContentResolver().openInputStream(getImageUri(this, imageBitmap));
+                        BitmapPjp1 = BitmapFactory.decodeStream(inputStream);
+                        IVPjp1.setImageBitmap(BitmapPjp1);
+                        LytPjp1.setVisibility(View.VISIBLE);
+                        BtnPjp1.setVisibility(View.GONE);
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
                     }
@@ -1717,6 +2210,69 @@ public class TambahListingActivity extends AppCompatActivity {
         }
     }
 
+    private void clearBitmapSHM() {
+        if (bitmapSHM != null && !bitmapSHM.isRecycled()) {
+            bitmapSHM.recycle();
+            bitmapSHM = null;
+            LytSHM.setVisibility(View.GONE);
+            BtnSHM.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void clearBitmapHGB() {
+        if (bitmapHGB != null && !bitmapHGB.isRecycled()) {
+            bitmapHGB.recycle();
+            bitmapHGB = null;
+            LytHGB.setVisibility(View.GONE);
+            BtnHGB.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void clearBitmapHSHP() {
+        if (bitmapHSHP != null && !bitmapHSHP.isRecycled()) {
+            bitmapHSHP.recycle();
+            bitmapHSHP = null;
+            LytHSHP.setVisibility(View.GONE);
+            BtnHSHP.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void clearBitmapPPJB() {
+        if (bitmapPPJB != null && !bitmapPPJB.isRecycled()) {
+            bitmapPPJB.recycle();
+            bitmapPPJB = null;
+            LytPPJB.setVisibility(View.GONE);
+            BtnPPJB.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void clearBitmapSTRA() {
+        if (bitmapSTRA != null && !bitmapSTRA.isRecycled()) {
+            bitmapSTRA.recycle();
+            bitmapSTRA = null;
+            LytStratatitle.setVisibility(View.GONE);
+            BtnSTRA.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void clearBitmapPJP() {
+        if (BitmapPjp != null && !BitmapPjp.isRecycled()) {
+            BitmapPjp.recycle();
+            BitmapPjp = null;
+            LytPjp.setVisibility(View.GONE);
+            BtnPjp.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void clearBitmapPJP1() {
+        if (BitmapPjp1 != null && !BitmapPjp1.isRecycled()) {
+            BitmapPjp1.recycle();
+            BitmapPjp1 = null;
+            LytPjp1.setVisibility(View.GONE);
+            BtnPjp1.setVisibility(View.VISIBLE);
+        }
+    }
+
     private void simpanData() {
         pDialog.setMessage("Menyimpan Data");
         pDialog.setCancelable(false);
@@ -1729,36 +2285,70 @@ public class TambahListingActivity extends AppCompatActivity {
                         pDialog.cancel();
                         try {
                             JSONObject res = new JSONObject(response);
-                            Dialog customDialog = new Dialog(TambahListingActivity.this);
-                            customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                            customDialog.setContentView(R.layout.custom_dialog_sukses);
+                            String status = res.getString("Status");
+                            if (status.equals("Sukses")){
+                                Dialog customDialog = new Dialog(TambahListingActivity.this);
+                                customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                                customDialog.setContentView(R.layout.custom_dialog_sukses);
 
-                            if (customDialog.getWindow() != null) {
-                                customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-                            }
-
-                            TextView dialogTitle = customDialog.findViewById(R.id.dialog_title);
-                            Button ok = customDialog.findViewById(R.id.btnya);
-                            Button cobalagi = customDialog.findViewById(R.id.btntidak);
-                            ImageView gifimage = customDialog.findViewById(R.id.ivdialog);
-
-                            dialogTitle.setText("Berhasil Menambahkan Listingan");
-                            cobalagi.setVisibility(View.GONE);
-
-                            ok.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    customDialog.dismiss();
-                                    finish();
+                                if (customDialog.getWindow() != null) {
+                                    customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
                                 }
-                            });
 
-                            Glide.with(TambahListingActivity.this)
-                                    .load(R.mipmap.ic_yes) // You can also use a local resource like R.drawable.your_gif_resource
-                                    .transition(DrawableTransitionOptions.withCrossFade())
-                                    .into(gifimage);
+                                TextView dialogTitle = customDialog.findViewById(R.id.dialog_title);
+                                Button ok = customDialog.findViewById(R.id.btnya);
+                                Button cobalagi = customDialog.findViewById(R.id.btntidak);
+                                ImageView gifimage = customDialog.findViewById(R.id.ivdialog);
 
-                            customDialog.show();
+                                dialogTitle.setText("Berhasil Menambahkan Listingan");
+                                cobalagi.setVisibility(View.GONE);
+
+                                ok.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        customDialog.dismiss();
+                                        finish();
+                                    }
+                                });
+
+                                Glide.with(TambahListingActivity.this)
+                                        .load(R.mipmap.ic_yes) // You can also use a local resource like R.drawable.your_gif_resource
+                                        .transition(DrawableTransitionOptions.withCrossFade())
+                                        .into(gifimage);
+
+                                customDialog.show();
+                            } else if (status.equals("Error")) {
+                                Dialog customDialog = new Dialog(TambahListingActivity.this);
+                                customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                                customDialog.setContentView(R.layout.custom_dialog_sukses);
+
+                                if (customDialog.getWindow() != null) {
+                                    customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                                }
+
+                                TextView dialogTitle = customDialog.findViewById(R.id.dialog_title);
+                                Button ok = customDialog.findViewById(R.id.btnya);
+                                Button cobalagi = customDialog.findViewById(R.id.btntidak);
+                                ImageView gifimage = customDialog.findViewById(R.id.ivdialog);
+
+                                dialogTitle.setText("Gagal Menambahkan Listingan");
+                                ok.setVisibility(View.GONE);
+
+                                cobalagi.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        customDialog.dismiss();
+                                        finish();
+                                    }
+                                });
+
+                                Glide.with(TambahListingActivity.this)
+                                        .load(R.mipmap.ic_no) // You can also use a local resource like R.drawable.your_gif_resource
+                                        .transition(DrawableTransitionOptions.withCrossFade())
+                                        .into(gifimage);
+
+                                customDialog.show();
+                            }
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -1781,7 +2371,7 @@ public class TambahListingActivity extends AppCompatActivity {
                         Button cobalagi = customDialog.findViewById(R.id.btntidak);
                         ImageView gifimage = customDialog.findViewById(R.id.ivdialog);
 
-                        dialogTitle.setText("Gagal Tambah Listingan");
+                        dialogTitle.setText("Terdapat Masalah Jaringan");
                         ok.setVisibility(View.GONE);
 
                         cobalagi.setOnClickListener(new View.OnClickListener() {
@@ -1792,7 +2382,7 @@ public class TambahListingActivity extends AppCompatActivity {
                         });
 
                         Glide.with(TambahListingActivity.this)
-                                .load(R.mipmap.ic_no) // You can also use a local resource like R.drawable.your_gif_resource
+                                .load(R.mipmap.ic_eror_network_foreground) // You can also use a local resource like R.drawable.your_gif_resource
                                 .transition(DrawableTransitionOptions.withCrossFade())
                                 .into(gifimage);
 
@@ -1872,6 +2462,26 @@ public class TambahListingActivity extends AppCompatActivity {
                 } else {
                     STRA = imageToString(bitmapSTRA);
                 }
+                if (BitmapPjp == null) {
+                    PJPHal1 = "0";
+                } else {
+                    PJPHal1 = imageToString(BitmapPjp);
+                }
+                if (BitmapPjp1 == null) {
+                    PJPHal2 = "0";
+                } else {
+                    PJPHal2 = imageToString(BitmapPjp1);
+                }
+                if (latitudeStr == null) {
+                    Lat = "0";
+                } else {
+                    Lat = latitudeStr;
+                }
+                if (longitudeStr == null) {
+                    Lng = "0";
+                } else {
+                    Lng = longitudeStr;
+                }
 
                 final String StringSHM = CBSHM.isChecked() ? "1" : "0";
                 final String StringHGB = CBHGB.isChecked() ? "1" : "0";
@@ -1888,11 +2498,12 @@ public class TambahListingActivity extends AppCompatActivity {
                 map.put("Bank", bank.getText().toString());
                 map.put("AtasNama", atasnama.getText().toString());
                 map.put("IdAgen", idnull);
+                map.put("IdAgenCo", idnull);
                 map.put("IdInput", idnull);
                 map.put("NamaListing", namaproperti.getText().toString());
                 map.put("Alamat", alamatproperti.getText().toString());
-                map.put("Latitude", latitudeStr);
-                map.put("Longitude", longitudeStr);
+                map.put("Latitude", Lat);
+                map.put("Longitude", Lng);
                 map.put("Location", alamatproperti.getText().toString());
                 map.put("Wide", luas.getText().toString());
                 map.put("Land", land.getText().toString());
@@ -1915,6 +2526,8 @@ public class TambahListingActivity extends AppCompatActivity {
                 map.put("ImgHSHP", HSHP);
                 map.put("ImgPPJB", PPJB);
                 map.put("ImgStratatitle", STRA);
+                map.put("ImgPjp", PJPHal1);
+                map.put("ImgPjp1", PJPHal2);
                 map.put("JenisProperti", jenisproperti.getText().toString());
                 map.put("SumberAir", air.getText().toString());
                 map.put("Kondisi", status.getText().toString());
@@ -1925,7 +2538,8 @@ public class TambahListingActivity extends AppCompatActivity {
                 map.put("Banner", banner.getText().toString());
                 map.put("Size", size.getText().toString());
                 map.put("Harga", harga.getText().toString());
-                map.put("TglInput", idnull);
+                map.put("HargaSewa", hargasewa.getText().toString());
+                map.put("TglInput", EtTglInput.getText().toString());
                 map.put("Img1", image1);
                 map.put("Img2", image2);
                 map.put("Img3", image3);
@@ -1961,36 +2575,70 @@ public class TambahListingActivity extends AppCompatActivity {
                         pDialog.cancel();
                         try {
                             JSONObject res = new JSONObject(response);
-                            Dialog customDialog = new Dialog(TambahListingActivity.this);
-                            customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                            customDialog.setContentView(R.layout.custom_dialog_sukses);
+                            String status = res.getString("Status");
+                            if (status.equals("Sukses")){
+                                Dialog customDialog = new Dialog(TambahListingActivity.this);
+                                customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                                customDialog.setContentView(R.layout.custom_dialog_sukses);
 
-                            if (customDialog.getWindow() != null) {
-                                customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-                            }
-
-                            TextView dialogTitle = customDialog.findViewById(R.id.dialog_title);
-                            Button ok = customDialog.findViewById(R.id.btnya);
-                            Button cobalagi = customDialog.findViewById(R.id.btntidak);
-                            ImageView gifimage = customDialog.findViewById(R.id.ivdialog);
-
-                            dialogTitle.setText("Berhasil Menambahkan Listingan");
-                            cobalagi.setVisibility(View.GONE);
-
-                            ok.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    customDialog.dismiss();
-                                    finish();
+                                if (customDialog.getWindow() != null) {
+                                    customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
                                 }
-                            });
 
-                            Glide.with(TambahListingActivity.this)
-                                    .load(R.mipmap.ic_yes) // You can also use a local resource like R.drawable.your_gif_resource
-                                    .transition(DrawableTransitionOptions.withCrossFade())
-                                    .into(gifimage);
+                                TextView dialogTitle = customDialog.findViewById(R.id.dialog_title);
+                                Button ok = customDialog.findViewById(R.id.btnya);
+                                Button cobalagi = customDialog.findViewById(R.id.btntidak);
+                                ImageView gifimage = customDialog.findViewById(R.id.ivdialog);
 
-                            customDialog.show();
+                                dialogTitle.setText("Berhasil Menambahkan Listingan");
+                                cobalagi.setVisibility(View.GONE);
+
+                                ok.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        customDialog.dismiss();
+                                        finish();
+                                    }
+                                });
+
+                                Glide.with(TambahListingActivity.this)
+                                        .load(R.mipmap.ic_yes) // You can also use a local resource like R.drawable.your_gif_resource
+                                        .transition(DrawableTransitionOptions.withCrossFade())
+                                        .into(gifimage);
+
+                                customDialog.show();
+                            } else if (status.equals("Error")) {
+                                Dialog customDialog = new Dialog(TambahListingActivity.this);
+                                customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                                customDialog.setContentView(R.layout.custom_dialog_sukses);
+
+                                if (customDialog.getWindow() != null) {
+                                    customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                                }
+
+                                TextView dialogTitle = customDialog.findViewById(R.id.dialog_title);
+                                Button ok = customDialog.findViewById(R.id.btnya);
+                                Button cobalagi = customDialog.findViewById(R.id.btntidak);
+                                ImageView gifimage = customDialog.findViewById(R.id.ivdialog);
+
+                                dialogTitle.setText("Gagal Menambahkan Listingan");
+                                ok.setVisibility(View.GONE);
+
+                                cobalagi.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        customDialog.dismiss();
+                                        finish();
+                                    }
+                                });
+
+                                Glide.with(TambahListingActivity.this)
+                                        .load(R.mipmap.ic_no) // You can also use a local resource like R.drawable.your_gif_resource
+                                        .transition(DrawableTransitionOptions.withCrossFade())
+                                        .into(gifimage);
+
+                                customDialog.show();
+                            }
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -2013,7 +2661,7 @@ public class TambahListingActivity extends AppCompatActivity {
                         Button cobalagi = customDialog.findViewById(R.id.btntidak);
                         ImageView gifimage = customDialog.findViewById(R.id.ivdialog);
 
-                        dialogTitle.setText("Gagal Tambah Listingan");
+                        dialogTitle.setText("Terdapat Masalah Jaringan");
                         ok.setVisibility(View.GONE);
 
                         cobalagi.setOnClickListener(new View.OnClickListener() {
@@ -2024,7 +2672,7 @@ public class TambahListingActivity extends AppCompatActivity {
                         });
 
                         Glide.with(TambahListingActivity.this)
-                                .load(R.mipmap.ic_no) // You can also use a local resource like R.drawable.your_gif_resource
+                                .load(R.mipmap.ic_eror_network_foreground)
                                 .transition(DrawableTransitionOptions.withCrossFade())
                                 .into(gifimage);
 
@@ -2104,6 +2752,26 @@ public class TambahListingActivity extends AppCompatActivity {
                 } else {
                     STRA = imageToString(bitmapSTRA);
                 }
+                if (BitmapPjp == null) {
+                    PJPHal1 = "0";
+                } else {
+                    PJPHal1 = imageToString(BitmapPjp);
+                }
+                if (BitmapPjp1 == null) {
+                    PJPHal2 = "0";
+                } else {
+                    PJPHal2 = imageToString(BitmapPjp1);
+                }
+                if (latitudeStr == null) {
+                    Lat = "0";
+                } else {
+                    Lat = latitudeStr;
+                }
+                if (longitudeStr == null) {
+                    Lng = "0";
+                } else {
+                    Lng = longitudeStr;
+                }
 
                 final String StringSHM = CBSHM.isChecked() ? "1" : "0";
                 final String StringHGB = CBHGB.isChecked() ? "1" : "0";
@@ -2120,11 +2788,12 @@ public class TambahListingActivity extends AppCompatActivity {
                 map.put("Bank", bank.getText().toString());
                 map.put("AtasNama", atasnama.getText().toString());
                 map.put("IdAgen", idagen);
+                map.put("IdAgenCo", idagen);
                 map.put("IdInput", idagen);
                 map.put("NamaListing", namaproperti.getText().toString());
                 map.put("Alamat", alamatproperti.getText().toString());
-                map.put("Latitude", latitudeStr);
-                map.put("Longitude", longitudeStr);
+                map.put("Latitude", Lat);
+                map.put("Longitude", Lng);
                 map.put("Location", alamatproperti.getText().toString());
                 map.put("Wide", luas.getText().toString());
                 map.put("Land", land.getText().toString());
@@ -2147,6 +2816,8 @@ public class TambahListingActivity extends AppCompatActivity {
                 map.put("ImgHSHP", HSHP);
                 map.put("ImgPPJB", PPJB);
                 map.put("ImgStratatitle", STRA);
+                map.put("ImgPjp", PJPHal1);
+                map.put("ImgPjp1", PJPHal2);
                 map.put("JenisProperti", jenisproperti.getText().toString());
                 map.put("SumberAir", air.getText().toString());
                 map.put("Kondisi", status.getText().toString());
@@ -2157,6 +2828,7 @@ public class TambahListingActivity extends AppCompatActivity {
                 map.put("Banner", banner.getText().toString());
                 map.put("Size", size.getText().toString());
                 map.put("Harga", harga.getText().toString());
+                map.put("HargaSewa", hargasewa.getText().toString());
                 map.put("TglInput", idnull);
                 map.put("Img1", image1);
                 map.put("Img2", image2);
@@ -2193,36 +2865,70 @@ public class TambahListingActivity extends AppCompatActivity {
                         pDialog.cancel();
                         try {
                             JSONObject res = new JSONObject(response);
-                            Dialog customDialog = new Dialog(TambahListingActivity.this);
-                            customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                            customDialog.setContentView(R.layout.custom_dialog_sukses);
+                            String status = res.getString("Status");
+                            if (status.equals("Sukses")){
+                                Dialog customDialog = new Dialog(TambahListingActivity.this);
+                                customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                                customDialog.setContentView(R.layout.custom_dialog_sukses);
 
-                            if (customDialog.getWindow() != null) {
-                                customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-                            }
-
-                            TextView dialogTitle = customDialog.findViewById(R.id.dialog_title);
-                            Button ok = customDialog.findViewById(R.id.btnya);
-                            Button cobalagi = customDialog.findViewById(R.id.btntidak);
-                            ImageView gifimage = customDialog.findViewById(R.id.ivdialog);
-
-                            dialogTitle.setText("Berhasil Menambahkan Listingan");
-                            cobalagi.setVisibility(View.GONE);
-
-                            ok.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    customDialog.dismiss();
-                                    finish();
+                                if (customDialog.getWindow() != null) {
+                                    customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
                                 }
-                            });
 
-                            Glide.with(TambahListingActivity.this)
-                                    .load(R.mipmap.ic_yes) // You can also use a local resource like R.drawable.your_gif_resource
-                                    .transition(DrawableTransitionOptions.withCrossFade())
-                                    .into(gifimage);
+                                TextView dialogTitle = customDialog.findViewById(R.id.dialog_title);
+                                Button ok = customDialog.findViewById(R.id.btnya);
+                                Button cobalagi = customDialog.findViewById(R.id.btntidak);
+                                ImageView gifimage = customDialog.findViewById(R.id.ivdialog);
 
-                            customDialog.show();
+                                dialogTitle.setText("Berhasil Menambahkan Listingan");
+                                cobalagi.setVisibility(View.GONE);
+
+                                ok.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        customDialog.dismiss();
+                                        finish();
+                                    }
+                                });
+
+                                Glide.with(TambahListingActivity.this)
+                                        .load(R.mipmap.ic_yes) // You can also use a local resource like R.drawable.your_gif_resource
+                                        .transition(DrawableTransitionOptions.withCrossFade())
+                                        .into(gifimage);
+
+                                customDialog.show();
+                            } else if (status.equals("Error")) {
+                                Dialog customDialog = new Dialog(TambahListingActivity.this);
+                                customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                                customDialog.setContentView(R.layout.custom_dialog_sukses);
+
+                                if (customDialog.getWindow() != null) {
+                                    customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                                }
+
+                                TextView dialogTitle = customDialog.findViewById(R.id.dialog_title);
+                                Button ok = customDialog.findViewById(R.id.btnya);
+                                Button cobalagi = customDialog.findViewById(R.id.btntidak);
+                                ImageView gifimage = customDialog.findViewById(R.id.ivdialog);
+
+                                dialogTitle.setText("Gagal Menambahkan Listingan");
+                                ok.setVisibility(View.GONE);
+
+                                cobalagi.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        customDialog.dismiss();
+                                        finish();
+                                    }
+                                });
+
+                                Glide.with(TambahListingActivity.this)
+                                        .load(R.mipmap.ic_no) // You can also use a local resource like R.drawable.your_gif_resource
+                                        .transition(DrawableTransitionOptions.withCrossFade())
+                                        .into(gifimage);
+
+                                customDialog.show();
+                            }
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -2245,7 +2951,7 @@ public class TambahListingActivity extends AppCompatActivity {
                         Button cobalagi = customDialog.findViewById(R.id.btntidak);
                         ImageView gifimage = customDialog.findViewById(R.id.ivdialog);
 
-                        dialogTitle.setText("Gagal Tambah Listingan");
+                        dialogTitle.setText("Terdapat Masalah Jaringan");
                         ok.setVisibility(View.GONE);
 
                         cobalagi.setOnClickListener(new View.OnClickListener() {
@@ -2256,7 +2962,7 @@ public class TambahListingActivity extends AppCompatActivity {
                         });
 
                         Glide.with(TambahListingActivity.this)
-                                .load(R.mipmap.ic_no) // You can also use a local resource like R.drawable.your_gif_resource
+                                .load(R.mipmap.ic_eror_network_foreground) // You can also use a local resource like R.drawable.your_gif_resource
                                 .transition(DrawableTransitionOptions.withCrossFade())
                                 .into(gifimage);
 
@@ -2336,6 +3042,26 @@ public class TambahListingActivity extends AppCompatActivity {
                 } else {
                     STRA = imageToString(bitmapSTRA);
                 }
+                if (BitmapPjp == null) {
+                    PJPHal1 = "0";
+                } else {
+                    PJPHal1 = imageToString(BitmapPjp);
+                }
+                if (BitmapPjp1 == null) {
+                    PJPHal2 = "0";
+                } else {
+                    PJPHal2 = imageToString(BitmapPjp1);
+                }
+                if (latitudeStr == null) {
+                    Lat = "0";
+                } else {
+                    Lat = latitudeStr;
+                }
+                if (longitudeStr == null) {
+                    Lng = "0";
+                } else {
+                    Lng = longitudeStr;
+                }
 
                 final String StringSHM = CBSHM.isChecked() ? "1" : "0";
                 final String StringHGB = CBHGB.isChecked() ? "1" : "0";
@@ -2352,11 +3078,12 @@ public class TambahListingActivity extends AppCompatActivity {
                 map.put("Bank", bank.getText().toString());
                 map.put("AtasNama", atasnama.getText().toString());
                 map.put("IdAgen", idnull);
+                map.put("IdAgenCo", idnull);
                 map.put("IdInput", idagen);
                 map.put("NamaListing", namaproperti.getText().toString());
                 map.put("Alamat", alamatproperti.getText().toString());
-                map.put("Latitude", latitudeStr);
-                map.put("Longitude", longitudeStr);
+                map.put("Latitude", Lat);
+                map.put("Longitude", Lng);
                 map.put("Location", alamatproperti.getText().toString());
                 map.put("Wide", luas.getText().toString());
                 map.put("Land", land.getText().toString());
@@ -2379,6 +3106,8 @@ public class TambahListingActivity extends AppCompatActivity {
                 map.put("ImgHSHP", HSHP);
                 map.put("ImgPPJB", PPJB);
                 map.put("ImgStratatitle", STRA);
+                map.put("ImgPjp", PJPHal1);
+                map.put("ImgPjp1", PJPHal2);
                 map.put("JenisProperti", jenisproperti.getText().toString());
                 map.put("SumberAir", air.getText().toString());
                 map.put("Kondisi", status.getText().toString());
@@ -2389,6 +3118,7 @@ public class TambahListingActivity extends AppCompatActivity {
                 map.put("Banner", banner.getText().toString());
                 map.put("Size", size.getText().toString());
                 map.put("Harga", harga.getText().toString());
+                map.put("HargaSewa", hargasewa.getText().toString());
                 map.put("TglInput", idnull);
                 map.put("Img1", image1);
                 map.put("Img2", image2);
@@ -2417,7 +3147,7 @@ public class TambahListingActivity extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.CustomAlertDialogStyle);
         builder.setTitle("Silahkan Pilih Bank");
 
-        final CharSequence[] Bank = {"BCA", "BRI"};
+        final CharSequence[] Bank = {"BCA", "BRI", "BTN", "Mandiri", "Permata", "Bank Lainnya.."};
         final int[] SelectedBank = {0};
 
         builder.setSingleChoiceItems(Bank, SelectedBank[0], new DialogInterface.OnClickListener() {
@@ -2430,7 +3160,12 @@ public class TambahListingActivity extends AppCompatActivity {
         builder.setPositiveButton("Pilih", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                bank.setText(Bank[SelectedBank[0]]);
+                if (SelectedBank[0] == Bank.length - 1) {
+                    // The user selected "Bank Lainnya..," show the custom input dialog
+                    showCustomBankInputDialog();
+                } else {
+                    bank.setText(Bank[SelectedBank[0]]);
+                }
             }
         });
 
@@ -2440,11 +3175,44 @@ public class TambahListingActivity extends AppCompatActivity {
         dialog.show();
     }
 
+    private void showCustomBankInputDialog() {
+        AlertDialog.Builder customBuilder = new AlertDialog.Builder(this, R.style.CustomAlertDialogStyle);
+        customBuilder.setTitle("Bank Lainnya");
+
+        LinearLayout containerLayout = new LinearLayout(this);
+        containerLayout.setOrientation(LinearLayout.VERTICAL);
+        containerLayout.setPadding(50, 20, 50, 0);
+
+        final EditText customBankInput = new EditText(this);
+        customBankInput.setHint("Masukkan Nama Bank");
+        customBankInput.setTextColor(getResources().getColor(android.R.color.black));
+        customBankInput.setHintTextColor(getResources().getColor(android.R.color.black));
+        //customBankInput.setBackgroundResource(R.drawable.backgroundbox);
+        //customBankInput.setPadding(10,10,10,10);
+
+        containerLayout.addView(customBankInput);
+
+        customBuilder.setView(containerLayout);
+
+        customBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                String customBankName = customBankInput.getText().toString();
+                bank.setText(customBankName);
+            }
+        });
+
+        customBuilder.setNegativeButton("Batal", null);
+
+        AlertDialog customDialog = customBuilder.create();
+        customDialog.show();
+    }
+
     public void ShowJenisProperti(View view) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.CustomAlertDialogStyle);
         builder.setTitle("Silahkan Pilih Jenis Properti");
 
-        final CharSequence[] JenisProperti = {"Rumah", "Ruko", "Tanah", "Gudang", "Ruang Usaha", "Villa", "Apartemen", "Pabrik", "Kantor", "Hotel", "Kondohotel"};
+        final CharSequence[] JenisProperti = {"Rumah", "Ruko", "Tanah", "Gudang", "Ruang Usaha", "Villa", "Apartemen", "Pabrik", "Kantor", "Hotel", "Rukost"};
         final int[] SelectedJenisProperti = {0};
 
         builder.setSingleChoiceItems(JenisProperti, SelectedJenisProperti[0], new DialogInterface.OnClickListener() {
@@ -2458,6 +3226,33 @@ public class TambahListingActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 jenisproperti.setText(JenisProperti[SelectedJenisProperti[0]]);
+            }
+        });
+
+        builder.setNegativeButton("Batal", null);
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    public void ShowPjp(View view) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.CustomAlertDialogStyle);
+        builder.setTitle("Ketersediaan PJP");
+
+        final CharSequence[] JenisProperti = {"Ya", "Tidak"};
+        final int[] SelectedJenisProperti = {0};
+
+        builder.setSingleChoiceItems(JenisProperti, SelectedJenisProperti[0], new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                SelectedJenisProperti[0] = which;
+            }
+        });
+
+        builder.setPositiveButton("Pilih", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                pjp.setText(JenisProperti[SelectedJenisProperti[0]]);
             }
         });
 
@@ -2592,7 +3387,7 @@ public class TambahListingActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 banner.setText(Banner[SelectedBanner[0]]);
-                if (Banner[SelectedBanner[0]].equals("Ya")){
+                if (Banner[SelectedBanner[0]].equals("Ya")) {
                     size.setVisibility(View.VISIBLE);
                 }
                 /*if (Banner[SelectedBanner[0]] == "Ya"){
@@ -2638,7 +3433,7 @@ public class TambahListingActivity extends AppCompatActivity {
         editTextCustomType.setTextColor(getResources().getColor(android.R.color.black));
         editTextCustomType.setHintTextColor(getResources().getColor(android.R.color.black));
         editTextCustomType.setBackgroundColor(getResources().getColor(android.R.color.white));
-        editTextCustomType.setPadding(50,20,50,0);
+        editTextCustomType.setPadding(50, 20, 50, 0);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.CustomAlertDialogStyle);
         builder.setTitle("Ukuran Banner")
@@ -2668,7 +3463,7 @@ public class TambahListingActivity extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.CustomAlertDialogStyle);
         builder.setTitle("Silahkan Pilih Status Properti");
 
-        final CharSequence[] Status = {"Jual", "Sewa"};
+        final CharSequence[] Status = {"Jual", "Sewa", "Jual/Sewa"};
         final int[] SelectedStatus = {0};
 
         builder.setSingleChoiceItems(Status, SelectedStatus[0], new DialogInterface.OnClickListener() {
@@ -2703,36 +3498,6 @@ public class TambahListingActivity extends AppCompatActivity {
             nohp.requestFocus();
             return false;
         }
-        if (nik.getText().toString().equals("")) {
-            nik.setError("Harap Isi NIK");
-            nik.requestFocus();
-            return false;
-        }
-        if (alamat.getText().toString().equals("")) {
-            alamat.setError("Harap Isi Alamat Vendor");
-            alamat.requestFocus();
-            return false;
-        }
-        if (tgllhir.getText().toString().equals("")) {
-            tgllhir.setError("Harap Isi Tanggal Lahir Vendor");
-            tgllhir.requestFocus();
-            return false;
-        }
-        if (rekening.getText().toString().equals("")) {
-            rekening.setError("Harap Isi Rekening Vendor");
-            rekening.requestFocus();
-            return false;
-        }
-        if (bank.getText().toString().equals("")) {
-            bank.setError("Harap Isi Bank Vendor");
-            bank.requestFocus();
-            return false;
-        }
-        if (atasnama.getText().toString().equals("")) {
-            atasnama.setError("Harap Isi Atas Nama Rekening");
-            atasnama.requestFocus();
-            return false;
-        }
         if (jenisproperti.getText().toString().equals("")) {
             jenisproperti.setError("Harap Isi Nama Lengkap Vendor");
             jenisproperti.requestFocus();
@@ -2758,7 +3523,7 @@ public class TambahListingActivity extends AppCompatActivity {
             banner.requestFocus();
             return false;
         } else if (banner.getText().toString().equals("Ya")) {
-            if (size.getText().toString().equals("")){
+            if (size.getText().toString().equals("")) {
                 size.setError("Harap Isi Ukuran Banner");
                 banner.requestFocus();
             }
@@ -2768,13 +3533,8 @@ public class TambahListingActivity extends AppCompatActivity {
             harga.requestFocus();
             return false;
         }
-        if (keterangan.getText().toString().equals("")) {
-            keterangan.setError("Harap Isi Deskripsi Properti");
-            keterangan.requestFocus();
-            return false;
-        }
-        if (CBSHM.isChecked()){
-            if (bitmapSHM == null){
+        if (CBSHM.isChecked()) {
+            if (bitmapSHM == null) {
                 Dialog customDialog = new Dialog(TambahListingActivity.this);
                 customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                 customDialog.setContentView(R.layout.custom_dialog_eror_input);
@@ -2806,8 +3566,8 @@ public class TambahListingActivity extends AppCompatActivity {
                 return false;
             }
         }
-        if (CBHGB.isChecked()){
-            if (bitmapHGB == null){
+        if (CBHGB.isChecked()) {
+            if (bitmapHGB == null) {
                 Dialog customDialog = new Dialog(TambahListingActivity.this);
                 customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                 customDialog.setContentView(R.layout.custom_dialog_eror_input);
@@ -2839,8 +3599,8 @@ public class TambahListingActivity extends AppCompatActivity {
                 return false;
             }
         }
-        if (CBHSHP.isChecked()){
-            if (bitmapHSHP == null){
+        if (CBHSHP.isChecked()) {
+            if (bitmapHSHP == null) {
                 Dialog customDialog = new Dialog(TambahListingActivity.this);
                 customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                 customDialog.setContentView(R.layout.custom_dialog_eror_input);
@@ -2872,8 +3632,8 @@ public class TambahListingActivity extends AppCompatActivity {
                 return false;
             }
         }
-        if (CBPPJB.isChecked()){
-            if (bitmapPPJB == null){
+        if (CBPPJB.isChecked()) {
+            if (bitmapPPJB == null) {
                 Dialog customDialog = new Dialog(TambahListingActivity.this);
                 customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                 customDialog.setContentView(R.layout.custom_dialog_eror_input);
@@ -2905,8 +3665,8 @@ public class TambahListingActivity extends AppCompatActivity {
                 return false;
             }
         }
-        if (CBSTRA.isChecked()){
-            if (bitmapSTRA == null){
+        if (CBSTRA.isChecked()) {
+            if (bitmapSTRA == null) {
                 Dialog customDialog = new Dialog(TambahListingActivity.this);
                 customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                 customDialog.setContentView(R.layout.custom_dialog_eror_input);

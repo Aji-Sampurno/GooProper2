@@ -62,6 +62,7 @@ import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClic
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.gooproper.R;
+import com.gooproper.adapter.PJPAdapter;
 import com.gooproper.adapter.SertifikatAdapter;
 import com.gooproper.adapter.ViewPagerAdapter;
 import com.gooproper.model.ListingModel;
@@ -90,11 +91,11 @@ import java.util.Map;
 public class DetailListingActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     ProgressDialog PDDetailListing;
-    TextView TVNamaDetailListing, TVAlamatDetailListing, TVHargaDetailListing, TVViewsDetailListing, TVBedDetailListing, TVNamaAgen, TVBathDetailListing, TVWideDetailListing, TVLandDetailListing, TVTipeDetailListing, TVStatusDetailListing, TVSertifikatDetailListing, TVLuasDetailListing, TVKamarTidurDetailListing, TVKamarMandiDetailListing, TVLantaiDetailListing, TVGarasiDetailListing, TVCarpotDetailListing, TVListrikDetailListing, TVSumberAirDetailListing, TVDeskripsiDetailListing, TVNoData;
+    TextView TVNamaDetailListing, TVAlamatDetailListing, TVHargaDetailListing, TVViewsDetailListing, TVBedDetailListing, TVNamaAgen, TVBathDetailListing, TVWideDetailListing, TVLandDetailListing, TVTipeDetailListing, TVStatusDetailListing, TVSertifikatDetailListing, TVLuasDetailListing, TVKamarTidurDetailListing, TVKamarMandiDetailListing, TVLantaiDetailListing, TVGarasiDetailListing, TVCarpotDetailListing, TVListrikDetailListing, TVSumberAirDetailListing, TVSizeBanner, TVDeskripsiDetailListing, TVNoData, TVPriority, TVKondisi, TVNoPjp, TVNoDataPjp;
     ImageView IVFlowUp, IVWhatsapp, IVInstagram, IVFavorite, IVFavoriteOn, IVShare, IVEdit, IVStar1, IVStar2, IVStar3, IVStar4, IVStar5 ;
-    Button BtnApproveAdmin, BtnApproveManager;
-    TextInputEditText tambahagen;
-    TextInputLayout lytambahagen;
+    Button BtnApproveAdmin, BtnApproveManager, BtnTambahMaps;
+    TextInputEditText tambahagen, tambahpjp;
+    TextInputLayout lytambahagen, lyttambahpjp;
     CheckBox CBMarketable, CBHarga;
     ScrollView scrollView;
     CardView agen;
@@ -105,12 +106,14 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
     String productId;
     ProgressDialog pDialog;
     ListingModel lm;
-    LinearLayout LytSertifikat;
-    ViewPager viewPager, viewPagerSertifikat;
+    LinearLayout LytSertifikat, LytPJP, LytSize;
+    ViewPager viewPager, viewPagerSertifikat, viewPagerPJP;
     ViewPagerAdapter adapter;
     SertifikatAdapter sertifikatAdapter;
+    PJPAdapter pjpAdapter;
     ArrayList<String> images = new ArrayList<>();
     ArrayList<String> sertif = new ArrayList<>();
+    ArrayList<String> pjpimage = new ArrayList<>();
     private String[] dataOptions;
     private int selectedOption = -1;
     private AgenManager agenManager;
@@ -126,15 +129,21 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
 
         PDDetailListing = new ProgressDialog(DetailListingActivity.this);
         tambahagen = findViewById(R.id.ETTambahAgenDetailListing);
+        tambahpjp = findViewById(R.id.ETTambahNoPjpDetailListing);
         viewPager = findViewById(R.id.VPDetailListing);
         viewPagerSertifikat = findViewById(R.id.VPSertifikatDetailListing);
+        viewPagerPJP = findViewById(R.id.VPPJPDetailListing);
         agen = findViewById(R.id.LytAgenDetailListing);
         lytambahagen = findViewById(R.id.LytTambahAgenDetailListing);
+        lyttambahpjp = findViewById(R.id.LytTambahNoPjpDetailListing);
         LytSertifikat = findViewById(R.id.LytSertifikat);
+        LytPJP = findViewById(R.id.LytViewPjp);
+        LytSize = findViewById(R.id.LytUkuranBannerDetailListing);
         scrollView = findViewById(R.id.SVDetailListing);
 
         BtnApproveAdmin = findViewById(R.id.BtnApproveAdminDetailListing);
         BtnApproveManager = findViewById(R.id.BtnApproveManagerDetailListing);
+        BtnTambahMaps = findViewById(R.id.BtnAddMapsDetailListing);
 
         TVNamaDetailListing = findViewById(R.id.TVNamaDetailListing);
         TVAlamatDetailListing = findViewById(R.id.TVAlamatDetailListing);
@@ -155,9 +164,14 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
         TVCarpotDetailListing = findViewById(R.id.TVCarportDetailListing);
         TVListrikDetailListing = findViewById(R.id.TVListrikDetailListing);
         TVSumberAirDetailListing = findViewById(R.id.TVSumberAirDetailListing);
+        TVSizeBanner = findViewById(R.id.TVUkuranBannerDetailListing);
         TVDeskripsiDetailListing = findViewById(R.id.TVDeskripsiDetailListing);
         TVNamaAgen = findViewById(R.id.TVNamaAgenDetailListing);
         TVNoData = findViewById(R.id.TVNoData);
+        TVNoDataPjp = findViewById(R.id.TVNoDataPjp);
+        TVPriority = findViewById(R.id.TVPriority);
+        TVKondisi = findViewById(R.id.TVKondisi);
+        TVNoPjp = findViewById(R.id.TVNoPjp);
 
         IVFlowUp = findViewById(R.id.IVFlowUpAgenDetailListing);
         IVWhatsapp = findViewById(R.id.IVNoTelpAgenDetailListing);
@@ -190,12 +204,14 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
         String intentIdPraListing = data.getStringExtra("IdPraListing");
         String intentIdListing = data.getStringExtra("IdListing");
         String intentIdAgen = data.getStringExtra("IdAgen");
+        String intentIdAgenCo = data.getStringExtra("IdAgenCo");
         String intentIdInput = data.getStringExtra("IdInput");
         String intentNamaListing = data.getStringExtra("NamaListing");
         String intentAlamat = data.getStringExtra("Alamat");
         String intentLatitude = data.getStringExtra("Latitude");
         String intentLongitude = data.getStringExtra("Longitude");
         String intentLocation = data.getStringExtra("Location");
+        String intentSelfie = data.getStringExtra("Selfie");
         String intentWide = data.getStringExtra("Wide");
         String intentLand = data.getStringExtra("Land");
         String intentListrik = data.getStringExtra("Listrik");
@@ -212,11 +228,14 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
         String intentHSHP = data.getStringExtra("HSHP");
         String intentPPJB = data.getStringExtra("PPJB");
         String intentStratatitle = data.getStringExtra("Stratatitle");
+        String intentPjp = data.getStringExtra("Pjp");
         String intentImgSHM = data.getStringExtra("ImgSHM");
         String intentImgHGB = data.getStringExtra("ImgHGB");
         String intentImgHSHP = data.getStringExtra("ImgHSHP");
         String intentImgPPJB = data.getStringExtra("ImgPPJB");
         String intentImgStratatitle = data.getStringExtra("ImgStratatitle");
+        String intentImgPjp = data.getStringExtra("ImgPjp");
+        String intentImgPjp1 = data.getStringExtra("ImgPjp1");
         String intentNoCertificate = data.getStringExtra("NoCertificate");
         String intentPbb = data.getStringExtra("Pbb");
         String intentJenisProperti = data.getStringExtra("JenisProperti");
@@ -231,6 +250,7 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
         String intentBanner = data.getStringExtra("Banner");
         String intentSize = data.getStringExtra("Size");
         String intentHarga = data.getStringExtra("Harga");
+        String intentHargaSewa = data.getStringExtra("HargaSewa");
         String intentTglInput = data.getStringExtra("TglInput");
         String intentImg1 = data.getStringExtra("Img1");
         String intentImg2 = data.getStringExtra("Img2");
@@ -284,6 +304,7 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
         if (status.equals("1")) {
             StringNamaBuyer = Preferences.getKeyNamaLengkap(this);
             LytSertifikat.setVisibility(View.VISIBLE);
+            LytPJP.setVisibility(View.VISIBLE);
             IVWhatsapp.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -298,6 +319,7 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
         } else if (status.equals("2")) {
             StringNamaBuyer = Preferences.getKeyNamaLengkap(this);
             LytSertifikat.setVisibility(View.VISIBLE);
+            LytPJP.setVisibility(View.VISIBLE);
             IVWhatsapp.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -322,9 +344,11 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                     startActivity(i);
                 }
             });
+            LytSize.setVisibility(View.GONE);
         } else {
             StringNamaBuyer = Preferences.getKeyNamaLengkap(this);
             IVFlowUp.setVisibility(View.INVISIBLE);
+            LytSize.setVisibility(View.GONE);
             IVWhatsapp.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -343,9 +367,9 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                 BtnApproveAdmin.setVisibility(View.VISIBLE);
                 BtnApproveManager.setVisibility(View.GONE);
                 IVFlowUp.setVisibility(View.INVISIBLE);
-                IVEdit.setVisibility(View.INVISIBLE);
+                IVEdit.setVisibility(View.VISIBLE);
                 IVShare.setVisibility(View.INVISIBLE);
-                IVFavorite.setVisibility(View.INVISIBLE);
+                IVFavorite.setVisibility(View.GONE);
                 CBMarketable.setVisibility(View.VISIBLE);
                 CBHarga.setVisibility(View.VISIBLE);
                 AgenId = "0";
@@ -354,9 +378,9 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                 BtnApproveAdmin.setVisibility(View.GONE);
                 BtnApproveManager.setVisibility(View.VISIBLE);
                 IVFlowUp.setVisibility(View.INVISIBLE);
-                IVEdit.setVisibility(View.INVISIBLE);
+                IVEdit.setVisibility(View.VISIBLE);
                 IVShare.setVisibility(View.INVISIBLE);
-                IVFavorite.setVisibility(View.INVISIBLE);
+                IVFavorite.setVisibility(View.GONE);
                 CBMarketable.setVisibility(View.VISIBLE);
                 CBHarga.setVisibility(View.VISIBLE);
                 AgenId = "0";
@@ -365,6 +389,9 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                 BtnApproveAdmin.setVisibility(View.GONE);
                 BtnApproveManager.setVisibility(View.GONE);
                 IVFlowUp.setVisibility(View.VISIBLE);
+                IVEdit.setVisibility(View.VISIBLE);
+                IVShare.setVisibility(View.VISIBLE);
+                IVFavorite.setVisibility(View.GONE);
                 AgenId = "0";
                 idpengguna = Preferences.getKeyIdAdmin(this);
             }
@@ -373,37 +400,67 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                 BtnApproveAdmin.setVisibility(View.VISIBLE);
                 BtnApproveManager.setVisibility(View.GONE);
                 IVFlowUp.setVisibility(View.INVISIBLE);
-                IVEdit.setVisibility(View.INVISIBLE);
+                IVEdit.setVisibility(View.VISIBLE);
                 IVShare.setVisibility(View.INVISIBLE);
-                IVFavorite.setVisibility(View.INVISIBLE);
-                CBMarketable.setVisibility(View.VISIBLE);
-                CBHarga.setVisibility(View.VISIBLE);
+                IVFavorite.setVisibility(View.GONE);
                 AgenId = "0";
                 idpengguna = Preferences.getKeyIdAdmin(this);
+                if (!intentImgPjp.equals("0")){
+                    lyttambahpjp.setVisibility(View.VISIBLE);
+                }
             } else if (intentIsManager.equals("0")) {
                 BtnApproveAdmin.setVisibility(View.GONE);
                 BtnApproveManager.setVisibility(View.VISIBLE);
                 IVFlowUp.setVisibility(View.INVISIBLE);
-                IVEdit.setVisibility(View.INVISIBLE);
+                IVEdit.setVisibility(View.VISIBLE);
                 IVShare.setVisibility(View.INVISIBLE);
-                IVFavorite.setVisibility(View.INVISIBLE);
-                CBMarketable.setVisibility(View.VISIBLE);
-                CBHarga.setVisibility(View.VISIBLE);
+                IVFavorite.setVisibility(View.GONE);
                 AgenId = "0";
                 idpengguna = Preferences.getKeyIdAdmin(this);
             } else {
                 BtnApproveAdmin.setVisibility(View.GONE);
                 BtnApproveManager.setVisibility(View.GONE);
                 IVFlowUp.setVisibility(View.VISIBLE);
+                IVEdit.setVisibility(View.VISIBLE);
+                IVShare.setVisibility(View.INVISIBLE);
+                IVFavorite.setVisibility(View.GONE);
                 AgenId = "0";
                 idpengguna = Preferences.getKeyIdAdmin(this);
             }
         } else if (status.equals("3")) {
-            BtnApproveAdmin.setVisibility(View.GONE);
-            BtnApproveManager.setVisibility(View.GONE);
-            IVFlowUp.setVisibility(View.VISIBLE);
-            idpengguna = "0";
-            AgenId = Preferences.getKeyIdAgen(this);
+            if (intentLatitude.equals("0") && intentLongitude.equals("0")){
+                if (intentIsAdmin.equals("0")){
+                    BtnApproveAdmin.setVisibility(View.GONE);
+                    BtnApproveManager.setVisibility(View.GONE);
+                    IVFlowUp.setVisibility(View.VISIBLE);
+                    idpengguna = "0";
+                    AgenId = Preferences.getKeyIdAgen(this);
+                    if (intentIdInput == Preferences.getKeyIdAgen(DetailListingActivity.this)){
+                        BtnTambahMaps.setVisibility(View.VISIBLE);
+                    }
+                } else if (intentIsManager.equals("0")) {
+                    BtnApproveAdmin.setVisibility(View.GONE);
+                    BtnApproveManager.setVisibility(View.GONE);
+                    IVFlowUp.setVisibility(View.VISIBLE);
+                    idpengguna = "0";
+                    AgenId = Preferences.getKeyIdAgen(this);
+                    if (intentIdInput == Preferences.getKeyIdAgen(DetailListingActivity.this)){
+                        BtnTambahMaps.setVisibility(View.VISIBLE);
+                    }
+                } else {
+                    BtnApproveAdmin.setVisibility(View.GONE);
+                    BtnApproveManager.setVisibility(View.GONE);
+                    IVFlowUp.setVisibility(View.VISIBLE);
+                    idpengguna = "0";
+                    AgenId = Preferences.getKeyIdAgen(this);
+                }
+            } else {
+                BtnApproveAdmin.setVisibility(View.GONE);
+                BtnApproveManager.setVisibility(View.GONE);
+                IVFlowUp.setVisibility(View.VISIBLE);
+                idpengguna = "0";
+                AgenId = Preferences.getKeyIdAgen(this);
+            }
         } else if (status.equals("4")) {
             IVFlowUp.setVisibility(View.INVISIBLE);
             BtnApproveAdmin.setVisibility(View.GONE);
@@ -434,7 +491,22 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                     IVStar2.setVisibility(View.VISIBLE);
                 }
             } else {
-                IVStar1.setVisibility(View.VISIBLE);
+                if (intentMarketable.equals("1")){
+                    IVStar1.setVisibility(View.VISIBLE);
+                    IVStar2.setVisibility(View.VISIBLE);
+                } else {
+                    CBMarketable.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                        @Override
+                        public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                            if (b) {
+                                IVStar2.setVisibility(View.VISIBLE);
+                            } else {
+                                IVStar2.setVisibility(View.GONE);
+                            }
+                        }
+                    });
+                    IVStar1.setVisibility(View.VISIBLE);
+                }
             }
         } else {
             if (intentBanner.equals("Ya")){
@@ -504,8 +576,67 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                     }
                 }
             } else {
-                IVStar1.setVisibility(View.VISIBLE);
-                IVStar2.setVisibility(View.VISIBLE);
+                if (intentMarketable.equals("1")){
+                    if (intentStatusHarga.equals("1")){
+                        IVStar1.setVisibility(View.VISIBLE);
+                        IVStar2.setVisibility(View.VISIBLE);
+                        IVStar3.setVisibility(View.VISIBLE);
+                        IVStar4.setVisibility(View.VISIBLE);
+                    } else {
+                        CBHarga.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                            @Override
+                            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                                if (b) {
+                                    IVStar4.setVisibility(View.VISIBLE);
+                                } else {
+                                    IVStar4.setVisibility(View.GONE);
+                                }
+                            }
+                        });
+                        IVStar1.setVisibility(View.VISIBLE);
+                        IVStar2.setVisibility(View.VISIBLE);
+                        IVStar3.setVisibility(View.VISIBLE);
+                    }
+                } else {
+                    if (intentStatusHarga.equals("1")){
+                        CBMarketable.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                            @Override
+                            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                                if (b) {
+                                    IVStar4.setVisibility(View.VISIBLE);
+                                } else {
+                                    IVStar4.setVisibility(View.GONE);
+                                }
+                            }
+                        });
+                        IVStar1.setVisibility(View.VISIBLE);
+                        IVStar2.setVisibility(View.VISIBLE);
+                        IVStar3.setVisibility(View.VISIBLE);
+                    } else {
+                        CBMarketable.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                            @Override
+                            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                                if (b) {
+                                    IVStar3.setVisibility(View.VISIBLE);
+                                } else {
+                                    IVStar3.setVisibility(View.GONE);
+                                }
+                            }
+                        });
+                        CBHarga.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                            @Override
+                            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                                if (b) {
+                                    IVStar4.setVisibility(View.VISIBLE);
+                                } else {
+                                    IVStar4.setVisibility(View.GONE);
+                                }
+                            }
+                        });
+                        IVStar1.setVisibility(View.VISIBLE);
+                        IVStar2.setVisibility(View.VISIBLE);
+                    }
+                }
             }
         }
 
@@ -646,8 +777,34 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
             }
         });
         BtnApproveManager.setOnClickListener(v -> approvemanager());
+        BtnTambahMaps.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent update = new Intent(DetailListingActivity.this, EditPralistingActivity.class);
+                update.putExtra("IdPraListing", intentIdPraListing);
+                startActivity(update);
+            }
+        });
 
         if (update == 1) {
+            if (intentKondisi.isEmpty()) {
+                TVKondisi.setText("-");
+            } else {
+                TVKondisi.setText(intentKondisi);
+            }
+
+            if (intentPriority.isEmpty() || intentPriority.equals("open")) {
+                TVPriority.setVisibility(View.INVISIBLE);
+            } else {
+                TVPriority.setText(intentPriority);
+            }
+
+            if (intentPjp.isEmpty() || intentPjp.equals("0")) {
+                TVNoPjp.setVisibility(View.INVISIBLE);
+            } else {
+                TVNoPjp.setText(intentPjp);
+            }
+
             if (intentNamaListing.isEmpty()) {
                 TVNamaDetailListing.setText("-");
             } else {
@@ -694,22 +851,22 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                 }
             } else {
                 if (intentBathArt.isEmpty()) {
-                    TVBathDetailListing.setText(intentBathArt + " + " + intentBathArt);
+                    TVBathDetailListing.setText(intentBath + " + " + intentBathArt);
                 } else {
-                    TVBathDetailListing.setText(intentBathArt + " + " + intentBathArt);
+                    TVBathDetailListing.setText(intentBath + " + " + intentBathArt);
                 }
             }
 
-            if (intentWide.isEmpty()) {
+            if (intentLand.isEmpty()) {
                 TVWideDetailListing.setText("-");
             } else {
-                TVWideDetailListing.setText(intentWide + " m2");
+                TVWideDetailListing.setText(intentLand + " m2");
             }
 
-            if (intentLand.isEmpty()) {
+            if (intentWide.isEmpty()) {
                 TVLandDetailListing.setText("-");
             } else {
-                TVLandDetailListing.setText(intentLand + " m2");
+                TVLandDetailListing.setText(intentWide + " m2");
             }
 
             if (intentJenisProperti.isEmpty()) {
@@ -725,22 +882,142 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
             }
 
             if (intentSHM.isEmpty()||intentSHM.equals("0")) {
-                TVSertifikatDetailListing.setText(": -");
+                if (intentHGB.isEmpty()||intentHGB.equals("0")){
+                    if (intentHSHP.isEmpty()||intentHSHP.equals("0")){
+                        if (intentPPJB.isEmpty()||intentPPJB.equals("0")){
+                            if (intentStratatitle.isEmpty()||intentStratatitle.equals("0")){
+                                TVSertifikatDetailListing.setText(": -");
+                            } else {
+                                TVSertifikatDetailListing.setText(": Stratatitle");
+                            }
+                        } else {
+                            if (intentStratatitle.isEmpty()||intentStratatitle.equals("0")){
+                                TVSertifikatDetailListing.setText(": PPJB");
+                            } else {
+                                TVSertifikatDetailListing.setText(": PPJB, Stratatitle");
+                            }
+                        }
+                    } else {
+                        if (intentPPJB.isEmpty()||intentPPJB.equals("0")){
+                            if (intentStratatitle.isEmpty()||intentStratatitle.equals("0")){
+                                TVSertifikatDetailListing.setText(": HS/HP");
+                            } else {
+                                TVSertifikatDetailListing.setText(": HS/HP, Stratatitle");
+                            }
+                        } else {
+                            if (intentStratatitle.isEmpty()||intentStratatitle.equals("0")){
+                                TVSertifikatDetailListing.setText(": HS/HP, PPJB");
+                            } else {
+                                TVSertifikatDetailListing.setText(": HS/HP, PPJB, Stratatitle");
+                            }
+                        }
+                    }
+                } else {
+                    if (intentHSHP.isEmpty()||intentHSHP.equals("0")){
+                        if (intentPPJB.isEmpty()||intentPPJB.equals("0")){
+                            if (intentStratatitle.isEmpty()||intentStratatitle.equals("0")){
+                                TVSertifikatDetailListing.setText(": HGB");
+                            } else {
+                                TVSertifikatDetailListing.setText(": HGB, Stratatitle");
+                            }
+                        } else {
+                            if (intentStratatitle.isEmpty()||intentStratatitle.equals("0")){
+                                TVSertifikatDetailListing.setText(": HGB, PPJB");
+                            } else {
+                                TVSertifikatDetailListing.setText(": HGB, PPJB, Stratatitle");
+                            }
+                        }
+                    } else {
+                        if (intentPPJB.isEmpty()||intentPPJB.equals("0")){
+                            if (intentStratatitle.isEmpty()||intentStratatitle.equals("0")){
+                                TVSertifikatDetailListing.setText(": HGB, HS/HP");
+                            } else {
+                                TVSertifikatDetailListing.setText(": HGB, HS/HP, Stratatitle");
+                            }
+                        } else {
+                            if (intentStratatitle.isEmpty()||intentStratatitle.equals("0")){
+                                TVSertifikatDetailListing.setText(": HGB, HS/HP, PPJB");
+                            } else {
+                                TVSertifikatDetailListing.setText(": HGB, HS/HP, PPJB, Stratatitle");
+                            }
+                        }
+                    }
+                }
             } else {
-                TVSertifikatDetailListing.setText(": " + intentJenisCertificate);
+                if (intentHGB.isEmpty()||intentHGB.equals("0")){
+                    if (intentHSHP.isEmpty()||intentHSHP.equals("0")){
+                        if (intentPPJB.isEmpty()||intentPPJB.equals("0")){
+                            if (intentStratatitle.isEmpty()||intentStratatitle.equals("0")){
+                                TVSertifikatDetailListing.setText(": SHM");
+                            } else {
+                                TVSertifikatDetailListing.setText(": SHM, Stratatitle");
+                            }
+                        } else {
+                            if (intentStratatitle.isEmpty()||intentStratatitle.equals("0")){
+                                TVSertifikatDetailListing.setText(": SHM, PPJB");
+                            } else {
+                                TVSertifikatDetailListing.setText(": SHM, PPJB, Stratatitle");
+                            }
+                        }
+                    } else {
+                        if (intentPPJB.isEmpty()||intentPPJB.equals("0")){
+                            if (intentStratatitle.isEmpty()||intentStratatitle.equals("0")){
+                                TVSertifikatDetailListing.setText(": SHM, HS/HP");
+                            } else {
+                                TVSertifikatDetailListing.setText(": SHM, HS/HP, Stratatitle");
+                            }
+                        } else {
+                            if (intentStratatitle.isEmpty()||intentStratatitle.equals("0")){
+                                TVSertifikatDetailListing.setText(": SHM, HS/HP, PPJB");
+                            } else {
+                                TVSertifikatDetailListing.setText(": SHM, HS/HP, PPJB, Stratatitle");
+                            }
+                        }
+                    }
+                } else {
+                    if (intentHSHP.isEmpty()||intentHSHP.equals("0")){
+                        if (intentPPJB.isEmpty()||intentPPJB.equals("0")){
+                            if (intentStratatitle.isEmpty()||intentStratatitle.equals("0")){
+                                TVSertifikatDetailListing.setText(": SHM, HGB");
+                            } else {
+                                TVSertifikatDetailListing.setText(": SHM, HGB, Stratatitle");
+                            }
+                        } else {
+                            if (intentStratatitle.isEmpty()||intentStratatitle.equals("0")){
+                                TVSertifikatDetailListing.setText(": SHM, HGB, PPJB");
+                            } else {
+                                TVSertifikatDetailListing.setText(": SHM, HGB, PPJB, Stratatitle");
+                            }
+                        }
+                    } else {
+                        if (intentPPJB.isEmpty()||intentPPJB.equals("0")){
+                            if (intentStratatitle.isEmpty()||intentStratatitle.equals("0")){
+                                TVSertifikatDetailListing.setText(": SHM, HGB, HS/HP");
+                            } else {
+                                TVSertifikatDetailListing.setText(": SHM, HGB, HS/HP, Stratatitle");
+                            }
+                        } else {
+                            if (intentStratatitle.isEmpty()||intentStratatitle.equals("0")){
+                                TVSertifikatDetailListing.setText(": SHM, HGB, HS/HP, PPJB");
+                            } else {
+                                TVSertifikatDetailListing.setText(": SHM, HGB, HS/HP, PPJB, Stratatitle");
+                            }
+                        }
+                    }
+                }
             }
 
             if (intentWide.isEmpty()) {
                 if (intentLand.isEmpty()) {
                     TVLuasDetailListing.setText(": - m2/- m2");
                 } else {
-                    TVLuasDetailListing.setText(": - m2/" + intentLand + " m2");
+                    TVLuasDetailListing.setText(": " +intentLand + " m2/" + " - m2");
                 }
             } else {
                 if (intentLand.isEmpty()) {
-                    TVLuasDetailListing.setText(": " + intentWide + " m2/- m2");
+                    TVLuasDetailListing.setText(": - m2/" + intentWide + " m2");
                 } else {
-                    TVLuasDetailListing.setText(": " + intentWide + " m2/" + intentLand + " m2");
+                    TVLuasDetailListing.setText(": " + intentLand + " m2/" + intentWide + " m2");
                 }
             }
 
@@ -794,13 +1071,18 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                 TVListrikDetailListing.setText(": -");
             } else {
                 TVListrikDetailListing.setText(": " + intentListrik + " Watt");
-
             }
 
             if (intentSumberAir.isEmpty()) {
                 TVSumberAirDetailListing.setText(": -");
             } else {
                 TVSumberAirDetailListing.setText(": " + intentSumberAir);
+            }
+
+            if (intentSize.isEmpty()) {
+                TVSizeBanner.setText(": -");
+            } else {
+                TVSizeBanner.setText(": " + intentSize);
             }
 
             if (intentDeskripsi.isEmpty()) {
@@ -810,8 +1092,14 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
             }
             TVNamaAgen.setText(intentNama);
 
-            lat = Double.parseDouble(intentLatitude);
-            lng = Double.parseDouble(intentLongitude);
+            if (intentLatitude.equals("0") || intentLongitude.equals("0")){
+                lat = Double.parseDouble("0");
+                lng = Double.parseDouble("0");
+                mapView.setVisibility(View.GONE);
+            } else {
+                lat = Double.parseDouble(intentLatitude);
+                lng = Double.parseDouble(intentLongitude);
+            }
 
             IVInstagram.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -898,9 +1186,24 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                 sertif.add(intentImgStratatitle);
             }
 
+            if (intentImgPjp.equals("0")) {
+            } else {
+                pjpimage.add(intentImgPjp);
+            }
+
+            if (intentImgPjp1.equals("0")) {
+            } else {
+                pjpimage.add(intentImgPjp1);
+            }
+
             if (intentImgSHM.equals("0") && intentImgHGB.equals("0") && intentImgHSHP.equals("0") && intentImgPPJB.equals("0") && intentImgStratatitle.equals("0")) {
                 viewPagerSertifikat.setVisibility(View.GONE);
                 TVNoData.setVisibility(View.VISIBLE);
+            }
+
+            if (intentImgPjp.equals("0") && intentImgPjp1.equals("0")) {
+                viewPagerPJP.setVisibility(View.GONE);
+                TVNoDataPjp.setVisibility(View.VISIBLE);
             }
 
             adapter = new ViewPagerAdapter(this, images);
@@ -910,6 +1213,10 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
             sertifikatAdapter = new SertifikatAdapter(this, sertif);
             viewPagerSertifikat.setPadding(0, 0, 0, 0);
             viewPagerSertifikat.setAdapter(sertifikatAdapter);
+
+            pjpAdapter = new PJPAdapter(this, pjpimage);
+            viewPagerPJP.setPadding(0, 0, 0, 0);
+            viewPagerPJP.setAdapter(pjpAdapter);
         }
 
         if (getSupportActionBar() != null) {
@@ -1024,9 +1331,6 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
         pDialog.setCancelable(false);
         pDialog.show();
 
-        final String StringMarketable = CBMarketable.isChecked()?"1":"0";
-        final String StringHarga = CBHarga.isChecked()?"1":"0";
-
         StringRequest stringRequest = new StringRequest(Request.Method.POST, ServerApi.URL_APPROVE_ADMIN, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -1103,8 +1407,7 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                 System.out.println(map);
                 map.put("IdAgen", idagen);
                 map.put("IdPraListing", idpralisting);
-                map.put("Marketable", StringMarketable);
-                map.put("StatusHarga", StringHarga);
+                map.put("Pjp", tambahpjp.getText().toString().trim());
                 return map;
             }
         };
@@ -1116,6 +1419,7 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
     private void approvemanager() {
         pDialog.setMessage("Sedang Diproses...");
         pDialog.setCancelable(false);
+        pDialog.show();
 
         final String StringMarketable = CBMarketable.isChecked()?"1":"0";
         final String StringHarga = CBHarga.isChecked()?"1":"0";

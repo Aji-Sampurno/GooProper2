@@ -108,7 +108,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="5dp"
-                    android:text="Info Dasar"
+                    android:text="Info Dasar Vendor"
                     android:textColor="@color/black"
                     android:textStyle="bold" />
 
@@ -122,7 +122,7 @@
                         android:id="@+id/etnamavendor"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Nama Lengkap"
+                        android:hint="Nama Lengkap Vendor"
                         android:inputType="textPersonName"
                         android:textColor="@color/black" />
                 </com.google.android.material.textfield.TextInputLayout>
@@ -139,7 +139,7 @@
                         android:id="@+id/etnohpvendor"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Nomor Hp"
+                        android:hint="Nomor Hp Vendor"
                         android:inputType="phone"
                         android:textColor="@color/black" />
                 </com.google.android.material.textfield.TextInputLayout>
@@ -156,7 +156,7 @@
                         android:id="@+id/etnikvendor"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="NIK"
+                        android:hint="NIK Vendor"
                         android:inputType="number"
                         android:textColor="@color/black" />
                 </com.google.android.material.textfield.TextInputLayout>
@@ -172,7 +172,7 @@
                         android:id="@+id/etalamatvendor"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Alamat"
+                        android:hint="Alamat Vendor"
                         android:inputType="textPersonName"
                         android:textColor="@color/black" />
                 </com.google.android.material.textfield.TextInputLayout>
@@ -183,7 +183,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:hint="Tanggal Lahir">
+                    android:hint="Tanggal Lahir Vendor">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/ettgllahirvendor"
@@ -212,7 +212,7 @@
                             android:id="@+id/etrekeningvendor"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="No Rekening"
+                            android:hint="No Rekening Vendor"
                             android:inputType="number"
                             android:textColor="@color/black" />
                     </com.google.android.material.textfield.TextInputLayout>
@@ -225,7 +225,7 @@
                         android:layout_marginStart="5dp"
                         android:layout_marginTop="10dp"
                         android:layout_weight="2"
-                        android:hint="Bank">
+                        android:hint="Bank Vendor">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/etbankvendor"
@@ -249,7 +249,7 @@
                         android:id="@+id/etatasnamavendor"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Atas Nama"
+                        android:hint="Atas Nama Rekening Vendor"
                         android:inputType="textPersonName"
                         android:textColor="@color/black" />
                 </com.google.android.material.textfield.TextInputLayout>
@@ -260,7 +260,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:layout_marginBottom="5dp"
-                    android:text="Spesifikasi Properti"
+                    android:text="Spesifikasi Properti Listing"
                     android:textColor="@color/black"
                     android:textStyle="bold" />
 
@@ -291,7 +291,7 @@
                         android:id="@+id/etnamaproperti"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Nama Properti"
+                        android:hint="Judul Properti"
                         android:inputType="textPersonName"
                         android:textColor="@color/black" />
                 </com.google.android.material.textfield.TextInputLayout>
@@ -308,6 +308,24 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Alamat Properti"
+                        android:inputType="none"
+                        android:textColor="@color/black" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/lyttglinputproperti"
+                    style="@style/CustomOutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:hint="Tanggal Input Properti"
+                    android:visibility="gone">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/ettglinputproperti"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:focusable="false"
                         android:inputType="none"
                         android:textColor="@color/black" />
                 </com.google.android.material.textfield.TextInputLayout>
@@ -391,20 +409,38 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
-                    <ImageView
-                        android:id="@+id/IVSHM"
+                    <LinearLayout
+                        android:id="@+id/LytSHM"
                         android:layout_width="match_parent"
-                        android:layout_height="150dp"
+                        android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
-                        android:scaleType="centerCrop"
-                        android:visibility="gone" />
+                        android:orientation="horizontal"
+                        android:visibility="gone">
+
+                        <ImageView
+                            android:id="@+id/IVSHM"
+                            android:layout_width="250dp"
+                            android:layout_height="250dp"
+                            android:visibility="gone" />
+
+                        <ImageView
+                            android:id="@+id/IVDeleteSHM"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_margin="5dp"
+                            android:gravity="center"
+                            android:src="@drawable/ic_delete"
+                            app:tint="@color/red_color" />
+
+                    </LinearLayout>
 
                     <Button
                         android:id="@+id/BtnSHM"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
-                        android:text="upload"
+                        android:text="Upload SHM"
                         android:visibility="gone" />
 
                 </LinearLayout>
@@ -414,20 +450,38 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
-                    <ImageView
-                        android:id="@+id/IVHGB"
+                    <LinearLayout
+                        android:id="@+id/LytHGB"
                         android:layout_width="match_parent"
-                        android:layout_height="150dp"
+                        android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
-                        android:scaleType="centerCrop"
-                        android:visibility="gone" />
+                        android:orientation="horizontal"
+                        android:visibility="gone">
+
+                        <ImageView
+                            android:id="@+id/IVHGB"
+                            android:layout_width="250dp"
+                            android:layout_height="250dp"
+                            android:visibility="gone" />
+
+                        <ImageView
+                            android:id="@+id/IVDeleteHGB"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_margin="5dp"
+                            android:gravity="center"
+                            android:src="@drawable/ic_delete"
+                            app:tint="@color/red_color" />
+
+                    </LinearLayout>
 
                     <Button
                         android:id="@+id/BtnHGB"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
-                        android:text="upload"
+                        android:text="Upload HGB"
                         android:visibility="gone" />
 
                 </LinearLayout>
@@ -437,20 +491,38 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
-                    <ImageView
-                        android:id="@+id/IVHSHP"
+                    <LinearLayout
+                        android:id="@+id/LytHSHP"
                         android:layout_width="match_parent"
-                        android:layout_height="150dp"
+                        android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
-                        android:scaleType="centerCrop"
-                        android:visibility="gone" />
+                        android:orientation="horizontal"
+                        android:visibility="gone">
+
+                        <ImageView
+                            android:id="@+id/IVHSHP"
+                            android:layout_width="250dp"
+                            android:layout_height="250dp"
+                            android:visibility="gone" />
+
+                        <ImageView
+                            android:id="@+id/IVDeleteHSHP"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_margin="5dp"
+                            android:gravity="center"
+                            android:src="@drawable/ic_delete"
+                            app:tint="@color/red_color" />
+
+                    </LinearLayout>
 
                     <Button
                         android:id="@+id/BtnHSHP"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
-                        android:text="upload"
+                        android:text="Upload HS/HP"
                         android:visibility="gone" />
 
                 </LinearLayout>
@@ -460,20 +532,38 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
-                    <ImageView
-                        android:id="@+id/IVPPJB"
+                    <LinearLayout
+                        android:id="@+id/LytPPJB"
                         android:layout_width="match_parent"
-                        android:layout_height="150dp"
+                        android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
-                        android:scaleType="centerCrop"
-                        android:visibility="gone" />
+                        android:orientation="horizontal"
+                        android:visibility="gone">
+
+                        <ImageView
+                            android:id="@+id/IVPPJB"
+                            android:layout_width="250dp"
+                            android:layout_height="250dp"
+                            android:visibility="gone" />
+
+                        <ImageView
+                            android:id="@+id/IVDeletePPJB"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_margin="5dp"
+                            android:gravity="center"
+                            android:src="@drawable/ic_delete"
+                            app:tint="@color/red_color" />
+
+                    </LinearLayout>
 
                     <Button
                         android:id="@+id/BtnPPJB"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
-                        android:text="upload"
+                        android:text="Upload PPJB"
                         android:visibility="gone" />
 
                 </LinearLayout>
@@ -483,20 +573,135 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
-                    <ImageView
-                        android:id="@+id/IVStratatitle"
+                    <LinearLayout
+                        android:id="@+id/LytStratatitle"
                         android:layout_width="match_parent"
-                        android:layout_height="150dp"
+                        android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
-                        android:scaleType="centerCrop"
-                        android:visibility="gone" />
+                        android:orientation="horizontal"
+                        android:visibility="gone">
+
+                        <ImageView
+                            android:id="@+id/IVStratatitle"
+                            android:layout_width="250dp"
+                            android:layout_height="250dp"
+                            android:visibility="gone" />
+
+                        <ImageView
+                            android:id="@+id/IVDeleteStratatitle"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_margin="5dp"
+                            android:gravity="center"
+                            android:src="@drawable/ic_delete"
+                            app:tint="@color/red_color" />
+
+                    </LinearLayout>
 
                     <Button
                         android:id="@+id/BtnStratatitle"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
-                        android:text="upload"
+                        android:text="Upload Stratatitle"
+                        android:visibility="gone" />
+
+                </LinearLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/lytKonfirmasiPjp"
+                    style="@style/CustomOutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:hint="Menyertakan PJP?">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etkonfirmasipjp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:focusable="false"
+                        android:inputType="none"
+                        android:textColor="@color/black" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:id="@+id/LytPjp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:orientation="horizontal"
+                        android:visibility="gone">
+
+                        <ImageView
+                            android:id="@+id/IVPjp"
+                            android:layout_width="250dp"
+                            android:layout_height="250dp"/>
+
+                        <ImageView
+                            android:id="@+id/IVDeletePjp"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_margin="5dp"
+                            android:gravity="center"
+                            android:src="@drawable/ic_delete"
+                            app:tint="@color/red_color" />
+
+                    </LinearLayout>
+
+                    <Button
+                        android:id="@+id/BtnPjp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="Upload PJP Halaman 1"
+                        android:visibility="gone" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:id="@+id/LytPjp1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:orientation="horizontal"
+                        android:visibility="gone">
+
+                        <ImageView
+                            android:id="@+id/IVPjp1"
+                            android:layout_width="250dp"
+                            android:layout_height="250dp"/>
+
+                        <ImageView
+                            android:id="@+id/IVDeletePjp1"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_margin="5dp"
+                            android:gravity="center"
+                            android:src="@drawable/ic_delete"
+                            app:tint="@color/red_color" />
+
+                    </LinearLayout>
+
+                    <Button
+                        android:id="@+id/BtnPjp1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="Upload PJP Halaman 2"
                         android:visibility="gone" />
 
                 </LinearLayout>
@@ -598,7 +803,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Jumlah Lantai"
-                        android:inputType="number"
+                        android:inputType="numberDecimal"
                         android:textColor="@color/black" />
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -881,13 +1086,31 @@
                     style="@style/CustomOutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp">
+                    android:layout_marginTop="10dp"
+                    android:visibility="gone">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/etharga"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Harga"
+                        android:hint="Harga Jual"
+                        android:inputType="number"
+                        android:textColor="@color/black" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/lythargasewa"
+                    style="@style/CustomOutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:visibility="gone">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/ethargasewa"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Harga Sewa"
                         android:inputType="number"
                         android:textColor="@color/black" />
                 </com.google.android.material.textfield.TextInputLayout>

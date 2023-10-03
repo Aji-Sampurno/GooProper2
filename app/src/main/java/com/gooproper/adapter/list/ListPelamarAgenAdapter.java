@@ -91,6 +91,7 @@ public class ListPelamarAgenAdapter extends RecyclerView.Adapter<ListPelamarAgen
                     update.putExtra("NamaSekolah",agenModel.getNamaSekolah());
                     update.putExtra("MasaKerja",agenModel.getMasaKerja());
                     update.putExtra("Jabatan",agenModel.getJabatan());
+                    update.putExtra("Konfirmasi",agenModel.getKonfirmasi());
                     update.putExtra("Status",agenModel.getStatus());
                     update.putExtra("AlamatDomisili",agenModel.getAlamatDomisili());
                     update.putExtra("Facebook",agenModel.getFacebook());

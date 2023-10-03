@@ -37,11 +37,12 @@ public class AkunFragment extends Fragment {
     String imgurl;
     String profile;
     String id;
-    String wa = "";
-    String ig = "";
-    String tt = "";
-    String yt = "";
-    String em = "";
+    String wa = "811 333 8838";
+    String fb = "100085562741346";
+    String ig = "gooproper.oficial";
+    String tt = "@gooproper";
+    String yt = "@gooproperofficial";
+    String em = "goopropermalang09@gmail.com";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -148,6 +149,7 @@ public class AkunFragment extends Fragment {
 
         LinearLayout lytwa = customDialog.findViewById(R.id.lytwa);
         LinearLayout lytig = customDialog.findViewById(R.id.lytig);
+        LinearLayout lytfb = customDialog.findViewById(R.id.lytfacebook);
         LinearLayout lyttt = customDialog.findViewById(R.id.lyttiktok);
         LinearLayout lytyt = customDialog.findViewById(R.id.lytyt);
         LinearLayout lytem = customDialog.findViewById(R.id.lytemail);
@@ -155,7 +157,17 @@ public class AkunFragment extends Fragment {
         lytwa.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String url = "https://api.whatsapp.com/send?phone="+wa;
+                String url = "https://api.whatsapp.com/send?phone=" + wa;
+                Intent i = new Intent(Intent.ACTION_VIEW);
+                i.setData(Uri.parse(url));
+                startActivity(i);
+            }
+        });
+
+        lytfb.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String url = "https://www.facebook.com/profile.php?id=" + fb;
                 Intent i = new Intent(Intent.ACTION_VIEW);
                 i.setData(Uri.parse(url));
                 startActivity(i);
@@ -165,7 +177,7 @@ public class AkunFragment extends Fragment {
         lytig.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String url = "http://instagram.com/_u/"+ig;
+                String url = "http://instagram.com/_u/" + ig;
                 Intent i = new Intent(Intent.ACTION_VIEW);
                 i.setData(Uri.parse(url));
                 startActivity(i);
@@ -175,7 +187,7 @@ public class AkunFragment extends Fragment {
         lyttt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String url = "http://instagram.com/_u/"+tt;
+                String url = "https://www.tiktok.com/" + tt;
                 Intent i = new Intent(Intent.ACTION_VIEW);
                 i.setData(Uri.parse(url));
                 startActivity(i);
@@ -185,7 +197,7 @@ public class AkunFragment extends Fragment {
         lytyt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String url = "http://instagram.com/_u/"+yt;
+                String url = "https://www.youtube.com/" + yt;
                 Intent i = new Intent(Intent.ACTION_VIEW);
                 i.setData(Uri.parse(url));
                 startActivity(i);
@@ -195,10 +207,15 @@ public class AkunFragment extends Fragment {
         lytem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String url = "http://instagram.com/_u/"+em;
-                Intent i = new Intent(Intent.ACTION_VIEW);
-                i.setData(Uri.parse(url));
-                startActivity(i);
+                Intent intent = new Intent(Intent.ACTION_SEND);
+                intent.setType("text/plain");
+                intent.putExtra(Intent.EXTRA_EMAIL, new String[] {em});
+                intent.setPackage("com.google.android.gm");
+
+                try {
+                    startActivity(intent);
+                } catch (android.content.ActivityNotFoundException ex) {
+                }
             }
         });
 

@@ -267,6 +267,7 @@
                     android:layout_weight="1"
                     android:gravity="end"
                     android:text="Lihat Semua"
+                    android:visibility="invisible"
                     android:textColor="@color/white" />
             </LinearLayout>
 
@@ -655,7 +656,7 @@
                     android:layout_marginEnd="5dp"
                     android:layout_weight="1"
                     android:text="Hubungi"
-                    android:backgroundTint="@color/grey"
+                    android:backgroundTint="#43A047"
                     android:textColor="@color/white" />
 
                 <Button

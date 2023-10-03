@@ -2,6 +2,7 @@ package com.gooproper.adapter;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
@@ -16,6 +17,7 @@ import androidx.annotation.NonNull;
 import androidx.viewpager.widget.PagerAdapter;
 
 import com.gooproper.R;
+import com.gooproper.ui.ImageViewActivity;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
@@ -71,6 +73,15 @@ public class SertifikatAdapter extends PagerAdapter {
                 });
                 builder.create().show();
                 return true;
+            }
+        });
+
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, ImageViewActivity.class);
+                intent.putExtra("imageResources", sertif);
+                context.startActivity(intent);
             }
         });
         return view;

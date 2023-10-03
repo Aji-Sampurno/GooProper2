@@ -29,6 +29,12 @@
         android:theme="@style/Theme.GooProper"
         tools:targetApi="31">
         <activity
+            android:name=".ui.EditPralistingActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.PraListingAgenActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.AddListingActivity"
             android:exported="false" />
         <activity
@@ -65,7 +71,7 @@
                 <category android:name="android.intent.category.BROWSABLE" />
 
                 <data
-                    android:host="app.gooproper.com"
+                    android:host="gooproper.com"
                     android:pathPrefix="/detailagen"
                     android:scheme="https" />
             </intent-filter>
@@ -80,7 +86,7 @@
                 <category android:name="android.intent.category.BROWSABLE" />
 
                 <data
-                    android:host="app.gooproper.com"
+                    android:host="gooproper.com"
                     android:pathPrefix="/detail"
                     android:scheme="https" />
             </intent-filter>

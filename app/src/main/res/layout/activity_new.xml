@@ -17,6 +17,17 @@
         android:padding="10dp"
         android:weightSum="7">
 
+        <EditText
+            android:id="@+id/etsearchView"
+            android:padding="10dp"
+            android:textColor="@color/white"
+            android:hint="Cari..."
+            android:textColorHint="@color/white"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/backgroundbox"/>
+
         <androidx.appcompat.widget.SearchView
             android:id="@+id/searchView"
             android:layout_width="match_parent"
@@ -25,7 +36,8 @@
             android:layout_weight="1"
             android:background="@drawable/backgroundbox"
             android:iconifiedByDefault="false"
-            android:queryHint="Address" />
+            android:queryHint="Address"
+            android:visibility="gone"/>
 
         <ImageView
             android:id="@+id/filterBtn"

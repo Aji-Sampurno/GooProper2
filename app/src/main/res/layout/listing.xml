@@ -204,10 +204,12 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/LytBadge"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
                     android:orientation="vertical"
+                    android:visibility="visible"
                     android:background="@color/second">
 
                     <TextView

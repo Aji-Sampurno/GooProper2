@@ -77,16 +77,26 @@
             android:layout_marginTop="10dp"
             android:gravity="center"
             android:textColor="@color/black"
-            android:text="Belum Mempunyai Akun ? Daftar"/>
+            android:text="Belum Mempunyai Akun ?"/>
+
+        <Button
+            android:id="@+id/btnregisuser"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/main"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:text="Daftar Sekarang"
+            android:textColor="@color/white"/>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_above="@id/btnregisagent"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="10dp"
             android:gravity="center"
             android:textColor="@color/black"
-            android:text="Anda tertarik menjadi agent properti GooProper"/>
+            android:text="Anda tertarik menjadi agen properti GooProper"/>
 
         <Button
             android:id="@+id/btnregisagent"
@@ -95,7 +105,7 @@
             android:backgroundTint="@color/main"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
-            android:text="Daftar Sekarang"
+            android:text="Daftar Agen"
             android:textColor="@color/white"/>
 
     </LinearLayout>

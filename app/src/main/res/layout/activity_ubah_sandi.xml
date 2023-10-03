@@ -1,47 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/main"
+    android:background="@color/white"
     tools:context=".UbahSandiActivity">
 
     <LinearLayout
         android:id="@+id/lyt1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:background="@drawable/top_bar"
+        android:orientation="horizontal"
         android:weightSum="7">
 
         <ImageView
             android:id="@+id/ivback"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="3"
             android:layout_gravity="center"
             android:layout_marginStart="20dp"
-            android:src="@drawable/ic_arrow"
+            android:layout_weight="3"
             android:rotation="-90"
+            android:src="@drawable/ic_arrow"
             app:tint="@color/second" />
 
         <TextView
+            style="@style/TextAppearance.Material3.TitleMedium"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:layout_margin="20dp"
+            android:layout_weight="1"
             android:text="Ubah Sandi"
-            android:textColor="@color/second"
-            style="@style/TextAppearance.Material3.TitleMedium"/>
+            android:textColor="@color/second" />
 
         <ImageView
             android:id="@+id/ivsave"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="3"
             android:layout_gravity="center"
+            android:layout_marginEnd="20dp"
+            android:layout_weight="3"
             android:src="@drawable/ic_check"
             app:tint="@color/second" />
 
@@ -50,52 +50,60 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_below="@id/lyt1"
         android:layout_margin="11dp"
-        android:orientation="vertical"
-        android:layout_below="@id/lyt1">
+        android:orientation="vertical">
 
         <com.google.android.material.textfield.TextInputLayout
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            app:boxStrokeColor="@color/white"
+            style="@style/CustomOutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
             app:passwordToggleEnabled="true"
-            android:layout_marginTop="10dp">
+            app:passwordToggleTint="@color/black">
+
             <EditText
+                android:id="@+id/ETPasswordLama"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:hint="Password Lama"
                 android:inputType="textPassword"
-                android:hint="Password Lama"/>
+                android:textColor="@color/black" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/lytpassword"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            style="@style/CustomOutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
             app:passwordToggleEnabled="true"
-            android:layout_marginTop="20dp">
+            app:passwordToggleTint="@color/black">
+
             <EditText
                 android:id="@+id/etpassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:hint="Password Baru"
                 android:inputType="textPassword"
-                android:hint="Password Baru"/>
+                android:textColor="@color/black" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/lytrepassword"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            style="@style/CustomOutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
             app:passwordToggleEnabled="true"
-            android:layout_marginTop="10dp">
+            app:passwordToggleTint="@color/black">
+
             <EditText
                 android:id="@+id/etrepassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textPersonName"
-                android:hint="Konfirmasi Password"/>
+                android:hint="Konfirmasi Password"
+                android:inputType="textPassword"
+                android:textColor="@color/black" />
         </com.google.android.material.textfield.TextInputLayout>
 
     </LinearLayout>

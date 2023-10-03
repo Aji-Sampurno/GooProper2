@@ -42,7 +42,10 @@
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="11dp">
+            android:paddingStart="11dp"
+            android:paddingEnd="11dp"
+            android:paddingBottom="11dp"
+            android:scrollbars="none">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -51,6 +54,7 @@
 
                 <ImageView
                     android:id="@+id/imageView"
+                    android:layout_marginTop="11dp"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:adjustViewBounds="true"
@@ -60,7 +64,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
-                    android:text="GooProper"
+                    android:text="Tentang Kami"
                     android:textColor="@color/black"
                     android:textStyle="bold"
                     style="@style/TextAppearance.Material3.TitleLarge"/>
@@ -69,7 +73,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:text="GooProper"
+                    android:text="Goo proper adalah perusahaan yang bergerak di bidang pemasaran property yang berdiri sejak 09 September 2022 dibawah naungan Asosiasi Real Estate Broker Indonesia (AREBI).
+Lokasi kantor kami beralamatkan di Jl. Letjend Sutoyo 123 A Malang
+Kami juga mempunyai aplikasi yang dikhususkan untuk mempromosikan property yang kami pasarkan, supaya cepat dikenal dan dibeli oleh buyer dari mana saja, sehingga jika anda mempunyai property jenis apa saja dan dimana saja, sebaikanya meminta Goo Proper memasarkannya dengn harapan bisa cepat terjual dan menguntungkan anda."
                     android:textColor="@color/black"
                     style="@style/TextAppearance.Material3.BodyLarge"/>
 
@@ -86,7 +92,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:text="GooProper"
+                    android:text="Menjadi perusahaan property nomor satu di indonesia."
                     android:textColor="@color/black"
                     style="@style/TextAppearance.Material3.BodyLarge"/>
 
@@ -103,18 +109,12 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:text="GooProper"
+                    android:text="Mengembangkan perusahaan agar semakin dipercaya oleh masyarakat luas.
+                                \n\nMemberikan layanan dalam pencarian hunuan atau property lainnya yang  tepat untuk customer.
+                                \n\nMembangun hubungan kerjasama dengan berbagai pihak yang saling menguntungkan.
+                                \n\nMeningkatkan nilai nilai perusahaan dengan membentuk sumber daya manusia yang memiliki intergritas dan komitmen tinggi."
                     android:textColor="@color/black"
                     style="@style/TextAppearance.Material3.BodyLarge"/>
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:text="Lainnya"
-                    android:textColor="@color/black"
-                    android:textStyle="bold"
-                    style="@style/TextAppearance.Material3.TitleLarge"/>
 
             </LinearLayout>
 

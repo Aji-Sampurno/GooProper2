@@ -21,12 +21,12 @@ import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class AgenAdapter extends RecyclerView .Adapter<AgenAdapter.HolderData>{
+public class AgenAdapter extends RecyclerView.Adapter<AgenAdapter.HolderData> {
     private List<AgenModel> models;
     private Context context;
     private static final int MAX_TEXT_LENGTH = 20;
 
-    public AgenAdapter(Context context, List<AgenModel> list){
+    public AgenAdapter(Context context, List<AgenModel> list) {
         this.models = list;
         this.context = context;
     }
@@ -40,7 +40,7 @@ public class AgenAdapter extends RecyclerView .Adapter<AgenAdapter.HolderData>{
     }
 
     //searchView
-    public void setFilteredlist (List<AgenModel> filteredlist){
+    public void setFilteredlist(List<AgenModel> filteredlist) {
         this.models = filteredlist;
         notifyDataSetChanged();
     }
@@ -48,7 +48,7 @@ public class AgenAdapter extends RecyclerView .Adapter<AgenAdapter.HolderData>{
     @NonNull
     @Override
     public AgenAdapter.HolderData onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View layout = LayoutInflater.from(parent.getContext()).inflate(R.layout.agen,parent,false);
+        View layout = LayoutInflater.from(parent.getContext()).inflate(R.layout.agen, parent, false);
         HolderData holderData = new HolderData(layout);
         return holderData;
     }
@@ -58,7 +58,7 @@ public class AgenAdapter extends RecyclerView .Adapter<AgenAdapter.HolderData>{
         FormatCurrency currency = new FormatCurrency();
         AgenModel agenModel = models.get(position);
         holder.telp.setText(agenModel.getNoTelp());
-        holder.pengalaman.setText(agenModel.getJabatan()+" "+agenModel.getMasaKerja()+"Tahun");
+        holder.pengalaman.setText(agenModel.getJabatan() + " " + agenModel.getMasaKerja() + "Tahun");
         Glide.with(context).load(models.get(position).getPhoto()).into(holder.cvagen);
 
         String namaagen = agenModel.getNama();
@@ -77,47 +77,49 @@ public class AgenAdapter extends RecyclerView .Adapter<AgenAdapter.HolderData>{
         return models.size();
     }
 
-    class HolderData extends RecyclerView.ViewHolder{
+    class HolderData extends RecyclerView.ViewHolder {
         TextView nama, alamat, pengalaman, telp;
         CircleImageView cvagen;
         public AgenModel agenModel;
-        public HolderData(View view){
+
+        public HolderData(View view) {
             super(view);
-            nama       = view.findViewById(R.id.tvnamaagen);
-            alamat     = view.findViewById(R.id.tvalamatagen);
+            nama = view.findViewById(R.id.tvnamaagen);
+            alamat = view.findViewById(R.id.tvalamatagen);
             pengalaman = view.findViewById(R.id.tvpengalamanagen);
-            telp       = view.findViewById(R.id.tvtelpagen);
-            cvagen     = view.findViewById(R.id.picagen);
+            telp = view.findViewById(R.id.tvtelpagen);
+            cvagen = view.findViewById(R.id.picagen);
 
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     Intent update = new Intent(context, DetailAgenActivity.class);
-                    update.putExtra("update",1);
-                    update.putExtra("IdAgen",agenModel.getIdAgen());
-                    update.putExtra("Username",agenModel.getUsername());
-                    update.putExtra("Password",agenModel.getPassword());
-                    update.putExtra("Nama",agenModel.getNama());
-                    update.putExtra("NoTelp",agenModel.getNoTelp());
-                    update.putExtra("Email",agenModel.getEmail());
-                    update.putExtra("TglLahir",agenModel.getTglLahir());
-                    update.putExtra("KotaKelahiran",agenModel.getKotaKelahiran());
-                    update.putExtra("Pendidikan",agenModel.getPendidikan());
-                    update.putExtra("NamaSekolah",agenModel.getNamaSekolah());
-                    update.putExtra("MasaKerja",agenModel.getMasaKerja());
-                    update.putExtra("Jabatan",agenModel.getJabatan());
-                    update.putExtra("Status",agenModel.getStatus());
-                    update.putExtra("AlamatDomisili",agenModel.getAlamatDomisili());
-                    update.putExtra("Facebook",agenModel.getFacebook());
-                    update.putExtra("Instagram ",agenModel.getInstagram());
-                    update.putExtra("NoKtp",agenModel.getNoKtp());
-                    update.putExtra("ImgKtp",agenModel.getImgKtp());
-                    update.putExtra("ImgTtd",agenModel.getImgTtd());
-                    update.putExtra("Npwp ",agenModel.getNpwp ());
-                    update.putExtra("Photo",agenModel.getPhoto());
-                    update.putExtra("Poin",agenModel.getPoin ());
-                    update.putExtra("IsAkses",agenModel.getIsAkses());
-                    update.putExtra("Approve",agenModel.getApprove());
+                    update.putExtra("update", 1);
+                    update.putExtra("IdAgen", agenModel.getIdAgen());
+                    update.putExtra("Username", agenModel.getUsername());
+                    update.putExtra("Password", agenModel.getPassword());
+                    update.putExtra("Nama", agenModel.getNama());
+                    update.putExtra("NoTelp", agenModel.getNoTelp());
+                    update.putExtra("Email", agenModel.getEmail());
+                    update.putExtra("TglLahir", agenModel.getTglLahir());
+                    update.putExtra("KotaKelahiran", agenModel.getKotaKelahiran());
+                    update.putExtra("Pendidikan", agenModel.getPendidikan());
+                    update.putExtra("NamaSekolah", agenModel.getNamaSekolah());
+                    update.putExtra("MasaKerja", agenModel.getMasaKerja());
+                    update.putExtra("Jabatan", agenModel.getJabatan());
+                    update.putExtra("Konfirmasi", agenModel.getKonfirmasi());
+                    update.putExtra("Status", agenModel.getStatus());
+                    update.putExtra("AlamatDomisili", agenModel.getAlamatDomisili());
+                    update.putExtra("Facebook", agenModel.getFacebook());
+                    update.putExtra("Instagram ", agenModel.getInstagram());
+                    update.putExtra("NoKtp", agenModel.getNoKtp());
+                    update.putExtra("ImgKtp", agenModel.getImgKtp());
+                    update.putExtra("ImgTtd", agenModel.getImgTtd());
+                    update.putExtra("Npwp ", agenModel.getNpwp());
+                    update.putExtra("Photo", agenModel.getPhoto());
+                    update.putExtra("Poin", agenModel.getPoin());
+                    update.putExtra("IsAkses", agenModel.getIsAkses());
+                    update.putExtra("Approve", agenModel.getApprove());
                     context.startActivity(update);
                 }
             });

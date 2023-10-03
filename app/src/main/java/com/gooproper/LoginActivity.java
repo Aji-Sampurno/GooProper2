@@ -38,8 +38,8 @@ import com.gooproper.util.ServerApi;
 public class LoginActivity extends AppCompatActivity {
 
     private ProgressDialog pDialog;
-    Button login, regisagent;
-    TextView username, password, regis;
+    Button login, regis, regisagent;
+    TextView username, password;
 //    EditText username, password;
 
     @Override
@@ -49,7 +49,7 @@ public class LoginActivity extends AppCompatActivity {
 
         login      = findViewById(R.id.btnlogin);
         regisagent = findViewById(R.id.btnregisagent);
-        regis      = findViewById(R.id.tvregis);
+        regis      = findViewById(R.id.btnregisuser);
         username   = findViewById(R.id.etusername);
         password   = findViewById(R.id.etpassword);
         pDialog   = new ProgressDialog(LoginActivity.this);

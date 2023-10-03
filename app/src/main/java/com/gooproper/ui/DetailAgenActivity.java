@@ -7,18 +7,23 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -45,6 +50,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -61,7 +72,7 @@ public class DetailAgenActivity extends AppCompatActivity {
     ImageView qrCodeImageView;
     CircleImageView cvagen, cvpelamar;
     RecyclerView rvbadge;
-    String imgurl, profile, agen, StringIdAgen, StringNamaAgen, StringApprove;
+    String imgurl, profile, agen, StringIdAgen, StringNamaAgen, StringApprove, StringStatus;
     RecyclerView rvgrid;
     RecyclerView.Adapter adapter;
     List<ListingModel> list;
@@ -117,6 +128,7 @@ public class DetailAgenActivity extends AppCompatActivity {
         String intentNamaSekolah = data.getStringExtra("NamaSekolah");
         String intentMasaKerja = data.getStringExtra("MasaKerja");
         String intentJabatan = data.getStringExtra("Jabatan");
+        String intentKonfirmasi = data.getStringExtra("Konfirmasi");
         String intentStatus = data.getStringExtra("Status");
         String intentAlamatDomisili = data.getStringExtra("AlamatDomisili");
         String intentFacebook = data.getStringExtra("Facebook");
@@ -130,6 +142,7 @@ public class DetailAgenActivity extends AppCompatActivity {
         String intentIsAkses = data.getStringExtra("IsAkses");
         String intentApprove = data.getStringExtra("Approve");
 
+        StringStatus = Preferences.getKeyStatus(DetailAgenActivity.this);
         profile = intentPhoto;
         agen = intentIdAgen;
         StringIdAgen = intentIdAgen;
@@ -151,7 +164,48 @@ public class DetailAgenActivity extends AppCompatActivity {
         adapter = new ListingAdapter(this, list);
         rvgrid.setAdapter(adapter);
 
+        if (StringStatus.equals("1")){
+            cvagen.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext(),R.style.CustomAlertDialogStyle);
+                    builder.setTitle("Konfirmasi Unduhan");
+                    builder.setMessage("Apakah Anda ingin mengunduh gambar ini?");
+                    builder.setPositiveButton("Ya", (dialog, which) -> {
+                        downloadImage(imgurl);
+                    });
+                    builder.setNegativeButton("Batal", (dialog, which) -> {
+                        dialog.dismiss();
+                    });
+                    builder.create().show();
+                    return true;
+                }
+            });
+        } else if (StringStatus.equals("2")) {
+            cvagen.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext(),R.style.CustomAlertDialogStyle);
+                    builder.setTitle("Konfirmasi Unduhan");
+                    builder.setMessage("Apakah Anda ingin mengunduh gambar ini?");
+                    builder.setPositiveButton("Ya", (dialog, which) -> {
+                        downloadImage(imgurl);
+                    });
+                    builder.setNegativeButton("Batal", (dialog, which) -> {
+                        dialog.dismiss();
+                    });
+                    builder.create().show();
+                    return true;
+                }
+            });
+        } else {
+
+        }
+
         LoadListing(true);
+        CountSewa(agen);
+        CountJual(agen);
+        CountListing(agen);
 
         if (StringApprove.equals("1")){
             SV1.setVisibility(View.VISIBLE);
@@ -170,19 +224,19 @@ public class DetailAgenActivity extends AppCompatActivity {
             SV2.setVisibility(View.VISIBLE);
 
             if (update == 1) {
-                NamaPelamar.setText(intentNama);
-                WaPelamar.setText(intentNoTelp);
-                EmailPelamar.setText(intentEmail);
-                KotaPelamar.setText(intentKotaKelahiran);
-                LahirPelamar.setText(intentTglLahir);
-                PendidikanPelamar.setText(intentPendidikan);
-                SekolahPelamar.setText(intentNamaSekolah);
-                PengalamanPelamar.setText(intentMasaKerja);
-                PosisiPelamar.setText(intentJabatan);
-                KonfirmasiPelamar.setText(intentStatus);
-                DomisisliPelamar.setText(intentAlamatDomisili);
-                FacebookPelamar.setText(intentFacebook);
-                InstgramPelamar.setText(intentInstagram);
+                NamaPelamar.setText(" : "+intentNama);
+                WaPelamar.setText(" : "+intentNoTelp);
+                EmailPelamar.setText(" : "+intentEmail);
+                KotaPelamar.setText(" : "+intentKotaKelahiran);
+                LahirPelamar.setText(" : "+intentTglLahir);
+                PendidikanPelamar.setText(" : "+intentPendidikan);
+                SekolahPelamar.setText(" : "+intentNamaSekolah);
+                PengalamanPelamar.setText(" : "+intentMasaKerja);
+                PosisiPelamar.setText(" : "+intentJabatan);
+                KonfirmasiPelamar.setText(" : "+intentKonfirmasi);
+                DomisisliPelamar.setText(" : "+intentAlamatDomisili);
+                FacebookPelamar.setText(" : "+intentFacebook);
+                InstgramPelamar.setText(" : "+intentInstagram);
                 HubungiPelamar.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -204,8 +258,6 @@ public class DetailAgenActivity extends AppCompatActivity {
                         .into(cvpelamar);
             }
         }
-
-
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
@@ -391,6 +443,96 @@ public class DetailAgenActivity extends AppCompatActivity {
         queue.add(reqData);
     }
 
+    private void CountSewa(String agenId) {
+        RequestQueue queue = Volley.newRequestQueue(this);
+        JsonArrayRequest reqData = new JsonArrayRequest(Request.Method.GET, ServerApi.URL_COUNT_SEWA + agenId,null,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        for(int i = 0 ; i < response.length(); i++)
+                        {
+                            try {
+                                JSONObject data = response.getJSONObject(i);
+                                String countsewa = data.getString("sewa");
+
+                                sewa.setText(countsewa);
+
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        error.printStackTrace();
+                    }
+                });
+
+        queue.add(reqData);
+    }
+
+    private void CountJual(String agenId) {
+        RequestQueue queue = Volley.newRequestQueue(this);
+        JsonArrayRequest reqData = new JsonArrayRequest(Request.Method.GET, ServerApi.URL_COUNT_JUAL + agenId,null,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        for(int i = 0 ; i < response.length(); i++)
+                        {
+                            try {
+                                JSONObject data = response.getJSONObject(i);
+                                String countjual = data.getString("jual");
+
+                                jual.setText(countjual);
+
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        error.printStackTrace();
+                    }
+                });
+
+        queue.add(reqData);
+    }
+
+    private void CountListing(String agenId) {
+        RequestQueue queue = Volley.newRequestQueue(this);
+        JsonArrayRequest reqData = new JsonArrayRequest(Request.Method.GET, ServerApi.URL_COUNT_LISTING + agenId,null,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        for(int i = 0 ; i < response.length(); i++)
+                        {
+                            try {
+                                JSONObject data = response.getJSONObject(i);
+                                String countlisting = data.getString("listing");
+
+                                listing.setText(countlisting);
+
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        error.printStackTrace();
+                    }
+                });
+
+        queue.add(reqData);
+    }
+
     private void Terima() {
         PDAgen.setMessage("Sedang Diproses...");
         PDAgen.setCancelable(false);
@@ -478,5 +620,69 @@ public class DetailAgenActivity extends AppCompatActivity {
 
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(stringRequest);
+    }
+
+    private void downloadImage(String imageUrl) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    // Membuat URL dari alamat gambar
+                    URL url = new URL(imageUrl);
+                    HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                    connection.setDoInput(true);
+                    connection.connect();
+
+                    // Membaca gambar dari input stream
+                    InputStream input = connection.getInputStream();
+
+                    // Menyimpan gambar di penyimpanan eksternal
+                    String customFileName = "image_" + System.currentTimeMillis();
+                    String fileName = customFileName + ".jpg";
+                    File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+                    File file = new File(storageDir, fileName);
+
+                    if (!storageDir.exists()) {
+                        storageDir.mkdirs();
+                    }
+
+                    FileOutputStream output = new FileOutputStream(file);
+                    byte[] buffer = new byte[1024];
+                    int bytesRead;
+                    while ((bytesRead = input.read(buffer)) != -1) {
+                        output.write(buffer, 0, bytesRead);
+                    }
+                    output.close();
+                    input.close();
+
+                    showDownloadSuccessNotification();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    showDownloadErrorNotification();
+                }
+            }
+        }).start();
+    }
+
+    private void showDownloadSuccessNotification() {
+        // Menampilkan pemberitahuan unduhan berhasil di UI utama (melalui Handler)
+        Handler handler = new Handler(Looper.getMainLooper());
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(DetailAgenActivity.this, "Gambar berhasil diunduh", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void showDownloadErrorNotification() {
+        // Menampilkan pemberitahuan unduhan gagal di UI utama (melalui Handler)
+        Handler handler = new Handler(Looper.getMainLooper());
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(DetailAgenActivity.this, "Gagal mengunduh gambar", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

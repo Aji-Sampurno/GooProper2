@@ -14,6 +14,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -56,7 +58,8 @@ public class ListingAgenFragment extends Fragment {
     List<ListingModel> list;
     String id;
     private AlertDialog alertDialog;
-    private SearchView searchView;
+    //private SearchView searchView;
+    private EditText searchView;
     private boolean applyFilters = false;
 
     @Override
@@ -70,10 +73,27 @@ public class ListingAgenFragment extends Fragment {
         IVSortAsc = root.findViewById(R.id.sortAscendingBtn);
         IVSortDesc = root.findViewById(R.id.sortDescendingBtn);
         IVFilter = root.findViewById(R.id.filterBtn);
-        searchView  = root.findViewById(R.id.searchView);
+        searchView  = root.findViewById(R.id.etsearchView);
 
         searchView.clearFocus();
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+        searchView.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                String newText = s.toString();
+                filterList(newText);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+        /*searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 return false;
@@ -84,7 +104,7 @@ public class ListingAgenFragment extends Fragment {
                 filterList(newText);
                 return true;
             }
-        });
+        });*/
 
         IVSortAsc.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -316,7 +336,7 @@ public class ListingAgenFragment extends Fragment {
         androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(getActivity());
         builder.setTitle("Jenis Properti");
 
-        final CharSequence[] spec = {"Rumah", "Ruko", "Tanah", "Gudang", "Ruang Usaha", "Villa", "Apartemen", "Pabrik", "Kantor", "Hotel", "Kondohotel"};
+        final CharSequence[] spec = {"Rumah", "Ruko", "Tanah", "Gudang", "Ruang Usaha", "Villa", "Apartemen", "Pabrik", "Kantor", "Hotel", "Kondotel"};
         final int[] selectedSpecIndex = {0}; // to store the index of the selected property type
 
         builder.setSingleChoiceItems(spec, selectedSpecIndex[0], new DialogInterface.OnClickListener() {

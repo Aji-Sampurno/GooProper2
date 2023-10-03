@@ -57,6 +57,9 @@ public class TambahKaryawanActivity extends AppCompatActivity {
         IVBack.setOnClickListener(view -> finish());
         Batal.setOnClickListener(view -> finish());
         Submit.setOnClickListener(view -> AddKaryawan());
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().hide();
+        }
     }
 
     private void AddKaryawan() {

@@ -40,8 +40,8 @@ import java.util.Map;
 public class LoginConditionActivity extends AppCompatActivity {
 
     private ProgressDialog pDialog;
-    Button login, regisagent;
-    TextView username, password, regis;
+    Button login, regis, regisagent;
+    TextView username, password;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +50,7 @@ public class LoginConditionActivity extends AppCompatActivity {
 
         login      = findViewById(R.id.btnlogin);
         regisagent = findViewById(R.id.btnregisagent);
-        regis      = findViewById(R.id.tvregis);
+        regis      = findViewById(R.id.btnregisuser);
         username   = findViewById(R.id.etusername);
         password   = findViewById(R.id.etpassword);
         pDialog   = new ProgressDialog(LoginConditionActivity.this);

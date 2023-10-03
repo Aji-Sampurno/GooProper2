@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -13,36 +12,36 @@
         android:id="@+id/LytTopEditAkun"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:background="@drawable/top_bar"
+        android:orientation="horizontal"
         android:weightSum="7">
 
         <ImageView
             android:id="@+id/IVBackEditAkun"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="3"
             android:layout_gravity="center"
             android:layout_marginStart="20dp"
-            android:src="@drawable/ic_arrow"
+            android:layout_weight="3"
             android:rotation="-90"
+            android:src="@drawable/ic_arrow"
             app:tint="@color/second" />
 
         <TextView
+            style="@style/TextAppearance.Material3.TitleMedium"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:layout_margin="20dp"
+            android:layout_weight="1"
             android:text="Edit Akun"
-            android:textColor="@color/second"
-            style="@style/TextAppearance.Material3.TitleMedium"/>
+            android:textColor="@color/second" />
 
         <ImageView
             android:id="@+id/IVSaveEditAkun"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="3"
             android:layout_gravity="center"
+            android:layout_weight="3"
             android:src="@drawable/ic_check"
             app:tint="@color/second" />
 
@@ -64,13 +63,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp">
+
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/ETUsernameEditAkun"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/black"
+                    android:hint="Username"
                     android:inputType="textPersonName"
-                    android:hint="Username"/>
+                    android:textColor="@color/black" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -79,13 +79,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp">
+
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/ETNamaLengkapEditAkun"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/black"
+                    android:hint="Nama Lengkap"
                     android:inputType="textPersonName"
-                    android:hint="Nama Lengkap"/>
+                    android:textColor="@color/black" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -94,13 +95,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp">
+
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/ETNamaEditAkun"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/black"
+                    android:hint="Nama Lengkap"
                     android:inputType="textPersonName"
-                    android:hint="Nama Lengkap"/>
+                    android:textColor="@color/black" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -109,13 +111,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp">
+
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/ETNamaKantorEditAkun"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/black"
+                    android:hint="Nama Kantor"
                     android:inputType="textPersonName"
-                    android:hint="Nama Kantor"/>
+                    android:textColor="@color/black" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -129,9 +132,9 @@
                     android:id="@+id/ETNoTelpEditAkun"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/black"
+                    android:hint="Telephone"
                     android:inputType="phone"
-                    android:hint="Telephone"/>
+                    android:textColor="@color/black" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -141,13 +144,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp">
+
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/ETEmailEditAkun"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/black"
+                    android:hint="E-Mail"
                     android:inputType="textEmailAddress"
-                    android:hint="E-Mail"/>
+                    android:textColor="@color/black" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -156,13 +160,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp">
+
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/ETAlamatDomisiliEditAkun"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/black"
+                    android:hint="Alamat Domisili"
                     android:inputType="text"
-                    android:hint="Alamat Domisili"/>
+                    android:textColor="@color/black" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -171,13 +176,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp">
+
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/ETFacebookEditAkun"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/black"
+                    android:hint="Facebook"
                     android:inputType="text"
-                    android:hint="Facebook"/>
+                    android:textColor="@color/black" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -186,13 +192,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp">
+
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/ETInstagramEditAkun"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/black"
+                    android:hint="Instagram"
                     android:inputType="text"
-                    android:hint="Instagram"/>
+                    android:textColor="@color/black" />
             </com.google.android.material.textfield.TextInputLayout>
 
         </LinearLayout>

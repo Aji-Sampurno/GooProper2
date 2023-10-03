@@ -13,29 +13,43 @@
         android:layout_height="wrap_content"
         android:background="@drawable/top_bar"
         android:orientation="horizontal"
-        android:weightSum="5"
-        android:padding="10dp">
+        android:padding="10dp"
+        android:weightSum="5">
 
         <TextView
             style="@style/TextAppearance.Material3.TitleMedium"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_margin="10dp"
             android:layout_weight="4"
             android:text="Agen"
             android:textColor="@color/second" />
 
+        <EditText
+            android:id="@+id/etsearchView"
+            android:padding="10dp"
+            android:textColor="@color/white"
+            android:hint="Cari..."
+            android:textColorHint="@color/white"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/backgroundbox"/>
+
         <androidx.appcompat.widget.SearchView
             android:id="@+id/searchView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:outlineAmbientShadowColor="@color/white"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
             android:layout_weight="1"
+            android:visibility="gone"
             android:background="@drawable/backgroundbox"
             android:iconifiedByDefault="false"
-            android:queryHint="Address" />
+            android:outlineAmbientShadowColor="@color/white"
+            android:queryHint="Address"
+            android:theme="@style/MySearchViewStyle" />
 
     </LinearLayout>
 

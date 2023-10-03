@@ -58,7 +58,7 @@ public class DetailFollowUpActivity extends AppCompatActivity {
     TextView TVNamaListing, TVAlamatListing, TVNamaBuyer, TVWaBuyer, TVSumber, TVTanggal, TVJam, TVStatus;
     CheckBox CBChat, CBSurvei, CBTawar, CBLokasi, CBDeal;
     ImageView IVBack, IVSelfie;
-    Button BtnBatal, BtnUpdate;
+    Button BtnBatal, BtnUpdate, BtnSelfie, BtnDelete;
     Bitmap BitmapSelfie;
     Drawable DrawableSelfie;
     String StringIdFollowUp, StringSelfie;
@@ -92,6 +92,8 @@ public class DetailFollowUpActivity extends AppCompatActivity {
 
         BtnBatal = findViewById(R.id.BtnBatalBuyer);
         BtnUpdate = findViewById(R.id.BtnSubmitBuyer);
+        BtnSelfie = findViewById(R.id.BtnSelfie);
+        BtnDelete = findViewById(R.id.BtnDelete);
 
         DrawableSelfie = IVSelfie.getDrawable();
 
@@ -150,21 +152,34 @@ public class DetailFollowUpActivity extends AppCompatActivity {
         if (intentDeal.equals("1")){
             TVStatus.setText("Deal");
             CBDeal.setChecked(true);
+            CBDeal.setClickable(false);
         } else if (intentLokasi.equals("1")) {
             TVStatus.setText("Cari Lokasi Lain");
             CBLokasi.setChecked(true);
+            CBLokasi.setClickable(false);
         } else if (intentTawar.equals("1")) {
             TVStatus.setText("Tawar");
             CBTawar.setChecked(true);
+            CBTawar.setClickable(false);
         } else if (intentSurvei.equals("1")) {
             TVStatus.setText("Survei");
             CBSurvei.setChecked(true);
+            CBSurvei.setClickable(false);
         } else if (intentChat.equals("1")){
             TVStatus.setText("Chat");
             CBChat.setChecked(true);
+            CBChat.setClickable(false);
         }
 
-        if (intentDeal.equals("1")){
+        if (!intentSelfie.isEmpty()){
+            IVSelfie.setVisibility(View.VISIBLE);
+            Glide.with(DetailFollowUpActivity.this)
+                    .load(intentSelfie)
+                    .transition(DrawableTransitionOptions.withCrossFade())
+                    .into(IVSelfie);
+        }
+
+        /*if (intentDeal.equals("1")){
             CBDeal.setChecked(true);
         }
         if (intentLokasi.equals("1")) {
@@ -179,19 +194,20 @@ public class DetailFollowUpActivity extends AppCompatActivity {
         }
         if (intentChat.equals("1")){
             CBChat.setChecked(true);
-        }
+        }*/
 
         CBSurvei.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if (b){
-                    IVSelfie.setVisibility(View.VISIBLE);
+                    BtnSelfie.setVisibility(View.VISIBLE);
                 } else {
-                    IVSelfie.setVisibility(View.GONE);
+                    BtnSelfie.setVisibility(View.GONE);
                 }
             }
         });
 
+        BtnDelete.setOnClickListener(v -> clearBitmapSelfie());
         IVBack.setOnClickListener(view -> finish());
         IVSelfie.setOnClickListener(view -> ActivityCompat.requestPermissions(DetailFollowUpActivity.this, new String[]{Manifest.permission.CAMERA}, CODE_CAMERA_REQUEST));
 
@@ -307,6 +323,9 @@ public class DetailFollowUpActivity extends AppCompatActivity {
                         InputStream inputStream = getContentResolver().openInputStream(getImageUri(this,imageBitmap));
                         BitmapSelfie = BitmapFactory.decodeStream(inputStream);
                         IVSelfie.setImageBitmap(BitmapSelfie);
+                        IVSelfie.setVisibility(View.VISIBLE);
+                        BtnDelete.setVisibility(View.VISIBLE);
+                        BtnSelfie.setVisibility(View.GONE);
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
                     }
@@ -330,6 +349,15 @@ public class DetailFollowUpActivity extends AppCompatActivity {
 
         String encodeImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);
         return encodeImage;
+    }
+
+    private void clearBitmapSelfie() {
+        if (BitmapSelfie != null && !BitmapSelfie.isRecycled()) {
+            BitmapSelfie.recycle();
+            BitmapSelfie = null;
+            BtnDelete.setVisibility(View.GONE);
+            BtnSelfie.setVisibility(View.VISIBLE);
+        }
     }
 
     private void AddFlowup() {

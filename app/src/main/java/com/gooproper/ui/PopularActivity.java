@@ -16,6 +16,8 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
@@ -49,12 +51,14 @@ import java.util.List;
 public class PopularActivity extends AppCompatActivity {
 
     ProgressDialog PDPopuler;
+    ImageView IVSortAsc, IVSortDesc, IVFilter;
     SwipeRefreshLayout srpopuler;
     RecyclerView rvgrid;
     ListingPopulerAdapter adapter;
     List<ListingModel> list;
     private AlertDialog alertDialog;
-    private SearchView searchView;
+    //private SearchView searchView;
+    private EditText searchView;
     private boolean applyFilters = false;
 
     @Override
@@ -62,8 +66,29 @@ public class PopularActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_popular);
 
-        searchView  = findViewById(R.id.searchView);
-        searchView.clearFocus();
+        IVSortAsc = findViewById(R.id.sortAscendingBtn);
+        IVSortDesc = findViewById(R.id.sortDescendingBtn);
+        IVFilter = findViewById(R.id.filterBtn);
+        searchView  = findViewById(R.id.etsearchView);
+        //searchView.clearFocus();
+        searchView.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                String newText = s.toString();
+                filterList(newText);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+        /*
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -75,7 +100,24 @@ public class PopularActivity extends AppCompatActivity {
                 filterList(newText);
                 return true;
             }
+        });*/
+        IVSortAsc.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                adapter.sortAscending();
+                IVSortDesc.setVisibility(View.VISIBLE);
+                IVSortAsc.setVisibility(View.GONE);
+            }
         });
+        IVSortDesc.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                adapter.sortDescending();
+                IVSortDesc.setVisibility(View.GONE);
+                IVSortAsc.setVisibility(View.VISIBLE);
+            }
+        });
+        IVFilter.setOnClickListener(view -> showFilterDialog());
 
         PDPopuler = new ProgressDialog(PopularActivity.this);
         srpopuler = findViewById(R.id.SRPopuler);
@@ -100,7 +142,6 @@ public class PopularActivity extends AppCompatActivity {
             getSupportActionBar().hide();
         }
     }
-
     //searchView
     private void filterList(String text) {
         List<ListingModel> filteredList = new ArrayList<>();
@@ -115,11 +156,10 @@ public class PopularActivity extends AppCompatActivity {
         }
         adapter.setFilteredlist(filteredList);
     }
-
     //filter
-    public void showFilterDialog (View view) {
-        androidx.appcompat.app.AlertDialog.Builder dialogBuilder = new androidx.appcompat.app.AlertDialog.Builder(this);
-        LayoutInflater inflater = this.getLayoutInflater();
+    public void showFilterDialog () {
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+        LayoutInflater inflater = getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.filter, null);
         dialogBuilder.setView(dialogView);
 
@@ -135,7 +175,7 @@ public class PopularActivity extends AppCompatActivity {
         EditText textViewPropertyTypeText       = dialogView.findViewById(R.id.textViewPropertyType);
         EditText textViewSpec                   = dialogView.findViewById(R.id.textViewSpec);
 
-        RadioGroup kondisiRadioGroup = alertDialog.findViewById(R.id.kondisi);
+        RadioGroup kondisiRadioGroup = dialogView.findViewById(R.id.kondisi);
         int selectedRadioButtonId = kondisiRadioGroup.getCheckedRadioButtonId();
 
         String selectedKondisi = ""; // Initialize the selected kondisi
@@ -294,7 +334,7 @@ public class PopularActivity extends AppCompatActivity {
         androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this);
         builder.setTitle("Jenis Properti");
 
-        final CharSequence[] spec = {"Rumah", "Ruko", "Tanah", "Gudang", "Ruang Usaha", "Villa", "Apartemen", "Pabrik", "Kantor", "Hotel", "Kondohotel"};
+        final CharSequence[] spec = {"Rumah", "Ruko", "Tanah", "Gudang", "Ruang Usaha", "Villa", "Apartemen", "Pabrik", "Kantor", "Hotel", "Rukost"};
         final int[] selectedSpecIndex = {0}; // to store the index of the selected property type
 
         builder.setSingleChoiceItems(spec, selectedSpecIndex[0], new DialogInterface.OnClickListener() {
@@ -466,12 +506,14 @@ public class PopularActivity extends AppCompatActivity {
                                 ListingModel md = new ListingModel();
                                 md.setIdListing(data.getString("IdListing"));
                                 md.setIdAgen(data.getString("IdAgen"));
+                                md.setIdAgenCo(data.getString("IdAgenCo"));
                                 md.setIdInput(data.getString("IdInput"));
                                 md.setNamaListing(data.getString("NamaListing"));
                                 md.setAlamat(data.getString("Alamat"));
                                 md.setLatitude(data.getString("Latitude"));
                                 md.setLongitude(data.getString("Longitude"));
                                 md.setLocation(data.getString("Location"));
+                                md.setSelfie(data.getString("Selfie"));
                                 md.setWide(data.getString("Wide"));
                                 md.setLand(data.getString("Land"));
                                 md.setListrik(data.getString("Listrik"));
@@ -488,11 +530,14 @@ public class PopularActivity extends AppCompatActivity {
                                 md.setHSHP(data.getString("HSHP"));
                                 md.setPPJB(data.getString("PPJB"));
                                 md.setStratatitle(data.getString("Stratatitle"));
+                                md.setPjp(data.getString("Pjp"));
                                 md.setImgSHM(data.getString("ImgSHM"));
                                 md.setImgHGB(data.getString("ImgHGB"));
                                 md.setImgHSHP(data.getString("ImgHSHP"));
                                 md.setImgPPJB(data.getString("ImgPPJB"));
                                 md.setImgStratatitle(data.getString("ImgStratatitle"));
+                                md.setImgPjp(data.getString("ImgPjp"));
+                                md.setImgPjp1(data.getString("ImgPjp1"));
                                 md.setNoCertificate(data.getString("NoCertificate"));
                                 md.setPbb(data.getString("Pbb"));
                                 md.setJenisProperti(data.getString("JenisProperti"));
@@ -507,6 +552,7 @@ public class PopularActivity extends AppCompatActivity {
                                 md.setBanner(data.getString("Banner"));
                                 md.setSize(data.getString("Size"));
                                 md.setHarga(data.getString("Harga"));
+                                md.setHargaSewa(data.getString("HargaSewa"));
                                 md.setTglInput(data.getString("TglInput"));
                                 md.setImg1(data.getString("Img1"));
                                 md.setImg2(data.getString("Img2"));

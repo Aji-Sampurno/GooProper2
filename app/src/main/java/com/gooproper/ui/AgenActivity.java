@@ -12,9 +12,12 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -25,6 +28,7 @@ import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
 import com.gooproper.R;
 import com.gooproper.adapter.AgenAdapter;
+import com.gooproper.adapter.AgenAdminAdapter;
 import com.gooproper.adapter.ListingSoldAdapter;
 import com.gooproper.adapter.list.ListPelamarAgenAdapter;
 import com.gooproper.model.AgenModel;
@@ -42,8 +46,9 @@ public class AgenActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
     SwipeRefreshLayout refreshLayout;
-    private AgenAdapter adapterAgen;
-    private SearchView searchView;
+    private AgenAdminAdapter adapterAgen;
+    //private SearchView searchView;
+    private EditText searchView;
     List<AgenModel> mItems;
 
     @Override
@@ -51,9 +56,25 @@ public class AgenActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_agen);
 
-        searchView  = findViewById(R.id.searchView);
-        searchView.clearFocus();
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+        searchView  = findViewById(R.id.etsearchView);
+        searchView.clearFocus();searchView.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                String newText = s.toString();
+                filterList(newText);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+        /*searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 return false;
@@ -64,7 +85,7 @@ public class AgenActivity extends AppCompatActivity {
                 filterList(newText);
                 return true;
             }
-        });
+        });*/
 
         recyclerView = findViewById(R.id.RVAgenAdmin);
         refreshLayout = findViewById(R.id.SRLAgenAdmin);
@@ -72,7 +93,7 @@ public class AgenActivity extends AppCompatActivity {
         mItems = new ArrayList<>();
 
         recyclerView.setLayoutManager(new LinearLayoutManager(AgenActivity.this, LinearLayoutManager.VERTICAL, false));
-        adapterAgen = new AgenAdapter(AgenActivity.this, mItems);
+        adapterAgen = new AgenAdminAdapter(AgenActivity.this, mItems);
         recyclerView.setAdapter(adapterAgen);
 
         LoadAgen(true);
@@ -129,6 +150,7 @@ public class AgenActivity extends AppCompatActivity {
                                 agenModel.setNamaSekolah(data.getString("NamaSekolah"));
                                 agenModel.setMasaKerja(data.getString("MasaKerja"));
                                 agenModel.setJabatan(data.getString("Jabatan"));
+                                agenModel.setKonfirmasi(data.getString("Konfirmasi"));
                                 agenModel.setStatus(data.getString("Status"));
                                 agenModel.setAlamatDomisili(data.getString("AlamatDomisili"));
                                 agenModel.setFacebook(data.getString("Facebook"));
@@ -139,6 +161,7 @@ public class AgenActivity extends AppCompatActivity {
                                 agenModel.setPhoto(data.getString("Photo"));
                                 agenModel.setIsAkses(data.getString("IsAkses"));
                                 agenModel.setApprove(data.getString("Approve"));
+                                agenModel.setNoKaryawan(data.getString("NoKaryawan"));
                                 mItems.add(agenModel);
                                 progressDialog.dismiss();
                             } catch (JSONException e) {

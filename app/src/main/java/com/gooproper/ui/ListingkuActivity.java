@@ -11,6 +11,8 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
@@ -49,8 +51,11 @@ public class ListingkuActivity extends AppCompatActivity {
     ListingAdapter adapter;
     List<ListingModel> list;
     private AlertDialog alertDialog;
-    private SearchView searchView;
+    //private SearchView searchView;
+    private EditText searchView;
     private boolean applyFilters = false;
+
+    Button open, exclusive;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,9 +65,26 @@ public class ListingkuActivity extends AppCompatActivity {
         IVSortAsc = findViewById(R.id.sortAscendingBtn);
         IVSortDesc = findViewById(R.id.sortDescendingBtn);
         IVFilter = findViewById(R.id.filterBtn);
-        searchView  = findViewById(R.id.searchView);
+        searchView = findViewById(R.id.etsearchView);
         searchView.clearFocus();
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+        searchView.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                String newText = s.toString();
+                filterList(newText);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+        /*searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 return false;
@@ -73,7 +95,7 @@ public class ListingkuActivity extends AppCompatActivity {
                 filterList(newText);
                 return true;
             }
-        });
+        });*/
 
         IVSortAsc.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -133,11 +155,12 @@ public class ListingkuActivity extends AppCompatActivity {
         adapter.setFilteredlist(filteredList);
     }
 
+
     //filter
     public void showFilterDialog () {
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
         LayoutInflater inflater = getLayoutInflater();
-        View dialogView = inflater.inflate(R.layout.filter, null);
+        View dialogView = inflater.inflate(R.layout.filterku, null);
         dialogBuilder.setView(dialogView);
 
         EditText editTextMinPrice               = dialogView.findViewById(R.id.editTextMinPrice);
@@ -161,6 +184,17 @@ public class ListingkuActivity extends AppCompatActivity {
             selectedKondisi = "Jual";
         } else if (selectedRadioButtonId == R.id.sewa) {
             selectedKondisi = "Sewa";
+        }
+
+        RadioGroup prioritasRG = dialogView.findViewById(R.id.prioritas);
+        int selectedPrioritasRG = prioritasRG.getCheckedRadioButtonId();
+
+        String selectedPrioritas = "";
+
+        if (selectedPrioritasRG == R.id.exclusive){
+            selectedPrioritas = "exclusive";
+        } else if (selectedPrioritasRG == R.id.open){
+            selectedPrioritas = "open";
         }
 
         textViewSpec.setOnClickListener(new View.OnClickListener() {
@@ -203,6 +237,17 @@ public class ListingkuActivity extends AppCompatActivity {
                     selectedKondisi = "Jual";
                 } else if (selectedRadioButtonId == R.id.sewa) {
                     selectedKondisi = "Sewa";
+                }
+
+                RadioGroup prioritasRG = dialogView.findViewById(R.id.prioritas);
+                int selectedPrioritasRG = prioritasRG.getCheckedRadioButtonId();
+
+                String selectedPrioritas = "";
+
+                if (selectedPrioritasRG == R.id.exclusive){
+                    selectedPrioritas = "exclusive";
+                } else if (selectedPrioritasRG == R.id.open){
+                    selectedPrioritas = "open";
                 }
 
                 long minPrice = 0;
@@ -262,27 +307,27 @@ public class ListingkuActivity extends AppCompatActivity {
 
                 if (!minPriceStr.isEmpty() && !maxPriceStr.isEmpty()) {
                     if (minPrice <= maxPrice) {
-                        applyCustomFilter(v, minPrice, maxPrice, true, bedSearchStr, bathSearchStr, landWideSearchStr, buildingWideSearchStr, garageSearchStr, carpotSearchStr, levelSearchStr, specStr, typeStr, selectedKondisi);
+                        applyCustomFilter(v, minPrice, maxPrice, true, bedSearchStr, bathSearchStr, landWideSearchStr, buildingWideSearchStr, garageSearchStr, carpotSearchStr, levelSearchStr, specStr, typeStr, selectedKondisi, selectedPrioritas);
                     } else {
                         // Handle invalid input, show a message or toast if needed
                         Toast.makeText(ListingkuActivity.this, "Invalid price range", Toast.LENGTH_SHORT).show();
                     }
                 } else if (!minPriceStr.isEmpty()) {
-                    applyCustomFilter(v, minPrice, maxPrice, true, bedSearchStr, bathSearchStr, landWideSearchStr, buildingWideSearchStr, garageSearchStr, carpotSearchStr, levelSearchStr, specStr, typeStr, selectedKondisi);
+                    applyCustomFilter(v, minPrice, maxPrice, true, bedSearchStr, bathSearchStr, landWideSearchStr, buildingWideSearchStr, garageSearchStr, carpotSearchStr, levelSearchStr, specStr, typeStr, selectedKondisi, selectedPrioritas);
                 } else if (!maxPriceStr.isEmpty()) {
-                    applyCustomFilter(v, minPrice, maxPrice, true, bedSearchStr, bathSearchStr, landWideSearchStr, buildingWideSearchStr, garageSearchStr, carpotSearchStr, levelSearchStr, specStr, typeStr, selectedKondisi);
+                    applyCustomFilter(v, minPrice, maxPrice, true, bedSearchStr, bathSearchStr, landWideSearchStr, buildingWideSearchStr, garageSearchStr, carpotSearchStr, levelSearchStr, specStr, typeStr, selectedKondisi, selectedPrioritas);
                 } else if (!bedSearchStr.isEmpty()) {
-                    applyCustomFilter(v, 0, 0, true, bedSearchStr, bathSearchStr, landWideSearchStr, buildingWideSearchStr, garageSearchStr, carpotSearchStr, levelSearchStr, specStr, typeStr, selectedKondisi);
+                    applyCustomFilter(v, 0, 0, true, bedSearchStr, bathSearchStr, landWideSearchStr, buildingWideSearchStr, garageSearchStr, carpotSearchStr, levelSearchStr, specStr, typeStr, selectedKondisi, selectedPrioritas);
                 } else if (!bathSearchStr.isEmpty()) {
-                    applyCustomFilter(v, 0, 0, true, bedSearchStr, bathSearchStr, landWideSearchStr, buildingWideSearchStr, garageSearchStr, carpotSearchStr, levelSearchStr, specStr, typeStr, selectedKondisi);
+                    applyCustomFilter(v, 0, 0, true, bedSearchStr, bathSearchStr, landWideSearchStr, buildingWideSearchStr, garageSearchStr, carpotSearchStr, levelSearchStr, specStr, typeStr, selectedKondisi, selectedPrioritas);
                 } else if(!landWideSearchStr.isEmpty()){
-                    applyCustomFilter(v, 0, 0, true, bedSearchStr, bathSearchStr, landWideSearchStr, buildingWideSearchStr, garageSearchStr, carpotSearchStr, levelSearchStr, specStr, typeStr, selectedKondisi);
+                    applyCustomFilter(v, 0, 0, true, bedSearchStr, bathSearchStr, landWideSearchStr, buildingWideSearchStr, garageSearchStr, carpotSearchStr, levelSearchStr, specStr, typeStr, selectedKondisi, selectedPrioritas);
                 } else if (!buildingWideSearchStr.isEmpty()) {
-                    applyCustomFilter(v, 0, 0, true, bedSearchStr, bathSearchStr, landWideSearchStr, buildingWideSearchStr, garageSearchStr, carpotSearchStr, levelSearchStr, specStr, typeStr, selectedKondisi);
+                    applyCustomFilter(v, 0, 0, true, bedSearchStr, bathSearchStr, landWideSearchStr, buildingWideSearchStr, garageSearchStr, carpotSearchStr, levelSearchStr, specStr, typeStr, selectedKondisi, selectedPrioritas);
                 } else if (!specStr.isEmpty()) {
-                    applyCustomFilter(v, 0, 0, true, bedSearchStr, bathSearchStr, landWideSearchStr, buildingWideSearchStr, garageSearchStr, carpotSearchStr, levelSearchStr, specStr, typeStr, selectedKondisi);
+                    applyCustomFilter(v, 0, 0, true, bedSearchStr, bathSearchStr, landWideSearchStr, buildingWideSearchStr, garageSearchStr, carpotSearchStr, levelSearchStr, specStr, typeStr, selectedKondisi, selectedPrioritas);
                 } else if (!typeStr.isEmpty()) {
-                    applyCustomFilter(v, 0, 0, true, bedSearchStr, bathSearchStr, landWideSearchStr, buildingWideSearchStr, garageSearchStr, carpotSearchStr, levelSearchStr, specStr, typeStr, selectedKondisi);
+                    applyCustomFilter(v, 0, 0, true, bedSearchStr, bathSearchStr, landWideSearchStr, buildingWideSearchStr, garageSearchStr, carpotSearchStr, levelSearchStr, specStr, typeStr, selectedKondisi, selectedPrioritas);
                 } else {
                     applyFilters = true; // Apply filters
                     adapter.setFilteredlist(list);
@@ -311,7 +356,7 @@ public class ListingkuActivity extends AppCompatActivity {
         androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this);
         builder.setTitle("Jenis Properti");
 
-        final CharSequence[] spec = {"Rumah", "Ruko", "Tanah", "Gudang", "Ruang Usaha", "Villa", "Apartemen", "Pabrik", "Kantor", "Hotel", "Kondohotel"};
+        final CharSequence[] spec = {"Rumah", "Ruko", "Tanah", "Gudang", "Ruang Usaha", "Villa", "Apartemen", "Pabrik", "Kantor", "Hotel", "Rukost"};
         final int[] selectedSpecIndex = {0}; // to store the index of the selected property type
 
         builder.setSingleChoiceItems(spec, selectedSpecIndex[0], new DialogInterface.OnClickListener() {
@@ -376,7 +421,8 @@ public class ListingkuActivity extends AppCompatActivity {
                                   String levelSearch,
                                   String viewSpec,
                                   String viewType,
-                                  String kondisi) {
+                                  String kondisi,
+                                  String prioritas) {
         //applyFilters = true; // Set the boolean to true before applying filters
         ArrayList<ListingModel> filteredList = new ArrayList<>();
         for (ListingModel product : list) {
@@ -392,6 +438,7 @@ public class ListingkuActivity extends AppCompatActivity {
             boolean isViewSpecMatched       = true; //tipe hunian
             boolean isViewTypeMatched       = true;
             boolean isKondisiMatched        = true; //kondisi
+            boolean isPrioritasMatched      = true;
 
             if (isAbove) {
                 if (productPrice >= minPrice) {
@@ -447,8 +494,12 @@ public class ListingkuActivity extends AppCompatActivity {
                 isKondisiMatched = false;
             }
 
+            if (!prioritas.isEmpty() && !prioritas.equals(product.getPriority())){
+                isPrioritasMatched = false;
+            }
+
             // Check other filter criteria and include the listing if all conditions are met
-            if (isPriceMatched && isBedMatched && isBathMatched && isLandWideMatched && isBuildingWideMatched && isGarageMatched && isCarpotMatched && isLevelMatched && isViewSpecMatched && isViewTypeMatched && isKondisiMatched) {
+            if (isPriceMatched && isBedMatched && isBathMatched && isLandWideMatched && isBuildingWideMatched && isGarageMatched && isCarpotMatched && isLevelMatched && isViewSpecMatched && isViewTypeMatched && isKondisiMatched && isPrioritasMatched) {
                 filteredList.add(product);
             }
         }
@@ -481,12 +532,14 @@ public class ListingkuActivity extends AppCompatActivity {
                                 ListingModel md = new ListingModel();
                                 md.setIdListing(data.getString("IdListing"));
                                 md.setIdAgen(data.getString("IdAgen"));
+                                md.setIdAgenCo(data.getString("IdAgenCo"));
                                 md.setIdInput(data.getString("IdInput"));
                                 md.setNamaListing(data.getString("NamaListing"));
                                 md.setAlamat(data.getString("Alamat"));
                                 md.setLatitude(data.getString("Latitude"));
                                 md.setLongitude(data.getString("Longitude"));
                                 md.setLocation(data.getString("Location"));
+                                md.setSelfie(data.getString("Selfie"));
                                 md.setWide(data.getString("Wide"));
                                 md.setLand(data.getString("Land"));
                                 md.setListrik(data.getString("Listrik"));
@@ -503,11 +556,14 @@ public class ListingkuActivity extends AppCompatActivity {
                                 md.setHSHP(data.getString("HSHP"));
                                 md.setPPJB(data.getString("PPJB"));
                                 md.setStratatitle(data.getString("Stratatitle"));
+                                md.setPjp(data.getString("Pjp"));
                                 md.setImgSHM(data.getString("ImgSHM"));
                                 md.setImgHGB(data.getString("ImgHGB"));
                                 md.setImgHSHP(data.getString("ImgHSHP"));
                                 md.setImgPPJB(data.getString("ImgPPJB"));
                                 md.setImgStratatitle(data.getString("ImgStratatitle"));
+                                md.setImgPjp(data.getString("ImgPjp"));
+                                md.setImgPjp1(data.getString("ImgPjp1"));
                                 md.setNoCertificate(data.getString("NoCertificate"));
                                 md.setPbb(data.getString("Pbb"));
                                 md.setJenisProperti(data.getString("JenisProperti"));
@@ -522,6 +578,7 @@ public class ListingkuActivity extends AppCompatActivity {
                                 md.setBanner(data.getString("Banner"));
                                 md.setSize(data.getString("Size"));
                                 md.setHarga(data.getString("Harga"));
+                                md.setHargaSewa(data.getString("HargaSewa"));
                                 md.setTglInput(data.getString("TglInput"));
                                 md.setImg1(data.getString("Img1"));
                                 md.setImg2(data.getString("Img2"));
