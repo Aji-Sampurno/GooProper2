@@ -91,7 +91,7 @@ import java.util.Map;
 public class DetailListingActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     ProgressDialog PDDetailListing;
-    TextView TVNamaDetailListing, TVAlamatDetailListing, TVHargaDetailListing, TVViewsDetailListing, TVBedDetailListing, TVNamaAgen, TVBathDetailListing, TVWideDetailListing, TVLandDetailListing, TVTipeDetailListing, TVStatusDetailListing, TVSertifikatDetailListing, TVLuasDetailListing, TVKamarTidurDetailListing, TVKamarMandiDetailListing, TVLantaiDetailListing, TVGarasiDetailListing, TVCarpotDetailListing, TVListrikDetailListing, TVSumberAirDetailListing, TVSizeBanner, TVDeskripsiDetailListing, TVNoData, TVPriority, TVKondisi, TVNoPjp, TVNoDataPjp;
+    TextView TVNamaDetailListing, TVAlamatDetailListing, TVHargaDetailListing, TVViewsDetailListing, TVBedDetailListing, TVNamaAgen, TVBathDetailListing, TVWideDetailListing, TVLandDetailListing, TVTipeDetailListing, TVStatusDetailListing, TVSertifikatDetailListing, TVLuasDetailListing, TVKamarTidurDetailListing, TVKamarMandiDetailListing, TVLantaiDetailListing, TVGarasiDetailListing, TVCarpotDetailListing, TVListrikDetailListing, TVSumberAirDetailListing, TVSizeBanner, TVDeskripsiDetailListing, TVNoData, TVPriority, TVKondisi, TVNoPjp, TVNoDataPjp, TVFee;
     ImageView IVFlowUp, IVWhatsapp, IVInstagram, IVFavorite, IVFavoriteOn, IVShare, IVEdit, IVStar1, IVStar2, IVStar3, IVStar4, IVStar5 ;
     Button BtnApproveAdmin, BtnApproveManager, BtnTambahMaps;
     TextInputEditText tambahagen, tambahpjp;
@@ -106,7 +106,7 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
     String productId;
     ProgressDialog pDialog;
     ListingModel lm;
-    LinearLayout LytSertifikat, LytPJP, LytSize;
+    LinearLayout LytSertifikat, LytPJP, LytSize, LytFee;
     ViewPager viewPager, viewPagerSertifikat, viewPagerPJP;
     ViewPagerAdapter adapter;
     SertifikatAdapter sertifikatAdapter;
@@ -139,6 +139,7 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
         LytSertifikat = findViewById(R.id.LytSertifikat);
         LytPJP = findViewById(R.id.LytViewPjp);
         LytSize = findViewById(R.id.LytUkuranBannerDetailListing);
+        LytFee = findViewById(R.id.LytFeeDetailListing);
         scrollView = findViewById(R.id.SVDetailListing);
 
         BtnApproveAdmin = findViewById(R.id.BtnApproveAdminDetailListing);
@@ -172,6 +173,7 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
         TVPriority = findViewById(R.id.TVPriority);
         TVKondisi = findViewById(R.id.TVKondisi);
         TVNoPjp = findViewById(R.id.TVNoPjp);
+        TVFee = findViewById(R.id.TVFeeDetailListing);
 
         IVFlowUp = findViewById(R.id.IVFlowUpAgenDetailListing);
         IVWhatsapp = findViewById(R.id.IVNoTelpAgenDetailListing);
@@ -274,6 +276,7 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
         String intentNama = data.getStringExtra("Nama");
         String intentNoTelp = data.getStringExtra("NoTelp");
         String intentInstagram = data.getStringExtra("Instagram");
+        String intentFee = data.getStringExtra("Fee");
 
         adapter = new ViewPagerAdapter(this, images);
         sertifikatAdapter = new SertifikatAdapter(this, sertif);
@@ -345,10 +348,12 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                 }
             });
             LytSize.setVisibility(View.GONE);
+            LytFee.setVisibility(View.GONE);
         } else {
             StringNamaBuyer = Preferences.getKeyNamaLengkap(this);
             IVFlowUp.setVisibility(View.INVISIBLE);
             LytSize.setVisibility(View.GONE);
+            LytFee.setVisibility(View.GONE);
             IVWhatsapp.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -726,6 +731,7 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                 update.putExtra("Nama",intentNama);
                 update.putExtra("NoTelp",intentNoTelp);
                 update.putExtra("Instagram",intentInstagram);
+                update.putExtra("Fee",intentFee);
                 startActivity(update);
             }
         });
@@ -1090,6 +1096,13 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
             } else {
                 TVDeskripsiDetailListing.setText(intentDeskripsi);
             }
+
+            if (intentFee.isEmpty()) {
+                TVFee.setText(": -");
+            } else {
+                TVFee.setText(": " + intentFee);
+            }
+
             TVNamaAgen.setText(intentNama);
 
             if (intentLatitude.equals("0") || intentLongitude.equals("0")){
@@ -1428,35 +1441,75 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
             @Override
             public void onResponse(String response) {
                 pDialog.cancel();
-                Dialog customDialog = new Dialog(DetailListingActivity.this);
-                customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                customDialog.setContentView(R.layout.custom_dialog_sukses);
+                try {
+                    JSONObject res = new JSONObject(response);
+                    String status = res.getString("Status");
+                    if (status.equals("Sukses")){
+                        Dialog customDialog = new Dialog(DetailListingActivity.this);
+                        customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                        customDialog.setContentView(R.layout.custom_dialog_sukses);
 
-                if (customDialog.getWindow() != null) {
-                    customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-                }
+                        if (customDialog.getWindow() != null) {
+                            customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                        }
 
-                TextView dialogTitle = customDialog.findViewById(R.id.dialog_title);
-                Button ok = customDialog.findViewById(R.id.btnya);
-                Button cobalagi = customDialog.findViewById(R.id.btntidak);
-                ImageView gifimage = customDialog.findViewById(R.id.ivdialog);
+                        TextView dialogTitle = customDialog.findViewById(R.id.dialog_title);
+                        Button ok = customDialog.findViewById(R.id.btnya);
+                        Button cobalagi = customDialog.findViewById(R.id.btntidak);
+                        ImageView gifimage = customDialog.findViewById(R.id.ivdialog);
 
-                dialogTitle.setText("Berhasil Approve Listing");
-                cobalagi.setVisibility(View.GONE);
+                        dialogTitle.setText("Berhasil Approve Listing");
+                        cobalagi.setVisibility(View.GONE);
 
-                ok.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        finish();
+                        ok.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                customDialog.dismiss();
+                                finish();
+                            }
+                        });
+
+                        Glide.with(DetailListingActivity.this)
+                                .load(R.mipmap.ic_yes) // You can also use a local resource like R.drawable.your_gif_resource
+                                .transition(DrawableTransitionOptions.withCrossFade())
+                                .into(gifimage);
+
+                        customDialog.show();
+                    } else if (status.equals("Error")) {
+                        Dialog customDialog = new Dialog(DetailListingActivity.this);
+                        customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                        customDialog.setContentView(R.layout.custom_dialog_sukses);
+
+                        if (customDialog.getWindow() != null) {
+                            customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                        }
+
+                        TextView dialogTitle = customDialog.findViewById(R.id.dialog_title);
+                        Button ok = customDialog.findViewById(R.id.btnya);
+                        Button cobalagi = customDialog.findViewById(R.id.btntidak);
+                        ImageView gifimage = customDialog.findViewById(R.id.ivdialog);
+
+                        dialogTitle.setText("Gagal Approve Listing");
+                        ok.setVisibility(View.GONE);
+
+                        cobalagi.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                customDialog.dismiss();
+                                finish();
+                            }
+                        });
+
+                        Glide.with(DetailListingActivity.this)
+                                .load(R.mipmap.ic_no) // You can also use a local resource like R.drawable.your_gif_resource
+                                .transition(DrawableTransitionOptions.withCrossFade())
+                                .into(gifimage);
+
+                        customDialog.show();
                     }
-                });
-
-                Glide.with(DetailListingActivity.this)
-                        .load(R.mipmap.ic_yes)
-                        .transition(DrawableTransitionOptions.withCrossFade())
-                        .into(gifimage);
-
-                customDialog.show();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
         }, new Response.ErrorListener() {
             @Override

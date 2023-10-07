@@ -1,0 +1,368 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical"
+    tools:context=".ui.kebijakan.PrivacyActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/backFormBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            app:srcCompat="@drawable/ic_cancel" />
+
+        <TextView
+            android:id="@+id/textView8"
+            style="@style/TextAppearance.Material3.TitleLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:text="Privacy"
+            android:textColor="@color/black"
+            android:textSize="16sp" />
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="11dp">
+
+            <TextView
+                style="@style/TextAppearance.AppCompat.Title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Kebijakan Privasi Data Pribadi"
+                android:textColor="@color/black" />
+
+            <TextView
+                style="@style/TextAppearance.AppCompat.Caption"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Goo Proper mempertimbangkan privasi dan perlindungan data pribadi pengguna adalah prioritas."
+                android:textColor="@color/black" />
+
+            <TextView
+                style="@style/TextAppearance.AppCompat.Caption"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Untuk memastikan bahwa Anda merasa yakin tentang penyediaan informasi oleh kami terkait dengan informasi pribadi Anda selama menggunakan layanan, terkait dengan pengumpulan dan penggunaan data pribadi akan diuraikan sebagaimana di bawah ini."
+                android:textColor="@color/black" />
+
+            <TextView
+                style="@style/TextAppearance.AppCompat.Title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Tujuan"
+                android:textColor="@color/black" />
+
+            <TextView
+                style="@style/TextAppearance.AppCompat.Caption"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Kami akan mengumpulkan dan menggunakan data pribadi Anda hanya untuk memungkinkan Anda untuk membeli, menyewa, atau menjual properti riil melalui afiliasi dari Goo Proper. Kecuali Anda keberatan, silahkan untuk memberitahukan kepada kami mengenai keberatan terkait."
+                android:textColor="@color/black" />
+
+            <TextView
+                style="@style/TextAppearance.AppCompat.Caption"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Kecuali Anda keberatan, silahkan untuk memberitahukan kepada kami mengenai keberatan terkait."
+                android:textColor="@color/black" />
+
+            <TextView
+                style="@style/TextAppearance.AppCompat.Title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Privasi"
+                android:textColor="@color/black" />
+
+            <TextView
+                style="@style/TextAppearance.AppCompat.Caption"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Kami akan mengumpulkan dan menggunakan data pribadi Anda hanya untuk memungkinkan Anda untuk membeli, menyewa, atau menjual properti riil melalui afiliasi dari Goo Proper. Kecuali Anda keberatan, silahkan untuk memberitahukan kepada kami mengenai keberatan terkait."
+                android:textColor="@color/black" />
+
+            <TextView
+                style="@style/TextAppearance.AppCompat.Caption"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Kecuali Anda keberatan, silahkan untuk memberitahukan kepada kami mengenai keberatan terkait."
+                android:textColor="@color/black" />
+
+            <TextView
+                style="@style/TextAppearance.AppCompat.Title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Keamanan"
+                android:textColor="@color/black" />
+
+            <TextView
+                style="@style/TextAppearance.AppCompat.Caption"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Setiap data pribadi yang Anda berikan kepada kami dijamin keamanan nya dalam database yang dimiliki oleh Goo Proper. Akses hanya dimiliki pihak berwenang dari karyawan dan agen terkait. Kami telah memberlakukan langkah-langkah administratif untuk memastikan bahwa akses karyawan Goo Proper dan agen pada data pribadi dan server kami hanya terbatas sejauh yang diperlukan untuk menjalankan fungsi kerjanya secara fungsional dan struktural."
+                android:textColor="@color/black" />
+
+            <TextView
+                style="@style/TextAppearance.AppCompat.Caption"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Semua karyawan kami diminta untuk menandatangani perjanjian kerahasiaan di mana mereka setuju untuk memperlakukan data pribadi sebagai rahasia. Server yang menyimpan data pribadi Anda dilindungi baik dari akses fisik dan elektronik yang tidak sah. Langkah-langkah ini mencakup firewall elektronik dan berbagai tindakan perlindungan lainnya yang melibatkan pemindaian virus, instalasi patch keamanan, pengujian kerentanan, backup dan perencanaan pemulihan, pelatihan karyawan, audit keamanan, dan langkah-langkah lain yang dirancang untuk terus meningkatkan postur perlindungan data. Server tidak secara langsung terhubung ke Internet, dan karena data yang tersedia hanya untuk komputer yang berwenang."
+                android:textColor="@color/black" />
+
+            <TextView
+                style="@style/TextAppearance.AppCompat.Caption"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Sementara kami berusaha untuk menyediakan keamanan yang sesuai dan melebihi standar industri, karena sifat kerentanan yang ada pada Internet, kami tidak dapat memastikan atau menjamin keamanan menyeluruh dari semua informasi yang dikirim kepada kami."
+                android:textColor="@color/black" />
+
+            <TextView
+                style="@style/TextAppearance.AppCompat.Title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Kebijakan Privasi Goo Proper dan Internet"
+                android:textColor="@color/black" />
+
+            <TextView
+                style="@style/TextAppearance.AppCompat.Title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Web Site"
+                android:textColor="@color/black" />
+
+            <TextView
+                style="@style/TextAppearance.AppCompat.Caption"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Secara umum, Anda dapat menelusuri situs internet kami secara anonim. Namun, beberapa layanan online kami memerlukan pengumpulan beberapa informasi identitas pribadi, seperti nama, alamat, dan bila perlu, informasi kredit Anda. Untuk transaksi yang melibatkan informasi sensitif, seperti nomor kartu kredit dan informasi akuntansi, kita akan menggunakan transmisi dan penyimpanan protokol diterima, seperti enkripsi, untuk mencegah informasi ini dari yang diungkapkan. Ketika Anda mengetikkan informasi sensitif, seperti informasi kartu kredit, maka akan secara otomatis diubah menjadi kode sebelum aman dikirimkan kepada kami melalui Internet."
+                android:textColor="@color/black" />
+
+            <TextView
+                style="@style/TextAppearance.AppCompat.Caption"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Informasi ini akan digunakan untuk memproses transaksi, tetapi juga dapat digunakan untuk pengolahan data internal, seperti kompilasi informasi statistik tentang minat Anda dan penggunaan situs internet kami. Sebagai layanan kepada Anda, kami juga dapat menggunakan informasi ini untuk menyesuaikan konten yang kami tawarkan."
+                android:textColor="@color/black" />
+
+            <TextView
+                style="@style/TextAppearance.AppCompat.Title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Email"
+                android:textColor="@color/black" />
+
+            <TextView
+                style="@style/TextAppearance.AppCompat.Caption"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Dalam rangka untuk menyediakan Anda dengan pemberitahuan terkini mengenai real properti baru yang ditawarkan untuk dijual maupun disewakan, Goo Proper dapat mengirimkan email kepada Anda. Untuk memfasilitasi layanan ini, kami dapat merekam halaman tertentu yang Anda kunjungi di situs web kami. Setiap saat, Anda dapat menghentikan layanan ini dengan mengirimkan email ke goopropermalang09@gmail.com dan meminta alamat email Anda dihapus dari daftar database kami."
+                android:textColor="@color/black" />
+
+            <TextView
+                style="@style/TextAppearance.AppCompat.Title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Hubungan Bisnis"
+                android:textColor="@color/black" />
+
+            <TextView
+                style="@style/TextAppearance.AppCompat.Caption"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Situs Goo Proper berisi link ke situs Web lain. Tak satu pun dari informasi yang Anda berikan kepada kami akan dikirim ke situs Web lain. Goo Proper tidak bertanggung jawab atas praktek privasi atau isi dari situs Web tersebut."
+                android:textColor="@color/black" />
+
+            <TextView
+                style="@style/TextAppearance.AppCompat.Title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Cookies"
+                android:textColor="@color/black" />
+
+            <TextView
+                style="@style/TextAppearance.AppCompat.Caption"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Goo Proper juga dapat menggunakan teknologi Internetnya bersifat personalisasi yang disebut cookie. Cookie adalah file teks kecil yang ditempatkan pada hard disk komputer Anda yang mengidentifikasi software browser Anda ke situs Web. Cookies memungkinkan kami untuk mengidentifikasi ketika Anda mengunjungi, menelusuri, menutup halaman, dan masuk kembali ke situs kami beserta segala aktivitas yang anda lakukan pada kunjungan ke situs kami."
+                android:textColor="@color/black" />
+
+            <TextView
+                style="@style/TextAppearance.AppCompat.Title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Mencari Property Dijual atau Disewa"
+                android:textColor="@color/black" />
+
+            <TextView
+                style="@style/TextAppearance.AppCompat.Caption"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Goo Proper memberikan kesempatan untuk menerima informasi tentang real properti ditawarkan untuk dijual, yang akan meminta alamat email anda dan atau untuk memberikan alamat email Anda kepada agen maupun afiliasi pemasaran kami."
+                android:textColor="@color/black" />
+
+            <TextView
+                style="@style/TextAppearance.AppCompat.Caption"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Jika Anda tidak ingin menerima email lebih lanjut dari pengirim, silakan balas ke pengirim dan meminta agar mereka berhenti mengirimkan korespondensi di masa depan."
+                android:textColor="@color/black" />
+
+            <TextView
+                style="@style/TextAppearance.AppCompat.Caption"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Goo Proper tidak bertanggung jawab atas penggunaan pihak ketiga (atau penyalahgunaan) dari layanan ini."
+                android:textColor="@color/black" />
+
+            <TextView
+                style="@style/TextAppearance.AppCompat.Title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Pengecualian"
+                android:textColor="@color/black" />
+
+            <TextView
+                style="@style/TextAppearance.AppCompat.Caption"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Meskipun kami tidak akan secara sukarela mengungkapkan data pribadi Anda, kami dapat mengungkapkan informasi tersebut jika atas perintah pengadilan, penyelidikan kepolisian, maupun atas perintah pemerintah atau aparat penegak hukum, sesuai proses hukum berlaku lainnya yang dibuktikan secara tertulis maupun jika dianggap perlu untuk melindungi hak atau kepemilikan Goo Proper."
+                android:textColor="@color/black" />
+
+            <TextView
+                style="@style/TextAppearance.AppCompat.Title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Komunikasi Lanjutan"
+                android:textColor="@color/black" />
+
+            <TextView
+                style="@style/TextAppearance.AppCompat.Caption"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Jika Anda memiliki pertanyaan sehubungan dengan penggunaan dan perlindungan data pribadi Anda, silakan hubungi kami di goopropermalang09@gmail.com atau bisa dengan melihat kontak kami di bagian hubungi kami dalam aplikasi."
+                android:textColor="@color/black" />
+
+            <TextView
+                style="@style/TextAppearance.AppCompat.Title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Keamanan Anda Apakah Penting untuk Kami"
+                android:textColor="@color/black" />
+
+            <TextView
+                style="@style/TextAppearance.AppCompat.Caption"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Scam- atau phishing – adalah tindakan menggunakan email resmi yang tampak menipu konsumen agar mengungkapkan informasi pribadi mereka. Email sering mengarahkan penerima ke mirip situs Web dari sebuah bisnis yang sah, menipu konsumen ke dalam pemikiran mereka menanggapi permintaan yang valid."
+                android:textColor="@color/black" />
+
+            <TextView
+                style="@style/TextAppearance.AppCompat.Caption"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Untuk menghindari terjebak dalam penipuan ini, ingatlah untuk :"
+                android:textColor="@color/black" />
+
+            <TextView
+                style="@style/TextAppearance.AppCompat.Caption"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Menjaga rahasia password Anda dan mengubahnya secara berkala."
+                android:textColor="@color/black" />
+
+            <TextView
+                style="@style/TextAppearance.AppCompat.Caption"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Jangan pernah memberikan informasi akun penting Anda melalui email atau telepon, kecuali Anda memulai kontak."
+                android:textColor="@color/black" />
+
+            <TextView
+                style="@style/TextAppearance.AppCompat.Caption"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Goo Proper tidak pernah mengirimkan email yang meminta informasi pribadi yang bersifat rahasia seperti data kartu kredit dan keuangan, password, maupun data pribadi lainnya kecuali untuk keperluan transaksi anda dengan agen yang disahkan dengan perjanjian tertulis berkekuatan hukum."
+                android:textColor="@color/black" />
+
+            <TextView
+                style="@style/TextAppearance.AppCompat.Caption"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Apabila Anda ingin mencari informasi atau mendaftarkan properti pada Goo Proper, berniat mengedit atau menambahkan informasi baru, ataupun bergabung dengan jaringan karir kami, pastikan alamat URL adalah sebagai berikut : https://gooproper.com"
+                android:textColor="@color/black" />
+
+            <TextView
+                style="@style/TextAppearance.AppCompat.Caption"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Anda mungkin ingin menambahkan URL ini ke Favorit browser Anda atau menu Bookmarks."
+                android:textColor="@color/black" />
+
+            <TextView
+                style="@style/TextAppearance.AppCompat.Caption"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Selalu mengakhiri sesi aman di Internet benar-benar dengan mengklik link Log Out dan dengan menutup jendela browser Anda sebelum Anda meninggalkan komputer."
+                android:textColor="@color/black" />
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>

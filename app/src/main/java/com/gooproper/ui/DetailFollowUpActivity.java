@@ -165,13 +165,14 @@ public class DetailFollowUpActivity extends AppCompatActivity {
             TVStatus.setText("Survei");
             CBSurvei.setChecked(true);
             CBSurvei.setClickable(false);
+            IVSelfie.setVisibility(View.VISIBLE);
         } else if (intentChat.equals("1")){
             TVStatus.setText("Chat");
             CBChat.setChecked(true);
             CBChat.setClickable(false);
         }
 
-        if (!intentSelfie.isEmpty()){
+        if (!intentSelfie.equals("0")){
             IVSelfie.setVisibility(View.VISIBLE);
             Glide.with(DetailFollowUpActivity.this)
                     .load(intentSelfie)
@@ -209,7 +210,8 @@ public class DetailFollowUpActivity extends AppCompatActivity {
 
         BtnDelete.setOnClickListener(v -> clearBitmapSelfie());
         IVBack.setOnClickListener(view -> finish());
-        IVSelfie.setOnClickListener(view -> ActivityCompat.requestPermissions(DetailFollowUpActivity.this, new String[]{Manifest.permission.CAMERA}, CODE_CAMERA_REQUEST));
+        //IVSelfie.setOnClickListener(view -> ActivityCompat.requestPermissions(DetailFollowUpActivity.this, new String[]{Manifest.permission.CAMERA}, CODE_CAMERA_REQUEST));
+        BtnSelfie.setOnClickListener(view -> ActivityCompat.requestPermissions(DetailFollowUpActivity.this, new String[]{Manifest.permission.CAMERA}, CODE_CAMERA_REQUEST));
 
         BtnBatal.setOnClickListener(view -> finish());
         BtnUpdate.setOnClickListener(new View.OnClickListener() {

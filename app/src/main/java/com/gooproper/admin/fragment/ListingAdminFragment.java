@@ -183,6 +183,7 @@ public class ListingAdminFragment extends Fragment {
                                 md.setNama(data.getString("Nama"));
                                 md.setNoTelp(data.getString("NoTelp"));
                                 md.setInstagram(data.getString("Instagram"));
+                                md.setFee(data.getString("Fee"));
                                 list.add(md);
                                 PDListingAdmin.dismiss();
                             } catch (JSONException e) {
@@ -347,6 +348,7 @@ public class ListingAdminFragment extends Fragment {
                                 md.setNama(data.getString("Nama"));
                                 md.setNoTelp(data.getString("NoTelp"));
                                 md.setInstagram(data.getString("Instagram"));
+                                md.setFee(data.getString("Fee"));
                                 list.add(md);
                                 PDListingAdmin.dismiss();
                             } catch (JSONException e) {

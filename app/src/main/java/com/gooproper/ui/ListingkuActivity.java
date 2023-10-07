@@ -602,6 +602,7 @@ public class ListingkuActivity extends AppCompatActivity {
                                 md.setNama(data.getString("Nama"));
                                 md.setNoTelp(data.getString("NoTelp"));
                                 md.setInstagram(data.getString("Instagram"));
+                                md.setFee(data.getString("Fee"));
                                 list.add(md);
                                 PDListingKu.cancel();
                             } catch (JSONException e) {

@@ -224,6 +224,7 @@ public class ListingAdapter extends RecyclerView.Adapter<ListingAdapter.HolderDa
                     update.putExtra("Nama",listingModel.getNama());
                     update.putExtra("NoTelp",listingModel.getNoTelp());
                     update.putExtra("Instagram",listingModel.getInstagram());
+                    update.putExtra("Fee",listingModel.getFee());
                     context.startActivity(update);
                 }
             });

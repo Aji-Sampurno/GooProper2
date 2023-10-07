@@ -158,6 +158,7 @@ public class PralistingActivity extends AppCompatActivity {
                                 md.setNama(data.getString("Nama"));
                                 md.setNoTelp(data.getString("NoTelp"));
                                 md.setInstagram(data.getString("Instagram"));
+                                md.setFee(data.getString("Fee"));
                                 list.add(md);
                                 PDPralisting.dismiss();
                             } catch (JSONException e) {

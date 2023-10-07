@@ -168,7 +168,8 @@ public class FollowUpActivity extends AppCompatActivity {
             }
         });
 
-        IVSurvei.setOnClickListener(view -> ActivityCompat.requestPermissions(FollowUpActivity.this, new String[]{Manifest.permission.CAMERA}, CODE_CAMERA_REQUEST));
+        //IVSurvei.setOnClickListener(view -> ActivityCompat.requestPermissions(FollowUpActivity.this, new String[]{Manifest.permission.CAMERA}, CODE_CAMERA_REQUEST));
+        Selfie.setOnClickListener(view -> ActivityCompat.requestPermissions(FollowUpActivity.this, new String[]{Manifest.permission.CAMERA}, CODE_CAMERA_REQUEST));
 
         Batal.setOnClickListener(new View.OnClickListener() {
             @Override

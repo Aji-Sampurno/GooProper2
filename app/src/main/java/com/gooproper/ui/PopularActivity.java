@@ -576,6 +576,7 @@ public class PopularActivity extends AppCompatActivity {
                                 md.setNama(data.getString("Nama"));
                                 md.setNoTelp(data.getString("NoTelp"));
                                 md.setInstagram(data.getString("Instagram"));
+                                md.setFee(data.getString("Fee"));
                                 list.add(md);
                                 PDPopuler.dismiss();
                             } catch (JSONException e) {

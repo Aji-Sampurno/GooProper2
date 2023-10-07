@@ -131,7 +131,7 @@ public class TambahListingActivity extends AppCompatActivity {
     ImageView back, iv1, iv2, iv3, iv4, iv5, iv6, iv7, iv8, IVShm, IVHgb, IVHshp, IVPpjb, IVStratatitle, IVPjp, IVPjp1;
     Button batal, submit, select, maps, BtnSHM, BtnHGB, BtnHSHP, BtnPPJB, BtnSTRA, BtnPjp, BtnPjp1;
     ImageView hps1, hps2, hps3, hps4, hps5, hps6, hps7, hps8, HpsSHM, HpsHGB, HpsHSHP, HpsPPJB, HpsStratatitle, HpsPjp, HpsPjp1;
-    TextInputEditText namalengkap, nohp, nik, alamat, tgllhir, rekening, bank, atasnama, jenisproperti, namaproperti, alamatproperti, sertifikat, nosertif, luas, land, lantai, bed, bath, bedart, bathart, garasi, carpot, listrik, air, pjp, perabot, ketperabot, banner, status, harga, hargasewa, keterangan, hadap, size, EtTglInput;
+    TextInputEditText namalengkap, nohp, nik, alamat, tgllhir, rekening, bank, atasnama, jenisproperti, namaproperti, alamatproperti, sertifikat, nosertif, luas, land, lantai, bed, bath, bedart, bathart, garasi, carpot, listrik, air, pjp, perabot, ketperabot, banner, status, harga, hargasewa, keterangan, hadap, size, EtTglInput, EtFee;
     TextInputLayout LytSize, LytTglInput, LytHargaJual, LytHargaSewa;
     RadioButton open, exclusive;
     RadioGroup rgpriority;
@@ -249,6 +249,7 @@ public class TambahListingActivity extends AppCompatActivity {
         hadap = findViewById(R.id.ethadap);
         size = findViewById(R.id.etukuranbanner);
         EtTglInput = findViewById(R.id.ettglinputproperti);
+        EtFee = findViewById(R.id.etfee);
 
         maps = findViewById(R.id.map);
 
@@ -1848,7 +1849,9 @@ public class TambahListingActivity extends AppCompatActivity {
             try {
                 InputStream inputStream = getContentResolver().openInputStream(filePath);
                 if (BitmapPjp == null) {
-                    BitmapPjp = BitmapFactory.decodeStream(inputStream);
+                    BitmapFactory.Options options = new BitmapFactory.Options();
+                    options.inSampleSize = 1;
+                    BitmapPjp = BitmapFactory.decodeStream(inputStream, null, options);
                     IVPjp.setImageBitmap(BitmapPjp);
                     LytPjp.setVisibility(View.VISIBLE);
                     BtnPjp.setVisibility(View.GONE);
@@ -2092,7 +2095,9 @@ public class TambahListingActivity extends AppCompatActivity {
                 if (imageBitmap != null) {
                     try {
                         InputStream inputStream = getContentResolver().openInputStream(getImageUri(this, imageBitmap));
-                        BitmapPjp = BitmapFactory.decodeStream(inputStream);
+                        BitmapFactory.Options options = new BitmapFactory.Options();
+                        options.inSampleSize = 1;
+                        BitmapPjp = BitmapFactory.decodeStream(inputStream, null, options);
                         IVPjp.setImageBitmap(BitmapPjp);
                         LytPjp.setVisibility(View.VISIBLE);
                         BtnPjp.setVisibility(View.GONE);
@@ -2122,7 +2127,7 @@ public class TambahListingActivity extends AppCompatActivity {
 
     public static Uri getImageUri(Context inContext, Bitmap inImage) {
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-        inImage.compress(Bitmap.CompressFormat.PNG, 100, bytes);
+        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
         String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "IMG_" + Calendar.getInstance().getTime(), null);
         return Uri.parse(path);
     }
@@ -2553,6 +2558,7 @@ public class TambahListingActivity extends AppCompatActivity {
                 map.put("LinkTiktok", idnull);
                 map.put("LinkInstagram", idnull);
                 map.put("LinkYoutube", idnull);
+                map.put("Fee", EtFee.getText().toString());
                 System.out.println(map);
 
                 return map;
@@ -2843,6 +2849,7 @@ public class TambahListingActivity extends AppCompatActivity {
                 map.put("LinkTiktok", idnull);
                 map.put("LinkInstagram", idnull);
                 map.put("LinkYoutube", idnull);
+                map.put("Fee", EtFee.getText().toString());
                 System.out.println(map);
 
                 return map;
@@ -3133,6 +3140,7 @@ public class TambahListingActivity extends AppCompatActivity {
                 map.put("LinkTiktok", idnull);
                 map.put("LinkInstagram", idnull);
                 map.put("LinkYoutube", idnull);
+                map.put("Fee", EtFee.getText().toString());
                 System.out.println(map);
 
                 return map;

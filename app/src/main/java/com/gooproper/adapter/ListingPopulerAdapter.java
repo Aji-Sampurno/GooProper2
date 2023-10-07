@@ -217,6 +217,7 @@ public class ListingPopulerAdapter extends RecyclerView.Adapter<ListingPopulerAd
                     update.putExtra("Nama",listingModel.getNama());
                     update.putExtra("NoTelp",listingModel.getNoTelp());
                     update.putExtra("Instagram",listingModel.getInstagram());
+                    update.putExtra("Fee",listingModel.getFee());
                     context.startActivity(update);
                 }
             });

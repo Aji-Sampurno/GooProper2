@@ -22,6 +22,7 @@ public class ServerApi {
     public static final String URL_UPDATE_PRALISTING = BASE_URL + "/Api/UpdatePraListing";
     public static final String URL_UPDATE_PRALISTING_AGEN = BASE_URL + "/Api/UpdatePraListingAgen";
     public static final String URL_UPDATE_PRALISTING_MAPS = BASE_URL + "/Api/UpdateMapsPraListing";
+    public static final String URL_DELETE_PRALISTING = BASE_URL + "/Api/DeletePraListing";
     public static final String URL_GET_PRALISTING_ADMIN = BASE_URL + "/Api/GetPraListingAdmin";
     public static final String URL_GET_PRALISTING_MANAGER = BASE_URL + "/Api/GetPraListingManager";
     public static final String URL_GET_PRALISTING_AGEN = BASE_URL + "/Api/GetPraListingAgen?idagen=";

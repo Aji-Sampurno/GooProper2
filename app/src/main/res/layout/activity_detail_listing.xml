@@ -669,6 +669,30 @@
 
                 </LinearLayout>
 
+                <LinearLayout
+                    android:id="@+id/LytFeeDetailListing"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:weightSum="2">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Fee"
+                        android:textColor="@color/white" />
+
+                    <TextView
+                        android:id="@+id/TVFeeDetailListing"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text=": -"
+                        android:textColor="@color/white" />
+
+                </LinearLayout>
+
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
