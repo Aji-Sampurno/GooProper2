@@ -6,11 +6,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 
-import com.gooproper.LoginActivity;
 import com.gooproper.R;
 import com.gooproper.admin.MainAdminActivity;
 import com.gooproper.agen.MainAgenActivity;
 import com.gooproper.customer.MainCustomerActivity;
+import com.gooproper.guest.MainGuestActivity;
 import com.gooproper.util.Preferences;
 
 public class SplashScreenActivity extends AppCompatActivity {
@@ -37,7 +37,7 @@ public class SplashScreenActivity extends AppCompatActivity {
                     startActivity(new Intent(SplashScreenActivity.this, MainCustomerActivity.class));
                     finish();
                 } else {
-                    startActivity(new Intent(SplashScreenActivity.this, LoginActivity.class));
+                    startActivity(new Intent(SplashScreenActivity.this, MainGuestActivity.class));
                     finish();
                 }
 

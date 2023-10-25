@@ -1,4 +1,4 @@
-package com.gooproper.ui;
+package com.gooproper.ui.detail;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -28,9 +28,7 @@ import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
 import com.gooproper.R;
 import com.gooproper.adapter.ListingAdapter;
-import com.gooproper.adapter.ViewPagerAdapter;
 import com.gooproper.model.ListingModel;
-import com.gooproper.util.FormatCurrency;
 import com.gooproper.util.ServerApi;
 import com.squareup.picasso.Picasso;
 
@@ -145,6 +143,7 @@ public class DetailAgenDeepActivity extends AppCompatActivity {
                                 md.setLocation(data.getString("Location"));
                                 md.setWide(data.getString("Wide"));
                                 md.setLand(data.getString("Land"));
+                                md.setDimensi(data.getString("Dimensi"));
                                 md.setListrik(data.getString("Listrik"));
                                 md.setLevel(data.getString("Level"));
                                 md.setBed(data.getString("Bed"));
@@ -195,6 +194,7 @@ public class DetailAgenDeepActivity extends AppCompatActivity {
                                 md.setIsAdmin(data.getString("IsAdmin"));
                                 md.setIsManager(data.getString("IsManager"));
                                 md.setSold(data.getString("Sold"));
+                                md.setRented(data.getString("Rented"));
                                 md.setView(data.getString("View"));
                                 md.setMarketable(data.getString("Marketable"));
                                 md.setStatusHarga(data.getString("StatusHarga"));

@@ -4,11 +4,12 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
     <uses-permission android:name="android.permission.READ_MEDIA_AUDIO" />
     <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CAMERA" />
 
     <uses-feature android:name="android.hardware.camera" />
@@ -29,10 +30,42 @@
         android:theme="@style/Theme.GooProper"
         tools:targetApi="31">
         <activity
+            android:name=".ui.detail.DetailListingGuestActivity"
+            android:exported="false" />
+        <activity
+            android:name=".guest.MainGuestActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.detail.DetailClosingActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.edit.EditPraListingAgenActivity"
+            android:exported="false" />
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="com.gooproper"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+
+        <activity
+            android:name=".ui.TambahListingGambarActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.TambahListingSertifikatActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.LaporanListingActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.kebijakan.PrivacyActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.EditPralistingActivity"
+            android:name=".ui.edit.EditPralistingActivity"
             android:exported="false" />
         <activity
             android:name=".ui.PraListingAgenActivity"
@@ -50,10 +83,10 @@
             android:name=".ui.ImageViewActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.EditListingActivity"
+            android:name=".ui.edit.EditListingActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.DetailFollowUpActivity"
+            android:name=".ui.detail.DetailFollowUpActivity"
             android:exported="false" />
         <activity
             android:name=".ui.TambahKaryawanActivity"
@@ -65,7 +98,7 @@
             android:name=".ui.FollowUpActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.DetailAgenDeepActivity"
+            android:name=".ui.detail.DetailAgenDeepActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -80,7 +113,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.DetailListingDeepActivity"
+            android:name=".ui.detail.DetailListingDeepActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -131,7 +164,7 @@
             android:name=".ui.LamarActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.DetailAgenActivity"
+            android:name=".ui.detail.DetailAgenActivity"
             android:exported="false" />
         <activity
             android:name=".ui.LoginConditionActivity"
@@ -140,7 +173,7 @@
             android:name=".ui.AgenActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.DetailListingActivity"
+            android:name=".ui.detail.DetailListingActivity"
             android:exported="false" />
         <activity
             android:name=".ui.RewardActivity"
@@ -182,19 +215,19 @@
             android:name=".ui.ListingFavoriteActivity"
             android:exported="false" />
         <activity
-            android:name=".UbahSandiActivity"
+            android:name=".ui.UbahSandiActivity"
             android:exported="false" />
         <activity
-            android:name=".EditAkunActivity"
+            android:name=".ui.edit.EditAkunActivity"
             android:exported="false" />
         <activity
-            android:name=".TentangKamiActivity"
+            android:name=".ui.TentangKamiActivity"
             android:exported="false" />
         <activity
-            android:name=".SettingActivity"
+            android:name=".ui.SettingActivity"
             android:exported="false" />
         <activity
-            android:name=".OTPActivity"
+            android:name=".ui.OTPActivity"
             android:exported="false" />
         <activity
             android:name=".customer.MainCustomerActivity"
@@ -203,7 +236,7 @@
             android:name=".ui.registrasi.RegistrasiCustomerActivity"
             android:exported="false" />
         <activity
-            android:name=".LoginActivity"
+            android:name=".ui.LoginActivity"
             android:exported="false" />
     </application>
 

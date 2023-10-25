@@ -5,6 +5,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
 
 import android.Manifest;
 import android.app.AlertDialog;
@@ -14,23 +15,17 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.Paint;
 import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
-import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.text.Editable;
-import android.text.Html;
 import android.text.TextWatcher;
 import android.util.Base64;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -42,7 +37,6 @@ import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -53,13 +47,17 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
-import com.github.gcacace.signaturepad.views.SignaturePad;
+import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.Tasks;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.StorageTask;
+import com.google.firebase.storage.UploadTask;
 import com.gooproper.R;
-import com.gooproper.ui.registrasi.RegistrasiAgenActivity;
 import com.gooproper.util.Preferences;
 import com.gooproper.util.ServerApi;
 import com.theartofdev.edmodo.cropper.CropImage;
@@ -71,72 +69,111 @@ import org.json.JSONObject;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
 import java.text.MessageFormat;
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
 public class TambahListingActivity extends AppCompatActivity {
 
     private ProgressDialog pDialog;
-    final int CODE_GALLERY_REQUEST = 100;
-    final int CODE_CAMERA_REQUEST = 101;
-    final int KODE_REQUEST_KAMERA = 102;
-    final int CODE_GALLERY_REQUEST_SHM = 103;
-    final int CODE_CAMERA_REQUEST_SHM = 104;
-    final int KODE_REQUEST_KAMERA_SHM = 105;
-    final int CODE_GALLERY_REQUEST_HGB = 106;
-    final int CODE_CAMERA_REQUEST_HGB = 107;
-    final int KODE_REQUEST_KAMERA_HGB = 108;
-    final int CODE_GALLERY_REQUEST_HSHP = 109;
-    final int CODE_CAMERA_REQUEST_HSHP = 110;
-    final int KODE_REQUEST_KAMERA_HSHP = 111;
-    final int CODE_GALLERY_REQUEST_PPJB = 112;
-    final int CODE_CAMERA_REQUEST_PPJB = 113;
-    final int KODE_REQUEST_KAMERA_PPJB = 114;
-    final int CODE_GALLERY_REQUEST_STRA = 115;
-    final int CODE_CAMERA_REQUEST_STRA = 116;
-    final int KODE_REQUEST_KAMERA_STRA = 117;
-    final int CODE_GALLERY_REQUEST_PJP = 118;
-    final int CODE_CAMERA_REQUEST_PJP = 119;
-    final int KODE_REQUEST_KAMERA_PJP = 120;
-    final int CODE_GALLERY_REQUEST_PJP1 = 121;
-    final int CODE_CAMERA_REQUEST_PJP1 = 122;
-    final int KODE_REQUEST_KAMERA_PJP1 = 123;
-    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE = 124;
-    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES = 450;
-    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE_SHM = 125;
-    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES_SHM = 451;
-    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE_HGB = 126;
-    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES_HGB = 452;
-    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE_HSHP = 127;
-    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES_HSHP = 453;
-    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE_PPJB = 128;
-    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES_PPJB = 454;
-    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE_STRA = 129;
-    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES_STRA = 455;
-    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE_PJP = 130;
-    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES_PJP = 456;
-    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE_PJP1 = 131;
-    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES_PJP1 = 457;
+    final int CODE_GALLERY_REQUEST1 = 1;
+    final int CODE_GALLERY_REQUEST2 = 2;
+    final int CODE_GALLERY_REQUEST3 = 3;
+    final int CODE_GALLERY_REQUEST4 = 4;
+    final int CODE_GALLERY_REQUEST5 = 5;
+    final int CODE_GALLERY_REQUEST6 = 6;
+    final int CODE_GALLERY_REQUEST7 = 7;
+    final int CODE_GALLERY_REQUEST8 = 8;
+    final int CODE_CAMERA_REQUEST1 = 9;
+    final int KODE_REQUEST_KAMERA1 = 10;
+    final int CODE_CAMERA_REQUEST2 = 11;
+    final int KODE_REQUEST_KAMERA2 = 12;
+    final int CODE_CAMERA_REQUEST3 = 13;
+    final int KODE_REQUEST_KAMERA3 = 14;
+    final int CODE_CAMERA_REQUEST4 = 15;
+    final int KODE_REQUEST_KAMERA4 = 16;
+    final int CODE_CAMERA_REQUEST5 = 17;
+    final int KODE_REQUEST_KAMERA5 = 18;
+    final int CODE_CAMERA_REQUEST6 = 19;
+    final int KODE_REQUEST_KAMERA6 = 20;
+    final int CODE_CAMERA_REQUEST7 = 21;
+    final int KODE_REQUEST_KAMERA7 = 22;
+    final int CODE_CAMERA_REQUEST8 = 23;
+    final int KODE_REQUEST_KAMERA8 = 24;
+    final int CODE_GALLERY_REQUEST_SHM = 25;
+    final int CODE_CAMERA_REQUEST_SHM = 26;
+    final int KODE_REQUEST_KAMERA_SHM = 27;
+    final int CODE_GALLERY_REQUEST_HGB = 28;
+    final int CODE_CAMERA_REQUEST_HGB = 29;
+    final int KODE_REQUEST_KAMERA_HGB = 30;
+    final int CODE_GALLERY_REQUEST_HSHP = 31;
+    final int CODE_CAMERA_REQUEST_HSHP = 32;
+    final int KODE_REQUEST_KAMERA_HSHP = 33;
+    final int CODE_GALLERY_REQUEST_PPJB = 34;
+    final int CODE_CAMERA_REQUEST_PPJB = 35;
+    final int KODE_REQUEST_KAMERA_PPJB = 36;
+    final int CODE_GALLERY_REQUEST_STRA = 37;
+    final int CODE_CAMERA_REQUEST_STRA = 38;
+    final int KODE_REQUEST_KAMERA_STRA = 39;
+    final int CODE_GALLERY_REQUEST_PJP = 40;
+    final int CODE_CAMERA_REQUEST_PJP = 41;
+    final int KODE_REQUEST_KAMERA_PJP = 42;
+    final int CODE_GALLERY_REQUEST_PJP1 = 43;
+    final int CODE_CAMERA_REQUEST_PJP1 = 44;
+    final int KODE_REQUEST_KAMERA_PJP1 = 45;
+    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE1 = 46;
+    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES1 = 47;
+    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE2 = 48;
+    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES2 = 49;
+    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE3 = 50;
+    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES3 = 51;
+    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE4 = 52;
+    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES4 = 53;
+    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE5 = 54;
+    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES5 = 55;
+    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE6 = 56;
+    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES6 = 57;
+    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE7 = 58;
+    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES7 = 59;
+    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE8 = 60;
+    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES8 = 61;
+    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE_SHM = 62;
+    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES_SHM = 63;
+    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE_HGB = 64;
+    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES_HGB = 65;
+    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE_HSHP = 66;
+    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES_HSHP = 67;
+    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE_PPJB = 68;
+    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES_PPJB = 69;
+    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE_STRA = 70;
+    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES_STRA = 71;
+    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE_PJP = 72;
+    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES_PJP = 73;
+    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE_PJP1 = 74;
+    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES_PJP1 = 75;
     private static final int MAPS_ACTIVITY_REQUEST_CODE = 3;
     Bitmap bitmap1, bitmap2, bitmap3, bitmap4, bitmap5, bitmap6, bitmap7, bitmap8, bitmapSHM, bitmapHGB, bitmapHSHP, bitmapPPJB, bitmapSTRA, BitmapWatermark, BitmapPjp, BitmapPjp1;
+    Uri Uri1, Uri2, Uri3, Uri4, Uri5, Uri6, Uri7, Uri8, UriSHM, UriHGB, UriHSHP, UriPPJB, UriSTRA, UriPJP, UriPJP1;
     Drawable WatermarkDrawable;
     LinearLayout lyt1, lyt2, lyt3, lyt4, lyt5, lyt6, lyt7, lyt8, LytSHM, LytHGB, LytHSHP, LytPPJB, LytStratatitle, LytPjp, LytPjp1;
     ImageView back, iv1, iv2, iv3, iv4, iv5, iv6, iv7, iv8, IVShm, IVHgb, IVHshp, IVPpjb, IVStratatitle, IVPjp, IVPjp1;
-    Button batal, submit, select, maps, BtnSHM, BtnHGB, BtnHSHP, BtnPPJB, BtnSTRA, BtnPjp, BtnPjp1;
+    Button batal, submit, select, select1, select2, select3, select4, select5, select6, select7, maps, BtnSHM, BtnHGB, BtnHSHP, BtnPPJB, BtnSTRA, BtnPjp, BtnPjp1;
     ImageView hps1, hps2, hps3, hps4, hps5, hps6, hps7, hps8, HpsSHM, HpsHGB, HpsHSHP, HpsPPJB, HpsStratatitle, HpsPjp, HpsPjp1;
-    TextInputEditText namalengkap, nohp, nik, alamat, tgllhir, rekening, bank, atasnama, jenisproperti, namaproperti, alamatproperti, sertifikat, nosertif, luas, land, lantai, bed, bath, bedart, bathart, garasi, carpot, listrik, air, pjp, perabot, ketperabot, banner, status, harga, hargasewa, keterangan, hadap, size, EtTglInput, EtFee;
+    TextInputEditText namalengkap, nohp, nik, alamat, tgllhir, rekening, bank, atasnama, jenisproperti, namaproperti, alamatproperti, sertifikat, nosertif, luas, land, dimensi, lantai, bed, bath, bedart, bathart, garasi, carpot, listrik, air, pjp, perabot, ketperabot, banner, status, harga, hargasewa, keterangan, hadap, size, EtTglInput, EtFee;
     TextInputLayout LytSize, LytTglInput, LytHargaJual, LytHargaSewa;
     RadioButton open, exclusive;
     RadioGroup rgpriority;
     CheckBox CBSHM, CBHGB, CBHSHP, CBPPJB, CBSTRA;
-    String idagen, idnull, sstatus, priority, namalisting, isAdmin, idadmin, idinput;
+    String idagen, idnull, sstatus, priority, namalisting, isAdmin, idadmin, idinput, HargaString, HargaSewaString, SHarga, SHargaSewa;
     String image1, image2, image3, image4, image5, image6, image7, image8, SHM, HGB, HSHP, PPJB, STRA, PJPHal1, PJPHal2;
     String latitudeStr, longitudeStr, addressStr, Lat, Lng;
     Drawable DrawableSHM, DrawableHGB, DrawableHSHP, DrawablePPJB, DrawableSTRA;
@@ -197,6 +234,13 @@ public class TambahListingActivity extends AppCompatActivity {
         batal = findViewById(R.id.btnbatal);
         submit = findViewById(R.id.btnsubmit);
         select = findViewById(R.id.btnSelectImage);
+        select1 = findViewById(R.id.btnSelectImage1);
+        select2 = findViewById(R.id.btnSelectImage2);
+        select3 = findViewById(R.id.btnSelectImage3);
+        select4 = findViewById(R.id.btnSelectImage4);
+        select5 = findViewById(R.id.btnSelectImage5);
+        select6 = findViewById(R.id.btnSelectImage6);
+        select7 = findViewById(R.id.btnSelectImage7);
 
         hps1 = findViewById(R.id.IVDelete1);
         hps2 = findViewById(R.id.IVDelete2);
@@ -230,6 +274,7 @@ public class TambahListingActivity extends AppCompatActivity {
         nosertif = findViewById(R.id.etnomorsertifikat);
         luas = findViewById(R.id.etluastanah);
         land = findViewById(R.id.etluasbangunan);
+        dimensi = findViewById(R.id.etdimensi);
         lantai = findViewById(R.id.etjumlahlantai);
         bed = findViewById(R.id.etkamartidur);
         bath = findViewById(R.id.etkamarmandi);
@@ -279,11 +324,28 @@ public class TambahListingActivity extends AppCompatActivity {
         DrawablePPJB = IVPpjb.getDrawable();
         DrawableSTRA = IVStratatitle.getDrawable();
 
-        if (isAdmin.equals("2")){
+        if (isAdmin.equals("2")) {
             LytTglInput.setVisibility(View.VISIBLE);
         } else {
             LytTglInput.setVisibility(View.GONE);
         }
+
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
+        String fileListing1 = "Listing1_" + timeStamp + ".jpg";
+        String fileListing2 = "Listing2_" + timeStamp + ".jpg";
+        String fileListing3 = "Listing3_" + timeStamp + ".jpg";
+        String fileListing4 = "Listing4_" + timeStamp + ".jpg";
+        String fileListing5 = "Listing5_" + timeStamp + ".jpg";
+        String fileListing6 = "Listing6_" + timeStamp + ".jpg";
+        String fileListing7 = "Listing7_" + timeStamp + ".jpg";
+        String fileListing8 = "Listing8_" + timeStamp + ".jpg";
+        String fileSertifikatshm = "SHM_" + timeStamp + ".jpg";
+        String fileSertifikathgb = "HGB_" + timeStamp + ".jpg";
+        String fileSertifikathshp = "HSHP_" + timeStamp + ".jpg";
+        String fileSertifikatppjb = "PPJB_" + timeStamp + ".jpg";
+        String fileSertifikatstra = "Stratatitle_" + timeStamp + ".jpg";
+        String filePjp1 = "PJP1_" + timeStamp + ".jpg";
+        String filePjp2 = "PJP2_" + timeStamp + ".jpg";
 
         if (isAdmin.equals("2")) {
             submit.setOnClickListener(view -> {
@@ -320,7 +382,7 @@ public class TambahListingActivity extends AppCompatActivity {
                     customDialog.show();
                 } else {
                     if (Validate()) {
-                        if (bitmap1 == null) {
+                        if (Uri1 == null) {
                             Dialog customDialog = new Dialog(TambahListingActivity.this);
                             customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                             customDialog.setContentView(R.layout.custom_dialog_eror_input);
@@ -350,7 +412,320 @@ public class TambahListingActivity extends AppCompatActivity {
 
                             customDialog.show();
                         } else {
-                            simpanData();
+                            pDialog.setMessage("Menyimpan Data");
+                            pDialog.setCancelable(false);
+                            pDialog.show();
+
+                            StorageReference storageRef = FirebaseStorage.getInstance().getReference();
+                            StorageReference ImgListing1 = storageRef.child("listing/" + fileListing1);
+                            StorageReference ImgListing2 = storageRef.child("listing/" + fileListing2);
+                            StorageReference ImgListing3 = storageRef.child("listing/" + fileListing3);
+                            StorageReference ImgListing4 = storageRef.child("listing/" + fileListing4);
+                            StorageReference ImgListing5 = storageRef.child("listing/" + fileListing5);
+                            StorageReference ImgListing6 = storageRef.child("listing/" + fileListing6);
+                            StorageReference ImgListing7 = storageRef.child("listing/" + fileListing7);
+                            StorageReference ImgListing8 = storageRef.child("listing/" + fileListing8);
+                            StorageReference ImgSertifikatshm = storageRef.child("sertifikat/" + fileSertifikatshm);
+                            StorageReference ImgSertifikathgb = storageRef.child("sertifikat/" + fileSertifikathgb);
+                            StorageReference ImgSertifikathshp = storageRef.child("sertifikat/" + fileSertifikathshp);
+                            StorageReference ImgSertifikatppjb = storageRef.child("sertifikat/" + fileSertifikatppjb);
+                            StorageReference ImgSertifikatstra = storageRef.child("sertifikat/" + fileSertifikatstra);
+                            StorageReference ImgPjp = storageRef.child("pjp/" + filePjp1);
+                            StorageReference ImgPjp1 = storageRef.child("pjp/" + filePjp2);
+
+                            List<StorageTask<UploadTask.TaskSnapshot>> uploadTasks = new ArrayList<>();
+
+                            if (Uri1 != null) {
+                                StorageTask<UploadTask.TaskSnapshot> task1 = ImgListing1.putFile(Uri1)
+                                        .addOnSuccessListener(taskSnapshot -> {
+                                            ImgListing1.getDownloadUrl()
+                                                    .addOnSuccessListener(uri -> {
+                                                        String imageUrl = uri.toString();
+                                                        image1 = imageUrl;
+                                                    })
+                                                    .addOnFailureListener(exception -> {
+                                                    });
+                                        })
+                                        .addOnFailureListener(exception -> {
+                                        });
+                                uploadTasks.add(task1);
+                            } else {
+                                image1 = "0";
+                            }
+                            if (Uri2 != null) {
+                                StorageTask<UploadTask.TaskSnapshot> task2 = ImgListing2.putFile(Uri2)
+                                        .addOnSuccessListener(taskSnapshot -> {
+                                            ImgListing2.getDownloadUrl()
+                                                    .addOnSuccessListener(uri -> {
+                                                        String imageUrl = uri.toString();
+                                                        image2 = imageUrl;
+                                                    })
+                                                    .addOnFailureListener(exception -> {
+                                                    });
+                                        })
+                                        .addOnFailureListener(exception -> {
+                                        });
+                                uploadTasks.add(task2);
+                            } else {
+                                image2 = "0";
+                            }
+                            if (Uri3 != null) {
+                                StorageTask<UploadTask.TaskSnapshot> task3 = ImgListing3.putFile(Uri3)
+                                        .addOnSuccessListener(taskSnapshot -> {
+                                            ImgListing3.getDownloadUrl()
+                                                    .addOnSuccessListener(uri -> {
+                                                        String imageUrl = uri.toString();
+                                                        image3 = imageUrl;
+                                                    })
+                                                    .addOnFailureListener(exception -> {
+                                                    });
+                                        })
+                                        .addOnFailureListener(exception -> {
+                                        });
+                                uploadTasks.add(task3);
+                            } else {
+                                image3 = "0";
+                            }
+                            if (Uri4 != null) {
+                                StorageTask<UploadTask.TaskSnapshot> task4 = ImgListing4.putFile(Uri4)
+                                        .addOnSuccessListener(taskSnapshot -> {
+                                            ImgListing4.getDownloadUrl()
+                                                    .addOnSuccessListener(uri -> {
+                                                        String imageUrl = uri.toString();
+                                                        image4 = imageUrl;
+                                                    })
+                                                    .addOnFailureListener(exception -> {
+                                                    });
+                                        })
+                                        .addOnFailureListener(exception -> {
+                                        });
+                                uploadTasks.add(task4);
+                            } else {
+                                image4 = "0";
+                            }
+                            if (Uri5 != null) {
+                                StorageTask<UploadTask.TaskSnapshot> task5 = ImgListing5.putFile(Uri5)
+                                        .addOnSuccessListener(taskSnapshot -> {
+                                            ImgListing5.getDownloadUrl()
+                                                    .addOnSuccessListener(uri -> {
+                                                        String imageUrl = uri.toString();
+                                                        image5 = imageUrl;
+                                                    })
+                                                    .addOnFailureListener(exception -> {
+                                                    });
+                                        })
+                                        .addOnFailureListener(exception -> {
+                                        });
+                                uploadTasks.add(task5);
+                            } else {
+                                image5 = "0";
+                            }
+                            if (Uri6 != null) {
+                                StorageTask<UploadTask.TaskSnapshot> task6 = ImgListing6.putFile(Uri6)
+                                        .addOnSuccessListener(taskSnapshot -> {
+                                            ImgListing6.getDownloadUrl()
+                                                    .addOnSuccessListener(uri -> {
+                                                        String imageUrl = uri.toString();
+                                                        image6 = imageUrl;
+                                                    })
+                                                    .addOnFailureListener(exception -> {
+                                                    });
+                                        })
+                                        .addOnFailureListener(exception -> {
+                                        });
+                                uploadTasks.add(task6);
+                            } else {
+                                image6 = "0";
+                            }
+                            if (Uri7 != null) {
+                                StorageTask<UploadTask.TaskSnapshot> task7 = ImgListing7.putFile(Uri7)
+                                        .addOnSuccessListener(taskSnapshot -> {
+                                            ImgListing7.getDownloadUrl()
+                                                    .addOnSuccessListener(uri -> {
+                                                        String imageUrl = uri.toString();
+                                                        image7 = imageUrl;
+                                                    })
+                                                    .addOnFailureListener(exception -> {
+                                                    });
+                                        })
+                                        .addOnFailureListener(exception -> {
+                                        });
+                                uploadTasks.add(task7);
+                            } else {
+                                image7 = "0";
+                            }
+                            if (Uri8 != null) {
+                                StorageTask<UploadTask.TaskSnapshot> task8 = ImgListing8.putFile(Uri8)
+                                        .addOnSuccessListener(taskSnapshot -> {
+                                            ImgListing8.getDownloadUrl()
+                                                    .addOnSuccessListener(uri -> {
+                                                        String imageUrl = uri.toString();
+                                                        image8 = imageUrl;
+                                                    })
+                                                    .addOnFailureListener(exception -> {
+                                                    });
+                                        })
+                                        .addOnFailureListener(exception -> {
+                                        });
+                                uploadTasks.add(task8);
+                            } else {
+                                image8 = "0";
+                            }
+                            if (UriSHM != null) {
+                                StorageTask<UploadTask.TaskSnapshot> taskSHM = ImgSertifikatshm.putFile(UriSHM)
+                                        .addOnSuccessListener(taskSnapshot -> {
+                                            ImgSertifikatshm.getDownloadUrl()
+                                                    .addOnSuccessListener(uri -> {
+                                                        String imageUrl = uri.toString();
+                                                        SHM = imageUrl;
+                                                    })
+                                                    .addOnFailureListener(exception -> {
+                                                    });
+                                        })
+                                        .addOnFailureListener(exception -> {
+                                        });
+                                uploadTasks.add(taskSHM);
+                            } else {
+                                SHM = "0";
+                            }
+                            if (UriHGB != null) {
+                                StorageTask<UploadTask.TaskSnapshot> taskHGB = ImgSertifikathgb.putFile(UriHGB)
+                                        .addOnSuccessListener(taskSnapshot -> {
+                                            ImgSertifikathgb.getDownloadUrl()
+                                                    .addOnSuccessListener(uri -> {
+                                                        String imageUrl = uri.toString();
+                                                        HGB = imageUrl;
+                                                    })
+                                                    .addOnFailureListener(exception -> {
+                                                    });
+                                        })
+                                        .addOnFailureListener(exception -> {
+                                        });
+                                uploadTasks.add(taskHGB);
+                            } else {
+                                HGB = "0";
+                            }
+                            if (UriHSHP != null) {
+                                StorageTask<UploadTask.TaskSnapshot> taskHSHP = ImgSertifikathshp.putFile(UriHSHP)
+                                        .addOnSuccessListener(taskSnapshot -> {
+                                            ImgSertifikathshp.getDownloadUrl()
+                                                    .addOnSuccessListener(uri -> {
+                                                        String imageUrl = uri.toString();
+                                                        HSHP = imageUrl;
+                                                    })
+                                                    .addOnFailureListener(exception -> {
+                                                    });
+                                        })
+                                        .addOnFailureListener(exception -> {
+                                        });
+                                uploadTasks.add(taskHSHP);
+                            } else {
+                                HSHP = "0";
+                            }
+                            if (UriPPJB != null) {
+                                StorageTask<UploadTask.TaskSnapshot> taskPPJB = ImgSertifikatppjb.putFile(UriPPJB)
+                                        .addOnSuccessListener(taskSnapshot -> {
+                                            ImgSertifikatppjb.getDownloadUrl()
+                                                    .addOnSuccessListener(uri -> {
+                                                        String imageUrl = uri.toString();
+                                                        PPJB = imageUrl;
+                                                    })
+                                                    .addOnFailureListener(exception -> {
+                                                    });
+                                        })
+                                        .addOnFailureListener(exception -> {
+                                        });
+                                uploadTasks.add(taskPPJB);
+                            } else {
+                                PPJB = "0";
+                            }
+                            if (UriSTRA != null) {
+                                StorageTask<UploadTask.TaskSnapshot> taskSTRA = ImgSertifikatstra.putFile(UriSTRA)
+                                        .addOnSuccessListener(taskSnapshot -> {
+                                            ImgSertifikatstra.getDownloadUrl()
+                                                    .addOnSuccessListener(uri -> {
+                                                        String imageUrl = uri.toString();
+                                                        STRA = imageUrl;
+                                                    })
+                                                    .addOnFailureListener(exception -> {
+                                                    });
+                                        })
+                                        .addOnFailureListener(exception -> {
+                                        });
+                                uploadTasks.add(taskSTRA);
+                            } else {
+                                STRA = "0";
+                            }
+                            if (UriPJP != null) {
+                                StorageTask<UploadTask.TaskSnapshot> taskPJP = ImgPjp.putFile(UriPJP)
+                                        .addOnSuccessListener(taskSnapshot -> {
+                                            ImgPjp.getDownloadUrl()
+                                                    .addOnSuccessListener(uri -> {
+                                                        String imageUrl = uri.toString();
+                                                        PJPHal1 = imageUrl;
+                                                    })
+                                                    .addOnFailureListener(exception -> {
+                                                    });
+                                        })
+                                        .addOnFailureListener(exception -> {
+                                        });
+                                uploadTasks.add(taskPJP);
+                            } else {
+                                PJPHal1 = "0";
+                            }
+                            if (UriPJP1 != null) {
+                                StorageTask<UploadTask.TaskSnapshot> taskPJP1 = ImgPjp1.putFile(UriPJP1)
+                                        .addOnSuccessListener(taskSnapshot -> {
+                                            ImgPjp1.getDownloadUrl()
+                                                    .addOnSuccessListener(uri -> {
+                                                        String imageUrl = uri.toString();
+                                                        PJPHal2 = imageUrl;
+                                                    })
+                                                    .addOnFailureListener(exception -> {
+                                                    });
+                                        })
+                                        .addOnFailureListener(exception -> {
+                                        });
+                                uploadTasks.add(taskPJP1);
+                            } else {
+                                PJPHal2 = "0";
+                            }
+
+                            Tasks.whenAllSuccess(uploadTasks)
+                                    .addOnSuccessListener(results -> {
+                                        pDialog.cancel();
+                                        simpanData();
+                                    })
+                                    .addOnFailureListener(exception -> {
+                                        Dialog customDialog = new Dialog(TambahListingActivity.this);
+                                        customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                                        customDialog.setContentView(R.layout.custom_dialog_eror_input);
+
+                                        if (customDialog.getWindow() != null) {
+                                            customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                                        }
+
+                                        Button ok = customDialog.findViewById(R.id.BtnOkErorInput);
+                                        TextView tv = customDialog.findViewById(R.id.TVDialogErorInput);
+
+                                        tv.setText("Gagal Saat Unggah Gambar");
+
+                                        ok.setOnClickListener(new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View view) {
+                                                customDialog.dismiss();
+                                            }
+                                        });
+
+                                        ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
+
+                                        Glide.with(TambahListingActivity.this)
+                                                .load(R.drawable.alert) // You can also use a local resource like R.drawable.your_gif_resource
+                                                .transition(DrawableTransitionOptions.withCrossFade())
+                                                .into(gifImageView);
+
+                                        customDialog.show();
+                                    });
                         }
                     }
                 }
@@ -391,7 +766,7 @@ public class TambahListingActivity extends AppCompatActivity {
                         customDialog.show();
                     } else {
                         if (Validate()) {
-                            if (bitmap1 == null) {
+                            if (Uri1 == null) {
                                 Dialog customDialog = new Dialog(TambahListingActivity.this);
                                 customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                                 customDialog.setContentView(R.layout.custom_dialog_eror_input);
@@ -421,7 +796,320 @@ public class TambahListingActivity extends AppCompatActivity {
 
                                 customDialog.show();
                             } else {
-                                simpanDataAgen();
+                                pDialog.setMessage("Menyimpan Data");
+                                pDialog.setCancelable(false);
+                                pDialog.show();
+
+                                StorageReference storageRef = FirebaseStorage.getInstance().getReference();
+                                StorageReference ImgListing1 = storageRef.child("listing/" + fileListing1);
+                                StorageReference ImgListing2 = storageRef.child("listing/" + fileListing2);
+                                StorageReference ImgListing3 = storageRef.child("listing/" + fileListing3);
+                                StorageReference ImgListing4 = storageRef.child("listing/" + fileListing4);
+                                StorageReference ImgListing5 = storageRef.child("listing/" + fileListing5);
+                                StorageReference ImgListing6 = storageRef.child("listing/" + fileListing6);
+                                StorageReference ImgListing7 = storageRef.child("listing/" + fileListing7);
+                                StorageReference ImgListing8 = storageRef.child("listing/" + fileListing8);
+                                StorageReference ImgSertifikatshm = storageRef.child("sertifikat/" + fileSertifikatshm);
+                                StorageReference ImgSertifikathgb = storageRef.child("sertifikat/" + fileSertifikathgb);
+                                StorageReference ImgSertifikathshp = storageRef.child("sertifikat/" + fileSertifikathshp);
+                                StorageReference ImgSertifikatppjb = storageRef.child("sertifikat/" + fileSertifikatppjb);
+                                StorageReference ImgSertifikatstra = storageRef.child("sertifikat/" + fileSertifikatstra);
+                                StorageReference ImgPjp = storageRef.child("pjp/" + filePjp1);
+                                StorageReference ImgPjp1 = storageRef.child("pjp/" + filePjp2);
+
+                                List<StorageTask<UploadTask.TaskSnapshot>> uploadTasks = new ArrayList<>();
+
+                                if (Uri1 != null) {
+                                    StorageTask<UploadTask.TaskSnapshot> task1 = ImgListing1.putFile(Uri1)
+                                            .addOnSuccessListener(taskSnapshot -> {
+                                                ImgListing1.getDownloadUrl()
+                                                        .addOnSuccessListener(uri -> {
+                                                            String imageUrl = uri.toString();
+                                                            image1 = imageUrl;
+                                                        })
+                                                        .addOnFailureListener(exception -> {
+                                                        });
+                                            })
+                                            .addOnFailureListener(exception -> {
+                                            });
+                                    uploadTasks.add(task1);
+                                } else {
+                                    image1 = "0";
+                                }
+                                if (Uri2 != null) {
+                                    StorageTask<UploadTask.TaskSnapshot> task2 = ImgListing2.putFile(Uri2)
+                                            .addOnSuccessListener(taskSnapshot -> {
+                                                ImgListing2.getDownloadUrl()
+                                                        .addOnSuccessListener(uri -> {
+                                                            String imageUrl = uri.toString();
+                                                            image2 = imageUrl;
+                                                        })
+                                                        .addOnFailureListener(exception -> {
+                                                        });
+                                            })
+                                            .addOnFailureListener(exception -> {
+                                            });
+                                    uploadTasks.add(task2);
+                                } else {
+                                    image2 = "0";
+                                }
+                                if (Uri3 != null) {
+                                    StorageTask<UploadTask.TaskSnapshot> task3 = ImgListing3.putFile(Uri3)
+                                            .addOnSuccessListener(taskSnapshot -> {
+                                                ImgListing3.getDownloadUrl()
+                                                        .addOnSuccessListener(uri -> {
+                                                            String imageUrl = uri.toString();
+                                                            image3 = imageUrl;
+                                                        })
+                                                        .addOnFailureListener(exception -> {
+                                                        });
+                                            })
+                                            .addOnFailureListener(exception -> {
+                                            });
+                                    uploadTasks.add(task3);
+                                } else {
+                                    image3 = "0";
+                                }
+                                if (Uri4 != null) {
+                                    StorageTask<UploadTask.TaskSnapshot> task4 = ImgListing4.putFile(Uri4)
+                                            .addOnSuccessListener(taskSnapshot -> {
+                                                ImgListing4.getDownloadUrl()
+                                                        .addOnSuccessListener(uri -> {
+                                                            String imageUrl = uri.toString();
+                                                            image4 = imageUrl;
+                                                        })
+                                                        .addOnFailureListener(exception -> {
+                                                        });
+                                            })
+                                            .addOnFailureListener(exception -> {
+                                            });
+                                    uploadTasks.add(task4);
+                                } else {
+                                    image4 = "0";
+                                }
+                                if (Uri5 != null) {
+                                    StorageTask<UploadTask.TaskSnapshot> task5 = ImgListing5.putFile(Uri5)
+                                            .addOnSuccessListener(taskSnapshot -> {
+                                                ImgListing5.getDownloadUrl()
+                                                        .addOnSuccessListener(uri -> {
+                                                            String imageUrl = uri.toString();
+                                                            image5 = imageUrl;
+                                                        })
+                                                        .addOnFailureListener(exception -> {
+                                                        });
+                                            })
+                                            .addOnFailureListener(exception -> {
+                                            });
+                                    uploadTasks.add(task5);
+                                } else {
+                                    image5 = "0";
+                                }
+                                if (Uri6 != null) {
+                                    StorageTask<UploadTask.TaskSnapshot> task6 = ImgListing6.putFile(Uri6)
+                                            .addOnSuccessListener(taskSnapshot -> {
+                                                ImgListing6.getDownloadUrl()
+                                                        .addOnSuccessListener(uri -> {
+                                                            String imageUrl = uri.toString();
+                                                            image6 = imageUrl;
+                                                        })
+                                                        .addOnFailureListener(exception -> {
+                                                        });
+                                            })
+                                            .addOnFailureListener(exception -> {
+                                            });
+                                    uploadTasks.add(task6);
+                                } else {
+                                    image6 = "0";
+                                }
+                                if (Uri7 != null) {
+                                    StorageTask<UploadTask.TaskSnapshot> task7 = ImgListing7.putFile(Uri7)
+                                            .addOnSuccessListener(taskSnapshot -> {
+                                                ImgListing7.getDownloadUrl()
+                                                        .addOnSuccessListener(uri -> {
+                                                            String imageUrl = uri.toString();
+                                                            image7 = imageUrl;
+                                                        })
+                                                        .addOnFailureListener(exception -> {
+                                                        });
+                                            })
+                                            .addOnFailureListener(exception -> {
+                                            });
+                                    uploadTasks.add(task7);
+                                } else {
+                                    image7 = "0";
+                                }
+                                if (Uri8 != null) {
+                                    StorageTask<UploadTask.TaskSnapshot> task8 = ImgListing8.putFile(Uri8)
+                                            .addOnSuccessListener(taskSnapshot -> {
+                                                ImgListing8.getDownloadUrl()
+                                                        .addOnSuccessListener(uri -> {
+                                                            String imageUrl = uri.toString();
+                                                            image8 = imageUrl;
+                                                        })
+                                                        .addOnFailureListener(exception -> {
+                                                        });
+                                            })
+                                            .addOnFailureListener(exception -> {
+                                            });
+                                    uploadTasks.add(task8);
+                                } else {
+                                    image8 = "0";
+                                }
+                                if (UriSHM != null) {
+                                    StorageTask<UploadTask.TaskSnapshot> taskSHM = ImgSertifikatshm.putFile(UriSHM)
+                                            .addOnSuccessListener(taskSnapshot -> {
+                                                ImgSertifikatshm.getDownloadUrl()
+                                                        .addOnSuccessListener(uri -> {
+                                                            String imageUrl = uri.toString();
+                                                            SHM = imageUrl;
+                                                        })
+                                                        .addOnFailureListener(exception -> {
+                                                        });
+                                            })
+                                            .addOnFailureListener(exception -> {
+                                            });
+                                    uploadTasks.add(taskSHM);
+                                } else {
+                                    SHM = "0";
+                                }
+                                if (UriHGB != null) {
+                                    StorageTask<UploadTask.TaskSnapshot> taskHGB = ImgSertifikathgb.putFile(UriHGB)
+                                            .addOnSuccessListener(taskSnapshot -> {
+                                                ImgSertifikathgb.getDownloadUrl()
+                                                        .addOnSuccessListener(uri -> {
+                                                            String imageUrl = uri.toString();
+                                                            HGB = imageUrl;
+                                                        })
+                                                        .addOnFailureListener(exception -> {
+                                                        });
+                                            })
+                                            .addOnFailureListener(exception -> {
+                                            });
+                                    uploadTasks.add(taskHGB);
+                                } else {
+                                    HGB = "0";
+                                }
+                                if (UriHSHP != null) {
+                                    StorageTask<UploadTask.TaskSnapshot> taskHSHP = ImgSertifikathshp.putFile(UriHSHP)
+                                            .addOnSuccessListener(taskSnapshot -> {
+                                                ImgSertifikathshp.getDownloadUrl()
+                                                        .addOnSuccessListener(uri -> {
+                                                            String imageUrl = uri.toString();
+                                                            HSHP = imageUrl;
+                                                        })
+                                                        .addOnFailureListener(exception -> {
+                                                        });
+                                            })
+                                            .addOnFailureListener(exception -> {
+                                            });
+                                    uploadTasks.add(taskHSHP);
+                                } else {
+                                    HSHP = "0";
+                                }
+                                if (UriPPJB != null) {
+                                    StorageTask<UploadTask.TaskSnapshot> taskPPJB = ImgSertifikatppjb.putFile(UriPPJB)
+                                            .addOnSuccessListener(taskSnapshot -> {
+                                                ImgSertifikatppjb.getDownloadUrl()
+                                                        .addOnSuccessListener(uri -> {
+                                                            String imageUrl = uri.toString();
+                                                            PPJB = imageUrl;
+                                                        })
+                                                        .addOnFailureListener(exception -> {
+                                                        });
+                                            })
+                                            .addOnFailureListener(exception -> {
+                                            });
+                                    uploadTasks.add(taskPPJB);
+                                } else {
+                                    PPJB = "0";
+                                }
+                                if (UriSTRA != null) {
+                                    StorageTask<UploadTask.TaskSnapshot> taskSTRA = ImgSertifikatstra.putFile(UriSTRA)
+                                            .addOnSuccessListener(taskSnapshot -> {
+                                                ImgSertifikatstra.getDownloadUrl()
+                                                        .addOnSuccessListener(uri -> {
+                                                            String imageUrl = uri.toString();
+                                                            STRA = imageUrl;
+                                                        })
+                                                        .addOnFailureListener(exception -> {
+                                                        });
+                                            })
+                                            .addOnFailureListener(exception -> {
+                                            });
+                                    uploadTasks.add(taskSTRA);
+                                } else {
+                                    STRA = "0";
+                                }
+                                if (UriPJP != null) {
+                                    StorageTask<UploadTask.TaskSnapshot> taskPJP = ImgPjp.putFile(UriPJP)
+                                            .addOnSuccessListener(taskSnapshot -> {
+                                                ImgPjp.getDownloadUrl()
+                                                        .addOnSuccessListener(uri -> {
+                                                            String imageUrl = uri.toString();
+                                                            PJPHal1 = imageUrl;
+                                                        })
+                                                        .addOnFailureListener(exception -> {
+                                                        });
+                                            })
+                                            .addOnFailureListener(exception -> {
+                                            });
+                                    uploadTasks.add(taskPJP);
+                                } else {
+                                    PJPHal1 = "0";
+                                }
+                                if (UriPJP1 != null) {
+                                    StorageTask<UploadTask.TaskSnapshot> taskPJP1 = ImgPjp1.putFile(UriPJP1)
+                                            .addOnSuccessListener(taskSnapshot -> {
+                                                ImgPjp1.getDownloadUrl()
+                                                        .addOnSuccessListener(uri -> {
+                                                            String imageUrl = uri.toString();
+                                                            PJPHal2 = imageUrl;
+                                                        })
+                                                        .addOnFailureListener(exception -> {
+                                                        });
+                                            })
+                                            .addOnFailureListener(exception -> {
+                                            });
+                                    uploadTasks.add(taskPJP1);
+                                } else {
+                                    PJPHal2 = "0";
+                                }
+
+                                Tasks.whenAllSuccess(uploadTasks)
+                                        .addOnSuccessListener(results -> {
+                                            pDialog.cancel();
+                                            simpanDataAgen();
+                                        })
+                                        .addOnFailureListener(exception -> {
+                                            Dialog customDialog = new Dialog(TambahListingActivity.this);
+                                            customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                                            customDialog.setContentView(R.layout.custom_dialog_eror_input);
+
+                                            if (customDialog.getWindow() != null) {
+                                                customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                                            }
+
+                                            Button ok = customDialog.findViewById(R.id.BtnOkErorInput);
+                                            TextView tv = customDialog.findViewById(R.id.TVDialogErorInput);
+
+                                            tv.setText("Gagal Saat Unggah Gambar");
+
+                                            ok.setOnClickListener(new View.OnClickListener() {
+                                                @Override
+                                                public void onClick(View view) {
+                                                    customDialog.dismiss();
+                                                }
+                                            });
+
+                                            ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
+
+                                            Glide.with(TambahListingActivity.this)
+                                                    .load(R.drawable.alert) // You can also use a local resource like R.drawable.your_gif_resource
+                                                    .transition(DrawableTransitionOptions.withCrossFade())
+                                                    .into(gifImageView);
+
+                                            customDialog.show();
+                                        });
                             }
                         }
                     }
@@ -461,7 +1149,7 @@ public class TambahListingActivity extends AppCompatActivity {
                         customDialog.show();
                     } else {
                         if (Validate()) {
-                            if (bitmap1 == null) {
+                            if (Uri1 == null) {
                                 Dialog customDialog = new Dialog(TambahListingActivity.this);
                                 customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                                 customDialog.setContentView(R.layout.custom_dialog_eror_input);
@@ -491,7 +1179,320 @@ public class TambahListingActivity extends AppCompatActivity {
 
                                 customDialog.show();
                             } else {
-                                simpanDataNonAgen();
+                                pDialog.setMessage("Menyimpan Data");
+                                pDialog.setCancelable(false);
+                                pDialog.show();
+
+                                StorageReference storageRef = FirebaseStorage.getInstance().getReference();
+                                StorageReference ImgListing1 = storageRef.child("listing/" + fileListing1);
+                                StorageReference ImgListing2 = storageRef.child("listing/" + fileListing2);
+                                StorageReference ImgListing3 = storageRef.child("listing/" + fileListing3);
+                                StorageReference ImgListing4 = storageRef.child("listing/" + fileListing4);
+                                StorageReference ImgListing5 = storageRef.child("listing/" + fileListing5);
+                                StorageReference ImgListing6 = storageRef.child("listing/" + fileListing6);
+                                StorageReference ImgListing7 = storageRef.child("listing/" + fileListing7);
+                                StorageReference ImgListing8 = storageRef.child("listing/" + fileListing8);
+                                StorageReference ImgSertifikatshm = storageRef.child("sertifikat/" + fileSertifikatshm);
+                                StorageReference ImgSertifikathgb = storageRef.child("sertifikat/" + fileSertifikathgb);
+                                StorageReference ImgSertifikathshp = storageRef.child("sertifikat/" + fileSertifikathshp);
+                                StorageReference ImgSertifikatppjb = storageRef.child("sertifikat/" + fileSertifikatppjb);
+                                StorageReference ImgSertifikatstra = storageRef.child("sertifikat/" + fileSertifikatstra);
+                                StorageReference ImgPjp = storageRef.child("pjp/" + filePjp1);
+                                StorageReference ImgPjp1 = storageRef.child("pjp/" + filePjp2);
+
+                                List<StorageTask<UploadTask.TaskSnapshot>> uploadTasks = new ArrayList<>();
+
+                                if (Uri1 != null) {
+                                    StorageTask<UploadTask.TaskSnapshot> task1 = ImgListing1.putFile(Uri1)
+                                            .addOnSuccessListener(taskSnapshot -> {
+                                                ImgListing1.getDownloadUrl()
+                                                        .addOnSuccessListener(uri -> {
+                                                            String imageUrl = uri.toString();
+                                                            image1 = imageUrl;
+                                                        })
+                                                        .addOnFailureListener(exception -> {
+                                                        });
+                                            })
+                                            .addOnFailureListener(exception -> {
+                                            });
+                                    uploadTasks.add(task1);
+                                } else {
+                                    image1 = "0";
+                                }
+                                if (Uri2 != null) {
+                                    StorageTask<UploadTask.TaskSnapshot> task2 = ImgListing2.putFile(Uri2)
+                                            .addOnSuccessListener(taskSnapshot -> {
+                                                ImgListing2.getDownloadUrl()
+                                                        .addOnSuccessListener(uri -> {
+                                                            String imageUrl = uri.toString();
+                                                            image2 = imageUrl;
+                                                        })
+                                                        .addOnFailureListener(exception -> {
+                                                        });
+                                            })
+                                            .addOnFailureListener(exception -> {
+                                            });
+                                    uploadTasks.add(task2);
+                                } else {
+                                    image2 = "0";
+                                }
+                                if (Uri3 != null) {
+                                    StorageTask<UploadTask.TaskSnapshot> task3 = ImgListing3.putFile(Uri3)
+                                            .addOnSuccessListener(taskSnapshot -> {
+                                                ImgListing3.getDownloadUrl()
+                                                        .addOnSuccessListener(uri -> {
+                                                            String imageUrl = uri.toString();
+                                                            image3 = imageUrl;
+                                                        })
+                                                        .addOnFailureListener(exception -> {
+                                                        });
+                                            })
+                                            .addOnFailureListener(exception -> {
+                                            });
+                                    uploadTasks.add(task3);
+                                } else {
+                                    image3 = "0";
+                                }
+                                if (Uri4 != null) {
+                                    StorageTask<UploadTask.TaskSnapshot> task4 = ImgListing4.putFile(Uri4)
+                                            .addOnSuccessListener(taskSnapshot -> {
+                                                ImgListing4.getDownloadUrl()
+                                                        .addOnSuccessListener(uri -> {
+                                                            String imageUrl = uri.toString();
+                                                            image4 = imageUrl;
+                                                        })
+                                                        .addOnFailureListener(exception -> {
+                                                        });
+                                            })
+                                            .addOnFailureListener(exception -> {
+                                            });
+                                    uploadTasks.add(task4);
+                                } else {
+                                    image4 = "0";
+                                }
+                                if (Uri5 != null) {
+                                    StorageTask<UploadTask.TaskSnapshot> task5 = ImgListing5.putFile(Uri5)
+                                            .addOnSuccessListener(taskSnapshot -> {
+                                                ImgListing5.getDownloadUrl()
+                                                        .addOnSuccessListener(uri -> {
+                                                            String imageUrl = uri.toString();
+                                                            image5 = imageUrl;
+                                                        })
+                                                        .addOnFailureListener(exception -> {
+                                                        });
+                                            })
+                                            .addOnFailureListener(exception -> {
+                                            });
+                                    uploadTasks.add(task5);
+                                } else {
+                                    image5 = "0";
+                                }
+                                if (Uri6 != null) {
+                                    StorageTask<UploadTask.TaskSnapshot> task6 = ImgListing6.putFile(Uri6)
+                                            .addOnSuccessListener(taskSnapshot -> {
+                                                ImgListing6.getDownloadUrl()
+                                                        .addOnSuccessListener(uri -> {
+                                                            String imageUrl = uri.toString();
+                                                            image6 = imageUrl;
+                                                        })
+                                                        .addOnFailureListener(exception -> {
+                                                        });
+                                            })
+                                            .addOnFailureListener(exception -> {
+                                            });
+                                    uploadTasks.add(task6);
+                                } else {
+                                    image6 = "0";
+                                }
+                                if (Uri7 != null) {
+                                    StorageTask<UploadTask.TaskSnapshot> task7 = ImgListing7.putFile(Uri7)
+                                            .addOnSuccessListener(taskSnapshot -> {
+                                                ImgListing7.getDownloadUrl()
+                                                        .addOnSuccessListener(uri -> {
+                                                            String imageUrl = uri.toString();
+                                                            image7 = imageUrl;
+                                                        })
+                                                        .addOnFailureListener(exception -> {
+                                                        });
+                                            })
+                                            .addOnFailureListener(exception -> {
+                                            });
+                                    uploadTasks.add(task7);
+                                } else {
+                                    image7 = "0";
+                                }
+                                if (Uri8 != null) {
+                                    StorageTask<UploadTask.TaskSnapshot> task8 = ImgListing8.putFile(Uri8)
+                                            .addOnSuccessListener(taskSnapshot -> {
+                                                ImgListing8.getDownloadUrl()
+                                                        .addOnSuccessListener(uri -> {
+                                                            String imageUrl = uri.toString();
+                                                            image8 = imageUrl;
+                                                        })
+                                                        .addOnFailureListener(exception -> {
+                                                        });
+                                            })
+                                            .addOnFailureListener(exception -> {
+                                            });
+                                    uploadTasks.add(task8);
+                                } else {
+                                    image8 = "0";
+                                }
+                                if (UriSHM != null) {
+                                    StorageTask<UploadTask.TaskSnapshot> taskSHM = ImgSertifikatshm.putFile(UriSHM)
+                                            .addOnSuccessListener(taskSnapshot -> {
+                                                ImgSertifikatshm.getDownloadUrl()
+                                                        .addOnSuccessListener(uri -> {
+                                                            String imageUrl = uri.toString();
+                                                            SHM = imageUrl;
+                                                        })
+                                                        .addOnFailureListener(exception -> {
+                                                        });
+                                            })
+                                            .addOnFailureListener(exception -> {
+                                            });
+                                    uploadTasks.add(taskSHM);
+                                } else {
+                                    SHM = "0";
+                                }
+                                if (UriHGB != null) {
+                                    StorageTask<UploadTask.TaskSnapshot> taskHGB = ImgSertifikathgb.putFile(UriHGB)
+                                            .addOnSuccessListener(taskSnapshot -> {
+                                                ImgSertifikathgb.getDownloadUrl()
+                                                        .addOnSuccessListener(uri -> {
+                                                            String imageUrl = uri.toString();
+                                                            HGB = imageUrl;
+                                                        })
+                                                        .addOnFailureListener(exception -> {
+                                                        });
+                                            })
+                                            .addOnFailureListener(exception -> {
+                                            });
+                                    uploadTasks.add(taskHGB);
+                                } else {
+                                    HGB = "0";
+                                }
+                                if (UriHSHP != null) {
+                                    StorageTask<UploadTask.TaskSnapshot> taskHSHP = ImgSertifikathshp.putFile(UriHSHP)
+                                            .addOnSuccessListener(taskSnapshot -> {
+                                                ImgSertifikathshp.getDownloadUrl()
+                                                        .addOnSuccessListener(uri -> {
+                                                            String imageUrl = uri.toString();
+                                                            HSHP = imageUrl;
+                                                        })
+                                                        .addOnFailureListener(exception -> {
+                                                        });
+                                            })
+                                            .addOnFailureListener(exception -> {
+                                            });
+                                    uploadTasks.add(taskHSHP);
+                                } else {
+                                    HSHP = "0";
+                                }
+                                if (UriPPJB != null) {
+                                    StorageTask<UploadTask.TaskSnapshot> taskPPJB = ImgSertifikatppjb.putFile(UriPPJB)
+                                            .addOnSuccessListener(taskSnapshot -> {
+                                                ImgSertifikatppjb.getDownloadUrl()
+                                                        .addOnSuccessListener(uri -> {
+                                                            String imageUrl = uri.toString();
+                                                            PPJB = imageUrl;
+                                                        })
+                                                        .addOnFailureListener(exception -> {
+                                                        });
+                                            })
+                                            .addOnFailureListener(exception -> {
+                                            });
+                                    uploadTasks.add(taskPPJB);
+                                } else {
+                                    PPJB = "0";
+                                }
+                                if (UriSTRA != null) {
+                                    StorageTask<UploadTask.TaskSnapshot> taskSTRA = ImgSertifikatstra.putFile(UriSTRA)
+                                            .addOnSuccessListener(taskSnapshot -> {
+                                                ImgSertifikatstra.getDownloadUrl()
+                                                        .addOnSuccessListener(uri -> {
+                                                            String imageUrl = uri.toString();
+                                                            STRA = imageUrl;
+                                                        })
+                                                        .addOnFailureListener(exception -> {
+                                                        });
+                                            })
+                                            .addOnFailureListener(exception -> {
+                                            });
+                                    uploadTasks.add(taskSTRA);
+                                } else {
+                                    STRA = "0";
+                                }
+                                if (UriPJP != null) {
+                                    StorageTask<UploadTask.TaskSnapshot> taskPJP = ImgPjp.putFile(UriPJP)
+                                            .addOnSuccessListener(taskSnapshot -> {
+                                                ImgPjp.getDownloadUrl()
+                                                        .addOnSuccessListener(uri -> {
+                                                            String imageUrl = uri.toString();
+                                                            PJPHal1 = imageUrl;
+                                                        })
+                                                        .addOnFailureListener(exception -> {
+                                                        });
+                                            })
+                                            .addOnFailureListener(exception -> {
+                                            });
+                                    uploadTasks.add(taskPJP);
+                                } else {
+                                    PJPHal1 = "0";
+                                }
+                                if (UriPJP1 != null) {
+                                    StorageTask<UploadTask.TaskSnapshot> taskPJP1 = ImgPjp1.putFile(UriPJP1)
+                                            .addOnSuccessListener(taskSnapshot -> {
+                                                ImgPjp1.getDownloadUrl()
+                                                        .addOnSuccessListener(uri -> {
+                                                            String imageUrl = uri.toString();
+                                                            PJPHal2 = imageUrl;
+                                                        })
+                                                        .addOnFailureListener(exception -> {
+                                                        });
+                                            })
+                                            .addOnFailureListener(exception -> {
+                                            });
+                                    uploadTasks.add(taskPJP1);
+                                } else {
+                                    PJPHal2 = "0";
+                                }
+
+                                Tasks.whenAllSuccess(uploadTasks)
+                                        .addOnSuccessListener(results -> {
+                                            pDialog.cancel();
+                                            simpanDataNonAgen();
+                                        })
+                                        .addOnFailureListener(exception -> {
+                                            Dialog customDialog = new Dialog(TambahListingActivity.this);
+                                            customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                                            customDialog.setContentView(R.layout.custom_dialog_eror_input);
+
+                                            if (customDialog.getWindow() != null) {
+                                                customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                                            }
+
+                                            Button ok = customDialog.findViewById(R.id.BtnOkErorInput);
+                                            TextView tv = customDialog.findViewById(R.id.TVDialogErorInput);
+
+                                            tv.setText("Gagal Saat Unggah Gambar");
+
+                                            ok.setOnClickListener(new View.OnClickListener() {
+                                                @Override
+                                                public void onClick(View view) {
+                                                    customDialog.dismiss();
+                                                }
+                                            });
+
+                                            ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
+
+                                            Glide.with(TambahListingActivity.this)
+                                                    .load(R.drawable.alert) // You can also use a local resource like R.drawable.your_gif_resource
+                                                    .transition(DrawableTransitionOptions.withCrossFade())
+                                                    .into(gifImageView);
+
+                                            customDialog.show();
+                                        });
                             }
                         }
                     }
@@ -531,7 +1532,7 @@ public class TambahListingActivity extends AppCompatActivity {
                         customDialog.show();
                     } else {
                         if (Validate()) {
-                            if (bitmap1 == null) {
+                            if (Uri1 == null) {
                                 Dialog customDialog = new Dialog(TambahListingActivity.this);
                                 customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                                 customDialog.setContentView(R.layout.custom_dialog_eror_input);
@@ -561,7 +1562,320 @@ public class TambahListingActivity extends AppCompatActivity {
 
                                 customDialog.show();
                             } else {
-                                simpanDataNonAgen();
+                                pDialog.setMessage("Menyimpan Data");
+                                pDialog.setCancelable(false);
+                                pDialog.show();
+
+                                StorageReference storageRef = FirebaseStorage.getInstance().getReference();
+                                StorageReference ImgListing1 = storageRef.child("listing/" + fileListing1);
+                                StorageReference ImgListing2 = storageRef.child("listing/" + fileListing2);
+                                StorageReference ImgListing3 = storageRef.child("listing/" + fileListing3);
+                                StorageReference ImgListing4 = storageRef.child("listing/" + fileListing4);
+                                StorageReference ImgListing5 = storageRef.child("listing/" + fileListing5);
+                                StorageReference ImgListing6 = storageRef.child("listing/" + fileListing6);
+                                StorageReference ImgListing7 = storageRef.child("listing/" + fileListing7);
+                                StorageReference ImgListing8 = storageRef.child("listing/" + fileListing8);
+                                StorageReference ImgSertifikatshm = storageRef.child("sertifikat/" + fileSertifikatshm);
+                                StorageReference ImgSertifikathgb = storageRef.child("sertifikat/" + fileSertifikathgb);
+                                StorageReference ImgSertifikathshp = storageRef.child("sertifikat/" + fileSertifikathshp);
+                                StorageReference ImgSertifikatppjb = storageRef.child("sertifikat/" + fileSertifikatppjb);
+                                StorageReference ImgSertifikatstra = storageRef.child("sertifikat/" + fileSertifikatstra);
+                                StorageReference ImgPjp = storageRef.child("pjp/" + filePjp1);
+                                StorageReference ImgPjp1 = storageRef.child("pjp/" + filePjp2);
+
+                                List<StorageTask<UploadTask.TaskSnapshot>> uploadTasks = new ArrayList<>();
+
+                                if (Uri1 != null) {
+                                    StorageTask<UploadTask.TaskSnapshot> task1 = ImgListing1.putFile(Uri1)
+                                            .addOnSuccessListener(taskSnapshot -> {
+                                                ImgListing1.getDownloadUrl()
+                                                        .addOnSuccessListener(uri -> {
+                                                            String imageUrl = uri.toString();
+                                                            image1 = imageUrl;
+                                                        })
+                                                        .addOnFailureListener(exception -> {
+                                                        });
+                                            })
+                                            .addOnFailureListener(exception -> {
+                                            });
+                                    uploadTasks.add(task1);
+                                } else {
+                                    image1 = "0";
+                                }
+                                if (Uri2 != null) {
+                                    StorageTask<UploadTask.TaskSnapshot> task2 = ImgListing2.putFile(Uri2)
+                                            .addOnSuccessListener(taskSnapshot -> {
+                                                ImgListing2.getDownloadUrl()
+                                                        .addOnSuccessListener(uri -> {
+                                                            String imageUrl = uri.toString();
+                                                            image2 = imageUrl;
+                                                        })
+                                                        .addOnFailureListener(exception -> {
+                                                        });
+                                            })
+                                            .addOnFailureListener(exception -> {
+                                            });
+                                    uploadTasks.add(task2);
+                                } else {
+                                    image2 = "0";
+                                }
+                                if (Uri3 != null) {
+                                    StorageTask<UploadTask.TaskSnapshot> task3 = ImgListing3.putFile(Uri3)
+                                            .addOnSuccessListener(taskSnapshot -> {
+                                                ImgListing3.getDownloadUrl()
+                                                        .addOnSuccessListener(uri -> {
+                                                            String imageUrl = uri.toString();
+                                                            image3 = imageUrl;
+                                                        })
+                                                        .addOnFailureListener(exception -> {
+                                                        });
+                                            })
+                                            .addOnFailureListener(exception -> {
+                                            });
+                                    uploadTasks.add(task3);
+                                } else {
+                                    image3 = "0";
+                                }
+                                if (Uri4 != null) {
+                                    StorageTask<UploadTask.TaskSnapshot> task4 = ImgListing4.putFile(Uri4)
+                                            .addOnSuccessListener(taskSnapshot -> {
+                                                ImgListing4.getDownloadUrl()
+                                                        .addOnSuccessListener(uri -> {
+                                                            String imageUrl = uri.toString();
+                                                            image4 = imageUrl;
+                                                        })
+                                                        .addOnFailureListener(exception -> {
+                                                        });
+                                            })
+                                            .addOnFailureListener(exception -> {
+                                            });
+                                    uploadTasks.add(task4);
+                                } else {
+                                    image4 = "0";
+                                }
+                                if (Uri5 != null) {
+                                    StorageTask<UploadTask.TaskSnapshot> task5 = ImgListing5.putFile(Uri5)
+                                            .addOnSuccessListener(taskSnapshot -> {
+                                                ImgListing5.getDownloadUrl()
+                                                        .addOnSuccessListener(uri -> {
+                                                            String imageUrl = uri.toString();
+                                                            image5 = imageUrl;
+                                                        })
+                                                        .addOnFailureListener(exception -> {
+                                                        });
+                                            })
+                                            .addOnFailureListener(exception -> {
+                                            });
+                                    uploadTasks.add(task5);
+                                } else {
+                                    image5 = "0";
+                                }
+                                if (Uri6 != null) {
+                                    StorageTask<UploadTask.TaskSnapshot> task6 = ImgListing6.putFile(Uri6)
+                                            .addOnSuccessListener(taskSnapshot -> {
+                                                ImgListing6.getDownloadUrl()
+                                                        .addOnSuccessListener(uri -> {
+                                                            String imageUrl = uri.toString();
+                                                            image6 = imageUrl;
+                                                        })
+                                                        .addOnFailureListener(exception -> {
+                                                        });
+                                            })
+                                            .addOnFailureListener(exception -> {
+                                            });
+                                    uploadTasks.add(task6);
+                                } else {
+                                    image6 = "0";
+                                }
+                                if (Uri7 != null) {
+                                    StorageTask<UploadTask.TaskSnapshot> task7 = ImgListing7.putFile(Uri7)
+                                            .addOnSuccessListener(taskSnapshot -> {
+                                                ImgListing7.getDownloadUrl()
+                                                        .addOnSuccessListener(uri -> {
+                                                            String imageUrl = uri.toString();
+                                                            image7 = imageUrl;
+                                                        })
+                                                        .addOnFailureListener(exception -> {
+                                                        });
+                                            })
+                                            .addOnFailureListener(exception -> {
+                                            });
+                                    uploadTasks.add(task7);
+                                } else {
+                                    image7 = "0";
+                                }
+                                if (Uri8 != null) {
+                                    StorageTask<UploadTask.TaskSnapshot> task8 = ImgListing8.putFile(Uri8)
+                                            .addOnSuccessListener(taskSnapshot -> {
+                                                ImgListing8.getDownloadUrl()
+                                                        .addOnSuccessListener(uri -> {
+                                                            String imageUrl = uri.toString();
+                                                            image8 = imageUrl;
+                                                        })
+                                                        .addOnFailureListener(exception -> {
+                                                        });
+                                            })
+                                            .addOnFailureListener(exception -> {
+                                            });
+                                    uploadTasks.add(task8);
+                                } else {
+                                    image8 = "0";
+                                }
+                                if (UriSHM != null) {
+                                    StorageTask<UploadTask.TaskSnapshot> taskSHM = ImgSertifikatshm.putFile(UriSHM)
+                                            .addOnSuccessListener(taskSnapshot -> {
+                                                ImgSertifikatshm.getDownloadUrl()
+                                                        .addOnSuccessListener(uri -> {
+                                                            String imageUrl = uri.toString();
+                                                            SHM = imageUrl;
+                                                        })
+                                                        .addOnFailureListener(exception -> {
+                                                        });
+                                            })
+                                            .addOnFailureListener(exception -> {
+                                            });
+                                    uploadTasks.add(taskSHM);
+                                } else {
+                                    SHM = "0";
+                                }
+                                if (UriHGB != null) {
+                                    StorageTask<UploadTask.TaskSnapshot> taskHGB = ImgSertifikathgb.putFile(UriHGB)
+                                            .addOnSuccessListener(taskSnapshot -> {
+                                                ImgSertifikathgb.getDownloadUrl()
+                                                        .addOnSuccessListener(uri -> {
+                                                            String imageUrl = uri.toString();
+                                                            HGB = imageUrl;
+                                                        })
+                                                        .addOnFailureListener(exception -> {
+                                                        });
+                                            })
+                                            .addOnFailureListener(exception -> {
+                                            });
+                                    uploadTasks.add(taskHGB);
+                                } else {
+                                    HGB = "0";
+                                }
+                                if (UriHSHP != null) {
+                                    StorageTask<UploadTask.TaskSnapshot> taskHSHP = ImgSertifikathshp.putFile(UriHSHP)
+                                            .addOnSuccessListener(taskSnapshot -> {
+                                                ImgSertifikathshp.getDownloadUrl()
+                                                        .addOnSuccessListener(uri -> {
+                                                            String imageUrl = uri.toString();
+                                                            HSHP = imageUrl;
+                                                        })
+                                                        .addOnFailureListener(exception -> {
+                                                        });
+                                            })
+                                            .addOnFailureListener(exception -> {
+                                            });
+                                    uploadTasks.add(taskHSHP);
+                                } else {
+                                    HSHP = "0";
+                                }
+                                if (UriPPJB != null) {
+                                    StorageTask<UploadTask.TaskSnapshot> taskPPJB = ImgSertifikatppjb.putFile(UriPPJB)
+                                            .addOnSuccessListener(taskSnapshot -> {
+                                                ImgSertifikatppjb.getDownloadUrl()
+                                                        .addOnSuccessListener(uri -> {
+                                                            String imageUrl = uri.toString();
+                                                            PPJB = imageUrl;
+                                                        })
+                                                        .addOnFailureListener(exception -> {
+                                                        });
+                                            })
+                                            .addOnFailureListener(exception -> {
+                                            });
+                                    uploadTasks.add(taskPPJB);
+                                } else {
+                                    PPJB = "0";
+                                }
+                                if (UriSTRA != null) {
+                                    StorageTask<UploadTask.TaskSnapshot> taskSTRA = ImgSertifikatstra.putFile(UriSTRA)
+                                            .addOnSuccessListener(taskSnapshot -> {
+                                                ImgSertifikatstra.getDownloadUrl()
+                                                        .addOnSuccessListener(uri -> {
+                                                            String imageUrl = uri.toString();
+                                                            STRA = imageUrl;
+                                                        })
+                                                        .addOnFailureListener(exception -> {
+                                                        });
+                                            })
+                                            .addOnFailureListener(exception -> {
+                                            });
+                                    uploadTasks.add(taskSTRA);
+                                } else {
+                                    STRA = "0";
+                                }
+                                if (UriPJP != null) {
+                                    StorageTask<UploadTask.TaskSnapshot> taskPJP = ImgPjp.putFile(UriPJP)
+                                            .addOnSuccessListener(taskSnapshot -> {
+                                                ImgPjp.getDownloadUrl()
+                                                        .addOnSuccessListener(uri -> {
+                                                            String imageUrl = uri.toString();
+                                                            PJPHal1 = imageUrl;
+                                                        })
+                                                        .addOnFailureListener(exception -> {
+                                                        });
+                                            })
+                                            .addOnFailureListener(exception -> {
+                                            });
+                                    uploadTasks.add(taskPJP);
+                                } else {
+                                    PJPHal1 = "0";
+                                }
+                                if (UriPJP1 != null) {
+                                    StorageTask<UploadTask.TaskSnapshot> taskPJP1 = ImgPjp1.putFile(UriPJP1)
+                                            .addOnSuccessListener(taskSnapshot -> {
+                                                ImgPjp1.getDownloadUrl()
+                                                        .addOnSuccessListener(uri -> {
+                                                            String imageUrl = uri.toString();
+                                                            PJPHal2 = imageUrl;
+                                                        })
+                                                        .addOnFailureListener(exception -> {
+                                                        });
+                                            })
+                                            .addOnFailureListener(exception -> {
+                                            });
+                                    uploadTasks.add(taskPJP1);
+                                } else {
+                                    PJPHal2 = "0";
+                                }
+
+                                Tasks.whenAllSuccess(uploadTasks)
+                                        .addOnSuccessListener(results -> {
+                                            pDialog.cancel();
+                                            simpanDataNonAgen();
+                                        })
+                                        .addOnFailureListener(exception -> {
+                                            Dialog customDialog = new Dialog(TambahListingActivity.this);
+                                            customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                                            customDialog.setContentView(R.layout.custom_dialog_eror_input);
+
+                                            if (customDialog.getWindow() != null) {
+                                                customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                                            }
+
+                                            Button ok = customDialog.findViewById(R.id.BtnOkErorInput);
+                                            TextView tv = customDialog.findViewById(R.id.TVDialogErorInput);
+
+                                            tv.setText("Gagal Saat Unggah Gambar");
+
+                                            ok.setOnClickListener(new View.OnClickListener() {
+                                                @Override
+                                                public void onClick(View view) {
+                                                    customDialog.dismiss();
+                                                }
+                                            });
+
+                                            ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
+
+                                            Glide.with(TambahListingActivity.this)
+                                                    .load(R.drawable.alert) // You can also use a local resource like R.drawable.your_gif_resource
+                                                    .transition(DrawableTransitionOptions.withCrossFade())
+                                                    .into(gifImageView);
+
+                                            customDialog.show();
+                                        });
                             }
                         }
                     }
@@ -616,7 +1930,6 @@ public class TambahListingActivity extends AppCompatActivity {
                 }
             }
         });
-
         status.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -645,7 +1958,6 @@ public class TambahListingActivity extends AppCompatActivity {
                 }
             }
         });
-
         pjp.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -660,12 +1972,12 @@ public class TambahListingActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable editable) {
                 if (editable.toString().equalsIgnoreCase("Ya")) {
-                    if (BitmapPjp == null){
+                    if (BitmapPjp == null) {
                         BtnPjp.setVisibility(View.VISIBLE);
                     } else {
                         BtnPjp.setVisibility(View.GONE);
                     }
-                    if (BitmapPjp1 == null){
+                    if (BitmapPjp1 == null) {
                         BtnPjp1.setVisibility(View.VISIBLE);
                     } else {
                         BtnPjp1.setVisibility(View.GONE);
@@ -679,98 +1991,93 @@ public class TambahListingActivity extends AppCompatActivity {
                 }
             }
         });
-
         CBSHM.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if (b) {
                     IVShm.setVisibility(View.VISIBLE);
                     HpsSHM.setVisibility(View.VISIBLE);
-                    if (bitmapSHM == null){
+                    if (UriSHM == null) {
                         BtnSHM.setVisibility(View.VISIBLE);
                     } else {
                         BtnSHM.setVisibility(View.GONE);
                     }
                 } else {
-                    IVShm.setVisibility(View.GONE);
-                    BtnSHM.setVisibility(View.GONE);
-                    HpsSHM.setVisibility(View.GONE);
+                    UriSHM = null;
+                    LytSHM.setVisibility(View.GONE);
+                    BtnSHM.setVisibility(View.VISIBLE);
                 }
             }
         });
-
         CBHGB.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if (b) {
                     IVHgb.setVisibility(View.VISIBLE);
                     HpsHGB.setVisibility(View.VISIBLE);
-                    if (bitmapHGB == null){
+                    if (UriHGB == null) {
                         BtnHGB.setVisibility(View.VISIBLE);
                     } else {
                         BtnHGB.setVisibility(View.GONE);
                     }
                 } else {
-                    IVHgb.setVisibility(View.GONE);
-                    BtnHGB.setVisibility(View.GONE);
-                    HpsHGB.setVisibility(View.GONE);
+                    UriHGB = null;
+                    LytHGB.setVisibility(View.GONE);
+                    BtnHGB.setVisibility(View.VISIBLE);
                 }
             }
         });
-
         CBHSHP.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if (b) {
                     IVHshp.setVisibility(View.VISIBLE);
                     HpsHSHP.setVisibility(View.VISIBLE);
-                    if (bitmapHSHP == null){
+                    if (UriHSHP == null) {
                         BtnHSHP.setVisibility(View.VISIBLE);
                     } else {
                         BtnHSHP.setVisibility(View.GONE);
                     }
                 } else {
-                    IVHshp.setVisibility(View.GONE);
-                    BtnHSHP.setVisibility(View.GONE);
-                    HpsHSHP.setVisibility(View.GONE);
+                    UriHSHP = null;
+                    LytHSHP.setVisibility(View.GONE);
+                    BtnHSHP.setVisibility(View.VISIBLE);
                 }
             }
         });
-
         CBPPJB.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if (b) {
                     IVPpjb.setVisibility(View.VISIBLE);
                     HpsPPJB.setVisibility(View.VISIBLE);
-                    if (bitmapPPJB == null){
+                    if (UriPPJB == null) {
                         BtnPPJB.setVisibility(View.VISIBLE);
                     } else {
                         BtnPPJB.setVisibility(View.GONE);
                     }
                 } else {
-                    IVPpjb.setVisibility(View.GONE);
-                    BtnPPJB.setVisibility(View.GONE);
-                    HpsPPJB.setVisibility(View.GONE);
+                    UriPPJB = null;
+                    LytPPJB.setVisibility(View.GONE);
+                    BtnPPJB.setVisibility(View.VISIBLE);
                 }
             }
         });
-
         CBSTRA.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if (b) {
                     IVStratatitle.setVisibility(View.VISIBLE);
                     HpsStratatitle.setVisibility(View.VISIBLE);
-                    if (bitmapSTRA == null){
+                    if (UriSTRA == null) {
                         BtnSTRA.setVisibility(View.VISIBLE);
                     } else {
                         BtnSTRA.setVisibility(View.GONE);
                     }
                 } else {
-                    IVStratatitle.setVisibility(View.GONE);
-                    BtnSTRA.setVisibility(View.GONE);
-                    HpsStratatitle.setVisibility(View.GONE);
+                    UriSTRA = null;
+                    LytStratatitle.setVisibility(View.GONE);
+                    BtnSTRA.setVisibility(View.VISIBLE);
                 }
             }
         });
@@ -786,10 +2093,51 @@ public class TambahListingActivity extends AppCompatActivity {
         select.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showPhotoSelectionDialog();
+                showPhotoSelectionDialog8();
             }
         });
-
+        select1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showPhotoSelectionDialog1();
+            }
+        });
+        select2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showPhotoSelectionDialog2();
+            }
+        });
+        select3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showPhotoSelectionDialog3();
+            }
+        });
+        select4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showPhotoSelectionDialog4();
+            }
+        });
+        select5.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showPhotoSelectionDialog5();
+            }
+        });
+        select6.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showPhotoSelectionDialog6();
+            }
+        });
+        select7.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showPhotoSelectionDialog7();
+            }
+        });
         rgpriority.setOnCheckedChangeListener((group, checkedId) -> {
             if (checkedId == R.id.rbopen) {
                 priority = "open";
@@ -797,7 +2145,6 @@ public class TambahListingActivity extends AppCompatActivity {
                 priority = "exclusive";
             }
         });
-
         tgllhir.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -815,7 +2162,6 @@ public class TambahListingActivity extends AppCompatActivity {
                 materialDatePicker.show(getSupportFragmentManager(), "tag");
             }
         });
-
         EtTglInput.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -833,18 +2179,82 @@ public class TambahListingActivity extends AppCompatActivity {
                 materialDatePicker.show(getSupportFragmentManager(), "tag");
             }
         });
+        harga.addTextChangedListener(new TextWatcher() {
+            private String current = "";
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (!s.toString().equals(current)) {
+                    harga.removeTextChangedListener(this);
+
+                    String cleanString = s.toString().replaceAll("[Rp,.\\s]", "");
+                    if (!cleanString.isEmpty()) {
+                        double parsed = Double.parseDouble(cleanString);
+                        String formatted = String.format(Locale.US, "%,.0f", parsed);
+                        HargaString = cleanString;
+                        current = formatted;
+                        harga.setText(formatted);
+                        harga.setSelection(formatted.length());
+                    } else {
+                        harga.setText("");
+                        HargaString = "";
+                    }
+
+                    harga.addTextChangedListener(this);
+                }
+            }
+        });
+        hargasewa.addTextChangedListener(new TextWatcher() {
+            private String current = "";
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (!s.toString().equals(current)) {
+                    hargasewa.removeTextChangedListener(this);
+
+                    String cleanString = s.toString().replaceAll("[Rp,.\\s]", "");
+                    if (!cleanString.isEmpty()) {
+                        double parsed = Double.parseDouble(cleanString);
+                        String formatted = String.format(Locale.US, "%,.0f", parsed);
+                        HargaSewaString = cleanString;
+                        current = formatted;
+                        hargasewa.setText(formatted);
+                        hargasewa.setSelection(formatted.length());
+                    } else {
+                        hargasewa.setText("");
+                        HargaSewaString = "";
+                    }
+
+                    hargasewa.addTextChangedListener(this);
+                }
+            }
+        });
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
         }
     }
-
     public void startMapsActivityForResult() {
         Intent intent = new Intent(this, LocationActivity.class);
         startActivityForResult(intent, MAPS_ACTIVITY_REQUEST_CODE);
     }
-
-    private void showPhotoSelectionDialog() {
+    private void showPhotoSelectionDialog1() {
         androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this);
         builder.setTitle("Unggah Gambar")
                 .setItems(new CharSequence[]{"Ambil Foto", "Pilih Dari Galeri"}, new DialogInterface.OnClickListener() {
@@ -852,10 +2262,10 @@ public class TambahListingActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int which) {
                         switch (which) {
                             case 0:
-                                ActivityCompat.requestPermissions(TambahListingActivity.this, new String[]{Manifest.permission.CAMERA}, CODE_CAMERA_REQUEST);
+                                ActivityCompat.requestPermissions(TambahListingActivity.this, new String[]{Manifest.permission.CAMERA}, CODE_CAMERA_REQUEST1);
                                 break;
                             case 1:
-                                requestPermissions();
+                                requestPermissions1();
                                 break;
                         }
                     }
@@ -863,7 +2273,139 @@ public class TambahListingActivity extends AppCompatActivity {
 
         builder.show();
     }
+    private void showPhotoSelectionDialog2() {
+        androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this);
+        builder.setTitle("Unggah Gambar")
+                .setItems(new CharSequence[]{"Ambil Foto", "Pilih Dari Galeri"}, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which) {
+                            case 0:
+                                ActivityCompat.requestPermissions(TambahListingActivity.this, new String[]{Manifest.permission.CAMERA}, CODE_CAMERA_REQUEST2);
+                                break;
+                            case 1:
+                                requestPermissions2();
+                                break;
+                        }
+                    }
+                });
 
+        builder.show();
+    }
+    private void showPhotoSelectionDialog3() {
+        androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this);
+        builder.setTitle("Unggah Gambar")
+                .setItems(new CharSequence[]{"Ambil Foto", "Pilih Dari Galeri"}, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which) {
+                            case 0:
+                                ActivityCompat.requestPermissions(TambahListingActivity.this, new String[]{Manifest.permission.CAMERA}, CODE_CAMERA_REQUEST3);
+                                break;
+                            case 1:
+                                requestPermissions3();
+                                break;
+                        }
+                    }
+                });
+
+        builder.show();
+    }
+    private void showPhotoSelectionDialog4() {
+        androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this);
+        builder.setTitle("Unggah Gambar")
+                .setItems(new CharSequence[]{"Ambil Foto", "Pilih Dari Galeri"}, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which) {
+                            case 0:
+                                ActivityCompat.requestPermissions(TambahListingActivity.this, new String[]{Manifest.permission.CAMERA}, CODE_CAMERA_REQUEST4);
+                                break;
+                            case 1:
+                                requestPermissions4();
+                                break;
+                        }
+                    }
+                });
+
+        builder.show();
+    }
+    private void showPhotoSelectionDialog5() {
+        androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this);
+        builder.setTitle("Unggah Gambar")
+                .setItems(new CharSequence[]{"Ambil Foto", "Pilih Dari Galeri"}, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which) {
+                            case 0:
+                                ActivityCompat.requestPermissions(TambahListingActivity.this, new String[]{Manifest.permission.CAMERA}, CODE_CAMERA_REQUEST5);
+                                break;
+                            case 1:
+                                requestPermissions5();
+                                break;
+                        }
+                    }
+                });
+
+        builder.show();
+    }
+    private void showPhotoSelectionDialog6() {
+        androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this);
+        builder.setTitle("Unggah Gambar")
+                .setItems(new CharSequence[]{"Ambil Foto", "Pilih Dari Galeri"}, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which) {
+                            case 0:
+                                ActivityCompat.requestPermissions(TambahListingActivity.this, new String[]{Manifest.permission.CAMERA}, CODE_CAMERA_REQUEST6);
+                                break;
+                            case 1:
+                                requestPermissions6();
+                                break;
+                        }
+                    }
+                });
+
+        builder.show();
+    }
+    private void showPhotoSelectionDialog7() {
+        androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this);
+        builder.setTitle("Unggah Gambar")
+                .setItems(new CharSequence[]{"Ambil Foto", "Pilih Dari Galeri"}, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which) {
+                            case 0:
+                                ActivityCompat.requestPermissions(TambahListingActivity.this, new String[]{Manifest.permission.CAMERA}, CODE_CAMERA_REQUEST7);
+                                break;
+                            case 1:
+                                requestPermissions7();
+                                break;
+                        }
+                    }
+                });
+
+        builder.show();
+    }
+    private void showPhotoSelectionDialog8() {
+        androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this);
+        builder.setTitle("Unggah Gambar")
+                .setItems(new CharSequence[]{"Ambil Foto", "Pilih Dari Galeri"}, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which) {
+                            case 0:
+                                ActivityCompat.requestPermissions(TambahListingActivity.this, new String[]{Manifest.permission.CAMERA}, CODE_CAMERA_REQUEST8);
+                                break;
+                            case 1:
+                                requestPermissions8();
+                                break;
+                        }
+                    }
+                });
+
+        builder.show();
+    }
     private void showPhotoSHM() {
         androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this);
         builder.setTitle("Unggah Gambar")
@@ -883,7 +2425,6 @@ public class TambahListingActivity extends AppCompatActivity {
 
         builder.show();
     }
-
     private void showPhotoHGB() {
         androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this);
         builder.setTitle("Unggah Gambar")
@@ -903,7 +2444,6 @@ public class TambahListingActivity extends AppCompatActivity {
 
         builder.show();
     }
-
     private void showPhotoHSHP() {
         androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this);
         builder.setTitle("Unggah Gambar")
@@ -923,7 +2463,6 @@ public class TambahListingActivity extends AppCompatActivity {
 
         builder.show();
     }
-
     private void showPhotoPPJB() {
         androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this);
         builder.setTitle("Unggah Gambar")
@@ -943,7 +2482,6 @@ public class TambahListingActivity extends AppCompatActivity {
 
         builder.show();
     }
-
     private void showPhotoSTRA() {
         androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this);
         builder.setTitle("Unggah Gambar")
@@ -963,7 +2501,6 @@ public class TambahListingActivity extends AppCompatActivity {
 
         builder.show();
     }
-
     private void showPhotoPJP() {
         androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this);
         builder.setTitle("Unggah Gambar")
@@ -983,7 +2520,6 @@ public class TambahListingActivity extends AppCompatActivity {
 
         builder.show();
     }
-
     private void showPhotoPJP1() {
         androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this);
         builder.setTitle("Unggah Gambar")
@@ -1003,17 +2539,78 @@ public class TambahListingActivity extends AppCompatActivity {
 
         builder.show();
     }
-
-    private void requestPermissions() {
+    private void requestPermissions1() {
         boolean externalStoragePermissionGranted = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
 
         if (externalStoragePermissionGranted) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE);
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE1);
         } else {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_MEDIA_IMAGES}, PERMISSION_REQUEST_CODE_MEDIA_IMAGES);
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_MEDIA_IMAGES}, PERMISSION_REQUEST_CODE_MEDIA_IMAGES1);
         }
     }
+    private void requestPermissions2() {
+        boolean externalStoragePermissionGranted = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
 
+        if (externalStoragePermissionGranted) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE2);
+        } else {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_MEDIA_IMAGES}, PERMISSION_REQUEST_CODE_MEDIA_IMAGES2);
+        }
+    }
+    private void requestPermissions3() {
+        boolean externalStoragePermissionGranted = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
+
+        if (externalStoragePermissionGranted) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE3);
+        } else {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_MEDIA_IMAGES}, PERMISSION_REQUEST_CODE_MEDIA_IMAGES3);
+        }
+    }
+    private void requestPermissions4() {
+        boolean externalStoragePermissionGranted = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
+
+        if (externalStoragePermissionGranted) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE4);
+        } else {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_MEDIA_IMAGES}, PERMISSION_REQUEST_CODE_MEDIA_IMAGES4);
+        }
+    }
+    private void requestPermissions5() {
+        boolean externalStoragePermissionGranted = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
+
+        if (externalStoragePermissionGranted) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE5);
+        } else {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_MEDIA_IMAGES}, PERMISSION_REQUEST_CODE_MEDIA_IMAGES5);
+        }
+    }
+    private void requestPermissions6() {
+        boolean externalStoragePermissionGranted = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
+
+        if (externalStoragePermissionGranted) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE6);
+        } else {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_MEDIA_IMAGES}, PERMISSION_REQUEST_CODE_MEDIA_IMAGES6);
+        }
+    }
+    private void requestPermissions7() {
+        boolean externalStoragePermissionGranted = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
+
+        if (externalStoragePermissionGranted) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE7);
+        } else {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_MEDIA_IMAGES}, PERMISSION_REQUEST_CODE_MEDIA_IMAGES7);
+        }
+    }
+    private void requestPermissions8() {
+        boolean externalStoragePermissionGranted = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
+
+        if (externalStoragePermissionGranted) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE8);
+        } else {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_MEDIA_IMAGES}, PERMISSION_REQUEST_CODE_MEDIA_IMAGES8);
+        }
+    }
     private void requestPermissionsSHM() {
         boolean externalStoragePermissionGranted = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
 
@@ -1023,7 +2620,6 @@ public class TambahListingActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_MEDIA_IMAGES}, PERMISSION_REQUEST_CODE_MEDIA_IMAGES_SHM);
         }
     }
-
     private void requestPermissionsHGB() {
         boolean externalStoragePermissionGranted = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
 
@@ -1033,7 +2629,6 @@ public class TambahListingActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_MEDIA_IMAGES}, PERMISSION_REQUEST_CODE_MEDIA_IMAGES_HGB);
         }
     }
-
     private void requestPermissionsHSHP() {
         boolean externalStoragePermissionGranted = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
 
@@ -1043,7 +2638,6 @@ public class TambahListingActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_MEDIA_IMAGES}, PERMISSION_REQUEST_CODE_MEDIA_IMAGES_HSHP);
         }
     }
-
     private void requestPermissionsPPJB() {
         boolean externalStoragePermissionGranted = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
 
@@ -1053,7 +2647,6 @@ public class TambahListingActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_MEDIA_IMAGES}, PERMISSION_REQUEST_CODE_MEDIA_IMAGES_PPJB);
         }
     }
-
     private void requestPermissionsSTRA() {
         boolean externalStoragePermissionGranted = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
 
@@ -1063,7 +2656,6 @@ public class TambahListingActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_MEDIA_IMAGES}, PERMISSION_REQUEST_CODE_MEDIA_IMAGES_STRA);
         }
     }
-
     private void requestPermissionsPjp() {
         boolean externalStoragePermissionGranted = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
 
@@ -1073,7 +2665,6 @@ public class TambahListingActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_MEDIA_IMAGES}, PERMISSION_REQUEST_CODE_MEDIA_IMAGES_PJP);
         }
     }
-
     private void requestPermissionsPjp1() {
         boolean externalStoragePermissionGranted = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
 
@@ -1083,71 +2674,225 @@ public class TambahListingActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_MEDIA_IMAGES}, PERMISSION_REQUEST_CODE_MEDIA_IMAGES_PJP1);
         }
     }
-
-    private void bukaKamera() {
+    private void bukaKamera1() {
         Intent intentKamera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (intentKamera.resolveActivity(getPackageManager()) != null) {
-            startActivityForResult(intentKamera, KODE_REQUEST_KAMERA);
+            File photoFile = createImageFile();
+            if (photoFile != null) {
+                Uri1 = FileProvider.getUriForFile(this, "com.gooproper", photoFile);
+                intentKamera.putExtra(MediaStore.EXTRA_OUTPUT, Uri1);
+                startActivityForResult(intentKamera, KODE_REQUEST_KAMERA1);
+            }
         }
     }
-
+    private void bukaKamera2() {
+        Intent intentKamera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (intentKamera.resolveActivity(getPackageManager()) != null) {
+            File photoFile = createImageFile();
+            if (photoFile != null) {
+                Uri2 = FileProvider.getUriForFile(this, "com.gooproper", photoFile);
+                intentKamera.putExtra(MediaStore.EXTRA_OUTPUT, Uri2);
+                startActivityForResult(intentKamera, KODE_REQUEST_KAMERA2);
+            }
+        }
+    }
+    private void bukaKamera3() {
+        Intent intentKamera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (intentKamera.resolveActivity(getPackageManager()) != null) {
+            File photoFile = createImageFile();
+            if (photoFile != null) {
+                Uri3 = FileProvider.getUriForFile(this, "com.gooproper", photoFile);
+                intentKamera.putExtra(MediaStore.EXTRA_OUTPUT, Uri3);
+                startActivityForResult(intentKamera, KODE_REQUEST_KAMERA3);
+            }
+        }
+    }
+    private void bukaKamera4() {
+        Intent intentKamera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (intentKamera.resolveActivity(getPackageManager()) != null) {
+            File photoFile = createImageFile();
+            if (photoFile != null) {
+                Uri4 = FileProvider.getUriForFile(this, "com.gooproper", photoFile);
+                intentKamera.putExtra(MediaStore.EXTRA_OUTPUT, Uri4);
+                startActivityForResult(intentKamera, KODE_REQUEST_KAMERA4);
+            }
+        }
+    }
+    private void bukaKamera5() {
+        Intent intentKamera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (intentKamera.resolveActivity(getPackageManager()) != null) {
+            File photoFile = createImageFile();
+            if (photoFile != null) {
+                Uri5 = FileProvider.getUriForFile(this, "com.gooproper", photoFile);
+                intentKamera.putExtra(MediaStore.EXTRA_OUTPUT, Uri5);
+                startActivityForResult(intentKamera, KODE_REQUEST_KAMERA5);
+            }
+        }
+    }
+    private void bukaKamera6() {
+        Intent intentKamera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (intentKamera.resolveActivity(getPackageManager()) != null) {
+            File photoFile = createImageFile();
+            if (photoFile != null) {
+                Uri6 = FileProvider.getUriForFile(this, "com.gooproper", photoFile);
+                intentKamera.putExtra(MediaStore.EXTRA_OUTPUT, Uri6);
+                startActivityForResult(intentKamera, KODE_REQUEST_KAMERA6);
+            }
+        }
+    }
+    private void bukaKamera7() {
+        Intent intentKamera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (intentKamera.resolveActivity(getPackageManager()) != null) {
+            File photoFile = createImageFile();
+            if (photoFile != null) {
+                Uri7 = FileProvider.getUriForFile(this, "com.gooproper", photoFile);
+                intentKamera.putExtra(MediaStore.EXTRA_OUTPUT, Uri7);
+                startActivityForResult(intentKamera, KODE_REQUEST_KAMERA7);
+            }
+        }
+    }
+    private void bukaKamera8() {
+        Intent intentKamera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (intentKamera.resolveActivity(getPackageManager()) != null) {
+            File photoFile = createImageFile();
+            if (photoFile != null) {
+                Uri8 = FileProvider.getUriForFile(this, "com.gooproper", photoFile);
+                intentKamera.putExtra(MediaStore.EXTRA_OUTPUT, Uri8);
+                startActivityForResult(intentKamera, KODE_REQUEST_KAMERA8);
+            }
+        }
+    }
     private void bukaKameraSHM() {
         Intent intentKamera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (intentKamera.resolveActivity(getPackageManager()) != null) {
-            startActivityForResult(intentKamera, KODE_REQUEST_KAMERA_SHM);
+            File photoFile = createImageFile();
+            if (photoFile != null) {
+                UriSHM = FileProvider.getUriForFile(this, "com.gooproper", photoFile); // Gantilah "com.example.android.fileprovider" dengan authority Anda
+                intentKamera.putExtra(MediaStore.EXTRA_OUTPUT, UriSHM);
+                startActivityForResult(intentKamera, KODE_REQUEST_KAMERA_SHM);
+            }
         }
     }
-
     private void bukaKameraHGB() {
         Intent intentKamera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (intentKamera.resolveActivity(getPackageManager()) != null) {
-            startActivityForResult(intentKamera, KODE_REQUEST_KAMERA_HGB);
+            File photoFile = createImageFile();
+            if (photoFile != null) {
+                UriHGB = FileProvider.getUriForFile(this, "com.gooproper", photoFile);
+                intentKamera.putExtra(MediaStore.EXTRA_OUTPUT, UriHGB);
+                startActivityForResult(intentKamera, KODE_REQUEST_KAMERA_HGB);
+            }
         }
     }
-
     private void bukaKameraHSHP() {
         Intent intentKamera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (intentKamera.resolveActivity(getPackageManager()) != null) {
-            startActivityForResult(intentKamera, KODE_REQUEST_KAMERA_HSHP);
+            File photoFile = createImageFile();
+            if (photoFile != null) {
+                UriHSHP = FileProvider.getUriForFile(this, "com.gooproper", photoFile);
+                intentKamera.putExtra(MediaStore.EXTRA_OUTPUT, UriHSHP);
+                startActivityForResult(intentKamera, KODE_REQUEST_KAMERA_HSHP);
+            }
         }
     }
-
     private void bukaKameraPPJB() {
         Intent intentKamera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (intentKamera.resolveActivity(getPackageManager()) != null) {
-            startActivityForResult(intentKamera, KODE_REQUEST_KAMERA_PPJB);
+            File photoFile = createImageFile();
+            if (photoFile != null) {
+                UriPPJB = FileProvider.getUriForFile(this, "com.gooproper", photoFile);
+                intentKamera.putExtra(MediaStore.EXTRA_OUTPUT, UriPPJB);
+                startActivityForResult(intentKamera, KODE_REQUEST_KAMERA_PPJB);
+            }
         }
     }
-
     private void bukaKameraSTRA() {
         Intent intentKamera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (intentKamera.resolveActivity(getPackageManager()) != null) {
-            startActivityForResult(intentKamera, KODE_REQUEST_KAMERA_STRA);
+            File photoFile = createImageFile();
+            if (photoFile != null) {
+                UriSTRA = FileProvider.getUriForFile(this, "com.gooproper", photoFile);
+                intentKamera.putExtra(MediaStore.EXTRA_OUTPUT, UriSTRA);
+                startActivityForResult(intentKamera, KODE_REQUEST_KAMERA_STRA);
+            }
         }
     }
-
     private void bukaKameraPjp() {
         Intent intentKamera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (intentKamera.resolveActivity(getPackageManager()) != null) {
-            startActivityForResult(intentKamera, KODE_REQUEST_KAMERA_PJP);
+            File photoFile = createImageFile();
+            if (photoFile != null) {
+                UriPJP = FileProvider.getUriForFile(this, "com.gooproper", photoFile);
+                intentKamera.putExtra(MediaStore.EXTRA_OUTPUT, UriPJP);
+                startActivityForResult(intentKamera, KODE_REQUEST_KAMERA_PJP);
+            }
         }
     }
-
     private void bukaKameraPjp1() {
         Intent intentKamera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (intentKamera.resolveActivity(getPackageManager()) != null) {
-            startActivityForResult(intentKamera, KODE_REQUEST_KAMERA_PJP1);
+            File photoFile = createImageFile();
+            if (photoFile != null) {
+                UriPJP1 = FileProvider.getUriForFile(this, "com.gooproper", photoFile);
+                intentKamera.putExtra(MediaStore.EXTRA_OUTPUT, UriPJP1);
+                startActivityForResult(intentKamera, KODE_REQUEST_KAMERA_PJP1);
+            }
         }
     }
-
+    private File createImageFile() {
+        String imageFileName = "JPEG_" + new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File image = null;
+        try {
+            image = File.createTempFile(imageFileName, ".jpg", storageDir);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return image;
+    }
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
-        if (requestCode == PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE) {
+        if (requestCode == PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE1) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                startActivityForResult(intent, CODE_GALLERY_REQUEST);
+                startActivityForResult(intent, CODE_GALLERY_REQUEST1);
+            }
+        } else if (requestCode == PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE2) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(intent, CODE_GALLERY_REQUEST2);
+            }
+        } else if (requestCode == PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE3) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(intent, CODE_GALLERY_REQUEST3);
+            }
+        } else if (requestCode == PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE4) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(intent, CODE_GALLERY_REQUEST4);
+            }
+        } else if (requestCode == PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE5) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(intent, CODE_GALLERY_REQUEST5);
+            }
+        } else if (requestCode == PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE6) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(intent, CODE_GALLERY_REQUEST6);
+            }
+        } else if (requestCode == PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE7) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(intent, CODE_GALLERY_REQUEST7);
+            }
+        } else if (requestCode == PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE8) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(intent, CODE_GALLERY_REQUEST8);
             }
         } else if (requestCode == PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE_SHM) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -1174,20 +2919,55 @@ public class TambahListingActivity extends AppCompatActivity {
                 Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 startActivityForResult(intent, CODE_GALLERY_REQUEST_STRA);
             }
-        }  else if (requestCode == PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE_PJP) {
+        } else if (requestCode == PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE_PJP) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 startActivityForResult(intent, CODE_GALLERY_REQUEST_PJP);
             }
-        }  else if (requestCode == PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE_PJP1) {
+        } else if (requestCode == PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE_PJP1) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 startActivityForResult(intent, CODE_GALLERY_REQUEST_PJP1);
             }
-        } else if (requestCode == PERMISSION_REQUEST_CODE_MEDIA_IMAGES) {
+        } else if (requestCode == PERMISSION_REQUEST_CODE_MEDIA_IMAGES1) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                startActivityForResult(intent, CODE_GALLERY_REQUEST);
+                startActivityForResult(intent, CODE_GALLERY_REQUEST1);
+            }
+        } else if (requestCode == PERMISSION_REQUEST_CODE_MEDIA_IMAGES2) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(intent, CODE_GALLERY_REQUEST2);
+            }
+        } else if (requestCode == PERMISSION_REQUEST_CODE_MEDIA_IMAGES3) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(intent, CODE_GALLERY_REQUEST3);
+            }
+        } else if (requestCode == PERMISSION_REQUEST_CODE_MEDIA_IMAGES4) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(intent, CODE_GALLERY_REQUEST4);
+            }
+        } else if (requestCode == PERMISSION_REQUEST_CODE_MEDIA_IMAGES5) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(intent, CODE_GALLERY_REQUEST5);
+            }
+        } else if (requestCode == PERMISSION_REQUEST_CODE_MEDIA_IMAGES6) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(intent, CODE_GALLERY_REQUEST6);
+            }
+        } else if (requestCode == PERMISSION_REQUEST_CODE_MEDIA_IMAGES7) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(intent, CODE_GALLERY_REQUEST7);
+            }
+        } else if (requestCode == PERMISSION_REQUEST_CODE_MEDIA_IMAGES8) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(intent, CODE_GALLERY_REQUEST8);
             }
         } else if (requestCode == PERMISSION_REQUEST_CODE_MEDIA_IMAGES_SHM) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -1214,20 +2994,272 @@ public class TambahListingActivity extends AppCompatActivity {
                 Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 startActivityForResult(intent, CODE_GALLERY_REQUEST_STRA);
             }
-        }  else if (requestCode == PERMISSION_REQUEST_CODE_MEDIA_IMAGES_PJP) {
+        } else if (requestCode == PERMISSION_REQUEST_CODE_MEDIA_IMAGES_PJP) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 startActivityForResult(intent, CODE_GALLERY_REQUEST_PJP);
             }
-        }  else if (requestCode == PERMISSION_REQUEST_CODE_MEDIA_IMAGES_PJP1) {
+        } else if (requestCode == PERMISSION_REQUEST_CODE_MEDIA_IMAGES_PJP1) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 startActivityForResult(intent, CODE_GALLERY_REQUEST_PJP1);
             }
-        } else if (requestCode == CODE_GALLERY_REQUEST) {
+        } else if (requestCode == CODE_GALLERY_REQUEST1) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                startActivityForResult(intent, CODE_GALLERY_REQUEST);
+                startActivityForResult(intent, CODE_GALLERY_REQUEST1);
+            } else {
+                Dialog customDialog = new Dialog(TambahListingActivity.this);
+                customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                customDialog.setContentView(R.layout.custom_dialog_eror_input);
+
+                if (customDialog.getWindow() != null) {
+                    customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                }
+
+                Button ok = customDialog.findViewById(R.id.BtnOkErorInput);
+                TextView tv = customDialog.findViewById(R.id.TVDialogErorInput);
+
+                tv.setText("Akses Galeri Ditolak");
+
+                ok.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        customDialog.dismiss();
+                    }
+                });
+
+                ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
+
+                Glide.with(TambahListingActivity.this)
+                        .load(R.drawable.alert) // You can also use a local resource like R.drawable.your_gif_resource
+                        .transition(DrawableTransitionOptions.withCrossFade())
+                        .into(gifImageView);
+
+                customDialog.show();
+            }
+
+            return;
+        } else if (requestCode == CODE_GALLERY_REQUEST2) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(intent, CODE_GALLERY_REQUEST2);
+            } else {
+                Dialog customDialog = new Dialog(TambahListingActivity.this);
+                customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                customDialog.setContentView(R.layout.custom_dialog_eror_input);
+
+                if (customDialog.getWindow() != null) {
+                    customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                }
+
+                Button ok = customDialog.findViewById(R.id.BtnOkErorInput);
+                TextView tv = customDialog.findViewById(R.id.TVDialogErorInput);
+
+                tv.setText("Akses Galeri Ditolak");
+
+                ok.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        customDialog.dismiss();
+                    }
+                });
+
+                ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
+
+                Glide.with(TambahListingActivity.this)
+                        .load(R.drawable.alert) // You can also use a local resource like R.drawable.your_gif_resource
+                        .transition(DrawableTransitionOptions.withCrossFade())
+                        .into(gifImageView);
+
+                customDialog.show();
+            }
+
+            return;
+        } else if (requestCode == CODE_GALLERY_REQUEST3) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(intent, CODE_GALLERY_REQUEST3);
+            } else {
+                Dialog customDialog = new Dialog(TambahListingActivity.this);
+                customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                customDialog.setContentView(R.layout.custom_dialog_eror_input);
+
+                if (customDialog.getWindow() != null) {
+                    customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                }
+
+                Button ok = customDialog.findViewById(R.id.BtnOkErorInput);
+                TextView tv = customDialog.findViewById(R.id.TVDialogErorInput);
+
+                tv.setText("Akses Galeri Ditolak");
+
+                ok.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        customDialog.dismiss();
+                    }
+                });
+
+                ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
+
+                Glide.with(TambahListingActivity.this)
+                        .load(R.drawable.alert) // You can also use a local resource like R.drawable.your_gif_resource
+                        .transition(DrawableTransitionOptions.withCrossFade())
+                        .into(gifImageView);
+
+                customDialog.show();
+            }
+
+            return;
+        } else if (requestCode == CODE_GALLERY_REQUEST4) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(intent, CODE_GALLERY_REQUEST4);
+            } else {
+                Dialog customDialog = new Dialog(TambahListingActivity.this);
+                customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                customDialog.setContentView(R.layout.custom_dialog_eror_input);
+
+                if (customDialog.getWindow() != null) {
+                    customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                }
+
+                Button ok = customDialog.findViewById(R.id.BtnOkErorInput);
+                TextView tv = customDialog.findViewById(R.id.TVDialogErorInput);
+
+                tv.setText("Akses Galeri Ditolak");
+
+                ok.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        customDialog.dismiss();
+                    }
+                });
+
+                ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
+
+                Glide.with(TambahListingActivity.this)
+                        .load(R.drawable.alert) // You can also use a local resource like R.drawable.your_gif_resource
+                        .transition(DrawableTransitionOptions.withCrossFade())
+                        .into(gifImageView);
+
+                customDialog.show();
+            }
+
+            return;
+        } else if (requestCode == CODE_GALLERY_REQUEST5) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(intent, CODE_GALLERY_REQUEST5);
+            } else {
+                Dialog customDialog = new Dialog(TambahListingActivity.this);
+                customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                customDialog.setContentView(R.layout.custom_dialog_eror_input);
+
+                if (customDialog.getWindow() != null) {
+                    customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                }
+
+                Button ok = customDialog.findViewById(R.id.BtnOkErorInput);
+                TextView tv = customDialog.findViewById(R.id.TVDialogErorInput);
+
+                tv.setText("Akses Galeri Ditolak");
+
+                ok.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        customDialog.dismiss();
+                    }
+                });
+
+                ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
+
+                Glide.with(TambahListingActivity.this)
+                        .load(R.drawable.alert) // You can also use a local resource like R.drawable.your_gif_resource
+                        .transition(DrawableTransitionOptions.withCrossFade())
+                        .into(gifImageView);
+
+                customDialog.show();
+            }
+
+            return;
+        } else if (requestCode == CODE_GALLERY_REQUEST6) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(intent, CODE_GALLERY_REQUEST6);
+            } else {
+                Dialog customDialog = new Dialog(TambahListingActivity.this);
+                customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                customDialog.setContentView(R.layout.custom_dialog_eror_input);
+
+                if (customDialog.getWindow() != null) {
+                    customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                }
+
+                Button ok = customDialog.findViewById(R.id.BtnOkErorInput);
+                TextView tv = customDialog.findViewById(R.id.TVDialogErorInput);
+
+                tv.setText("Akses Galeri Ditolak");
+
+                ok.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        customDialog.dismiss();
+                    }
+                });
+
+                ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
+
+                Glide.with(TambahListingActivity.this)
+                        .load(R.drawable.alert) // You can also use a local resource like R.drawable.your_gif_resource
+                        .transition(DrawableTransitionOptions.withCrossFade())
+                        .into(gifImageView);
+
+                customDialog.show();
+            }
+
+            return;
+        } else if (requestCode == CODE_GALLERY_REQUEST7) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(intent, CODE_GALLERY_REQUEST7);
+            } else {
+                Dialog customDialog = new Dialog(TambahListingActivity.this);
+                customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                customDialog.setContentView(R.layout.custom_dialog_eror_input);
+
+                if (customDialog.getWindow() != null) {
+                    customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                }
+
+                Button ok = customDialog.findViewById(R.id.BtnOkErorInput);
+                TextView tv = customDialog.findViewById(R.id.TVDialogErorInput);
+
+                tv.setText("Akses Galeri Ditolak");
+
+                ok.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        customDialog.dismiss();
+                    }
+                });
+
+                ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
+
+                Glide.with(TambahListingActivity.this)
+                        .load(R.drawable.alert) // You can also use a local resource like R.drawable.your_gif_resource
+                        .transition(DrawableTransitionOptions.withCrossFade())
+                        .into(gifImageView);
+
+                customDialog.show();
+            }
+
+            return;
+        } else if (requestCode == CODE_GALLERY_REQUEST8) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(intent, CODE_GALLERY_REQUEST8);
             } else {
                 Dialog customDialog = new Dialog(TambahListingActivity.this);
                 customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -1512,9 +3544,107 @@ public class TambahListingActivity extends AppCompatActivity {
             }
 
             return;
-        } else if (requestCode == CODE_CAMERA_REQUEST) {
+        } else if (requestCode == CODE_CAMERA_REQUEST1) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                bukaKamera();
+                bukaKamera1();
+            } else {
+                AlertDialog.Builder builder = new AlertDialog.Builder(TambahListingActivity.this);
+                builder.setTitle("Izin Kamera Ditolak").
+                        setMessage("Aplikasi memerlukan izin kamera untuk mengambil gambar.");
+                builder.setPositiveButton("OK",
+                        (dialog, id) -> dialog.cancel());
+                AlertDialog alert = builder.create();
+                alert.show();
+            }
+
+            return;
+        } else if (requestCode == CODE_CAMERA_REQUEST2) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                bukaKamera2();
+            } else {
+                AlertDialog.Builder builder = new AlertDialog.Builder(TambahListingActivity.this);
+                builder.setTitle("Izin Kamera Ditolak").
+                        setMessage("Aplikasi memerlukan izin kamera untuk mengambil gambar.");
+                builder.setPositiveButton("OK",
+                        (dialog, id) -> dialog.cancel());
+                AlertDialog alert = builder.create();
+                alert.show();
+            }
+
+            return;
+        } else if (requestCode == CODE_CAMERA_REQUEST3) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                bukaKamera3();
+            } else {
+                AlertDialog.Builder builder = new AlertDialog.Builder(TambahListingActivity.this);
+                builder.setTitle("Izin Kamera Ditolak").
+                        setMessage("Aplikasi memerlukan izin kamera untuk mengambil gambar.");
+                builder.setPositiveButton("OK",
+                        (dialog, id) -> dialog.cancel());
+                AlertDialog alert = builder.create();
+                alert.show();
+            }
+
+            return;
+        } else if (requestCode == CODE_CAMERA_REQUEST4) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                bukaKamera4();
+            } else {
+                AlertDialog.Builder builder = new AlertDialog.Builder(TambahListingActivity.this);
+                builder.setTitle("Izin Kamera Ditolak").
+                        setMessage("Aplikasi memerlukan izin kamera untuk mengambil gambar.");
+                builder.setPositiveButton("OK",
+                        (dialog, id) -> dialog.cancel());
+                AlertDialog alert = builder.create();
+                alert.show();
+            }
+
+            return;
+        } else if (requestCode == CODE_CAMERA_REQUEST5) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                bukaKamera5();
+            } else {
+                AlertDialog.Builder builder = new AlertDialog.Builder(TambahListingActivity.this);
+                builder.setTitle("Izin Kamera Ditolak").
+                        setMessage("Aplikasi memerlukan izin kamera untuk mengambil gambar.");
+                builder.setPositiveButton("OK",
+                        (dialog, id) -> dialog.cancel());
+                AlertDialog alert = builder.create();
+                alert.show();
+            }
+
+            return;
+        } else if (requestCode == CODE_CAMERA_REQUEST6) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                bukaKamera6();
+            } else {
+                AlertDialog.Builder builder = new AlertDialog.Builder(TambahListingActivity.this);
+                builder.setTitle("Izin Kamera Ditolak").
+                        setMessage("Aplikasi memerlukan izin kamera untuk mengambil gambar.");
+                builder.setPositiveButton("OK",
+                        (dialog, id) -> dialog.cancel());
+                AlertDialog alert = builder.create();
+                alert.show();
+            }
+
+            return;
+        } else if (requestCode == CODE_CAMERA_REQUEST7) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                bukaKamera7();
+            } else {
+                AlertDialog.Builder builder = new AlertDialog.Builder(TambahListingActivity.this);
+                builder.setTitle("Izin Kamera Ditolak").
+                        setMessage("Aplikasi memerlukan izin kamera untuk mengambil gambar.");
+                builder.setPositiveButton("OK",
+                        (dialog, id) -> dialog.cancel());
+                AlertDialog alert = builder.create();
+                alert.show();
+            }
+
+            return;
+        } else if (requestCode == CODE_CAMERA_REQUEST8) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                bukaKamera8();
             } else {
                 AlertDialog.Builder builder = new AlertDialog.Builder(TambahListingActivity.this);
                 builder.setTitle("Izin Kamera Ditolak").
@@ -1628,7 +3758,6 @@ public class TambahListingActivity extends AppCompatActivity {
 
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -1641,647 +3770,344 @@ public class TambahListingActivity extends AppCompatActivity {
             }
         }
 
-        if (requestCode == CODE_GALLERY_REQUEST && resultCode == RESULT_OK && data != null) {
-            Uri filePath = data.getData();
-            try {
-                InputStream inputStream = getContentResolver().openInputStream(filePath);
-                if (bitmap1 == null) {
-                    bitmap1 = BitmapFactory.decodeStream(inputStream);
-                    lyt1.setVisibility(View.VISIBLE);
-                    iv1.setImageBitmap(bitmap1);
-                    int opacity = 128;
-                    int watermarkWidth = (int)(bitmap1.getWidth() * 0.2);
-                    int watermarkHeight = (int)(bitmap1.getHeight() * 0.1);
-                    Bitmap scaledWatermark = Bitmap.createScaledBitmap(BitmapWatermark, watermarkWidth, watermarkHeight, true);
-                    int x = (bitmap1.getWidth() - scaledWatermark.getWidth()) / 3;
-                    int y = (bitmap1.getHeight() - scaledWatermark.getHeight()) / 2;
-                    bitmap1 = bitmap1.copy(Bitmap.Config.ARGB_8888, true);
-                    Canvas canvas = new Canvas(bitmap1);
-                    Paint paint = new Paint();
-                    paint.setAlpha(opacity);
-                    canvas.drawBitmap(scaledWatermark, x, y, paint);
-                    iv1.setImageBitmap(bitmap1);
-                } else if (bitmap2 == null) {
-                    bitmap2 = BitmapFactory.decodeStream(inputStream);
-                    lyt2.setVisibility(View.VISIBLE);
-                    iv2.setImageBitmap(bitmap2);
-                    int opacity = 128;
-                    int watermarkWidth = (int)(bitmap2.getWidth() * 0.2);
-                    int watermarkHeight = (int)(bitmap2.getHeight() * 0.1);
-                    Bitmap scaledWatermark = Bitmap.createScaledBitmap(BitmapWatermark, watermarkWidth, watermarkHeight, true);
-                    int x = (bitmap2.getWidth() - scaledWatermark.getWidth()) / 3;
-                    int y = (bitmap2.getHeight() - scaledWatermark.getHeight()) / 2;
-                    bitmap2 = bitmap2.copy(Bitmap.Config.ARGB_8888, true);
-                    Canvas canvas = new Canvas(bitmap2);
-                    Paint paint = new Paint();
-                    paint.setAlpha(opacity);
-                    canvas.drawBitmap(scaledWatermark, x, y, paint);
-                    iv2.setImageBitmap(bitmap2);
-                } else if (bitmap3 == null) {
-                    bitmap3 = BitmapFactory.decodeStream(inputStream);
-                    lyt3.setVisibility(View.VISIBLE);
-                    iv3.setImageBitmap(bitmap3);
-                    int opacity = 128;
-                    int watermarkWidth = (int)(bitmap3.getWidth() * 0.2);
-                    int watermarkHeight = (int)(bitmap3.getHeight() * 0.1);
-                    Bitmap scaledWatermark = Bitmap.createScaledBitmap(BitmapWatermark, watermarkWidth, watermarkHeight, true);
-                    int x = (bitmap3.getWidth() - scaledWatermark.getWidth()) / 3;
-                    int y = (bitmap3.getHeight() - scaledWatermark.getHeight()) / 2;
-                    bitmap3 = bitmap3.copy(Bitmap.Config.ARGB_8888, true);
-                    Canvas canvas = new Canvas(bitmap3);
-                    Paint paint = new Paint();
-                    paint.setAlpha(opacity);
-                    canvas.drawBitmap(scaledWatermark, x, y, paint);
-                    iv3.setImageBitmap(bitmap3);
-                } else if (bitmap4 == null) {
-                    bitmap4 = BitmapFactory.decodeStream(inputStream);
-                    lyt4.setVisibility(View.VISIBLE);
-                    iv4.setImageBitmap(bitmap4);
-                    int opacity = 128;
-                    int watermarkWidth = (int)(bitmap4.getWidth() * 0.2);
-                    int watermarkHeight = (int)(bitmap4.getHeight() * 0.1);
-                    Bitmap scaledWatermark = Bitmap.createScaledBitmap(BitmapWatermark, watermarkWidth, watermarkHeight, true);
-                    int x = (bitmap4.getWidth() - scaledWatermark.getWidth()) / 3;
-                    int y = (bitmap4.getHeight() - scaledWatermark.getHeight()) / 2;
-                    bitmap4 = bitmap4.copy(Bitmap.Config.ARGB_8888, true);
-                    Canvas canvas = new Canvas(bitmap4);
-                    Paint paint = new Paint();
-                    paint.setAlpha(opacity);
-                    canvas.drawBitmap(scaledWatermark, x, y, paint);
-                    iv4.setImageBitmap(bitmap4);
-                } else if (bitmap5 == null) {
-                    bitmap5 = BitmapFactory.decodeStream(inputStream);
-                    lyt5.setVisibility(View.VISIBLE);
-                    iv5.setImageBitmap(bitmap5);
-                    int opacity = 128;
-                    int watermarkWidth = (int)(bitmap5.getWidth() * 0.2);
-                    int watermarkHeight = (int)(bitmap5.getHeight() * 0.1);
-                    Bitmap scaledWatermark = Bitmap.createScaledBitmap(BitmapWatermark, watermarkWidth, watermarkHeight, true);
-                    int x = (bitmap5.getWidth() - scaledWatermark.getWidth()) / 3;
-                    int y = (bitmap5.getHeight() - scaledWatermark.getHeight()) / 2;
-                    bitmap5 = bitmap5.copy(Bitmap.Config.ARGB_8888, true);
-                    Canvas canvas = new Canvas(bitmap5);
-                    Paint paint = new Paint();
-                    paint.setAlpha(opacity);
-                    canvas.drawBitmap(scaledWatermark, x, y, paint);
-                    iv5.setImageBitmap(bitmap5);
-                } else if (bitmap6 == null) {
-                    bitmap6 = BitmapFactory.decodeStream(inputStream);
-                    lyt6.setVisibility(View.VISIBLE);
-                    iv6.setImageBitmap(bitmap6);
-                    int opacity = 128;
-                    int watermarkWidth = (int)(bitmap6.getWidth() * 0.2);
-                    int watermarkHeight = (int)(bitmap6.getHeight() * 0.1);
-                    Bitmap scaledWatermark = Bitmap.createScaledBitmap(BitmapWatermark, watermarkWidth, watermarkHeight, true);
-                    int x = (bitmap6.getWidth() - scaledWatermark.getWidth()) / 3;
-                    int y = (bitmap6.getHeight() - scaledWatermark.getHeight()) / 2;
-                    bitmap6 = bitmap6.copy(Bitmap.Config.ARGB_8888, true);
-                    Canvas canvas = new Canvas(bitmap6);
-                    Paint paint = new Paint();
-                    paint.setAlpha(opacity);
-                    canvas.drawBitmap(scaledWatermark, x, y, paint);
-                    iv6.setImageBitmap(bitmap6);
-                } else if (bitmap7 == null) {
-                    bitmap7 = BitmapFactory.decodeStream(inputStream);
-                    lyt7.setVisibility(View.VISIBLE);
-                    iv7.setImageBitmap(bitmap7);
-                    int opacity = 128;
-                    int watermarkWidth = (int)(bitmap7.getWidth() * 0.2);
-                    int watermarkHeight = (int)(bitmap7.getHeight() * 0.1);
-                    Bitmap scaledWatermark = Bitmap.createScaledBitmap(BitmapWatermark, watermarkWidth, watermarkHeight, true);
-                    int x = (bitmap7.getWidth() - scaledWatermark.getWidth()) / 3;
-                    int y = (bitmap7.getHeight() - scaledWatermark.getHeight()) / 2;
-                    bitmap7 = bitmap7.copy(Bitmap.Config.ARGB_8888, true);
-                    Canvas canvas = new Canvas(bitmap7);
-                    Paint paint = new Paint();
-                    paint.setAlpha(opacity);
-                    canvas.drawBitmap(scaledWatermark, x, y, paint);
-                    iv7.setImageBitmap(bitmap7);
-                } else if (bitmap8 == null) {
-                    bitmap8 = BitmapFactory.decodeStream(inputStream);
-                    lyt8.setVisibility(View.VISIBLE);
-                    iv8.setImageBitmap(bitmap8);
-                    int opacity = 128;
-                    int watermarkWidth = (int)(bitmap8.getWidth() * 0.2);
-                    int watermarkHeight = (int)(bitmap8.getHeight() * 0.1);
-                    Bitmap scaledWatermark = Bitmap.createScaledBitmap(BitmapWatermark, watermarkWidth, watermarkHeight, true);
-                    int x = (bitmap8.getWidth() - scaledWatermark.getWidth()) / 3;
-                    int y = (bitmap8.getHeight() - scaledWatermark.getHeight()) / 2;
-                    bitmap8 = bitmap8.copy(Bitmap.Config.ARGB_8888, true);
-                    Canvas canvas = new Canvas(bitmap8);
-                    Paint paint = new Paint();
-                    paint.setAlpha(opacity);
-                    canvas.drawBitmap(scaledWatermark, x, y, paint);
-                    iv8.setImageBitmap(bitmap8);
-                } else {
-                    select.setVisibility(View.GONE);
-                }
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
+        if (requestCode == CODE_GALLERY_REQUEST1 && resultCode == RESULT_OK && data != null) {
+            Uri1 = data.getData();
+            iv1.setImageURI(Uri1);
+            lyt1.setVisibility(View.VISIBLE);
+            select1.setVisibility(View.GONE);
+            select2.setVisibility(View.VISIBLE);
+        } else if (requestCode == CODE_GALLERY_REQUEST2 && resultCode == RESULT_OK && data != null) {
+            Uri2 = data.getData();
+            iv2.setImageURI(Uri2);
+            lyt2.setVisibility(View.VISIBLE);
+            select2.setVisibility(View.GONE);
+            select3.setVisibility(View.VISIBLE);
+        } else if (requestCode == CODE_GALLERY_REQUEST3 && resultCode == RESULT_OK && data != null) {
+            Uri3 = data.getData();
+            iv3.setImageURI(Uri3);
+            lyt3.setVisibility(View.VISIBLE);
+            select3.setVisibility(View.GONE);
+            select4.setVisibility(View.VISIBLE);
+        } else if (requestCode == CODE_GALLERY_REQUEST4 && resultCode == RESULT_OK && data != null) {
+            Uri4 = data.getData();
+            iv4.setImageURI(Uri4);
+            lyt4.setVisibility(View.VISIBLE);
+            select4.setVisibility(View.GONE);
+            select5.setVisibility(View.VISIBLE);
+        } else if (requestCode == CODE_GALLERY_REQUEST5 && resultCode == RESULT_OK && data != null) {
+            Uri5 = data.getData();
+            iv5.setImageURI(Uri5);
+            lyt5.setVisibility(View.VISIBLE);
+            select5.setVisibility(View.GONE);
+            select6.setVisibility(View.VISIBLE);
+        } else if (requestCode == CODE_GALLERY_REQUEST6 && resultCode == RESULT_OK && data != null) {
+            Uri6 = data.getData();
+            iv6.setImageURI(Uri6);
+            lyt6.setVisibility(View.VISIBLE);
+            select6.setVisibility(View.GONE);
+            select7.setVisibility(View.VISIBLE);
+        } else if (requestCode == CODE_GALLERY_REQUEST7 && resultCode == RESULT_OK && data != null) {
+            Uri7 = data.getData();
+            iv7.setImageURI(Uri7);
+            lyt7.setVisibility(View.VISIBLE);
+            select7.setVisibility(View.GONE);
+            select.setVisibility(View.VISIBLE);
+        } else if (requestCode == CODE_GALLERY_REQUEST8 && resultCode == RESULT_OK && data != null) {
+            Uri8 = data.getData();
+            iv8.setImageURI(Uri8);
+            lyt8.setVisibility(View.VISIBLE);
+            select.setVisibility(View.GONE);
         } else if (requestCode == CODE_GALLERY_REQUEST_SHM && resultCode == RESULT_OK && data != null) {
-            Uri filePath = data.getData();
-            try {
-                InputStream inputStream = getContentResolver().openInputStream(filePath);
-                if (bitmapSHM == null) {
-                    bitmapSHM = BitmapFactory.decodeStream(inputStream);
-                    IVShm.setImageBitmap(bitmapSHM);
-                    LytSHM.setVisibility(View.VISIBLE);
-                    BtnSHM.setVisibility(View.GONE);
-                }
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
+            UriSHM = data.getData();
+            IVShm.setImageURI(UriSHM);
+            LytSHM.setVisibility(View.VISIBLE);
+            BtnSHM.setVisibility(View.GONE);
         } else if (requestCode == CODE_GALLERY_REQUEST_HGB && resultCode == RESULT_OK && data != null) {
-            Uri filePath = data.getData();
-            try {
-                InputStream inputStream = getContentResolver().openInputStream(filePath);
-                if (bitmapHGB == null) {
-                    bitmapHGB = BitmapFactory.decodeStream(inputStream);
-                    IVHgb.setImageBitmap(bitmapHGB);
-                    LytHGB.setVisibility(View.VISIBLE);
-                    BtnHGB.setVisibility(View.GONE);
-                }
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
+            UriHGB = data.getData();
+            IVHgb.setImageURI(UriHGB);
+            LytHGB.setVisibility(View.VISIBLE);
+            BtnHGB.setVisibility(View.GONE);
         } else if (requestCode == CODE_GALLERY_REQUEST_HSHP && resultCode == RESULT_OK && data != null) {
-            Uri filePath = data.getData();
-            try {
-                InputStream inputStream = getContentResolver().openInputStream(filePath);
-                if (bitmapHSHP == null) {
-                    bitmapHSHP = BitmapFactory.decodeStream(inputStream);
-                    IVHshp.setImageBitmap(bitmapHSHP);
-                    LytHSHP.setVisibility(View.VISIBLE);
-                    BtnHSHP.setVisibility(View.GONE);
-                }
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
+            UriHSHP = data.getData();
+            IVHshp.setImageURI(UriHSHP);
+            LytHSHP.setVisibility(View.VISIBLE);
+            BtnHSHP.setVisibility(View.GONE);
         } else if (requestCode == CODE_GALLERY_REQUEST_PPJB && resultCode == RESULT_OK && data != null) {
-            Uri filePath = data.getData();
-            try {
-                InputStream inputStream = getContentResolver().openInputStream(filePath);
-                if (bitmapPPJB == null) {
-                    bitmapPPJB = BitmapFactory.decodeStream(inputStream);
-                    IVPpjb.setImageBitmap(bitmapPPJB);
-                    LytPPJB.setVisibility(View.VISIBLE);
-                    BtnPPJB.setVisibility(View.GONE);
-                }
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
+            UriPPJB = data.getData();
+            IVPpjb.setImageURI(UriPPJB);
+            LytPPJB.setVisibility(View.VISIBLE);
+            BtnPPJB.setVisibility(View.GONE);
         } else if (requestCode == CODE_GALLERY_REQUEST_STRA && resultCode == RESULT_OK && data != null) {
-            Uri filePath = data.getData();
-            try {
-                InputStream inputStream = getContentResolver().openInputStream(filePath);
-                if (bitmapSTRA == null) {
-                    bitmapSTRA = BitmapFactory.decodeStream(inputStream);
-                    IVStratatitle.setImageBitmap(bitmapSTRA);
-                    LytStratatitle.setVisibility(View.VISIBLE);
-                    BtnSTRA.setVisibility(View.GONE);
-                }
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
+            UriSTRA = data.getData();
+            IVStratatitle.setImageURI(UriSTRA);
+            LytStratatitle.setVisibility(View.VISIBLE);
+            BtnSTRA.setVisibility(View.GONE);
         } else if (requestCode == CODE_GALLERY_REQUEST_PJP && resultCode == RESULT_OK && data != null) {
-            Uri filePath = data.getData();
-            try {
-                InputStream inputStream = getContentResolver().openInputStream(filePath);
-                if (BitmapPjp == null) {
-                    BitmapFactory.Options options = new BitmapFactory.Options();
-                    options.inSampleSize = 1;
-                    BitmapPjp = BitmapFactory.decodeStream(inputStream, null, options);
-                    IVPjp.setImageBitmap(BitmapPjp);
-                    LytPjp.setVisibility(View.VISIBLE);
-                    BtnPjp.setVisibility(View.GONE);
-                }
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
+            UriPJP = data.getData();
+            IVPjp.setImageURI(UriPJP);
+            LytPjp.setVisibility(View.VISIBLE);
+            BtnPjp.setVisibility(View.GONE);
         } else if (requestCode == CODE_GALLERY_REQUEST_PJP1 && resultCode == RESULT_OK && data != null) {
-            Uri filePath = data.getData();
-            try {
-                InputStream inputStream = getContentResolver().openInputStream(filePath);
-                if (BitmapPjp1 == null) {
-                    BitmapPjp1 = BitmapFactory.decodeStream(inputStream);
-                    IVPjp1.setImageBitmap(BitmapPjp1);
-                    LytPjp1.setVisibility(View.VISIBLE);
-                    BtnPjp1.setVisibility(View.GONE);
-                }
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
-        } else if (requestCode == KODE_REQUEST_KAMERA && resultCode == RESULT_OK) {
-            if (data != null && data.getExtras() != null) {
-                Bitmap imageBitmap = (Bitmap) data.getExtras().get("data");
-                if (imageBitmap != null) {
-                    try {
-                        InputStream inputStream = getContentResolver().openInputStream(getImageUri(this, imageBitmap));
-                        if (bitmap1 == null) {
-                            bitmap1 = BitmapFactory.decodeStream(inputStream);
-                            lyt1.setVisibility(View.VISIBLE);
-                            iv1.setImageBitmap(bitmap1);
-                            int opacity = 128;
-                            int watermarkWidth = (int)(bitmap1.getWidth() * 0.2);
-                            int watermarkHeight = (int)(bitmap1.getHeight() * 0.1);
-                            Bitmap scaledWatermark = Bitmap.createScaledBitmap(BitmapWatermark, watermarkWidth, watermarkHeight, true);
-                            int x = (bitmap1.getWidth() - scaledWatermark.getWidth()) / 3;
-                            int y = (bitmap1.getHeight() - scaledWatermark.getHeight()) / 2;
-                            bitmap1 = bitmap1.copy(Bitmap.Config.ARGB_8888, true);
-                            Canvas canvas = new Canvas(bitmap1);
-                            Paint paint = new Paint();
-                            paint.setAlpha(opacity);
-                            canvas.drawBitmap(scaledWatermark, x, y, paint);
-                            iv1.setImageBitmap(bitmap1);
-                        } else if (bitmap2 == null) {
-                            bitmap2 = BitmapFactory.decodeStream(inputStream);
-                            lyt2.setVisibility(View.VISIBLE);
-                            iv2.setImageBitmap(bitmap2);
-                            int opacity = 128;
-                            int watermarkWidth = (int)(bitmap2.getWidth() * 0.2);
-                            int watermarkHeight = (int)(bitmap2.getHeight() * 0.1);
-                            Bitmap scaledWatermark = Bitmap.createScaledBitmap(BitmapWatermark, watermarkWidth, watermarkHeight, true);
-                            int x = (bitmap2.getWidth() - scaledWatermark.getWidth()) / 3;
-                            int y = (bitmap2.getHeight() - scaledWatermark.getHeight()) / 2;
-                            bitmap2 = bitmap2.copy(Bitmap.Config.ARGB_8888, true);
-                            Canvas canvas = new Canvas(bitmap2);
-                            Paint paint = new Paint();
-                            paint.setAlpha(opacity);
-                            canvas.drawBitmap(scaledWatermark, x, y, paint);
-                            iv2.setImageBitmap(bitmap2);
-                        } else if (bitmap3 == null) {
-                            bitmap3 = BitmapFactory.decodeStream(inputStream);
-                            lyt3.setVisibility(View.VISIBLE);
-                            iv3.setImageBitmap(bitmap3);
-                            int opacity = 128;
-                            int watermarkWidth = (int)(bitmap3.getWidth() * 0.2);
-                            int watermarkHeight = (int)(bitmap3.getHeight() * 0.1);
-                            Bitmap scaledWatermark = Bitmap.createScaledBitmap(BitmapWatermark, watermarkWidth, watermarkHeight, true);
-                            int x = (bitmap3.getWidth() - scaledWatermark.getWidth()) / 3;
-                            int y = (bitmap3.getHeight() - scaledWatermark.getHeight()) / 2;
-                            bitmap3 = bitmap3.copy(Bitmap.Config.ARGB_8888, true);
-                            Canvas canvas = new Canvas(bitmap3);
-                            Paint paint = new Paint();
-                            paint.setAlpha(opacity);
-                            canvas.drawBitmap(scaledWatermark, x, y, paint);
-                            iv3.setImageBitmap(bitmap3);
-                        } else if (bitmap4 == null) {
-                            bitmap4 = BitmapFactory.decodeStream(inputStream);
-                            lyt4.setVisibility(View.VISIBLE);
-                            iv4.setImageBitmap(bitmap4);
-                            int opacity = 128;
-                            int watermarkWidth = (int)(bitmap4.getWidth() * 0.2);
-                            int watermarkHeight = (int)(bitmap4.getHeight() * 0.1);
-                            Bitmap scaledWatermark = Bitmap.createScaledBitmap(BitmapWatermark, watermarkWidth, watermarkHeight, true);
-                            int x = (bitmap4.getWidth() - scaledWatermark.getWidth()) / 3;
-                            int y = (bitmap4.getHeight() - scaledWatermark.getHeight()) / 2;
-                            bitmap4 = bitmap4.copy(Bitmap.Config.ARGB_8888, true);
-                            Canvas canvas = new Canvas(bitmap4);
-                            Paint paint = new Paint();
-                            paint.setAlpha(opacity);
-                            canvas.drawBitmap(scaledWatermark, x, y, paint);
-                            iv4.setImageBitmap(bitmap4);
-                        } else if (bitmap5 == null) {
-                            bitmap5 = BitmapFactory.decodeStream(inputStream);
-                            lyt5.setVisibility(View.VISIBLE);
-                            iv5.setImageBitmap(bitmap5);
-                            int opacity = 128;
-                            int watermarkWidth = (int)(bitmap5.getWidth() * 0.2);
-                            int watermarkHeight = (int)(bitmap5.getHeight() * 0.1);
-                            Bitmap scaledWatermark = Bitmap.createScaledBitmap(BitmapWatermark, watermarkWidth, watermarkHeight, true);
-                            int x = (bitmap5.getWidth() - scaledWatermark.getWidth()) / 3;
-                            int y = (bitmap5.getHeight() - scaledWatermark.getHeight()) / 2;
-                            bitmap5 = bitmap5.copy(Bitmap.Config.ARGB_8888, true);
-                            Canvas canvas = new Canvas(bitmap5);
-                            Paint paint = new Paint();
-                            paint.setAlpha(opacity);
-                            canvas.drawBitmap(scaledWatermark, x, y, paint);
-                            iv5.setImageBitmap(bitmap5);
-                        } else if (bitmap6 == null) {
-                            bitmap6 = BitmapFactory.decodeStream(inputStream);
-                            lyt6.setVisibility(View.VISIBLE);
-                            iv6.setImageBitmap(bitmap6);
-                            int opacity = 128;
-                            int watermarkWidth = (int)(bitmap6.getWidth() * 0.2);
-                            int watermarkHeight = (int)(bitmap6.getHeight() * 0.1);
-                            Bitmap scaledWatermark = Bitmap.createScaledBitmap(BitmapWatermark, watermarkWidth, watermarkHeight, true);
-                            int x = (bitmap6.getWidth() - scaledWatermark.getWidth()) / 3;
-                            int y = (bitmap6.getHeight() - scaledWatermark.getHeight()) / 2;
-                            bitmap6 = bitmap6.copy(Bitmap.Config.ARGB_8888, true);
-                            Canvas canvas = new Canvas(bitmap6);
-                            Paint paint = new Paint();
-                            paint.setAlpha(opacity);
-                            canvas.drawBitmap(scaledWatermark, x, y, paint);
-                            iv6.setImageBitmap(bitmap6);
-                        } else if (bitmap7 == null) {
-                            bitmap7 = BitmapFactory.decodeStream(inputStream);
-                            lyt7.setVisibility(View.VISIBLE);
-                            iv7.setImageBitmap(bitmap7);
-                            int opacity = 128;
-                            int watermarkWidth = (int)(bitmap7.getWidth() * 0.2);
-                            int watermarkHeight = (int)(bitmap7.getHeight() * 0.1);
-                            Bitmap scaledWatermark = Bitmap.createScaledBitmap(BitmapWatermark, watermarkWidth, watermarkHeight, true);
-                            int x = (bitmap7.getWidth() - scaledWatermark.getWidth()) / 3;
-                            int y = (bitmap7.getHeight() - scaledWatermark.getHeight()) / 2;
-                            bitmap7 = bitmap7.copy(Bitmap.Config.ARGB_8888, true);
-                            Canvas canvas = new Canvas(bitmap7);
-                            Paint paint = new Paint();
-                            paint.setAlpha(opacity);
-                            canvas.drawBitmap(scaledWatermark, x, y, paint);
-                            iv7.setImageBitmap(bitmap7);
-                        } else if (bitmap8 == null) {
-                            bitmap8 = BitmapFactory.decodeStream(inputStream);
-                            lyt8.setVisibility(View.VISIBLE);
-                            iv8.setImageBitmap(bitmap8);
-                            int opacity = 128;
-                            int watermarkWidth = (int)(bitmap8.getWidth() * 0.2);
-                            int watermarkHeight = (int)(bitmap8.getHeight() * 0.1);
-                            Bitmap scaledWatermark = Bitmap.createScaledBitmap(BitmapWatermark, watermarkWidth, watermarkHeight, true);
-                            int x = (bitmap8.getWidth() - scaledWatermark.getWidth()) / 3;
-                            int y = (bitmap8.getHeight() - scaledWatermark.getHeight()) / 2;
-                            bitmap8 = bitmap8.copy(Bitmap.Config.ARGB_8888, true);
-                            Canvas canvas = new Canvas(bitmap8);
-                            Paint paint = new Paint();
-                            paint.setAlpha(opacity);
-                            canvas.drawBitmap(scaledWatermark, x, y, paint);
-                            iv8.setImageBitmap(bitmap8);
-                        } else {
-                            select.setVisibility(View.GONE);
-                        }
-                    } catch (FileNotFoundException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
+            UriPJP1 = data.getData();
+            IVPjp1.setImageURI(UriPJP1);
+            LytPjp1.setVisibility(View.VISIBLE);
+            BtnPjp1.setVisibility(View.GONE);
+        } else if (requestCode == KODE_REQUEST_KAMERA1 && resultCode == RESULT_OK) {
+            iv1.setImageURI(Uri1);
+            lyt1.setVisibility(View.VISIBLE);
+            select1.setVisibility(View.GONE);
+            select2.setVisibility(View.VISIBLE);
+        } else if (requestCode == KODE_REQUEST_KAMERA2 && resultCode == RESULT_OK) {
+            iv2.setImageURI(Uri2);
+            lyt2.setVisibility(View.VISIBLE);
+            select2.setVisibility(View.GONE);
+            select3.setVisibility(View.VISIBLE);
+        } else if (requestCode == KODE_REQUEST_KAMERA3 && resultCode == RESULT_OK) {
+            iv3.setImageURI(Uri3);
+            lyt3.setVisibility(View.VISIBLE);
+            select3.setVisibility(View.GONE);
+            select4.setVisibility(View.VISIBLE);
+        } else if (requestCode == KODE_REQUEST_KAMERA4 && resultCode == RESULT_OK) {
+            iv4.setImageURI(Uri4);
+            lyt4.setVisibility(View.VISIBLE);
+            select4.setVisibility(View.GONE);
+            select5.setVisibility(View.VISIBLE);
+        } else if (requestCode == KODE_REQUEST_KAMERA5 && resultCode == RESULT_OK) {
+            iv5.setImageURI(Uri5);
+            lyt5.setVisibility(View.VISIBLE);
+            select5.setVisibility(View.GONE);
+            select6.setVisibility(View.VISIBLE);
+        } else if (requestCode == KODE_REQUEST_KAMERA6 && resultCode == RESULT_OK) {
+            iv6.setImageURI(Uri6);
+            lyt6.setVisibility(View.VISIBLE);
+            select6.setVisibility(View.GONE);
+            select7.setVisibility(View.VISIBLE);
+        } else if (requestCode == KODE_REQUEST_KAMERA7 && resultCode == RESULT_OK) {
+            iv7.setImageURI(Uri7);
+            lyt7.setVisibility(View.VISIBLE);
+            select7.setVisibility(View.GONE);
+            select.setVisibility(View.VISIBLE);
+        } else if (requestCode == KODE_REQUEST_KAMERA8 && resultCode == RESULT_OK) {
+            iv8.setImageURI(Uri8);
+            lyt8.setVisibility(View.VISIBLE);
+            select.setVisibility(View.GONE);
         } else if (requestCode == KODE_REQUEST_KAMERA_SHM && resultCode == RESULT_OK) {
-            if (data != null && data.getExtras() != null) {
-                Bitmap imageBitmap = (Bitmap) data.getExtras().get("data");
-                if (imageBitmap != null) {
-                    try {
-                        InputStream inputStream = getContentResolver().openInputStream(getImageUri(this, imageBitmap));
-                        bitmapSHM = BitmapFactory.decodeStream(inputStream);
-                        IVShm.setImageBitmap(bitmapSHM);
-                        LytSHM.setVisibility(View.VISIBLE);
-                        BtnSHM.setVisibility(View.GONE);
-                    } catch (FileNotFoundException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
+            IVShm.setImageURI(UriSHM);
+            LytSHM.setVisibility(View.VISIBLE);
+            BtnSHM.setVisibility(View.GONE);
         } else if (requestCode == KODE_REQUEST_KAMERA_HGB && resultCode == RESULT_OK) {
-            if (data != null && data.getExtras() != null) {
-                Bitmap imageBitmap = (Bitmap) data.getExtras().get("data");
-                if (imageBitmap != null) {
-                    try {
-                        InputStream inputStream = getContentResolver().openInputStream(getImageUri(this, imageBitmap));
-                        bitmapHGB = BitmapFactory.decodeStream(inputStream);
-                        IVHgb.setImageBitmap(bitmapHGB);
-                        LytHGB.setVisibility(View.VISIBLE);
-                        BtnHGB.setVisibility(View.GONE);
-                    } catch (FileNotFoundException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
+            IVHgb.setImageURI(UriHGB);
+            LytHGB.setVisibility(View.VISIBLE);
+            BtnHGB.setVisibility(View.GONE);
         } else if (requestCode == KODE_REQUEST_KAMERA_HSHP && resultCode == RESULT_OK) {
-            if (data != null && data.getExtras() != null) {
-                Bitmap imageBitmap = (Bitmap) data.getExtras().get("data");
-                if (imageBitmap != null) {
-                    try {
-                        InputStream inputStream = getContentResolver().openInputStream(getImageUri(this, imageBitmap));
-                        bitmapHSHP = BitmapFactory.decodeStream(inputStream);
-                        IVHshp.setImageBitmap(bitmapHSHP);
-                        LytHSHP.setVisibility(View.VISIBLE);
-                        BtnHSHP.setVisibility(View.GONE);
-                    } catch (FileNotFoundException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
+            IVHshp.setImageURI(UriHSHP);
+            LytHSHP.setVisibility(View.VISIBLE);
+            BtnHSHP.setVisibility(View.GONE);
         } else if (requestCode == KODE_REQUEST_KAMERA_PPJB && resultCode == RESULT_OK) {
-            if (data != null && data.getExtras() != null) {
-                Bitmap imageBitmap = (Bitmap) data.getExtras().get("data");
-                if (imageBitmap != null) {
-                    try {
-                        InputStream inputStream = getContentResolver().openInputStream(getImageUri(this, imageBitmap));
-                        bitmapPPJB = BitmapFactory.decodeStream(inputStream);
-                        IVPpjb.setImageBitmap(bitmapPPJB);
-                        LytPPJB.setVisibility(View.VISIBLE);
-                        BtnPPJB.setVisibility(View.GONE);
-                    } catch (FileNotFoundException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
+            IVPpjb.setImageURI(UriSHM);
+            LytPPJB.setVisibility(View.VISIBLE);
+            BtnPPJB.setVisibility(View.GONE);
         } else if (requestCode == KODE_REQUEST_KAMERA_STRA && resultCode == RESULT_OK) {
-            if (data != null && data.getExtras() != null) {
-                Bitmap imageBitmap = (Bitmap) data.getExtras().get("data");
-                if (imageBitmap != null) {
-                    try {
-                        InputStream inputStream = getContentResolver().openInputStream(getImageUri(this, imageBitmap));
-                        bitmapSTRA = BitmapFactory.decodeStream(inputStream);
-                        IVStratatitle.setImageBitmap(bitmapSTRA);
-                        LytStratatitle.setVisibility(View.VISIBLE);
-                        BtnSTRA.setVisibility(View.GONE);
-                    } catch (FileNotFoundException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
+            IVStratatitle.setImageURI(UriSHM);
+            LytStratatitle.setVisibility(View.VISIBLE);
+            BtnSTRA.setVisibility(View.GONE);
         } else if (requestCode == KODE_REQUEST_KAMERA_PJP && resultCode == RESULT_OK) {
-            if (data != null && data.getExtras() != null) {
-                Bitmap imageBitmap = (Bitmap) data.getExtras().get("data");
-                if (imageBitmap != null) {
-                    try {
-                        InputStream inputStream = getContentResolver().openInputStream(getImageUri(this, imageBitmap));
-                        BitmapFactory.Options options = new BitmapFactory.Options();
-                        options.inSampleSize = 1;
-                        BitmapPjp = BitmapFactory.decodeStream(inputStream, null, options);
-                        IVPjp.setImageBitmap(BitmapPjp);
-                        LytPjp.setVisibility(View.VISIBLE);
-                        BtnPjp.setVisibility(View.GONE);
-                    } catch (FileNotFoundException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
+            IVPjp.setImageURI(UriPJP);
+            LytPjp.setVisibility(View.VISIBLE);
+            BtnPjp.setVisibility(View.VISIBLE);
         } else if (requestCode == KODE_REQUEST_KAMERA_PJP1 && resultCode == RESULT_OK) {
-            if (data != null && data.getExtras() != null) {
-                Bitmap imageBitmap = (Bitmap) data.getExtras().get("data");
-                if (imageBitmap != null) {
-                    try {
-                        InputStream inputStream = getContentResolver().openInputStream(getImageUri(this, imageBitmap));
-                        BitmapPjp1 = BitmapFactory.decodeStream(inputStream);
-                        IVPjp1.setImageBitmap(BitmapPjp1);
-                        LytPjp1.setVisibility(View.VISIBLE);
-                        BtnPjp1.setVisibility(View.GONE);
-                    } catch (FileNotFoundException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
+            IVPjp1.setImageURI(UriPJP1);
+            LytPjp1.setVisibility(View.VISIBLE);
+            BtnPjp1.setVisibility(View.GONE);
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
-
-    public static Uri getImageUri(Context inContext, Bitmap inImage) {
-        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
-        String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "IMG_" + Calendar.getInstance().getTime(), null);
-        return Uri.parse(path);
-    }
-
-    private void cropImage(Uri sourceUri) {
-        Uri destinationUri = Uri.fromFile(new File(getCacheDir(), "cropped_image"));
-        CropImage.activity(sourceUri)
-                .setGuidelines(CropImageView.Guidelines.ON)
-                .setAspectRatio(1, 1)
-                .setCropShape(CropImageView.CropShape.RECTANGLE)
-                .setOutputUri(destinationUri)
-                .start(this);
-    }
-
-    private String imageToString(Bitmap bitmap) {
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
-        byte[] imageBytes = outputStream.toByteArray();
-
-        String encodeImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);
-        return encodeImage;
-    }
-
     private void clearBitmap1() {
         if (bitmap1 != null && !bitmap1.isRecycled()) {
             bitmap1.recycle();
             bitmap1 = null;
             lyt1.setVisibility(View.GONE);
+            select1.setVisibility(View.VISIBLE);
+        } else {
+            Uri1 = null;
+            lyt1.setVisibility(View.GONE);
+            select1.setVisibility(View.VISIBLE);
         }
     }
-
     private void clearBitmap2() {
         if (bitmap2 != null && !bitmap2.isRecycled()) {
             bitmap2.recycle();
             bitmap2 = null;
             lyt2.setVisibility(View.GONE);
+            select2.setVisibility(View.VISIBLE);
+        } else {
+            Uri2 = null;
+            lyt2.setVisibility(View.GONE);
+            select2.setVisibility(View.VISIBLE);
         }
     }
-
     private void clearBitmap3() {
         if (bitmap3 != null && !bitmap3.isRecycled()) {
             bitmap3.recycle();
             bitmap3 = null;
             lyt3.setVisibility(View.GONE);
+            select3.setVisibility(View.VISIBLE);
+        } else {
+            Uri3 = null;
+            lyt3.setVisibility(View.GONE);
+            select3.setVisibility(View.VISIBLE);
         }
     }
-
     private void clearBitmap4() {
         if (bitmap4 != null && !bitmap4.isRecycled()) {
             bitmap4.recycle();
             bitmap4 = null;
             lyt4.setVisibility(View.GONE);
+            select4.setVisibility(View.VISIBLE);
+        } else {
+            Uri4 = null;
+            lyt4.setVisibility(View.GONE);
+            select4.setVisibility(View.VISIBLE);
         }
     }
-
     private void clearBitmap5() {
         if (bitmap5 != null && !bitmap5.isRecycled()) {
             bitmap5.recycle();
             bitmap5 = null;
             lyt5.setVisibility(View.GONE);
+            select5.setVisibility(View.VISIBLE);
+        } else {
+            Uri5 = null;
+            lyt5.setVisibility(View.GONE);
+            select5.setVisibility(View.VISIBLE);
         }
     }
-
     private void clearBitmap6() {
         if (bitmap6 != null && !bitmap6.isRecycled()) {
             bitmap6.recycle();
             bitmap6 = null;
             lyt6.setVisibility(View.GONE);
+            select6.setVisibility(View.VISIBLE);
+        } else {
+            Uri6 = null;
+            lyt6.setVisibility(View.GONE);
+            select6.setVisibility(View.VISIBLE);
         }
     }
-
     private void clearBitmap7() {
         if (bitmap7 != null && !bitmap7.isRecycled()) {
             bitmap7.recycle();
             bitmap7 = null;
             lyt7.setVisibility(View.GONE);
+            select7.setVisibility(View.VISIBLE);
+        } else {
+            Uri7 = null;
+            lyt7.setVisibility(View.GONE);
+            select7.setVisibility(View.VISIBLE);
         }
     }
-
     private void clearBitmap8() {
         if (bitmap8 != null && !bitmap8.isRecycled()) {
             bitmap8.recycle();
             bitmap8 = null;
             lyt8.setVisibility(View.GONE);
+            select.setVisibility(View.VISIBLE);
+        } else {
+            Uri8 = null;
+            lyt8.setVisibility(View.GONE);
+            select.setVisibility(View.VISIBLE);
         }
     }
-
     private void clearBitmapSHM() {
         if (bitmapSHM != null && !bitmapSHM.isRecycled()) {
             bitmapSHM.recycle();
             bitmapSHM = null;
             LytSHM.setVisibility(View.GONE);
             BtnSHM.setVisibility(View.VISIBLE);
+        } else {
+            UriSHM = null;
+            LytSHM.setVisibility(View.GONE);
+            BtnSHM.setVisibility(View.VISIBLE);
         }
     }
-
     private void clearBitmapHGB() {
         if (bitmapHGB != null && !bitmapHGB.isRecycled()) {
             bitmapHGB.recycle();
             bitmapHGB = null;
             LytHGB.setVisibility(View.GONE);
             BtnHGB.setVisibility(View.VISIBLE);
+        } else {
+            UriHGB = null;
+            LytHGB.setVisibility(View.GONE);
+            BtnHGB.setVisibility(View.VISIBLE);
         }
     }
-
     private void clearBitmapHSHP() {
         if (bitmapHSHP != null && !bitmapHSHP.isRecycled()) {
             bitmapHSHP.recycle();
             bitmapHSHP = null;
             LytHSHP.setVisibility(View.GONE);
             BtnHSHP.setVisibility(View.VISIBLE);
+        } else {
+            UriHSHP = null;
+            LytHSHP.setVisibility(View.GONE);
+            BtnHSHP.setVisibility(View.VISIBLE);
         }
     }
-
     private void clearBitmapPPJB() {
         if (bitmapPPJB != null && !bitmapPPJB.isRecycled()) {
             bitmapPPJB.recycle();
             bitmapPPJB = null;
             LytPPJB.setVisibility(View.GONE);
             BtnPPJB.setVisibility(View.VISIBLE);
+        } else {
+            UriPPJB = null;
+            LytPPJB.setVisibility(View.GONE);
+            BtnPPJB.setVisibility(View.VISIBLE);
         }
     }
-
     private void clearBitmapSTRA() {
         if (bitmapSTRA != null && !bitmapSTRA.isRecycled()) {
             bitmapSTRA.recycle();
             bitmapSTRA = null;
             LytStratatitle.setVisibility(View.GONE);
             BtnSTRA.setVisibility(View.VISIBLE);
+        } else {
+            UriSTRA = null;
+            LytStratatitle.setVisibility(View.GONE);
+            BtnSTRA.setVisibility(View.VISIBLE);
         }
     }
-
     private void clearBitmapPJP() {
         if (BitmapPjp != null && !BitmapPjp.isRecycled()) {
             BitmapPjp.recycle();
             BitmapPjp = null;
             LytPjp.setVisibility(View.GONE);
             BtnPjp.setVisibility(View.VISIBLE);
+        } else {
+            UriPJP = null;
+            LytPjp.setVisibility(View.GONE);
+            BtnPjp.setVisibility(View.VISIBLE);
         }
     }
-
     private void clearBitmapPJP1() {
         if (BitmapPjp1 != null && !BitmapPjp1.isRecycled()) {
             BitmapPjp1.recycle();
             BitmapPjp1 = null;
             LytPjp1.setVisibility(View.GONE);
             BtnPjp1.setVisibility(View.VISIBLE);
+        } else {
+            UriPJP1 = null;
+            LytPjp1.setVisibility(View.GONE);
+            BtnPjp1.setVisibility(View.VISIBLE);
         }
     }
-
     private void simpanData() {
         pDialog.setMessage("Menyimpan Data");
         pDialog.setCancelable(false);
         pDialog.show();
+
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, ServerApi.URL_TAMBAH_PRALISTING,
                 new Response.Listener<String>() {
@@ -2291,7 +4117,7 @@ public class TambahListingActivity extends AppCompatActivity {
                         try {
                             JSONObject res = new JSONObject(response);
                             String status = res.getString("Status");
-                            if (status.equals("Sukses")){
+                            if (status.equals("Sukses")) {
                                 Dialog customDialog = new Dialog(TambahListingActivity.this);
                                 customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                                 customDialog.setContentView(R.layout.custom_dialog_sukses);
@@ -2343,7 +4169,6 @@ public class TambahListingActivity extends AppCompatActivity {
                                     @Override
                                     public void onClick(View view) {
                                         customDialog.dismiss();
-                                        finish();
                                     }
                                 });
 
@@ -2387,7 +4212,7 @@ public class TambahListingActivity extends AppCompatActivity {
                         });
 
                         Glide.with(TambahListingActivity.this)
-                                .load(R.mipmap.ic_eror_network_foreground) // You can also use a local resource like R.drawable.your_gif_resource
+                                .load(R.mipmap.ic_eror_network_foreground)
                                 .transition(DrawableTransitionOptions.withCrossFade())
                                 .into(gifimage);
 
@@ -2402,81 +4227,6 @@ public class TambahListingActivity extends AppCompatActivity {
                 } else {
                     idinput = idagen;
                 }
-                if (bitmap1 == null) {
-                    image1 = "0";
-                } else {
-                    image1 = imageToString(bitmap1);
-                }
-                if (bitmap2 == null) {
-                    image2 = "0";
-                } else {
-                    image2 = imageToString(bitmap2);
-                }
-                if (bitmap3 == null) {
-                    image3 = "0";
-                } else {
-                    image3 = imageToString(bitmap3);
-                }
-                if (bitmap4 == null) {
-                    image4 = "0";
-                } else {
-                    image4 = imageToString(bitmap4);
-                }
-                if (bitmap5 == null) {
-                    image5 = "0";
-                } else {
-                    image5 = imageToString(bitmap5);
-                }
-                if (bitmap6 == null) {
-                    image6 = "0";
-                } else {
-                    image6 = imageToString(bitmap6);
-                }
-                if (bitmap7 == null) {
-                    image7 = "0";
-                } else {
-                    image7 = imageToString(bitmap7);
-                }
-                if (bitmap8 == null) {
-                    image8 = "0";
-                } else {
-                    image8 = imageToString(bitmap8);
-                }
-                if (bitmapSHM == null) {
-                    SHM = "0";
-                } else {
-                    SHM = imageToString(bitmapSHM);
-                }
-                if (bitmapHGB == null) {
-                    HGB = "0";
-                } else {
-                    HGB = imageToString(bitmapHGB);
-                }
-                if (bitmapHSHP == null) {
-                    HSHP = "0";
-                } else {
-                    HSHP = imageToString(bitmapHSHP);
-                }
-                if (bitmapPPJB == null) {
-                    PPJB = "0";
-                } else {
-                    PPJB = imageToString(bitmapPPJB);
-                }
-                if (bitmapSTRA == null) {
-                    STRA = "0";
-                } else {
-                    STRA = imageToString(bitmapSTRA);
-                }
-                if (BitmapPjp == null) {
-                    PJPHal1 = "0";
-                } else {
-                    PJPHal1 = imageToString(BitmapPjp);
-                }
-                if (BitmapPjp1 == null) {
-                    PJPHal2 = "0";
-                } else {
-                    PJPHal2 = imageToString(BitmapPjp1);
-                }
                 if (latitudeStr == null) {
                     Lat = "0";
                 } else {
@@ -2486,6 +4236,16 @@ public class TambahListingActivity extends AppCompatActivity {
                     Lng = "0";
                 } else {
                     Lng = longitudeStr;
+                }
+                if (HargaString == null){
+                    SHarga = "0";
+                } else {
+                    SHarga = HargaString;
+                }
+                if (HargaSewaString == null){
+                    SHargaSewa = "0";
+                } else {
+                    SHargaSewa = HargaSewaString;
                 }
 
                 final String StringSHM = CBSHM.isChecked() ? "1" : "0";
@@ -2512,6 +4272,7 @@ public class TambahListingActivity extends AppCompatActivity {
                 map.put("Location", alamatproperti.getText().toString());
                 map.put("Wide", luas.getText().toString());
                 map.put("Land", land.getText().toString());
+                map.put("Dimensi", dimensi.getText().toString());
                 map.put("Listrik", listrik.getText().toString());
                 map.put("Level", lantai.getText().toString());
                 map.put("Bed", bed.getText().toString());
@@ -2542,8 +4303,8 @@ public class TambahListingActivity extends AppCompatActivity {
                 map.put("Priority", priority);
                 map.put("Banner", banner.getText().toString());
                 map.put("Size", size.getText().toString());
-                map.put("Harga", harga.getText().toString());
-                map.put("HargaSewa", hargasewa.getText().toString());
+                map.put("Harga", SHarga);
+                map.put("HargaSewa", SHargaSewa);
                 map.put("TglInput", EtTglInput.getText().toString());
                 map.put("Img1", image1);
                 map.put("Img2", image2);
@@ -2565,14 +4326,14 @@ public class TambahListingActivity extends AppCompatActivity {
             }
         };
 
-        RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(stringRequest);
     }
-
     private void simpanDataAgen() {
         pDialog.setMessage("Menyimpan Data");
         pDialog.setCancelable(false);
         pDialog.show();
+
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, ServerApi.URL_TAMBAH_PRALISTING,
                 new Response.Listener<String>() {
@@ -2582,7 +4343,7 @@ public class TambahListingActivity extends AppCompatActivity {
                         try {
                             JSONObject res = new JSONObject(response);
                             String status = res.getString("Status");
-                            if (status.equals("Sukses")){
+                            if (status.equals("Sukses")) {
                                 Dialog customDialog = new Dialog(TambahListingActivity.this);
                                 customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                                 customDialog.setContentView(R.layout.custom_dialog_sukses);
@@ -2693,81 +4454,6 @@ public class TambahListingActivity extends AppCompatActivity {
                 } else {
                     idinput = idagen;
                 }
-                if (bitmap1 == null) {
-                    image1 = "0";
-                } else {
-                    image1 = imageToString(bitmap1);
-                }
-                if (bitmap2 == null) {
-                    image2 = "0";
-                } else {
-                    image2 = imageToString(bitmap2);
-                }
-                if (bitmap3 == null) {
-                    image3 = "0";
-                } else {
-                    image3 = imageToString(bitmap3);
-                }
-                if (bitmap4 == null) {
-                    image4 = "0";
-                } else {
-                    image4 = imageToString(bitmap4);
-                }
-                if (bitmap5 == null) {
-                    image5 = "0";
-                } else {
-                    image5 = imageToString(bitmap5);
-                }
-                if (bitmap6 == null) {
-                    image6 = "0";
-                } else {
-                    image6 = imageToString(bitmap6);
-                }
-                if (bitmap7 == null) {
-                    image7 = "0";
-                } else {
-                    image7 = imageToString(bitmap7);
-                }
-                if (bitmap8 == null) {
-                    image8 = "0";
-                } else {
-                    image8 = imageToString(bitmap8);
-                }
-                if (bitmapSHM == null) {
-                    SHM = "0";
-                } else {
-                    SHM = imageToString(bitmapSHM);
-                }
-                if (bitmapHGB == null) {
-                    HGB = "0";
-                } else {
-                    HGB = imageToString(bitmapHGB);
-                }
-                if (bitmapHSHP == null) {
-                    HSHP = "0";
-                } else {
-                    HSHP = imageToString(bitmapHSHP);
-                }
-                if (bitmapPPJB == null) {
-                    PPJB = "0";
-                } else {
-                    PPJB = imageToString(bitmapPPJB);
-                }
-                if (bitmapSTRA == null) {
-                    STRA = "0";
-                } else {
-                    STRA = imageToString(bitmapSTRA);
-                }
-                if (BitmapPjp == null) {
-                    PJPHal1 = "0";
-                } else {
-                    PJPHal1 = imageToString(BitmapPjp);
-                }
-                if (BitmapPjp1 == null) {
-                    PJPHal2 = "0";
-                } else {
-                    PJPHal2 = imageToString(BitmapPjp1);
-                }
                 if (latitudeStr == null) {
                     Lat = "0";
                 } else {
@@ -2777,6 +4463,16 @@ public class TambahListingActivity extends AppCompatActivity {
                     Lng = "0";
                 } else {
                     Lng = longitudeStr;
+                }
+                if (HargaString == null){
+                    SHarga = "0";
+                } else {
+                    SHarga = HargaString;
+                }
+                if (HargaSewaString == null){
+                    SHargaSewa = "0";
+                } else {
+                    SHargaSewa = HargaSewaString;
                 }
 
                 final String StringSHM = CBSHM.isChecked() ? "1" : "0";
@@ -2803,6 +4499,7 @@ public class TambahListingActivity extends AppCompatActivity {
                 map.put("Location", alamatproperti.getText().toString());
                 map.put("Wide", luas.getText().toString());
                 map.put("Land", land.getText().toString());
+                map.put("Dimensi", dimensi.getText().toString());
                 map.put("Listrik", listrik.getText().toString());
                 map.put("Level", lantai.getText().toString());
                 map.put("Bed", bed.getText().toString());
@@ -2833,8 +4530,8 @@ public class TambahListingActivity extends AppCompatActivity {
                 map.put("Priority", priority);
                 map.put("Banner", banner.getText().toString());
                 map.put("Size", size.getText().toString());
-                map.put("Harga", harga.getText().toString());
-                map.put("HargaSewa", hargasewa.getText().toString());
+                map.put("Harga", SHarga);
+                map.put("HargaSewa", SHargaSewa);
                 map.put("TglInput", idnull);
                 map.put("Img1", image1);
                 map.put("Img2", image2);
@@ -2856,15 +4553,13 @@ public class TambahListingActivity extends AppCompatActivity {
             }
         };
 
-        RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(stringRequest);
     }
-
     private void simpanDataNonAgen() {
         pDialog.setMessage("Menyimpan Data");
         pDialog.setCancelable(false);
         pDialog.show();
-
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
         StringRequest stringRequest = new StringRequest(Request.Method.POST, ServerApi.URL_TAMBAH_PRALISTING,
                 new Response.Listener<String>() {
                     @Override
@@ -2873,7 +4568,7 @@ public class TambahListingActivity extends AppCompatActivity {
                         try {
                             JSONObject res = new JSONObject(response);
                             String status = res.getString("Status");
-                            if (status.equals("Sukses")){
+                            if (status.equals("Sukses")) {
                                 Dialog customDialog = new Dialog(TambahListingActivity.this);
                                 customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                                 customDialog.setContentView(R.layout.custom_dialog_sukses);
@@ -2984,81 +4679,6 @@ public class TambahListingActivity extends AppCompatActivity {
                 } else {
                     idinput = idagen;
                 }
-                if (bitmap1 == null) {
-                    image1 = "0";
-                } else {
-                    image1 = imageToString(bitmap1);
-                }
-                if (bitmap2 == null) {
-                    image2 = "0";
-                } else {
-                    image2 = imageToString(bitmap2);
-                }
-                if (bitmap3 == null) {
-                    image3 = "0";
-                } else {
-                    image3 = imageToString(bitmap3);
-                }
-                if (bitmap4 == null) {
-                    image4 = "0";
-                } else {
-                    image4 = imageToString(bitmap4);
-                }
-                if (bitmap5 == null) {
-                    image5 = "0";
-                } else {
-                    image5 = imageToString(bitmap5);
-                }
-                if (bitmap6 == null) {
-                    image6 = "0";
-                } else {
-                    image6 = imageToString(bitmap6);
-                }
-                if (bitmap7 == null) {
-                    image7 = "0";
-                } else {
-                    image7 = imageToString(bitmap7);
-                }
-                if (bitmap8 == null) {
-                    image8 = "0";
-                } else {
-                    image8 = imageToString(bitmap8);
-                }
-                if (bitmapSHM == null) {
-                    SHM = "0";
-                } else {
-                    SHM = imageToString(bitmapSHM);
-                }
-                if (bitmapHGB == null) {
-                    HGB = "0";
-                } else {
-                    HGB = imageToString(bitmapHGB);
-                }
-                if (bitmapHSHP == null) {
-                    HSHP = "0";
-                } else {
-                    HSHP = imageToString(bitmapHSHP);
-                }
-                if (bitmapPPJB == null) {
-                    PPJB = "0";
-                } else {
-                    PPJB = imageToString(bitmapPPJB);
-                }
-                if (bitmapSTRA == null) {
-                    STRA = "0";
-                } else {
-                    STRA = imageToString(bitmapSTRA);
-                }
-                if (BitmapPjp == null) {
-                    PJPHal1 = "0";
-                } else {
-                    PJPHal1 = imageToString(BitmapPjp);
-                }
-                if (BitmapPjp1 == null) {
-                    PJPHal2 = "0";
-                } else {
-                    PJPHal2 = imageToString(BitmapPjp1);
-                }
                 if (latitudeStr == null) {
                     Lat = "0";
                 } else {
@@ -3068,6 +4688,16 @@ public class TambahListingActivity extends AppCompatActivity {
                     Lng = "0";
                 } else {
                     Lng = longitudeStr;
+                }
+                if (HargaString == null){
+                    SHarga = "0";
+                } else {
+                    SHarga = HargaString;
+                }
+                if (HargaSewaString == null){
+                    SHargaSewa = "0";
+                } else {
+                    SHargaSewa = HargaSewaString;
                 }
 
                 final String StringSHM = CBSHM.isChecked() ? "1" : "0";
@@ -3094,6 +4724,7 @@ public class TambahListingActivity extends AppCompatActivity {
                 map.put("Location", alamatproperti.getText().toString());
                 map.put("Wide", luas.getText().toString());
                 map.put("Land", land.getText().toString());
+                map.put("Dimensi", dimensi.getText().toString());
                 map.put("Listrik", listrik.getText().toString());
                 map.put("Level", lantai.getText().toString());
                 map.put("Bed", bed.getText().toString());
@@ -3124,8 +4755,8 @@ public class TambahListingActivity extends AppCompatActivity {
                 map.put("Priority", priority);
                 map.put("Banner", banner.getText().toString());
                 map.put("Size", size.getText().toString());
-                map.put("Harga", harga.getText().toString());
-                map.put("HargaSewa", hargasewa.getText().toString());
+                map.put("Harga", SHarga);
+                map.put("HargaSewa", SHargaSewa);
                 map.put("TglInput", idnull);
                 map.put("Img1", image1);
                 map.put("Img2", image2);
@@ -3147,10 +4778,8 @@ public class TambahListingActivity extends AppCompatActivity {
             }
         };
 
-        RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(stringRequest);
     }
-
     public void ShowBank(View view) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.CustomAlertDialogStyle);
         builder.setTitle("Silahkan Pilih Bank");
@@ -3182,7 +4811,6 @@ public class TambahListingActivity extends AppCompatActivity {
         AlertDialog dialog = builder.create();
         dialog.show();
     }
-
     private void showCustomBankInputDialog() {
         AlertDialog.Builder customBuilder = new AlertDialog.Builder(this, R.style.CustomAlertDialogStyle);
         customBuilder.setTitle("Bank Lainnya");
@@ -3215,7 +4843,6 @@ public class TambahListingActivity extends AppCompatActivity {
         AlertDialog customDialog = customBuilder.create();
         customDialog.show();
     }
-
     public void ShowJenisProperti(View view) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.CustomAlertDialogStyle);
         builder.setTitle("Silahkan Pilih Jenis Properti");
@@ -3242,7 +4869,6 @@ public class TambahListingActivity extends AppCompatActivity {
         AlertDialog dialog = builder.create();
         dialog.show();
     }
-
     public void ShowPjp(View view) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.CustomAlertDialogStyle);
         builder.setTitle("Ketersediaan PJP");
@@ -3269,7 +4895,6 @@ public class TambahListingActivity extends AppCompatActivity {
         AlertDialog dialog = builder.create();
         dialog.show();
     }
-
     public void ShowTipeSertifikat(View view) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.CustomAlertDialogStyle);
         builder.setTitle("Silahkan Pilih Tipe Sertifikat");
@@ -3294,7 +4919,6 @@ public class TambahListingActivity extends AppCompatActivity {
         AlertDialog dialog = builder.create();
         dialog.show();
     }
-
     private void showCustomTypeInputDialog() {
         final EditText editTextCustomType = new EditText(this);
         editTextCustomType.setHint("Masukkan Tipe Sertifikat");
@@ -3322,7 +4946,6 @@ public class TambahListingActivity extends AppCompatActivity {
         AlertDialog dialog = builder.create();
         dialog.show();
     }
-
     public void ShowSumberAir(View view) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.CustomAlertDialogStyle);
         builder.setTitle("Silahkan Pilih Sumber Air");
@@ -3349,7 +4972,6 @@ public class TambahListingActivity extends AppCompatActivity {
         AlertDialog dialog = builder.create();
         dialog.show();
     }
-
     public void ShowPerabot(View view) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.CustomAlertDialogStyle);
         builder.setTitle("Ketersediaan Prabot");
@@ -3376,7 +4998,6 @@ public class TambahListingActivity extends AppCompatActivity {
         AlertDialog dialog = builder.create();
         dialog.show();
     }
-
     public void ShowBanner(View view) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.CustomAlertDialogStyle);
         builder.setTitle("Pemasangan Banner");
@@ -3409,7 +5030,6 @@ public class TambahListingActivity extends AppCompatActivity {
         AlertDialog dialog = builder.create();
         dialog.show();
     }
-
     public void ShowSize(View view) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.CustomAlertDialogStyle);
         builder.setTitle("Ukuran Banner");
@@ -3434,7 +5054,6 @@ public class TambahListingActivity extends AppCompatActivity {
         AlertDialog dialog = builder.create();
         dialog.show();
     }
-
     private void ShowCustomSize() {
         final EditText editTextCustomType = new EditText(this);
         editTextCustomType.setHint("Masukkan Ukuran Banner");
@@ -3466,7 +5085,6 @@ public class TambahListingActivity extends AppCompatActivity {
         AlertDialog dialog = builder.create();
         dialog.show();
     }
-
     public void ShowStatus(View view) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.CustomAlertDialogStyle);
         builder.setTitle("Silahkan Pilih Status Properti");
@@ -3494,7 +5112,6 @@ public class TambahListingActivity extends AppCompatActivity {
 
         dialog.show();
     }
-
     public boolean Validate() {
         if (namalengkap.getText().toString().equals("")) {
             namalengkap.setError("Harap Isi Nama Lengkap Vendor");
@@ -3522,27 +5139,124 @@ public class TambahListingActivity extends AppCompatActivity {
             return false;
         }
         if (status.getText().toString().equals("")) {
-            status.setError("Harap Isi Status Properti");
-            status.requestFocus();
+            Dialog customDialog = new Dialog(TambahListingActivity.this);
+            customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            customDialog.setContentView(R.layout.custom_dialog_eror_input);
+
+            if (customDialog.getWindow() != null) {
+                customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+            }
+
+            Button ok = customDialog.findViewById(R.id.BtnOkErorInput);
+            TextView tv = customDialog.findViewById(R.id.TVDialogErorInput);
+
+            tv.setText("Harap Pilih Status Properti");
+
+            ok.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    customDialog.dismiss();
+                }
+            });
+
+            ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
+
+            Glide.with(TambahListingActivity.this)
+                    .load(R.drawable.alert) // You can also use a local resource like R.drawable.your_gif_resource
+                    .transition(DrawableTransitionOptions.withCrossFade())
+                    .into(gifImageView);
+
+            customDialog.show();
             return false;
+        } else if (status.getText().toString().equals("Jual")) {
+            if (harga.getText().toString().equals("")) {
+                harga.setError("Harap Isi Harga Properti");
+                harga.requestFocus();
+                return false;
+            }
+        } else if (status.getText().toString().equals("Sewa")) {
+            if (hargasewa.getText().toString().equals("")) {
+                hargasewa.setError("Harap Isi Harga Properti");
+                hargasewa.requestFocus();
+                return false;
+            }
+        } else {
+            if (harga.getText().toString().equals("")) {
+                harga.setError("Harap Isi Harga Properti");
+                harga.requestFocus();
+                return false;
+            }
+            if (hargasewa.getText().toString().equals("")) {
+                hargasewa.setError("Harap Isi Harga Properti");
+                hargasewa.requestFocus();
+                return false;
+            }
         }
         if (banner.getText().toString().equals("")) {
-            banner.setError("Harap Isi Pemasangan Banner");
-            banner.requestFocus();
+            Dialog customDialog = new Dialog(TambahListingActivity.this);
+            customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            customDialog.setContentView(R.layout.custom_dialog_eror_input);
+
+            if (customDialog.getWindow() != null) {
+                customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+            }
+
+            Button ok = customDialog.findViewById(R.id.BtnOkErorInput);
+            TextView tv = customDialog.findViewById(R.id.TVDialogErorInput);
+
+            tv.setText("Harap Isi Pemasangan Banner");
+
+            ok.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    customDialog.dismiss();
+                }
+            });
+
+            ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
+
+            Glide.with(TambahListingActivity.this)
+                    .load(R.drawable.alert) // You can also use a local resource like R.drawable.your_gif_resource
+                    .transition(DrawableTransitionOptions.withCrossFade())
+                    .into(gifImageView);
+
+            customDialog.show();
             return false;
         } else if (banner.getText().toString().equals("Ya")) {
             if (size.getText().toString().equals("")) {
-                size.setError("Harap Isi Ukuran Banner");
-                banner.requestFocus();
+                Dialog customDialog = new Dialog(TambahListingActivity.this);
+                customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                customDialog.setContentView(R.layout.custom_dialog_eror_input);
+
+                if (customDialog.getWindow() != null) {
+                    customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                }
+
+                Button ok = customDialog.findViewById(R.id.BtnOkErorInput);
+                TextView tv = customDialog.findViewById(R.id.TVDialogErorInput);
+
+                tv.setText("Harap Isi Ukuran Banner");
+
+                ok.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        customDialog.dismiss();
+                    }
+                });
+
+                ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
+
+                Glide.with(TambahListingActivity.this)
+                        .load(R.drawable.alert) // You can also use a local resource like R.drawable.your_gif_resource
+                        .transition(DrawableTransitionOptions.withCrossFade())
+                        .into(gifImageView);
+
+                customDialog.show();
+                return false;
             }
         }
-        if (harga.getText().toString().equals("")) {
-            harga.setError("Harap Isi Harga Properti");
-            harga.requestFocus();
-            return false;
-        }
         if (CBSHM.isChecked()) {
-            if (bitmapSHM == null) {
+            if (UriSHM == null) {
                 Dialog customDialog = new Dialog(TambahListingActivity.this);
                 customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                 customDialog.setContentView(R.layout.custom_dialog_eror_input);
@@ -3575,7 +5289,7 @@ public class TambahListingActivity extends AppCompatActivity {
             }
         }
         if (CBHGB.isChecked()) {
-            if (bitmapHGB == null) {
+            if (UriHGB == null) {
                 Dialog customDialog = new Dialog(TambahListingActivity.this);
                 customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                 customDialog.setContentView(R.layout.custom_dialog_eror_input);
@@ -3608,7 +5322,7 @@ public class TambahListingActivity extends AppCompatActivity {
             }
         }
         if (CBHSHP.isChecked()) {
-            if (bitmapHSHP == null) {
+            if (UriHSHP == null) {
                 Dialog customDialog = new Dialog(TambahListingActivity.this);
                 customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                 customDialog.setContentView(R.layout.custom_dialog_eror_input);
@@ -3641,7 +5355,7 @@ public class TambahListingActivity extends AppCompatActivity {
             }
         }
         if (CBPPJB.isChecked()) {
-            if (bitmapPPJB == null) {
+            if (UriPPJB == null) {
                 Dialog customDialog = new Dialog(TambahListingActivity.this);
                 customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                 customDialog.setContentView(R.layout.custom_dialog_eror_input);
@@ -3674,7 +5388,7 @@ public class TambahListingActivity extends AppCompatActivity {
             }
         }
         if (CBSTRA.isChecked()) {
-            if (bitmapSTRA == null) {
+            if (UriSTRA == null) {
                 Dialog customDialog = new Dialog(TambahListingActivity.this);
                 customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                 customDialog.setContentView(R.layout.custom_dialog_eror_input);

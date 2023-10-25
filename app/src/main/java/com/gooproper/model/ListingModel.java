@@ -1,12 +1,12 @@
 package com.gooproper.model;
 
 public class ListingModel {
-    String IdPraListing, IdListing, IdAgen, IdInput, IdVendor, NamaListing, Alamat, Location, Wide, Land, Listrik, Level, Bed, Bath, BedArt, BathArt, Garage, Carpot, NoCertificate, Pbb, JenisProperti, JenisCertificate, SumberAir, Kondisi, Deskripsi, Prabot, KetPrabot, Priority, Ttd, Banner, Harga, TglInput, Img1, Img2, Img3, Img4, Img5, Img6, Img7, Img8, Video, LinkFacebook, LinkTiktok, LinkInstagram, LinkYoutube, IsAdmin, IsManager, View, Sold, Nama, NoTelp, Instagram, Latitude, Longitude, Hadap, SHM, HGB, HSHP, PPJB, Stratatitle, ImgSHM, ImgHGB, ImgHSHP, ImgPPJB, ImgStratatitle, Size, Marketable, StatusHarga, IdAgenCo, Selfie, Pjp, ImgPjp, ImgPjp1, HargaSewa, Fee;
+    String IdPraListing, IdListing, IdAgen, IdInput, IdVendor, NamaListing, Alamat, Location, Wide, Land, Dimensi, Listrik, Level, Bed, Bath, BedArt, BathArt, Garage, Carpot, NoCertificate, Pbb, JenisProperti, JenisCertificate, SumberAir, Kondisi, Deskripsi, Prabot, KetPrabot, Priority, Ttd, Banner, Harga, TglInput, Img1, Img2, Img3, Img4, Img5, Img6, Img7, Img8, Video, LinkFacebook, LinkTiktok, LinkInstagram, LinkYoutube, IsAdmin, IsManager, View, Sold, Rented, Nama, NoTelp, Instagram, Latitude, Longitude, Hadap, SHM, HGB, HSHP, PPJB, Stratatitle, ImgSHM, ImgHGB, ImgHSHP, ImgPPJB, ImgStratatitle, Size, Marketable, StatusHarga, IdAgenCo, Selfie, Pjp, ImgPjp, ImgPjp1, HargaSewa, Fee, AJB, PetokD, ImgAJB, ImgPetokD;
 
     public ListingModel() {
     }
 
-    public ListingModel(String IdPraListing, String IdListing, String IdAgen, String IdInput, String IdVendor, String NamaListing, String Alamat, String Location, String Wide, String Land, String Listrik, String Level, String Bed, String Bath, String BedArt, String BathArt, String Garage, String Carpot, String NoCertificate, String Pbb, String JenisProperti, String JenisCertificate, String SumberAir, String Kondisi, String Deskripsi, String Prabot, String KetPrabot, String Priority, String Ttd, String Banner, String Harga, String TglInput, String Img1, String Img2, String Img3, String Img4, String Img5, String Img6, String Img7, String Img8, String Video, String LinkFacebook, String LinkTiktok, String LinkInstagram, String LinkYoutube, String IsAdmin, String IsManager, String View, String Sold, String Nama, String NoTelp, String Instagram, String Latitude, String Longitude, String Hadap, String SHM, String HGB, String HSHP, String PPJB, String Stratatitle, String ImgSHM, String ImgHGB, String ImgHSHP, String ImgPPJB, String ImgStratatitle, String Size, String Marketable, String StatusHarga, String IdAgenCo, String Selfie, String Pjp, String ImgPjp, String ImgPjp1, String HargaSewa, String Fee) {
+    public ListingModel(String IdPraListing, String IdListing, String IdAgen, String IdInput, String IdVendor, String NamaListing, String Alamat, String Location, String Wide, String Land, String Dimensi, String Listrik, String Level, String Bed, String Bath, String BedArt, String BathArt, String Garage, String Carpot, String NoCertificate, String Pbb, String JenisProperti, String JenisCertificate, String SumberAir, String Kondisi, String Deskripsi, String Prabot, String KetPrabot, String Priority, String Ttd, String Banner, String Harga, String TglInput, String Img1, String Img2, String Img3, String Img4, String Img5, String Img6, String Img7, String Img8, String Video, String LinkFacebook, String LinkTiktok, String LinkInstagram, String LinkYoutube, String IsAdmin, String IsManager, String View, String Sold, String Rented, String Nama, String NoTelp, String Instagram, String Latitude, String Longitude, String Hadap, String SHM, String HGB, String HSHP, String PPJB, String Stratatitle, String ImgSHM, String ImgHGB, String ImgHSHP, String ImgPPJB, String ImgStratatitle, String Size, String Marketable, String StatusHarga, String IdAgenCo, String Selfie, String Pjp, String ImgPjp, String ImgPjp1, String HargaSewa, String Fee, String AJB, String PetokD, String ImgAJB, String ImgPetokD) {
         this.IdPraListing = IdPraListing;
         this.IdListing = IdListing;
         this.IdAgen = IdAgen;
@@ -17,6 +17,7 @@ public class ListingModel {
         this.Location = Location;
         this.Wide = Wide;
         this.Land = Land;
+        this.Dimensi = Dimensi;
         this.Listrik = Listrik;
         this.Level = Level;
         this.Bed = Bed;
@@ -67,6 +68,7 @@ public class ListingModel {
         this.IsManager = IsManager;
         this.View = View;
         this.Sold = Sold;
+        this.Rented = Rented;
         this.Nama = Nama;
         this.NoTelp = NoTelp;
         this.Instagram = Instagram;
@@ -82,6 +84,10 @@ public class ListingModel {
         this.ImgPjp1 = ImgPjp1;
         this.HargaSewa = HargaSewa;
         this.Fee = Fee;
+        this.AJB = AJB;
+        this.PetokD = PetokD;
+        this.ImgAJB = ImgAJB;
+        this.ImgPetokD = ImgPetokD;
     }
 
     public String getIdPraListing() {
@@ -154,6 +160,14 @@ public class ListingModel {
 
     public void setWide(String wide) {
         Wide = wide;
+    }
+
+    public String getDimensi() {
+        return Dimensi;
+    }
+
+    public void setDimensi(String dimensi) {
+        Dimensi = dimensi;
     }
 
     public String getLevel() {
@@ -548,6 +562,14 @@ public class ListingModel {
         Sold = sold;
     }
 
+    public String getRented() {
+        return Rented;
+    }
+
+    public void setRented(String rented) {
+        Rented = rented;
+    }
+
     public String getNama() {
         return Nama;
     }
@@ -682,5 +704,37 @@ public class ListingModel {
 
     public void setFee(String fee) {
         Fee = fee;
+    }
+
+    public String getAJB() {
+        return AJB;
+    }
+
+    public void setAJB(String AJB) {
+        this.AJB = AJB;
+    }
+
+    public String getPetokD() {
+        return PetokD;
+    }
+
+    public void setPetokD(String petokD) {
+        PetokD = petokD;
+    }
+
+    public String getImgAJB() {
+        return ImgAJB;
+    }
+
+    public void setImgAJB(String imgAJB) {
+        ImgAJB = imgAJB;
+    }
+
+    public String getImgPetokD() {
+        return ImgPetokD;
+    }
+
+    public void setImgPetokD(String imgPetokD) {
+        ImgPetokD = imgPetokD;
     }
 }

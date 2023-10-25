@@ -5,20 +5,15 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
 import com.gooproper.R;
 import com.gooproper.model.FlowUpModel;
-import com.gooproper.model.ListingModel;
-import com.gooproper.ui.DetailFollowUpActivity;
-import com.gooproper.ui.DetailListingActivity;
-import com.gooproper.util.FormatCurrency;
+import com.gooproper.ui.detail.DetailFollowUpActivity;
 
 import java.util.List;
 

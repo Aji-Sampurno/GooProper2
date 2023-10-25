@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/guest_navigation"
+    app:startDestination="@id/home_guest_nav">
+
+    <fragment
+        android:id="@+id/home_guest_nav"
+        android:name="com.gooproper.guest.fragment.HomeGuestFragment"
+        tools:layout="@layout/fragment_home_guest" />
+    <fragment
+        android:id="@+id/listing_guest_nav"
+        android:name="com.gooproper.guest.fragment.ListingGuestFragment"
+        tools:layout="@layout/fragment_listing_guest" />
+    <fragment
+        android:id="@+id/agen_guest_nav"
+        android:name="com.gooproper.guest.fragment.AgenGuestFragment"
+        tools:layout="@layout/fragment_agen_guest" />
+    <fragment
+        android:id="@+id/akun_guest_nav"
+        android:name="com.gooproper.guest.fragment.AkunGuestFragment"
+        tools:layout="@layout/fragment_akun_guest" />
+    <activity
+        android:id="@+id/login_guest_nav"
+        android:name="com.gooproper.ui.LoginConditionActivity"
+        tools:layout="@layout/activity_login_condition" />
+    <action
+        android:id="@+id/login_nav"
+        app:destination="@id/login_guest_nav" />
+</navigation>

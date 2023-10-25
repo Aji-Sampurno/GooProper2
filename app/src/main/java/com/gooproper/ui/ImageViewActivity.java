@@ -7,9 +7,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ImageView;
 
-import com.gooproper.ImageViewAdapter;
+import com.gooproper.adapter.ImageViewAdapter;
 import com.gooproper.R;
-import com.gooproper.adapter.ViewPagerAdapter;
 
 import java.util.ArrayList;
 
@@ -27,7 +26,7 @@ public class ImageViewActivity extends AppCompatActivity {
         viewPager = findViewById(R.id.VPImageView);
         IVBack = findViewById(R.id.IVBackImageView);
 
-        IVBack.setOnClickListener(v -> startActivity(new Intent(ImageViewActivity.this, DetailListingActivity.class)));
+        IVBack.setOnClickListener(v -> finish());
 
         Intent intent = getIntent();
         images = intent.getStringArrayListExtra("imageResources");

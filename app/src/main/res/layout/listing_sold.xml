@@ -187,20 +187,12 @@
 
                         </LinearLayout>
 
-                        <TextView
-                            android:id="@+id/priceTxt"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="8dp"
-                            android:text="Rp. 2.576.000"
-                            android:textColor="@color/second"
-                            android:textSize="12sp"/>
-
                     </LinearLayout>
 
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/badgesold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
@@ -212,6 +204,24 @@
                         android:layout_height="wrap_content"
                         android:layout_margin="5dp"
                         android:text="Sold"
+                        android:textColor="@color/white"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/badgerented"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:orientation="vertical"
+                    android:visibility="gone"
+                    android:background="@color/red">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:text="Rented"
                         android:textColor="@color/white"/>
 
                 </LinearLayout>

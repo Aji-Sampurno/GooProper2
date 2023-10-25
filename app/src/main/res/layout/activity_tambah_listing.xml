@@ -642,7 +642,7 @@
                         <ImageView
                             android:id="@+id/IVPjp"
                             android:layout_width="250dp"
-                            android:layout_height="250dp"/>
+                            android:layout_height="250dp" />
 
                         <ImageView
                             android:id="@+id/IVDeletePjp"
@@ -682,7 +682,7 @@
                         <ImageView
                             android:id="@+id/IVPjp1"
                             android:layout_width="250dp"
-                            android:layout_height="250dp"/>
+                            android:layout_height="250dp" />
 
                         <ImageView
                             android:id="@+id/IVDeletePjp1"
@@ -744,18 +744,18 @@
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/lythadap"
+                    android:id="@+id/lytluastanah"
                     style="@style/CustomOutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp">
 
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/ethadap"
+                        android:id="@+id/etluastanah"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Hadap Bangunan"
-                        android:inputType="text"
+                        android:hint="Luas Tanah"
+                        android:inputType="number"
                         android:textColor="@color/black" />
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -776,18 +776,34 @@
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/lytluastanah"
+                    android:id="@+id/lythadap"
                     style="@style/CustomOutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp">
 
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/etluastanah"
+                        android:id="@+id/ethadap"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Luas Tanah"
-                        android:inputType="number"
+                        android:hint="Hadap Bangunan"
+                        android:inputType="text"
+                        android:textColor="@color/black" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/lytdimensi"
+                    style="@style/CustomOutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etdimensi"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Dimensi"
+                        android:inputType="text"
                         android:textColor="@color/black" />
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -1172,6 +1188,15 @@
 
                 </LinearLayout>
 
+                <Button
+                    android:id="@+id/btnSelectImage1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:backgroundTint="@color/main"
+                    android:text="Gambar Tampak Depan"
+                    android:textColor="@color/white" />
+
                 <LinearLayout
                     android:id="@+id/lyts2"
                     android:layout_width="match_parent"
@@ -1196,6 +1221,16 @@
                         app:tint="@color/red_color" />
 
                 </LinearLayout>
+
+                <Button
+                    android:id="@+id/btnSelectImage2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:backgroundTint="@color/main"
+                    android:text="Gambar Ruang Tamu"
+                    android:textColor="@color/white"
+                    android:visibility="gone" />
 
                 <LinearLayout
                     android:id="@+id/lyts3"
@@ -1222,6 +1257,16 @@
 
                 </LinearLayout>
 
+                <Button
+                    android:id="@+id/btnSelectImage3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:backgroundTint="@color/main"
+                    android:text="Gambar Dapur"
+                    android:textColor="@color/white"
+                    android:visibility="gone" />
+
                 <LinearLayout
                     android:id="@+id/lyts4"
                     android:layout_width="match_parent"
@@ -1246,6 +1291,16 @@
                         app:tint="@color/red_color" />
 
                 </LinearLayout>
+
+                <Button
+                    android:id="@+id/btnSelectImage4"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:backgroundTint="@color/main"
+                    android:text="Gambar Kamar Mandi"
+                    android:textColor="@color/white"
+                    android:visibility="gone" />
 
                 <LinearLayout
                     android:id="@+id/lyts5"
@@ -1272,6 +1327,16 @@
 
                 </LinearLayout>
 
+                <Button
+                    android:id="@+id/btnSelectImage5"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:backgroundTint="@color/main"
+                    android:text="Tambah Gambar"
+                    android:textColor="@color/white"
+                    android:visibility="gone" />
+
                 <LinearLayout
                     android:id="@+id/lyts6"
                     android:layout_width="match_parent"
@@ -1297,6 +1362,16 @@
 
                 </LinearLayout>
 
+                <Button
+                    android:id="@+id/btnSelectImage6"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:backgroundTint="@color/main"
+                    android:text="Tambah Gambar"
+                    android:textColor="@color/white"
+                    android:visibility="gone" />
+
                 <LinearLayout
                     android:id="@+id/lyts7"
                     android:layout_width="match_parent"
@@ -1321,6 +1396,16 @@
                         app:tint="@color/red_color" />
 
                 </LinearLayout>
+
+                <Button
+                    android:id="@+id/btnSelectImage7"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:backgroundTint="@color/main"
+                    android:text="Tambah Gambar"
+                    android:textColor="@color/white"
+                    android:visibility="gone" />
 
                 <LinearLayout
                     android:id="@+id/lyts8"
@@ -1354,7 +1439,8 @@
                     android:layout_marginTop="10dp"
                     android:backgroundTint="@color/main"
                     android:text="Tambah Gambar"
-                    android:textColor="@color/white" />
+                    android:textColor="@color/white"
+                    android:visibility="gone" />
 
                 <LinearLayout
                     android:layout_width="match_parent"

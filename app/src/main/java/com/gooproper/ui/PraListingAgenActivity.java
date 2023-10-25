@@ -1,6 +1,7 @@
 package com.gooproper.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -31,6 +32,7 @@ import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
 import com.gooproper.R;
 import com.gooproper.adapter.ListingAdapter;
+import com.gooproper.adapter.PraListingAdapter;
 import com.gooproper.model.ListingModel;
 import com.gooproper.util.Preferences;
 import com.gooproper.util.ServerApi;
@@ -48,7 +50,7 @@ public class PraListingAgenActivity extends AppCompatActivity {
     ImageView IVSortAsc, IVSortDesc, IVFilter;
     SwipeRefreshLayout srlistingku;
     RecyclerView rvlist;
-    ListingAdapter adapter;
+    PraListingAdapter adapter;
     List<ListingModel> list;
     private AlertDialog alertDialog;
     private EditText searchView;
@@ -107,8 +109,8 @@ public class PraListingAgenActivity extends AppCompatActivity {
 
         list = new ArrayList<>();
 
-        rvlist.setLayoutManager(new LinearLayoutManager(PraListingAgenActivity.this, LinearLayoutManager.VERTICAL, false));
-        adapter = new ListingAdapter(this, list);
+        rvlist.setLayoutManager(new GridLayoutManager(PraListingAgenActivity.this,2));
+        adapter = new PraListingAdapter(this, list);
         rvlist.setAdapter(adapter);
 
         LoadListing(true);
@@ -513,7 +515,7 @@ public class PraListingAgenActivity extends AppCompatActivity {
                             try {
                                 JSONObject data = response.getJSONObject(i);
                                 ListingModel md = new ListingModel();
-                                md.setIdListing(data.getString("IdListing"));
+                                md.setIdPraListing(data.getString("IdPraListing"));
                                 md.setIdAgen(data.getString("IdAgen"));
                                 md.setIdAgenCo(data.getString("IdAgenCo"));
                                 md.setIdInput(data.getString("IdInput"));
@@ -525,6 +527,7 @@ public class PraListingAgenActivity extends AppCompatActivity {
                                 md.setSelfie(data.getString("Selfie"));
                                 md.setWide(data.getString("Wide"));
                                 md.setLand(data.getString("Land"));
+                                md.setDimensi(data.getString("Dimensi"));
                                 md.setListrik(data.getString("Listrik"));
                                 md.setLevel(data.getString("Level"));
                                 md.setBed(data.getString("Bed"));
@@ -539,12 +542,16 @@ public class PraListingAgenActivity extends AppCompatActivity {
                                 md.setHSHP(data.getString("HSHP"));
                                 md.setPPJB(data.getString("PPJB"));
                                 md.setStratatitle(data.getString("Stratatitle"));
+                                md.setStratatitle(data.getString("AJB"));
+                                md.setStratatitle(data.getString("PetokD"));
                                 md.setPjp(data.getString("Pjp"));
                                 md.setImgSHM(data.getString("ImgSHM"));
                                 md.setImgHGB(data.getString("ImgHGB"));
                                 md.setImgHSHP(data.getString("ImgHSHP"));
                                 md.setImgPPJB(data.getString("ImgPPJB"));
                                 md.setImgStratatitle(data.getString("ImgStratatitle"));
+                                md.setImgStratatitle(data.getString("ImgAJB"));
+                                md.setImgStratatitle(data.getString("ImgPetokD"));
                                 md.setImgPjp(data.getString("ImgPjp"));
                                 md.setImgPjp1(data.getString("ImgPjp1"));
                                 md.setNoCertificate(data.getString("NoCertificate"));
@@ -579,6 +586,7 @@ public class PraListingAgenActivity extends AppCompatActivity {
                                 md.setIsAdmin(data.getString("IsAdmin"));
                                 md.setIsManager(data.getString("IsManager"));
                                 md.setSold(data.getString("Sold"));
+                                md.setRented(data.getString("Rented"));
                                 md.setView(data.getString("View"));
                                 md.setMarketable(data.getString("Marketable"));
                                 md.setStatusHarga(data.getString("StatusHarga"));

@@ -48,12 +48,99 @@
 
     </LinearLayout>
 
-    <TextView
+    <LinearLayout
+        android:id="@+id/LYTTopNew"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="10dp"
+        android:weightSum="7">
+
+        <EditText
+            android:id="@+id/etsearchView"
+            android:padding="10dp"
+            android:textColor="@color/white"
+            android:hint="Cari..."
+            android:textColorHint="@color/white"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/backgroundbox"/>
+
+        <androidx.appcompat.widget.SearchView
+            android:id="@+id/searchView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="8dp"
+            android:layout_weight="1"
+            android:background="@drawable/backgroundbox"
+            android:iconifiedByDefault="false"
+            android:queryHint="Address"
+            android:visibility="gone"
+            android:theme="@style/MySearchViewStyle" />
+
+        <ImageView
+            android:id="@+id/filterBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="3"
+            android:adjustViewBounds="true"
+            android:padding="10dp"
+            android:src="@drawable/ic_filter"
+            app:tint="@color/second" />
+
+        <ImageView
+            android:id="@+id/sortAscendingBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="3"
+            android:adjustViewBounds="true"
+            android:padding="10dp"
+            android:src="@drawable/ic_sort"
+            android:visibility="visible"
+            app:tint="@color/second" />
+
+        <ImageView
+            android:id="@+id/sortDescendingBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="3"
+            android:adjustViewBounds="true"
+            android:padding="10dp"
+            android:rotation="180"
+            android:src="@drawable/ic_sort"
+            android:visibility="gone"
+            app:tint="@color/second" />
+
+    </LinearLayout>
+
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/SRClosingAdmin"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Fitur Dalam Proses Pengembangan"
-        android:textColor="@color/white"
-        android:layout_gravity="center"
-        android:gravity="center"/>
+        android:layout_marginBottom="?attr/actionBarSize">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/RVClosingGridAdmin"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="?attr/actionBarSize"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:visibility="visible" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/RVClosingListAdmin"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="?attr/actionBarSize"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:visibility="gone" />
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 </LinearLayout>

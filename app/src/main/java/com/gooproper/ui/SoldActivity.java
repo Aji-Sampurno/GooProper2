@@ -1,26 +1,16 @@
 package com.gooproper.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import android.animation.Animator;
-import android.animation.AnimatorInflater;
-import android.animation.AnimatorListenerAdapter;
-import android.animation.AnimatorSet;
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -28,15 +18,9 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.gooproper.R;
-import com.gooproper.SettingActivity;
-import com.gooproper.adapter.ListingAdapter;
 import com.gooproper.adapter.ListingSoldAdapter;
-import com.gooproper.customer.MainCustomerActivity;
 import com.gooproper.model.ListingModel;
-import com.gooproper.util.Preferences;
 import com.gooproper.util.ServerApi;
 
 import org.json.JSONArray;
@@ -114,6 +98,7 @@ public class SoldActivity extends AppCompatActivity {
                                 md.setSelfie(data.getString("Selfie"));
                                 md.setWide(data.getString("Wide"));
                                 md.setLand(data.getString("Land"));
+                                md.setDimensi(data.getString("Dimensi"));
                                 md.setListrik(data.getString("Listrik"));
                                 md.setLevel(data.getString("Level"));
                                 md.setBed(data.getString("Bed"));
@@ -128,12 +113,16 @@ public class SoldActivity extends AppCompatActivity {
                                 md.setHSHP(data.getString("HSHP"));
                                 md.setPPJB(data.getString("PPJB"));
                                 md.setStratatitle(data.getString("Stratatitle"));
+                                md.setStratatitle(data.getString("AJB"));
+                                md.setStratatitle(data.getString("PetokD"));
                                 md.setPjp(data.getString("Pjp"));
                                 md.setImgSHM(data.getString("ImgSHM"));
                                 md.setImgHGB(data.getString("ImgHGB"));
                                 md.setImgHSHP(data.getString("ImgHSHP"));
                                 md.setImgPPJB(data.getString("ImgPPJB"));
                                 md.setImgStratatitle(data.getString("ImgStratatitle"));
+                                md.setImgStratatitle(data.getString("ImgAJB"));
+                                md.setImgStratatitle(data.getString("ImgPetokD"));
                                 md.setImgPjp(data.getString("ImgPjp"));
                                 md.setImgPjp1(data.getString("ImgPjp1"));
                                 md.setNoCertificate(data.getString("NoCertificate"));
@@ -168,6 +157,7 @@ public class SoldActivity extends AppCompatActivity {
                                 md.setIsAdmin(data.getString("IsAdmin"));
                                 md.setIsManager(data.getString("IsManager"));
                                 md.setSold(data.getString("Sold"));
+                                md.setRented(data.getString("Rented"));
                                 md.setView(data.getString("View"));
                                 md.setMarketable(data.getString("Marketable"));
                                 md.setStatusHarga(data.getString("StatusHarga"));

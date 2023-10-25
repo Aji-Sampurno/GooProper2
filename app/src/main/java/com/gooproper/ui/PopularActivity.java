@@ -146,7 +146,8 @@ public class PopularActivity extends AppCompatActivity {
     private void filterList(String text) {
         List<ListingModel> filteredList = new ArrayList<>();
         for (ListingModel item : list) {
-            if (item.getAlamat().toLowerCase().contains(text.toLowerCase())
+            if (item.getNamaListing().toLowerCase().contains(text.toLowerCase())
+                    || item.getAlamat().toLowerCase().contains(text.toLowerCase())
                     || item.getJenisProperti().toLowerCase().contains(text.toLowerCase())) {
                 filteredList.add(item);
             }
@@ -516,6 +517,7 @@ public class PopularActivity extends AppCompatActivity {
                                 md.setSelfie(data.getString("Selfie"));
                                 md.setWide(data.getString("Wide"));
                                 md.setLand(data.getString("Land"));
+                                md.setDimensi(data.getString("Dimensi"));
                                 md.setListrik(data.getString("Listrik"));
                                 md.setLevel(data.getString("Level"));
                                 md.setBed(data.getString("Bed"));
@@ -530,12 +532,16 @@ public class PopularActivity extends AppCompatActivity {
                                 md.setHSHP(data.getString("HSHP"));
                                 md.setPPJB(data.getString("PPJB"));
                                 md.setStratatitle(data.getString("Stratatitle"));
+                                md.setStratatitle(data.getString("AJB"));
+                                md.setStratatitle(data.getString("PetokD"));
                                 md.setPjp(data.getString("Pjp"));
                                 md.setImgSHM(data.getString("ImgSHM"));
                                 md.setImgHGB(data.getString("ImgHGB"));
                                 md.setImgHSHP(data.getString("ImgHSHP"));
                                 md.setImgPPJB(data.getString("ImgPPJB"));
                                 md.setImgStratatitle(data.getString("ImgStratatitle"));
+                                md.setImgStratatitle(data.getString("ImgAJB"));
+                                md.setImgStratatitle(data.getString("ImgPetokD"));
                                 md.setImgPjp(data.getString("ImgPjp"));
                                 md.setImgPjp1(data.getString("ImgPjp1"));
                                 md.setNoCertificate(data.getString("NoCertificate"));
@@ -570,6 +576,7 @@ public class PopularActivity extends AppCompatActivity {
                                 md.setIsAdmin(data.getString("IsAdmin"));
                                 md.setIsManager(data.getString("IsManager"));
                                 md.setSold(data.getString("Sold"));
+                                md.setRented(data.getString("Rented"));
                                 md.setView(data.getString("View"));
                                 md.setMarketable(data.getString("Marketable"));
                                 md.setStatusHarga(data.getString("StatusHarga"));

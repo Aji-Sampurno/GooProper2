@@ -1,4 +1,4 @@
-package com.gooproper;
+package com.gooproper.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -27,6 +27,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.bumptech.glide.Glide;
+import com.gooproper.R;
 import com.gooproper.admin.MainAdminActivity;
 import com.gooproper.agen.MainAgenActivity;
 import com.gooproper.customer.MainCustomerActivity;

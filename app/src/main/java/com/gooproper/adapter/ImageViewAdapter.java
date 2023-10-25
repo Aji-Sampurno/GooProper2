@@ -1,25 +1,33 @@
-package com.gooproper;
+package com.gooproper.adapter;
 
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
+import android.provider.ContactsContract;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.viewpager.widget.PagerAdapter;
 
+import com.gooproper.R;
 import com.gooproper.ui.ImageViewActivity;
+import com.gooproper.util.ImageDownloader;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -64,7 +72,8 @@ public class ImageViewAdapter extends PagerAdapter {
                 builder.setTitle("Konfirmasi Unduhan");
                 builder.setMessage("Apakah Anda ingin mengunduh gambar ini?");
                 builder.setPositiveButton("Ya", (dialog, which) -> {
-                    downloadImage(images.get(position));
+                    //String imageUrl = images.get(position);
+                    //new ImageDownloader(context).execute(imageUrl);
                 });
                 builder.setNegativeButton("Batal", (dialog, which) -> {
                     dialog.dismiss();
@@ -81,7 +90,11 @@ public class ImageViewAdapter extends PagerAdapter {
         container.removeView((View) object);
     }
 
-    private void downloadImage(String imageUrl) {
+    private void Download(){
+
+    }
+
+    /*private void downloadImage(String imageUrl) {
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -121,7 +134,7 @@ public class ImageViewAdapter extends PagerAdapter {
                 }
             }
         }).start();
-    }
+    }*/
 
     private void showDownloadSuccessNotification() {
         // Menampilkan pemberitahuan unduhan berhasil di UI utama (melalui Handler)

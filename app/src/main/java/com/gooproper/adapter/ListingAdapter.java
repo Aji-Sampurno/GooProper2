@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.gooproper.R;
 import com.gooproper.model.ListingModel;
-import com.gooproper.ui.DetailListingActivity;
+import com.gooproper.ui.detail.DetailListingActivity;
 import com.gooproper.util.FormatCurrency;
 
 import java.util.Collections;
@@ -28,6 +28,8 @@ public class ListingAdapter extends RecyclerView.Adapter<ListingAdapter.HolderDa
     private List<ListingModel> originalList;
     private Context context;
     private static final int MAX_TEXT_LENGTH = 20;
+    private static final int MAX_TEXT_LENGTH_PRICE = 10;
+    private static final int MAX_TEXT_LENGTH_PRICE_JUTA = 19;
 
     public ListingAdapter(Context context, List<ListingModel> list){
         this.models = list;
@@ -38,6 +40,62 @@ public class ListingAdapter extends RecyclerView.Adapter<ListingAdapter.HolderDa
     private String truncateTextWithEllipsis(String text) {
         if (text.length() > MAX_TEXT_LENGTH) {
             return text.substring(0, MAX_TEXT_LENGTH) + " ...";
+        } else {
+            return text;
+        }
+    }
+
+    private String truncateTextWithEllipsisPrice(String text) {
+        if (text.length() > MAX_TEXT_LENGTH_PRICE) {
+            if (text.length() < MAX_TEXT_LENGTH_PRICE_JUTA) {
+                //return text.substring(0, MAX_TEXT_LENGTH_PRICE) + " Jt";
+                String truncatedText = removeTrailingZeroJ(text.substring(0, MAX_TEXT_LENGTH_PRICE)) + " Jt";
+                return truncatedText;
+            } else {
+                //return text.substring(0, MAX_TEXT_LENGTH_PRICE) + " M";
+                String truncatedText = removeTrailingZeroM(text.substring(0, MAX_TEXT_LENGTH_PRICE)) + " M";
+                return truncatedText;
+            }
+        } else {
+            return text;
+        }
+    }
+
+    private String removeTrailingZeroM(String text) {
+        if (text.endsWith(".000")) {
+            return text.substring(0, text.length() - 4);
+        } else if (text.endsWith(".00")) {
+            return text.substring(0, text.length() - 3);
+        } else if (text.endsWith(".0")) {
+            return text.substring(0, text.length() - 2);
+        } else if (text.endsWith(".000.")) {
+            return text.substring(0, text.length() - 5);
+        } else if (text.endsWith("000.")) {
+            return text.substring(0, text.length() - 4);
+        } else if (text.endsWith("00.")) {
+            return text.substring(0, text.length() - 3);
+        } else if (text.endsWith("0.")) {
+            return text.substring(0, text.length() - 2);
+        } else {
+            return text;
+        }
+    }
+
+    private String removeTrailingZeroJ(String text) {
+        if (text.endsWith(".000")) {
+            return text.substring(0, text.length() - 4);
+        } else if (text.endsWith(".00")) {
+            return text.substring(0, text.length() - 3);
+        } else if (text.endsWith(".0")) {
+            return text.substring(0, text.length() - 2);
+        } else if (text.endsWith(".000.")) {
+            return text.substring(0, text.length() - 5);
+        } else if (text.endsWith("000.")) {
+            return text.substring(0, text.length() - 4);
+        } else if (text.endsWith("00.")) {
+            return text.substring(0, text.length() - 3);
+        } else if (text.endsWith(".")) {
+            return text.substring(0, text.length() - 1);
         } else {
             return text;
         }
@@ -116,9 +174,21 @@ public class ListingAdapter extends RecyclerView.Adapter<ListingAdapter.HolderDa
         String truncatedaddres = truncateTextWithEllipsis(addresText);
         holder.addressTxt.setText(truncatedaddres);
 
-        String priceText = currency.formatRupiah(listingModel.getHarga());
-        String truncatedprice = truncateTextWithEllipsis(priceText);
-        holder.priceTxt.setText(truncatedprice);
+        if (listingModel.getKondisi().equals("Jual")){
+            String priceText = currency.formatRupiah(listingModel.getHarga());
+            String truncatedprice = truncateTextWithEllipsisPrice(priceText);
+            holder.priceTxt.setText(truncatedprice);
+        } else if (listingModel.getKondisi().equals("Sewa")) {
+            String priceSewaText = currency.formatRupiah(listingModel.getHargaSewa());
+            String truncatedpriceSewa = truncateTextWithEllipsisPrice(priceSewaText);
+            holder.priceTxt.setText(truncatedpriceSewa);
+        } else {
+            String priceText = currency.formatRupiah(listingModel.getHarga());
+            String priceSewaText = currency.formatRupiah(listingModel.getHargaSewa());
+            String truncatedprice = truncateTextWithEllipsisPrice(priceText);
+            String truncatedpriceSewa = truncateTextWithEllipsisPrice(priceSewaText);
+            holder.priceTxt.setText(truncatedprice + " / " + truncatedpriceSewa);
+        }
 
         holder.listingModel = listingModel;
     }
@@ -164,6 +234,7 @@ public class ListingAdapter extends RecyclerView.Adapter<ListingAdapter.HolderDa
                     update.putExtra("Selfie",listingModel.getSelfie());
                     update.putExtra("Wide",listingModel.getWide());
                     update.putExtra("Land",listingModel.getLand());
+                    update.putExtra("Dimensi", listingModel.getDimensi());
                     update.putExtra("Listrik",listingModel.getListrik());
                     update.putExtra("Level",listingModel.getLevel());
                     update.putExtra("Bed",listingModel.getBed());
@@ -219,6 +290,7 @@ public class ListingAdapter extends RecyclerView.Adapter<ListingAdapter.HolderDa
                     update.putExtra("IsManager",listingModel.getIsManager());
                     update.putExtra("View",listingModel.getView());
                     update.putExtra("Sold",listingModel.getSold());
+                    update.putExtra("Rented",listingModel.getRented());
                     update.putExtra("Marketable",listingModel.getMarketable());
                     update.putExtra("StatusHarga",listingModel.getStatusHarga());
                     update.putExtra("Nama",listingModel.getNama());

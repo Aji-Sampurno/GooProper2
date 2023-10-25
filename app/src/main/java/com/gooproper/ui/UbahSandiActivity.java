@@ -1,4 +1,4 @@
-package com.gooproper;
+package com.gooproper.ui;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,6 +22,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
+import com.gooproper.R;
 import com.gooproper.util.Preferences;
 import com.gooproper.util.ServerApi;
 

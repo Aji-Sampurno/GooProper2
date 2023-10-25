@@ -20,9 +20,8 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
-import com.gooproper.LoginActivity;
 import com.gooproper.R;
+import com.gooproper.guest.MainGuestActivity;
 import com.gooproper.ui.registrasi.RegistrasiCustomerActivity;
 import com.gooproper.admin.MainAdminActivity;
 import com.gooproper.agen.MainAgenActivity;
@@ -281,7 +280,7 @@ public class LoginConditionActivity extends AppCompatActivity {
     public void onBackPressed()
     {
         Preferences.clearLoggedInUser(this);
-        startActivity(new Intent(this,MainCustomerActivity.class));
+        startActivity(new Intent(this, MainGuestActivity.class));
         finish();
     }
 }

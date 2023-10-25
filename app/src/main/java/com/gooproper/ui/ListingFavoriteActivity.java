@@ -109,6 +109,7 @@ public class ListingFavoriteActivity extends AppCompatActivity {
                                 md.setSelfie(data.getString("Selfie"));
                                 md.setWide(data.getString("Wide"));
                                 md.setLand(data.getString("Land"));
+                                md.setDimensi(data.getString("Dimensi"));
                                 md.setListrik(data.getString("Listrik"));
                                 md.setLevel(data.getString("Level"));
                                 md.setBed(data.getString("Bed"));
@@ -163,6 +164,7 @@ public class ListingFavoriteActivity extends AppCompatActivity {
                                 md.setIsAdmin(data.getString("IsAdmin"));
                                 md.setIsManager(data.getString("IsManager"));
                                 md.setSold(data.getString("Sold"));
+                                md.setRented(data.getString("Rented"));
                                 md.setView(data.getString("View"));
                                 md.setMarketable(data.getString("Marketable"));
                                 md.setStatusHarga(data.getString("StatusHarga"));
@@ -267,14 +269,17 @@ public class ListingFavoriteActivity extends AppCompatActivity {
                                 ListingModel md = new ListingModel();
                                 md.setIdListing(data.getString("IdListing"));
                                 md.setIdAgen(data.getString("IdAgen"));
+                                md.setIdAgenCo(data.getString("IdAgenCo"));
                                 md.setIdInput(data.getString("IdInput"));
                                 md.setNamaListing(data.getString("NamaListing"));
                                 md.setAlamat(data.getString("Alamat"));
                                 md.setLatitude(data.getString("Latitude"));
                                 md.setLongitude(data.getString("Longitude"));
                                 md.setLocation(data.getString("Location"));
+                                md.setSelfie(data.getString("Selfie"));
                                 md.setWide(data.getString("Wide"));
                                 md.setLand(data.getString("Land"));
+                                md.setDimensi(data.getString("Dimensi"));
                                 md.setListrik(data.getString("Listrik"));
                                 md.setLevel(data.getString("Level"));
                                 md.setBed(data.getString("Bed"));
@@ -289,11 +294,18 @@ public class ListingFavoriteActivity extends AppCompatActivity {
                                 md.setHSHP(data.getString("HSHP"));
                                 md.setPPJB(data.getString("PPJB"));
                                 md.setStratatitle(data.getString("Stratatitle"));
+                                md.setStratatitle(data.getString("AJB"));
+                                md.setStratatitle(data.getString("PetokD"));
+                                md.setPjp(data.getString("Pjp"));
                                 md.setImgSHM(data.getString("ImgSHM"));
                                 md.setImgHGB(data.getString("ImgHGB"));
                                 md.setImgHSHP(data.getString("ImgHSHP"));
                                 md.setImgPPJB(data.getString("ImgPPJB"));
                                 md.setImgStratatitle(data.getString("ImgStratatitle"));
+                                md.setImgStratatitle(data.getString("ImgAJB"));
+                                md.setImgStratatitle(data.getString("ImgPetokD"));
+                                md.setImgPjp(data.getString("ImgPjp"));
+                                md.setImgPjp1(data.getString("ImgPjp1"));
                                 md.setNoCertificate(data.getString("NoCertificate"));
                                 md.setPbb(data.getString("Pbb"));
                                 md.setJenisProperti(data.getString("JenisProperti"));
@@ -308,6 +320,7 @@ public class ListingFavoriteActivity extends AppCompatActivity {
                                 md.setBanner(data.getString("Banner"));
                                 md.setSize(data.getString("Size"));
                                 md.setHarga(data.getString("Harga"));
+                                md.setHargaSewa(data.getString("HargaSewa"));
                                 md.setTglInput(data.getString("TglInput"));
                                 md.setImg1(data.getString("Img1"));
                                 md.setImg2(data.getString("Img2"));
@@ -325,6 +338,7 @@ public class ListingFavoriteActivity extends AppCompatActivity {
                                 md.setIsAdmin(data.getString("IsAdmin"));
                                 md.setIsManager(data.getString("IsManager"));
                                 md.setSold(data.getString("Sold"));
+                                md.setRented(data.getString("Rented"));
                                 md.setView(data.getString("View"));
                                 md.setMarketable(data.getString("Marketable"));
                                 md.setStatusHarga(data.getString("StatusHarga"));

@@ -15,10 +15,10 @@ import android.view.Window;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.gooproper.EditAkunActivity;
+import com.gooproper.ui.edit.EditAkunActivity;
 import com.gooproper.R;
-import com.gooproper.SettingActivity;
-import com.gooproper.TentangKamiActivity;
+import com.gooproper.ui.SettingActivity;
+import com.gooproper.ui.TentangKamiActivity;
 import com.gooproper.ui.ListingFavoriteActivity;
 import com.gooproper.ui.ListingTerakhirDilihatActivity;
 import com.gooproper.ui.LoginConditionActivity;

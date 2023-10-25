@@ -1,4 +1,4 @@
-package com.gooproper.ui;
+package com.gooproper.ui.detail;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -12,7 +12,6 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -21,7 +20,6 @@ import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
@@ -29,7 +27,6 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.ImageRequest;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -40,12 +37,8 @@ import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.material.textfield.TextInputEditText;
-import com.google.android.material.textfield.TextInputLayout;
 import com.gooproper.R;
 import com.gooproper.adapter.ViewPagerAdapter;
-import com.gooproper.model.ListingModel;
-import com.gooproper.util.AgenManager;
 import com.gooproper.util.FormatCurrency;
 import com.gooproper.util.Preferences;
 import com.gooproper.util.ServerApi;
@@ -57,7 +50,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class DetailListingDeepActivity extends AppCompatActivity implements OnMapReadyCallback {
 
@@ -213,6 +205,7 @@ public class DetailListingDeepActivity extends AppCompatActivity implements OnMa
                                 String intentLocation = data.getString("Location");
                                 String intentWide = data.getString("Wide");
                                 String intentLand = data.getString("Land");
+                                String intentDimensi = data.getString("Dimensi");
                                 String intentListrik = data.getString("Listrik");
                                 String intentLevel = data.getString("Level");
                                 String intentBed = data.getString("Bed");

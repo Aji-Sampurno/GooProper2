@@ -1,4 +1,4 @@
-package com.gooproper.ui;
+package com.gooproper.ui.detail;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -12,30 +12,23 @@ import android.Manifest;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
-import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.EditText;
-import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -43,7 +36,6 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
@@ -54,11 +46,8 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.material.datepicker.MaterialDatePicker;
-import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.gooproper.R;
@@ -66,7 +55,11 @@ import com.gooproper.adapter.PJPAdapter;
 import com.gooproper.adapter.SertifikatAdapter;
 import com.gooproper.adapter.ViewPagerAdapter;
 import com.gooproper.model.ListingModel;
-import com.gooproper.ui.registrasi.RegistrasiAgenActivity;
+import com.gooproper.ui.edit.EditListingActivity;
+import com.gooproper.ui.edit.EditPraListingAgenActivity;
+import com.gooproper.ui.edit.EditPralistingActivity;
+import com.gooproper.ui.FollowUpActivity;
+import com.gooproper.ui.ImageViewActivity;
 import com.gooproper.util.AgenManager;
 import com.gooproper.util.FormatCurrency;
 import com.gooproper.util.Preferences;
@@ -74,31 +67,25 @@ import com.gooproper.util.ServerApi;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.MessageFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 public class DetailListingActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     ProgressDialog PDDetailListing;
-    TextView TVNamaDetailListing, TVAlamatDetailListing, TVHargaDetailListing, TVViewsDetailListing, TVBedDetailListing, TVNamaAgen, TVBathDetailListing, TVWideDetailListing, TVLandDetailListing, TVTipeDetailListing, TVStatusDetailListing, TVSertifikatDetailListing, TVLuasDetailListing, TVKamarTidurDetailListing, TVKamarMandiDetailListing, TVLantaiDetailListing, TVGarasiDetailListing, TVCarpotDetailListing, TVListrikDetailListing, TVSumberAirDetailListing, TVSizeBanner, TVDeskripsiDetailListing, TVNoData, TVPriority, TVKondisi, TVNoPjp, TVNoDataPjp, TVFee;
-    ImageView IVFlowUp, IVWhatsapp, IVInstagram, IVFavorite, IVFavoriteOn, IVShare, IVEdit, IVStar1, IVStar2, IVStar3, IVStar4, IVStar5 ;
+    TextView TVNamaDetailListing, TVAlamatDetailListing, TVHargaDetailListing, TVHargaSewaDetailListing, TVViewsDetailListing, TVBedDetailListing, TVNamaAgen, TVBathDetailListing, TVWideDetailListing, TVLandDetailListing, TVDimensiDetailListing, TVTipeDetailListing, TVStatusDetailListing, TVSertifikatDetailListing, TVLuasDetailListing, TVKamarTidurDetailListing, TVKamarMandiDetailListing, TVLantaiDetailListing, TVGarasiDetailListing, TVCarpotDetailListing, TVListrikDetailListing, TVSumberAirDetailListing, TVPerabotDetailListing, TVSizeBanner, TVDeskripsiDetailListing, TVNoData, TVPriority, TVKondisi, TVNoPjp, TVNoDataPjp, TVFee;
+    ImageView IVFlowUp, IVWhatsapp, IVInstagram, IVFavorite, IVFavoriteOn, IVShare, IVStar1, IVStar2, IVStar3, IVStar4, IVStar5 ;
     Button BtnApproveAdmin, BtnApproveManager, BtnTambahMaps;
     TextInputEditText tambahagen, tambahpjp;
     TextInputLayout lytambahagen, lyttambahpjp;
     CheckBox CBMarketable, CBHarga;
     ScrollView scrollView;
-    CardView agen;
+    CardView agen, CVSold, CVRented;
     String status, idpralisting, idagen, idlisting, agenid, idpengguna, StringNamaListing, StringLuasTanah, StringLuasBangunan, StringKamarTidur, StringKamarTidurArt, StringKamarMandiArt, StringKamarMandi, StringListrik, StringHarga, StringSertifikat;
     String BuyerNama, BuyerTelp, BuyerKeterangan, BuyerTanggal, BuyerIdAgen, BuyerIdListing, BuyerIdInput, BuyerJam, StringNamaBuyer, AgenId;
     String NamaMaps;
@@ -106,7 +93,7 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
     String productId;
     ProgressDialog pDialog;
     ListingModel lm;
-    LinearLayout LytSertifikat, LytPJP, LytSize, LytFee;
+    LinearLayout LytSertifikat, LytPJP, LytSize, LytFee, LytBadge, LytBadgeSold, LytBadgeRented, IVEdit;
     ViewPager viewPager, viewPagerSertifikat, viewPagerPJP;
     ViewPagerAdapter adapter;
     SertifikatAdapter sertifikatAdapter;
@@ -134,12 +121,17 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
         viewPagerSertifikat = findViewById(R.id.VPSertifikatDetailListing);
         viewPagerPJP = findViewById(R.id.VPPJPDetailListing);
         agen = findViewById(R.id.LytAgenDetailListing);
+        CVSold = findViewById(R.id.LytSoldDetailListing);
+        CVRented = findViewById(R.id.LytRentedDetailListing);
         lytambahagen = findViewById(R.id.LytTambahAgenDetailListing);
         lyttambahpjp = findViewById(R.id.LytTambahNoPjpDetailListing);
         LytSertifikat = findViewById(R.id.LytSertifikat);
         LytPJP = findViewById(R.id.LytViewPjp);
         LytSize = findViewById(R.id.LytUkuranBannerDetailListing);
         LytFee = findViewById(R.id.LytFeeDetailListing);
+        LytBadge = findViewById(R.id.LytBadge);
+        LytBadgeSold = findViewById(R.id.LytBadgeSold);
+        LytBadgeRented = findViewById(R.id.LytBadgeRented);
         scrollView = findViewById(R.id.SVDetailListing);
 
         BtnApproveAdmin = findViewById(R.id.BtnApproveAdminDetailListing);
@@ -149,6 +141,7 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
         TVNamaDetailListing = findViewById(R.id.TVNamaDetailListing);
         TVAlamatDetailListing = findViewById(R.id.TVAlamatDetailListing);
         TVHargaDetailListing = findViewById(R.id.TVHargaDetailListing);
+        TVHargaSewaDetailListing = findViewById(R.id.TVHargaSewaDetailListing);
         TVViewsDetailListing = findViewById(R.id.TVViewsDetailListing);
         TVBedDetailListing = findViewById(R.id.TVBedDetailListing);
         TVBathDetailListing = findViewById(R.id.TVBathDetailListing);
@@ -158,6 +151,7 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
         TVStatusDetailListing = findViewById(R.id.TVStatusHunianDetailListing);
         TVSertifikatDetailListing = findViewById(R.id.TVSertifikatDetailListing);
         TVLuasDetailListing = findViewById(R.id.TVLuasHunianDetailListing);
+        TVDimensiDetailListing = findViewById(R.id.TVDimensiDetailListing);
         TVKamarTidurDetailListing = findViewById(R.id.TVKamarTidurHunianDetailListing);
         TVKamarMandiDetailListing = findViewById(R.id.TVKamarMandiHunianDetailListing);
         TVLantaiDetailListing = findViewById(R.id.TVLevelDetailListing);
@@ -165,6 +159,7 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
         TVCarpotDetailListing = findViewById(R.id.TVCarportDetailListing);
         TVListrikDetailListing = findViewById(R.id.TVListrikDetailListing);
         TVSumberAirDetailListing = findViewById(R.id.TVSumberAirDetailListing);
+        TVPerabotDetailListing = findViewById(R.id.TVPerabotDetailListing);
         TVSizeBanner = findViewById(R.id.TVUkuranBannerDetailListing);
         TVDeskripsiDetailListing = findViewById(R.id.TVDeskripsiDetailListing);
         TVNamaAgen = findViewById(R.id.TVNamaAgenDetailListing);
@@ -197,7 +192,12 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
 
         agenManager = new AgenManager();
 
-        checkStoragePermission();
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                    REQUEST_WRITE_STORAGE);
+        }
 
         FormatCurrency currency = new FormatCurrency();
 
@@ -216,6 +216,7 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
         String intentSelfie = data.getStringExtra("Selfie");
         String intentWide = data.getStringExtra("Wide");
         String intentLand = data.getStringExtra("Land");
+        String intentDimensi = data.getStringExtra("Dimensi");
         String intentListrik = data.getStringExtra("Listrik");
         String intentLevel = data.getStringExtra("Level");
         String intentBed = data.getStringExtra("Bed");
@@ -270,6 +271,7 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
         String intentIsAdmin = data.getStringExtra("IsAdmin");
         String intentIsManager = data.getStringExtra("IsManager");
         String intentSold = data.getStringExtra("Sold");
+        String intentRented = data.getStringExtra("Rented");
         String intentView = data.getStringExtra("View");
         String intentMarketable = data.getStringExtra("Marketable");
         String intentStatusHarga = data.getStringExtra("StatusHarga");
@@ -406,7 +408,86 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                 BtnApproveManager.setVisibility(View.GONE);
                 IVFlowUp.setVisibility(View.INVISIBLE);
                 IVEdit.setVisibility(View.VISIBLE);
-                IVShare.setVisibility(View.INVISIBLE);
+                IVEdit.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent update = new Intent(DetailListingActivity.this, EditListingActivity.class);
+                        update.putExtra("IdPraListing",idpralisting);
+                        update.putExtra("IdListing",intentIdListing);
+                        update.putExtra("IdAgen",intentIdAgen);
+                        update.putExtra("IdInput",intentIdInput);
+                        update.putExtra("NamaListing",intentNamaListing);
+                        update.putExtra("Alamat",intentAlamat);
+                        update.putExtra("Latitude",intentLatitude);
+                        update.putExtra("Longitude",intentLongitude);
+                        update.putExtra("Location",intentLocation);
+                        update.putExtra("Wide",intentWide);
+                        update.putExtra("Land",intentLand);
+                        update.putExtra("Dimensi",intentDimensi);
+                        update.putExtra("Listrik",intentListrik);
+                        update.putExtra("Level",intentLevel);
+                        update.putExtra("Bed",intentBed);
+                        update.putExtra("BedArt",intentBedArt);
+                        update.putExtra("Bath",intentBath);
+                        update.putExtra("BathArt",intentBathArt);
+                        update.putExtra("Garage",intentGarage);
+                        update.putExtra("Carpot",intentCarpot);
+                        update.putExtra("Hadap",intentHadap);
+                        update.putExtra("SHM",intentSHM);
+                        update.putExtra("HGB",intentHGB);
+                        update.putExtra("HSHP",intentHSHP);
+                        update.putExtra("PPJB",intentPPJB);
+                        update.putExtra("Stratatitle",intentStratatitle);
+                        update.putExtra("ImgSHM",intentImgSHM);
+                        update.putExtra("ImgHGB",intentImgHGB);
+                        update.putExtra("ImgHSHP",intentImgHSHP);
+                        update.putExtra("ImgPPJB",intentImgPPJB);
+                        update.putExtra("ImgStratatitle",intentImgStratatitle);
+                        update.putExtra("ImgPjp",intentImgPjp);
+                        update.putExtra("ImgPjp1",intentImgPjp1);
+                        update.putExtra("NoCertificate",intentNoCertificate);
+                        update.putExtra("Pbb",intentPbb);
+                        update.putExtra("JenisProperti",intentJenisProperti);
+                        update.putExtra("JenisCertificate",intentJenisCertificate);
+                        update.putExtra("SumberAir",intentSumberAir);
+                        update.putExtra("Kondisi",intentKondisi);
+                        update.putExtra("Deskripsi",intentDeskripsi);
+                        update.putExtra("Prabot",intentPrabot);
+                        update.putExtra("KetPrabot",intentKetPrabot);
+                        update.putExtra("Priority",intentPriority);
+                        update.putExtra("Ttd",intentTtd);
+                        update.putExtra("Banner",intentBanner);
+                        update.putExtra("Size",intentSize);
+                        update.putExtra("Harga",intentHarga);
+                        update.putExtra("HargaSewa",intentHargaSewa);
+                        update.putExtra("TglInput",intentTglInput);
+                        update.putExtra("Img1",intentImg1);
+                        update.putExtra("Img2",intentImg2);
+                        update.putExtra("Img3",intentImg3);
+                        update.putExtra("Img4",intentImg4);
+                        update.putExtra("Img5",intentImg5);
+                        update.putExtra("Img6",intentImg6);
+                        update.putExtra("Img7",intentImg7);
+                        update.putExtra("Img8",intentImg8);
+                        update.putExtra("Video",intentVideo);
+                        update.putExtra("LinkFacebook",intentLinkFacebook);
+                        update.putExtra("LinkTiktok",intentLinkTiktok);
+                        update.putExtra("LinkInstagram",intentLinkInstagram);
+                        update.putExtra("LinkYoutube",intentLinkYoutube);
+                        update.putExtra("IsAdmin",intentIsAdmin);
+                        update.putExtra("IsManager",intentIsManager);
+                        update.putExtra("View",intentView);
+                        update.putExtra("Sold",intentSold);
+                        update.putExtra("Marketable",intentMarketable);
+                        update.putExtra("StatusHarga",intentStatusHarga);
+                        update.putExtra("Nama",intentNama);
+                        update.putExtra("NoTelp",intentNoTelp);
+                        update.putExtra("Instagram",intentInstagram);
+                        update.putExtra("Fee",intentFee);
+                        startActivity(update);
+                    }
+                });
+                IVShare.setVisibility(View.GONE);
                 IVFavorite.setVisibility(View.GONE);
                 AgenId = "0";
                 idpengguna = Preferences.getKeyIdAdmin(this);
@@ -418,7 +499,86 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                 BtnApproveManager.setVisibility(View.VISIBLE);
                 IVFlowUp.setVisibility(View.INVISIBLE);
                 IVEdit.setVisibility(View.VISIBLE);
-                IVShare.setVisibility(View.INVISIBLE);
+                IVEdit.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent update = new Intent(DetailListingActivity.this, EditListingActivity.class);
+                        update.putExtra("IdPraListing",idpralisting);
+                        update.putExtra("IdListing",intentIdListing);
+                        update.putExtra("IdAgen",intentIdAgen);
+                        update.putExtra("IdInput",intentIdInput);
+                        update.putExtra("NamaListing",intentNamaListing);
+                        update.putExtra("Alamat",intentAlamat);
+                        update.putExtra("Latitude",intentLatitude);
+                        update.putExtra("Longitude",intentLongitude);
+                        update.putExtra("Location",intentLocation);
+                        update.putExtra("Wide",intentWide);
+                        update.putExtra("Land",intentLand);
+                        update.putExtra("Dimensi",intentDimensi);
+                        update.putExtra("Listrik",intentListrik);
+                        update.putExtra("Level",intentLevel);
+                        update.putExtra("Bed",intentBed);
+                        update.putExtra("BedArt",intentBedArt);
+                        update.putExtra("Bath",intentBath);
+                        update.putExtra("BathArt",intentBathArt);
+                        update.putExtra("Garage",intentGarage);
+                        update.putExtra("Carpot",intentCarpot);
+                        update.putExtra("Hadap",intentHadap);
+                        update.putExtra("SHM",intentSHM);
+                        update.putExtra("HGB",intentHGB);
+                        update.putExtra("HSHP",intentHSHP);
+                        update.putExtra("PPJB",intentPPJB);
+                        update.putExtra("Stratatitle",intentStratatitle);
+                        update.putExtra("ImgSHM",intentImgSHM);
+                        update.putExtra("ImgHGB",intentImgHGB);
+                        update.putExtra("ImgHSHP",intentImgHSHP);
+                        update.putExtra("ImgPPJB",intentImgPPJB);
+                        update.putExtra("ImgStratatitle",intentImgStratatitle);
+                        update.putExtra("ImgPjp",intentImgPjp);
+                        update.putExtra("ImgPjp1",intentImgPjp1);
+                        update.putExtra("NoCertificate",intentNoCertificate);
+                        update.putExtra("Pbb",intentPbb);
+                        update.putExtra("JenisProperti",intentJenisProperti);
+                        update.putExtra("JenisCertificate",intentJenisCertificate);
+                        update.putExtra("SumberAir",intentSumberAir);
+                        update.putExtra("Kondisi",intentKondisi);
+                        update.putExtra("Deskripsi",intentDeskripsi);
+                        update.putExtra("Prabot",intentPrabot);
+                        update.putExtra("KetPrabot",intentKetPrabot);
+                        update.putExtra("Priority",intentPriority);
+                        update.putExtra("Ttd",intentTtd);
+                        update.putExtra("Banner",intentBanner);
+                        update.putExtra("Size",intentSize);
+                        update.putExtra("Harga",intentHarga);
+                        update.putExtra("HargaSewa",intentHargaSewa);
+                        update.putExtra("TglInput",intentTglInput);
+                        update.putExtra("Img1",intentImg1);
+                        update.putExtra("Img2",intentImg2);
+                        update.putExtra("Img3",intentImg3);
+                        update.putExtra("Img4",intentImg4);
+                        update.putExtra("Img5",intentImg5);
+                        update.putExtra("Img6",intentImg6);
+                        update.putExtra("Img7",intentImg7);
+                        update.putExtra("Img8",intentImg8);
+                        update.putExtra("Video",intentVideo);
+                        update.putExtra("LinkFacebook",intentLinkFacebook);
+                        update.putExtra("LinkTiktok",intentLinkTiktok);
+                        update.putExtra("LinkInstagram",intentLinkInstagram);
+                        update.putExtra("LinkYoutube",intentLinkYoutube);
+                        update.putExtra("IsAdmin",intentIsAdmin);
+                        update.putExtra("IsManager",intentIsManager);
+                        update.putExtra("View",intentView);
+                        update.putExtra("Sold",intentSold);
+                        update.putExtra("Marketable",intentMarketable);
+                        update.putExtra("StatusHarga",intentStatusHarga);
+                        update.putExtra("Nama",intentNama);
+                        update.putExtra("NoTelp",intentNoTelp);
+                        update.putExtra("Instagram",intentInstagram);
+                        update.putExtra("Fee",intentFee);
+                        startActivity(update);
+                    }
+                });
+                IVShare.setVisibility(View.GONE);
                 IVFavorite.setVisibility(View.GONE);
                 AgenId = "0";
                 idpengguna = Preferences.getKeyIdAdmin(this);
@@ -427,7 +587,86 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                 BtnApproveManager.setVisibility(View.GONE);
                 IVFlowUp.setVisibility(View.VISIBLE);
                 IVEdit.setVisibility(View.VISIBLE);
-                IVShare.setVisibility(View.INVISIBLE);
+                IVEdit.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent update = new Intent(DetailListingActivity.this, EditListingActivity.class);
+                        update.putExtra("IdPraListing",idpralisting);
+                        update.putExtra("IdListing",intentIdListing);
+                        update.putExtra("IdAgen",intentIdAgen);
+                        update.putExtra("IdInput",intentIdInput);
+                        update.putExtra("NamaListing",intentNamaListing);
+                        update.putExtra("Alamat",intentAlamat);
+                        update.putExtra("Latitude",intentLatitude);
+                        update.putExtra("Longitude",intentLongitude);
+                        update.putExtra("Location",intentLocation);
+                        update.putExtra("Wide",intentWide);
+                        update.putExtra("Land",intentLand);
+                        update.putExtra("Dimensi",intentDimensi);
+                        update.putExtra("Listrik",intentListrik);
+                        update.putExtra("Level",intentLevel);
+                        update.putExtra("Bed",intentBed);
+                        update.putExtra("BedArt",intentBedArt);
+                        update.putExtra("Bath",intentBath);
+                        update.putExtra("BathArt",intentBathArt);
+                        update.putExtra("Garage",intentGarage);
+                        update.putExtra("Carpot",intentCarpot);
+                        update.putExtra("Hadap",intentHadap);
+                        update.putExtra("SHM",intentSHM);
+                        update.putExtra("HGB",intentHGB);
+                        update.putExtra("HSHP",intentHSHP);
+                        update.putExtra("PPJB",intentPPJB);
+                        update.putExtra("Stratatitle",intentStratatitle);
+                        update.putExtra("ImgSHM",intentImgSHM);
+                        update.putExtra("ImgHGB",intentImgHGB);
+                        update.putExtra("ImgHSHP",intentImgHSHP);
+                        update.putExtra("ImgPPJB",intentImgPPJB);
+                        update.putExtra("ImgStratatitle",intentImgStratatitle);
+                        update.putExtra("ImgPjp",intentImgPjp);
+                        update.putExtra("ImgPjp1",intentImgPjp1);
+                        update.putExtra("NoCertificate",intentNoCertificate);
+                        update.putExtra("Pbb",intentPbb);
+                        update.putExtra("JenisProperti",intentJenisProperti);
+                        update.putExtra("JenisCertificate",intentJenisCertificate);
+                        update.putExtra("SumberAir",intentSumberAir);
+                        update.putExtra("Kondisi",intentKondisi);
+                        update.putExtra("Deskripsi",intentDeskripsi);
+                        update.putExtra("Prabot",intentPrabot);
+                        update.putExtra("KetPrabot",intentKetPrabot);
+                        update.putExtra("Priority",intentPriority);
+                        update.putExtra("Ttd",intentTtd);
+                        update.putExtra("Banner",intentBanner);
+                        update.putExtra("Size",intentSize);
+                        update.putExtra("Harga",intentHarga);
+                        update.putExtra("HargaSewa",intentHargaSewa);
+                        update.putExtra("TglInput",intentTglInput);
+                        update.putExtra("Img1",intentImg1);
+                        update.putExtra("Img2",intentImg2);
+                        update.putExtra("Img3",intentImg3);
+                        update.putExtra("Img4",intentImg4);
+                        update.putExtra("Img5",intentImg5);
+                        update.putExtra("Img6",intentImg6);
+                        update.putExtra("Img7",intentImg7);
+                        update.putExtra("Img8",intentImg8);
+                        update.putExtra("Video",intentVideo);
+                        update.putExtra("LinkFacebook",intentLinkFacebook);
+                        update.putExtra("LinkTiktok",intentLinkTiktok);
+                        update.putExtra("LinkInstagram",intentLinkInstagram);
+                        update.putExtra("LinkYoutube",intentLinkYoutube);
+                        update.putExtra("IsAdmin",intentIsAdmin);
+                        update.putExtra("IsManager",intentIsManager);
+                        update.putExtra("View",intentView);
+                        update.putExtra("Sold",intentSold);
+                        update.putExtra("Marketable",intentMarketable);
+                        update.putExtra("StatusHarga",intentStatusHarga);
+                        update.putExtra("Nama",intentNama);
+                        update.putExtra("NoTelp",intentNoTelp);
+                        update.putExtra("Instagram",intentInstagram);
+                        update.putExtra("Fee",intentFee);
+                        startActivity(update);
+                    }
+                });
+                IVShare.setVisibility(View.GONE);
                 IVFavorite.setVisibility(View.GONE);
                 AgenId = "0";
                 idpengguna = Preferences.getKeyIdAdmin(this);
@@ -440,18 +679,174 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                     IVFlowUp.setVisibility(View.VISIBLE);
                     idpengguna = "0";
                     AgenId = Preferences.getKeyIdAgen(this);
-                    if (intentIdInput == Preferences.getKeyIdAgen(DetailListingActivity.this)){
-                        BtnTambahMaps.setVisibility(View.VISIBLE);
-                    }
+                    BtnTambahMaps.setVisibility(View.VISIBLE);
+                    IVEdit.setVisibility(View.VISIBLE);
+                    IVShare.setVisibility(View.GONE);
+                    IVFavorite.setVisibility(View.GONE);
+                    IVEdit.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent update = new Intent(DetailListingActivity.this, EditPraListingAgenActivity.class);
+                            update.putExtra("IdPraListing",idpralisting);
+                            update.putExtra("IdListing",intentIdListing);
+                            update.putExtra("IdAgen",intentIdAgen);
+                            update.putExtra("IdInput",intentIdInput);
+                            update.putExtra("NamaListing",intentNamaListing);
+                            update.putExtra("Alamat",intentAlamat);
+                            update.putExtra("Latitude",intentLatitude);
+                            update.putExtra("Longitude",intentLongitude);
+                            update.putExtra("Location",intentLocation);
+                            update.putExtra("Wide",intentWide);
+                            update.putExtra("Land",intentLand);
+                            update.putExtra("Dimensi",intentDimensi);
+                            update.putExtra("Listrik",intentListrik);
+                            update.putExtra("Level",intentLevel);
+                            update.putExtra("Bed",intentBed);
+                            update.putExtra("BedArt",intentBedArt);
+                            update.putExtra("Bath",intentBath);
+                            update.putExtra("BathArt",intentBathArt);
+                            update.putExtra("Garage",intentGarage);
+                            update.putExtra("Carpot",intentCarpot);
+                            update.putExtra("Hadap",intentHadap);
+                            update.putExtra("SHM",intentSHM);
+                            update.putExtra("HGB",intentHGB);
+                            update.putExtra("HSHP",intentHSHP);
+                            update.putExtra("PPJB",intentPPJB);
+                            update.putExtra("Stratatitle",intentStratatitle);
+                            update.putExtra("ImgSHM",intentImgSHM);
+                            update.putExtra("ImgHGB",intentImgHGB);
+                            update.putExtra("ImgHSHP",intentImgHSHP);
+                            update.putExtra("ImgPPJB",intentImgPPJB);
+                            update.putExtra("ImgStratatitle",intentImgStratatitle);
+                            update.putExtra("NoCertificate",intentNoCertificate);
+                            update.putExtra("Pbb",intentPbb);
+                            update.putExtra("JenisProperti",intentJenisProperti);
+                            update.putExtra("JenisCertificate",intentJenisCertificate);
+                            update.putExtra("SumberAir",intentSumberAir);
+                            update.putExtra("Kondisi",intentKondisi);
+                            update.putExtra("Deskripsi",intentDeskripsi);
+                            update.putExtra("Prabot",intentPrabot);
+                            update.putExtra("KetPrabot",intentKetPrabot);
+                            update.putExtra("Priority",intentPriority);
+                            update.putExtra("Ttd",intentTtd);
+                            update.putExtra("Banner",intentBanner);
+                            update.putExtra("Size",intentSize);
+                            update.putExtra("Harga",intentHarga);
+                            update.putExtra("HargaSewa",intentHargaSewa);
+                            update.putExtra("TglInput",intentTglInput);
+                            update.putExtra("Img1",intentImg1);
+                            update.putExtra("Img2",intentImg2);
+                            update.putExtra("Img3",intentImg3);
+                            update.putExtra("Img4",intentImg4);
+                            update.putExtra("Img5",intentImg5);
+                            update.putExtra("Img6",intentImg6);
+                            update.putExtra("Img7",intentImg7);
+                            update.putExtra("Img8",intentImg8);
+                            update.putExtra("Video",intentVideo);
+                            update.putExtra("LinkFacebook",intentLinkFacebook);
+                            update.putExtra("LinkTiktok",intentLinkTiktok);
+                            update.putExtra("LinkInstagram",intentLinkInstagram);
+                            update.putExtra("LinkYoutube",intentLinkYoutube);
+                            update.putExtra("IsAdmin",intentIsAdmin);
+                            update.putExtra("IsManager",intentIsManager);
+                            update.putExtra("View",intentView);
+                            update.putExtra("Sold",intentSold);
+                            update.putExtra("Marketable",intentMarketable);
+                            update.putExtra("StatusHarga",intentStatusHarga);
+                            update.putExtra("Nama",intentNama);
+                            update.putExtra("NoTelp",intentNoTelp);
+                            update.putExtra("Instagram",intentInstagram);
+                            update.putExtra("Fee",intentFee);
+                            startActivity(update);
+                        }
+                    });
                 } else if (intentIsManager.equals("0")) {
                     BtnApproveAdmin.setVisibility(View.GONE);
                     BtnApproveManager.setVisibility(View.GONE);
                     IVFlowUp.setVisibility(View.VISIBLE);
                     idpengguna = "0";
                     AgenId = Preferences.getKeyIdAgen(this);
-                    if (intentIdInput == Preferences.getKeyIdAgen(DetailListingActivity.this)){
-                        BtnTambahMaps.setVisibility(View.VISIBLE);
-                    }
+                    BtnTambahMaps.setVisibility(View.VISIBLE);
+                    IVEdit.setVisibility(View.VISIBLE);
+                    IVShare.setVisibility(View.GONE);
+                    IVFavorite.setVisibility(View.GONE);
+                    IVEdit.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent update = new Intent(DetailListingActivity.this, EditPraListingAgenActivity.class);
+                            update.putExtra("IdPraListing",idpralisting);
+                            update.putExtra("IdListing",intentIdListing);
+                            update.putExtra("IdAgen",intentIdAgen);
+                            update.putExtra("IdInput",intentIdInput);
+                            update.putExtra("NamaListing",intentNamaListing);
+                            update.putExtra("Alamat",intentAlamat);
+                            update.putExtra("Latitude",intentLatitude);
+                            update.putExtra("Longitude",intentLongitude);
+                            update.putExtra("Location",intentLocation);
+                            update.putExtra("Wide",intentWide);
+                            update.putExtra("Land",intentLand);
+                            update.putExtra("Dimensi",intentDimensi);
+                            update.putExtra("Listrik",intentListrik);
+                            update.putExtra("Level",intentLevel);
+                            update.putExtra("Bed",intentBed);
+                            update.putExtra("BedArt",intentBedArt);
+                            update.putExtra("Bath",intentBath);
+                            update.putExtra("BathArt",intentBathArt);
+                            update.putExtra("Garage",intentGarage);
+                            update.putExtra("Carpot",intentCarpot);
+                            update.putExtra("Hadap",intentHadap);
+                            update.putExtra("SHM",intentSHM);
+                            update.putExtra("HGB",intentHGB);
+                            update.putExtra("HSHP",intentHSHP);
+                            update.putExtra("PPJB",intentPPJB);
+                            update.putExtra("Stratatitle",intentStratatitle);
+                            update.putExtra("ImgSHM",intentImgSHM);
+                            update.putExtra("ImgHGB",intentImgHGB);
+                            update.putExtra("ImgHSHP",intentImgHSHP);
+                            update.putExtra("ImgPPJB",intentImgPPJB);
+                            update.putExtra("ImgStratatitle",intentImgStratatitle);
+                            update.putExtra("NoCertificate",intentNoCertificate);
+                            update.putExtra("Pbb",intentPbb);
+                            update.putExtra("JenisProperti",intentJenisProperti);
+                            update.putExtra("JenisCertificate",intentJenisCertificate);
+                            update.putExtra("SumberAir",intentSumberAir);
+                            update.putExtra("Kondisi",intentKondisi);
+                            update.putExtra("Deskripsi",intentDeskripsi);
+                            update.putExtra("Prabot",intentPrabot);
+                            update.putExtra("KetPrabot",intentKetPrabot);
+                            update.putExtra("Priority",intentPriority);
+                            update.putExtra("Ttd",intentTtd);
+                            update.putExtra("Banner",intentBanner);
+                            update.putExtra("Size",intentSize);
+                            update.putExtra("Harga",intentHarga);
+                            update.putExtra("HargaSewa",intentHargaSewa);
+                            update.putExtra("TglInput",intentTglInput);
+                            update.putExtra("Img1",intentImg1);
+                            update.putExtra("Img2",intentImg2);
+                            update.putExtra("Img3",intentImg3);
+                            update.putExtra("Img4",intentImg4);
+                            update.putExtra("Img5",intentImg5);
+                            update.putExtra("Img6",intentImg6);
+                            update.putExtra("Img7",intentImg7);
+                            update.putExtra("Img8",intentImg8);
+                            update.putExtra("Video",intentVideo);
+                            update.putExtra("LinkFacebook",intentLinkFacebook);
+                            update.putExtra("LinkTiktok",intentLinkTiktok);
+                            update.putExtra("LinkInstagram",intentLinkInstagram);
+                            update.putExtra("LinkYoutube",intentLinkYoutube);
+                            update.putExtra("IsAdmin",intentIsAdmin);
+                            update.putExtra("IsManager",intentIsManager);
+                            update.putExtra("View",intentView);
+                            update.putExtra("Sold",intentSold);
+                            update.putExtra("Marketable",intentMarketable);
+                            update.putExtra("StatusHarga",intentStatusHarga);
+                            update.putExtra("Nama",intentNama);
+                            update.putExtra("NoTelp",intentNoTelp);
+                            update.putExtra("Instagram",intentInstagram);
+                            update.putExtra("Fee",intentFee);
+                            startActivity(update);
+                        }
+                    });
                 } else {
                     BtnApproveAdmin.setVisibility(View.GONE);
                     BtnApproveManager.setVisibility(View.GONE);
@@ -460,11 +855,188 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                     AgenId = Preferences.getKeyIdAgen(this);
                 }
             } else {
-                BtnApproveAdmin.setVisibility(View.GONE);
-                BtnApproveManager.setVisibility(View.GONE);
-                IVFlowUp.setVisibility(View.VISIBLE);
-                idpengguna = "0";
-                AgenId = Preferences.getKeyIdAgen(this);
+                if (intentIsAdmin.equals("0")){
+                    BtnApproveAdmin.setVisibility(View.GONE);
+                    BtnApproveManager.setVisibility(View.GONE);
+                    IVFlowUp.setVisibility(View.VISIBLE);
+                    idpengguna = "0";
+                    AgenId = Preferences.getKeyIdAgen(this);
+                    BtnTambahMaps.setVisibility(View.GONE);
+                    IVEdit.setVisibility(View.VISIBLE);
+                    IVShare.setVisibility(View.GONE);
+                    IVFavorite.setVisibility(View.GONE);
+                    IVEdit.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent update = new Intent(DetailListingActivity.this, EditPraListingAgenActivity.class);
+                            update.putExtra("IdPraListing",idpralisting);
+                            update.putExtra("IdListing",intentIdListing);
+                            update.putExtra("IdAgen",intentIdAgen);
+                            update.putExtra("IdInput",intentIdInput);
+                            update.putExtra("NamaListing",intentNamaListing);
+                            update.putExtra("Alamat",intentAlamat);
+                            update.putExtra("Latitude",intentLatitude);
+                            update.putExtra("Longitude",intentLongitude);
+                            update.putExtra("Location",intentLocation);
+                            update.putExtra("Wide",intentWide);
+                            update.putExtra("Land",intentLand);
+                            update.putExtra("Dimensi",intentDimensi);
+                            update.putExtra("Listrik",intentListrik);
+                            update.putExtra("Level",intentLevel);
+                            update.putExtra("Bed",intentBed);
+                            update.putExtra("BedArt",intentBedArt);
+                            update.putExtra("Bath",intentBath);
+                            update.putExtra("BathArt",intentBathArt);
+                            update.putExtra("Garage",intentGarage);
+                            update.putExtra("Carpot",intentCarpot);
+                            update.putExtra("Hadap",intentHadap);
+                            update.putExtra("SHM",intentSHM);
+                            update.putExtra("HGB",intentHGB);
+                            update.putExtra("HSHP",intentHSHP);
+                            update.putExtra("PPJB",intentPPJB);
+                            update.putExtra("Stratatitle",intentStratatitle);
+                            update.putExtra("ImgSHM",intentImgSHM);
+                            update.putExtra("ImgHGB",intentImgHGB);
+                            update.putExtra("ImgHSHP",intentImgHSHP);
+                            update.putExtra("ImgPPJB",intentImgPPJB);
+                            update.putExtra("ImgStratatitle",intentImgStratatitle);
+                            update.putExtra("NoCertificate",intentNoCertificate);
+                            update.putExtra("Pbb",intentPbb);
+                            update.putExtra("JenisProperti",intentJenisProperti);
+                            update.putExtra("JenisCertificate",intentJenisCertificate);
+                            update.putExtra("SumberAir",intentSumberAir);
+                            update.putExtra("Kondisi",intentKondisi);
+                            update.putExtra("Deskripsi",intentDeskripsi);
+                            update.putExtra("Prabot",intentPrabot);
+                            update.putExtra("KetPrabot",intentKetPrabot);
+                            update.putExtra("Priority",intentPriority);
+                            update.putExtra("Ttd",intentTtd);
+                            update.putExtra("Banner",intentBanner);
+                            update.putExtra("Size",intentSize);
+                            update.putExtra("Harga",intentHarga);
+                            update.putExtra("HargaSewa",intentHargaSewa);
+                            update.putExtra("TglInput",intentTglInput);
+                            update.putExtra("Img1",intentImg1);
+                            update.putExtra("Img2",intentImg2);
+                            update.putExtra("Img3",intentImg3);
+                            update.putExtra("Img4",intentImg4);
+                            update.putExtra("Img5",intentImg5);
+                            update.putExtra("Img6",intentImg6);
+                            update.putExtra("Img7",intentImg7);
+                            update.putExtra("Img8",intentImg8);
+                            update.putExtra("Video",intentVideo);
+                            update.putExtra("LinkFacebook",intentLinkFacebook);
+                            update.putExtra("LinkTiktok",intentLinkTiktok);
+                            update.putExtra("LinkInstagram",intentLinkInstagram);
+                            update.putExtra("LinkYoutube",intentLinkYoutube);
+                            update.putExtra("IsAdmin",intentIsAdmin);
+                            update.putExtra("IsManager",intentIsManager);
+                            update.putExtra("View",intentView);
+                            update.putExtra("Sold",intentSold);
+                            update.putExtra("Marketable",intentMarketable);
+                            update.putExtra("StatusHarga",intentStatusHarga);
+                            update.putExtra("Nama",intentNama);
+                            update.putExtra("NoTelp",intentNoTelp);
+                            update.putExtra("Instagram",intentInstagram);
+                            update.putExtra("Fee",intentFee);
+                            startActivity(update);
+                        }
+                    });
+                } else if (intentIsManager.equals("0")) {
+                    BtnApproveAdmin.setVisibility(View.GONE);
+                    BtnApproveManager.setVisibility(View.GONE);
+                    IVFlowUp.setVisibility(View.VISIBLE);
+                    idpengguna = "0";
+                    AgenId = Preferences.getKeyIdAgen(this);
+                    BtnTambahMaps.setVisibility(View.GONE);
+                    IVEdit.setVisibility(View.VISIBLE);
+                    IVShare.setVisibility(View.GONE);
+                    IVFavorite.setVisibility(View.GONE);
+                    IVEdit.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent update = new Intent(DetailListingActivity.this, EditPraListingAgenActivity.class);
+                            update.putExtra("IdPraListing",idpralisting);
+                            update.putExtra("IdListing",intentIdListing);
+                            update.putExtra("IdAgen",intentIdAgen);
+                            update.putExtra("IdInput",intentIdInput);
+                            update.putExtra("NamaListing",intentNamaListing);
+                            update.putExtra("Alamat",intentAlamat);
+                            update.putExtra("Latitude",intentLatitude);
+                            update.putExtra("Longitude",intentLongitude);
+                            update.putExtra("Location",intentLocation);
+                            update.putExtra("Wide",intentWide);
+                            update.putExtra("Land",intentLand);
+                            update.putExtra("Dimensi",intentDimensi);
+                            update.putExtra("Listrik",intentListrik);
+                            update.putExtra("Level",intentLevel);
+                            update.putExtra("Bed",intentBed);
+                            update.putExtra("BedArt",intentBedArt);
+                            update.putExtra("Bath",intentBath);
+                            update.putExtra("BathArt",intentBathArt);
+                            update.putExtra("Garage",intentGarage);
+                            update.putExtra("Carpot",intentCarpot);
+                            update.putExtra("Hadap",intentHadap);
+                            update.putExtra("SHM",intentSHM);
+                            update.putExtra("HGB",intentHGB);
+                            update.putExtra("HSHP",intentHSHP);
+                            update.putExtra("PPJB",intentPPJB);
+                            update.putExtra("Stratatitle",intentStratatitle);
+                            update.putExtra("ImgSHM",intentImgSHM);
+                            update.putExtra("ImgHGB",intentImgHGB);
+                            update.putExtra("ImgHSHP",intentImgHSHP);
+                            update.putExtra("ImgPPJB",intentImgPPJB);
+                            update.putExtra("ImgStratatitle",intentImgStratatitle);
+                            update.putExtra("NoCertificate",intentNoCertificate);
+                            update.putExtra("Pbb",intentPbb);
+                            update.putExtra("JenisProperti",intentJenisProperti);
+                            update.putExtra("JenisCertificate",intentJenisCertificate);
+                            update.putExtra("SumberAir",intentSumberAir);
+                            update.putExtra("Kondisi",intentKondisi);
+                            update.putExtra("Deskripsi",intentDeskripsi);
+                            update.putExtra("Prabot",intentPrabot);
+                            update.putExtra("KetPrabot",intentKetPrabot);
+                            update.putExtra("Priority",intentPriority);
+                            update.putExtra("Ttd",intentTtd);
+                            update.putExtra("Banner",intentBanner);
+                            update.putExtra("Size",intentSize);
+                            update.putExtra("Harga",intentHarga);
+                            update.putExtra("HargaSewa",intentHargaSewa);
+                            update.putExtra("TglInput",intentTglInput);
+                            update.putExtra("Img1",intentImg1);
+                            update.putExtra("Img2",intentImg2);
+                            update.putExtra("Img3",intentImg3);
+                            update.putExtra("Img4",intentImg4);
+                            update.putExtra("Img5",intentImg5);
+                            update.putExtra("Img6",intentImg6);
+                            update.putExtra("Img7",intentImg7);
+                            update.putExtra("Img8",intentImg8);
+                            update.putExtra("Video",intentVideo);
+                            update.putExtra("LinkFacebook",intentLinkFacebook);
+                            update.putExtra("LinkTiktok",intentLinkTiktok);
+                            update.putExtra("LinkInstagram",intentLinkInstagram);
+                            update.putExtra("LinkYoutube",intentLinkYoutube);
+                            update.putExtra("IsAdmin",intentIsAdmin);
+                            update.putExtra("IsManager",intentIsManager);
+                            update.putExtra("View",intentView);
+                            update.putExtra("Sold",intentSold);
+                            update.putExtra("Marketable",intentMarketable);
+                            update.putExtra("StatusHarga",intentStatusHarga);
+                            update.putExtra("Nama",intentNama);
+                            update.putExtra("NoTelp",intentNoTelp);
+                            update.putExtra("Instagram",intentInstagram);
+                            update.putExtra("Fee",intentFee);
+                            startActivity(update);
+                        }
+                    });
+                } else {
+                    BtnApproveAdmin.setVisibility(View.GONE);
+                    BtnApproveManager.setVisibility(View.GONE);
+                    BtnTambahMaps.setVisibility(View.GONE);
+                    IVFlowUp.setVisibility(View.VISIBLE);
+                    idpengguna = "0";
+                    AgenId = Preferences.getKeyIdAgen(this);
+                }
             }
         } else if (status.equals("4")) {
             IVFlowUp.setVisibility(View.INVISIBLE);
@@ -660,81 +1232,6 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
             }
         });
         IVShare.setOnClickListener(view -> shareDeepLink(productId));
-        IVEdit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent update = new Intent(DetailListingActivity.this, EditListingActivity.class);
-                update.putExtra("IdPraListing",intentIdPraListing);
-                update.putExtra("IdListing",intentIdListing);
-                update.putExtra("IdAgen",intentIdAgen);
-                update.putExtra("IdInput",intentIdInput);
-                update.putExtra("NamaListing",intentNamaListing);
-                update.putExtra("Alamat",intentAlamat);
-                update.putExtra("Latitude",intentLatitude);
-                update.putExtra("Longitude",intentLongitude);
-                update.putExtra("Location",intentLocation);
-                update.putExtra("Wide",intentWide);
-                update.putExtra("Land",intentLand);
-                update.putExtra("Listrik",intentListrik);
-                update.putExtra("Level",intentLevel);
-                update.putExtra("Bed",intentBed);
-                update.putExtra("BedArt",intentBedArt);
-                update.putExtra("Bath",intentBath);
-                update.putExtra("BathArt",intentBathArt);
-                update.putExtra("Garage",intentGarage);
-                update.putExtra("Carpot",intentCarpot);
-                update.putExtra("Hadap",intentHadap);
-                update.putExtra("SHM",intentSHM);
-                update.putExtra("HGB",intentHGB);
-                update.putExtra("HSHP",intentHSHP);
-                update.putExtra("PPJB",intentPPJB);
-                update.putExtra("Stratatitle",intentStratatitle);
-                update.putExtra("ImgSHM",intentImgSHM);
-                update.putExtra("ImgHGB",intentImgHGB);
-                update.putExtra("ImgHSHP",intentImgHSHP);
-                update.putExtra("ImgPPJB",intentImgPPJB);
-                update.putExtra("ImgStratatitle",intentImgStratatitle);
-                update.putExtra("NoCertificate",intentNoCertificate);
-                update.putExtra("Pbb",intentPbb);
-                update.putExtra("JenisProperti",intentJenisProperti);
-                update.putExtra("JenisCertificate",intentJenisCertificate);
-                update.putExtra("SumberAir",intentSumberAir);
-                update.putExtra("Kondisi",intentKondisi);
-                update.putExtra("Deskripsi",intentDeskripsi);
-                update.putExtra("Prabot",intentPrabot);
-                update.putExtra("KetPrabot",intentKetPrabot);
-                update.putExtra("Priority",intentPriority);
-                update.putExtra("Ttd",intentTtd);
-                update.putExtra("Banner",intentBanner);
-                update.putExtra("Size",intentSize);
-                update.putExtra("Harga",intentHarga);
-                update.putExtra("TglInput",intentTglInput);
-                update.putExtra("Img1",intentImg1);
-                update.putExtra("Img2",intentImg2);
-                update.putExtra("Img3",intentImg3);
-                update.putExtra("Img4",intentImg4);
-                update.putExtra("Img5",intentImg5);
-                update.putExtra("Img6",intentImg6);
-                update.putExtra("Img7",intentImg7);
-                update.putExtra("Img8",intentImg8);
-                update.putExtra("Video",intentVideo);
-                update.putExtra("LinkFacebook",intentLinkFacebook);
-                update.putExtra("LinkTiktok",intentLinkTiktok);
-                update.putExtra("LinkInstagram",intentLinkInstagram);
-                update.putExtra("LinkYoutube",intentLinkYoutube);
-                update.putExtra("IsAdmin",intentIsAdmin);
-                update.putExtra("IsManager",intentIsManager);
-                update.putExtra("View",intentView);
-                update.putExtra("Sold",intentSold);
-                update.putExtra("Marketable",intentMarketable);
-                update.putExtra("StatusHarga",intentStatusHarga);
-                update.putExtra("Nama",intentNama);
-                update.putExtra("NoTelp",intentNoTelp);
-                update.putExtra("Instagram",intentInstagram);
-                update.putExtra("Fee",intentFee);
-                startActivity(update);
-            }
-        });
         tambahagen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -793,48 +1290,124 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
         });
 
         if (update == 1) {
+            if (intentIdAgen.equals("null")) {
+                if (intentSold.equals("1")){
+                    LytBadgeRented.setVisibility(View.GONE);
+                    LytBadgeSold.setVisibility(View.VISIBLE);
+                    LytBadge.setVisibility(View.GONE);
+                    CVSold.setVisibility(View.VISIBLE);
+                    CVRented.setVisibility(View.GONE);
+                    agen.setVisibility(View.GONE);
+                    lytambahagen.setVisibility(View.GONE);
+                    TVHargaDetailListing.setVisibility(View.GONE);
+                    TVHargaSewaDetailListing.setVisibility(View.GONE);
+                } else if (intentRented.equals("1")) {
+                    LytBadgeRented.setVisibility(View.VISIBLE);
+                    LytBadgeSold.setVisibility(View.GONE);
+                    LytBadge.setVisibility(View.GONE);
+                    CVSold.setVisibility(View.GONE);
+                    CVRented.setVisibility(View.VISIBLE);
+                    agen.setVisibility(View.GONE);
+                    lytambahagen.setVisibility(View.GONE);
+                    TVHargaDetailListing.setVisibility(View.GONE);
+                    TVHargaSewaDetailListing.setVisibility(View.GONE);
+                } else {
+                    agen.setVisibility(View.GONE);
+                    lytambahagen.setVisibility(View.VISIBLE);
+                    idagen = agenid;
+                }
+            } else {
+                if (intentSold.equals("1")){
+                    LytBadgeRented.setVisibility(View.GONE);
+                    LytBadgeSold.setVisibility(View.VISIBLE);
+                    LytBadge.setVisibility(View.GONE);
+                    CVSold.setVisibility(View.VISIBLE);
+                    CVRented.setVisibility(View.GONE);
+                    agen.setVisibility(View.GONE);
+                    lytambahagen.setVisibility(View.GONE);
+                    TVHargaDetailListing.setVisibility(View.GONE);
+                    TVHargaSewaDetailListing.setVisibility(View.GONE);
+                } else if (intentRented.equals("1")) {
+                    LytBadgeRented.setVisibility(View.VISIBLE);
+                    LytBadgeSold.setVisibility(View.GONE);
+                    LytBadge.setVisibility(View.GONE);
+                    CVSold.setVisibility(View.GONE);
+                    CVRented.setVisibility(View.VISIBLE);
+                    agen.setVisibility(View.GONE);
+                    lytambahagen.setVisibility(View.GONE);
+                    TVHargaDetailListing.setVisibility(View.GONE);
+                    TVHargaSewaDetailListing.setVisibility(View.GONE);
+                } else {
+                    agen.setVisibility(View.VISIBLE);
+                    lytambahagen.setVisibility(View.GONE);
+                    idagen = intentIdAgen;
+                }
+            }
             if (intentKondisi.isEmpty()) {
                 TVKondisi.setText("-");
             } else {
                 TVKondisi.setText(intentKondisi);
             }
-
             if (intentPriority.isEmpty() || intentPriority.equals("open")) {
                 TVPriority.setVisibility(View.INVISIBLE);
             } else {
-                TVPriority.setText(intentPriority);
+                TVPriority.setText("Exclusive");
             }
-
             if (intentPjp.isEmpty() || intentPjp.equals("0")) {
                 TVNoPjp.setVisibility(View.INVISIBLE);
             } else {
                 TVNoPjp.setText(intentPjp);
             }
-
             if (intentNamaListing.isEmpty()) {
                 TVNamaDetailListing.setText("-");
             } else {
                 TVNamaDetailListing.setText(intentNamaListing);
             }
-
             if (intentAlamat.isEmpty()) {
                 TVAlamatDetailListing.setText(intentAlamat);
             } else {
                 TVAlamatDetailListing.setText(intentAlamat);
             }
-
-            if (intentHarga.isEmpty()) {
-                TVHargaDetailListing.setText("Rp. -");
+            if (intentKondisi.equals("Jual")){
+                if (intentHarga.isEmpty()) {
+                    TVHargaDetailListing.setText("Rp. -");
+                    TVHargaSewaDetailListing.setVisibility(View.GONE);
+                } else {
+                    TVHargaDetailListing.setText(currency.formatRupiah(intentHarga));
+                    TVHargaSewaDetailListing.setVisibility(View.GONE);
+                }
+            } else if (intentKondisi.equals("Sewa")) {
+                if (intentHargaSewa.isEmpty()) {
+                    TVHargaSewaDetailListing.setText("Rp. -");
+                    TVHargaDetailListing.setVisibility(View.GONE);
+                } else {
+                    TVHargaSewaDetailListing.setText(currency.formatRupiah(intentHargaSewa));
+                    TVHargaDetailListing.setVisibility(View.GONE);
+                }
             } else {
-                TVHargaDetailListing.setText(currency.formatRupiah(intentHarga));
+                if (intentHarga.isEmpty()) {
+                    if (intentHargaSewa.isEmpty()){
+                        TVHargaDetailListing.setText("Rp. -");
+                        TVHargaSewaDetailListing.setText("Rp. -");
+                    } else {
+                        TVHargaDetailListing.setText("Rp. - /");
+                        TVHargaSewaDetailListing.setText(currency.formatRupiah(intentHargaSewa));
+                    }
+                } else {
+                    if (intentHargaSewa.isEmpty()){
+                        TVHargaDetailListing.setText(currency.formatRupiah(intentHarga));
+                        TVHargaSewaDetailListing.setText("Rp. -");
+                    } else {
+                        TVHargaDetailListing.setText(currency.formatRupiah(intentHarga) + " /");
+                        TVHargaSewaDetailListing.setText(currency.formatRupiah(intentHargaSewa));
+                    }
+                }
             }
-
             if (intentView.isEmpty()) {
                 TVViewsDetailListing.setText("0 Views");
             } else {
                 TVViewsDetailListing.setText(intentView + " Views");
             }
-
             if (intentBed.isEmpty()) {
                 if (intentBedArt.isEmpty()) {
                     TVBedDetailListing.setText("0 + 0");
@@ -848,7 +1421,6 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                     TVBedDetailListing.setText(intentBed + " + " + intentBedArt);
                 }
             }
-
             if (intentBath.isEmpty()) {
                 if (intentBathArt.isEmpty()) {
                     TVBathDetailListing.setText("0 + 0");
@@ -862,31 +1434,26 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                     TVBathDetailListing.setText(intentBath + " + " + intentBathArt);
                 }
             }
-
             if (intentLand.isEmpty()) {
                 TVWideDetailListing.setText("-");
             } else {
                 TVWideDetailListing.setText(intentLand + " m2");
             }
-
             if (intentWide.isEmpty()) {
                 TVLandDetailListing.setText("-");
             } else {
                 TVLandDetailListing.setText(intentWide + " m2");
             }
-
             if (intentJenisProperti.isEmpty()) {
                 TVTipeDetailListing.setText(": -");
             } else {
                 TVTipeDetailListing.setText(": " + intentJenisProperti);
             }
-
             if (intentKondisi.isEmpty()) {
                 TVStatusDetailListing.setText(": -");
             } else {
                 TVStatusDetailListing.setText(": " + intentKondisi);
             }
-
             if (intentSHM.isEmpty()||intentSHM.equals("0")) {
                 if (intentHGB.isEmpty()||intentHGB.equals("0")){
                     if (intentHSHP.isEmpty()||intentHSHP.equals("0")){
@@ -1012,21 +1579,24 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                     }
                 }
             }
-
             if (intentWide.isEmpty()) {
                 if (intentLand.isEmpty()) {
-                    TVLuasDetailListing.setText(": - m2/- m2");
+                    TVLuasDetailListing.setText(": - m2/ - m2");
                 } else {
-                    TVLuasDetailListing.setText(": " +intentLand + " m2/" + " - m2");
+                    TVLuasDetailListing.setText(": m2/ " + intentLand + " m2");
                 }
             } else {
                 if (intentLand.isEmpty()) {
-                    TVLuasDetailListing.setText(": - m2/" + intentWide + " m2");
+                    TVLuasDetailListing.setText(": " + intentWide + " m2/ - m2");
                 } else {
-                    TVLuasDetailListing.setText(": " + intentLand + " m2/" + intentWide + " m2");
+                    TVLuasDetailListing.setText(": " + intentWide + " m2/" + intentLand + " m2");
                 }
             }
-
+            if (intentDimensi.isEmpty()){
+                TVDimensiDetailListing.setText(": -");
+            } else {
+                TVDimensiDetailListing.setText(": " + intentDimensi);
+            }
             if (intentBed.isEmpty()) {
                 if (intentBedArt.isEmpty()) {
                     TVKamarTidurDetailListing.setText(": -");
@@ -1040,7 +1610,6 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                     TVKamarTidurDetailListing.setText(": " + intentBed + " + " + intentBedArt);
                 }
             }
-
             if (intentBath.isEmpty()) {
                 if (intentBathArt.isEmpty()) {
                     TVKamarMandiDetailListing.setText(": -");
@@ -1054,57 +1623,52 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                     TVKamarMandiDetailListing.setText(": " + intentBath + " + " + intentBathArt);
                 }
             }
-
             if (intentLevel.isEmpty()) {
                 TVLantaiDetailListing.setText(": -");
             } else {
                 TVLantaiDetailListing.setText(": " + intentLevel);
             }
-
             if (intentGarage.isEmpty()) {
                 TVGarasiDetailListing.setText(": -");
             } else {
                 TVGarasiDetailListing.setText(": " + intentGarage);
             }
-
             if (intentCarpot.isEmpty()) {
                 TVCarpotDetailListing.setText(": -");
             } else {
                 TVCarpotDetailListing.setText(": " + intentCarpot);
             }
-
             if (intentListrik.isEmpty()) {
                 TVListrikDetailListing.setText(": -");
             } else {
                 TVListrikDetailListing.setText(": " + intentListrik + " Watt");
             }
-
             if (intentSumberAir.isEmpty()) {
                 TVSumberAirDetailListing.setText(": -");
             } else {
                 TVSumberAirDetailListing.setText(": " + intentSumberAir);
             }
-
+            if (intentPrabot.equals("Tidak")) {
+                TVPerabotDetailListing.setText(": -");
+            } else {
+                TVPerabotDetailListing.setText(": " + intentKetPrabot);
+            }
             if (intentSize.isEmpty()) {
                 TVSizeBanner.setText(": -");
             } else {
                 TVSizeBanner.setText(": " + intentSize);
             }
-
             if (intentDeskripsi.isEmpty()) {
                 TVDeskripsiDetailListing.setText("-");
             } else {
                 TVDeskripsiDetailListing.setText(intentDeskripsi);
             }
-
             if (intentFee.isEmpty()) {
                 TVFee.setText(": -");
             } else {
                 TVFee.setText(": " + intentFee);
             }
-
             TVNamaAgen.setText(intentNama);
-
             if (intentLatitude.equals("0") || intentLongitude.equals("0")){
                 lat = Double.parseDouble("0");
                 lng = Double.parseDouble("0");
@@ -1113,7 +1677,6 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                 lat = Double.parseDouble(intentLatitude);
                 lng = Double.parseDouble(intentLongitude);
             }
-
             IVInstagram.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -1124,86 +1687,62 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                 }
             });
 
-            if (intentIdAgen.equals("null")) {
-                agen.setVisibility(View.GONE);
-                lytambahagen.setVisibility(View.VISIBLE);
-                idagen = agenid;
-            } else {
-                agen.setVisibility(View.VISIBLE);
-                lytambahagen.setVisibility(View.GONE);
-                idagen = intentIdAgen;
-            }
-
             if (intentImg1.equals("0")) {
             } else {
                 images.add(intentImg1);
             }
-
             if (intentImg2.equals("0")) {
             } else {
                 images.add(intentImg2);
             }
-
             if (intentImg3.equals("0")) {
             } else {
                 images.add(intentImg3);
             }
-
             if (intentImg4.equals("0")) {
             } else {
                 images.add(intentImg4);
             }
-
             if (intentImg5.equals("0")) {
             } else {
                 images.add(intentImg5);
             }
-
             if (intentImg6.equals("0")) {
             } else {
                 images.add(intentImg6);
             }
-
             if (intentImg7.equals("0")) {
             } else {
                 images.add(intentImg7);
             }
-
             if (intentImg8.equals("0")) {
             } else {
                 images.add(intentImg8);
             }
-
             if (intentImgSHM.equals("0")) {
             } else {
                 sertif.add(intentImgSHM);
             }
-
             if (intentImgHGB.equals("0")) {
             } else {
                 sertif.add(intentImgHGB);
             }
-
             if (intentImgHSHP.equals("0")) {
             } else {
                 sertif.add(intentImgHSHP);
             }
-
             if (intentImgPPJB.equals("0")) {
             } else {
                 sertif.add(intentImgPPJB);
             }
-
             if (intentImgStratatitle.equals("0")) {
             } else {
                 sertif.add(intentImgStratatitle);
             }
-
             if (intentImgPjp.equals("0")) {
             } else {
                 pjpimage.add(intentImgPjp);
             }
-
             if (intentImgPjp1.equals("0")) {
             } else {
                 pjpimage.add(intentImgPjp1);
@@ -1234,15 +1773,6 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
-        }
-    }
-
-    private void checkStoragePermission() {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                    REQUEST_WRITE_STORAGE);
         }
     }
 
@@ -1443,72 +1973,68 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                 pDialog.cancel();
                 try {
                     JSONObject res = new JSONObject(response);
-                    String status = res.getString("Status");
-                    if (status.equals("Sukses")){
-                        Dialog customDialog = new Dialog(DetailListingActivity.this);
-                        customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                        customDialog.setContentView(R.layout.custom_dialog_sukses);
+                    Dialog customDialog = new Dialog(DetailListingActivity.this);
+                    customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                    customDialog.setContentView(R.layout.custom_dialog_sukses);
 
-                        if (customDialog.getWindow() != null) {
-                            customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-                        }
-
-                        TextView dialogTitle = customDialog.findViewById(R.id.dialog_title);
-                        Button ok = customDialog.findViewById(R.id.btnya);
-                        Button cobalagi = customDialog.findViewById(R.id.btntidak);
-                        ImageView gifimage = customDialog.findViewById(R.id.ivdialog);
-
-                        dialogTitle.setText("Berhasil Approve Listing");
-                        cobalagi.setVisibility(View.GONE);
-
-                        ok.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                customDialog.dismiss();
-                                finish();
-                            }
-                        });
-
-                        Glide.with(DetailListingActivity.this)
-                                .load(R.mipmap.ic_yes) // You can also use a local resource like R.drawable.your_gif_resource
-                                .transition(DrawableTransitionOptions.withCrossFade())
-                                .into(gifimage);
-
-                        customDialog.show();
-                    } else if (status.equals("Error")) {
-                        Dialog customDialog = new Dialog(DetailListingActivity.this);
-                        customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                        customDialog.setContentView(R.layout.custom_dialog_sukses);
-
-                        if (customDialog.getWindow() != null) {
-                            customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-                        }
-
-                        TextView dialogTitle = customDialog.findViewById(R.id.dialog_title);
-                        Button ok = customDialog.findViewById(R.id.btnya);
-                        Button cobalagi = customDialog.findViewById(R.id.btntidak);
-                        ImageView gifimage = customDialog.findViewById(R.id.ivdialog);
-
-                        dialogTitle.setText("Gagal Approve Listing");
-                        ok.setVisibility(View.GONE);
-
-                        cobalagi.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                customDialog.dismiss();
-                                finish();
-                            }
-                        });
-
-                        Glide.with(DetailListingActivity.this)
-                                .load(R.mipmap.ic_no) // You can also use a local resource like R.drawable.your_gif_resource
-                                .transition(DrawableTransitionOptions.withCrossFade())
-                                .into(gifimage);
-
-                        customDialog.show();
+                    if (customDialog.getWindow() != null) {
+                        customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
                     }
+
+                    TextView dialogTitle = customDialog.findViewById(R.id.dialog_title);
+                    Button ok = customDialog.findViewById(R.id.btnya);
+                    Button cobalagi = customDialog.findViewById(R.id.btntidak);
+                    ImageView gifimage = customDialog.findViewById(R.id.ivdialog);
+
+                    dialogTitle.setText("Berhasil Approve Listing");
+                    cobalagi.setVisibility(View.GONE);
+
+                    ok.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            customDialog.dismiss();
+                            finish();
+                        }
+                    });
+
+                    Glide.with(DetailListingActivity.this)
+                            .load(R.mipmap.ic_yes) // You can also use a local resource like R.drawable.your_gif_resource
+                            .transition(DrawableTransitionOptions.withCrossFade())
+                            .into(gifimage);
+
+                    customDialog.show();
                 } catch (JSONException e) {
                     e.printStackTrace();
+                    Dialog customDialog = new Dialog(DetailListingActivity.this);
+                    customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                    customDialog.setContentView(R.layout.custom_dialog_sukses);
+
+                    if (customDialog.getWindow() != null) {
+                        customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                    }
+
+                    TextView dialogTitle = customDialog.findViewById(R.id.dialog_title);
+                    Button ok = customDialog.findViewById(R.id.btnya);
+                    Button cobalagi = customDialog.findViewById(R.id.btntidak);
+                    ImageView gifimage = customDialog.findViewById(R.id.ivdialog);
+
+                    dialogTitle.setText("Berhasil Approve Listing");
+                    cobalagi.setVisibility(View.GONE);
+
+                    ok.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            customDialog.dismiss();
+                            finish();
+                        }
+                    });
+
+                    Glide.with(DetailListingActivity.this)
+                            .load(R.mipmap.ic_yes) // You can also use a local resource like R.drawable.your_gif_resource
+                            .transition(DrawableTransitionOptions.withCrossFade())
+                            .into(gifimage);
+
+                    customDialog.show();
                 }
             }
         }, new Response.ErrorListener() {
@@ -1528,18 +2054,19 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                 Button cobalagi = customDialog.findViewById(R.id.btntidak);
                 ImageView gifimage = customDialog.findViewById(R.id.ivdialog);
 
-                dialogTitle.setText("Gagal Approve Listing");
-                ok.setVisibility(View.GONE);
+                dialogTitle.setText("Berhasil Approve Listing");
+                cobalagi.setVisibility(View.GONE);
 
-                cobalagi.setOnClickListener(new View.OnClickListener() {
+                ok.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         customDialog.dismiss();
+                        finish();
                     }
                 });
 
                 Glide.with(DetailListingActivity.this)
-                        .load(R.mipmap.ic_no) // You can also use a local resource like R.drawable.your_gif_resource
+                        .load(R.mipmap.ic_yes) // You can also use a local resource like R.drawable.your_gif_resource
                         .transition(DrawableTransitionOptions.withCrossFade())
                         .into(gifimage);
 

@@ -1,14 +1,11 @@
 package com.gooproper.adapter;
 
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -25,16 +22,17 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.gooproper.R;
 import com.gooproper.model.ListingModel;
-import com.gooproper.ui.DetailListingActivity;
+import com.gooproper.ui.detail.DetailListingActivity;
 import com.gooproper.util.FormatCurrency;
 import com.gooproper.util.ServerApi;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -42,11 +40,15 @@ import java.util.Map;
 public class PraListingAdapter extends RecyclerView.Adapter<PraListingAdapter.HolderData> {
 
     private List<ListingModel> models;
+    private List<ListingModel> originalList;
     private Context context;
     private static final int MAX_TEXT_LENGTH = 20;
+    private static final int MAX_TEXT_LENGTH_PRICE = 10;
+    private static final int MAX_TEXT_LENGTH_PRICE_JUTA = 19;
 
     public PraListingAdapter(Context context, List<ListingModel> list) {
         this.models = list;
+        this.originalList = list;
         this.context = context;
     }
 
@@ -56,6 +58,104 @@ public class PraListingAdapter extends RecyclerView.Adapter<PraListingAdapter.Ho
         } else {
             return text;
         }
+    }
+
+    private String truncateTextWithEllipsisPrice(String text) {
+        if (text.length() > MAX_TEXT_LENGTH_PRICE) {
+            if (text.length() < MAX_TEXT_LENGTH_PRICE_JUTA) {
+                //return text.substring(0, MAX_TEXT_LENGTH_PRICE) + " Jt";
+                String truncatedText = removeTrailingZeroJ(text.substring(0, MAX_TEXT_LENGTH_PRICE)) + " Jt";
+                return truncatedText;
+            } else {
+                //return text.substring(0, MAX_TEXT_LENGTH_PRICE) + " M";
+                String truncatedText = removeTrailingZeroM(text.substring(0, MAX_TEXT_LENGTH_PRICE)) + " M";
+                return truncatedText;
+            }
+        } else {
+            return text;
+        }
+    }
+
+    private String removeTrailingZeroM(String text) {
+        if (text.endsWith(".000")) {
+            return text.substring(0, text.length() - 4);
+        } else if (text.endsWith(".00")) {
+            return text.substring(0, text.length() - 3);
+        } else if (text.endsWith(".0")) {
+            return text.substring(0, text.length() - 2);
+        } else if (text.endsWith(".000.")) {
+            return text.substring(0, text.length() - 5);
+        } else if (text.endsWith("000.")) {
+            return text.substring(0, text.length() - 4);
+        } else if (text.endsWith("00.")) {
+            return text.substring(0, text.length() - 3);
+        } else if (text.endsWith("0.")) {
+            return text.substring(0, text.length() - 2);
+        } else {
+            return text;
+        }
+    }
+
+    private String removeTrailingZeroJ(String text) {
+        if (text.endsWith(".000")) {
+            return text.substring(0, text.length() - 4);
+        } else if (text.endsWith(".00")) {
+            return text.substring(0, text.length() - 3);
+        } else if (text.endsWith(".0")) {
+            return text.substring(0, text.length() - 2);
+        } else if (text.endsWith(".000.")) {
+            return text.substring(0, text.length() - 5);
+        } else if (text.endsWith("000.")) {
+            return text.substring(0, text.length() - 4);
+        } else if (text.endsWith("00.")) {
+            return text.substring(0, text.length() - 3);
+        } else if (text.endsWith(".")) {
+            return text.substring(0, text.length() - 1);
+        } else {
+            return text;
+        }
+    }
+
+    //searchView
+    public void setFilteredlist (List<ListingModel> filteredlist){
+        this.models = filteredlist;
+        notifyDataSetChanged();
+    }
+
+    //reset filter
+    public void resetFilter() {
+        models.clear();
+        models.addAll(originalList);
+        notifyDataSetChanged();
+    }
+
+    //asc - desc
+    private long parsePrice(String priceString) {
+        return Long.parseLong(priceString.replaceAll(",", "").trim());
+    }
+
+    public void sortAscending() {
+        Collections.sort(models, new Comparator<ListingModel>() {
+            @Override
+            public int compare(ListingModel item1, ListingModel item2) {
+                long price1 = parsePrice(item1.getHarga());
+                long price2 = parsePrice(item2.getHarga());
+                return Long.compare(price1, price2);
+            }
+        });
+        notifyDataSetChanged();
+    }
+
+    public void sortDescending() {
+        Collections.sort(models, new Comparator<ListingModel>() {
+            @Override
+            public int compare(ListingModel item1, ListingModel item2) {
+                long price1 = parsePrice(item1.getHarga());
+                long price2 = parsePrice(item2.getHarga());
+                return Long.compare(price2, price1);
+            }
+        });
+        notifyDataSetChanged();
     }
 
     @NonNull
@@ -89,9 +189,21 @@ public class PraListingAdapter extends RecyclerView.Adapter<PraListingAdapter.Ho
         String truncatedaddres = truncateTextWithEllipsis(addresText);
         holder.addressTxt.setText(truncatedaddres);
 
-        String priceText = currency.formatRupiah(listingModel.getHarga());
-        String truncatedprice = truncateTextWithEllipsis(priceText);
-        holder.priceTxt.setText(truncatedprice);
+        if (listingModel.getKondisi().equals("Jual")){
+            String priceText = currency.formatRupiah(listingModel.getHarga());
+            String truncatedprice = truncateTextWithEllipsisPrice(priceText);
+            holder.priceTxt.setText(truncatedprice);
+        } else if (listingModel.getKondisi().equals("Sewa")) {
+            String priceSewaText = currency.formatRupiah(listingModel.getHargaSewa());
+            String truncatedpriceSewa = truncateTextWithEllipsisPrice(priceSewaText);
+            holder.priceTxt.setText(truncatedpriceSewa);
+        } else {
+            String priceText = currency.formatRupiah(listingModel.getHarga());
+            String priceSewaText = currency.formatRupiah(listingModel.getHargaSewa());
+            String truncatedprice = truncateTextWithEllipsisPrice(priceText);
+            String truncatedpriceSewa = truncateTextWithEllipsisPrice(priceSewaText);
+            holder.priceTxt.setText(truncatedprice + " / " + truncatedpriceSewa);
+        }
 
         holder.listingModel = listingModel;
     }
@@ -202,6 +314,7 @@ public class PraListingAdapter extends RecyclerView.Adapter<PraListingAdapter.Ho
                     update.putExtra("Selfie", listingModel.getSelfie());
                     update.putExtra("Wide", listingModel.getWide());
                     update.putExtra("Land", listingModel.getLand());
+                    update.putExtra("Dimensi", listingModel.getDimensi());
                     update.putExtra("Listrik", listingModel.getListrik());
                     update.putExtra("Level", listingModel.getLevel());
                     update.putExtra("Bed", listingModel.getBed());
@@ -257,6 +370,7 @@ public class PraListingAdapter extends RecyclerView.Adapter<PraListingAdapter.Ho
                     update.putExtra("IsManager", listingModel.getIsManager());
                     update.putExtra("View", listingModel.getView());
                     update.putExtra("Sold", listingModel.getSold());
+                    update.putExtra("Rented",listingModel.getRented());
                     update.putExtra("Marketable", listingModel.getMarketable());
                     update.putExtra("StatusHarga", listingModel.getStatusHarga());
                     update.putExtra("Nama", listingModel.getNama());

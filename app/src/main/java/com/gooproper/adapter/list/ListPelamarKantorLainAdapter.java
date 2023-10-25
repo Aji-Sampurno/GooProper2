@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.gooproper.R;
 import com.gooproper.model.AgenModel;
-import com.gooproper.ui.DetailListingActivity;
+import com.gooproper.ui.detail.DetailListingActivity;
 
 import java.util.List;
 

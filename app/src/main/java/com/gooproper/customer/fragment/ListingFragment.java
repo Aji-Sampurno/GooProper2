@@ -7,9 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -33,13 +31,10 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
-import com.gooproper.LoginActivity;
 import com.gooproper.R;
 import com.gooproper.adapter.ListingAdapter;
-import com.gooproper.adapter.PraListingAdapter;
 import com.gooproper.model.ListingModel;
 import com.gooproper.ui.LoginConditionActivity;
-import com.gooproper.ui.NewActivity;
 import com.gooproper.util.Preferences;
 import com.gooproper.util.ServerApi;
 
@@ -156,7 +151,8 @@ public class ListingFragment extends Fragment {
     private void filterList(String text) {
         List<ListingModel> filteredList = new ArrayList<>();
         for (ListingModel item : list) {
-            if (item.getAlamat().toLowerCase().contains(text.toLowerCase())
+            if (item.getNamaListing().toLowerCase().contains(text.toLowerCase())
+                    || item.getAlamat().toLowerCase().contains(text.toLowerCase())
                     || item.getJenisProperti().toLowerCase().contains(text.toLowerCase())) {
                 filteredList.add(item);
             }
@@ -526,6 +522,7 @@ public class ListingFragment extends Fragment {
                                 md.setSelfie(data.getString("Selfie"));
                                 md.setWide(data.getString("Wide"));
                                 md.setLand(data.getString("Land"));
+                                md.setDimensi(data.getString("Dimensi"));
                                 md.setListrik(data.getString("Listrik"));
                                 md.setLevel(data.getString("Level"));
                                 md.setBed(data.getString("Bed"));
@@ -540,12 +537,16 @@ public class ListingFragment extends Fragment {
                                 md.setHSHP(data.getString("HSHP"));
                                 md.setPPJB(data.getString("PPJB"));
                                 md.setStratatitle(data.getString("Stratatitle"));
+                                md.setStratatitle(data.getString("AJB"));
+                                md.setStratatitle(data.getString("PetokD"));
                                 md.setPjp(data.getString("Pjp"));
                                 md.setImgSHM(data.getString("ImgSHM"));
                                 md.setImgHGB(data.getString("ImgHGB"));
                                 md.setImgHSHP(data.getString("ImgHSHP"));
                                 md.setImgPPJB(data.getString("ImgPPJB"));
                                 md.setImgStratatitle(data.getString("ImgStratatitle"));
+                                md.setImgStratatitle(data.getString("ImgAJB"));
+                                md.setImgStratatitle(data.getString("ImgPetokD"));
                                 md.setImgPjp(data.getString("ImgPjp"));
                                 md.setImgPjp1(data.getString("ImgPjp1"));
                                 md.setNoCertificate(data.getString("NoCertificate"));
@@ -580,6 +581,7 @@ public class ListingFragment extends Fragment {
                                 md.setIsAdmin(data.getString("IsAdmin"));
                                 md.setIsManager(data.getString("IsManager"));
                                 md.setSold(data.getString("Sold"));
+                                md.setRented(data.getString("Rented"));
                                 md.setView(data.getString("View"));
                                 md.setMarketable(data.getString("Marketable"));
                                 md.setStatusHarga(data.getString("StatusHarga"));

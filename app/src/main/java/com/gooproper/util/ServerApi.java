@@ -51,6 +51,8 @@ public class ServerApi {
     public static final String URL_GET_FLOWUP = BASE_URL + "/Api/GetFlowUp?idagen=";
     // Closing -------------------------------------------------------------------------------------
     public static final String URL_CLOSING = BASE_URL + "/Api/Closing";
+    public static final String URL_SOLD = BASE_URL + "/Api/Sold";
+    public static final String URL_RENTED = BASE_URL + "/Api/Rented";
     // User ----------------------------------------------------------------------------------------
     public static final String URL_TAMBAH_KARYAWAN = BASE_URL + "/Api/AddKaryawan";
     public static final String URL_APPROVE_AGEN = BASE_URL + "/Api/ApproveAgen";

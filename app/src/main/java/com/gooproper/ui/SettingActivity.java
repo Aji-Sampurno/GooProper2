@@ -1,10 +1,9 @@
-package com.gooproper;
+package com.gooproper.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Dialog;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
@@ -15,8 +14,9 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
+import com.gooproper.R;
 import com.gooproper.customer.MainCustomerActivity;
-import com.gooproper.ui.SplashScreenActivity;
+import com.gooproper.ui.edit.EditAkunActivity;
 import com.gooproper.util.Preferences;
 
 public class SettingActivity extends AppCompatActivity {
