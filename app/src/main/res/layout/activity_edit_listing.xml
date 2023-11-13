@@ -239,7 +239,7 @@
                         android:id="@+id/CBPPJB"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="2"
+                        android:layout_weight="1"
                         android:text="PPJB"
                         android:textColor="@color/black" />
 
@@ -249,6 +249,31 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="Stratatitle"
+                        android:textColor="@color/black" />
+
+                    <CheckBox
+                        android:id="@+id/CBAJB"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="AJB"
+                        android:textColor="@color/black" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal"
+                    android:weightSum="1">
+
+                    <CheckBox
+                        android:id="@+id/CBPetokD"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Petok D"
                         android:textColor="@color/black" />
 
                 </LinearLayout>
@@ -264,12 +289,26 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
                         android:orientation="horizontal"
+                        android:weightSum="3"
                         android:visibility="gone">
+
+                        <TextView
+                            android:id="@+id/TVSHM"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:textAlignment="center"
+                            android:textColor="@color/black"
+                            android:text="judul pdf"
+                            android:visibility="gone"/>
 
                         <ImageView
                             android:id="@+id/IVSHM"
                             android:layout_width="250dp"
                             android:layout_height="250dp"
+                            android:layout_weight="1"
                             android:visibility="gone" />
 
                         <ImageView
@@ -278,6 +317,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:layout_margin="5dp"
+                            android:layout_weight="2"
                             android:gravity="center"
                             android:src="@drawable/ic_delete"
                             app:tint="@color/red_color" />
@@ -305,7 +345,20 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
                         android:orientation="horizontal"
+                        android:weightSum="3"
                         android:visibility="gone">
+
+                        <TextView
+                            android:id="@+id/TVHGB"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:textAlignment="center"
+                            android:textColor="@color/black"
+                            android:text="judul pdf"
+                            android:visibility="gone"/>
 
                         <ImageView
                             android:id="@+id/IVHGB"
@@ -319,6 +372,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:layout_margin="5dp"
+                            android:layout_weight="2"
                             android:gravity="center"
                             android:src="@drawable/ic_delete"
                             app:tint="@color/red_color" />
@@ -346,7 +400,20 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
                         android:orientation="horizontal"
+                        android:weightSum="3"
                         android:visibility="gone">
+
+                        <TextView
+                            android:id="@+id/TVHSHP"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:textAlignment="center"
+                            android:textColor="@color/black"
+                            android:text="judul pdf"
+                            android:visibility="gone"/>
 
                         <ImageView
                             android:id="@+id/IVHSHP"
@@ -360,6 +427,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:layout_margin="5dp"
+                            android:layout_weight="2"
                             android:gravity="center"
                             android:src="@drawable/ic_delete"
                             app:tint="@color/red_color" />
@@ -387,7 +455,20 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
                         android:orientation="horizontal"
+                        android:weightSum="3"
                         android:visibility="gone">
+
+                        <TextView
+                            android:id="@+id/TVPPJB"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:textAlignment="center"
+                            android:textColor="@color/black"
+                            android:text="judul pdf"
+                            android:visibility="gone"/>
 
                         <ImageView
                             android:id="@+id/IVPPJB"
@@ -401,6 +482,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:layout_margin="5dp"
+                            android:layout_weight="2"
                             android:gravity="center"
                             android:src="@drawable/ic_delete"
                             app:tint="@color/red_color" />
@@ -428,7 +510,20 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
                         android:orientation="horizontal"
+                        android:weightSum="3"
                         android:visibility="gone">
+
+                        <TextView
+                            android:id="@+id/TVSTRA"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:textAlignment="center"
+                            android:textColor="@color/black"
+                            android:text="judul pdf"
+                            android:visibility="gone"/>
 
                         <ImageView
                             android:id="@+id/IVStratatitle"
@@ -442,6 +537,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:layout_margin="5dp"
+                            android:layout_weight="2"
                             android:gravity="center"
                             android:src="@drawable/ic_delete"
                             app:tint="@color/red_color" />
@@ -454,6 +550,116 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
                         android:text="Upload Stratatitle"
+                        android:visibility="gone" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:id="@+id/LytAJB"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:orientation="horizontal"
+                        android:weightSum="3"
+                        android:visibility="gone">
+
+                        <TextView
+                            android:id="@+id/TVAJB"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:textAlignment="center"
+                            android:textColor="@color/black"
+                            android:text="judul pdf"
+                            android:visibility="gone"/>
+
+                        <ImageView
+                            android:id="@+id/IVAJB"
+                            android:layout_width="250dp"
+                            android:layout_height="250dp"
+                            android:visibility="gone" />
+
+                        <ImageView
+                            android:id="@+id/IVDeleteAJB"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_margin="5dp"
+                            android:layout_weight="2"
+                            android:gravity="center"
+                            android:src="@drawable/ic_delete"
+                            app:tint="@color/red_color" />
+
+                    </LinearLayout>
+
+                    <Button
+                        android:id="@+id/BtnAJB"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="Upload AJB"
+                        android:visibility="gone" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:id="@+id/LytPetokD"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:orientation="horizontal"
+                        android:weightSum="3"
+                        android:visibility="gone">
+
+                        <TextView
+                            android:id="@+id/TVPetokD"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:textAlignment="center"
+                            android:textColor="@color/black"
+                            android:text="judul pdf"
+                            android:visibility="gone"/>
+
+                        <ImageView
+                            android:id="@+id/IVPetokD"
+                            android:layout_width="250dp"
+                            android:layout_height="250dp"
+                            android:visibility="gone" />
+
+                        <ImageView
+                            android:id="@+id/IVDeletePetokD"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_margin="5dp"
+                            android:layout_weight="2"
+                            android:gravity="center"
+                            android:src="@drawable/ic_delete"
+                            app:tint="@color/red_color" />
+
+                    </LinearLayout>
+
+                    <Button
+                        android:id="@+id/BtnPetokD"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="Upload Petok D"
                         android:visibility="gone" />
 
                 </LinearLayout>
@@ -604,7 +810,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Luas Tanah"
-                        android:inputType="number"
+                        android:inputType="text"
                         android:textColor="@color/black" />
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -620,7 +826,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Luas Bangunan"
-                        android:inputType="number"
+                        android:inputType="text"
                         android:textColor="@color/black" />
                 </com.google.android.material.textfield.TextInputLayout>
 

@@ -11,15 +11,34 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.gooproper.R;
 import com.gooproper.customer.MainCustomerActivity;
+import com.gooproper.guest.MainGuestActivity;
 import com.gooproper.ui.edit.EditAkunActivity;
 import com.gooproper.util.Preferences;
+import com.gooproper.util.ServerApi;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class SettingActivity extends AppCompatActivity {
+
+    String Token;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +49,14 @@ public class SettingActivity extends AppCompatActivity {
         LinearLayout ubahsandi = findViewById(R.id.lytubahsandi);
         LinearLayout logout    = findViewById(R.id.lytkeluar);
         ImageView keluar       = findViewById(R.id.ivcancel);
+
+        FirebaseMessaging.getInstance().getToken()
+                .addOnCompleteListener(task -> {
+                    if (!task.isSuccessful()) {
+                        return;
+                    }
+                    Token = task.getResult();
+                });
 
         editakun.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -80,8 +107,38 @@ public class SettingActivity extends AppCompatActivity {
         ya.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                StringRequest stringRequest = new StringRequest(Request.Method.POST, ServerApi.URL_DELETE_DEVICE_AGEN,
+                        new Response.Listener<String>() {
+                            @Override
+                            public void onResponse(String response) {
+                                try {
+                                    JSONObject res = new JSONObject(response);
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        },
+                        new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                Toast.makeText(getBaseContext(), "Gagal Hapus Data. Error: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+                            }
+                        }){
+                    @Override
+                    protected Map<String, String> getParams() throws AuthFailureError {
+                        Map<String,String> map = new HashMap<>();
+                        map.put("Token",Token);
+                        System.out.println(map);
+
+                        return map;
+                    }
+                };
+
+                RequestQueue requestQueue = Volley.newRequestQueue(getBaseContext());
+                requestQueue.add(stringRequest);
+
                 Preferences.clearLoggedInUser(SettingActivity.this);
-                startActivity(new Intent(SettingActivity.this, MainCustomerActivity.class));
+                startActivity(new Intent(SettingActivity.this, MainGuestActivity.class));
                 finish();
             }
         });

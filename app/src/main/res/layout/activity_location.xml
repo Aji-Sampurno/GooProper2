@@ -1,28 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:map="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:weightSum="10"
     tools:context=".ui.LocationActivity">
 
     <fragment
         android:id="@+id/map"
         android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1" />
+        android:layout_height="match_parent" />
+
+    <android.widget.SearchView
+        android:id="@+id/searchedittext"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:queryHint="Cari Lokasi ..."
+        android:theme="@style/SearchViewMyStyle"
+        android:searchIcon="@drawable/quantum_ic_search_grey600_24"
+        map:layout_constraintStart_toStartOf="parent"
+        map:layout_constraintEnd_toEndOf="parent"
+        map:layout_constraintTop_toTopOf="parent"/>
 
     <Button
         android:id="@+id/BtnLocation"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="9"
+        android:layout_height="wrap_content"
         android:backgroundTint="@color/main"
+        android:layout_margin="10dp"
         android:text="pilih"
-        android:textColor="@color/white" />
+        android:textColor="@color/white"
+        map:layout_constraintStart_toStartOf="parent"
+        map:layout_constraintEnd_toEndOf="parent"
+        map:layout_constraintBottom_toBottomOf="parent"/>
 
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

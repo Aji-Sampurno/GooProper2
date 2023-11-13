@@ -2,14 +2,17 @@ package com.gooproper.ui.detail;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.widget.NestedScrollView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -49,6 +52,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -66,7 +70,8 @@ public class DetailAgenActivity extends AppCompatActivity {
     ProgressDialog PDAgen;
     TextView nama, telp, instagram, listing, jual, sewa, NamaPelamar, WaPelamar, EmailPelamar, KotaPelamar, LahirPelamar, PendidikanPelamar, SekolahPelamar, PengalamanPelamar, PosisiPelamar, KonfirmasiPelamar, DomisisliPelamar, FacebookPelamar, InstgramPelamar;
     Button HubungiPelamar, TerimaPelamar;
-    ScrollView SV1, SV2;
+    NestedScrollView SV1;
+    ScrollView SV2;
     ImageView qrCodeImageView;
     CircleImageView cvagen, cvpelamar;
     RecyclerView rvbadge;
@@ -158,7 +163,8 @@ public class DetailAgenActivity extends AppCompatActivity {
 
         list = new ArrayList<>();
 
-        rvgrid.setLayoutManager(new LinearLayoutManager(DetailAgenActivity.this, LinearLayoutManager.HORIZONTAL, false));
+        rvgrid.setLayoutManager(new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL));
+        //rvgrid.setLayoutManager(new LinearLayoutManager(DetailAgenActivity.this, LinearLayoutManager.VERTICAL, false));
         adapter = new ListingAdapter(this, list);
         rvgrid.setAdapter(adapter);
 
@@ -170,7 +176,34 @@ public class DetailAgenActivity extends AppCompatActivity {
                     builder.setTitle("Konfirmasi Unduhan");
                     builder.setMessage("Apakah Anda ingin mengunduh gambar ini?");
                     builder.setPositiveButton("Ya", (dialog, which) -> {
-                        downloadImage(imgurl);
+                        BitmapDrawable bitmapDrawable = (BitmapDrawable) cvagen.getDrawable();
+                        Bitmap bitmap = bitmapDrawable.getBitmap();
+
+                        FileOutputStream fileOutputStream = null;
+
+                        File sdCard = Environment.getExternalStorageDirectory();
+                        File Directory = new File(sdCard.getAbsolutePath()+"/Download");
+                        Directory.mkdir();
+
+                        String filename = String.format("%d.jpg", System.currentTimeMillis());
+                        File outfile = new File(Directory,filename);
+
+                        Toast.makeText(DetailAgenActivity.this, "Berhasil Download", Toast.LENGTH_SHORT).show();
+                        try {
+                            fileOutputStream = new FileOutputStream(outfile);
+                            bitmap.compress(Bitmap.CompressFormat.JPEG,100,fileOutputStream);
+                            fileOutputStream.flush();
+                            fileOutputStream.close();
+
+                            Intent intent=new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+                            intent.setData(Uri.fromFile(outfile));
+                            sendBroadcast(intent);
+
+                        } catch (FileNotFoundException e) {
+                            throw new RuntimeException(e);
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
                     });
                     builder.setNegativeButton("Batal", (dialog, which) -> {
                         dialog.dismiss();
@@ -187,7 +220,34 @@ public class DetailAgenActivity extends AppCompatActivity {
                     builder.setTitle("Konfirmasi Unduhan");
                     builder.setMessage("Apakah Anda ingin mengunduh gambar ini?");
                     builder.setPositiveButton("Ya", (dialog, which) -> {
-                        downloadImage(imgurl);
+                        BitmapDrawable bitmapDrawable = (BitmapDrawable) cvagen.getDrawable();
+                        Bitmap bitmap = bitmapDrawable.getBitmap();
+
+                        FileOutputStream fileOutputStream = null;
+
+                        File sdCard = Environment.getExternalStorageDirectory();
+                        File Directory = new File(sdCard.getAbsolutePath()+"/Download");
+                        Directory.mkdir();
+
+                        String filename = String.format("%d.jpg", System.currentTimeMillis());
+                        File outfile = new File(Directory,filename);
+
+                        Toast.makeText(DetailAgenActivity.this, "Berhasil Download", Toast.LENGTH_SHORT).show();
+                        try {
+                            fileOutputStream = new FileOutputStream(outfile);
+                            bitmap.compress(Bitmap.CompressFormat.JPEG,100,fileOutputStream);
+                            fileOutputStream.flush();
+                            fileOutputStream.close();
+
+                            Intent intent=new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+                            intent.setData(Uri.fromFile(outfile));
+                            sendBroadcast(intent);
+
+                        } catch (FileNotFoundException e) {
+                            throw new RuntimeException(e);
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
                     });
                     builder.setNegativeButton("Batal", (dialog, which) -> {
                         dialog.dismiss();
@@ -196,9 +256,7 @@ public class DetailAgenActivity extends AppCompatActivity {
                     return true;
                 }
             });
-        } else {
-
-        }
+        } else {}
 
         LoadListing(true);
         CountSewa(agen);
@@ -326,16 +384,16 @@ public class DetailAgenActivity extends AppCompatActivity {
                                 md.setHSHP(data.getString("HSHP"));
                                 md.setPPJB(data.getString("PPJB"));
                                 md.setStratatitle(data.getString("Stratatitle"));
-                                md.setStratatitle(data.getString("AJB"));
-                                md.setStratatitle(data.getString("PetokD"));
+                                md.setAJB(data.getString("AJB"));
+                                md.setPetokD(data.getString("PetokD"));
                                 md.setPjp(data.getString("Pjp"));
                                 md.setImgSHM(data.getString("ImgSHM"));
                                 md.setImgHGB(data.getString("ImgHGB"));
                                 md.setImgHSHP(data.getString("ImgHSHP"));
                                 md.setImgPPJB(data.getString("ImgPPJB"));
                                 md.setImgStratatitle(data.getString("ImgStratatitle"));
-                                md.setImgStratatitle(data.getString("ImgAJB"));
-                                md.setImgStratatitle(data.getString("ImgPetokD"));
+                                md.setImgAJB(data.getString("ImgAJB"));
+                                md.setImgPetokD(data.getString("ImgPetokD"));
                                 md.setImgPjp(data.getString("ImgPjp"));
                                 md.setImgPjp1(data.getString("ImgPjp1"));
                                 md.setNoCertificate(data.getString("NoCertificate"));

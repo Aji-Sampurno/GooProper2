@@ -11,9 +11,10 @@
 
     <ImageView
         android:id="@+id/logo"
-        android:src="@mipmap/ic_icon_round"
+        android:src="@drawable/logogp"
         android:layout_width="match_parent"
-        android:layout_height="200dp"/>
+        android:layout_height="200dp"
+        android:padding="30dp"/>
 
     <LinearLayout
         android:id="@+id/lytlogin"

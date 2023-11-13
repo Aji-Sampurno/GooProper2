@@ -242,12 +242,16 @@ public class ListingPopulerAdapter extends RecyclerView.Adapter<ListingPopulerAd
                     update.putExtra("HSHP",listingModel.getHSHP());
                     update.putExtra("PPJB",listingModel.getPPJB());
                     update.putExtra("Stratatitle",listingModel.getStratatitle());
+                    update.putExtra("AJB",listingModel.getAJB());
+                    update.putExtra("PetokD",listingModel.getPetokD());
                     update.putExtra("Pjp",listingModel.getPjp());
                     update.putExtra("ImgSHM",listingModel.getImgSHM());
                     update.putExtra("ImgHGB",listingModel.getImgHGB());
                     update.putExtra("ImgHSHP",listingModel.getImgHSHP());
                     update.putExtra("ImgPPJB",listingModel.getImgPPJB());
                     update.putExtra("ImgStratatitle",listingModel.getImgStratatitle());
+                    update.putExtra("ImgAJB",listingModel.getImgAJB());
+                    update.putExtra("ImgPetokD",listingModel.getImgPetokD());
                     update.putExtra("ImgPjp",listingModel.getImgPjp());
                     update.putExtra("ImgPjp1",listingModel.getImgPjp1());
                     update.putExtra("NoCertificate",listingModel.getNoCertificate());

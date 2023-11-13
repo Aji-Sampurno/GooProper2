@@ -5,6 +5,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
 
 import android.Manifest;
 import android.app.AlertDialog;
@@ -17,7 +18,9 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -31,6 +34,7 @@ import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -41,11 +45,19 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
+import com.google.android.gms.tasks.Tasks;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.StorageTask;
+import com.google.firebase.storage.UploadTask;
 import com.gooproper.ui.LoginActivity;
 import com.gooproper.R;
+import com.gooproper.ui.TambahListingActivity;
+import com.gooproper.util.Preferences;
+import com.gooproper.util.SendMessageToFCM;
 import com.gooproper.util.ServerApi;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
@@ -56,13 +68,16 @@ import org.json.JSONObject;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
 import java.security.SecureRandom;
 import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -80,7 +95,8 @@ public class RegistrasiAgenActivity extends AppCompatActivity {
     private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE_KTP = 9;
     private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES_KTP = 10;
     Bitmap bitmap, bitmappas;
-    String sktp, spas, Password, RePassword, RandomPassword;
+    Uri UriPas, UriKtp;
+    String sktp, spas, Password, RePassword, RandomPassword, StringPas, StringKtp;
     LinearLayout agen, Mitra, KantorLain;
     EditText namalengkap, nowa, email, kotakelahiran, tglkelahiran, pendterakhir, sekolahterakhir, masakerja, jabatan, konfirmasi, domisili, facebook, instagram, noktp, konfirmasinpwp, nonpwp;
     EditText UsernameKantorLain, NamaKantorLain, NoTelpKantorLain, EmailKantorLain, NPWP, PasswordKantorLain, RePasswordKantorLain;
@@ -153,6 +169,9 @@ public class RegistrasiAgenActivity extends AppCompatActivity {
         pDialog = new ProgressDialog(RegistrasiAgenActivity.this);
 
         RandomPassword = generateRandomPassword(12);
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
+        String FotoPas = "Pas_" + timeStamp + ".jpg";
+        String FotoKtp = "KTP_" + timeStamp + ".jpg";
 
         pendterakhir.setOnClickListener(v -> showEducationPopup(v));
         konfirmasi.setOnClickListener(v -> showKonfirmasiPopup(v));
@@ -167,7 +186,7 @@ public class RegistrasiAgenActivity extends AppCompatActivity {
         pas.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (bitmap == null) {
+                if (UriKtp == null) {
                     Dialog customDialog = new Dialog(RegistrasiAgenActivity.this);
                     customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                     customDialog.setContentView(R.layout.custom_dialog_eror_input);
@@ -200,7 +219,86 @@ public class RegistrasiAgenActivity extends AppCompatActivity {
         });
         submit.setOnClickListener(v -> {
             if (validateAgent()) {
-                regisagen();
+                pDialog.setMessage("Menyimpan Data");
+                pDialog.setCancelable(false);
+                pDialog.show();
+
+                StorageReference storageRef = FirebaseStorage.getInstance().getReference();
+                StorageReference ImgPas = storageRef.child("profil/" + FotoPas);
+                StorageReference ImgKtp = storageRef.child("ktp/" + FotoKtp);
+
+                List<StorageTask<UploadTask.TaskSnapshot>> uploadTasks = new ArrayList<>();
+
+                if (UriPas != null) {
+                    StorageTask<UploadTask.TaskSnapshot> task1 = ImgPas.putFile(UriPas)
+                            .addOnSuccessListener(taskSnapshot -> {
+                                ImgPas.getDownloadUrl()
+                                        .addOnSuccessListener(uri -> {
+                                            String imageUrl = uri.toString();
+                                            StringPas = imageUrl;
+                                        })
+                                        .addOnFailureListener(exception -> {
+                                        });
+                            })
+                            .addOnFailureListener(exception -> {
+                            });
+                    uploadTasks.add(task1);
+                } else {
+                    StringPas = "0";
+                }
+                if (UriKtp != null) {
+                    StorageTask<UploadTask.TaskSnapshot> task2 = ImgKtp.putFile(UriKtp)
+                            .addOnSuccessListener(taskSnapshot -> {
+                                ImgKtp.getDownloadUrl()
+                                        .addOnSuccessListener(uri -> {
+                                            String imageUrl = uri.toString();
+                                            StringKtp = imageUrl;
+                                        })
+                                        .addOnFailureListener(exception -> {
+                                        });
+                            })
+                            .addOnFailureListener(exception -> {
+                            });
+                    uploadTasks.add(task2);
+                } else {
+                    StringKtp = "0";
+                }
+
+                Tasks.whenAllSuccess(uploadTasks)
+                        .addOnSuccessListener(results -> {
+                            regisagen();
+                        })
+                        .addOnFailureListener(exception -> {
+                            pDialog.cancel();
+                            Dialog customDialog = new Dialog(RegistrasiAgenActivity.this);
+                            customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                            customDialog.setContentView(R.layout.custom_dialog_eror_input);
+
+                            if (customDialog.getWindow() != null) {
+                                customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                            }
+
+                            Button ok = customDialog.findViewById(R.id.BtnOkErorInput);
+                            TextView tv = customDialog.findViewById(R.id.TVDialogErorInput);
+
+                            tv.setText("Gagal Saat Unggah Gambar");
+
+                            ok.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    customDialog.dismiss();
+                                }
+                            });
+
+                            ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
+
+                            Glide.with(RegistrasiAgenActivity.this)
+                                    .load(R.drawable.alert) // You can also use a local resource like R.drawable.your_gif_resource
+                                    .transition(DrawableTransitionOptions.withCrossFade())
+                                    .into(gifImageView);
+
+                            customDialog.show();
+                        });
             }
         });
         SubmitMitra.setOnClickListener(v -> {
@@ -260,7 +358,6 @@ public class RegistrasiAgenActivity extends AppCompatActivity {
                 materialDatePicker.show(getSupportFragmentManager(), "tag");
             }
         });
-
         TglKelahiranMitra.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -278,7 +375,6 @@ public class RegistrasiAgenActivity extends AppCompatActivity {
                 materialDatePicker.show(getSupportFragmentManager(), "tag");
             }
         });
-
         radioGroup.setOnCheckedChangeListener((group, checkedId) -> {
             if (checkedId == R.id.rbagen) {
                 agen.setVisibility(View.VISIBLE);
@@ -294,7 +390,6 @@ public class RegistrasiAgenActivity extends AppCompatActivity {
                 KantorLain.setVisibility(View.VISIBLE);
             }
         });
-
         konfirmasinpwp.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -333,37 +428,70 @@ public class RegistrasiAgenActivity extends AppCompatActivity {
                         pDialog.cancel();
                         try {
                             JSONObject res = new JSONObject(response);
-                            pDialog.cancel();
-                            Dialog customDialog = new Dialog(RegistrasiAgenActivity.this);
-                            customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                            customDialog.setContentView(R.layout.custom_dialog_sukses);
+                            String status = res.getString("Status");
+                            if (status.equals("Sukses")) {
+                                pDialog.cancel();
+                                Dialog customDialog = new Dialog(RegistrasiAgenActivity.this);
+                                customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                                customDialog.setContentView(R.layout.custom_dialog_sukses);
 
-                            if (customDialog.getWindow() != null) {
-                                customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-                            }
-
-                            TextView dialogTitle = customDialog.findViewById(R.id.dialog_title);
-                            Button ok = customDialog.findViewById(R.id.btnya);
-                            Button cobalagi = customDialog.findViewById(R.id.btntidak);
-                            ImageView gifimage = customDialog.findViewById(R.id.ivdialog);
-
-                            cobalagi.setVisibility(View.GONE);
-                            dialogTitle.setText("Registrasi Berhasil");
-
-                            ok.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    startActivity(new Intent(RegistrasiAgenActivity.this, LoginActivity.class));
-                                    finish();
+                                if (customDialog.getWindow() != null) {
+                                    customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
                                 }
-                            });
 
-                            Glide.with(RegistrasiAgenActivity.this)
-                                    .load(R.mipmap.ic_yes)
-                                    .transition(DrawableTransitionOptions.withCrossFade())
-                                    .into(gifimage);
+                                TextView dialogTitle = customDialog.findViewById(R.id.dialog_title);
+                                Button ok = customDialog.findViewById(R.id.btnya);
+                                Button cobalagi = customDialog.findViewById(R.id.btntidak);
+                                ImageView gifimage = customDialog.findViewById(R.id.ivdialog);
 
-                            customDialog.show();
+                                dialogTitle.setText("Berhasil Registrasi Agen");
+                                cobalagi.setVisibility(View.GONE);
+
+                                ok.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        customDialog.dismiss();
+                                        finish();
+                                    }
+                                });
+
+                                Glide.with(RegistrasiAgenActivity.this)
+                                        .load(R.mipmap.ic_yes) // You can also use a local resource like R.drawable.your_gif_resource
+                                        .transition(DrawableTransitionOptions.withCrossFade())
+                                        .into(gifimage);
+
+                                customDialog.show();
+                            } else if (status.equals("Error")) {
+                                Dialog customDialog = new Dialog(RegistrasiAgenActivity.this);
+                                customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                                customDialog.setContentView(R.layout.custom_dialog_sukses);
+
+                                if (customDialog.getWindow() != null) {
+                                    customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                                }
+
+                                TextView dialogTitle = customDialog.findViewById(R.id.dialog_title);
+                                Button ok = customDialog.findViewById(R.id.btnya);
+                                Button cobalagi = customDialog.findViewById(R.id.btntidak);
+                                ImageView gifimage = customDialog.findViewById(R.id.ivdialog);
+
+                                dialogTitle.setText("Gagal Registrasi Agen");
+                                ok.setVisibility(View.GONE);
+
+                                cobalagi.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        customDialog.dismiss();
+                                    }
+                                });
+
+                                Glide.with(RegistrasiAgenActivity.this)
+                                        .load(R.mipmap.ic_no) // You can also use a local resource like R.drawable.your_gif_resource
+                                        .transition(DrawableTransitionOptions.withCrossFade())
+                                        .into(gifimage);
+
+                                customDialog.show();
+                            }
                         } catch (JSONException e) {
                             e.printStackTrace();
                             pDialog.cancel();
@@ -439,16 +567,6 @@ public class RegistrasiAgenActivity extends AppCompatActivity {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> map = new HashMap<>();
-                if (bitmap == null) {
-                    sktp = "0";
-                } else {
-                    sktp = imageToString(bitmap);
-                }
-                if (bitmappas == null) {
-                    spas = "0";
-                } else {
-                    spas = imageToString(bitmappas);
-                }
                 map.put("Username", namalengkap.getText().toString().trim());
                 map.put("Password", RandomPassword);
                 map.put("Nama", namalengkap.getText().toString().trim());
@@ -464,9 +582,10 @@ public class RegistrasiAgenActivity extends AppCompatActivity {
                 map.put("AlamatDomisili", domisili.getText().toString().trim());
                 map.put("Facebook", facebook.getText().toString().trim());
                 map.put("Instagram", instagram.getText().toString().trim());
+                map.put("Npwp", nonpwp.getText().toString().trim());
                 map.put("NoKtp", noktp.getText().toString().trim());
-                map.put("ImgKtp", sktp);
-                map.put("Photo", spas);
+                map.put("ImgKtp", StringKtp);
+                map.put("Photo", StringPas);
                 System.out.println(map);
 
                 return map;
@@ -476,7 +595,6 @@ public class RegistrasiAgenActivity extends AppCompatActivity {
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(stringRequest);
     }
-
     private void regismitra() {
         pDialog.setMessage("Proses Registrasi...");
         pDialog.setCancelable(false);
@@ -571,7 +689,6 @@ public class RegistrasiAgenActivity extends AppCompatActivity {
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(stringRequest);
     }
-
     private void regiskl() {
         pDialog.setMessage("Proses Registrasi...");
         pDialog.setCancelable(false);
@@ -665,7 +782,6 @@ public class RegistrasiAgenActivity extends AppCompatActivity {
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(stringRequest);
     }
-
     private boolean validateAgent() {
         if (namalengkap.getText().toString().equals("")) {
             namalengkap.setError("Harap Isi Nama Lengkap");
@@ -709,7 +825,6 @@ public class RegistrasiAgenActivity extends AppCompatActivity {
         }
         return true;
     }
-
     private boolean validateKantorLain() {
         if (NamaKantorLain.getText().toString().equals("")) {
             NamaKantorLain.setError("Harap Isi Nama Kantor");
@@ -738,7 +853,6 @@ public class RegistrasiAgenActivity extends AppCompatActivity {
         }
         return true;
     }
-
     private boolean validateMitra() {
         if (UsernameMitra.getText().toString().equals("")) {
             UsernameMitra.setError("Harap Isi Username");
@@ -777,7 +891,6 @@ public class RegistrasiAgenActivity extends AppCompatActivity {
         }
         return true;
     }
-
     public void showEducationPopup(View view) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Pendidikan terakhir");
@@ -806,7 +919,6 @@ public class RegistrasiAgenActivity extends AppCompatActivity {
         AlertDialog dialog = builder.create();
         dialog.show();
     }
-
     public void showKonfirmasiPopup(View view) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Apakah Anda Dari Agen Properti Lain?");
@@ -835,7 +947,6 @@ public class RegistrasiAgenActivity extends AppCompatActivity {
         AlertDialog dialog = builder.create();
         dialog.show();
     }
-
     public void showKonfirmasiNpwpPopup(View view) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Apakah Anda Memiliki NPWP?");
@@ -864,7 +975,6 @@ public class RegistrasiAgenActivity extends AppCompatActivity {
         AlertDialog dialog = builder.create();
         dialog.show();
     }
-
     private void showPhotoSelectionDialog() {
         androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this);
         builder.setTitle("Upload Foto")
@@ -884,7 +994,6 @@ public class RegistrasiAgenActivity extends AppCompatActivity {
 
         builder.show();
     }
-
     private void showKtpSelectionDialog() {
         androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this);
         builder.setTitle("Upload KTP")
@@ -904,21 +1013,39 @@ public class RegistrasiAgenActivity extends AppCompatActivity {
 
         builder.show();
     }
-
     private void bukaKamera() {
         Intent intentKamera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (intentKamera.resolveActivity(getPackageManager()) != null) {
-            startActivityForResult(intentKamera, KODE_REQUEST_KAMERA);
+            File photoFile = createImageFile();
+            if (photoFile != null) {
+                UriPas = FileProvider.getUriForFile(this, "com.gooproper", photoFile);
+                intentKamera.putExtra(MediaStore.EXTRA_OUTPUT, UriPas);
+                startActivityForResult(intentKamera, KODE_REQUEST_KAMERA);
+            }
         }
     }
-
     private void bukaKameraKtp() {
         Intent intentKamera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (intentKamera.resolveActivity(getPackageManager()) != null) {
-            startActivityForResult(intentKamera, KODE_REQUEST_KAMERA_KTP);
+            File photoFile = createImageFile();
+            if (photoFile != null) {
+                UriKtp = FileProvider.getUriForFile(this, "com.gooproper", photoFile);
+                intentKamera.putExtra(MediaStore.EXTRA_OUTPUT, UriKtp);
+                startActivityForResult(intentKamera, KODE_REQUEST_KAMERA_KTP);
+            }
         }
     }
-
+    private File createImageFile() {
+        String imageFileName = "JPEG_" + new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File image = null;
+        try {
+            image = File.createTempFile(imageFileName, ".jpg", storageDir);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return image;
+    }
     private void requestPermissionsPas() {
         boolean externalStoragePermissionGranted = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
 
@@ -928,7 +1055,6 @@ public class RegistrasiAgenActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_MEDIA_IMAGES}, PERMISSION_REQUEST_CODE_MEDIA_IMAGES);
         }
     }
-
     private void requestPermissionsKtp() {
         boolean externalStoragePermissionGranted = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
 
@@ -938,7 +1064,6 @@ public class RegistrasiAgenActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_MEDIA_IMAGES}, PERMISSION_REQUEST_CODE_MEDIA_IMAGES_KTP);
         }
     }
-
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE) {
@@ -963,9 +1088,8 @@ public class RegistrasiAgenActivity extends AppCompatActivity {
             }
         } else if (requestCode == CODE_GALLERY_REQUEST) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Intent intent = new Intent(Intent.ACTION_PICK);
-                intent.setType("image/*");
-                startActivityForResult(Intent.createChooser(intent, "Pilih Gambar"), CODE_GALLERY_REQUEST);
+                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(intent, CODE_GALLERY_REQUEST);
             } else {
                 AlertDialog.Builder builder = new AlertDialog.Builder(RegistrasiAgenActivity.this);
                 builder.setTitle("Gagal").
@@ -978,9 +1102,8 @@ public class RegistrasiAgenActivity extends AppCompatActivity {
             return;
         } else if (requestCode == CODE_GALLERY_REQUEST_KTP) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Intent intent = new Intent(Intent.ACTION_PICK);
-                intent.setType("image/*");
-                startActivityForResult(Intent.createChooser(intent, "Pilih Gambar"), CODE_GALLERY_REQUEST_KTP);
+                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(intent, CODE_GALLERY_REQUEST_KTP);
             } else {
                 AlertDialog.Builder builder = new AlertDialog.Builder(RegistrasiAgenActivity.this);
                 builder.setTitle("Gagal").
@@ -1024,97 +1147,25 @@ public class RegistrasiAgenActivity extends AppCompatActivity {
 
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if (requestCode == CODE_GALLERY_REQUEST && resultCode == RESULT_OK && data != null) {
-            Uri filePath = data.getData();
-            try {
-                InputStream inputStream = getContentResolver().openInputStream(filePath);
-                bitmappas = BitmapFactory.decodeStream(inputStream);
-                imgpas.setVisibility(View.VISIBLE);
-                imgpas.setImageBitmap(bitmappas);
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
+            UriPas = data.getData();
+            imgpas.setImageURI(UriPas);
+            imgpas.setVisibility(View.VISIBLE);
         } else if (requestCode == CODE_GALLERY_REQUEST_KTP && resultCode == RESULT_OK && data != null) {
-            Uri filePath = data.getData();
-            try {
-                InputStream inputStream = getContentResolver().openInputStream(filePath);
-                bitmap = BitmapFactory.decodeStream(inputStream);
-                imgktp.setVisibility(View.VISIBLE);
-                imgktp.setImageBitmap(bitmap);
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
+            UriKtp = data.getData();
+            imgktp.setImageURI(UriKtp);
+            imgktp.setVisibility(View.VISIBLE);
         } else if (requestCode == KODE_REQUEST_KAMERA && resultCode == RESULT_OK) {
-            if (data != null && data.getExtras() != null) {
-                Bitmap imageBitmap = (Bitmap) data.getExtras().get("data");
-                if (imageBitmap != null) {
-                    try {
-                        InputStream inputStream = getContentResolver().openInputStream(getImageUri(this,imageBitmap));
-                        bitmappas = BitmapFactory.decodeStream(inputStream);
-                        imgpas.setVisibility(View.VISIBLE);
-                        imgpas.setImageBitmap(bitmappas);
-                    } catch (FileNotFoundException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
+            imgpas.setImageURI(UriPas);
+            imgpas.setVisibility(View.VISIBLE);
         } else if (requestCode == KODE_REQUEST_KAMERA_KTP && resultCode == RESULT_OK) {
-            if (data != null && data.getExtras() != null) {
-                Bitmap imageBitmap = (Bitmap) data.getExtras().get("data");
-                if (imageBitmap != null) {
-                    try {
-                        InputStream inputStream = getContentResolver().openInputStream(getImageUri(this,imageBitmap));
-                        bitmap = BitmapFactory.decodeStream(inputStream);
-                        imgktp.setVisibility(View.VISIBLE);
-                        imgktp.setImageBitmap(bitmap);
-                    } catch (FileNotFoundException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
+            imgktp.setImageURI(UriKtp);
+            imgktp.setVisibility(View.VISIBLE);
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
-
-    private void cropImage(Uri sourceUri) {
-        Uri destinationUri = Uri.fromFile(new File(getCacheDir(), "cropped_image"));
-        CropImage.activity(sourceUri)
-                .setGuidelines(CropImageView.Guidelines.ON)
-                .setAspectRatio(3, 4)
-                .setCropShape(CropImageView.CropShape.RECTANGLE)
-                .setOutputUri(destinationUri)
-                .start(this);
-    }
-
-    private void cropImageKtp(Uri sourceUri) {
-        Uri destinationUri = Uri.fromFile(new File(getCacheDir(), "cropped_image"));
-        CropImage.activity(sourceUri)
-                .setGuidelines(CropImageView.Guidelines.ON)
-                .setAspectRatio(3, 2)
-                .setCropShape(CropImageView.CropShape.RECTANGLE)
-                .setOutputUri(destinationUri)
-                .start(this);
-    }
-
-    public static Uri getImageUri(Context inContext, Bitmap inImage) {
-        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
-        String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "IMG_" + Calendar.getInstance().getTime(), null);
-        return Uri.parse(path);
-    }
-
-    private String imageToString(Bitmap bitmap) {
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
-        byte[] imageBytes = outputStream.toByteArray();
-
-        String encodeImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);
-        return encodeImage;
-    }
-
     private String generateRandomPassword(int length) {
         final String charset = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
         StringBuilder password = new StringBuilder();
@@ -1128,5 +1179,24 @@ public class RegistrasiAgenActivity extends AppCompatActivity {
 
         return password.toString();
     }
-
+    private class SendMessageTask extends AsyncTask<String, Void, String> {
+        @Override
+        protected String doInBackground(String... params) {
+            for (String token : params) {
+                sendNotificationToToken(token, "pelamar");
+            }
+            return null;
+        }
+        @Override
+        protected void onPostExecute(String response) {
+            if (response != null) {
+                Toast.makeText(getApplicationContext(), response, Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+    private void sendNotificationToToken(String token, String notificationType) {
+        String title = Preferences.getKeyNama(this);
+        String message = "Terdapat Pelamar Agen Baru";
+        String response = SendMessageToFCM.sendMessage(token, title, message, notificationType);
+    }
 }

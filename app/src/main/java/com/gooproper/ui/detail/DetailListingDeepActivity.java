@@ -20,6 +20,7 @@ import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
@@ -54,10 +55,11 @@ import java.util.ArrayList;
 public class DetailListingDeepActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     ProgressDialog PDDetailListingDeep;
-    TextView TVNamaDetailListing, TVAlamatDetailListing, TVHargaDetailListing, TVViewsDetailListing, TVBedDetailListing, TVNamaAgen, TVBathDetailListing, TVWideDetailListing, TVLandDetailListing, TVTipeDetailListing, TVStatusDetailListing, TVSertifikatDetailListing, TVLuasDetailListing, TVKamarTidurDetailListing, TVKamarMandiDetailListing, TVLantaiDetailListing, TVGarasiDetailListing, TVCarpotDetailListing, TVListrikDetailListing, TVSumberAirDetailListing, TVDeskripsiDetailListing;
-    ImageView IVFlowUp, IVWhatsapp, IVInstagram, IVFavorite, IVFavoriteOn, IVShare;
+    TextView TVNamaDetailListing, TVAlamatDetailListing, TVHargaDetailListing, TVHargaSewaDetailListing, TVViewsDetailListing, TVLikeDetailListing, TVBedDetailListing, TVNamaAgen, TVBathDetailListing, TVWideDetailListing, TVLandDetailListing, TVDimensiDetailListing, TVTipeDetailListing, TVStatusDetailListing, TVSertifikatDetailListing, TVLuasDetailListing, TVKamarTidurDetailListing, TVKamarMandiDetailListing, TVLantaiDetailListing, TVGarasiDetailListing, TVCarpotDetailListing, TVListrikDetailListing, TVSumberAirDetailListing, TVPerabotDetailListing, TVSizeBanner, TVDeskripsiDetailListing, TVNoData, TVNoDataPdf, TVPriority, TVKondisi, TVNoPjp, TVNoDataPjp, TVFee;
+    ImageView IVFlowUp, IVWhatsapp, IVInstagram, IVFavorite, IVFavoriteOn, IVShare, IVStar1, IVStar2, IVStar3, IVStar4, IVStar5 ;
     ScrollView scrollView;
     CardView agen;
+    LinearLayout LytBadge;
     String status, idpralisting, idagen, idlisting, agenid, idpengguna;
     String BuyerNama, BuyerTelp, BuyerKeterangan, BuyerTanggal, BuyerIdAgen, BuyerIdListing, BuyerIdInput, BuyerJam;
     String NamaMaps;
@@ -80,11 +82,14 @@ public class DetailListingDeepActivity extends AppCompatActivity implements OnMa
         viewPager = findViewById(R.id.VPDetailListingDeep);
         agen = findViewById(R.id.LytAgenDetailListingDeep);
         scrollView = findViewById(R.id.SVDetailListingDeep);
+        LytBadge = findViewById(R.id.LytBadgeDeep);
 
         TVNamaDetailListing = findViewById(R.id.TVNamaDetailListingDeep);
         TVAlamatDetailListing = findViewById(R.id.TVAlamatDetailListingDeep);
         TVHargaDetailListing = findViewById(R.id.TVHargaDetailListingDeep);
+        TVHargaSewaDetailListing = findViewById(R.id.TVHargaSewaDetailListingDeep);
         TVViewsDetailListing = findViewById(R.id.TVViewsDetailListingDeep);
+        TVLikeDetailListing = findViewById(R.id.TVLikeDetailListingDeep);
         TVBedDetailListing = findViewById(R.id.TVBedDetailListingDeep);
         TVBathDetailListing = findViewById(R.id.TVBathDetailListingDeep);
         TVWideDetailListing = findViewById(R.id.TVWideDetailListingDeep);
@@ -93,6 +98,7 @@ public class DetailListingDeepActivity extends AppCompatActivity implements OnMa
         TVStatusDetailListing = findViewById(R.id.TVStatusHunianDetailListingDeep);
         TVSertifikatDetailListing = findViewById(R.id.TVSertifikatDetailListingDeep);
         TVLuasDetailListing = findViewById(R.id.TVLuasHunianDetailListingDeep);
+        TVDimensiDetailListing = findViewById(R.id.TVDimensiDetailListingDeep);
         TVKamarTidurDetailListing = findViewById(R.id.TVKamarTidurHunianDetailListingDeep);
         TVKamarMandiDetailListing = findViewById(R.id.TVKamarMandiHunianDetailListingDeep);
         TVLantaiDetailListing = findViewById(R.id.TVLevelDetailListingDeep);
@@ -100,8 +106,12 @@ public class DetailListingDeepActivity extends AppCompatActivity implements OnMa
         TVCarpotDetailListing = findViewById(R.id.TVCarportDetailListingDeep);
         TVListrikDetailListing = findViewById(R.id.TVListrikDetailListingDeep);
         TVSumberAirDetailListing = findViewById(R.id.TVSumberAirDetailListingDeep);
+        TVPerabotDetailListing = findViewById(R.id.TVPerabotDetailListingDeep);
         TVDeskripsiDetailListing = findViewById(R.id.TVDeskripsiDetailListingDeep);
         TVNamaAgen = findViewById(R.id.TVNamaAgenDetailListingDeep);
+        TVPriority = findViewById(R.id.TVPriorityDeep);
+        TVKondisi = findViewById(R.id.TVKondisiDeep);
+        TVNoPjp = findViewById(R.id.TVNoPjpDeep);
 
         IVFlowUp = findViewById(R.id.IVFlowUpAgenDetailListingDeep);
         IVWhatsapp = findViewById(R.id.IVNoTelpAgenDetailListingDeep);
@@ -109,6 +119,11 @@ public class DetailListingDeepActivity extends AppCompatActivity implements OnMa
         IVFavorite = findViewById(R.id.IVFavoriteDetailListingDeep);
         IVFavoriteOn = findViewById(R.id.IVFavoriteOnDetailListingDeep);
         IVShare = findViewById(R.id.IVShareDetailListingDeep);
+        IVStar1 = findViewById(R.id.Star1Deep);
+        IVStar2 = findViewById(R.id.Star2Deep);
+        IVStar3 = findViewById(R.id.Star3Deep);
+        IVStar4 = findViewById(R.id.Star4Deep);
+        IVStar5 = findViewById(R.id.Star5Deep);
 
         mapView = findViewById(R.id.MVDetailListingDeep);
         mapView.onCreate(savedInstanceState);
@@ -197,12 +212,14 @@ public class DetailListingDeepActivity extends AppCompatActivity implements OnMa
                                 FormatCurrency currency = new FormatCurrency();
                                 String intentIdListing = data.getString("IdListing");
                                 String intentIdAgen = data.getString("IdAgen");
+                                String intentIdAgenCo = data.getString("IdAgenCo");
                                 String intentIdInput = data.getString("IdInput");
                                 String intentNamaListing = data.getString("NamaListing");
                                 String intentAlamat = data.getString("Alamat");
                                 String intentLatitude = data.getString("Latitude");
                                 String intentLongitude = data.getString("Longitude");
                                 String intentLocation = data.getString("Location");
+                                String intentSelfie = data.getString("Selfie");
                                 String intentWide = data.getString("Wide");
                                 String intentLand = data.getString("Land");
                                 String intentDimensi = data.getString("Dimensi");
@@ -220,11 +237,18 @@ public class DetailListingDeepActivity extends AppCompatActivity implements OnMa
                                 String intentHSHP = data.getString("HSHP");
                                 String intentPPJB = data.getString("PPJB");
                                 String intentStratatitle = data.getString("Stratatitle");
+                                String intentAJB = data.getString("AJB");
+                                String intentPetokD = data.getString("PetokD");
+                                String intentPjp = data.getString("Pjp");
                                 String intentImgSHM = data.getString("ImgSHM");
                                 String intentImgHGB = data.getString("ImgHGB");
                                 String intentImgHSHP = data.getString("ImgHSHP");
                                 String intentImgPPJB = data.getString("ImgPPJB");
                                 String intentImgStratatitle = data.getString("ImgStratatitle");
+                                String intentImgAJB = data.getString("ImgAJB");
+                                String intentImgPetokD = data.getString("ImgPetokD");
+                                String intentImgPjp = data.getString("ImgPjp");
+                                String intentImgPjp1 = data.getString("ImgPjp1");
                                 String intentNoCertificate = data.getString("NoCertificate");
                                 String intentPbb = data.getString("Pbb");
                                 String intentJenisProperti = data.getString("JenisProperti");
@@ -239,6 +263,7 @@ public class DetailListingDeepActivity extends AppCompatActivity implements OnMa
                                 String intentBanner = data.getString("Banner");
                                 String intentSize = data.getString("Size");
                                 String intentHarga = data.getString("Harga");
+                                String intentHargaSewa = data.getString("HargaSewa");
                                 String intentTglInput = data.getString("TglInput");
                                 String intentImg1 = data.getString("Img1");
                                 String intentImg2 = data.getString("Img2");
@@ -256,255 +281,339 @@ public class DetailListingDeepActivity extends AppCompatActivity implements OnMa
                                 String intentIsAdmin = data.getString("IsAdmin");
                                 String intentIsManager = data.getString("IsManager");
                                 String intentSold = data.getString("Sold");
+                                String intentRented = data.getString("Rented");
                                 String intentView = data.getString("View");
                                 String intentMarketable = data.getString("Marketable");
                                 String intentStatusHarga = data.getString("StatusHarga");
                                 String intentNama = data.getString("Nama");
                                 String intentNoTelp = data.getString("NoTelp");
                                 String intentInstagram = data.getString("Instagram");
+                                String intentFee = data.getString("Fee");
 
-                                if (intentNamaListing.isEmpty()){
-                                    TVNamaDetailListing.setText(": -");
+                                if (intentIdAgen.equals("null")) {
+                                    if (intentSold.equals("1")){
+                                        LytBadge.setVisibility(View.GONE);
+                                        TVHargaDetailListing.setVisibility(View.GONE);
+                                        TVHargaSewaDetailListing.setVisibility(View.GONE);
+                                    } else if (intentRented.equals("1")) {
+                                        LytBadge.setVisibility(View.GONE);
+                                        TVHargaDetailListing.setVisibility(View.GONE);
+                                        TVHargaSewaDetailListing.setVisibility(View.GONE);
+                                    } else {
+                                        idagen = agenid;
+                                    }
+                                } else {
+                                    if (intentSold.equals("1")){
+                                        LytBadge.setVisibility(View.GONE);
+                                        TVHargaDetailListing.setVisibility(View.GONE);
+                                        TVHargaSewaDetailListing.setVisibility(View.GONE);
+                                    } else if (intentRented.equals("1")) {
+                                        LytBadge.setVisibility(View.GONE);
+                                        TVHargaDetailListing.setVisibility(View.GONE);
+                                        TVHargaSewaDetailListing.setVisibility(View.GONE);
+                                    } else {
+                                        idagen = intentIdAgen;
+                                    }
+                                }
+                                if (intentKondisi.isEmpty()) {
+                                    TVKondisi.setText("-");
+                                } else {
+                                    TVKondisi.setText(intentKondisi);
+                                }
+                                if (intentPriority.isEmpty() || intentPriority.equals("open")) {
+                                    TVPriority.setVisibility(View.INVISIBLE);
+                                } else {
+                                    TVPriority.setText("Exclusive");
+                                }
+                                if (intentPjp.isEmpty() || intentPjp.equals("0")) {
+                                    TVNoPjp.setVisibility(View.INVISIBLE);
+                                } else {
+                                    TVNoPjp.setText(intentPjp);
+                                }
+                                if (intentNamaListing.isEmpty()) {
+                                    TVNamaDetailListing.setText("-");
                                 } else {
                                     TVNamaDetailListing.setText(intentNamaListing);
                                 }
-
-                                if (intentAlamat.isEmpty()){
+                                if (intentAlamat.isEmpty()) {
                                     TVAlamatDetailListing.setText(intentAlamat);
                                 } else {
                                     TVAlamatDetailListing.setText(intentAlamat);
                                 }
-
-                                if (intentHarga.isEmpty()){
-                                    TVHargaDetailListing.setText("Rp. -");
+                                if (intentKondisi.equals("Jual")){
+                                    if (intentHarga.isEmpty()) {
+                                        TVHargaDetailListing.setText("Rp. -");
+                                        TVHargaSewaDetailListing.setVisibility(View.GONE);
+                                    } else {
+                                        TVHargaDetailListing.setText(currency.formatRupiah(intentHarga));
+                                        TVHargaSewaDetailListing.setVisibility(View.GONE);
+                                    }
+                                } else if (intentKondisi.equals("Sewa")) {
+                                    if (intentHargaSewa.isEmpty()) {
+                                        TVHargaSewaDetailListing.setText("Rp. -");
+                                        TVHargaDetailListing.setVisibility(View.GONE);
+                                    } else {
+                                        TVHargaSewaDetailListing.setText(currency.formatRupiah(intentHargaSewa));
+                                        TVHargaDetailListing.setVisibility(View.GONE);
+                                    }
                                 } else {
-                                    TVHargaDetailListing.setText(currency.formatRupiah(intentHarga));
+                                    if (intentHarga.isEmpty()) {
+                                        if (intentHargaSewa.isEmpty()){
+                                            TVHargaDetailListing.setText("Rp. -");
+                                            TVHargaSewaDetailListing.setText("Rp. -");
+                                        } else {
+                                            TVHargaDetailListing.setText("Rp. - /");
+                                            TVHargaSewaDetailListing.setText(currency.formatRupiah(intentHargaSewa));
+                                        }
+                                    } else {
+                                        if (intentHargaSewa.isEmpty()){
+                                            TVHargaDetailListing.setText(currency.formatRupiah(intentHarga));
+                                            TVHargaSewaDetailListing.setText("Rp. -");
+                                        } else {
+                                            TVHargaDetailListing.setText(currency.formatRupiah(intentHarga) + " /");
+                                            TVHargaSewaDetailListing.setText(currency.formatRupiah(intentHargaSewa));
+                                        }
+                                    }
                                 }
-
-                                if (intentView.isEmpty()){
+                                if (intentView.isEmpty()) {
                                     TVViewsDetailListing.setText("0 Views");
                                 } else {
-                                    TVViewsDetailListing.setText(intentView+" Views");
+                                    TVViewsDetailListing.setText(intentView + " Views");
                                 }
-
-                                if (intentBed.isEmpty()){
-                                    if (intentBedArt.isEmpty()){
+                                if (intentBed.isEmpty()) {
+                                    if (intentBedArt.isEmpty()) {
                                         TVBedDetailListing.setText("0 + 0");
                                     } else {
                                         TVBedDetailListing.setText("0 + " + intentBedArt);
                                     }
                                 } else {
-                                    if (intentBedArt.isEmpty()){
+                                    if (intentBedArt.isEmpty()) {
                                         TVBedDetailListing.setText(intentBed + " + 0");
                                     } else {
                                         TVBedDetailListing.setText(intentBed + " + " + intentBedArt);
                                     }
                                 }
-
-                                if (intentBath.isEmpty()){
-                                    if (intentBathArt.isEmpty()){
+                                if (intentBath.isEmpty()) {
+                                    if (intentBathArt.isEmpty()) {
                                         TVBathDetailListing.setText("0 + 0");
                                     } else {
                                         TVBathDetailListing.setText("0 + " + intentBathArt);
                                     }
                                 } else {
-                                    if (intentBathArt.isEmpty()){
-                                        TVBathDetailListing.setText(intentBathArt + " + " + intentBathArt);
+                                    if (intentBathArt.isEmpty()) {
+                                        TVBathDetailListing.setText(intentBath + " + " + intentBathArt);
                                     } else {
-                                        TVBathDetailListing.setText(intentBathArt + " + " + intentBathArt);
+                                        TVBathDetailListing.setText(intentBath + " + " + intentBathArt);
                                     }
                                 }
-
-                                if (intentWide.isEmpty()){
+                                if (intentLand.isEmpty()) {
                                     TVWideDetailListing.setText("-");
                                 } else {
-                                    TVWideDetailListing.setText(intentWide + " m2");
+                                    TVWideDetailListing.setText(intentLand);
                                 }
-
-                                if (intentLand.isEmpty()){
+                                if (intentWide.isEmpty()) {
                                     TVLandDetailListing.setText("-");
                                 } else {
-                                    TVLandDetailListing.setText(intentLand + " m2");
+                                    TVLandDetailListing.setText(intentWide);
                                 }
-
-                                if (intentJenisProperti.isEmpty()){
+                                if (intentJenisProperti.isEmpty()) {
                                     TVTipeDetailListing.setText(": -");
                                 } else {
-                                    TVTipeDetailListing.setText(": "+intentJenisProperti);
+                                    TVTipeDetailListing.setText(": " + intentJenisProperti);
                                 }
-
-                                if (intentKondisi.isEmpty()){
+                                if (intentKondisi.isEmpty()) {
                                     TVStatusDetailListing.setText(": -");
                                 } else {
-                                    TVStatusDetailListing.setText(": "+intentKondisi);
+                                    TVStatusDetailListing.setText(": " + intentKondisi);
                                 }
-
-                                if (intentJenisCertificate.isEmpty()){
-                                    TVSertifikatDetailListing.setText(": -");
-                                } else {
-                                    TVSertifikatDetailListing.setText(": "+intentJenisCertificate);
+                                StringBuilder messageBuilder = new StringBuilder(":");
+                                if (intentImgSHM.equals("0") && intentImgHGB.equals("0") && intentImgHSHP.equals("0") && intentImgPPJB.equals("0") && intentImgStratatitle.equals("0") && intentImgAJB.equals("0") && intentImgPetokD.equals("0")) {
+                                    messageBuilder.append(" -");
                                 }
-
-                                if (intentWide.isEmpty()){
-                                    if (intentLand.isEmpty()){
-                                        TVLuasDetailListing.setText(": - m2/- m2");
+                                if (!intentSHM.isEmpty() && !intentSHM.equals("0")) {
+                                    messageBuilder.append(" SHM");
+                                }
+                                if (!intentHGB.isEmpty() && !intentHGB.equals("0")) {
+                                    messageBuilder.append(" HGB");
+                                }
+                                if (!intentHSHP.isEmpty() && !intentHSHP.equals("0")) {
+                                    messageBuilder.append(" HS/HP");
+                                }
+                                if (!intentPPJB.isEmpty() && !intentPPJB.equals("0")) {
+                                    messageBuilder.append(" PPJB");
+                                }
+                                if (!intentStratatitle.isEmpty() && !intentStratatitle.equals("0")) {
+                                    messageBuilder.append(" Stratatitle");
+                                }
+                                if (!intentAJB.isEmpty() && !intentAJB.equals("0")) {
+                                    messageBuilder.append(" AJB");
+                                }
+                                if (!intentPetokD.isEmpty() && !intentPetokD.equals("0")) {
+                                    messageBuilder.append(" Petok D");
+                                }
+                                TVSertifikatDetailListing.setText(messageBuilder.toString());
+                                if (intentWide.isEmpty()) {
+                                    if (intentLand.isEmpty()) {
+                                        TVLuasDetailListing.setText(": -");
                                     } else {
-                                        TVLuasDetailListing.setText(": - m2/" + intentLand + " m2");
+                                        TVLuasDetailListing.setText(": - / " + intentLand);
                                     }
                                 } else {
-                                    if (intentLand.isEmpty()){
-                                        TVLuasDetailListing.setText(": "+intentWide + " m2/- m2");
+                                    if (intentLand.isEmpty()) {
+                                        TVLuasDetailListing.setText(": " + intentWide + "/ -");
                                     } else {
-                                        TVLuasDetailListing.setText(": "+intentWide + " m2/" + intentLand + " m2");
-
+                                        TVLuasDetailListing.setText(": " + intentWide + "/" + intentLand);
                                     }
                                 }
-                                TVKamarTidurDetailListing.setText(": "+intentBed + " + " + intentBedArt);
-                                TVKamarMandiDetailListing.setText(": "+intentBath + " + " + intentBathArt);
-
-                                if (intentLevel.isEmpty()){
+                                if (intentDimensi.isEmpty()){
+                                    TVDimensiDetailListing.setText(": -");
+                                } else {
+                                    TVDimensiDetailListing.setText(": " + intentDimensi);
+                                }
+                                if (intentBed.isEmpty()) {
+                                    if (intentBedArt.isEmpty()) {
+                                        TVKamarTidurDetailListing.setText(": -");
+                                    } else {
+                                        TVKamarTidurDetailListing.setText(": -" + " + " + intentBedArt);
+                                    }
+                                } else {
+                                    if (intentBedArt.isEmpty()) {
+                                        TVKamarTidurDetailListing.setText(": " + intentBed + " + -");
+                                    } else {
+                                        TVKamarTidurDetailListing.setText(": " + intentBed + " + " + intentBedArt);
+                                    }
+                                }
+                                if (intentBath.isEmpty()) {
+                                    if (intentBathArt.isEmpty()) {
+                                        TVKamarMandiDetailListing.setText(": -");
+                                    } else {
+                                        TVKamarMandiDetailListing.setText(": -" + " + " + intentBathArt);
+                                    }
+                                } else {
+                                    if (intentBathArt.isEmpty()) {
+                                        TVKamarMandiDetailListing.setText(": " + intentBath + " + -");
+                                    } else {
+                                        TVKamarMandiDetailListing.setText(": " + intentBath + " + " + intentBathArt);
+                                    }
+                                }
+                                if (intentLevel.isEmpty()) {
                                     TVLantaiDetailListing.setText(": -");
                                 } else {
-                                    TVLantaiDetailListing.setText(": "+intentLevel);
+                                    TVLantaiDetailListing.setText(": " + intentLevel);
                                 }
-
-                                if (intentGarage.isEmpty()){
+                                if (intentGarage.isEmpty()) {
                                     TVGarasiDetailListing.setText(": -");
                                 } else {
-                                    TVGarasiDetailListing.setText(": "+intentGarage);
+                                    TVGarasiDetailListing.setText(": " + intentGarage);
                                 }
-
-                                if (intentCarpot.isEmpty()){
+                                if (intentCarpot.isEmpty()) {
                                     TVCarpotDetailListing.setText(": -");
                                 } else {
-                                    TVCarpotDetailListing.setText(": "+intentCarpot);
+                                    TVCarpotDetailListing.setText(": " + intentCarpot);
                                 }
-
-                                if (intentListrik.isEmpty()){
+                                if (intentListrik.isEmpty()) {
                                     TVListrikDetailListing.setText(": -");
                                 } else {
-                                    TVListrikDetailListing.setText(": "+intentListrik + " Watt");
-
+                                    TVListrikDetailListing.setText(": " + intentListrik + " Watt");
                                 }
-
-                                if (intentSumberAir.isEmpty()){
+                                if (intentSumberAir.isEmpty()) {
                                     TVSumberAirDetailListing.setText(": -");
                                 } else {
-                                    TVSumberAirDetailListing.setText(": "+intentSumberAir);
+                                    TVSumberAirDetailListing.setText(": " + intentSumberAir);
                                 }
-
-                                if (intentDeskripsi.isEmpty()){
-                                    TVDeskripsiDetailListing.setText(": -");
+                                if (intentPrabot.equals("Tidak")) {
+                                    TVPerabotDetailListing.setText(": -");
                                 } else {
-                                    TVDeskripsiDetailListing.setText(": "+intentDeskripsi);
+                                    TVPerabotDetailListing.setText(": " + intentKetPrabot);
                                 }
-
+                                if (intentDeskripsi.isEmpty()) {
+                                    TVDeskripsiDetailListing.setText("-");
+                                } else {
+                                    TVDeskripsiDetailListing.setText(intentDeskripsi);
+                                }
                                 TVNamaAgen.setText(intentNama);
-                                NamaMaps = intentNamaListing;
-
-                                lat = Double.parseDouble(intentLatitude);
-                                lng = Double.parseDouble(intentLongitude);
-
-                                if (status.equals("1")) {
-                                    IVWhatsapp.setOnClickListener(new View.OnClickListener() {
-                                        @Override
-                                        public void onClick(View view) {
-                                            String deepLinkUrl = "https://gooproper.com/listing/" + intentIdListing;
-                                            String message = "Halo! Saya Manager, ingin menanyakan update pada listingan " + intentNamaListing + " yang beralamat di " + intentAlamat + ".\nDetail Listingan :\n" + deepLinkUrl;
-                                            String url = "https://api.whatsapp.com/send?phone=+62" + intentNoTelp + "&text=" + message;
-                                            Intent i = new Intent(Intent.ACTION_VIEW);
-                                            i.setData(Uri.parse(url));
-                                            startActivity(i);
-                                        }
-                                    });
-                                } else if (status.equals("2")) {
-                                    IVWhatsapp.setOnClickListener(new View.OnClickListener() {
-                                        @Override
-                                        public void onClick(View view) {
-                                            String deepLinkUrl = "https://gooproper.com/listing/" + intentIdListing;
-                                            String message = "Halo! Saya Admin, ingin menanyakan update pada listingan " + intentNamaListing + " yang beralamat di " + intentAlamat + ".\nDetail Listingan :\n" + deepLinkUrl;
-                                            String url = "https://api.whatsapp.com/send?phone=+62" + intentNoTelp + "&text=" + message;
-                                            Intent i = new Intent(Intent.ACTION_VIEW);
-                                            i.setData(Uri.parse(url));
-                                            startActivity(i);
-                                        }
-                                    });
-                                } else if (status.equals("3")) {
-                                    IVWhatsapp.setOnClickListener(new View.OnClickListener() {
-                                        @Override
-                                        public void onClick(View view) {
-                                            String deepLinkUrl = "https://gooproper.com/listing/" + intentIdListing;
-                                            String message = "Halo! Saya " + StringNamaBuyer + ", ingin melakukan cobroke pada listingan " + intentNamaListing + " yang beralamat di " + intentAlamat + ".\nApakah bersedia? \nDetail Listingan :\n" + deepLinkUrl;
-                                            String url = "https://api.whatsapp.com/send?phone=+62" + intentNoTelp + "&text=" + message;
-                                            Intent i = new Intent(Intent.ACTION_VIEW);
-                                            i.setData(Uri.parse(url));
-                                            startActivity(i);
-                                        }
-                                    });
+                                if (intentLatitude.equals("0") || intentLongitude.equals("0")){
+                                    lat = Double.parseDouble("0");
+                                    lng = Double.parseDouble("0");
+                                    mapView.setVisibility(View.GONE);
                                 } else {
-                                    IVFlowUp.setVisibility(View.INVISIBLE);
-                                    IVWhatsapp.setOnClickListener(new View.OnClickListener() {
-                                        @Override
-                                        public void onClick(View view) {
-                                            String deepLinkUrl = "https://gooproper.com/listing/" + intentIdListing;
-                                            String message = "Halo! Saya " + StringNamaBuyer + ", ingin menanyakan informasi mengenai listingan " + intentNamaListing + " yang beralamat di " + intentAlamat + ".\nApakah masih ada? atau ada update terbaru?\nDetail Listingan :\n" + deepLinkUrl;
-                                            String url = "https://api.whatsapp.com/send?phone=+62" + intentNoTelp + "&text=" + message;
-                                            Intent i = new Intent(Intent.ACTION_VIEW);
-                                            i.setData(Uri.parse(url));
-                                            startActivity(i);
-                                        }
-                                    });
-                                }
-
-                                IVInstagram.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View view) {
-                                        String url = "http://instagram.com/_u/" + intentInstagram;
-                                        Intent i = new Intent(Intent.ACTION_VIEW);
-                                        i.setData(Uri.parse(url));
-                                        startActivity(i);
-                                    }
-                                });
-
-                                if (intentImg1.equals("0")) {
-                                } else {
-                                    images.add(intentImg1);
+                                    lat = Double.parseDouble(intentLatitude);
+                                    lng = Double.parseDouble(intentLongitude);
                                 }
 
                                 if (intentImg2.equals("0")) {
                                 } else {
                                     images.add(intentImg2);
                                 }
-
                                 if (intentImg3.equals("0")) {
                                 } else {
                                     images.add(intentImg3);
                                 }
-
                                 if (intentImg4.equals("0")) {
                                 } else {
                                     images.add(intentImg4);
                                 }
-
                                 if (intentImg5.equals("0")) {
                                 } else {
                                     images.add(intentImg5);
                                 }
-
                                 if (intentImg6.equals("0")) {
                                 } else {
                                     images.add(intentImg6);
                                 }
-
                                 if (intentImg7.equals("0")) {
                                 } else {
                                     images.add(intentImg7);
                                 }
-
                                 if (intentImg8.equals("0")) {
                                 } else {
                                     images.add(intentImg8);
                                 }
+
+                                TVNamaAgen.setText(intentNama);
+                                NamaMaps = intentNamaListing;
+
+                                RequestQueue queue = Volley.newRequestQueue(getBaseContext());
+                                JsonArrayRequest reqData = new JsonArrayRequest(Request.Method.GET, ServerApi.URL_COUNT_LIKE + intentIdListing,null,
+                                        new Response.Listener<JSONArray>() {
+                                            @Override
+                                            public void onResponse(JSONArray response) {
+                                                for(int i = 0 ; i < response.length(); i++)
+                                                {
+                                                    try {
+                                                        JSONObject data = response.getJSONObject(i);
+                                                        String countlike = data.getString("fav");
+
+                                                        int like = Integer.parseInt(countlike);
+
+                                                        if (like >= 50){
+                                                            TVLikeDetailListing.setText(countlike+" Favorite");
+                                                        } else {
+                                                            TVLikeDetailListing.setVisibility(View.INVISIBLE);
+                                                        }
+
+                                                    } catch (JSONException e) {
+                                                        e.printStackTrace();
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        new Response.ErrorListener() {
+                                            @Override
+                                            public void onErrorResponse(VolleyError error) {
+                                                error.printStackTrace();
+                                            }
+                                        });
+
+                                queue.add(reqData);
+
+                                //lat = Double.parseDouble(intentLatitude);
+                                //lng = Double.parseDouble(intentLongitude);
+
+                                /*if (intentImg1.equals("0")) {
+                                } else {
+                                    images.add(intentImg1);
+                                }*/
                                 adapter = new ViewPagerAdapter(DetailListingDeepActivity.this, images);
                                 viewPager.setPadding(0, 0, 0, 0);
                                 viewPager.setAdapter(adapter);

@@ -29,6 +29,57 @@
                 android:overScrollMode="never" />
 
             <LinearLayout
+                android:id="@+id/LytBadgeDeep"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/second"
+                android:orientation="horizontal"
+                android:visibility="visible"
+                android:weightSum="3">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="2dp"
+                    android:layout_weight="1"
+                    android:background="@color/main"
+                    android:weightSum="2">
+
+                    <TextView
+                        android:id="@+id/TVPriorityDeep"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:layout_weight="1"
+                        android:text="Exclusive"
+                        android:textColor="@color/second" />
+
+                    <TextView
+                        android:id="@+id/TVNoPjpDeep"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:layout_weight="1"
+                        android:text="00000"
+                        android:textAlignment="textEnd"
+                        android:textColor="@color/second" />
+
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/TVKondisiDeep"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_margin="5dp"
+                    android:layout_weight="2"
+                    android:text="Exclusive"
+                    android:textAlignment="center"
+                    android:textColor="@color/main" />
+
+            </LinearLayout>
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
@@ -108,13 +159,100 @@
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/TVViewsDetailListingDeep"
+                android:id="@+id/TVHargaSewaDetailListingDeep"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
                 android:layout_marginTop="10dp"
-                android:text="0 views"
-                android:textColor="@color/white" />
+                android:text="Rp. 0"
+                android:textColor="@color/white"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/Star1Deep"
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
+                        android:layout_marginStart="5dp"
+                        android:layout_marginTop="10dp"
+                        android:src="@drawable/ic_star"
+                        android:visibility="invisible" />
+
+                    <ImageView
+                        android:id="@+id/Star2Deep"
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
+                        android:layout_marginStart="3dp"
+                        android:layout_marginTop="10dp"
+                        android:src="@drawable/ic_star"
+                        android:visibility="invisible" />
+
+                    <ImageView
+                        android:id="@+id/Star3Deep"
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
+                        android:layout_marginStart="3dp"
+                        android:layout_marginTop="10dp"
+                        android:src="@drawable/ic_star"
+                        android:visibility="invisible" />
+
+                    <ImageView
+                        android:id="@+id/Star4Deep"
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
+                        android:layout_marginStart="3dp"
+                        android:layout_marginTop="10dp"
+                        android:src="@drawable/ic_star"
+                        android:visibility="invisible" />
+
+                    <ImageView
+                        android:id="@+id/Star5Deep"
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
+                        android:layout_marginStart="3dp"
+                        android:layout_marginTop="10dp"
+                        android:src="@drawable/ic_star"
+                        android:visibility="invisible" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/TVViewsDetailListingDeep"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginTop="10dp"
+                    android:text="0 views"
+                    android:textColor="@color/white" />
+
+                <TextView
+                    android:id="@+id/TVLikeDetailListingDeep"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginTop="10dp"
+                    android:text="0 favorite"
+                    android:textColor="@color/white" />
+
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -188,11 +326,11 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_margin="5dp"
-                        app:srcCompat="@drawable/ic_home"
+                        app:srcCompat="@drawable/ic_luas"
                         app:tint="@color/white" />
 
                     <TextView
-                        android:id="@+id/TVWideDetailListingDeep"
+                        android:id="@+id/TVLandDetailListingDeep"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -214,11 +352,11 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_margin="5dp"
-                        app:srcCompat="@drawable/ic_luas"
+                        app:srcCompat="@drawable/ic_home"
                         app:tint="@color/white" />
 
                     <TextView
-                        android:id="@+id/TVLandDetailListingDeep"
+                        android:id="@+id/TVWideDetailListingDeep"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -319,16 +457,39 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:textColor="@color/white"
-                        android:text="Luas Bangunan/Luas Tanah"/>
+                        android:text="Luas Tanah/Luas Bangunan"
+                        android:textColor="@color/white" />
 
                     <TextView
                         android:id="@+id/TVLuasHunianDetailListingDeep"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:textColor="@color/white"
-                        android:text=": Luas Bangunan/Luas Tanah"/>
+                        android:text=": Luas Bangunan/Luas Tanah"
+                        android:textColor="@color/white" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:weightSum="2">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Dimensi"
+                        android:textColor="@color/white" />
+
+                    <TextView
+                        android:id="@+id/TVDimensiDetailListingDeep"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text=": Dimensi"
+                        android:textColor="@color/white" />
 
                 </LinearLayout>
 
@@ -493,6 +654,29 @@
 
                 </LinearLayout>
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:weightSum="2">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Perabot"
+                        android:textColor="@color/white" />
+
+                    <TextView
+                        android:id="@+id/TVPerabotDetailListingDeep"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text=": -"
+                        android:textColor="@color/white" />
+
+                </LinearLayout>
+
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -537,7 +721,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:elevation="4dp"
-        app:cardElevation="4dp">
+        app:cardElevation="4dp"
+        android:visibility="gone">
 
         <LinearLayout
             android:layout_width="match_parent"

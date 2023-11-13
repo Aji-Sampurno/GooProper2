@@ -12,6 +12,7 @@ import android.os.Bundle;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.gooproper.R;
+import com.gooproper.admin.fragment.ListingAdminFragment;
 
 public class MainAdminActivity extends AppCompatActivity {
 
@@ -19,6 +20,13 @@ public class MainAdminActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_admin);
+
+        if (getIntent().hasExtra("fragment_to_open")) {
+            String fragmentToOpen = getIntent().getStringExtra("fragment_to_open");
+            if ("pralisting".equals(fragmentToOpen)) {
+                openFragment();
+            }
+        }
 
         BottomNavigationView navigationView = findViewById(R.id.nav_view);
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(R.id.closingAdmin_nav, R.id.flowUpAdmin_nav, R.id.homeAdmin_nav, R.id.listingAdmin_nav, R.id.akunAdmin_nav).build();
@@ -33,5 +41,12 @@ public class MainAdminActivity extends AppCompatActivity {
         if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
         }
+    }
+
+    private void openFragment() {
+        // Buka fragment ListingFragment
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.nav_host, new ListingAdminFragment())
+                .commit();
     }
 }

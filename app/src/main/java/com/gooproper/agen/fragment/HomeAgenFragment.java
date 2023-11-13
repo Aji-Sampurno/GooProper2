@@ -22,11 +22,13 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -36,6 +38,7 @@ import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.gooproper.R;
 import com.gooproper.adapter.ListingAdapter;
 import com.gooproper.adapter.ListingPopulerAdapter;
@@ -45,6 +48,7 @@ import com.gooproper.ui.MapsActivity;
 import com.gooproper.ui.NewActivity;
 import com.gooproper.ui.PopularActivity;
 import com.gooproper.ui.SoldActivity;
+import com.gooproper.util.Preferences;
 import com.gooproper.util.ServerApi;
 
 import org.json.JSONArray;
@@ -52,7 +56,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class HomeAgenFragment extends Fragment implements OnMapReadyCallback{
 
@@ -62,6 +68,7 @@ public class HomeAgenFragment extends Fragment implements OnMapReadyCallback{
     private TextView SeeAllNew, SeeAllPopular, SeeAllSold, SeeAllAgentOM;
     private RecyclerView recycleListingSold, recycleListingNew, recycleListingPopular, recycleAgent;
     private RecyclerView.Adapter adapterSold, adapterNew, adapterPopular, adapterAgentOM;
+    String Token, Status, IdAdmin;
     List<ListingModel> mItemsSold;
     List<ListingModel> mItemsHot;
     List<ListingModel> mItemsNew;
@@ -71,6 +78,19 @@ public class HomeAgenFragment extends Fragment implements OnMapReadyCallback{
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_home_agen, container, false);
+
+        IdAdmin = Preferences.getKeyIdAgen(getContext());
+        Status = Preferences.getKeyStatus(getContext());
+
+        FirebaseMessaging.getInstance().getToken()
+                .addOnCompleteListener(task -> {
+                    if (!task.isSuccessful()) {
+                        return;
+                    }
+                    Token = task.getResult();
+                    //Toast.makeText(getContext(), "Token: " + Token, Toast.LENGTH_SHORT).show();
+                    simpanDevice();
+                });
 
         recycleListingSold = root.findViewById(R.id.ListingSold);
         recycleListingNew = root.findViewById(R.id.ListingNew);
@@ -115,6 +135,38 @@ public class HomeAgenFragment extends Fragment implements OnMapReadyCallback{
 
         return root;
     }
+    private void simpanDevice() {
+        RequestQueue requestQueue = Volley.newRequestQueue(getContext());
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, ServerApi.URL_ADD_DEVICE_AGEN,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            JSONObject res = new JSONObject(response);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                    }
+                }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> map = new HashMap<>();
+                map.put("IdAgen", IdAdmin);
+                map.put("Status", Status);
+                map.put("Token", Token);
+                System.out.println(map);
+
+                return map;
+            }
+        };
+
+        requestQueue.add(stringRequest);
+    }
 
     private void LoadListingSold() {
         RequestQueue queue = Volley.newRequestQueue(getActivity());
@@ -154,16 +206,16 @@ public class HomeAgenFragment extends Fragment implements OnMapReadyCallback{
                                 md.setHSHP(data.getString("HSHP"));
                                 md.setPPJB(data.getString("PPJB"));
                                 md.setStratatitle(data.getString("Stratatitle"));
-                                md.setStratatitle(data.getString("AJB"));
-                                md.setStratatitle(data.getString("PetokD"));
+                                md.setAJB(data.getString("AJB"));
+                                md.setPetokD(data.getString("PetokD"));
                                 md.setPjp(data.getString("Pjp"));
                                 md.setImgSHM(data.getString("ImgSHM"));
                                 md.setImgHGB(data.getString("ImgHGB"));
                                 md.setImgHSHP(data.getString("ImgHSHP"));
                                 md.setImgPPJB(data.getString("ImgPPJB"));
                                 md.setImgStratatitle(data.getString("ImgStratatitle"));
-                                md.setImgStratatitle(data.getString("ImgAJB"));
-                                md.setImgStratatitle(data.getString("ImgPetokD"));
+                                md.setImgAJB(data.getString("ImgAJB"));
+                                md.setImgPetokD(data.getString("ImgPetokD"));
                                 md.setImgPjp(data.getString("ImgPjp"));
                                 md.setImgPjp1(data.getString("ImgPjp1"));
                                 md.setNoCertificate(data.getString("NoCertificate"));
@@ -263,16 +315,16 @@ public class HomeAgenFragment extends Fragment implements OnMapReadyCallback{
                                 md.setHSHP(data.getString("HSHP"));
                                 md.setPPJB(data.getString("PPJB"));
                                 md.setStratatitle(data.getString("Stratatitle"));
-                                md.setStratatitle(data.getString("AJB"));
-                                md.setStratatitle(data.getString("PetokD"));
+                                md.setAJB(data.getString("AJB"));
+                                md.setPetokD(data.getString("PetokD"));
                                 md.setPjp(data.getString("Pjp"));
                                 md.setImgSHM(data.getString("ImgSHM"));
                                 md.setImgHGB(data.getString("ImgHGB"));
                                 md.setImgHSHP(data.getString("ImgHSHP"));
                                 md.setImgPPJB(data.getString("ImgPPJB"));
                                 md.setImgStratatitle(data.getString("ImgStratatitle"));
-                                md.setImgStratatitle(data.getString("ImgAJB"));
-                                md.setImgStratatitle(data.getString("ImgPetokD"));
+                                md.setImgAJB(data.getString("ImgAJB"));
+                                md.setImgPetokD(data.getString("ImgPetokD"));
                                 md.setImgPjp(data.getString("ImgPjp"));
                                 md.setImgPjp1(data.getString("ImgPjp1"));
                                 md.setNoCertificate(data.getString("NoCertificate"));
@@ -372,16 +424,16 @@ public class HomeAgenFragment extends Fragment implements OnMapReadyCallback{
                                 md.setHSHP(data.getString("HSHP"));
                                 md.setPPJB(data.getString("PPJB"));
                                 md.setStratatitle(data.getString("Stratatitle"));
-                                md.setStratatitle(data.getString("AJB"));
-                                md.setStratatitle(data.getString("PetokD"));
+                                md.setAJB(data.getString("AJB"));
+                                md.setPetokD(data.getString("PetokD"));
                                 md.setPjp(data.getString("Pjp"));
                                 md.setImgSHM(data.getString("ImgSHM"));
                                 md.setImgHGB(data.getString("ImgHGB"));
                                 md.setImgHSHP(data.getString("ImgHSHP"));
                                 md.setImgPPJB(data.getString("ImgPPJB"));
                                 md.setImgStratatitle(data.getString("ImgStratatitle"));
-                                md.setImgStratatitle(data.getString("ImgAJB"));
-                                md.setImgStratatitle(data.getString("ImgPetokD"));
+                                md.setImgAJB(data.getString("ImgAJB"));
+                                md.setImgPetokD(data.getString("ImgPetokD"));
                                 md.setImgPjp(data.getString("ImgPjp"));
                                 md.setImgPjp1(data.getString("ImgPjp1"));
                                 md.setNoCertificate(data.getString("NoCertificate"));

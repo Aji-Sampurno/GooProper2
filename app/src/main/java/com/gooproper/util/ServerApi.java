@@ -30,6 +30,7 @@ public class ServerApi {
     public static final String URL_APPROVE_MANAGER = BASE_URL + "/Api/ApproveManager";
     // Listing -------------------------------------------------------------------------------------
     public static final String URL_GET_LISTING = BASE_URL + "/Api/GetListing";
+    public static final String URL_UPDATE_LISTING = BASE_URL + "/Api/UpdateListing";
     public static final String URL_GET_LISTING_AGEN = BASE_URL + "/Api/GetListingAgen?idagen=";
     public static final String URL_GET_LISTING_DEEP = BASE_URL + "/Api/GetListingDeep?idlisting=";
     public static final String URL_GET_LISTING_SOLD = BASE_URL + "/Api/GetListingSold";
@@ -41,6 +42,7 @@ public class ServerApi {
     public static final String URL_ADD_VIEWS = BASE_URL + "/Api/AddViews";
     public static final String URL_ADD_SEEN = BASE_URL + "/Api/AddSeen";
     public static final String URL_ADD_FAVORITE = BASE_URL + "/Api/AddFavorite";
+    public static final String URL_COUNT_LIKE = BASE_URL + "/Api/CountLike?idlisting=";
     public static final String URL_COUNT_SEWA = BASE_URL + "/Api/CountSewa?idagen=";
     public static final String URL_COUNT_JUAL = BASE_URL + "/Api/CountJual?idagen=";
     public static final String URL_COUNT_LISTING = BASE_URL + "/Api/CountListing?idagen=";
@@ -62,6 +64,11 @@ public class ServerApi {
     public static final String URL_GET_PELAMAR_AGEN = BASE_URL + "/Api/GetPelamarAgen";
     public static final String URL_GET_PELAMAR_MITRA = BASE_URL + "/Api/GetPelamarMitra";
     public static final String URL_GET_PELAMAR_KANTORLAIN = BASE_URL + "/Api/GetPelamarKantorLain";
+    public static final String URL_ADD_DEVICE = BASE_URL + "/Api/AddDevice";
+    public static final String URL_GET_DEVICE = BASE_URL + "/Api/GetDevice";
+    public static final String URL_ADD_DEVICE_AGEN = BASE_URL + "/Api/AddDeviceAgen";
+    public static final String URL_GET_DEVICE_AGEN = BASE_URL + "/Api/GetDeviceByAgen?idagen=";
+    public static final String URL_DELETE_DEVICE_AGEN = BASE_URL + "/Api/DeleteDeviceAgen";
 
 }
 

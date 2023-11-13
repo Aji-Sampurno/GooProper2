@@ -159,12 +159,16 @@ public class DetailClosingActivity extends AppCompatActivity implements OnMapRea
         String intentHSHP = data.getStringExtra("HSHP");
         String intentPPJB = data.getStringExtra("PPJB");
         String intentStratatitle = data.getStringExtra("Stratatitle");
+        String intentAJB = data.getStringExtra("AJB");
+        String intentPetokD = data.getStringExtra("PetokD");
         String intentPjp = data.getStringExtra("Pjp");
         String intentImgSHM = data.getStringExtra("ImgSHM");
         String intentImgHGB = data.getStringExtra("ImgHGB");
         String intentImgHSHP = data.getStringExtra("ImgHSHP");
         String intentImgPPJB = data.getStringExtra("ImgPPJB");
         String intentImgStratatitle = data.getStringExtra("ImgStratatitle");
+        String intentImgAJB = data.getStringExtra("ImgAJB");
+        String intentImgPetokD = data.getStringExtra("ImgPetokD");
         String intentImgPjp = data.getStringExtra("ImgPjp");
         String intentImgPjp1 = data.getStringExtra("ImgPjp1");
         String intentNoCertificate = data.getStringExtra("NoCertificate");
@@ -199,6 +203,7 @@ public class DetailClosingActivity extends AppCompatActivity implements OnMapRea
         String intentIsAdmin = data.getStringExtra("IsAdmin");
         String intentIsManager = data.getStringExtra("IsManager");
         String intentSold = data.getStringExtra("Sold");
+        String intentRented = data.getStringExtra("Rented");
         String intentView = data.getStringExtra("View");
         String intentMarketable = data.getStringExtra("Marketable");
         String intentStatusHarga = data.getStringExtra("StatusHarga");

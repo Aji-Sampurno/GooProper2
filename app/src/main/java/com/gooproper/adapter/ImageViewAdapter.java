@@ -40,6 +40,8 @@ public class ImageViewAdapter extends PagerAdapter {
     Context context;
     ArrayList<String> images;
     GestureDetector gestureDetector;
+    BitmapDrawable bitmapDrawable;
+    Bitmap bitmap;
 
     public ImageViewAdapter(Context context, ArrayList<String> images){
         this.context = context;
@@ -72,6 +74,34 @@ public class ImageViewAdapter extends PagerAdapter {
                 builder.setTitle("Konfirmasi Unduhan");
                 builder.setMessage("Apakah Anda ingin mengunduh gambar ini?");
                 builder.setPositiveButton("Ya", (dialog, which) -> {
+                    bitmapDrawable = (BitmapDrawable) imageView.getDrawable();
+                    bitmap = bitmapDrawable.getBitmap();
+
+                    FileOutputStream fileOutputStream = null;
+
+                    File sdCard = Environment.getExternalStorageDirectory();
+                    File Directory = new File(sdCard.getAbsolutePath()+"/Download");
+                    Directory.mkdir();
+
+                    String filename = String.format("%d.jpg", System.currentTimeMillis());
+                    File outfile = new File(Directory,filename);
+
+                    Toast.makeText(context, "Berhasil Download", Toast.LENGTH_SHORT).show();
+                    try {
+                        fileOutputStream = new FileOutputStream(outfile);
+                        bitmap.compress(Bitmap.CompressFormat.JPEG,100,fileOutputStream);
+                        fileOutputStream.flush();
+                        fileOutputStream.close();
+
+                        Intent intent=new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+                        intent.setData(Uri.fromFile(outfile));
+                        context.sendBroadcast(intent);
+
+                    } catch (FileNotFoundException e) {
+                        throw new RuntimeException(e);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
                     //String imageUrl = images.get(position);
                     //new ImageDownloader(context).execute(imageUrl);
                 });

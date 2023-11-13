@@ -14,12 +14,15 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.provider.OpenableColumns;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
@@ -33,12 +36,14 @@ import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
@@ -52,9 +57,13 @@ import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
 import com.gooproper.R;
 import com.gooproper.ui.LocationActivity;
+import com.gooproper.ui.TambahListingActivity;
+import com.gooproper.util.Preferences;
+import com.gooproper.util.SendMessageToFCM;
 import com.gooproper.util.ServerApi;
 import com.squareup.picasso.Picasso;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -110,59 +119,80 @@ public class EditListingActivity extends AppCompatActivity {
     final int CODE_GALLERY_REQUEST_STRA = 37;
     final int CODE_CAMERA_REQUEST_STRA = 38;
     final int KODE_REQUEST_KAMERA_STRA = 39;
-    final int CODE_GALLERY_REQUEST_PJP = 40;
-    final int CODE_CAMERA_REQUEST_PJP = 41;
-    final int KODE_REQUEST_KAMERA_PJP = 42;
-    final int CODE_GALLERY_REQUEST_PJP1 = 43;
-    final int CODE_CAMERA_REQUEST_PJP1 = 44;
-    final int KODE_REQUEST_KAMERA_PJP1 = 45;
-    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE1 = 46;
-    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES1 = 47;
-    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE2 = 48;
-    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES2 = 49;
-    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE3 = 50;
-    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES3 = 51;
-    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE4 = 52;
-    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES4 = 53;
-    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE5 = 54;
-    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES5 = 55;
-    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE6 = 56;
-    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES6 = 57;
-    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE7 = 58;
-    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES7 = 59;
-    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE8 = 60;
-    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES8 = 61;
-    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE_SHM = 62;
-    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES_SHM = 63;
-    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE_HGB = 64;
-    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES_HGB = 65;
-    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE_HSHP = 66;
-    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES_HSHP = 67;
-    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE_PPJB = 68;
-    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES_PPJB = 69;
-    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE_STRA = 70;
-    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES_STRA = 71;
-    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE_PJP = 72;
-    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES_PJP = 73;
-    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE_PJP1 = 74;
-    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES_PJP1 = 75;
-    private static final int MAPS_ACTIVITY_REQUEST_CODE = 3;
-    Bitmap bitmap1, bitmap2, bitmap3, bitmap4, bitmap5, bitmap6, bitmap7, bitmap8, bitmapSHM, bitmapHGB, bitmapHSHP, bitmapPPJB, bitmapSTRA, BitmapWatermark, BitmapPjp, BitmapPjp1;
-    Uri Uri1, Uri2, Uri3, Uri4, Uri5, Uri6, Uri7, Uri8, UriSHM, UriHGB, UriHSHP, UriPPJB, UriSTRA, UriPJP, UriPJP1;
-    Drawable WatermarkDrawable;
-    LinearLayout lyt1, lyt2, lyt3, lyt4, lyt5, lyt6, lyt7, lyt8, LytSHM, LytHGB, LytHSHP, LytPPJB, LytStratatitle, LytPjp, LytPjp1;
-    ImageView back, iv1, iv2, iv3, iv4, iv5, iv6, iv7, iv8, IVShm, IVHgb, IVHshp, IVPpjb, IVStratatitle, IVPjp, IVPjp1;
-    Button batal, submit, select, select1, select2, select3, select4, select5, select6, select7, maps, BtnSHM, BtnHGB, BtnHSHP, BtnPPJB, BtnSTRA, BtnPjp, BtnPjp1;
-    ImageView hps1, hps2, hps3, hps4, hps5, hps6, hps7, hps8, HpsSHM, HpsHGB, HpsHSHP, HpsPPJB, HpsStratatitle, HpsPjp, HpsPjp1;
+    final int CODE_GALLERY_REQUEST_AJB = 40;
+    final int CODE_CAMERA_REQUEST_AJB = 41;
+    final int KODE_REQUEST_KAMERA_AJB = 42;
+    final int CODE_GALLERY_REQUEST_PetokD = 43;
+    final int CODE_CAMERA_REQUEST_PetokD = 44;
+    final int KODE_REQUEST_KAMERA_PetokD = 45;
+    final int CODE_GALLERY_REQUEST_PJP = 46;
+    final int CODE_CAMERA_REQUEST_PJP = 47;
+    final int KODE_REQUEST_KAMERA_PJP = 48;
+    final int CODE_GALLERY_REQUEST_PJP1 = 49;
+    final int CODE_CAMERA_REQUEST_PJP1 = 50;
+    final int KODE_REQUEST_KAMERA_PJP1 = 51;
+    final int CODE_GALLERY_REQUEST_Bukti = 52;
+    final int CODE_CAMERA_REQUEST_Bukti = 53;
+    final int KODE_REQUEST_KAMERA_Bukti = 54;
+    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE1 = 55;
+    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES1 = 56;
+    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE2 = 57;
+    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES2 = 58;
+    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE3 = 59;
+    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES3 = 60;
+    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE4 = 61;
+    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES4 = 62;
+    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE5 = 63;
+    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES5 = 64;
+    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE6 = 65;
+    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES6 = 66;
+    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE7 = 67;
+    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES7 = 68;
+    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE8 = 69;
+    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES8 = 70;
+    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE_SHM = 71;
+    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES_SHM = 72;
+    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE_HGB = 73;
+    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES_HGB = 74;
+    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE_HSHP = 75;
+    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES_HSHP = 76;
+    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE_PPJB = 77;
+    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES_PPJB = 78;
+    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE_STRA = 79;
+    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES_STRA = 80;
+    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE_AJB = 81;
+    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES_AJB = 82;
+    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE_PetokD = 83;
+    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES_PetokD = 84;
+    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE_PJP = 85;
+    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES_PJP = 86;
+    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE_PJP1 = 87;
+    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES_PJP1 = 88;
+    private static final int MAPS_ACTIVITY_REQUEST_CODE = 89;
+    private static final int STORAGE_PERMISSION_CODE = 90;
+    private static final int PICK_PDF_SHM = 91;
+    private static final int PICK_PDF_HGB = 92;
+    private static final int PICK_PDF_HSHP = 93;
+    private static final int PICK_PDF_PPJB = 94;
+    private static final int PICK_PDF_Stratatitle = 95;
+    private static final int PICK_PDF_AJB = 96;
+    private static final int PICK_PDF_PetokD = 97;
+    Uri Uri1, Uri2, Uri3, Uri4, Uri5, Uri6, Uri7, Uri8, UriSHM, UriHGB, UriHSHP, UriPPJB, UriSTRA, UriAJB, UriPetokD, UriPJP, UriPJP1;
+    LinearLayout lyt1, lyt2, lyt3, lyt4, lyt5, lyt6, lyt7, lyt8, LytSHM, LytHGB, LytHSHP, LytPPJB, LytStratatitle, LytAJB, LytPetokD, LytPjp, LytPjp1;
+    ImageView back, iv1, iv2, iv3, iv4, iv5, iv6, iv7, iv8, IVShm, IVHgb, IVHshp, IVPpjb, IVStratatitle, IVAJB, IVPetokD, IVPjp, IVPjp1;
+    Button batal, submit, select, select1, select2, select3, select4, select5, select6, select7, maps, BtnSHM, BtnHGB, BtnHSHP, BtnPPJB, BtnSTRA, BtnAJB, BtnPetokD, BtnPjp, BtnPjp1;
+    ImageView hps1, hps2, hps3, hps4, hps5, hps6, hps7, hps8, HpsSHM, HpsHGB, HpsHSHP, HpsPPJB, HpsStratatitle, HpsAJB, HpsPetokD, HpsPjp, HpsPjp1;
     TextInputEditText jenisproperti, namaproperti, alamatproperti, sertifikat, nosertif, luas, land, dimensi, lantai, bed, bath, bedart, bathart, garasi, carpot, listrik, air, pjp, perabot, ketperabot, banner, status, harga, hargasewa, keterangan, hadap, size, EtTglInput, EtFee;
     TextInputLayout LytSize, LytTglInput, LytHargaJual, LytHargaSewa;
     RadioButton open, exclusive;
     RadioGroup rgpriority;
-    CheckBox CBSHM, CBHGB, CBHSHP, CBPPJB, CBSTRA;
+    CheckBox CBSHM, CBHGB, CBHSHP, CBPPJB, CBSTRA, CBAJB, CBPetokD;
     String idnull, priority, HargaString, HargaSewaString, SHarga, SHargaSewa, idpralisting;
-    String image1, image2, image3, image4, image5, image6, image7, image8, SHM, HGB, HSHP, PPJB, STRA, PJPHal1, PJPHal2;
+    String image1, image2, image3, image4, image5, image6, image7, image8, SHM, HGB, HSHP, PPJB, STRA, AJB, PetokD, PJPHal1, PJPHal2;
+    String isimage1, isSHM, isHGB, isHSHP, isPPJB, isSTRA, isAJB, isPetokD;
     String latitudeStr, longitudeStr, addressStr, Lat, Lng;
     Drawable DrawableSHM, DrawableHGB, DrawableHSHP, DrawablePPJB, DrawableSTRA, Drawable1, Drawable2, Drawable3, Drawable4, Drawable5, Drawable6, Drawable7, Drawable8;
+    TextView TVSHM, TVHGB, TVHSHP, TVPPJB, TVSTRA, TVAJB, TVPetokD;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -189,6 +219,8 @@ public class EditListingActivity extends AppCompatActivity {
         IVHshp = findViewById(R.id.IVHSHP);
         IVPpjb = findViewById(R.id.IVPPJB);
         IVStratatitle = findViewById(R.id.IVStratatitle);
+        IVAJB = findViewById(R.id.IVAJB);
+        IVPetokD = findViewById(R.id.IVPetokD);
         IVPjp = findViewById(R.id.IVPjp);
         IVPjp1 = findViewById(R.id.IVPjp1);
 
@@ -209,6 +241,8 @@ public class EditListingActivity extends AppCompatActivity {
         LytHSHP = findViewById(R.id.LytHSHP);
         LytPPJB = findViewById(R.id.LytPPJB);
         LytStratatitle = findViewById(R.id.LytStratatitle);
+        LytAJB = findViewById(R.id.LytAJB);
+        LytPetokD = findViewById(R.id.LytPetokD);
         LytPjp = findViewById(R.id.LytPjp);
         LytPjp1 = findViewById(R.id.LytPjp1);
 
@@ -238,6 +272,8 @@ public class EditListingActivity extends AppCompatActivity {
         HpsHSHP = findViewById(R.id.IVDeleteHSHP);
         HpsPPJB = findViewById(R.id.IVDeletePPJB);
         HpsStratatitle = findViewById(R.id.IVDeleteStratatitle);
+        HpsAJB = findViewById(R.id.IVDeleteAJB);
+        HpsPetokD = findViewById(R.id.IVDeletePetokD);
         HpsPjp = findViewById(R.id.IVDeletePjp);
         HpsPjp1 = findViewById(R.id.IVDeletePjp1);
 
@@ -278,14 +314,26 @@ public class EditListingActivity extends AppCompatActivity {
         CBHSHP = findViewById(R.id.CBHSHP);
         CBPPJB = findViewById(R.id.CBPPJB);
         CBSTRA = findViewById(R.id.CBStratatitle);
+        CBAJB = findViewById(R.id.CBAJB);
+        CBPetokD = findViewById(R.id.CBPetokD);
 
         BtnSHM = findViewById(R.id.BtnSHM);
         BtnHGB = findViewById(R.id.BtnHGB);
         BtnHSHP = findViewById(R.id.BtnHSHP);
         BtnPPJB = findViewById(R.id.BtnPPJB);
         BtnSTRA = findViewById(R.id.BtnStratatitle);
+        BtnAJB = findViewById(R.id.BtnAJB);
+        BtnPetokD = findViewById(R.id.BtnPetokD);
         BtnPjp = findViewById(R.id.BtnPjp);
         BtnPjp1 = findViewById(R.id.BtnPjp1);
+
+        TVSHM = findViewById(R.id.TVSHM);
+        TVHGB = findViewById(R.id.TVHGB);
+        TVHSHP = findViewById(R.id.TVHSHP);
+        TVPPJB = findViewById(R.id.TVPPJB);
+        TVSTRA = findViewById(R.id.TVSTRA);
+        TVAJB = findViewById(R.id.TVAJB);
+        TVPetokD = findViewById(R.id.TVPetokD);
 
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
         String fileListing1 = "Listing1_" + timeStamp + ".jpg";
@@ -296,11 +344,13 @@ public class EditListingActivity extends AppCompatActivity {
         String fileListing6 = "Listing6_" + timeStamp + ".jpg";
         String fileListing7 = "Listing7_" + timeStamp + ".jpg";
         String fileListing8 = "Listing8_" + timeStamp + ".jpg";
-        String fileSertifikatshm = "SHM_" + timeStamp + ".jpg";
-        String fileSertifikathgb = "HGB_" + timeStamp + ".jpg";
-        String fileSertifikathshp = "HSHP_" + timeStamp + ".jpg";
-        String fileSertifikatppjb = "PPJB_" + timeStamp + ".jpg";
-        String fileSertifikatstra = "Stratatitle_" + timeStamp + ".jpg";
+        String fileSertifikatshm = "SHM_" + timeStamp + ".pdf";
+        String fileSertifikathgb = "HGB_" + timeStamp + ".pdf";
+        String fileSertifikathshp = "HSHP_" + timeStamp + ".pdf";
+        String fileSertifikatppjb = "PPJB_" + timeStamp + ".pdf";
+        String fileSertifikatstra = "Stratatitle_" + timeStamp + ".pdf";
+        String fileSertifikatajb = "Ajb_" + timeStamp + ".pdf";
+        String fileSertifikatpetokd = "PetokD_" + timeStamp + ".pdf";
         String filePjp1 = "PJP1_" + timeStamp + ".jpg";
         String filePjp2 = "PJP2_" + timeStamp + ".jpg";
 
@@ -332,12 +382,16 @@ public class EditListingActivity extends AppCompatActivity {
         String intentHSHP = data.getStringExtra("HSHP");
         String intentPPJB = data.getStringExtra("PPJB");
         String intentStratatitle = data.getStringExtra("Stratatitle");
+        String intentAJB = data.getStringExtra("AJB");
+        String intentPetokD = data.getStringExtra("PetokD");
         String intentPjp = data.getStringExtra("Pjp");
         String intentImgSHM = data.getStringExtra("ImgSHM");
         String intentImgHGB = data.getStringExtra("ImgHGB");
         String intentImgHSHP = data.getStringExtra("ImgHSHP");
         String intentImgPPJB = data.getStringExtra("ImgPPJB");
         String intentImgStratatitle = data.getStringExtra("ImgStratatitle");
+        String intentImgAJB = data.getStringExtra("ImgAJB");
+        String intentImgPetokD = data.getStringExtra("ImgPetokD");
         String intentImgPjp = data.getStringExtra("ImgPjp");
         String intentImgPjp1 = data.getStringExtra("ImgPjp1");
         String intentNoCertificate = data.getStringExtra("NoCertificate");
@@ -381,14 +435,24 @@ public class EditListingActivity extends AppCompatActivity {
         String intentInstagram = data.getStringExtra("Instagram");
         String intentFee = data.getStringExtra("Fee");
 
-        if (intentPriority != null && !intentPriority.isEmpty()){
-            if (intentPriority.equals("open")){
-                open.setActivated(true);
-                open.setChecked(true);
-            } else {
-                exclusive.setActivated(true);
-                exclusive.setChecked(true);
-            }
+        isimage1 = intentImg1;
+        isSHM = intentImgSHM;
+        isHGB = intentImgHGB;
+        isPPJB = intentImgPPJB;
+        isHSHP = intentImgHSHP;
+        isSTRA = intentImgStratatitle;
+        isAJB = intentImgAJB;
+        isPetokD = intentImgPetokD;
+
+        if (intentPriority.equals("open")){
+            open.setChecked(true);
+            priority = intentPriority;
+        } else if (intentPriority.equals("exclusive")) {
+            exclusive.setChecked(true);
+            priority = intentPriority;
+        } else {
+            open.setChecked(false);
+            exclusive.setChecked(false);
         }
         if (intentJenisProperti != null && !intentJenisProperti.isEmpty()) {
             jenisproperti.setText(intentJenisProperti);
@@ -482,32 +546,44 @@ public class EditListingActivity extends AppCompatActivity {
         if (intentSHM.equals("1")){
             CBSHM.setChecked(true);
             LytSHM.setVisibility(View.VISIBLE);
-            IVShm.setVisibility(View.VISIBLE);
+            TVSHM.setVisibility(View.VISIBLE);
             BtnSHM.setVisibility(View.VISIBLE);
         }
         if (intentHGB.equals("1")){
             CBHGB.setChecked(true);
             LytHGB.setVisibility(View.VISIBLE);
-            IVHgb.setVisibility(View.VISIBLE);
+            TVHGB.setVisibility(View.VISIBLE);
             BtnHGB.setVisibility(View.VISIBLE);
         }
         if (intentHSHP.equals("1")){
             CBHSHP.setChecked(true);
             LytHSHP.setVisibility(View.VISIBLE);
-            IVHshp.setVisibility(View.VISIBLE);
+            TVHSHP.setVisibility(View.VISIBLE);
             BtnHSHP.setVisibility(View.VISIBLE);
         }
         if (intentPPJB.equals("1")){
             CBPPJB.setChecked(true);
             LytPPJB.setVisibility(View.VISIBLE);
-            IVPpjb.setVisibility(View.VISIBLE);
+            TVPPJB.setVisibility(View.VISIBLE);
             BtnPPJB.setVisibility(View.VISIBLE);
         }
         if (intentStratatitle.equals("1")){
             CBSTRA.setChecked(true);
             LytStratatitle.setVisibility(View.VISIBLE);
-            IVStratatitle.setVisibility(View.VISIBLE);
+            TVSTRA.setVisibility(View.VISIBLE);
             BtnSTRA.setVisibility(View.VISIBLE);
+        }
+        if (intentAJB.equals("1")){
+            CBAJB.setChecked(true);
+            LytAJB.setVisibility(View.VISIBLE);
+            TVAJB.setVisibility(View.VISIBLE);
+            BtnAJB.setVisibility(View.VISIBLE);
+        }
+        if (intentPetokD.equals("1")){
+            CBPetokD.setChecked(true);
+            LytPetokD.setVisibility(View.VISIBLE);
+            TVPetokD.setVisibility(View.VISIBLE);
+            BtnPetokD.setVisibility(View.VISIBLE);
         }
         if (!intentImgPjp.equals("0")){
             LytPjp.setVisibility(View.VISIBLE);
@@ -522,29 +598,67 @@ public class EditListingActivity extends AppCompatActivity {
                     .into(IVPjp1);
         }
         if (!intentImgSHM.equals("0")){
-            Picasso.get()
-                    .load(intentImgSHM)
-                    .into(IVShm);
+            int indexPercent2 = intentImgSHM.indexOf("%2");
+            String title = intentImgSHM.substring(indexPercent2 + 3);
+            int indexQuestionMark = title.indexOf("?");
+            if (indexQuestionMark != -1) {
+                title = title.substring(0, indexQuestionMark);
+            }
+            TVSHM.setText(title);
         }
         if (!intentImgHGB.equals("0")){
-            Picasso.get()
-                    .load(intentImgHGB)
-                    .into(IVHgb);
+            int indexPercent2 = intentImgHGB.indexOf("%2");
+            String title = intentImgHGB.substring(indexPercent2 + 3);
+            int indexQuestionMark = title.indexOf("?");
+            if (indexQuestionMark != -1) {
+                title = title.substring(0, indexQuestionMark);
+            }
+            TVHGB.setText(title);
         }
         if (!intentImgHSHP.equals("0")){
-            Picasso.get()
-                    .load(intentImgHSHP)
-                    .into(IVHshp);
+            int indexPercent2 = intentImgHSHP.indexOf("%2");
+            String title = intentImgHSHP.substring(indexPercent2 + 3);
+            int indexQuestionMark = title.indexOf("?");
+            if (indexQuestionMark != -1) {
+                title = title.substring(0, indexQuestionMark);
+            }
+            TVHSHP.setText(title);
         }
         if (!intentImgPPJB.equals("0")){
-            Picasso.get()
-                    .load(intentImgPPJB)
-                    .into(IVPpjb);
+            int indexPercent2 = intentImgPPJB.indexOf("%2");
+            String title = intentImgPPJB.substring(indexPercent2 + 3);
+            int indexQuestionMark = title.indexOf("?");
+            if (indexQuestionMark != -1) {
+                title = title.substring(0, indexQuestionMark);
+            }
+            TVPPJB.setText(title);
         }
         if (!intentImgStratatitle.equals("0")){
-            Picasso.get()
-                    .load(intentImgStratatitle)
-                    .into(IVStratatitle);
+            int indexPercent2 = intentImgStratatitle.indexOf("%2");
+            String title = intentImgStratatitle.substring(indexPercent2 + 3);
+            int indexQuestionMark = title.indexOf("?");
+            if (indexQuestionMark != -1) {
+                title = title.substring(0, indexQuestionMark);
+            }
+            TVSTRA.setText(title);
+        }
+        if (!intentImgAJB.equals("0")){
+            int indexPercent2 = intentImgAJB.indexOf("%2");
+            String title = intentImgAJB.substring(indexPercent2 + 3);
+            int indexQuestionMark = title.indexOf("?");
+            if (indexQuestionMark != -1) {
+                title = title.substring(0, indexQuestionMark);
+            }
+            TVAJB.setText(title);
+        }
+        if (!intentImgPetokD.equals("0")){
+            int indexPercent2 = intentImgPetokD.indexOf("%2");
+            String title = intentImgPetokD.substring(indexPercent2 + 3);
+            int indexQuestionMark = title.indexOf("?");
+            if (indexQuestionMark != -1) {
+                title = title.substring(0, indexQuestionMark);
+            }
+            TVPetokD.setText(title);
         }
         if (!intentImg1.equals("0")){
             lyt1.setVisibility(View.VISIBLE);
@@ -596,11 +710,6 @@ public class EditListingActivity extends AppCompatActivity {
                     .into(iv8);
         }
 
-        DrawableSHM = IVShm.getDrawable();
-        DrawableHGB = IVHgb.getDrawable();
-        DrawableHSHP = IVHshp.getDrawable();
-        DrawablePPJB = IVPpjb.getDrawable();
-        DrawableSTRA = IVStratatitle.getDrawable();
         Drawable1 = iv1.getDrawable();
         Drawable2 = iv2.getDrawable();
         Drawable3 = iv3.getDrawable();
@@ -638,11 +747,13 @@ public class EditListingActivity extends AppCompatActivity {
         HpsStratatitle.setOnClickListener(view -> clearBitmapSTRA());
         HpsPjp.setOnClickListener(view -> clearBitmapPJP());
         HpsPjp1.setOnClickListener(view -> clearBitmapPJP1());
-        BtnSHM.setOnClickListener(view -> showPhotoSHM());
-        BtnHGB.setOnClickListener(view -> showPhotoHGB());
-        BtnHSHP.setOnClickListener(view -> showPhotoHSHP());
-        BtnPPJB.setOnClickListener(view -> showPhotoPPJB());
-        BtnSTRA.setOnClickListener(view -> showPhotoSTRA());
+        BtnSHM.setOnClickListener(view -> pilihFileSHM(view));
+        BtnHGB.setOnClickListener(view -> pilihFileHGB(view));
+        BtnHSHP.setOnClickListener(view -> pilihFileHSHP(view));
+        BtnPPJB.setOnClickListener(view -> pilihFilePPJB(view));
+        BtnSTRA.setOnClickListener(view -> pilihFileSTRA(view));
+        BtnAJB.setOnClickListener(view -> pilihFileAJB(view));
+        BtnPetokD.setOnClickListener(view -> pilihFilePetokD(view));
         BtnPjp.setOnClickListener(view -> showPhotoPJP());
         BtnPjp1.setOnClickListener(view -> showPhotoPJP1());
         select.setOnClickListener(new View.OnClickListener() {
@@ -721,26 +832,6 @@ public class EditListingActivity extends AppCompatActivity {
                 }
             }
         });
-        banner.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                if (editable.toString().equalsIgnoreCase("Ya")) {
-                    LytSize.setVisibility(View.VISIBLE);
-                } else {
-                    LytSize.setVisibility(View.GONE);
-                }
-            }
-        });
         status.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -783,12 +874,12 @@ public class EditListingActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable editable) {
                 if (editable.toString().equalsIgnoreCase("Ya")) {
-                    if (BitmapPjp == null) {
+                    if (intentImgPjp == null) {
                         BtnPjp.setVisibility(View.VISIBLE);
                     } else {
                         BtnPjp.setVisibility(View.GONE);
                     }
-                    if (BitmapPjp1 == null) {
+                    if (intentImgPjp1 == null) {
                         BtnPjp1.setVisibility(View.VISIBLE);
                     } else {
                         BtnPjp1.setVisibility(View.GONE);
@@ -872,10 +963,10 @@ public class EditListingActivity extends AppCompatActivity {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if (b) {
-                    IVShm.setVisibility(View.VISIBLE);
+                    TVSHM.setVisibility(View.VISIBLE);
                     BtnSHM.setVisibility(View.VISIBLE);
                 } else {
-                    IVShm.setVisibility(View.GONE);
+                    TVSHM.setVisibility(View.GONE);
                     BtnSHM.setVisibility(View.GONE);
                 }
             }
@@ -884,10 +975,10 @@ public class EditListingActivity extends AppCompatActivity {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if (b) {
-                    IVHgb.setVisibility(View.VISIBLE);
+                    TVHGB.setVisibility(View.VISIBLE);
                     BtnHGB.setVisibility(View.VISIBLE);
                 } else {
-                    IVHgb.setVisibility(View.GONE);
+                    TVHGB.setVisibility(View.GONE);
                     BtnHGB.setVisibility(View.GONE);
                 }
             }
@@ -896,10 +987,10 @@ public class EditListingActivity extends AppCompatActivity {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if (b) {
-                    IVHshp.setVisibility(View.VISIBLE);
+                    TVHSHP.setVisibility(View.VISIBLE);
                     BtnHSHP.setVisibility(View.VISIBLE);
                 } else {
-                    IVHshp.setVisibility(View.GONE);
+                    TVHSHP.setVisibility(View.GONE);
                     BtnHSHP.setVisibility(View.GONE);
                 }
             }
@@ -908,10 +999,10 @@ public class EditListingActivity extends AppCompatActivity {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if (b) {
-                    IVPpjb.setVisibility(View.VISIBLE);
+                    TVPPJB.setVisibility(View.VISIBLE);
                     BtnPPJB.setVisibility(View.VISIBLE);
                 } else {
-                    IVPpjb.setVisibility(View.GONE);
+                    TVPPJB.setVisibility(View.GONE);
                     BtnPPJB.setVisibility(View.GONE);
                 }
             }
@@ -920,11 +1011,123 @@ public class EditListingActivity extends AppCompatActivity {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if (b) {
-                    IVStratatitle.setVisibility(View.VISIBLE);
+                    TVSTRA.setVisibility(View.VISIBLE);
                     BtnSTRA.setVisibility(View.VISIBLE);
                 } else {
-                    IVStratatitle.setVisibility(View.GONE);
+                    TVSTRA.setVisibility(View.GONE);
                     BtnSTRA.setVisibility(View.GONE);
+                }
+            }
+        });
+        CBAJB.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if (b) {
+                    TVAJB.setVisibility(View.VISIBLE);
+                    BtnAJB.setVisibility(View.VISIBLE);
+                } else {
+                    TVAJB.setVisibility(View.GONE);
+                    BtnAJB.setVisibility(View.GONE);
+                }
+            }
+        });
+        CBPetokD.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if (b) {
+                    TVPetokD.setVisibility(View.VISIBLE);
+                    BtnPetokD.setVisibility(View.VISIBLE);
+                } else {
+                    TVPetokD.setVisibility(View.GONE);
+                    BtnPetokD.setVisibility(View.GONE);
+                }
+            }
+        });
+        harga.addTextChangedListener(new TextWatcher() {
+            private String current = "";
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (!s.toString().equals(current)) {
+                    harga.removeTextChangedListener(this);
+
+                    String cleanString = s.toString().replaceAll("[Rp,.\\s]", "");
+                    /*
+                    double parsed = Double.parseDouble(cleanString);
+                    String formatted = String.format(Locale.US, "%,.0f", parsed);
+
+                    HargaString = cleanString;
+
+                    current = formatted;
+                    harga.setText(formatted);
+                    harga.setSelection(formatted.length());
+                    harga.addTextChangedListener(this);
+                     */
+                    if (!cleanString.isEmpty()) {
+                        double parsed = Double.parseDouble(cleanString);
+                        String formatted = String.format(Locale.US, "%,.0f", parsed);
+                        HargaString = cleanString;
+                        current = formatted;
+                        harga.setText(formatted);
+                        harga.setSelection(formatted.length());
+                    } else {
+                        harga.setText("");
+                        HargaString = "";
+                    }
+
+                    harga.addTextChangedListener(this);
+                }
+            }
+        });
+        hargasewa.addTextChangedListener(new TextWatcher() {
+            private String current = "";
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (!s.toString().equals(current)) {
+                    hargasewa.removeTextChangedListener(this);
+
+                    String cleanString = s.toString().replaceAll("[Rp,.\\s]", "");
+                    /*
+                    double parsed = Double.parseDouble(cleanString);
+                    String formatted = String.format(Locale.US, "%,.0f", parsed);
+
+                    HargaString = cleanString;
+
+                    current = formatted;
+                    harga.setText(formatted);
+                    harga.setSelection(formatted.length());
+                    harga.addTextChangedListener(this);
+                     */
+                    if (!cleanString.isEmpty()) {
+                        double parsed = Double.parseDouble(cleanString);
+                        String formatted = String.format(Locale.US, "%,.0f", parsed);
+                        HargaSewaString = cleanString;
+                        current = formatted;
+                        hargasewa.setText(formatted);
+                        hargasewa.setSelection(formatted.length());
+                    } else {
+                        hargasewa.setText("");
+                        HargaSewaString = "";
+                    }
+
+                    hargasewa.addTextChangedListener(this);
                 }
             }
         });
@@ -963,7 +1166,7 @@ public class EditListingActivity extends AppCompatActivity {
                 customDialog.show();
             } else {
                 if (Validate()) {
-                    if (Uri1 == null || intentImg1.equals("0")) {
+                    if (Uri1 == null && isimage1.equals("0")) {
                         Dialog customDialog = new Dialog(EditListingActivity.this);
                         customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                         customDialog.setContentView(R.layout.custom_dialog_eror_input);
@@ -1011,6 +1214,8 @@ public class EditListingActivity extends AppCompatActivity {
                         StorageReference ImgSertifikathshp = storageRef.child("sertifikat/" + fileSertifikathshp);
                         StorageReference ImgSertifikatppjb = storageRef.child("sertifikat/" + fileSertifikatppjb);
                         StorageReference ImgSertifikatstra = storageRef.child("sertifikat/" + fileSertifikatstra);
+                        StorageReference ImgSertifikatajb = storageRef.child("sertifikat/" + fileSertifikatajb);
+                        StorageReference ImgSertifikatpetokd = storageRef.child("sertifikat/" + fileSertifikatpetokd);
                         StorageReference ImgPjp = storageRef.child("pjp/" + filePjp1);
                         StorageReference ImgPjp1 = storageRef.child("pjp/" + filePjp2);
 
@@ -1237,6 +1442,40 @@ public class EditListingActivity extends AppCompatActivity {
                         } else {
                             STRA = intentImgStratatitle;
                         }
+                        if (UriAJB != null) {
+                            StorageTask<UploadTask.TaskSnapshot> taskAJB = ImgSertifikatajb.putFile(UriAJB)
+                                    .addOnSuccessListener(taskSnapshot -> {
+                                        ImgSertifikatajb.getDownloadUrl()
+                                                .addOnSuccessListener(uri -> {
+                                                    String imageUrl = uri.toString();
+                                                    AJB = imageUrl;
+                                                })
+                                                .addOnFailureListener(exception -> {
+                                                });
+                                    })
+                                    .addOnFailureListener(exception -> {
+                                    });
+                            uploadTasks.add(taskAJB);
+                        } else {
+                            AJB = intentImgAJB;
+                        }
+                        if (UriPetokD != null) {
+                            StorageTask<UploadTask.TaskSnapshot> taskPetokD = ImgSertifikatpetokd.putFile(UriPetokD)
+                                    .addOnSuccessListener(taskSnapshot -> {
+                                        ImgSertifikatpetokd.getDownloadUrl()
+                                                .addOnSuccessListener(uri -> {
+                                                    String imageUrl = uri.toString();
+                                                    PetokD = imageUrl;
+                                                })
+                                                .addOnFailureListener(exception -> {
+                                                });
+                                    })
+                                    .addOnFailureListener(exception -> {
+                                    });
+                            uploadTasks.add(taskPetokD);
+                        } else {
+                            PetokD = intentImgPetokD;
+                        }
                         if (UriPJP != null) {
                             StorageTask<UploadTask.TaskSnapshot> taskPJP = ImgPjp.putFile(UriPJP)
                                     .addOnSuccessListener(taskSnapshot -> {
@@ -1316,12 +1555,13 @@ public class EditListingActivity extends AppCompatActivity {
             getSupportActionBar().hide();
         }
     }
-
     public void startMapsActivityForResult() {
         Intent intent = new Intent(this, LocationActivity.class);
         startActivityForResult(intent, MAPS_ACTIVITY_REQUEST_CODE);
     }
-
+    private void requestStoragePermission() {
+        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, STORAGE_PERMISSION_CODE);
+    }
     private void showPhotoSelectionDialog1() {
         androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this);
         builder.setTitle("Unggah Gambar")
@@ -1341,7 +1581,6 @@ public class EditListingActivity extends AppCompatActivity {
 
         builder.show();
     }
-
     private void showPhotoSelectionDialog2() {
         androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this);
         builder.setTitle("Unggah Gambar")
@@ -1361,7 +1600,6 @@ public class EditListingActivity extends AppCompatActivity {
 
         builder.show();
     }
-
     private void showPhotoSelectionDialog3() {
         androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this);
         builder.setTitle("Unggah Gambar")
@@ -1381,7 +1619,6 @@ public class EditListingActivity extends AppCompatActivity {
 
         builder.show();
     }
-
     private void showPhotoSelectionDialog4() {
         androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this);
         builder.setTitle("Unggah Gambar")
@@ -1401,7 +1638,6 @@ public class EditListingActivity extends AppCompatActivity {
 
         builder.show();
     }
-
     private void showPhotoSelectionDialog5() {
         androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this);
         builder.setTitle("Unggah Gambar")
@@ -1421,7 +1657,6 @@ public class EditListingActivity extends AppCompatActivity {
 
         builder.show();
     }
-
     private void showPhotoSelectionDialog6() {
         androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this);
         builder.setTitle("Unggah Gambar")
@@ -1441,7 +1676,6 @@ public class EditListingActivity extends AppCompatActivity {
 
         builder.show();
     }
-
     private void showPhotoSelectionDialog7() {
         androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this);
         builder.setTitle("Unggah Gambar")
@@ -1461,7 +1695,6 @@ public class EditListingActivity extends AppCompatActivity {
 
         builder.show();
     }
-
     private void showPhotoSelectionDialog8() {
         androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this);
         builder.setTitle("Unggah Gambar")
@@ -1481,7 +1714,6 @@ public class EditListingActivity extends AppCompatActivity {
 
         builder.show();
     }
-
     private void showPhotoSHM() {
         androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this);
         builder.setTitle("Unggah Gambar")
@@ -1501,7 +1733,6 @@ public class EditListingActivity extends AppCompatActivity {
 
         builder.show();
     }
-
     private void showPhotoHGB() {
         androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this);
         builder.setTitle("Unggah Gambar")
@@ -1521,7 +1752,6 @@ public class EditListingActivity extends AppCompatActivity {
 
         builder.show();
     }
-
     private void showPhotoHSHP() {
         androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this);
         builder.setTitle("Unggah Gambar")
@@ -1541,7 +1771,6 @@ public class EditListingActivity extends AppCompatActivity {
 
         builder.show();
     }
-
     private void showPhotoPPJB() {
         androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this);
         builder.setTitle("Unggah Gambar")
@@ -1561,7 +1790,6 @@ public class EditListingActivity extends AppCompatActivity {
 
         builder.show();
     }
-
     private void showPhotoSTRA() {
         androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this);
         builder.setTitle("Unggah Gambar")
@@ -1581,7 +1809,6 @@ public class EditListingActivity extends AppCompatActivity {
 
         builder.show();
     }
-
     private void showPhotoPJP() {
         androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this);
         builder.setTitle("Unggah Gambar")
@@ -1601,7 +1828,6 @@ public class EditListingActivity extends AppCompatActivity {
 
         builder.show();
     }
-
     private void showPhotoPJP1() {
         androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this);
         builder.setTitle("Unggah Gambar")
@@ -1621,7 +1847,6 @@ public class EditListingActivity extends AppCompatActivity {
 
         builder.show();
     }
-
     private void requestPermissions1() {
         boolean externalStoragePermissionGranted = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
 
@@ -1631,7 +1856,6 @@ public class EditListingActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_MEDIA_IMAGES}, PERMISSION_REQUEST_CODE_MEDIA_IMAGES1);
         }
     }
-
     private void requestPermissions2() {
         boolean externalStoragePermissionGranted = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
 
@@ -1641,7 +1865,6 @@ public class EditListingActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_MEDIA_IMAGES}, PERMISSION_REQUEST_CODE_MEDIA_IMAGES2);
         }
     }
-
     private void requestPermissions3() {
         boolean externalStoragePermissionGranted = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
 
@@ -1651,7 +1874,6 @@ public class EditListingActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_MEDIA_IMAGES}, PERMISSION_REQUEST_CODE_MEDIA_IMAGES3);
         }
     }
-
     private void requestPermissions4() {
         boolean externalStoragePermissionGranted = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
 
@@ -1661,7 +1883,6 @@ public class EditListingActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_MEDIA_IMAGES}, PERMISSION_REQUEST_CODE_MEDIA_IMAGES4);
         }
     }
-
     private void requestPermissions5() {
         boolean externalStoragePermissionGranted = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
 
@@ -1671,7 +1892,6 @@ public class EditListingActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_MEDIA_IMAGES}, PERMISSION_REQUEST_CODE_MEDIA_IMAGES5);
         }
     }
-
     private void requestPermissions6() {
         boolean externalStoragePermissionGranted = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
 
@@ -1681,7 +1901,6 @@ public class EditListingActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_MEDIA_IMAGES}, PERMISSION_REQUEST_CODE_MEDIA_IMAGES6);
         }
     }
-
     private void requestPermissions7() {
         boolean externalStoragePermissionGranted = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
 
@@ -1691,7 +1910,6 @@ public class EditListingActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_MEDIA_IMAGES}, PERMISSION_REQUEST_CODE_MEDIA_IMAGES7);
         }
     }
-
     private void requestPermissions8() {
         boolean externalStoragePermissionGranted = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
 
@@ -1701,7 +1919,6 @@ public class EditListingActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_MEDIA_IMAGES}, PERMISSION_REQUEST_CODE_MEDIA_IMAGES8);
         }
     }
-
     private void requestPermissionsSHM() {
         boolean externalStoragePermissionGranted = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
 
@@ -1711,7 +1928,6 @@ public class EditListingActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_MEDIA_IMAGES}, PERMISSION_REQUEST_CODE_MEDIA_IMAGES_SHM);
         }
     }
-
     private void requestPermissionsHGB() {
         boolean externalStoragePermissionGranted = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
 
@@ -1721,7 +1937,6 @@ public class EditListingActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_MEDIA_IMAGES}, PERMISSION_REQUEST_CODE_MEDIA_IMAGES_HGB);
         }
     }
-
     private void requestPermissionsHSHP() {
         boolean externalStoragePermissionGranted = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
 
@@ -1731,7 +1946,6 @@ public class EditListingActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_MEDIA_IMAGES}, PERMISSION_REQUEST_CODE_MEDIA_IMAGES_HSHP);
         }
     }
-
     private void requestPermissionsPPJB() {
         boolean externalStoragePermissionGranted = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
 
@@ -1741,7 +1955,6 @@ public class EditListingActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_MEDIA_IMAGES}, PERMISSION_REQUEST_CODE_MEDIA_IMAGES_PPJB);
         }
     }
-
     private void requestPermissionsSTRA() {
         boolean externalStoragePermissionGranted = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
 
@@ -1751,7 +1964,6 @@ public class EditListingActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_MEDIA_IMAGES}, PERMISSION_REQUEST_CODE_MEDIA_IMAGES_STRA);
         }
     }
-
     private void requestPermissionsPjp() {
         boolean externalStoragePermissionGranted = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
 
@@ -1761,7 +1973,6 @@ public class EditListingActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_MEDIA_IMAGES}, PERMISSION_REQUEST_CODE_MEDIA_IMAGES_PJP);
         }
     }
-
     private void requestPermissionsPjp1() {
         boolean externalStoragePermissionGranted = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
 
@@ -1771,7 +1982,6 @@ public class EditListingActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_MEDIA_IMAGES}, PERMISSION_REQUEST_CODE_MEDIA_IMAGES_PJP1);
         }
     }
-
     private void bukaKamera1() {
         Intent intentKamera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (intentKamera.resolveActivity(getPackageManager()) != null) {
@@ -1784,7 +1994,6 @@ public class EditListingActivity extends AppCompatActivity {
             //startActivityForResult(intentKamera, KODE_REQUEST_KAMERA1);
         }
     }
-
     private void bukaKamera2() {
         Intent intentKamera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (intentKamera.resolveActivity(getPackageManager()) != null) {
@@ -1797,7 +2006,6 @@ public class EditListingActivity extends AppCompatActivity {
             //startActivityForResult(intentKamera, KODE_REQUEST_KAMERA2);
         }
     }
-
     private void bukaKamera3() {
         Intent intentKamera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (intentKamera.resolveActivity(getPackageManager()) != null) {
@@ -1810,7 +2018,6 @@ public class EditListingActivity extends AppCompatActivity {
             //startActivityForResult(intentKamera, KODE_REQUEST_KAMERA3);
         }
     }
-
     private void bukaKamera4() {
         Intent intentKamera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (intentKamera.resolveActivity(getPackageManager()) != null) {
@@ -1823,7 +2030,6 @@ public class EditListingActivity extends AppCompatActivity {
             //startActivityForResult(intentKamera, KODE_REQUEST_KAMERA4);
         }
     }
-
     private void bukaKamera5() {
         Intent intentKamera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (intentKamera.resolveActivity(getPackageManager()) != null) {
@@ -1836,7 +2042,6 @@ public class EditListingActivity extends AppCompatActivity {
             //startActivityForResult(intentKamera, KODE_REQUEST_KAMERA5);
         }
     }
-
     private void bukaKamera6() {
         Intent intentKamera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (intentKamera.resolveActivity(getPackageManager()) != null) {
@@ -1849,7 +2054,6 @@ public class EditListingActivity extends AppCompatActivity {
             //startActivityForResult(intentKamera, KODE_REQUEST_KAMERA6);
         }
     }
-
     private void bukaKamera7() {
         Intent intentKamera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (intentKamera.resolveActivity(getPackageManager()) != null) {
@@ -1862,7 +2066,6 @@ public class EditListingActivity extends AppCompatActivity {
             //startActivityForResult(intentKamera, KODE_REQUEST_KAMERA7);
         }
     }
-
     private void bukaKamera8() {
         Intent intentKamera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (intentKamera.resolveActivity(getPackageManager()) != null) {
@@ -1875,7 +2078,6 @@ public class EditListingActivity extends AppCompatActivity {
             //startActivityForResult(intentKamera, KODE_REQUEST_KAMERA8);
         }
     }
-
     private void bukaKameraSHM() {
         Intent intentKamera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (intentKamera.resolveActivity(getPackageManager()) != null) {
@@ -1888,7 +2090,6 @@ public class EditListingActivity extends AppCompatActivity {
             //startActivityForResult(intentKamera, KODE_REQUEST_KAMERA_SHM);
         }
     }
-
     private void bukaKameraHGB() {
         Intent intentKamera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (intentKamera.resolveActivity(getPackageManager()) != null) {
@@ -1901,7 +2102,6 @@ public class EditListingActivity extends AppCompatActivity {
             //startActivityForResult(intentKamera, KODE_REQUEST_KAMERA_HGB);
         }
     }
-
     private void bukaKameraHSHP() {
         Intent intentKamera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (intentKamera.resolveActivity(getPackageManager()) != null) {
@@ -1914,7 +2114,6 @@ public class EditListingActivity extends AppCompatActivity {
             //startActivityForResult(intentKamera, KODE_REQUEST_KAMERA_HSHP);
         }
     }
-
     private void bukaKameraPPJB() {
         Intent intentKamera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (intentKamera.resolveActivity(getPackageManager()) != null) {
@@ -1927,7 +2126,6 @@ public class EditListingActivity extends AppCompatActivity {
             //startActivityForResult(intentKamera, KODE_REQUEST_KAMERA_PPJB);
         }
     }
-
     private void bukaKameraSTRA() {
         Intent intentKamera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (intentKamera.resolveActivity(getPackageManager()) != null) {
@@ -1940,7 +2138,6 @@ public class EditListingActivity extends AppCompatActivity {
             //startActivityForResult(intentKamera, KODE_REQUEST_KAMERA_STRA);
         }
     }
-
     private void bukaKameraPjp() {
         Intent intentKamera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (intentKamera.resolveActivity(getPackageManager()) != null) {
@@ -1953,7 +2150,6 @@ public class EditListingActivity extends AppCompatActivity {
             //startActivityForResult(intentKamera, KODE_REQUEST_KAMERA_PJP);
         }
     }
-
     private void bukaKameraPjp1() {
         Intent intentKamera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (intentKamera.resolveActivity(getPackageManager()) != null) {
@@ -1966,7 +2162,6 @@ public class EditListingActivity extends AppCompatActivity {
             //startActivityForResult(intentKamera, KODE_REQUEST_KAMERA_PJP1);
         }
     }
-
     private File createImageFile() {
         String imageFileName = "JPEG_" + new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
         File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
@@ -1978,7 +2173,90 @@ public class EditListingActivity extends AppCompatActivity {
         }
         return image;
     }
-
+    public void pilihFileSHM(View view) {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+            Intent intent = new Intent();
+            intent.setType("application/pdf");
+            intent.setAction(Intent.ACTION_GET_CONTENT);
+            startActivityForResult(Intent.createChooser(intent, "Pilih File PDF"), PICK_PDF_SHM);
+        } else {
+            requestStoragePermission();
+        }
+    }
+    public void pilihFileHGB(View view) {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+            Intent intent = new Intent();
+            intent.setType("application/pdf");
+            intent.setAction(Intent.ACTION_GET_CONTENT);
+            startActivityForResult(Intent.createChooser(intent, "Pilih File PDF"), PICK_PDF_HGB);
+        } else {
+            requestStoragePermission();
+        }
+    }
+    public void pilihFileHSHP(View view) {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+            Intent intent = new Intent();
+            intent.setType("application/pdf");
+            intent.setAction(Intent.ACTION_GET_CONTENT);
+            startActivityForResult(Intent.createChooser(intent, "Pilih File PDF"), PICK_PDF_HSHP);
+        } else {
+            requestStoragePermission();
+        }
+    }
+    public void pilihFilePPJB(View view) {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+            Intent intent = new Intent();
+            intent.setType("application/pdf");
+            intent.setAction(Intent.ACTION_GET_CONTENT);
+            startActivityForResult(Intent.createChooser(intent, "Pilih File PDF"), PICK_PDF_PPJB);
+        } else {
+            requestStoragePermission();
+        }
+    }
+    public void pilihFileSTRA(View view) {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+            Intent intent = new Intent();
+            intent.setType("application/pdf");
+            intent.setAction(Intent.ACTION_GET_CONTENT);
+            startActivityForResult(Intent.createChooser(intent, "Pilih File PDF"), PICK_PDF_Stratatitle);
+        } else {
+            requestStoragePermission();
+        }
+    }
+    public void pilihFileAJB(View view) {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+            Intent intent = new Intent();
+            intent.setType("application/pdf");
+            intent.setAction(Intent.ACTION_GET_CONTENT);
+            startActivityForResult(Intent.createChooser(intent, "Pilih File PDF"), PICK_PDF_AJB);
+        } else {
+            requestStoragePermission();
+        }
+    }
+    public void pilihFilePetokD(View view) {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+            Intent intent = new Intent();
+            intent.setType("application/pdf");
+            intent.setAction(Intent.ACTION_GET_CONTENT);
+            startActivityForResult(Intent.createChooser(intent, "Pilih File PDF"), PICK_PDF_PetokD);
+        } else {
+            requestStoragePermission();
+        }
+    }
+    private String getFileNameFromUri(Uri uri) {
+        String result = null;
+        if (uri.getScheme().equals("content")) {
+            try (Cursor cursor = getContentResolver().query(uri, null, null, null, null)) {
+                if (cursor != null && cursor.moveToFirst()) {
+                    result = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME));
+                }
+            }
+        }
+        if (result == null) {
+            result = uri.getLastPathSegment();
+        }
+        return result;
+    }
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -2132,6 +2410,39 @@ public class EditListingActivity extends AppCompatActivity {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 startActivityForResult(intent, CODE_GALLERY_REQUEST_PJP1);
+            }
+        } else if (requestCode == STORAGE_PERMISSION_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+            } else {
+                Dialog customDialog = new Dialog(EditListingActivity.this);
+                customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                customDialog.setContentView(R.layout.custom_dialog_eror_input);
+
+                if (customDialog.getWindow() != null) {
+                    customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                }
+
+                Button ok = customDialog.findViewById(R.id.BtnOkErorInput);
+                TextView tv = customDialog.findViewById(R.id.TVDialogErorInput);
+
+                tv.setText("Akses Galeri Ditolak");
+
+                ok.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        customDialog.dismiss();
+                    }
+                });
+
+                ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
+
+                Glide.with(EditListingActivity.this)
+                        .load(R.drawable.alert) // You can also use a local resource like R.drawable.your_gif_resource
+                        .transition(DrawableTransitionOptions.withCrossFade())
+                        .into(gifImageView);
+
+                customDialog.show();
             }
         } else if (requestCode == CODE_GALLERY_REQUEST1) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -2887,7 +3198,6 @@ public class EditListingActivity extends AppCompatActivity {
 
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -3049,199 +3359,173 @@ public class EditListingActivity extends AppCompatActivity {
             IVPjp1.setImageURI(UriPJP1);
             LytPjp1.setVisibility(View.VISIBLE);
             BtnPjp1.setVisibility(View.GONE);
+        }  else if (requestCode == PICK_PDF_SHM && resultCode == RESULT_OK && data != null && data.getData() != null) {
+            UriSHM = data.getData();
+            LytSHM.setVisibility(View.VISIBLE);
+            BtnSHM.setVisibility(View.GONE);
+            TVSHM.setVisibility(View.VISIBLE);
+            String pdfFileName = getFileNameFromUri(UriSHM);
+            TVSHM.setText(pdfFileName);
+        } else if (requestCode == PICK_PDF_HGB && resultCode == RESULT_OK && data != null && data.getData() != null) {
+            UriHGB = data.getData();
+            LytHGB.setVisibility(View.VISIBLE);
+            BtnHGB.setVisibility(View.GONE);
+            TVHGB.setVisibility(View.VISIBLE);
+            String pdfFileName = getFileNameFromUri(UriHGB);
+            TVHGB.setText(pdfFileName);
+        } else if (requestCode == PICK_PDF_PPJB && resultCode == RESULT_OK && data != null && data.getData() != null) {
+            UriPPJB = data.getData();
+            LytPPJB.setVisibility(View.VISIBLE);
+            BtnPPJB.setVisibility(View.GONE);
+            TVPPJB.setVisibility(View.VISIBLE);
+            String pdfFileName = getFileNameFromUri(UriPPJB);
+            TVPPJB.setText(pdfFileName);
+        } else if (requestCode == PICK_PDF_HSHP && resultCode == RESULT_OK && data != null && data.getData() != null) {
+            UriHSHP = data.getData();
+            LytHSHP.setVisibility(View.VISIBLE);
+            BtnHSHP.setVisibility(View.GONE);
+            TVHSHP.setVisibility(View.VISIBLE);
+            String pdfFileName = getFileNameFromUri(UriHSHP);
+            TVHSHP.setText(pdfFileName);
+        } else if (requestCode == PICK_PDF_Stratatitle && resultCode == RESULT_OK && data != null && data.getData() != null) {
+            UriSTRA = data.getData();
+            LytStratatitle.setVisibility(View.VISIBLE);
+            BtnSTRA.setVisibility(View.GONE);
+            TVSTRA.setVisibility(View.VISIBLE);
+            String pdfFileName = getFileNameFromUri(UriSTRA);
+            TVSTRA.setText(pdfFileName);
+        } else if (requestCode == PICK_PDF_AJB && resultCode == RESULT_OK && data != null && data.getData() != null) {
+            UriAJB = data.getData();
+            LytAJB.setVisibility(View.VISIBLE);
+            BtnAJB.setVisibility(View.GONE);
+            TVAJB.setVisibility(View.VISIBLE);
+            String pdfFileName = getFileNameFromUri(UriAJB);
+            TVAJB.setText(pdfFileName);
+        } else if (requestCode == PICK_PDF_PetokD && resultCode == RESULT_OK && data != null && data.getData() != null) {
+            UriPetokD = data.getData();
+            LytPetokD.setVisibility(View.VISIBLE);
+            BtnPetokD.setVisibility(View.GONE);
+            TVPetokD.setVisibility(View.VISIBLE);
+            String pdfFileName = getFileNameFromUri(UriPetokD);
+            TVPetokD.setText(pdfFileName);
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
 
     private void clearBitmap1() {
-        if (bitmap1 != null && !bitmap1.isRecycled()) {
-            bitmap1.recycle();
-            bitmap1 = null;
-            lyt1.setVisibility(View.GONE);
-            select1.setVisibility(View.VISIBLE);
-        } else {
+        if (Uri1 != null) {
             Uri1 = null;
             lyt1.setVisibility(View.GONE);
             select1.setVisibility(View.VISIBLE);
         }
     }
-
     private void clearBitmap2() {
-        if (bitmap2 != null && !bitmap2.isRecycled()) {
-            bitmap2.recycle();
-            bitmap2 = null;
-            lyt2.setVisibility(View.GONE);
-            select2.setVisibility(View.VISIBLE);
-        } else {
+        if (Uri2 != null) {
             Uri2 = null;
             lyt2.setVisibility(View.GONE);
             select2.setVisibility(View.VISIBLE);
         }
     }
-
     private void clearBitmap3() {
-        if (bitmap3 != null && !bitmap3.isRecycled()) {
-            bitmap3.recycle();
-            bitmap3 = null;
-            lyt3.setVisibility(View.GONE);
-            select3.setVisibility(View.VISIBLE);
-        } else {
+        if (Uri3 != null) {
             Uri3 = null;
             lyt3.setVisibility(View.GONE);
             select3.setVisibility(View.VISIBLE);
         }
     }
-
     private void clearBitmap4() {
-        if (bitmap4 != null && !bitmap4.isRecycled()) {
-            bitmap4.recycle();
-            bitmap4 = null;
-            lyt4.setVisibility(View.GONE);
-            select4.setVisibility(View.VISIBLE);
-        } else {
+        if (Uri4 != null) {
             Uri4 = null;
             lyt4.setVisibility(View.GONE);
             select4.setVisibility(View.VISIBLE);
         }
     }
-
     private void clearBitmap5() {
-        if (bitmap5 != null && !bitmap5.isRecycled()) {
-            bitmap5.recycle();
-            bitmap5 = null;
-            lyt5.setVisibility(View.GONE);
-            select5.setVisibility(View.VISIBLE);
-        } else {
+        if (Uri5 != null) {
             Uri5 = null;
             lyt5.setVisibility(View.GONE);
             select5.setVisibility(View.VISIBLE);
         }
     }
-
     private void clearBitmap6() {
-        if (bitmap6 != null && !bitmap6.isRecycled()) {
-            bitmap6.recycle();
-            bitmap6 = null;
-            lyt6.setVisibility(View.GONE);
-            select6.setVisibility(View.VISIBLE);
-        } else {
+        if (Uri6 != null) {
             Uri6 = null;
             lyt6.setVisibility(View.GONE);
             select6.setVisibility(View.VISIBLE);
         }
     }
-
     private void clearBitmap7() {
-        if (bitmap7 != null && !bitmap7.isRecycled()) {
-            bitmap7.recycle();
-            bitmap7 = null;
-            lyt7.setVisibility(View.GONE);
-            select7.setVisibility(View.VISIBLE);
-        } else {
+        if (Uri7 != null) {
             Uri7 = null;
             lyt7.setVisibility(View.GONE);
             select7.setVisibility(View.VISIBLE);
         }
     }
-
     private void clearBitmap8() {
-        if (bitmap8 != null && !bitmap8.isRecycled()) {
-            bitmap8.recycle();
-            bitmap8 = null;
-            lyt8.setVisibility(View.GONE);
-            select.setVisibility(View.VISIBLE);
-        } else {
+        if (Uri8 != null) {
             Uri8 = null;
             lyt8.setVisibility(View.GONE);
             select.setVisibility(View.VISIBLE);
         }
     }
-
     private void clearBitmapSHM() {
-        if (bitmapSHM != null && !bitmapSHM.isRecycled()) {
-            bitmapSHM.recycle();
-            bitmapSHM = null;
-            LytSHM.setVisibility(View.GONE);
-            BtnSHM.setVisibility(View.VISIBLE);
-        } else {
+        if (UriSHM != null) {
             UriSHM = null;
             LytSHM.setVisibility(View.GONE);
             BtnSHM.setVisibility(View.VISIBLE);
         }
     }
-
     private void clearBitmapHGB() {
-        if (bitmapHGB != null && !bitmapHGB.isRecycled()) {
-            bitmapHGB.recycle();
-            bitmapHGB = null;
-            LytHGB.setVisibility(View.GONE);
-            BtnHGB.setVisibility(View.VISIBLE);
-        } else {
+        if (UriHGB != null) {
             UriHGB = null;
             LytHGB.setVisibility(View.GONE);
             BtnHGB.setVisibility(View.VISIBLE);
         }
     }
-
     private void clearBitmapHSHP() {
-        if (bitmapHSHP != null && !bitmapHSHP.isRecycled()) {
-            bitmapHSHP.recycle();
-            bitmapHSHP = null;
-            LytHSHP.setVisibility(View.GONE);
-            BtnHSHP.setVisibility(View.VISIBLE);
-        } else {
+        if (UriHSHP != null) {
             UriHSHP = null;
             LytHSHP.setVisibility(View.GONE);
             BtnHSHP.setVisibility(View.VISIBLE);
         }
     }
-
     private void clearBitmapPPJB() {
-        if (bitmapPPJB != null && !bitmapPPJB.isRecycled()) {
-            bitmapPPJB.recycle();
-            bitmapPPJB = null;
-            LytPPJB.setVisibility(View.GONE);
-            BtnPPJB.setVisibility(View.VISIBLE);
-        } else {
+        if (UriPPJB != null) {
             UriPPJB = null;
             LytPPJB.setVisibility(View.GONE);
             BtnPPJB.setVisibility(View.VISIBLE);
         }
     }
-
     private void clearBitmapSTRA() {
-        if (bitmapSTRA != null && !bitmapSTRA.isRecycled()) {
-            bitmapSTRA.recycle();
-            bitmapSTRA = null;
-            LytStratatitle.setVisibility(View.GONE);
-            BtnSTRA.setVisibility(View.VISIBLE);
-        } else {
+        if (UriSTRA != null) {
             UriSTRA = null;
             LytStratatitle.setVisibility(View.GONE);
             BtnSTRA.setVisibility(View.VISIBLE);
         }
     }
-
+    private void clearBitmapAJB() {
+        if (UriAJB != null) {
+            UriAJB = null;
+            LytAJB.setVisibility(View.GONE);
+            BtnAJB.setVisibility(View.VISIBLE);
+        }
+    }
+    private void clearBitmapPetokD() {
+        if (UriPetokD != null) {
+            UriPetokD = null;
+            LytPetokD.setVisibility(View.GONE);
+            BtnPetokD.setVisibility(View.VISIBLE);
+        }
+    }
     private void clearBitmapPJP() {
-        if (BitmapPjp != null && !BitmapPjp.isRecycled()) {
-            BitmapPjp.recycle();
-            BitmapPjp = null;
-            LytPjp.setVisibility(View.GONE);
-            BtnPjp.setVisibility(View.VISIBLE);
-        } else {
+        if (UriPJP != null) {
             UriPJP = null;
             LytPjp.setVisibility(View.GONE);
             BtnPjp.setVisibility(View.VISIBLE);
         }
     }
-
     private void clearBitmapPJP1() {
-        if (BitmapPjp1 != null && !BitmapPjp1.isRecycled()) {
-            BitmapPjp1.recycle();
-            BitmapPjp1 = null;
-            LytPjp1.setVisibility(View.GONE);
-            BtnPjp1.setVisibility(View.VISIBLE);
-        } else {
+        if (UriPJP1 != null) {
             UriPJP1 = null;
             LytPjp1.setVisibility(View.GONE);
             BtnPjp1.setVisibility(View.VISIBLE);
@@ -3526,7 +3810,7 @@ public class EditListingActivity extends AppCompatActivity {
 
         dialog.show();
     }
-    
+
     public boolean Validate() {
         if (namaproperti.getText().toString().equals("")) {
             namaproperti.setError("Harap Isi Nama Properti");
@@ -3656,7 +3940,7 @@ public class EditListingActivity extends AppCompatActivity {
             }
         }
         if (CBSHM.isChecked()) {
-            if (UriSHM == null) {
+            if (UriSHM == null && isSHM.equals("0")) {
                 Dialog customDialog = new Dialog(EditListingActivity.this);
                 customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                 customDialog.setContentView(R.layout.custom_dialog_eror_input);
@@ -3668,7 +3952,7 @@ public class EditListingActivity extends AppCompatActivity {
                 Button ok = customDialog.findViewById(R.id.BtnOkErorInput);
                 TextView tv = customDialog.findViewById(R.id.TVDialogErorInput);
 
-                tv.setText("Harap Tambahkan Gambar SHM");
+                tv.setText("Harap Tambahkan File SHM");
 
                 ok.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -3689,7 +3973,7 @@ public class EditListingActivity extends AppCompatActivity {
             }
         }
         if (CBHGB.isChecked()) {
-            if (UriHGB == null) {
+            if (UriHGB == null && isHGB.equals("0")) {
                 Dialog customDialog = new Dialog(EditListingActivity.this);
                 customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                 customDialog.setContentView(R.layout.custom_dialog_eror_input);
@@ -3701,7 +3985,7 @@ public class EditListingActivity extends AppCompatActivity {
                 Button ok = customDialog.findViewById(R.id.BtnOkErorInput);
                 TextView tv = customDialog.findViewById(R.id.TVDialogErorInput);
 
-                tv.setText("Harap Tambahkan Gambar HGB");
+                tv.setText("Harap Tambahkan File HGB");
 
                 ok.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -3722,7 +4006,7 @@ public class EditListingActivity extends AppCompatActivity {
             }
         }
         if (CBHSHP.isChecked()) {
-            if (UriHSHP == null) {
+            if (UriHSHP == null && isHSHP.equals("0")) {
                 Dialog customDialog = new Dialog(EditListingActivity.this);
                 customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                 customDialog.setContentView(R.layout.custom_dialog_eror_input);
@@ -3734,7 +4018,7 @@ public class EditListingActivity extends AppCompatActivity {
                 Button ok = customDialog.findViewById(R.id.BtnOkErorInput);
                 TextView tv = customDialog.findViewById(R.id.TVDialogErorInput);
 
-                tv.setText("Harap Tambahkan Gambar HS/HP");
+                tv.setText("Harap Tambahkan File HS/HP");
 
                 ok.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -3755,7 +4039,7 @@ public class EditListingActivity extends AppCompatActivity {
             }
         }
         if (CBPPJB.isChecked()) {
-            if (UriPPJB == null) {
+            if (UriPPJB == null && isPPJB.equals("0")) {
                 Dialog customDialog = new Dialog(EditListingActivity.this);
                 customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                 customDialog.setContentView(R.layout.custom_dialog_eror_input);
@@ -3767,7 +4051,7 @@ public class EditListingActivity extends AppCompatActivity {
                 Button ok = customDialog.findViewById(R.id.BtnOkErorInput);
                 TextView tv = customDialog.findViewById(R.id.TVDialogErorInput);
 
-                tv.setText("Harap Tambahkan Gambar PPJB");
+                tv.setText("Harap Tambahkan File PPJB");
 
                 ok.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -3788,7 +4072,7 @@ public class EditListingActivity extends AppCompatActivity {
             }
         }
         if (CBSTRA.isChecked()) {
-            if (UriSTRA == null) {
+            if (UriSTRA == null && isSTRA.equals("0")) {
                 Dialog customDialog = new Dialog(EditListingActivity.this);
                 customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                 customDialog.setContentView(R.layout.custom_dialog_eror_input);
@@ -3800,7 +4084,73 @@ public class EditListingActivity extends AppCompatActivity {
                 Button ok = customDialog.findViewById(R.id.BtnOkErorInput);
                 TextView tv = customDialog.findViewById(R.id.TVDialogErorInput);
 
-                tv.setText("Harap Tambahkan Gambar STratatitle");
+                tv.setText("Harap Tambahkan File STratatitle");
+
+                ok.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        customDialog.dismiss();
+                    }
+                });
+
+                ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
+
+                Glide.with(EditListingActivity.this)
+                        .load(R.drawable.alert) // You can also use a local resource like R.drawable.your_gif_resource
+                        .transition(DrawableTransitionOptions.withCrossFade())
+                        .into(gifImageView);
+
+                customDialog.show();
+                return false;
+            }
+        }
+        if (CBAJB.isChecked()) {
+            if (UriAJB == null && isAJB.equals("0")) {
+                Dialog customDialog = new Dialog(EditListingActivity.this);
+                customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                customDialog.setContentView(R.layout.custom_dialog_eror_input);
+
+                if (customDialog.getWindow() != null) {
+                    customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                }
+
+                Button ok = customDialog.findViewById(R.id.BtnOkErorInput);
+                TextView tv = customDialog.findViewById(R.id.TVDialogErorInput);
+
+                tv.setText("Harap Tambahkan File AJB");
+
+                ok.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        customDialog.dismiss();
+                    }
+                });
+
+                ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
+
+                Glide.with(EditListingActivity.this)
+                        .load(R.drawable.alert) // You can also use a local resource like R.drawable.your_gif_resource
+                        .transition(DrawableTransitionOptions.withCrossFade())
+                        .into(gifImageView);
+
+                customDialog.show();
+                return false;
+            }
+        }
+        if (CBPetokD.isChecked()) {
+            if (UriPetokD == null && isPetokD.equals("0")) {
+                Dialog customDialog = new Dialog(EditListingActivity.this);
+                customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                customDialog.setContentView(R.layout.custom_dialog_eror_input);
+
+                if (customDialog.getWindow() != null) {
+                    customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                }
+
+                Button ok = customDialog.findViewById(R.id.BtnOkErorInput);
+                TextView tv = customDialog.findViewById(R.id.TVDialogErorInput);
+
+                tv.setText("Harap Tambahkan File Petok D");
 
                 ok.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -3824,7 +4174,7 @@ public class EditListingActivity extends AppCompatActivity {
     }
 
     private void simpanData() {
-        pDialog.setMessage("Menyimpan Data");
+        pDialog.setMessage("Menyimpan Pembaruan Data");
         pDialog.setCancelable(false);
         pDialog.show();
 
@@ -3858,6 +4208,29 @@ public class EditListingActivity extends AppCompatActivity {
                                 ok.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View view) {
+                                        RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
+                                        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, ServerApi.URL_GET_DEVICE, null, new Response.Listener<JSONArray>() {
+                                            @Override
+                                            public void onResponse(JSONArray response) {
+                                                try {
+                                                    ArrayList<String> tokens = new ArrayList<>();
+                                                    for (int i = 0; i < response.length(); i++) {
+                                                        JSONObject tokenObject = response.getJSONObject(i);
+                                                        String token = tokenObject.getString("Token");
+                                                        tokens.add(token);
+                                                    }
+                                                    new SendMessageTask().execute(tokens.toArray(new String[0]));
+                                                } catch (JSONException e) {
+                                                    e.printStackTrace();
+                                                }
+                                            }
+                                        }, new Response.ErrorListener() {
+                                            @Override
+                                            public void onErrorResponse(VolleyError error) {
+                                                // Tangani kesalahan jika terjadi
+                                            }
+                                        });
+                                        requestQueue.add(jsonArrayRequest);
                                         customDialog.dismiss();
                                         finish();
                                     }
@@ -3955,14 +4328,10 @@ public class EditListingActivity extends AppCompatActivity {
                     Lng = longitudeStr;
                 }
                 if (HargaString == null){
-                    SHarga = "0";
-                } else {
-                    SHarga = HargaString;
+                    HargaString = harga.getText().toString();
                 }
                 if (HargaSewaString == null){
-                    SHargaSewa = "0";
-                } else {
-                    SHargaSewa = HargaSewaString;
+                    HargaSewaString = hargasewa.getText().toString();
                 }
 
                 final String StringSHM = CBSHM.isChecked() ? "1" : "0";
@@ -3970,6 +4339,8 @@ public class EditListingActivity extends AppCompatActivity {
                 final String StringHSHP = CBHSHP.isChecked() ? "1" : "0";
                 final String StringPPJB = CBPPJB.isChecked() ? "1" : "0";
                 final String StringSTRA = CBSTRA.isChecked() ? "1" : "0";
+                final String StringAJB = CBAJB.isChecked() ? "1" : "0";
+                final String StringPetokD = CBPetokD.isChecked() ? "1" : "0";
 
                 map.put("IdPraListing", idpralisting);
                 map.put("NamaListing", namaproperti.getText().toString());
@@ -3994,11 +4365,15 @@ public class EditListingActivity extends AppCompatActivity {
                 map.put("HSHP", StringHSHP);
                 map.put("PPJB", StringPPJB);
                 map.put("Stratatitle", StringSTRA);
+                map.put("AJB", StringAJB);
+                map.put("PetokD", StringPetokD);
                 map.put("ImgSHM", SHM);
                 map.put("ImgHGB", HGB);
                 map.put("ImgHSHP", HSHP);
                 map.put("ImgPPJB", PPJB);
                 map.put("ImgStratatitle", STRA);
+                map.put("ImgAJB", AJB);
+                map.put("ImgPetokD", PetokD);
                 map.put("ImgPjp", PJPHal1);
                 map.put("ImgPjp1", PJPHal2);
                 map.put("JenisProperti", jenisproperti.getText().toString());
@@ -4010,8 +4385,8 @@ public class EditListingActivity extends AppCompatActivity {
                 map.put("Priority", priority);
                 map.put("Banner", banner.getText().toString());
                 map.put("Size", size.getText().toString());
-                map.put("Harga", SHarga);
-                map.put("HargaSewa", SHargaSewa);
+                map.put("Harga", HargaString);
+                map.put("HargaSewa", HargaSewaString);
                 map.put("TglInput", EtTglInput.getText().toString());
                 map.put("Img1", image1);
                 map.put("Img2", image2);
@@ -4034,5 +4409,25 @@ public class EditListingActivity extends AppCompatActivity {
         };
 
         requestQueue.add(stringRequest);
+    }
+    private class SendMessageTask extends AsyncTask<String, Void, String> {
+        @Override
+        protected String doInBackground(String... params) {
+            for (String token : params) {
+                sendNotificationToToken(token, "pesan");
+            }
+            return null;
+        }
+        @Override
+        protected void onPostExecute(String response) {
+            if (response != null) {
+                Toast.makeText(getApplicationContext(), response, Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+    private void sendNotificationToToken(String token, String notificationType) {
+        String title = Preferences.getKeyNama(this);
+        String message = "Melakukan Update Listing";
+        String response = SendMessageToFCM.sendMessage(token, title, message, notificationType);
     }
 }

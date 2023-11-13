@@ -14,6 +14,7 @@ import android.view.Window;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.gooproper.ui.CobaPesanActivity;
 import com.gooproper.ui.edit.EditAkunActivity;
 import com.gooproper.R;
 import com.gooproper.ui.SettingActivity;
@@ -30,7 +31,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class AkunAdminFragment extends Fragment {
 
-    private LinearLayout pelamar, agen, listing, karyawan, laporan, pengaturan, hubungikami, tentangkami;
+    private LinearLayout pelamar, agen, listing, karyawan, laporan, pengaturan, hubungikami, tentangkami, kirimpesan;
     TextView nama, edit;
     CircleImageView cvadmin;
     View view, view1;
@@ -57,6 +58,7 @@ public class AkunAdminFragment extends Fragment {
         pengaturan = root.findViewById(R.id.LytPengaturanAdmin);
         hubungikami = root.findViewById(R.id.LytHubungiKamiAdmin);
         tentangkami = root.findViewById(R.id.LytTentangKamiAdmin);
+        kirimpesan = root.findViewById(R.id.LytKirimPesan);
         nama = root.findViewById(R.id.TVNamaAkunAdmin);
         edit = root.findViewById(R.id.TVEditAkunAdmin);
         cvadmin = root.findViewById(R.id.CIVAkunAdmin);
@@ -89,6 +91,7 @@ public class AkunAdminFragment extends Fragment {
         pelamar.setOnClickListener(view -> startActivity(new Intent(getContext(), PelamarAgenActivity.class)));
         agen.setOnClickListener(view -> startActivity(new Intent(getContext(), AgenActivity.class)));
         laporan.setOnClickListener(view -> startActivity(new Intent(getContext(), LaporanListingActivity.class)));
+        kirimpesan.setOnClickListener(view -> startActivity(new Intent(getContext(), CobaPesanActivity.class)));
         karyawan.setOnClickListener(view -> startActivity(new Intent(getContext(), TambahKaryawanActivity.class)));
         pengaturan.setOnClickListener(view -> startActivity(new Intent(getContext(), SettingActivity.class)));
         tentangkami.setOnClickListener(view -> startActivity(new Intent(getContext(), TentangKamiActivity.class)));

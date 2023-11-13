@@ -1,6 +1,7 @@
 package com.gooproper.admin.fragment;
 
 import android.Manifest;
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -9,6 +10,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -17,15 +19,23 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -35,6 +45,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.gooproper.R;
 import com.gooproper.adapter.ListingAdapter;
 import com.gooproper.adapter.ListingPopulerAdapter;
@@ -45,6 +56,9 @@ import com.gooproper.ui.MapsFragment;
 import com.gooproper.ui.NewActivity;
 import com.gooproper.ui.PopularActivity;
 import com.gooproper.ui.SoldActivity;
+import com.gooproper.ui.TambahListingActivity;
+import com.gooproper.util.Preferences;
+import com.gooproper.util.PreferencesDevice;
 import com.gooproper.util.ServerApi;
 
 import org.json.JSONArray;
@@ -52,16 +66,20 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class HomeAdminFragment extends Fragment implements OnMapReadyCallback {
 
     private static final int REQUEST_LOCATION_PERMISSION = 1;
+    private static final int MY_PERMISSIONS_REQUEST_VIBRATE = 123;
     private MapView mapView;
     private GoogleMap googleMap;
     private TextView SeeAllNew, SeeAllPopular, SeeAllSold, SeeAllAgentOM;
     private RecyclerView recycleListingSold, recycleListingNew, recycleListingPopular, recycleAgent;
     private RecyclerView.Adapter adapterSold, adapterNew, adapterPopular, adapterAgentOM;
+    String Token, Status, IdAdmin;
     List<ListingModel> mItemsSold;
     List<ListingModel> mItemsHot;
     List<ListingModel> mItemsNew;
@@ -70,6 +88,21 @@ public class HomeAdminFragment extends Fragment implements OnMapReadyCallback {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_home_admin, container, false);
+
+        IdAdmin = Preferences.getKeyIdAdmin(getContext());
+        Status = Preferences.getKeyStatus(getContext());
+
+        requestNotificationPermission();
+
+        FirebaseMessaging.getInstance().getToken()
+                .addOnCompleteListener(task -> {
+                    if (!task.isSuccessful()) {
+                        return;
+                    }
+                    Token = task.getResult();
+                    Toast.makeText(getContext(), "Selamat Datang" + Token, Toast.LENGTH_SHORT);
+                    simpanDevice();
+                });
 
         recycleListingSold = root.findViewById(R.id.ListingSold);
         recycleListingNew = root.findViewById(R.id.ListingNew);
@@ -105,6 +138,19 @@ public class HomeAdminFragment extends Fragment implements OnMapReadyCallback {
         LoadListingSold();
         LoadListingPopuler();
         LoadListing();
+        LoadDevice();
+
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(getContext());
+        boolean areNotificationsEnabled = notificationManager.areNotificationsEnabled();
+        if (areNotificationsEnabled) {
+        } else {
+            Intent intent = new Intent();
+            intent.setAction("android.settings.APP_NOTIFICATION_SETTINGS");
+            intent.putExtra("app_package", getContext().getPackageName());
+            intent.putExtra("app_uid", getContext().getApplicationInfo().uid);
+            startActivity(intent);
+        }
+
 
         if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
                 && ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
@@ -114,7 +160,77 @@ public class HomeAdminFragment extends Fragment implements OnMapReadyCallback {
 
         return root;
     }
+    private void requestNotificationPermission() {
+        if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.VIBRATE)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(getActivity(),
+                    new String[]{Manifest.permission.VIBRATE},
+                    MY_PERMISSIONS_REQUEST_VIBRATE);
+        } else {
+            showNotification();
+        }
+    }
+    private void showNotification() {
+        // Logika untuk menampilkan notifikasi
+        // ...
+    }
+    private void simpanDevice() {
+        RequestQueue requestQueue = Volley.newRequestQueue(getContext());
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, ServerApi.URL_ADD_DEVICE,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            JSONObject res = new JSONObject(response);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                    }
+                }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> map = new HashMap<>();
+                map.put("IdAdmin", IdAdmin);
+                map.put("Status", Status);
+                map.put("Token", Token);
+                System.out.println(map);
 
+                return map;
+            }
+        };
+
+        requestQueue.add(stringRequest);
+    }
+    private void LoadDevice() {
+        RequestQueue queue = Volley.newRequestQueue(getActivity());
+        JsonArrayRequest reqData = new JsonArrayRequest(Request.Method.GET, ServerApi.URL_GET_DEVICE, null,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        for (int i = 0; i < response.length(); i++) {
+                            try {
+                                JSONObject data = response.getJSONObject(i);
+                                PreferencesDevice.setKeyToken(getContext(), data.getString("Token"));
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        error.printStackTrace();
+                    }
+                });
+
+        queue.add(reqData);
+    }
     private void LoadListingSold() {
         RequestQueue queue = Volley.newRequestQueue(getActivity());
         JsonArrayRequest reqData = new JsonArrayRequest(Request.Method.GET, ServerApi.URL_GET_LISTING_SOLD, null,
@@ -153,16 +269,16 @@ public class HomeAdminFragment extends Fragment implements OnMapReadyCallback {
                                 md.setHSHP(data.getString("HSHP"));
                                 md.setPPJB(data.getString("PPJB"));
                                 md.setStratatitle(data.getString("Stratatitle"));
-                                md.setStratatitle(data.getString("AJB"));
-                                md.setStratatitle(data.getString("PetokD"));
+                                md.setAJB(data.getString("AJB"));
+                                md.setPetokD(data.getString("PetokD"));
                                 md.setPjp(data.getString("Pjp"));
                                 md.setImgSHM(data.getString("ImgSHM"));
                                 md.setImgHGB(data.getString("ImgHGB"));
                                 md.setImgHSHP(data.getString("ImgHSHP"));
                                 md.setImgPPJB(data.getString("ImgPPJB"));
                                 md.setImgStratatitle(data.getString("ImgStratatitle"));
-                                md.setImgStratatitle(data.getString("ImgAJB"));
-                                md.setImgStratatitle(data.getString("ImgPetokD"));
+                                md.setImgAJB(data.getString("ImgAJB"));
+                                md.setImgPetokD(data.getString("ImgPetokD"));
                                 md.setImgPjp(data.getString("ImgPjp"));
                                 md.setImgPjp1(data.getString("ImgPjp1"));
                                 md.setNoCertificate(data.getString("NoCertificate"));
@@ -223,7 +339,6 @@ public class HomeAdminFragment extends Fragment implements OnMapReadyCallback {
 
         queue.add(reqData);
     }
-
     private void LoadListingPopuler() {
         RequestQueue queue = Volley.newRequestQueue(getActivity());
         JsonArrayRequest reqData = new JsonArrayRequest(Request.Method.GET, ServerApi.URL_GET_LISTING_HOT, null,
@@ -262,16 +377,16 @@ public class HomeAdminFragment extends Fragment implements OnMapReadyCallback {
                                 md.setHSHP(data.getString("HSHP"));
                                 md.setPPJB(data.getString("PPJB"));
                                 md.setStratatitle(data.getString("Stratatitle"));
-                                md.setStratatitle(data.getString("AJB"));
-                                md.setStratatitle(data.getString("PetokD"));
+                                md.setAJB(data.getString("AJB"));
+                                md.setPetokD(data.getString("PetokD"));
                                 md.setPjp(data.getString("Pjp"));
                                 md.setImgSHM(data.getString("ImgSHM"));
                                 md.setImgHGB(data.getString("ImgHGB"));
                                 md.setImgHSHP(data.getString("ImgHSHP"));
                                 md.setImgPPJB(data.getString("ImgPPJB"));
                                 md.setImgStratatitle(data.getString("ImgStratatitle"));
-                                md.setImgStratatitle(data.getString("ImgAJB"));
-                                md.setImgStratatitle(data.getString("ImgPetokD"));
+                                md.setImgAJB(data.getString("ImgAJB"));
+                                md.setImgPetokD(data.getString("ImgPetokD"));
                                 md.setImgPjp(data.getString("ImgPjp"));
                                 md.setImgPjp1(data.getString("ImgPjp1"));
                                 md.setNoCertificate(data.getString("NoCertificate"));
@@ -332,7 +447,6 @@ public class HomeAdminFragment extends Fragment implements OnMapReadyCallback {
 
         queue.add(reqData);
     }
-
     private void LoadListing() {
         RequestQueue queue = Volley.newRequestQueue(getActivity());
         JsonArrayRequest reqData = new JsonArrayRequest(Request.Method.GET, ServerApi.URL_GET_LISTING, null,
@@ -371,16 +485,16 @@ public class HomeAdminFragment extends Fragment implements OnMapReadyCallback {
                                 md.setHSHP(data.getString("HSHP"));
                                 md.setPPJB(data.getString("PPJB"));
                                 md.setStratatitle(data.getString("Stratatitle"));
-                                md.setStratatitle(data.getString("AJB"));
-                                md.setStratatitle(data.getString("PetokD"));
+                                md.setAJB(data.getString("AJB"));
+                                md.setPetokD(data.getString("PetokD"));
                                 md.setPjp(data.getString("Pjp"));
                                 md.setImgSHM(data.getString("ImgSHM"));
                                 md.setImgHGB(data.getString("ImgHGB"));
                                 md.setImgHSHP(data.getString("ImgHSHP"));
                                 md.setImgPPJB(data.getString("ImgPPJB"));
                                 md.setImgStratatitle(data.getString("ImgStratatitle"));
-                                md.setImgStratatitle(data.getString("ImgAJB"));
-                                md.setImgStratatitle(data.getString("ImgPetokD"));
+                                md.setImgAJB(data.getString("ImgAJB"));
+                                md.setImgPetokD(data.getString("ImgPetokD"));
                                 md.setImgPjp(data.getString("ImgPjp"));
                                 md.setImgPjp1(data.getString("ImgPjp1"));
                                 md.setNoCertificate(data.getString("NoCertificate"));
@@ -441,31 +555,26 @@ public class HomeAdminFragment extends Fragment implements OnMapReadyCallback {
 
         queue.add(reqData);
     }
-
     @Override
     public void onResume() {
         super.onResume();
         mapView.onResume();
     }
-
     @Override
     public void onPause() {
         super.onPause();
         mapView.onPause();
     }
-
     @Override
     public void onDestroy() {
         super.onDestroy();
         mapView.onDestroy();
     }
-
     @Override
     public void onLowMemory() {
         super.onLowMemory();
         mapView.onLowMemory();
     }
-
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -480,8 +589,13 @@ public class HomeAdminFragment extends Fragment implements OnMapReadyCallback {
                 Toast.makeText(getActivity(), "Izin lokasi ditolak", Toast.LENGTH_SHORT).show();
             }
         }
+        if (requestCode == MY_PERMISSIONS_REQUEST_VIBRATE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                showNotification();
+            } else {
+            }
+        }
     }
-
     @Override
     public void onMapReady(@NonNull GoogleMap map) {
         googleMap = map;

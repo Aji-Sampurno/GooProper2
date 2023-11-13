@@ -18,6 +18,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
@@ -36,6 +37,7 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
@@ -55,7 +57,10 @@ import com.gooproper.adapter.PJPAdapter;
 import com.gooproper.adapter.SertifikatAdapter;
 import com.gooproper.adapter.ViewPagerAdapter;
 import com.gooproper.model.ListingModel;
+import com.gooproper.pager.SertifikatPdfAdapter;
+import com.gooproper.ui.TambahListingActivity;
 import com.gooproper.ui.edit.EditListingActivity;
+import com.gooproper.ui.edit.EditListingAgenActivity;
 import com.gooproper.ui.edit.EditPraListingAgenActivity;
 import com.gooproper.ui.edit.EditPralistingActivity;
 import com.gooproper.ui.FollowUpActivity;
@@ -63,10 +68,12 @@ import com.gooproper.ui.ImageViewActivity;
 import com.gooproper.util.AgenManager;
 import com.gooproper.util.FormatCurrency;
 import com.gooproper.util.Preferences;
+import com.gooproper.util.SendMessageToFCM;
 import com.gooproper.util.ServerApi;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -78,18 +85,18 @@ import java.util.Map;
 public class DetailListingActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     ProgressDialog PDDetailListing;
-    TextView TVNamaDetailListing, TVAlamatDetailListing, TVHargaDetailListing, TVHargaSewaDetailListing, TVViewsDetailListing, TVBedDetailListing, TVNamaAgen, TVBathDetailListing, TVWideDetailListing, TVLandDetailListing, TVDimensiDetailListing, TVTipeDetailListing, TVStatusDetailListing, TVSertifikatDetailListing, TVLuasDetailListing, TVKamarTidurDetailListing, TVKamarMandiDetailListing, TVLantaiDetailListing, TVGarasiDetailListing, TVCarpotDetailListing, TVListrikDetailListing, TVSumberAirDetailListing, TVPerabotDetailListing, TVSizeBanner, TVDeskripsiDetailListing, TVNoData, TVPriority, TVKondisi, TVNoPjp, TVNoDataPjp, TVFee;
+    TextView TVNamaDetailListing, TVAlamatDetailListing, TVHargaDetailListing, TVHargaSewaDetailListing, TVViewsDetailListing, TVLikeDetailListing, TVBedDetailListing, TVNamaAgen, TVBathDetailListing, TVWideDetailListing, TVLandDetailListing, TVDimensiDetailListing, TVTipeDetailListing, TVStatusDetailListing, TVSertifikatDetailListing, TVLuasDetailListing, TVKamarTidurDetailListing, TVKamarMandiDetailListing, TVLantaiDetailListing, TVGarasiDetailListing, TVCarpotDetailListing, TVListrikDetailListing, TVSumberAirDetailListing, TVPerabotDetailListing, TVSizeBanner, TVDeskripsiDetailListing, TVNoData, TVNoDataPdf, TVPriority, TVKondisi, TVNoPjp, TVNoDataPjp, TVFee;
     ImageView IVFlowUp, IVWhatsapp, IVInstagram, IVFavorite, IVFavoriteOn, IVShare, IVStar1, IVStar2, IVStar3, IVStar4, IVStar5 ;
     Button BtnApproveAdmin, BtnApproveManager, BtnTambahMaps;
-    TextInputEditText tambahagen, tambahpjp;
-    TextInputLayout lytambahagen, lyttambahpjp;
+    TextInputEditText tambahagen, tambahcoagen, tambahpjp;
+    TextInputLayout lytambahagen, lyttambahcoagen, lyttambahpjp;
     CheckBox CBMarketable, CBHarga;
     ScrollView scrollView;
     CardView agen, CVSold, CVRented;
-    String status, idpralisting, idagen, idlisting, agenid, idpengguna, StringNamaListing, StringLuasTanah, StringLuasBangunan, StringKamarTidur, StringKamarTidurArt, StringKamarMandiArt, StringKamarMandi, StringListrik, StringHarga, StringSertifikat;
+    String status, idpralisting, idagen, idlisting, agenid, agencoid, idpengguna, StringNamaListing, StringLuasTanah, StringLuasBangunan, StringKamarTidur, StringKamarTidurArt, StringKamarMandiArt, StringKamarMandi, StringListrik, StringHarga, StringHargaSewa, StringSertifikat;
     String BuyerNama, BuyerTelp, BuyerKeterangan, BuyerTanggal, BuyerIdAgen, BuyerIdListing, BuyerIdInput, BuyerJam, StringNamaBuyer, AgenId;
     String NamaMaps;
-    String imageUrl, namaAgen, telpAgen;
+    String imageUrl, namaAgen, telpAgen, UrlSHM, UrlHGB, UrlHSHP, UrlPPJB, UrlStratatitle, UrlAJB, UrlPetokD;
     String productId;
     ProgressDialog pDialog;
     ListingModel lm;
@@ -97,13 +104,15 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
     ViewPager viewPager, viewPagerSertifikat, viewPagerPJP;
     ViewPagerAdapter adapter;
     SertifikatAdapter sertifikatAdapter;
+    private SertifikatPdfAdapter sertifikatPdfAdapter;
     PJPAdapter pjpAdapter;
     ArrayList<String> images = new ArrayList<>();
     ArrayList<String> sertif = new ArrayList<>();
+    ArrayList<String> sertifpdf = new ArrayList<>();
     ArrayList<String> pjpimage = new ArrayList<>();
     private String[] dataOptions;
     private int selectedOption = -1;
-    private AgenManager agenManager;
+    private AgenManager agenManager, agenCoManager;
     private MapView mapView;
     private GoogleMap googleMap;
     double lat, lng;
@@ -116,6 +125,7 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
 
         PDDetailListing = new ProgressDialog(DetailListingActivity.this);
         tambahagen = findViewById(R.id.ETTambahAgenDetailListing);
+        tambahcoagen = findViewById(R.id.ETTambahCoAgenDetailListing);
         tambahpjp = findViewById(R.id.ETTambahNoPjpDetailListing);
         viewPager = findViewById(R.id.VPDetailListing);
         viewPagerSertifikat = findViewById(R.id.VPSertifikatDetailListing);
@@ -124,6 +134,7 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
         CVSold = findViewById(R.id.LytSoldDetailListing);
         CVRented = findViewById(R.id.LytRentedDetailListing);
         lytambahagen = findViewById(R.id.LytTambahAgenDetailListing);
+        lyttambahcoagen = findViewById(R.id.LytTambahCoAgenDetailListing);
         lyttambahpjp = findViewById(R.id.LytTambahNoPjpDetailListing);
         LytSertifikat = findViewById(R.id.LytSertifikat);
         LytPJP = findViewById(R.id.LytViewPjp);
@@ -143,6 +154,7 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
         TVHargaDetailListing = findViewById(R.id.TVHargaDetailListing);
         TVHargaSewaDetailListing = findViewById(R.id.TVHargaSewaDetailListing);
         TVViewsDetailListing = findViewById(R.id.TVViewsDetailListing);
+        TVLikeDetailListing = findViewById(R.id.TVLikeDetailListing);
         TVBedDetailListing = findViewById(R.id.TVBedDetailListing);
         TVBathDetailListing = findViewById(R.id.TVBathDetailListing);
         TVWideDetailListing = findViewById(R.id.TVWideDetailListing);
@@ -191,9 +203,9 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
         mapView.getMapAsync(this);
 
         agenManager = new AgenManager();
+        agenCoManager = new AgenManager();
 
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                != PackageManager.PERMISSION_GRANTED) {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this,
                     new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
                     REQUEST_WRITE_STORAGE);
@@ -231,12 +243,16 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
         String intentHSHP = data.getStringExtra("HSHP");
         String intentPPJB = data.getStringExtra("PPJB");
         String intentStratatitle = data.getStringExtra("Stratatitle");
+        String intentAJB = data.getStringExtra("AJB");
+        String intentPetokD = data.getStringExtra("PetokD");
         String intentPjp = data.getStringExtra("Pjp");
         String intentImgSHM = data.getStringExtra("ImgSHM");
         String intentImgHGB = data.getStringExtra("ImgHGB");
         String intentImgHSHP = data.getStringExtra("ImgHSHP");
         String intentImgPPJB = data.getStringExtra("ImgPPJB");
         String intentImgStratatitle = data.getStringExtra("ImgStratatitle");
+        String intentImgAJB = data.getStringExtra("ImgAJB");
+        String intentImgPetokD = data.getStringExtra("ImgPetokD");
         String intentImgPjp = data.getStringExtra("ImgPjp");
         String intentImgPjp1 = data.getStringExtra("ImgPjp1");
         String intentNoCertificate = data.getStringExtra("NoCertificate");
@@ -280,8 +296,6 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
         String intentInstagram = data.getStringExtra("Instagram");
         String intentFee = data.getStringExtra("Fee");
 
-        adapter = new ViewPagerAdapter(this, images);
-        sertifikatAdapter = new SertifikatAdapter(this, sertif);
         pDialog = new ProgressDialog(this);
         status = Preferences.getKeyStatus(this);
 
@@ -291,7 +305,7 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
         NamaMaps = intentNamaListing;
         BuyerIdAgen = intentIdAgen;
         BuyerIdListing = intentIdListing;
-        imageUrl = intentImg1;
+        imageUrl = intentImg2;
         namaAgen = intentNama;
         telpAgen = intentNoTelp;
         productId = intentIdListing;
@@ -304,7 +318,18 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
         StringKamarMandiArt = intentBathArt;
         StringListrik = intentListrik;
         StringSertifikat = intentJenisCertificate;
-        StringHarga = currency.formatRupiah(intentHarga);
+
+        if (intentKondisi.equals("Jual")){
+            StringHarga = currency.formatRupiah(intentHarga);
+            IVShare.setOnClickListener(view -> shareDeepLink(productId));
+        } else if (intentKondisi.equals("Sewa")) {
+            StringHargaSewa = currency.formatRupiah(intentHargaSewa);
+            IVShare.setOnClickListener(view -> shareDeepLinkSewa(productId));
+        } else {
+            StringHarga = currency.formatRupiah(intentHarga);
+            StringHargaSewa = currency.formatRupiah(intentHargaSewa);
+            IVShare.setOnClickListener(view -> shareDeepLinkJualSewa(productId));
+        }
 
         if (status.equals("1")) {
             StringNamaBuyer = Preferences.getKeyNamaLengkap(this);
@@ -438,11 +463,15 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                         update.putExtra("HSHP",intentHSHP);
                         update.putExtra("PPJB",intentPPJB);
                         update.putExtra("Stratatitle",intentStratatitle);
+                        update.putExtra("AJB",intentAJB);
+                        update.putExtra("PetokD",intentPetokD);
                         update.putExtra("ImgSHM",intentImgSHM);
                         update.putExtra("ImgHGB",intentImgHGB);
                         update.putExtra("ImgHSHP",intentImgHSHP);
                         update.putExtra("ImgPPJB",intentImgPPJB);
                         update.putExtra("ImgStratatitle",intentImgStratatitle);
+                        update.putExtra("ImgAJB",intentImgAJB);
+                        update.putExtra("ImgPetokD",intentImgPetokD);
                         update.putExtra("ImgPjp",intentImgPjp);
                         update.putExtra("ImgPjp1",intentImgPjp1);
                         update.putExtra("NoCertificate",intentNoCertificate);
@@ -529,11 +558,15 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                         update.putExtra("HSHP",intentHSHP);
                         update.putExtra("PPJB",intentPPJB);
                         update.putExtra("Stratatitle",intentStratatitle);
+                        update.putExtra("AJB",intentAJB);
+                        update.putExtra("PetokD",intentPetokD);
                         update.putExtra("ImgSHM",intentImgSHM);
                         update.putExtra("ImgHGB",intentImgHGB);
                         update.putExtra("ImgHSHP",intentImgHSHP);
                         update.putExtra("ImgPPJB",intentImgPPJB);
                         update.putExtra("ImgStratatitle",intentImgStratatitle);
+                        update.putExtra("ImgAJB",intentImgAJB);
+                        update.putExtra("ImgPetokD",intentImgPetokD);
                         update.putExtra("ImgPjp",intentImgPjp);
                         update.putExtra("ImgPjp1",intentImgPjp1);
                         update.putExtra("NoCertificate",intentNoCertificate);
@@ -590,7 +623,7 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                 IVEdit.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent update = new Intent(DetailListingActivity.this, EditListingActivity.class);
+                        Intent update = new Intent(DetailListingActivity.this, EditListingAgenActivity.class);
                         update.putExtra("IdPraListing",idpralisting);
                         update.putExtra("IdListing",intentIdListing);
                         update.putExtra("IdAgen",intentIdAgen);
@@ -617,11 +650,15 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                         update.putExtra("HSHP",intentHSHP);
                         update.putExtra("PPJB",intentPPJB);
                         update.putExtra("Stratatitle",intentStratatitle);
+                        update.putExtra("AJB",intentAJB);
+                        update.putExtra("PetokD",intentPetokD);
                         update.putExtra("ImgSHM",intentImgSHM);
                         update.putExtra("ImgHGB",intentImgHGB);
                         update.putExtra("ImgHSHP",intentImgHSHP);
                         update.putExtra("ImgPPJB",intentImgPPJB);
                         update.putExtra("ImgStratatitle",intentImgStratatitle);
+                        update.putExtra("ImgAJB",intentImgAJB);
+                        update.putExtra("ImgPetokD",intentImgPetokD);
                         update.putExtra("ImgPjp",intentImgPjp);
                         update.putExtra("ImgPjp1",intentImgPjp1);
                         update.putExtra("NoCertificate",intentNoCertificate);
@@ -713,11 +750,15 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                             update.putExtra("HSHP",intentHSHP);
                             update.putExtra("PPJB",intentPPJB);
                             update.putExtra("Stratatitle",intentStratatitle);
+                            update.putExtra("AJB",intentAJB);
+                            update.putExtra("PetokD",intentPetokD);
                             update.putExtra("ImgSHM",intentImgSHM);
                             update.putExtra("ImgHGB",intentImgHGB);
                             update.putExtra("ImgHSHP",intentImgHSHP);
                             update.putExtra("ImgPPJB",intentImgPPJB);
                             update.putExtra("ImgStratatitle",intentImgStratatitle);
+                            update.putExtra("ImgAJB",intentImgAJB);
+                            update.putExtra("ImgPetokD",intentImgPetokD);
                             update.putExtra("NoCertificate",intentNoCertificate);
                             update.putExtra("Pbb",intentPbb);
                             update.putExtra("JenisProperti",intentJenisProperti);
@@ -800,11 +841,15 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                             update.putExtra("HSHP",intentHSHP);
                             update.putExtra("PPJB",intentPPJB);
                             update.putExtra("Stratatitle",intentStratatitle);
+                            update.putExtra("AJB",intentAJB);
+                            update.putExtra("PetokD",intentPetokD);
                             update.putExtra("ImgSHM",intentImgSHM);
                             update.putExtra("ImgHGB",intentImgHGB);
                             update.putExtra("ImgHSHP",intentImgHSHP);
                             update.putExtra("ImgPPJB",intentImgPPJB);
                             update.putExtra("ImgStratatitle",intentImgStratatitle);
+                            update.putExtra("ImgAJB",intentImgAJB);
+                            update.putExtra("ImgPetokD",intentImgPetokD);
                             update.putExtra("NoCertificate",intentNoCertificate);
                             update.putExtra("Pbb",intentPbb);
                             update.putExtra("JenisProperti",intentJenisProperti);
@@ -895,11 +940,15 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                             update.putExtra("HSHP",intentHSHP);
                             update.putExtra("PPJB",intentPPJB);
                             update.putExtra("Stratatitle",intentStratatitle);
+                            update.putExtra("AJB",intentAJB);
+                            update.putExtra("PetokD",intentPetokD);
                             update.putExtra("ImgSHM",intentImgSHM);
                             update.putExtra("ImgHGB",intentImgHGB);
                             update.putExtra("ImgHSHP",intentImgHSHP);
                             update.putExtra("ImgPPJB",intentImgPPJB);
                             update.putExtra("ImgStratatitle",intentImgStratatitle);
+                            update.putExtra("ImgAJB",intentImgAJB);
+                            update.putExtra("ImgPetokD",intentImgPetokD);
                             update.putExtra("NoCertificate",intentNoCertificate);
                             update.putExtra("Pbb",intentPbb);
                             update.putExtra("JenisProperti",intentJenisProperti);
@@ -982,11 +1031,15 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                             update.putExtra("HSHP",intentHSHP);
                             update.putExtra("PPJB",intentPPJB);
                             update.putExtra("Stratatitle",intentStratatitle);
+                            update.putExtra("AJB",intentAJB);
+                            update.putExtra("PetokD",intentPetokD);
                             update.putExtra("ImgSHM",intentImgSHM);
                             update.putExtra("ImgHGB",intentImgHGB);
                             update.putExtra("ImgHSHP",intentImgHSHP);
                             update.putExtra("ImgPPJB",intentImgPPJB);
                             update.putExtra("ImgStratatitle",intentImgStratatitle);
+                            update.putExtra("ImgAJB",intentImgAJB);
+                            update.putExtra("ImgPetokD",intentImgPetokD);
                             update.putExtra("NoCertificate",intentNoCertificate);
                             update.putExtra("Pbb",intentPbb);
                             update.putExtra("JenisProperti",intentJenisProperti);
@@ -1217,6 +1270,7 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
             }
         }
 
+        CountLike(idlisting);
         AddViews();
         AddSeen();
 
@@ -1231,11 +1285,16 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                 startActivity(update);
             }
         });
-        IVShare.setOnClickListener(view -> shareDeepLink(productId));
         tambahagen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 fetchDataFromApi();
+            }
+        });
+        tambahcoagen.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                fetchDataFromApiCo();
             }
         });
         BtnApproveAdmin.setOnClickListener(new View.OnClickListener() {
@@ -1437,12 +1496,12 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
             if (intentLand.isEmpty()) {
                 TVWideDetailListing.setText("-");
             } else {
-                TVWideDetailListing.setText(intentLand + " m2");
+                TVWideDetailListing.setText(intentLand);
             }
             if (intentWide.isEmpty()) {
                 TVLandDetailListing.setText("-");
             } else {
-                TVLandDetailListing.setText(intentWide + " m2");
+                TVLandDetailListing.setText(intentWide);
             }
             if (intentJenisProperti.isEmpty()) {
                 TVTipeDetailListing.setText(": -");
@@ -1454,142 +1513,43 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
             } else {
                 TVStatusDetailListing.setText(": " + intentKondisi);
             }
-            if (intentSHM.isEmpty()||intentSHM.equals("0")) {
-                if (intentHGB.isEmpty()||intentHGB.equals("0")){
-                    if (intentHSHP.isEmpty()||intentHSHP.equals("0")){
-                        if (intentPPJB.isEmpty()||intentPPJB.equals("0")){
-                            if (intentStratatitle.isEmpty()||intentStratatitle.equals("0")){
-                                TVSertifikatDetailListing.setText(": -");
-                            } else {
-                                TVSertifikatDetailListing.setText(": Stratatitle");
-                            }
-                        } else {
-                            if (intentStratatitle.isEmpty()||intentStratatitle.equals("0")){
-                                TVSertifikatDetailListing.setText(": PPJB");
-                            } else {
-                                TVSertifikatDetailListing.setText(": PPJB, Stratatitle");
-                            }
-                        }
-                    } else {
-                        if (intentPPJB.isEmpty()||intentPPJB.equals("0")){
-                            if (intentStratatitle.isEmpty()||intentStratatitle.equals("0")){
-                                TVSertifikatDetailListing.setText(": HS/HP");
-                            } else {
-                                TVSertifikatDetailListing.setText(": HS/HP, Stratatitle");
-                            }
-                        } else {
-                            if (intentStratatitle.isEmpty()||intentStratatitle.equals("0")){
-                                TVSertifikatDetailListing.setText(": HS/HP, PPJB");
-                            } else {
-                                TVSertifikatDetailListing.setText(": HS/HP, PPJB, Stratatitle");
-                            }
-                        }
-                    }
-                } else {
-                    if (intentHSHP.isEmpty()||intentHSHP.equals("0")){
-                        if (intentPPJB.isEmpty()||intentPPJB.equals("0")){
-                            if (intentStratatitle.isEmpty()||intentStratatitle.equals("0")){
-                                TVSertifikatDetailListing.setText(": HGB");
-                            } else {
-                                TVSertifikatDetailListing.setText(": HGB, Stratatitle");
-                            }
-                        } else {
-                            if (intentStratatitle.isEmpty()||intentStratatitle.equals("0")){
-                                TVSertifikatDetailListing.setText(": HGB, PPJB");
-                            } else {
-                                TVSertifikatDetailListing.setText(": HGB, PPJB, Stratatitle");
-                            }
-                        }
-                    } else {
-                        if (intentPPJB.isEmpty()||intentPPJB.equals("0")){
-                            if (intentStratatitle.isEmpty()||intentStratatitle.equals("0")){
-                                TVSertifikatDetailListing.setText(": HGB, HS/HP");
-                            } else {
-                                TVSertifikatDetailListing.setText(": HGB, HS/HP, Stratatitle");
-                            }
-                        } else {
-                            if (intentStratatitle.isEmpty()||intentStratatitle.equals("0")){
-                                TVSertifikatDetailListing.setText(": HGB, HS/HP, PPJB");
-                            } else {
-                                TVSertifikatDetailListing.setText(": HGB, HS/HP, PPJB, Stratatitle");
-                            }
-                        }
-                    }
-                }
-            } else {
-                if (intentHGB.isEmpty()||intentHGB.equals("0")){
-                    if (intentHSHP.isEmpty()||intentHSHP.equals("0")){
-                        if (intentPPJB.isEmpty()||intentPPJB.equals("0")){
-                            if (intentStratatitle.isEmpty()||intentStratatitle.equals("0")){
-                                TVSertifikatDetailListing.setText(": SHM");
-                            } else {
-                                TVSertifikatDetailListing.setText(": SHM, Stratatitle");
-                            }
-                        } else {
-                            if (intentStratatitle.isEmpty()||intentStratatitle.equals("0")){
-                                TVSertifikatDetailListing.setText(": SHM, PPJB");
-                            } else {
-                                TVSertifikatDetailListing.setText(": SHM, PPJB, Stratatitle");
-                            }
-                        }
-                    } else {
-                        if (intentPPJB.isEmpty()||intentPPJB.equals("0")){
-                            if (intentStratatitle.isEmpty()||intentStratatitle.equals("0")){
-                                TVSertifikatDetailListing.setText(": SHM, HS/HP");
-                            } else {
-                                TVSertifikatDetailListing.setText(": SHM, HS/HP, Stratatitle");
-                            }
-                        } else {
-                            if (intentStratatitle.isEmpty()||intentStratatitle.equals("0")){
-                                TVSertifikatDetailListing.setText(": SHM, HS/HP, PPJB");
-                            } else {
-                                TVSertifikatDetailListing.setText(": SHM, HS/HP, PPJB, Stratatitle");
-                            }
-                        }
-                    }
-                } else {
-                    if (intentHSHP.isEmpty()||intentHSHP.equals("0")){
-                        if (intentPPJB.isEmpty()||intentPPJB.equals("0")){
-                            if (intentStratatitle.isEmpty()||intentStratatitle.equals("0")){
-                                TVSertifikatDetailListing.setText(": SHM, HGB");
-                            } else {
-                                TVSertifikatDetailListing.setText(": SHM, HGB, Stratatitle");
-                            }
-                        } else {
-                            if (intentStratatitle.isEmpty()||intentStratatitle.equals("0")){
-                                TVSertifikatDetailListing.setText(": SHM, HGB, PPJB");
-                            } else {
-                                TVSertifikatDetailListing.setText(": SHM, HGB, PPJB, Stratatitle");
-                            }
-                        }
-                    } else {
-                        if (intentPPJB.isEmpty()||intentPPJB.equals("0")){
-                            if (intentStratatitle.isEmpty()||intentStratatitle.equals("0")){
-                                TVSertifikatDetailListing.setText(": SHM, HGB, HS/HP");
-                            } else {
-                                TVSertifikatDetailListing.setText(": SHM, HGB, HS/HP, Stratatitle");
-                            }
-                        } else {
-                            if (intentStratatitle.isEmpty()||intentStratatitle.equals("0")){
-                                TVSertifikatDetailListing.setText(": SHM, HGB, HS/HP, PPJB");
-                            } else {
-                                TVSertifikatDetailListing.setText(": SHM, HGB, HS/HP, PPJB, Stratatitle");
-                            }
-                        }
-                    }
-                }
+            StringBuilder messageBuilder = new StringBuilder(":");
+            if (intentImgSHM.equals("0") && intentImgHGB.equals("0") && intentImgHSHP.equals("0") && intentImgPPJB.equals("0") && intentImgStratatitle.equals("0") && intentImgAJB.equals("0") && intentImgPetokD.equals("0")) {
+                messageBuilder.append(" -");
             }
+            if (!intentSHM.isEmpty() && !intentSHM.equals("0")) {
+                messageBuilder.append(" SHM");
+            }
+            if (!intentHGB.isEmpty() && !intentHGB.equals("0")) {
+                messageBuilder.append(" HGB");
+            }
+            if (!intentHSHP.isEmpty() && !intentHSHP.equals("0")) {
+                messageBuilder.append(" HS/HP");
+            }
+            if (!intentPPJB.isEmpty() && !intentPPJB.equals("0")) {
+                messageBuilder.append(" PPJB");
+            }
+            if (!intentStratatitle.isEmpty() && !intentStratatitle.equals("0")) {
+                messageBuilder.append(" Stratatitle");
+            }
+            if (!intentAJB.isEmpty() && !intentAJB.equals("0")) {
+                messageBuilder.append(" AJB");
+            }
+            if (!intentPetokD.isEmpty() && !intentPetokD.equals("0")) {
+                messageBuilder.append(" Petok D");
+            }
+            TVSertifikatDetailListing.setText(messageBuilder.toString());
             if (intentWide.isEmpty()) {
                 if (intentLand.isEmpty()) {
-                    TVLuasDetailListing.setText(": - m2/ - m2");
+                    TVLuasDetailListing.setText(": -");
                 } else {
-                    TVLuasDetailListing.setText(": m2/ " + intentLand + " m2");
+                    TVLuasDetailListing.setText(": - / " + intentLand);
                 }
             } else {
                 if (intentLand.isEmpty()) {
-                    TVLuasDetailListing.setText(": " + intentWide + " m2/ - m2");
+                    TVLuasDetailListing.setText(": " + intentWide + "/ -");
                 } else {
-                    TVLuasDetailListing.setText(": " + intentWide + " m2/" + intentLand + " m2");
+                    TVLuasDetailListing.setText(": " + intentWide + "/" + intentLand);
                 }
             }
             if (intentDimensi.isEmpty()){
@@ -1669,6 +1629,15 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                 TVFee.setText(": " + intentFee);
             }
             TVNamaAgen.setText(intentNama);
+            TVNamaAgen.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent update = new Intent(DetailListingActivity.this, DetailAgenListingActivity.class);
+                    update.putExtra("update",1);
+                    update.putExtra("IdAgen",intentIdAgen);
+                    startActivity(update);
+                }
+            });
             if (intentLatitude.equals("0") || intentLongitude.equals("0")){
                 lat = Double.parseDouble("0");
                 lng = Double.parseDouble("0");
@@ -1686,6 +1655,14 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                     startActivity(i);
                 }
             });
+
+            UrlSHM = intentImgSHM;
+            UrlHGB = intentImgHGB;
+            UrlHSHP = intentImgHSHP;
+            UrlPPJB = intentImgPPJB;
+            UrlStratatitle = intentImgStratatitle;
+            UrlAJB = intentImgAJB;
+            UrlPetokD = intentImgPetokD;
 
             if (intentImg1.equals("0")) {
             } else {
@@ -1721,23 +1698,31 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
             }
             if (intentImgSHM.equals("0")) {
             } else {
-                sertif.add(intentImgSHM);
+                sertifpdf.add(intentImgSHM);
             }
             if (intentImgHGB.equals("0")) {
             } else {
-                sertif.add(intentImgHGB);
+                sertifpdf.add(intentImgHGB);
             }
             if (intentImgHSHP.equals("0")) {
             } else {
-                sertif.add(intentImgHSHP);
+                sertifpdf.add(intentImgHSHP);
             }
             if (intentImgPPJB.equals("0")) {
             } else {
-                sertif.add(intentImgPPJB);
+                sertifpdf.add(intentImgPPJB);
             }
             if (intentImgStratatitle.equals("0")) {
             } else {
-                sertif.add(intentImgStratatitle);
+                sertifpdf.add(intentImgStratatitle);
+            }
+            if (intentImgAJB.equals("0")) {
+            } else {
+                sertifpdf.add(intentImgAJB);
+            }
+            if (intentImgPetokD.equals("0")) {
+            } else {
+                sertifpdf.add(intentImgPetokD);
             }
             if (intentImgPjp.equals("0")) {
             } else {
@@ -1748,7 +1733,7 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                 pjpimage.add(intentImgPjp1);
             }
 
-            if (intentImgSHM.equals("0") && intentImgHGB.equals("0") && intentImgHSHP.equals("0") && intentImgPPJB.equals("0") && intentImgStratatitle.equals("0")) {
+            if (intentImgSHM.equals("0") && intentImgHGB.equals("0") && intentImgHSHP.equals("0") && intentImgPPJB.equals("0") && intentImgStratatitle.equals("0") && intentImgAJB.equals("0") && intentImgPetokD.equals("0")) {
                 viewPagerSertifikat.setVisibility(View.GONE);
                 TVNoData.setVisibility(View.VISIBLE);
             }
@@ -1762,9 +1747,12 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
             viewPager.setPadding(0, 0, 0, 0);
             viewPager.setAdapter(adapter);
 
-            sertifikatAdapter = new SertifikatAdapter(this, sertif);
-            viewPagerSertifikat.setPadding(0, 0, 0, 0);
-            viewPagerSertifikat.setAdapter(sertifikatAdapter);
+            //sertifikatAdapter = new SertifikatAdapter(this, sertif);
+            //viewPagerSertifikat.setPadding(0, 0, 0, 0);
+            //viewPagerSertifikat.setAdapter(sertifikatAdapter);
+
+            sertifikatPdfAdapter = new SertifikatPdfAdapter(this, sertifpdf);
+            viewPagerSertifikat.setAdapter(sertifikatPdfAdapter);
 
             pjpAdapter = new PJPAdapter(this, pjpimage);
             viewPagerPJP.setPadding(0, 0, 0, 0);
@@ -1775,7 +1763,6 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
             getSupportActionBar().hide();
         }
     }
-
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -1786,11 +1773,9 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
             }
         }
     }
-
     private void showToast(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
-
     private void AddViews() {
         StringRequest stringRequest = new StringRequest(Request.Method.POST, ServerApi.URL_ADD_VIEWS, new Response.Listener<String>() {
             @Override
@@ -1814,7 +1799,6 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(stringRequest);
     }
-
     private void AddFavorite() {
         StringRequest stringRequest = new StringRequest(Request.Method.POST, ServerApi.URL_ADD_FAVORITE, new Response.Listener<String>() {
             @Override
@@ -1842,7 +1826,6 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(stringRequest);
     }
-
     private void AddSeen() {
         StringRequest stringRequest = new StringRequest(Request.Method.POST, ServerApi.URL_ADD_SEEN, new Response.Listener<String>() {
             @Override
@@ -1868,7 +1851,82 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(stringRequest);
     }
+    private void CountLike(String listingId) {
+        RequestQueue queue = Volley.newRequestQueue(this);
+        JsonArrayRequest reqData = new JsonArrayRequest(Request.Method.GET, ServerApi.URL_COUNT_LIKE + listingId,null,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        for(int i = 0 ; i < response.length(); i++)
+                        {
+                            try {
+                                JSONObject data = response.getJSONObject(i);
+                                String countlike = data.getString("fav");
 
+                                int like = Integer.parseInt(countlike);
+
+                                if (like >= 50){
+                                    TVLikeDetailListing.setText(countlike+" Favorite");
+                                } else {
+                                    TVLikeDetailListing.setVisibility(View.INVISIBLE);
+                                }
+
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        error.printStackTrace();
+                    }
+                });
+
+        queue.add(reqData);
+    }
+    private void fetchDataFromApiCo() {
+        agenCoManager.fetchDataFromApi(this, new AgenManager.ApiCallback() {
+            @Override
+            public void onSuccess(List<AgenManager.DataItem> dataList) {
+                showAlertDialogCo(dataList);
+            }
+
+            @Override
+            public void onError(String errorMessage) {
+            }
+        });
+    }
+    private void showAlertDialogCo(List<AgenManager.DataItem> dataList) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.CustomAlertDialogStyle);
+        builder.setTitle("Daftar Agen");
+
+        final String[] dataItems = new String[dataList.size()];
+        for (int i = 0; i < dataList.size(); i++) {
+            AgenManager.DataItem item = dataList.get(i);
+            dataItems[i] = item.getName();
+        }
+
+        builder.setItems(dataItems, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                AgenManager.DataItem selectedData = dataList.get(which);
+                agencoid = selectedData.getId();
+                handleSelectedData(selectedData);
+            }
+        });
+
+        builder.setPositiveButton("OK", null);
+        builder.show();
+    }
+    private void handleSelectedDataCo(AgenManager.DataItem selectedData) {
+        String selectedText = "ID Agen Co Listing: " + selectedData.getId();
+        Toast.makeText(this, selectedText, Toast.LENGTH_SHORT).show();
+
+        tambahcoagen.setText(selectedData.getName());
+        agencoid = selectedData.getId();
+    }
     private void approveadmin() {
         pDialog.setMessage("Sedang Diproses...");
         pDialog.setCancelable(false);
@@ -1958,7 +2016,6 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(stringRequest);
     }
-
     private void approvemanager() {
         pDialog.setMessage("Sedang Diproses...");
         pDialog.setCancelable(false);
@@ -1992,6 +2049,29 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                     ok.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
+                            RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
+                            JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, ServerApi.URL_GET_DEVICE_AGEN+idagen, null, new Response.Listener<JSONArray>() {
+                                @Override
+                                public void onResponse(JSONArray response) {
+                                    try {
+                                        ArrayList<String> tokens = new ArrayList<>();
+                                        for (int i = 0; i < response.length(); i++) {
+                                            JSONObject tokenObject = response.getJSONObject(i);
+                                            String token = tokenObject.getString("Token");
+                                            tokens.add(token);
+                                        }
+                                        new SendMessageTask().execute(tokens.toArray(new String[0]));
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            }, new Response.ErrorListener() {
+                                @Override
+                                public void onErrorResponse(VolleyError error) {
+                                    // Tangani kesalahan jika terjadi
+                                }
+                            });
+                            requestQueue.add(jsonArrayRequest);
                             customDialog.dismiss();
                             finish();
                         }
@@ -2024,6 +2104,29 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                     ok.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
+                            RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
+                            JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, ServerApi.URL_GET_DEVICE_AGEN+idagen, null, new Response.Listener<JSONArray>() {
+                                @Override
+                                public void onResponse(JSONArray response) {
+                                    try {
+                                        ArrayList<String> tokens = new ArrayList<>();
+                                        for (int i = 0; i < response.length(); i++) {
+                                            JSONObject tokenObject = response.getJSONObject(i);
+                                            String token = tokenObject.getString("Token");
+                                            tokens.add(token);
+                                        }
+                                        new SendMessageTask().execute(tokens.toArray(new String[0]));
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            }, new Response.ErrorListener() {
+                                @Override
+                                public void onErrorResponse(VolleyError error) {
+                                    // Tangani kesalahan jika terjadi
+                                }
+                            });
+                            requestQueue.add(jsonArrayRequest);
                             customDialog.dismiss();
                             finish();
                         }
@@ -2060,6 +2163,29 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                 ok.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+                        RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
+                        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, ServerApi.URL_GET_DEVICE_AGEN+idagen, null, new Response.Listener<JSONArray>() {
+                            @Override
+                            public void onResponse(JSONArray response) {
+                                try {
+                                    ArrayList<String> tokens = new ArrayList<>();
+                                    for (int i = 0; i < response.length(); i++) {
+                                        JSONObject tokenObject = response.getJSONObject(i);
+                                        String token = tokenObject.getString("Token");
+                                        tokens.add(token);
+                                    }
+                                    new SendMessageTask().execute(tokens.toArray(new String[0]));
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }, new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                // Tangani kesalahan jika terjadi
+                            }
+                        });
+                        requestQueue.add(jsonArrayRequest);
                         customDialog.dismiss();
                         finish();
                     }
@@ -2088,7 +2214,6 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(stringRequest);
     }
-
     private void fetchDataFromApi() {
         agenManager.fetchDataFromApi(this, new AgenManager.ApiCallback() {
             @Override
@@ -2101,7 +2226,6 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
             }
         });
     }
-
     private void showAlertDialog(List<AgenManager.DataItem> dataList) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.CustomAlertDialogStyle);
         builder.setTitle("Daftar Agen");
@@ -2124,7 +2248,6 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
         builder.setPositiveButton("OK", null);
         builder.show();
     }
-
     private void handleSelectedData(AgenManager.DataItem selectedData) {
         String selectedText = "Selected ID: " + selectedData.getId();
         Toast.makeText(this, selectedText, Toast.LENGTH_SHORT).show();
@@ -2132,10 +2255,9 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
         tambahagen.setText(selectedData.getName());
         agenid = selectedData.getId();
     }
-
     private void shareDeepLink(String productId) {
         String deepLinkUrl = "https://gooproper.com/listing/" + productId;
-        String shareMessage = "Lihat listingan kami\n" + StringNamaListing + "\nLT " + StringLuasTanah + "m2 LB " + StringLuasBangunan + " m2\nKT " + StringKamarTidur + " + " + StringKamarTidurArt + "\nKM " + StringKamarMandi + " + " + StringKamarMandiArt + "\nListrik " + StringListrik + " Watt\n" + StringSertifikat + "\nHarga " + StringHarga + "\n\nhubungi : \n" + namaAgen + " - " + telpAgen + "\n\n" + deepLinkUrl;
+        String shareMessage = "Lihat listingan kami\n" + StringNamaListing + "\nLT " + StringLuasTanah + " LB " + StringLuasBangunan + " \nKT " + StringKamarTidur + " + " + StringKamarTidurArt + "\nKM " + StringKamarMandi + " + " + StringKamarMandiArt + "\nListrik " + StringListrik + " Watt\n" + StringSertifikat + "\nHarga " + StringHarga + "\n\n" + deepLinkUrl;
 
         Picasso.get().load(imageUrl).into(new Target() {
             @Override
@@ -2162,31 +2284,84 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
             }
         });
     }
+    private void shareDeepLinkSewa(String productId) {
+        String deepLinkUrl = "https://gooproper.com/listing/" + productId;
+        String shareMessage = "Lihat listingan kami\n" + StringNamaListing + "\nLT " + StringLuasTanah + " LB " + StringLuasBangunan + " \nKT " + StringKamarTidur + " + " + StringKamarTidurArt + "\nKM " + StringKamarMandi + " + " + StringKamarMandiArt + "\nListrik " + StringListrik + " Watt\n" + StringSertifikat + "\nHarga " + StringHargaSewa + "\n\n" + deepLinkUrl;
 
+        Picasso.get().load(imageUrl).into(new Target() {
+            @Override
+            public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                String imagePath = MediaStore.Images.Media.insertImage(getContentResolver(), bitmap, "Image Title", null);
+                Uri imageUri = Uri.parse(imagePath);
+
+                Intent shareIntent = new Intent(Intent.ACTION_SEND);
+                shareIntent.setType("image/*");
+
+                shareIntent.putExtra(Intent.EXTRA_TEXT, shareMessage);
+                shareIntent.putExtra(Intent.EXTRA_STREAM, imageUri);
+
+                startActivity(Intent.createChooser(shareIntent, "Bagikan melalui"));
+            }
+
+            @Override
+            public void onBitmapFailed(Exception e, Drawable errorDrawable) {
+                e.printStackTrace();
+            }
+
+            @Override
+            public void onPrepareLoad(Drawable placeHolderDrawable) {
+            }
+        });
+    }
+    private void shareDeepLinkJualSewa(String productId) {
+        String deepLinkUrl = "https://gooproper.com/listing/" + productId;
+        String shareMessage = "Lihat listingan kami\n" + StringNamaListing + "\nLT " + StringLuasTanah + " LB " + StringLuasBangunan + " \nKT " + StringKamarTidur + " + " + StringKamarTidurArt + "\nKM " + StringKamarMandi + " + " + StringKamarMandiArt + "\nListrik " + StringListrik + " Watt\n" + StringSertifikat + "\nHarga " + StringHarga + "\nHarga Sewa " + StringHargaSewa + "\n\n" + deepLinkUrl;
+
+        Picasso.get().load(imageUrl).into(new Target() {
+            @Override
+            public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                String imagePath = MediaStore.Images.Media.insertImage(getContentResolver(), bitmap, "Image Title", null);
+                Uri imageUri = Uri.parse(imagePath);
+
+                Intent shareIntent = new Intent(Intent.ACTION_SEND);
+                shareIntent.setType("image/*");
+
+                shareIntent.putExtra(Intent.EXTRA_TEXT, shareMessage);
+                shareIntent.putExtra(Intent.EXTRA_STREAM, imageUri);
+
+                startActivity(Intent.createChooser(shareIntent, "Bagikan melalui"));
+            }
+
+            @Override
+            public void onBitmapFailed(Exception e, Drawable errorDrawable) {
+                e.printStackTrace();
+            }
+
+            @Override
+            public void onPrepareLoad(Drawable placeHolderDrawable) {
+            }
+        });
+    }
     @Override
     public void onResume() {
         super.onResume();
         mapView.onResume();
     }
-
     @Override
     public void onPause() {
         super.onPause();
         mapView.onPause();
     }
-
     @Override
     public void onDestroy() {
         super.onDestroy();
         mapView.onDestroy();
     }
-
     @Override
     public void onLowMemory() {
         super.onLowMemory();
         mapView.onLowMemory();
     }
-
     @Override
     public void onMapReady(@NonNull GoogleMap map) {
         googleMap = map;
@@ -2222,5 +2397,25 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                 }
             });
         }
+    }
+    private class SendMessageTask extends AsyncTask<String, Void, String> {
+        @Override
+        protected String doInBackground(String... params) {
+            for (String token : params) {
+                sendNotificationToToken(token, "listingku");
+            }
+            return null;
+        }
+        @Override
+        protected void onPostExecute(String response) {
+            if (response != null) {
+                Toast.makeText(getApplicationContext(), response, Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+    private void sendNotificationToToken(String token, String notificationType) {
+        String title = "Admin Goo Proper";
+        String message = "Listing Anda Sudah di Approve";
+        String response = SendMessageToFCM.sendMessage(token, title, message, notificationType);
     }
 }

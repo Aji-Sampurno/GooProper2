@@ -378,14 +378,30 @@
 
             </LinearLayout>
 
-            <TextView
-                android:id="@+id/TVViewsDetailListing"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="5dp"
-                android:layout_marginTop="10dp"
-                android:text="0 views"
-                android:textColor="@color/white" />
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/TVViewsDetailListing"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginTop="10dp"
+                    android:text="0 views"
+                    android:textColor="@color/white" />
+
+                <TextView
+                    android:id="@+id/TVLikeDetailListing"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginTop="10dp"
+                    android:text="0 favorite"
+                    android:textColor="@color/white" />
+
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -985,6 +1001,26 @@
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/ETTambahAgenDetailListing"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:focusable="false"
+                    android:inputType="none"
+                    android:textColor="@color/white" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/LytTambahCoAgenDetailListing"
+                style="@style/CustomOutlinedBoxWhite"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="5dp"
+                android:hint="Tambah Co Listing"
+                android:visibility="gone">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/ETTambahCoAgenDetailListing"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:focusable="false"

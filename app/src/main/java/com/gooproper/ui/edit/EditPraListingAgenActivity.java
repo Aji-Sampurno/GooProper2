@@ -7,6 +7,7 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -18,12 +19,14 @@ import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
@@ -31,11 +34,16 @@ import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.gooproper.R;
+import com.gooproper.ui.TambahListingActivity;
+import com.gooproper.util.Preferences;
+import com.gooproper.util.SendMessageToFCM;
 import com.gooproper.util.ServerApi;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -49,7 +57,7 @@ public class EditPraListingAgenActivity extends AppCompatActivity {
     TextInputLayout LytSize, LytHargaJual, LytHargaSewa;
     RadioButton open, exclusive;
     RadioGroup rgpriority;
-    String idpralisting, priority, HargaString, HargaSewaString;
+    String idpralisting, priority, HargaString, HargaSewaString, StringIdAgen;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -152,13 +160,6 @@ public class EditPraListingAgenActivity extends AppCompatActivity {
                     LytHargaJual.setVisibility(View.GONE);
                     LytHargaSewa.setVisibility(View.GONE);
                 }
-            }
-        });
-        rgpriority.setOnCheckedChangeListener((group, checkedId) -> {
-            if (checkedId == R.id.rbopen) {
-                priority = "open";
-            } else if (checkedId == R.id.rbexclusive) {
-                priority = "exclusive";
             }
         });
         Etharga.addTextChangedListener(new TextWatcher() {
@@ -327,6 +328,8 @@ public class EditPraListingAgenActivity extends AppCompatActivity {
         String intentInstagram = data.getStringExtra("Instagram");
         String intentFee = data.getStringExtra("Fee");
 
+        StringIdAgen = intentIdAgen;
+
         if (intentPriority.equals("open")){
             open.setChecked(true);
             priority = intentPriority;
@@ -413,6 +416,29 @@ public class EditPraListingAgenActivity extends AppCompatActivity {
                                 ok.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View view) {
+                                        RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
+                                        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, ServerApi.URL_GET_DEVICE, null, new Response.Listener<JSONArray>() {
+                                            @Override
+                                            public void onResponse(JSONArray response) {
+                                                try {
+                                                    ArrayList<String> tokens = new ArrayList<>();
+                                                    for (int i = 0; i < response.length(); i++) {
+                                                        JSONObject tokenObject = response.getJSONObject(i);
+                                                        String token = tokenObject.getString("Token");
+                                                        tokens.add(token);
+                                                    }
+                                                    new SendMessageTask().execute(tokens.toArray(new String[0]));
+                                                } catch (JSONException e) {
+                                                    e.printStackTrace();
+                                                }
+                                            }
+                                        }, new Response.ErrorListener() {
+                                            @Override
+                                            public void onErrorResponse(VolleyError error) {
+                                                // Tangani kesalahan jika terjadi
+                                            }
+                                        });
+                                        requestQueue.add(jsonArrayRequest);
                                         customDialog.dismiss();
                                         finish();
                                     }
@@ -739,5 +765,25 @@ public class EditPraListingAgenActivity extends AppCompatActivity {
         AlertDialog dialog = builder.create();
 
         dialog.show();
+    }
+    private class SendMessageTask extends AsyncTask<String, Void, String> {
+        @Override
+        protected String doInBackground(String... params) {
+            for (String token : params) {
+                sendNotificationToToken(token, "pesan");
+            }
+            return null;
+        }
+        @Override
+        protected void onPostExecute(String response) {
+            if (response != null) {
+                Toast.makeText(getApplicationContext(), response, Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+    private void sendNotificationToToken(String token, String notificationType) {
+        String title = Preferences.getKeyNama(this);
+        String message = "Melakukan Update Listing";
+        String response = SendMessageToFCM.sendMessage(token, title, message, notificationType);
     }
 }
