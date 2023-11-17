@@ -1,11 +1,14 @@
 package com.gooproper.adapter;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -19,18 +22,23 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.gooproper.R;
 import com.gooproper.model.ListingModel;
+import com.gooproper.ui.TambahListingActivity;
 import com.gooproper.ui.detail.DetailListingActivity;
 import com.gooproper.util.FormatCurrency;
 import com.gooproper.util.ServerApi;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -217,41 +225,54 @@ public class PraListingAdapter extends RecyclerView.Adapter<PraListingAdapter.Ho
         if (position >= 0 && position < models.size()) {
             String itemId = models.get(position).getIdPraListing();
 
-            //databaseHelper.deleteItem(itemId);
-            /*String url = "https://your-api-endpoint.com/delete/" + itemId;
-            RequestQueue queue = Volley.newRequestQueue(context);
-
-            StringRequest deleteRequest = new StringRequest(Request.Method.DELETE, url,
-                    new Response.Listener<String>() {
-                        @Override
-                        public void onResponse(String response) {
-                            models.remove(position);
-                            notifyItemRemoved(position);
-                        }
-                    },
-                    new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                            Toast.makeText(context, "Delete failed. Error: " + error.getMessage(), Toast.LENGTH_SHORT).show();
-                        }
-                    });
-
-            queue.add(deleteRequest);*/
-
             StringRequest stringRequest = new StringRequest(Request.Method.POST, ServerApi.URL_DELETE_PRALISTING,
                     new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
                             try {
                                 JSONObject res = new JSONObject(response);
-                                String status = res.getString("Status");
-                                if (status.equals("Sukses")){
-                                    models.remove(position);
-                                    notifyItemRemoved(position);
-                                    Toast.makeText(context, "Berhasil Hapus Data ", Toast.LENGTH_SHORT).show();
-                                } else if (status.equals("Error")) {
-                                    Toast.makeText(context, "Gagal Hapus Data.", Toast.LENGTH_SHORT).show();
+
+                                models.remove(position);
+                                notifyItemRemoved(position);
+                                Toast.makeText(context, "Berhasil Hapus Data ", Toast.LENGTH_SHORT).show();
+                                Dialog customDialog = new Dialog(context);
+                                customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                                customDialog.setContentView(R.layout.custom_dialog_sukses);
+
+                                if (customDialog.getWindow() != null) {
+                                    customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
                                 }
+
+                                TextView dialogTitle = customDialog.findViewById(R.id.dialog_title);
+                                Button ok = customDialog.findViewById(R.id.btnya);
+                                Button cobalagi = customDialog.findViewById(R.id.btntidak);
+                                ImageView gifimage = customDialog.findViewById(R.id.ivdialog);
+
+                                dialogTitle.setText("Berhasil Menambahkan Listingan");
+                                cobalagi.setVisibility(View.GONE);
+
+                                ok.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        customDialog.dismiss();
+                                    }
+                                });
+
+                                Glide.with(context)
+                                        .load(R.mipmap.ic_yes) // You can also use a local resource like R.drawable.your_gif_resource
+                                        .transition(DrawableTransitionOptions.withCrossFade())
+                                        .into(gifimage);
+
+                                customDialog.show();
+
+//                                String status = res.getString("Status");
+//                                if (status.equals("Sukses")){
+//                                    models.remove(position);
+//                                    notifyItemRemoved(position);
+//                                    Toast.makeText(context, "Berhasil Hapus Data ", Toast.LENGTH_SHORT).show();
+//                                } else if (status.equals("Error")) {
+//                                    Toast.makeText(context, "Gagal Hapus Data.", Toast.LENGTH_SHORT).show();
+//                                }
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
@@ -381,6 +402,8 @@ public class PraListingAdapter extends RecyclerView.Adapter<PraListingAdapter.Ho
                     update.putExtra("NoTelp",listingModel.getNoTelp());
                     update.putExtra("Instagram",listingModel.getInstagram());
                     update.putExtra("Fee",listingModel.getFee());
+                    update.putExtra("NamaVendor",listingModel.getNamaVendor());
+                    update.putExtra("NoTelpVendor",listingModel.getNoTelpVendor());
                     context.startActivity(update);
                 }
             });

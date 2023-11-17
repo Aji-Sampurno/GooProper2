@@ -7,6 +7,8 @@ import androidx.fragment.app.FragmentActivity;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 
 import com.android.volley.Request;
@@ -21,6 +23,8 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.gooproper.R;
@@ -30,6 +34,9 @@ import com.gooproper.util.ServerApi;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.text.NumberFormat;
+import java.util.Locale;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
@@ -85,11 +92,27 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                                     String title = markerObject.getString("NamaListing");
                                     String harga = markerObject.getString("Harga");
 
-                                    LatLng position = new LatLng(lat, lng);
-                                    googleMap.addMarker(new MarkerOptions()
-                                            .position(position)
-                                            .title(title)
-                                            .snippet(harga));
+                                    if (!harga.isEmpty()){
+                                        double hargaDouble = Double.parseDouble(harga);
+
+                                        NumberFormat numberFormat = NumberFormat.getCurrencyInstance(new Locale("id", "ID"));
+                                        String formattedHarga = numberFormat.format(hargaDouble);
+
+                                        LatLng position = new LatLng(lat, lng);
+
+                                        int width = 50;
+                                        int height = 70;
+                                        Bitmap smallMarker = Bitmap.createScaledBitmap(((BitmapDrawable) getResources().getDrawable(R.drawable.markerlocation)).getBitmap(), width, height, false);
+                                        BitmapDescriptor smallMarkerIcon = BitmapDescriptorFactory.fromBitmap(smallMarker);
+
+                                        MarkerOptions markerOptions = new MarkerOptions()
+                                                .position(position)
+                                                .title(title)
+                                                .snippet(formattedHarga)
+                                                .icon(smallMarkerIcon);
+
+                                        googleMap.addMarker(markerOptions);
+                                    }
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();

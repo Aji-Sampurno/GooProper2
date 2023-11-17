@@ -2629,6 +2629,14 @@ public class TambahListingActivity extends AppCompatActivity {
         });
 
         builder.setPositiveButton("OK", null);
+        builder.setNeutralButton("Hapus", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                agenid = "0";
+                CoListing.setText("");
+            }
+        });
+        builder.setNegativeButton("Batal", null);
         builder.show();
     }
     private void handleSelectedData(AgenManager.DataItem selectedData) {
@@ -5248,8 +5256,8 @@ public class TambahListingActivity extends AppCompatActivity {
                 } else {
                     idinput = idagen;
                 }
-                if (agenid.isEmpty()) {
-                    agencoid = "0";
+                if (agenid == null) {
+                    agencoid = idnull;
                 } else {
                     agencoid = agenid;
                 }
@@ -6147,237 +6155,7 @@ public class TambahListingActivity extends AppCompatActivity {
                 return false;
             }
         }
-        if (CBSHM.isChecked()) {
-            if (UriSHM == null && UriSHMPdf == null) {
-                Dialog customDialog = new Dialog(TambahListingActivity.this);
-                customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                customDialog.setContentView(R.layout.custom_dialog_eror_input);
 
-                if (customDialog.getWindow() != null) {
-                    customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-                }
-
-                Button ok = customDialog.findViewById(R.id.BtnOkErorInput);
-                TextView tv = customDialog.findViewById(R.id.TVDialogErorInput);
-
-                tv.setText("Harap Tambahkan Gambar SHM");
-
-                ok.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        customDialog.dismiss();
-                    }
-                });
-
-                ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
-
-                Glide.with(TambahListingActivity.this)
-                        .load(R.drawable.alert) // You can also use a local resource like R.drawable.your_gif_resource
-                        .transition(DrawableTransitionOptions.withCrossFade())
-                        .into(gifImageView);
-
-                customDialog.show();
-                return false;
-            }
-        }
-        if (CBHGB.isChecked()) {
-            if (UriHGB == null && UriHGBPdf == null) {
-                Dialog customDialog = new Dialog(TambahListingActivity.this);
-                customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                customDialog.setContentView(R.layout.custom_dialog_eror_input);
-
-                if (customDialog.getWindow() != null) {
-                    customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-                }
-
-                Button ok = customDialog.findViewById(R.id.BtnOkErorInput);
-                TextView tv = customDialog.findViewById(R.id.TVDialogErorInput);
-
-                tv.setText("Harap Tambahkan Gambar HGB");
-
-                ok.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        customDialog.dismiss();
-                    }
-                });
-
-                ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
-
-                Glide.with(TambahListingActivity.this)
-                        .load(R.drawable.alert) // You can also use a local resource like R.drawable.your_gif_resource
-                        .transition(DrawableTransitionOptions.withCrossFade())
-                        .into(gifImageView);
-
-                customDialog.show();
-                return false;
-            }
-        }
-        if (CBHSHP.isChecked()) {
-            if (UriHSHP == null && UriHSHPPdf == null) {
-                Dialog customDialog = new Dialog(TambahListingActivity.this);
-                customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                customDialog.setContentView(R.layout.custom_dialog_eror_input);
-
-                if (customDialog.getWindow() != null) {
-                    customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-                }
-
-                Button ok = customDialog.findViewById(R.id.BtnOkErorInput);
-                TextView tv = customDialog.findViewById(R.id.TVDialogErorInput);
-
-                tv.setText("Harap Tambahkan Gambar HS/HP");
-
-                ok.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        customDialog.dismiss();
-                    }
-                });
-
-                ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
-
-                Glide.with(TambahListingActivity.this)
-                        .load(R.drawable.alert) // You can also use a local resource like R.drawable.your_gif_resource
-                        .transition(DrawableTransitionOptions.withCrossFade())
-                        .into(gifImageView);
-
-                customDialog.show();
-                return false;
-            }
-        }
-        if (CBPPJB.isChecked()) {
-            if (UriPPJB == null && UriPPJBPdf == null) {
-                Dialog customDialog = new Dialog(TambahListingActivity.this);
-                customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                customDialog.setContentView(R.layout.custom_dialog_eror_input);
-
-                if (customDialog.getWindow() != null) {
-                    customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-                }
-
-                Button ok = customDialog.findViewById(R.id.BtnOkErorInput);
-                TextView tv = customDialog.findViewById(R.id.TVDialogErorInput);
-
-                tv.setText("Harap Tambahkan Gambar PPJB");
-
-                ok.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        customDialog.dismiss();
-                    }
-                });
-
-                ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
-
-                Glide.with(TambahListingActivity.this)
-                        .load(R.drawable.alert) // You can also use a local resource like R.drawable.your_gif_resource
-                        .transition(DrawableTransitionOptions.withCrossFade())
-                        .into(gifImageView);
-
-                customDialog.show();
-                return false;
-            }
-        }
-        if (CBSTRA.isChecked()) {
-            if (UriSTRA == null && UriSTRAPdf == null) {
-                Dialog customDialog = new Dialog(TambahListingActivity.this);
-                customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                customDialog.setContentView(R.layout.custom_dialog_eror_input);
-
-                if (customDialog.getWindow() != null) {
-                    customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-                }
-
-                Button ok = customDialog.findViewById(R.id.BtnOkErorInput);
-                TextView tv = customDialog.findViewById(R.id.TVDialogErorInput);
-
-                tv.setText("Harap Tambahkan Gambar Stratatitle");
-
-                ok.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        customDialog.dismiss();
-                    }
-                });
-
-                ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
-
-                Glide.with(TambahListingActivity.this)
-                        .load(R.drawable.alert) // You can also use a local resource like R.drawable.your_gif_resource
-                        .transition(DrawableTransitionOptions.withCrossFade())
-                        .into(gifImageView);
-
-                customDialog.show();
-                return false;
-            }
-        }
-        if (CBAJB.isChecked()) {
-            if (UriAJB == null && UriAJBPdf == null) {
-                Dialog customDialog = new Dialog(TambahListingActivity.this);
-                customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                customDialog.setContentView(R.layout.custom_dialog_eror_input);
-
-                if (customDialog.getWindow() != null) {
-                    customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-                }
-
-                Button ok = customDialog.findViewById(R.id.BtnOkErorInput);
-                TextView tv = customDialog.findViewById(R.id.TVDialogErorInput);
-
-                tv.setText("Harap Tambahkan Gambar AJB");
-
-                ok.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        customDialog.dismiss();
-                    }
-                });
-
-                ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
-
-                Glide.with(TambahListingActivity.this)
-                        .load(R.drawable.alert) // You can also use a local resource like R.drawable.your_gif_resource
-                        .transition(DrawableTransitionOptions.withCrossFade())
-                        .into(gifImageView);
-
-                customDialog.show();
-                return false;
-            }
-        }
-        if (CBPetokD.isChecked()) {
-            if (UriPetokD == null && UriPetokDPdf == null) {
-                Dialog customDialog = new Dialog(TambahListingActivity.this);
-                customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                customDialog.setContentView(R.layout.custom_dialog_eror_input);
-
-                if (customDialog.getWindow() != null) {
-                    customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-                }
-
-                Button ok = customDialog.findViewById(R.id.BtnOkErorInput);
-                TextView tv = customDialog.findViewById(R.id.TVDialogErorInput);
-
-                tv.setText("Harap Tambahkan Gambar Petok D");
-
-                ok.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        customDialog.dismiss();
-                    }
-                });
-
-                ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
-
-                Glide.with(TambahListingActivity.this)
-                        .load(R.drawable.alert) // You can also use a local resource like R.drawable.your_gif_resource
-                        .transition(DrawableTransitionOptions.withCrossFade())
-                        .into(gifImageView);
-
-                customDialog.show();
-                return false;
-            }
-        }
         return true;
     }
     private class SendMessageTask extends AsyncTask<String, Void, String> {

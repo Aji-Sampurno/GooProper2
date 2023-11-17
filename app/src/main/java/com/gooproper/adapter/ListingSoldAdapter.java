@@ -16,6 +16,7 @@ import com.bumptech.glide.Glide;
 import com.gooproper.R;
 import com.gooproper.model.ListingModel;
 import com.gooproper.ui.detail.DetailListingActivity;
+import com.gooproper.util.Preferences;
 
 import java.util.List;
 
@@ -141,6 +142,7 @@ public class ListingSoldAdapter extends RecyclerView.Adapter<ListingSoldAdapter.
         TextView titleTxt, addressTxt, bedTxt, bathTxt, levelTxt, garageTxt;
         LinearLayout sold, rented;
         ImageView pic;
+        String status;
         public ListingModel listingModel;
 
         public HolderData(View view) {
@@ -154,6 +156,20 @@ public class ListingSoldAdapter extends RecyclerView.Adapter<ListingSoldAdapter.
             pic = view.findViewById(R.id.pic);
             sold = view.findViewById(R.id.badgesold);
             rented = view.findViewById(R.id.badgerented);
+
+            status = Preferences.getKeyStatus(context);
+
+            if (status.equals("1")){
+                addressTxt.setVisibility(View.VISIBLE);
+            } else if (status.equals("2")) {
+                addressTxt.setVisibility(View.VISIBLE);
+            } else if (status.equals("3")) {
+                addressTxt.setVisibility(View.GONE);
+            } else if (status.equals("4")) {
+                addressTxt.setVisibility(View.GONE);
+            } else {
+                addressTxt.setVisibility(View.GONE);
+            }
 
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -239,6 +255,8 @@ public class ListingSoldAdapter extends RecyclerView.Adapter<ListingSoldAdapter.
                     update.putExtra("NoTelp",listingModel.getNoTelp());
                     update.putExtra("Instagram",listingModel.getInstagram());
                     update.putExtra("Fee",listingModel.getFee());
+                    update.putExtra("NamaVendor",listingModel.getNamaVendor());
+                    update.putExtra("NoTelpVendor",listingModel.getNoTelpVendor());
                     context.startActivity(update);
                 }
             });

@@ -211,6 +211,8 @@ public class DetailClosingActivity extends AppCompatActivity implements OnMapRea
         String intentNoTelp = data.getStringExtra("NoTelp");
         String intentInstagram = data.getStringExtra("Instagram");
         String intentFee = data.getStringExtra("Fee");
+        String intentNamaVendor = data.getStringExtra("NamaVendor");
+        String intentNoTelpVendor = data.getStringExtra("NoTelpVendor");
 
         adapter = new ViewPagerAdapter(this, images);;
         pDialog = new ProgressDialog(this);

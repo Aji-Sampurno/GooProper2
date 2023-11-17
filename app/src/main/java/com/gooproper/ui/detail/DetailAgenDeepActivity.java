@@ -201,6 +201,8 @@ public class DetailAgenDeepActivity extends AppCompatActivity {
                                 md.setNama(data.getString("Nama"));
                                 md.setNoTelp(data.getString("NoTelp"));
                                 md.setInstagram(data.getString("Instagram"));
+                                md.setNamaVendor(data.getString("NamaVendor"));
+                                md.setNoTelpVendor(data.getString("NoTelpVendor"));
                                 list.add(md);
                                 PDAgen.dismiss();
                             } catch (JSONException e) {

@@ -589,6 +589,8 @@ public class ListingFragment extends Fragment {
                                 md.setNoTelp(data.getString("NoTelp"));
                                 md.setInstagram(data.getString("Instagram"));
                                 md.setFee(data.getString("Fee"));
+                                md.setNamaVendor(data.getString("NamaVendor"));
+                                md.setNoTelpVendor(data.getString("NoTelpVendor"));
                                 list.add(md);
                                 PDListingCustomer.dismiss();
                             } catch (JSONException e) {

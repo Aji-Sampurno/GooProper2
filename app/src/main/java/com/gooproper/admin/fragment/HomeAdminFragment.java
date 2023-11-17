@@ -1,11 +1,19 @@
 package com.gooproper.admin.fragment;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -16,6 +24,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,6 +51,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -57,6 +67,7 @@ import com.gooproper.ui.NewActivity;
 import com.gooproper.ui.PopularActivity;
 import com.gooproper.ui.SoldActivity;
 import com.gooproper.ui.TambahListingActivity;
+import com.gooproper.util.FormatCurrency;
 import com.gooproper.util.Preferences;
 import com.gooproper.util.PreferencesDevice;
 import com.gooproper.util.ServerApi;
@@ -65,9 +76,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 public class HomeAdminFragment extends Fragment implements OnMapReadyCallback {
@@ -93,6 +106,12 @@ public class HomeAdminFragment extends Fragment implements OnMapReadyCallback {
         Status = Preferences.getKeyStatus(getContext());
 
         requestNotificationPermission();
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+            NotificationChannel channel = new NotificationChannel("1","notification", NotificationManager.IMPORTANCE_HIGH);
+            NotificationManager notificationManager = requireContext().getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
 
         FirebaseMessaging.getInstance().getToken()
                 .addOnCompleteListener(task -> {
@@ -161,14 +180,27 @@ public class HomeAdminFragment extends Fragment implements OnMapReadyCallback {
         return root;
     }
     private void requestNotificationPermission() {
-        if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.VIBRATE)
-                != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(getActivity(),
-                    new String[]{Manifest.permission.VIBRATE},
-                    MY_PERMISSIONS_REQUEST_VIBRATE);
+        if (!NotificationManagerCompat.from(requireContext()).areNotificationsEnabled()) {
+            openNotificationSettings();
         } else {
-            showNotification();
+            Toast.makeText(requireContext(), "Izin notifikasi sudah diberikan", Toast.LENGTH_SHORT).show();
         }
+    }
+    private void openNotificationSettings() {
+        Intent intent = new Intent();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            intent.setAction(Settings.ACTION_APP_NOTIFICATION_SETTINGS);
+            intent.putExtra(Settings.EXTRA_APP_PACKAGE, requireContext().getPackageName());
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            intent.setAction("android.settings.APP_NOTIFICATION_SETTINGS");
+            intent.putExtra("app_package", requireContext().getPackageName());
+            intent.putExtra("app_uid", requireContext().getApplicationInfo().uid);
+        } else {
+            intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+            intent.addCategory(Intent.CATEGORY_DEFAULT);
+            intent.setData(Uri.parse("package:" + requireContext().getPackageName()));
+        }
+        startActivity(intent);
     }
     private void showNotification() {
         // Logika untuk menampilkan notifikasi
@@ -321,6 +353,8 @@ public class HomeAdminFragment extends Fragment implements OnMapReadyCallback {
                                 md.setNoTelp(data.getString("NoTelp"));
                                 md.setInstagram(data.getString("Instagram"));
                                 md.setFee(data.getString("Fee"));
+                                md.setNamaVendor(data.getString("NamaVendor"));
+                                md.setNoTelpVendor(data.getString("NoTelpVendor"));
                                 mItemsSold.add(md);
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -429,6 +463,8 @@ public class HomeAdminFragment extends Fragment implements OnMapReadyCallback {
                                 md.setNoTelp(data.getString("NoTelp"));
                                 md.setInstagram(data.getString("Instagram"));
                                 md.setFee(data.getString("Fee"));
+                                md.setNamaVendor(data.getString("NamaVendor"));
+                                md.setNoTelpVendor(data.getString("NoTelpVendor"));
                                 mItemsHot.add(md);
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -537,6 +573,8 @@ public class HomeAdminFragment extends Fragment implements OnMapReadyCallback {
                                 md.setNoTelp(data.getString("NoTelp"));
                                 md.setInstagram(data.getString("Instagram"));
                                 md.setFee(data.getString("Fee"));
+                                md.setNamaVendor(data.getString("NamaVendor"));
+                                md.setNoTelpVendor(data.getString("NoTelpVendor"));
                                 mItemsNew.add(md);
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -632,11 +670,27 @@ public class HomeAdminFragment extends Fragment implements OnMapReadyCallback {
                                     String title = markerObject.getString("NamaListing");
                                     String harga = markerObject.getString("Harga");
 
-                                    LatLng position = new LatLng(lat, lng);
-                                    googleMap.addMarker(new MarkerOptions()
-                                            .position(position)
-                                            .title(title)
-                                            .snippet(harga));
+                                    if (!harga.isEmpty()){
+                                        double hargaDouble = Double.parseDouble(harga);
+
+                                        NumberFormat numberFormat = NumberFormat.getCurrencyInstance(new Locale("id", "ID"));
+                                        String formattedHarga = numberFormat.format(hargaDouble);
+
+                                        LatLng position = new LatLng(lat, lng);
+
+                                        int width = 50;
+                                        int height = 70;
+                                        Bitmap smallMarker = Bitmap.createScaledBitmap(((BitmapDrawable) getResources().getDrawable(R.drawable.markerlocation)).getBitmap(), width, height, false);
+                                        BitmapDescriptor smallMarkerIcon = BitmapDescriptorFactory.fromBitmap(smallMarker);
+
+                                        MarkerOptions markerOptions = new MarkerOptions()
+                                                .position(position)
+                                                .title(title)
+                                                .snippet(formattedHarga)
+                                                .icon(smallMarkerIcon);
+
+                                        googleMap.addMarker(markerOptions);
+                                    }
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();

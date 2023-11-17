@@ -44,7 +44,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
-public class LocationActivity extends AppCompatActivity implements OnMapReadyCallback {
+public class LocationActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMapLongClickListener {
 
     private static final int AUTOCOMPLETE_REQUEST_CODE = 1; // You can use any integer value
     private GoogleMap mMap;
@@ -82,7 +82,7 @@ public class LocationActivity extends AppCompatActivity implements OnMapReadyCal
                     selectedLocation = latLng;
                     mMap.clear();
                     mMap.addMarker(new MarkerOptions().position(latLng).title(location));
-                    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,10));
+                    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,20));
                 }
                 return false;
             }
@@ -111,6 +111,8 @@ public class LocationActivity extends AppCompatActivity implements OnMapReadyCal
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
+        mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             googleMap.setMyLocationEnabled(true);
             googleMap.getUiSettings().setMyLocationButtonEnabled(true);
@@ -123,10 +125,12 @@ public class LocationActivity extends AppCompatActivity implements OnMapReadyCal
                             googleMap.addMarker(new MarkerOptions()
                                     .position(currentLocation)
                                     .title("Lokasi Saya"));
-                            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 15f));
+                            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 20));
                         }
                     });
         }
+
+        mMap.setOnMapLongClickListener(this);
 
         /*if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             googleMap.setMyLocationEnabled(true); // Enable user's location button
@@ -156,6 +160,12 @@ public class LocationActivity extends AppCompatActivity implements OnMapReadyCal
                         }
                     });
         }*/
+    }
+    @Override
+    public void onMapLongClick(LatLng latLng) {
+        mMap.clear();
+        mMap.addMarker(new MarkerOptions().position(latLng).title("Lokasi yang Dipilih"));
+        selectedLocation = latLng;
     }
     private void shareSelectedLocation() {
         if (selectedLocation != null) {

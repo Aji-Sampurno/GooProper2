@@ -289,6 +289,8 @@ public class DetailListingDeepActivity extends AppCompatActivity implements OnMa
                                 String intentNoTelp = data.getString("NoTelp");
                                 String intentInstagram = data.getString("Instagram");
                                 String intentFee = data.getString("Fee");
+                                String intentNamaVendor = data.getString("NamaVendor");
+                                String intentNoTelpVendor = data.getString("NoTelpVendor");
 
                                 if (intentIdAgen.equals("null")) {
                                     if (intentSold.equals("1")){

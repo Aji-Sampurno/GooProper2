@@ -16,6 +16,7 @@ import com.gooproper.R;
 import com.gooproper.model.ListingModel;
 import com.gooproper.ui.detail.DetailListingActivity;
 import com.gooproper.util.FormatCurrency;
+import com.gooproper.util.Preferences;
 
 import java.util.Collections;
 import java.util.Comparator;
@@ -196,6 +197,7 @@ public class ListingPopulerAdapter extends RecyclerView.Adapter<ListingPopulerAd
     class HolderData extends RecyclerView.ViewHolder{
         TextView titleTxt, addressTxt, priceTxt, bedTxt, bathTxt, levelTxt, garageTxt, bathArtTxt, bedArtTxt, carpotTxt, wideTxt, priorityTxt;
         ImageView pic;
+        String status;
         public ListingModel listingModel;
 
         public HolderData(View view){
@@ -209,6 +211,20 @@ public class ListingPopulerAdapter extends RecyclerView.Adapter<ListingPopulerAd
             garageTxt=view.findViewById(R.id.garageTxt);
             priorityTxt=view.findViewById(R.id.TVPriority);
             pic=view.findViewById(R.id.pic);
+
+            status = Preferences.getKeyStatus(context);
+
+            if (status.equals("1")){
+                addressTxt.setVisibility(View.VISIBLE);
+            } else if (status.equals("2")) {
+                addressTxt.setVisibility(View.VISIBLE);
+            } else if (status.equals("3")) {
+                addressTxt.setVisibility(View.GONE);
+            } else if (status.equals("4")) {
+                addressTxt.setVisibility(View.GONE);
+            } else {
+                addressTxt.setVisibility(View.GONE);
+            }
 
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -294,6 +310,8 @@ public class ListingPopulerAdapter extends RecyclerView.Adapter<ListingPopulerAd
                     update.putExtra("NoTelp",listingModel.getNoTelp());
                     update.putExtra("Instagram",listingModel.getInstagram());
                     update.putExtra("Fee",listingModel.getFee());
+                    update.putExtra("NamaVendor",listingModel.getNamaVendor());
+                    update.putExtra("NoTelpVendor",listingModel.getNoTelpVendor());
                     context.startActivity(update);
                 }
             });

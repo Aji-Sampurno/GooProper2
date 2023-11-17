@@ -205,6 +205,8 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
                                 md.setNoTelp(data.getString("NoTelp"));
                                 md.setInstagram(data.getString("Instagram"));
                                 md.setFee(data.getString("Fee"));
+                                md.setNamaVendor(data.getString("NamaVendor"));
+                                md.setNoTelpVendor(data.getString("NoTelpVendor"));
                                 mItemsSold.add(md);
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -314,6 +316,8 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
                                 md.setNoTelp(data.getString("NoTelp"));
                                 md.setInstagram(data.getString("Instagram"));
                                 md.setFee(data.getString("Fee"));
+                                md.setNamaVendor(data.getString("NamaVendor"));
+                                md.setNoTelpVendor(data.getString("NoTelpVendor"));
                                 mItemsHot.add(md);
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -423,6 +427,8 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
                                 md.setNoTelp(data.getString("NoTelp"));
                                 md.setInstagram(data.getString("Instagram"));
                                 md.setFee(data.getString("Fee"));
+                                md.setNamaVendor(data.getString("NamaVendor"));
+                                md.setNoTelpVendor(data.getString("NoTelpVendor"));
                                 mItemsNew.add(md);
                             } catch (JSONException e) {
                                 e.printStackTrace();

@@ -16,6 +16,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -48,6 +49,8 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.textfield.TextInputEditText;
@@ -85,8 +88,8 @@ import java.util.Map;
 public class DetailListingActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     ProgressDialog PDDetailListing;
-    TextView TVNamaDetailListing, TVAlamatDetailListing, TVHargaDetailListing, TVHargaSewaDetailListing, TVViewsDetailListing, TVLikeDetailListing, TVBedDetailListing, TVNamaAgen, TVBathDetailListing, TVWideDetailListing, TVLandDetailListing, TVDimensiDetailListing, TVTipeDetailListing, TVStatusDetailListing, TVSertifikatDetailListing, TVLuasDetailListing, TVKamarTidurDetailListing, TVKamarMandiDetailListing, TVLantaiDetailListing, TVGarasiDetailListing, TVCarpotDetailListing, TVListrikDetailListing, TVSumberAirDetailListing, TVPerabotDetailListing, TVSizeBanner, TVDeskripsiDetailListing, TVNoData, TVNoDataPdf, TVPriority, TVKondisi, TVNoPjp, TVNoDataPjp, TVFee;
-    ImageView IVFlowUp, IVWhatsapp, IVInstagram, IVFavorite, IVFavoriteOn, IVShare, IVStar1, IVStar2, IVStar3, IVStar4, IVStar5 ;
+    TextView TVNamaDetailListing, TVAlamatDetailListing, TVHargaDetailListing, TVHargaSewaDetailListing, TVViewsDetailListing, TVLikeDetailListing, TVBedDetailListing, TVNamaAgen, TVBathDetailListing, TVWideDetailListing, TVLandDetailListing, TVDimensiDetailListing, TVTipeDetailListing, TVStatusDetailListing, TVSertifikatDetailListing, TVLuasDetailListing, TVKamarTidurDetailListing, TVKamarMandiDetailListing, TVLantaiDetailListing, TVGarasiDetailListing, TVCarpotDetailListing, TVListrikDetailListing, TVSumberAirDetailListing, TVPerabotDetailListing, TVSizeBanner, TVDeskripsiDetailListing, TVNoData, TVNoDataPdf, TVPriority, TVKondisi, TVNoPjp, TVNoDataPjp, TVFee, TVNamaVendor, TVTelpVendor;
+    ImageView IVFlowUp, IVWhatsapp, IVInstagram, IVFavorite, IVFavoriteOn, IVShare, IVStar1, IVStar2, IVStar3, IVStar4, IVStar5, IVAlamat ;
     Button BtnApproveAdmin, BtnApproveManager, BtnTambahMaps;
     TextInputEditText tambahagen, tambahcoagen, tambahpjp;
     TextInputLayout lytambahagen, lyttambahcoagen, lyttambahpjp;
@@ -100,7 +103,7 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
     String productId;
     ProgressDialog pDialog;
     ListingModel lm;
-    LinearLayout LytSertifikat, LytPJP, LytSize, LytFee, LytBadge, LytBadgeSold, LytBadgeRented, IVEdit;
+    LinearLayout LytSertifikat, LytPJP, LytSize, LytFee, LytBadge, LytBadgeSold, LytBadgeRented, IVEdit, LytNamaVendor, LytTelpVendor;
     ViewPager viewPager, viewPagerSertifikat, viewPagerPJP;
     ViewPagerAdapter adapter;
     SertifikatAdapter sertifikatAdapter;
@@ -143,6 +146,8 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
         LytBadge = findViewById(R.id.LytBadge);
         LytBadgeSold = findViewById(R.id.LytBadgeSold);
         LytBadgeRented = findViewById(R.id.LytBadgeRented);
+        LytNamaVendor = findViewById(R.id.LytNamaVendorDetailListing);
+        LytTelpVendor = findViewById(R.id.LytTelpVendorDetailListing);
         scrollView = findViewById(R.id.SVDetailListing);
 
         BtnApproveAdmin = findViewById(R.id.BtnApproveAdminDetailListing);
@@ -181,7 +186,10 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
         TVKondisi = findViewById(R.id.TVKondisi);
         TVNoPjp = findViewById(R.id.TVNoPjp);
         TVFee = findViewById(R.id.TVFeeDetailListing);
+        TVNamaVendor = findViewById(R.id.TVNamaVendorDetailListing);
+        TVTelpVendor = findViewById(R.id.TVTelpVendorDetailListing);
 
+        IVAlamat = findViewById(R.id.IVAlamatDetailListing);
         IVFlowUp = findViewById(R.id.IVFlowUpAgenDetailListing);
         IVWhatsapp = findViewById(R.id.IVNoTelpAgenDetailListing);
         IVInstagram = findViewById(R.id.IVInstagramAgenDetailListing);
@@ -295,7 +303,8 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
         String intentNoTelp = data.getStringExtra("NoTelp");
         String intentInstagram = data.getStringExtra("Instagram");
         String intentFee = data.getStringExtra("Fee");
-
+        String intentNamaVendor = data.getStringExtra("NamaVendor");
+        String intentNoTelpVendor = data.getStringExtra("NoTelpVendor");
         pDialog = new ProgressDialog(this);
         status = Preferences.getKeyStatus(this);
 
@@ -335,6 +344,9 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
             StringNamaBuyer = Preferences.getKeyNamaLengkap(this);
             LytSertifikat.setVisibility(View.VISIBLE);
             LytPJP.setVisibility(View.VISIBLE);
+            LytNamaVendor.setVisibility(View.VISIBLE);
+            LytTelpVendor.setVisibility(View.VISIBLE);
+            lytambahagen.setVisibility(View.GONE);
             IVWhatsapp.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -350,6 +362,8 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
             StringNamaBuyer = Preferences.getKeyNamaLengkap(this);
             LytSertifikat.setVisibility(View.VISIBLE);
             LytPJP.setVisibility(View.VISIBLE);
+            LytNamaVendor.setVisibility(View.VISIBLE);
+            LytTelpVendor.setVisibility(View.VISIBLE);
             IVWhatsapp.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -376,11 +390,17 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
             });
             LytSize.setVisibility(View.GONE);
             LytFee.setVisibility(View.GONE);
+            LytNamaVendor.setVisibility(View.GONE);
+            LytTelpVendor.setVisibility(View.GONE);
+            lytambahagen.setVisibility(View.GONE);
         } else {
             StringNamaBuyer = Preferences.getKeyNamaLengkap(this);
             IVFlowUp.setVisibility(View.INVISIBLE);
             LytSize.setVisibility(View.GONE);
             LytFee.setVisibility(View.GONE);
+            LytNamaVendor.setVisibility(View.GONE);
+            LytTelpVendor.setVisibility(View.GONE);
+            lytambahagen.setVisibility(View.GONE);
             IVWhatsapp.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -396,8 +416,8 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
 
         if (status.equals("1")) {
             if (intentIsAdmin.equals("0")) {
-                BtnApproveAdmin.setVisibility(View.VISIBLE);
-                BtnApproveManager.setVisibility(View.GONE);
+                BtnApproveAdmin.setVisibility(View.GONE);
+                BtnApproveManager.setVisibility(View.VISIBLE);
                 IVFlowUp.setVisibility(View.INVISIBLE);
                 IVEdit.setVisibility(View.VISIBLE);
                 IVShare.setVisibility(View.INVISIBLE);
@@ -524,8 +544,8 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                     lyttambahpjp.setVisibility(View.VISIBLE);
                 }
             } else if (intentIsManager.equals("0")) {
-                BtnApproveAdmin.setVisibility(View.GONE);
-                BtnApproveManager.setVisibility(View.VISIBLE);
+                BtnApproveAdmin.setVisibility(View.VISIBLE);
+                BtnApproveManager.setVisibility(View.GONE);
                 IVFlowUp.setVisibility(View.INVISIBLE);
                 IVEdit.setVisibility(View.VISIBLE);
                 IVEdit.setOnClickListener(new View.OnClickListener() {
@@ -720,6 +740,8 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                     IVEdit.setVisibility(View.VISIBLE);
                     IVShare.setVisibility(View.GONE);
                     IVFavorite.setVisibility(View.GONE);
+                    TVAlamatDetailListing.setVisibility(View.GONE);
+                    IVAlamat.setVisibility(View.GONE);
                     IVEdit.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -811,6 +833,8 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                     IVEdit.setVisibility(View.VISIBLE);
                     IVShare.setVisibility(View.GONE);
                     IVFavorite.setVisibility(View.GONE);
+                    TVAlamatDetailListing.setVisibility(View.GONE);
+                    IVAlamat.setVisibility(View.GONE);
                     IVEdit.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -896,6 +920,8 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                     BtnApproveAdmin.setVisibility(View.GONE);
                     BtnApproveManager.setVisibility(View.GONE);
                     IVFlowUp.setVisibility(View.VISIBLE);
+                    TVAlamatDetailListing.setVisibility(View.GONE);
+                    IVAlamat.setVisibility(View.GONE);
                     idpengguna = "0";
                     AgenId = Preferences.getKeyIdAgen(this);
                 }
@@ -1096,8 +1122,19 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
             BtnApproveAdmin.setVisibility(View.GONE);
             BtnApproveManager.setVisibility(View.GONE);
             IVFlowUp.setVisibility(View.INVISIBLE);
+            TVAlamatDetailListing.setVisibility(View.GONE);
+            IVAlamat.setVisibility(View.GONE);
             idpengguna = Preferences.getKeyIdCustomer(this);
             AgenId = "0";
+        } else {
+//            IVFlowUp.setVisibility(View.INVISIBLE);
+//            BtnApproveAdmin.setVisibility(View.GONE);
+//            BtnApproveManager.setVisibility(View.GONE);
+//            IVFlowUp.setVisibility(View.INVISIBLE);
+            TVAlamatDetailListing.setVisibility(View.GONE);
+            IVAlamat.setVisibility(View.GONE);
+//            idpengguna = Preferences.getKeyIdCustomer(this);
+//            AgenId = "0";
         }
 
         if (intentPriority.equals("open")){
@@ -1402,6 +1439,16 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                     idagen = intentIdAgen;
                 }
             }
+            if (intentNamaVendor.isEmpty()) {
+                TVNamaVendor.setText("-");
+            } else {
+                TVNamaVendor.setText(": " + intentNamaVendor);
+            }
+            if (intentNoTelpVendor.isEmpty()) {
+                TVTelpVendor.setText("-");
+            } else {
+                TVTelpVendor.setText(": " + intentNoTelpVendor);
+            }
             if (intentKondisi.isEmpty()) {
                 TVKondisi.setText("-");
             } else {
@@ -1423,7 +1470,7 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                 TVNamaDetailListing.setText(intentNamaListing);
             }
             if (intentAlamat.isEmpty()) {
-                TVAlamatDetailListing.setText(intentAlamat);
+                TVAlamatDetailListing.setText("-");
             } else {
                 TVAlamatDetailListing.setText(intentAlamat);
             }
@@ -2028,122 +2075,6 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
             @Override
             public void onResponse(String response) {
                 pDialog.cancel();
-                try {
-                    JSONObject res = new JSONObject(response);
-                    Dialog customDialog = new Dialog(DetailListingActivity.this);
-                    customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                    customDialog.setContentView(R.layout.custom_dialog_sukses);
-
-                    if (customDialog.getWindow() != null) {
-                        customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-                    }
-
-                    TextView dialogTitle = customDialog.findViewById(R.id.dialog_title);
-                    Button ok = customDialog.findViewById(R.id.btnya);
-                    Button cobalagi = customDialog.findViewById(R.id.btntidak);
-                    ImageView gifimage = customDialog.findViewById(R.id.ivdialog);
-
-                    dialogTitle.setText("Berhasil Approve Listing");
-                    cobalagi.setVisibility(View.GONE);
-
-                    ok.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
-                            JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, ServerApi.URL_GET_DEVICE_AGEN+idagen, null, new Response.Listener<JSONArray>() {
-                                @Override
-                                public void onResponse(JSONArray response) {
-                                    try {
-                                        ArrayList<String> tokens = new ArrayList<>();
-                                        for (int i = 0; i < response.length(); i++) {
-                                            JSONObject tokenObject = response.getJSONObject(i);
-                                            String token = tokenObject.getString("Token");
-                                            tokens.add(token);
-                                        }
-                                        new SendMessageTask().execute(tokens.toArray(new String[0]));
-                                    } catch (JSONException e) {
-                                        e.printStackTrace();
-                                    }
-                                }
-                            }, new Response.ErrorListener() {
-                                @Override
-                                public void onErrorResponse(VolleyError error) {
-                                    // Tangani kesalahan jika terjadi
-                                }
-                            });
-                            requestQueue.add(jsonArrayRequest);
-                            customDialog.dismiss();
-                            finish();
-                        }
-                    });
-
-                    Glide.with(DetailListingActivity.this)
-                            .load(R.mipmap.ic_yes) // You can also use a local resource like R.drawable.your_gif_resource
-                            .transition(DrawableTransitionOptions.withCrossFade())
-                            .into(gifimage);
-
-                    customDialog.show();
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    Dialog customDialog = new Dialog(DetailListingActivity.this);
-                    customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                    customDialog.setContentView(R.layout.custom_dialog_sukses);
-
-                    if (customDialog.getWindow() != null) {
-                        customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-                    }
-
-                    TextView dialogTitle = customDialog.findViewById(R.id.dialog_title);
-                    Button ok = customDialog.findViewById(R.id.btnya);
-                    Button cobalagi = customDialog.findViewById(R.id.btntidak);
-                    ImageView gifimage = customDialog.findViewById(R.id.ivdialog);
-
-                    dialogTitle.setText("Berhasil Approve Listing");
-                    cobalagi.setVisibility(View.GONE);
-
-                    ok.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
-                            JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, ServerApi.URL_GET_DEVICE_AGEN+idagen, null, new Response.Listener<JSONArray>() {
-                                @Override
-                                public void onResponse(JSONArray response) {
-                                    try {
-                                        ArrayList<String> tokens = new ArrayList<>();
-                                        for (int i = 0; i < response.length(); i++) {
-                                            JSONObject tokenObject = response.getJSONObject(i);
-                                            String token = tokenObject.getString("Token");
-                                            tokens.add(token);
-                                        }
-                                        new SendMessageTask().execute(tokens.toArray(new String[0]));
-                                    } catch (JSONException e) {
-                                        e.printStackTrace();
-                                    }
-                                }
-                            }, new Response.ErrorListener() {
-                                @Override
-                                public void onErrorResponse(VolleyError error) {
-                                    // Tangani kesalahan jika terjadi
-                                }
-                            });
-                            requestQueue.add(jsonArrayRequest);
-                            customDialog.dismiss();
-                            finish();
-                        }
-                    });
-
-                    Glide.with(DetailListingActivity.this)
-                            .load(R.mipmap.ic_yes) // You can also use a local resource like R.drawable.your_gif_resource
-                            .transition(DrawableTransitionOptions.withCrossFade())
-                            .into(gifimage);
-
-                    customDialog.show();
-                }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                pDialog.cancel();
                 Dialog customDialog = new Dialog(DetailListingActivity.this);
                 customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                 customDialog.setContentView(R.layout.custom_dialog_sukses);
@@ -2193,6 +2124,33 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
 
                 Glide.with(DetailListingActivity.this)
                         .load(R.mipmap.ic_yes) // You can also use a local resource like R.drawable.your_gif_resource
+                        .transition(DrawableTransitionOptions.withCrossFade())
+                        .into(gifimage);
+
+                customDialog.show();
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                pDialog.cancel();
+                Dialog customDialog = new Dialog(DetailListingActivity.this);
+                customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                customDialog.setContentView(R.layout.custom_dialog_sukses);
+
+                if (customDialog.getWindow() != null) {
+                    customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                }
+
+                TextView dialogTitle = customDialog.findViewById(R.id.dialog_title);
+                Button ok = customDialog.findViewById(R.id.btnya);
+                Button cobalagi = customDialog.findViewById(R.id.btntidak);
+                ImageView gifimage = customDialog.findViewById(R.id.ivdialog);
+
+                dialogTitle.setText("Gagal Approve Listing");
+                ok.setVisibility(View.GONE);
+
+                Glide.with(DetailListingActivity.this)
+                        .load(R.mipmap.ic_no)
                         .transition(DrawableTransitionOptions.withCrossFade())
                         .into(gifimage);
 
@@ -2374,28 +2332,39 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
             fusedLocationProviderClient.getLastLocation().addOnSuccessListener(location -> {
                 if (location != null) {
                     LatLng currentLocation = new LatLng(lat, lng);
-                    googleMap.addMarker(new MarkerOptions()
+
+                    BitmapDescriptor icon = BitmapDescriptorFactory.fromResource(R.drawable.markerlocation);
+
+                    int width = 50;
+                    int height = 70;
+                    Bitmap smallMarker = Bitmap.createScaledBitmap(((BitmapDrawable) getResources().getDrawable(R.drawable.markerlocation)).getBitmap(), width, height, false);
+                    BitmapDescriptor smallMarkerIcon = BitmapDescriptorFactory.fromBitmap(smallMarker);
+
+                    MarkerOptions markerOptions = new MarkerOptions()
                             .position(currentLocation)
-                            .title(NamaMaps));
+                            .title(NamaMaps)
+                            .icon(smallMarkerIcon);
+
+                    googleMap.addMarker(markerOptions);
                     googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 15f));
                 }
             });
 
-            googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
-                @Override
-                public void onMapClick(LatLng latLng) {
-                    double latitude = lat;
-                    double longitude = lng;
-
-                    Uri gmmIntentUri = Uri.parse("google.navigation:q=" + latitude + "," + longitude);
-                    Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
-                    mapIntent.setPackage("com.google.android.apps.maps");
-
-                    if (mapIntent.resolveActivity(getPackageManager()) != null) {
-                        startActivity(mapIntent);
-                    }
-                }
-            });
+//            googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+//                @Override
+//                public void onMapClick(LatLng latLng) {
+//                    double latitude = lat;
+//                    double longitude = lng;
+//
+//                    Uri gmmIntentUri = Uri.parse("google.navigation:q=" + latitude + "," + longitude);
+//                    Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+//                    mapIntent.setPackage("com.google.android.apps.maps");
+//
+//                    if (mapIntent.resolveActivity(getPackageManager()) != null) {
+//                        startActivity(mapIntent);
+//                    }
+//                }
+//            });
         }
     }
     private class SendMessageTask extends AsyncTask<String, Void, String> {
