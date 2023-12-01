@@ -20,7 +20,7 @@ public class ServerApi {
     // Pra Listing ---------------------------------------------------------------------------------
     public static final String URL_TAMBAH_PRALISTING = BASE_URL + "/Api/PraListing";
     public static final String URL_UPDATE_PRALISTING = BASE_URL + "/Api/UpdatePraListing";
-    public static final String URL_UPDATE_PRALISTING_AGEN = BASE_URL + "/Api/UpdatePraListingAgen";
+    public static final String URL_UPDATE_PRALISTING_AGEN = BASE_URL + "/Api/UpdatePraListingAgenFinal";
     public static final String URL_UPDATE_PRALISTING_MAPS = BASE_URL + "/Api/UpdateMapsPraListing";
     public static final String URL_DELETE_PRALISTING = BASE_URL + "/Api/DeletePraListing";
     public static final String URL_GET_PRALISTING_ADMIN = BASE_URL + "/Api/GetPraListingAdmin";
@@ -29,6 +29,9 @@ public class ServerApi {
     public static final String URL_APPROVE_ADMIN = BASE_URL + "/Api/ApproveAdmin";
     public static final String URL_APPROVE_MANAGER = BASE_URL + "/Api/ApproveManager";
     // Listing -------------------------------------------------------------------------------------
+    public static final String URL_TAMBAH_LISTING_PRIMARY = BASE_URL + "/Api/ListingPrimary";
+    public static final String URL_GET_LISTING_PRIMARY = BASE_URL + "/Api/GetListingPrimary";
+    public static final String URL_GET_LISTING_LAPORAN = BASE_URL + "/Api/GetLaporanListing";
     public static final String URL_GET_LISTING = BASE_URL + "/Api/GetListing";
     public static final String URL_UPDATE_LISTING = BASE_URL + "/Api/UpdateListing";
     public static final String URL_GET_LISTING_AGEN = BASE_URL + "/Api/GetListingAgen?idagen=";
@@ -39,6 +42,7 @@ public class ServerApi {
     public static final String URL_GET_LISTING_FAVORITE_AGEN= BASE_URL + "/Api/GetFavoriteAgen?idagen=";
     public static final String URL_GET_LISTING_SEEN= BASE_URL + "/Api/GetSeen?idcustomer=";
     public static final String URL_GET_LISTING_SEEN_AGEN= BASE_URL + "/Api/GetSeenAgen?idagen=";
+    public static final String URL_GET_CO_LISTING = BASE_URL + "/Api/GetCoListing?idco=";
     public static final String URL_ADD_VIEWS = BASE_URL + "/Api/AddViews";
     public static final String URL_ADD_SEEN = BASE_URL + "/Api/AddSeen";
     public static final String URL_ADD_FAVORITE = BASE_URL + "/Api/AddFavorite";
@@ -69,6 +73,20 @@ public class ServerApi {
     public static final String URL_ADD_DEVICE_AGEN = BASE_URL + "/Api/AddDeviceAgen";
     public static final String URL_GET_DEVICE_AGEN = BASE_URL + "/Api/GetDeviceByAgen?idagen=";
     public static final String URL_DELETE_DEVICE_AGEN = BASE_URL + "/Api/DeleteDeviceAgen";
+    public static final String URL_DELETE_IMAGE_1 = BASE_URL + "/Api/DeleteImages1";
+    public static final String URL_DELETE_IMAGE_2 = BASE_URL + "/Api/DeleteImages2";
+    public static final String URL_DELETE_IMAGE_3 = BASE_URL + "/Api/DeleteImages3";
+    public static final String URL_DELETE_IMAGE_4 = BASE_URL + "/Api/DeleteImages4";
+    public static final String URL_DELETE_IMAGE_5 = BASE_URL + "/Api/DeleteImages5";
+    public static final String URL_DELETE_IMAGE_6 = BASE_URL + "/Api/DeleteImages6";
+    public static final String URL_DELETE_IMAGE_7 = BASE_URL + "/Api/DeleteImages7";
+    public static final String URL_DELETE_IMAGE_8 = BASE_URL + "/Api/DeleteImages8";
+    // Primary -------------------------------------------------------------------------------------
+    public static final String URL_TAMBAH_PRIMARY = BASE_URL + "/Api/TambahPrimary";
+    public static final String URL_TAMBAH_TIPE_PRIMARY = BASE_URL + "/Api/TambahTipePrimary";
+    public static final String URL_GET_PRIMARY = BASE_URL + "/Api/GetPrimary";
+    public static final String URL_GET_TIPE_PRIMARY = BASE_URL + "/Api/GetTipePrimary?id=";
+    public static final String URL_DELETE_PRIMARY = BASE_URL + "/Api/DeletePrimary";
 
 }
 

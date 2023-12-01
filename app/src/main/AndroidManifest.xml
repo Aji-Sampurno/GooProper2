@@ -33,6 +33,30 @@
         android:theme="@style/Theme.GooProper"
         tools:targetApi="31">
         <activity
+            android:name=".ui.detail.DetailPrimaryActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.PrimaryActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.tambah.TambahTipeListingPrimaryActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.tambah.TambahListingPrimaryActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.tambah.TambahListingLocationActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="geo" />
+            </intent-filter>
+        </activity>
+        <activity
             android:name=".ui.edit.EditListingAgenActivity"
             android:exported="false" />
         <activity
@@ -77,10 +101,10 @@
         </provider>
 
         <activity
-            android:name=".ui.TambahListingGambarActivity"
+            android:name=".ui.tambah.TambahListingGambarActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.TambahListingSertifikatActivity"
+            android:name=".ui.tambah.TambahListingSertifikatActivity"
             android:exported="false" />
         <activity
             android:name=".ui.LaporanListingActivity"
@@ -113,7 +137,7 @@
             android:name=".ui.detail.DetailFollowUpActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.TambahKaryawanActivity"
+            android:name=".ui.tambah.TambahKaryawanActivity"
             android:exported="false" />
         <activity
             android:name=".ui.ListingkuActivity"

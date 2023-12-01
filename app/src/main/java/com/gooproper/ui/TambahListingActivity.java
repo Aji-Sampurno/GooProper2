@@ -2628,15 +2628,26 @@ public class TambahListingActivity extends AppCompatActivity {
             }
         });
 
-        builder.setPositiveButton("OK", null);
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
         builder.setNeutralButton("Hapus", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 agenid = "0";
                 CoListing.setText("");
+                dialog.dismiss();
             }
         });
-        builder.setNegativeButton("Batal", null);
+        builder.setNegativeButton("Batal", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
         builder.show();
     }
     private void handleSelectedData(AgenManager.DataItem selectedData) {
@@ -3318,7 +3329,9 @@ public class TambahListingActivity extends AppCompatActivity {
     }
     public void pilihFileSHM(View view) {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-            Intent intent = new Intent();
+            //Intent intent = new Intent();
+            Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+            intent.addCategory(Intent.CATEGORY_OPENABLE);
             intent.setType("application/pdf");
             intent.setAction(Intent.ACTION_GET_CONTENT);
             startActivityForResult(Intent.createChooser(intent, "Pilih File PDF"), PICK_PDF_SHM);
@@ -3328,7 +3341,9 @@ public class TambahListingActivity extends AppCompatActivity {
     }
     public void pilihFileHGB(View view) {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-            Intent intent = new Intent();
+            //Intent intent = new Intent();
+            Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+            intent.addCategory(Intent.CATEGORY_OPENABLE);
             intent.setType("application/pdf");
             intent.setAction(Intent.ACTION_GET_CONTENT);
             startActivityForResult(Intent.createChooser(intent, "Pilih File PDF"), PICK_PDF_HGB);
@@ -3338,7 +3353,9 @@ public class TambahListingActivity extends AppCompatActivity {
     }
     public void pilihFileHSHP(View view) {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-            Intent intent = new Intent();
+            //Intent intent = new Intent();
+            Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+            intent.addCategory(Intent.CATEGORY_OPENABLE);
             intent.setType("application/pdf");
             intent.setAction(Intent.ACTION_GET_CONTENT);
             startActivityForResult(Intent.createChooser(intent, "Pilih File PDF"), PICK_PDF_HSHP);
@@ -3348,7 +3365,9 @@ public class TambahListingActivity extends AppCompatActivity {
     }
     public void pilihFilePPJB(View view) {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-            Intent intent = new Intent();
+            //Intent intent = new Intent();
+            Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+            intent.addCategory(Intent.CATEGORY_OPENABLE);
             intent.setType("application/pdf");
             intent.setAction(Intent.ACTION_GET_CONTENT);
             startActivityForResult(Intent.createChooser(intent, "Pilih File PDF"), PICK_PDF_PPJB);
@@ -3358,7 +3377,9 @@ public class TambahListingActivity extends AppCompatActivity {
     }
     public void pilihFileSTRA(View view) {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-            Intent intent = new Intent();
+            //Intent intent = new Intent();
+            Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+            intent.addCategory(Intent.CATEGORY_OPENABLE);
             intent.setType("application/pdf");
             intent.setAction(Intent.ACTION_GET_CONTENT);
             startActivityForResult(Intent.createChooser(intent, "Pilih File PDF"), PICK_PDF_Stratatitle);
@@ -3368,7 +3389,9 @@ public class TambahListingActivity extends AppCompatActivity {
     }
     public void pilihFileAJB(View view) {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-            Intent intent = new Intent();
+            //Intent intent = new Intent();
+            Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+            intent.addCategory(Intent.CATEGORY_OPENABLE);
             intent.setType("application/pdf");
             intent.setAction(Intent.ACTION_GET_CONTENT);
             startActivityForResult(Intent.createChooser(intent, "Pilih File PDF"), PICK_PDF_AJB);
@@ -3378,7 +3401,9 @@ public class TambahListingActivity extends AppCompatActivity {
     }
     public void pilihFilePetokD(View view) {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-            Intent intent = new Intent();
+            //Intent intent = new Intent();
+            Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+            intent.addCategory(Intent.CATEGORY_OPENABLE);
             intent.setType("application/pdf");
             intent.setAction(Intent.ACTION_GET_CONTENT);
             startActivityForResult(Intent.createChooser(intent, "Pilih File PDF"), PICK_PDF_PetokD);
@@ -3586,38 +3611,7 @@ public class TambahListingActivity extends AppCompatActivity {
                 startActivityForResult(intent, CODE_GALLERY_REQUEST_PJP1);
             }
         } else if (requestCode == STORAGE_PERMISSION_CODE) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-
-            } else {
-                Dialog customDialog = new Dialog(TambahListingActivity.this);
-                customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                customDialog.setContentView(R.layout.custom_dialog_eror_input);
-
-                if (customDialog.getWindow() != null) {
-                    customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-                }
-
-                Button ok = customDialog.findViewById(R.id.BtnOkErorInput);
-                TextView tv = customDialog.findViewById(R.id.TVDialogErorInput);
-
-                tv.setText("Akses Galeri Ditolak");
-
-                ok.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        customDialog.dismiss();
-                    }
-                });
-
-                ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
-
-                Glide.with(TambahListingActivity.this)
-                        .load(R.drawable.alert) // You can also use a local resource like R.drawable.your_gif_resource
-                        .transition(DrawableTransitionOptions.withCrossFade())
-                        .into(gifImageView);
-
-                customDialog.show();
-            }
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {} else {}
         } else if (requestCode == CODE_GALLERY_REQUEST1) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
@@ -3687,7 +3681,6 @@ public class TambahListingActivity extends AppCompatActivity {
 
                 customDialog.show();
             }
-
             return;
         } else if (requestCode == CODE_GALLERY_REQUEST3) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -3723,7 +3716,6 @@ public class TambahListingActivity extends AppCompatActivity {
 
                 customDialog.show();
             }
-
             return;
         } else if (requestCode == CODE_GALLERY_REQUEST4) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -3759,7 +3751,6 @@ public class TambahListingActivity extends AppCompatActivity {
 
                 customDialog.show();
             }
-
             return;
         } else if (requestCode == CODE_GALLERY_REQUEST5) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -3795,7 +3786,6 @@ public class TambahListingActivity extends AppCompatActivity {
 
                 customDialog.show();
             }
-
             return;
         } else if (requestCode == CODE_GALLERY_REQUEST6) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -3831,7 +3821,6 @@ public class TambahListingActivity extends AppCompatActivity {
 
                 customDialog.show();
             }
-
             return;
         } else if (requestCode == CODE_GALLERY_REQUEST7) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -3867,7 +3856,6 @@ public class TambahListingActivity extends AppCompatActivity {
 
                 customDialog.show();
             }
-
             return;
         } else if (requestCode == CODE_GALLERY_REQUEST8) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -3903,7 +3891,6 @@ public class TambahListingActivity extends AppCompatActivity {
 
                 customDialog.show();
             }
-
             return;
         } else if (requestCode == CODE_GALLERY_REQUEST_SHM) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -3939,7 +3926,6 @@ public class TambahListingActivity extends AppCompatActivity {
 
                 customDialog.show();
             }
-
             return;
         } else if (requestCode == CODE_GALLERY_REQUEST_HGB) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -3975,7 +3961,6 @@ public class TambahListingActivity extends AppCompatActivity {
 
                 customDialog.show();
             }
-
             return;
         } else if (requestCode == CODE_GALLERY_REQUEST_HSHP) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -4011,7 +3996,6 @@ public class TambahListingActivity extends AppCompatActivity {
 
                 customDialog.show();
             }
-
             return;
         } else if (requestCode == CODE_GALLERY_REQUEST_PPJB) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -4047,7 +4031,6 @@ public class TambahListingActivity extends AppCompatActivity {
 
                 customDialog.show();
             }
-
             return;
         } else if (requestCode == CODE_GALLERY_REQUEST_STRA) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -4083,7 +4066,6 @@ public class TambahListingActivity extends AppCompatActivity {
 
                 customDialog.show();
             }
-
             return;
         }  else if (requestCode == CODE_GALLERY_REQUEST_AJB) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -4119,7 +4101,6 @@ public class TambahListingActivity extends AppCompatActivity {
 
                 customDialog.show();
             }
-
             return;
         }  else if (requestCode == CODE_GALLERY_REQUEST_PetokD) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -4155,7 +4136,6 @@ public class TambahListingActivity extends AppCompatActivity {
 
                 customDialog.show();
             }
-
             return;
         } else if (requestCode == CODE_GALLERY_REQUEST_PJP) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -4191,7 +4171,6 @@ public class TambahListingActivity extends AppCompatActivity {
 
                 customDialog.show();
             }
-
             return;
         } else if (requestCode == CODE_GALLERY_REQUEST_PJP1) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -4227,7 +4206,6 @@ public class TambahListingActivity extends AppCompatActivity {
 
                 customDialog.show();
             }
-
             return;
         } else if (requestCode == CODE_CAMERA_REQUEST1) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -4241,7 +4219,6 @@ public class TambahListingActivity extends AppCompatActivity {
                 AlertDialog alert = builder.create();
                 alert.show();
             }
-
             return;
         } else if (requestCode == CODE_CAMERA_REQUEST2) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -4255,7 +4232,6 @@ public class TambahListingActivity extends AppCompatActivity {
                 AlertDialog alert = builder.create();
                 alert.show();
             }
-
             return;
         } else if (requestCode == CODE_CAMERA_REQUEST3) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -4269,7 +4245,6 @@ public class TambahListingActivity extends AppCompatActivity {
                 AlertDialog alert = builder.create();
                 alert.show();
             }
-
             return;
         } else if (requestCode == CODE_CAMERA_REQUEST4) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -4283,7 +4258,6 @@ public class TambahListingActivity extends AppCompatActivity {
                 AlertDialog alert = builder.create();
                 alert.show();
             }
-
             return;
         } else if (requestCode == CODE_CAMERA_REQUEST5) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -4297,7 +4271,6 @@ public class TambahListingActivity extends AppCompatActivity {
                 AlertDialog alert = builder.create();
                 alert.show();
             }
-
             return;
         } else if (requestCode == CODE_CAMERA_REQUEST6) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -4311,7 +4284,6 @@ public class TambahListingActivity extends AppCompatActivity {
                 AlertDialog alert = builder.create();
                 alert.show();
             }
-
             return;
         } else if (requestCode == CODE_CAMERA_REQUEST7) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -4325,7 +4297,6 @@ public class TambahListingActivity extends AppCompatActivity {
                 AlertDialog alert = builder.create();
                 alert.show();
             }
-
             return;
         } else if (requestCode == CODE_CAMERA_REQUEST8) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -4339,7 +4310,6 @@ public class TambahListingActivity extends AppCompatActivity {
                 AlertDialog alert = builder.create();
                 alert.show();
             }
-
             return;
         } else if (requestCode == CODE_CAMERA_REQUEST_SHM) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -4353,7 +4323,6 @@ public class TambahListingActivity extends AppCompatActivity {
                 AlertDialog alert = builder.create();
                 alert.show();
             }
-
             return;
         } else if (requestCode == CODE_CAMERA_REQUEST_HGB) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -4367,7 +4336,6 @@ public class TambahListingActivity extends AppCompatActivity {
                 AlertDialog alert = builder.create();
                 alert.show();
             }
-
             return;
         } else if (requestCode == CODE_CAMERA_REQUEST_HSHP) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -4381,7 +4349,6 @@ public class TambahListingActivity extends AppCompatActivity {
                 AlertDialog alert = builder.create();
                 alert.show();
             }
-
             return;
         } else if (requestCode == CODE_CAMERA_REQUEST_PPJB) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -4395,7 +4362,6 @@ public class TambahListingActivity extends AppCompatActivity {
                 AlertDialog alert = builder.create();
                 alert.show();
             }
-
             return;
         } else if (requestCode == CODE_CAMERA_REQUEST_STRA) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -4409,7 +4375,6 @@ public class TambahListingActivity extends AppCompatActivity {
                 AlertDialog alert = builder.create();
                 alert.show();
             }
-
             return;
         }  else if (requestCode == CODE_CAMERA_REQUEST_AJB) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -4423,7 +4388,6 @@ public class TambahListingActivity extends AppCompatActivity {
                 AlertDialog alert = builder.create();
                 alert.show();
             }
-
             return;
         }  else if (requestCode == CODE_CAMERA_REQUEST_PetokD) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -4437,7 +4401,6 @@ public class TambahListingActivity extends AppCompatActivity {
                 AlertDialog alert = builder.create();
                 alert.show();
             }
-
             return;
         } else if (requestCode == CODE_CAMERA_REQUEST_PJP) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -4451,7 +4414,6 @@ public class TambahListingActivity extends AppCompatActivity {
                 AlertDialog alert = builder.create();
                 alert.show();
             }
-
             return;
         } else if (requestCode == CODE_CAMERA_REQUEST_PJP1) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -4997,6 +4959,11 @@ public class TambahListingActivity extends AppCompatActivity {
                 } else {
                     idinput = idagen;
                 }
+                if (agenid == null) {
+                    agencoid = idnull;
+                } else {
+                    agencoid = agenid;
+                }
                 if (latitudeStr == null) {
                     Lat = "0";
                 } else {
@@ -5038,7 +5005,7 @@ public class TambahListingActivity extends AppCompatActivity {
                 map.put("Bank", bank.getText().toString());
                 map.put("AtasNama", atasnama.getText().toString());
                 map.put("IdAgen", idnull);
-                map.put("IdAgenCo", idnull);
+                map.put("IdAgenCo", agencoid);
                 map.put("IdInput", idnull);
                 map.put("NamaListing", namaproperti.getText().toString());
                 map.put("Alamat", alamatproperti.getText().toString());
@@ -5962,7 +5929,7 @@ public class TambahListingActivity extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.CustomAlertDialogStyle);
         builder.setTitle("Silahkan Pilih Satuan Luas");
 
-        final CharSequence[] Status = {"m²", "are", "ha"};
+        final CharSequence[] Status = {"m²", "are", "ha", "m² (Semigros)"};
         final int[] SelectedStatus = {0};
 
         builder.setSingleChoiceItems(Status, SelectedStatus[0], new DialogInterface.OnClickListener() {
@@ -5989,7 +5956,7 @@ public class TambahListingActivity extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.CustomAlertDialogStyle);
         builder.setTitle("Silahkan Pilih Satuan Luas");
 
-        final CharSequence[] Status = {"m²", "are", "ha"};
+        final CharSequence[] Status = {"m²", "are", "ha", "m² (Semigros)"};
         final int[] SelectedStatus = {0};
 
         builder.setSingleChoiceItems(Status, SelectedStatus[0], new DialogInterface.OnClickListener() {
@@ -6037,6 +6004,20 @@ public class TambahListingActivity extends AppCompatActivity {
             alamatproperti.setError("Harap Isi Alamat Properti");
             alamatproperti.requestFocus();
             return false;
+        }
+        if (!luas.getText().toString().equals("")) {
+            if (satuanluas.getText().equals("")) {
+                satuanluas.setError("Harap Isi Satuan");
+                satuanluas.requestFocus();
+                return false;
+            }
+        }
+        if (!land.getText().toString().equals("")) {
+            if (satuanland.getText().equals("")) {
+                satuanland.setError("Harap Isi Satuan");
+                satuanland.requestFocus();
+                return false;
+            }
         }
         if (status.getText().toString().equals("")) {
             Dialog customDialog = new Dialog(TambahListingActivity.this);
@@ -6155,7 +6136,6 @@ public class TambahListingActivity extends AppCompatActivity {
                 return false;
             }
         }
-
         return true;
     }
     private class SendMessageTask extends AsyncTask<String, Void, String> {

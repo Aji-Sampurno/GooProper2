@@ -993,6 +993,7 @@
                 android:visibility="gone">
 
                 <TextView
+                    android:id="@+id/TVPjp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="PJP"
@@ -1181,6 +1182,64 @@
 
             <ImageView
                 android:id="@+id/IVInstagramAgenDetailListing"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="2"
+                android:src="@drawable/ic_instagram"
+                app:tint="@color/black" />
+
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/LytAgen2DetailListing"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:elevation="4dp"
+        app:cardElevation="4dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:background="@color/second"
+            android:orientation="horizontal"
+            android:paddingBottom="20dp"
+            android:paddingStart="20dp"
+            android:paddingEnd="20dp"
+            android:weightSum="8">
+
+            <TextView
+                android:id="@+id/TVNamaAgen2DetailListing"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="2"
+                android:text="Agent"
+                android:textColor="@color/black" />
+
+            <ImageView
+                android:id="@+id/IVFlowUpAgen2DetailListing"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="2"
+                android:src="@drawable/ic_flowup"
+                app:tint="@color/black" />
+
+            <ImageView
+                android:id="@+id/IVNoTelpAgen2DetailListing"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="2"
+                android:src="@drawable/ic_whatsapp"
+                app:tint="@color/black" />
+
+            <ImageView
+                android:id="@+id/IVInstagramAgen2DetailListing"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"

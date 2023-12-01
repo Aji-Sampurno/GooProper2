@@ -160,6 +160,774 @@
                         android:textColor="@color/black" />
                 </com.google.android.material.textfield.TextInputLayout>
 
+                <Button
+                    android:id="@+id/map"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:backgroundTint="@color/main"
+                    android:text="Tambahkan Lokasi Maps"
+                    android:textColor="@color/white" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="Sertifikat"
+                    android:textColor="@color/black" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal"
+                    android:weightSum="3">
+
+                    <CheckBox
+                        android:id="@+id/CBSHM"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="SHM"
+                        android:textColor="@color/black" />
+
+                    <CheckBox
+                        android:id="@+id/CBHGB"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="HGB"
+                        android:textColor="@color/black" />
+
+                    <CheckBox
+                        android:id="@+id/CBHSHP"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="HS/HP"
+                        android:textColor="@color/black" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal"
+                    android:weightSum="3">
+
+                    <CheckBox
+                        android:id="@+id/CBPPJB"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="PPJB"
+                        android:textColor="@color/black" />
+
+                    <CheckBox
+                        android:id="@+id/CBStratatitle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Stratatitle"
+                        android:textColor="@color/black" />
+
+                    <CheckBox
+                        android:id="@+id/CBAJB"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="AJB"
+                        android:textColor="@color/black" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal"
+                    android:weightSum="1">
+
+                    <CheckBox
+                        android:id="@+id/CBPetokD"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Petok D"
+                        android:textColor="@color/black" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:id="@+id/LytSHM"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:orientation="horizontal"
+                        android:visibility="gone"
+                        android:weightSum="3">
+
+                        <TextView
+                            android:id="@+id/TVSHM"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:text="judul pdf"
+                            android:textAlignment="center"
+                            android:textColor="@color/black"
+                            android:visibility="gone" />
+
+                        <ImageView
+                            android:id="@+id/IVSHM"
+                            android:layout_width="250dp"
+                            android:layout_height="250dp"
+                            android:layout_weight="1"
+                            android:visibility="gone" />
+
+                        <ImageView
+                            android:id="@+id/IVDeleteSHM"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_margin="5dp"
+                            android:layout_weight="2"
+                            android:gravity="center"
+                            android:src="@drawable/ic_delete"
+                            app:tint="@color/red_color" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/LytBtnSHM"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:visibility="gone"
+                        android:weightSum="2">
+
+                        <Button
+                            android:id="@+id/BtnSHM"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginEnd="5dp"
+                            android:layout_weight="1"
+                            android:text="Upload Gambar SHM" />
+
+                        <Button
+                            android:id="@+id/BtnSHMPDF"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="5dp"
+                            android:layout_marginTop="10dp"
+                            android:layout_weight="1"
+                            android:text="Upload Pdf SHM" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:id="@+id/LytHGB"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:orientation="horizontal"
+                        android:visibility="gone"
+                        android:weightSum="3">
+
+                        <TextView
+                            android:id="@+id/TVHGB"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:text="judul pdf"
+                            android:textAlignment="center"
+                            android:textColor="@color/black"
+                            android:visibility="gone" />
+
+                        <ImageView
+                            android:id="@+id/IVHGB"
+                            android:layout_width="250dp"
+                            android:layout_height="250dp"
+                            android:layout_weight="1"
+                            android:visibility="gone" />
+
+                        <ImageView
+                            android:id="@+id/IVDeleteHGB"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_margin="5dp"
+                            android:layout_weight="2"
+                            android:gravity="center"
+                            android:src="@drawable/ic_delete"
+                            app:tint="@color/red_color" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/LytBtnHGB"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:visibility="gone"
+                        android:weightSum="2">
+
+                        <Button
+                            android:id="@+id/BtnHGB"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginEnd="5dp"
+                            android:layout_weight="1"
+                            android:text="Upload Gambar HGB " />
+
+                        <Button
+                            android:id="@+id/BtnHGBPDF"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="5dp"
+                            android:layout_marginTop="10dp"
+                            android:layout_weight="1"
+                            android:text="Upload  Pdf  HGB" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:id="@+id/LytHSHP"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:orientation="horizontal"
+                        android:visibility="gone"
+                        android:weightSum="3">
+
+                        <TextView
+                            android:id="@+id/TVHSHP"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:text="judul pdf"
+                            android:textAlignment="center"
+                            android:textColor="@color/black"
+                            android:visibility="gone" />
+
+                        <ImageView
+                            android:id="@+id/IVHSHP"
+                            android:layout_width="250dp"
+                            android:layout_height="250dp"
+                            android:layout_weight="1"
+                            android:visibility="gone" />
+
+                        <ImageView
+                            android:id="@+id/IVDeleteHSHP"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_margin="5dp"
+                            android:layout_weight="2"
+                            android:gravity="center"
+                            android:src="@drawable/ic_delete"
+                            app:tint="@color/red_color" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/LytBtnHSHP"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:visibility="gone"
+                        android:weightSum="2">
+
+                        <Button
+                            android:id="@+id/BtnHSHP"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginEnd="5dp"
+                            android:layout_weight="1"
+                            android:text="Upload Gambar HSHP" />
+
+                        <Button
+                            android:id="@+id/BtnHSHPPDF"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="5dp"
+                            android:layout_marginTop="10dp"
+                            android:layout_weight="1"
+                            android:text="Upload Pdf HSHP" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:id="@+id/LytPPJB"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:orientation="horizontal"
+                        android:visibility="gone"
+                        android:weightSum="3">
+
+                        <TextView
+                            android:id="@+id/TVPPJB"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:text="judul pdf"
+                            android:textAlignment="center"
+                            android:textColor="@color/black"
+                            android:visibility="gone" />
+
+                        <ImageView
+                            android:id="@+id/IVPPJB"
+                            android:layout_width="250dp"
+                            android:layout_height="250dp"
+                            android:layout_weight="1"
+                            android:visibility="gone" />
+
+                        <ImageView
+                            android:id="@+id/IVDeletePPJB"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_margin="5dp"
+                            android:layout_weight="2"
+                            android:gravity="center"
+                            android:src="@drawable/ic_delete"
+                            app:tint="@color/red_color" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/LytBtnPPJB"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:visibility="gone"
+                        android:weightSum="2">
+
+                        <Button
+                            android:id="@+id/BtnPPJB"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginEnd="5dp"
+                            android:layout_weight="1"
+                            android:text="Upload Gambar PPJB" />
+
+                        <Button
+                            android:id="@+id/BtnPPJBPDF"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="5dp"
+                            android:layout_marginTop="10dp"
+                            android:layout_weight="1"
+                            android:text="Upload Pdf PPJB" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:id="@+id/LytStratatitle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:orientation="horizontal"
+                        android:visibility="gone"
+                        android:weightSum="3">
+
+                        <TextView
+                            android:id="@+id/TVSTRA"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:text="judul pdf"
+                            android:textAlignment="center"
+                            android:textColor="@color/black"
+                            android:visibility="gone" />
+
+                        <ImageView
+                            android:id="@+id/IVStratatitle"
+                            android:layout_width="250dp"
+                            android:layout_height="250dp"
+                            android:layout_weight="1"
+                            android:visibility="gone" />
+
+                        <ImageView
+                            android:id="@+id/IVDeleteStratatitle"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_margin="5dp"
+                            android:layout_weight="2"
+                            android:gravity="center"
+                            android:src="@drawable/ic_delete"
+                            app:tint="@color/red_color" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/LytBtnStratatitle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:visibility="gone"
+                        android:weightSum="2">
+
+                        <Button
+                            android:id="@+id/BtnStratatitle"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginEnd="5dp"
+                            android:layout_weight="1"
+                            android:text="Upload Gambar Stratatitle" />
+
+                        <Button
+                            android:id="@+id/BtnStratatitlePDF"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="5dp"
+                            android:layout_marginTop="10dp"
+                            android:layout_weight="1"
+                            android:text="Upload Pdf Stratatitle" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:id="@+id/LytAJB"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:orientation="horizontal"
+                        android:visibility="gone"
+                        android:weightSum="3">
+
+                        <TextView
+                            android:id="@+id/TVAJB"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:text="judul pdf"
+                            android:textAlignment="center"
+                            android:textColor="@color/black"
+                            android:visibility="gone" />
+
+                        <ImageView
+                            android:id="@+id/IVAJB"
+                            android:layout_width="250dp"
+                            android:layout_height="250dp"
+                            android:layout_weight="1"
+                            android:visibility="gone" />
+
+                        <ImageView
+                            android:id="@+id/IVDeleteAJB"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_margin="5dp"
+                            android:layout_weight="2"
+                            android:gravity="center"
+                            android:src="@drawable/ic_delete"
+                            app:tint="@color/red_color" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/LytBtnAJB"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:visibility="gone"
+                        android:weightSum="2">
+
+                        <Button
+                            android:id="@+id/BtnAJB"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginEnd="5dp"
+                            android:layout_weight="1"
+                            android:text="Upload Gambar AJB" />
+
+                        <Button
+                            android:id="@+id/BtnAJBPDF"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="5dp"
+                            android:layout_marginTop="10dp"
+                            android:layout_weight="1"
+                            android:text="Upload  Pdf  AJB " />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:id="@+id/LytPetokD"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:orientation="horizontal"
+                        android:visibility="gone"
+                        android:weightSum="3">
+
+                        <TextView
+                            android:id="@+id/TVPetokD"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:text="judul pdf"
+                            android:textAlignment="center"
+                            android:textColor="@color/black"
+                            android:visibility="gone" />
+
+                        <ImageView
+                            android:id="@+id/IVPetokD"
+                            android:layout_width="250dp"
+                            android:layout_height="250dp"
+                            android:layout_weight="1"
+                            android:visibility="gone" />
+
+                        <ImageView
+                            android:id="@+id/IVDeletePetokD"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_margin="5dp"
+                            android:layout_weight="2"
+                            android:gravity="center"
+                            android:src="@drawable/ic_delete"
+                            app:tint="@color/red_color" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/LytBtnPetokD"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:visibility="gone"
+                        android:weightSum="2">
+
+                        <Button
+                            android:id="@+id/BtnPetokD"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginEnd="5dp"
+                            android:layout_weight="1"
+                            android:text="Upload Gambar Petok D" />
+
+                        <Button
+                            android:id="@+id/BtnPetokDPDF"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="5dp"
+                            android:layout_marginTop="10dp"
+                            android:layout_weight="1"
+                            android:text="Upload Pdf Petok D" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/lytKonfirmasiPjp"
+                    style="@style/CustomOutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:hint="Menyertakan PJP?">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etkonfirmasipjp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:focusable="false"
+                        android:inputType="none"
+                        android:textColor="@color/black" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:id="@+id/LytBuktiChat"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:orientation="horizontal"
+                        android:visibility="gone">
+
+                        <ImageView
+                            android:id="@+id/IVBuktiChat"
+                            android:layout_width="250dp"
+                            android:layout_height="250dp" />
+
+                        <ImageView
+                            android:id="@+id/IVDeleteBuktiChat"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_margin="5dp"
+                            android:gravity="center"
+                            android:src="@drawable/ic_delete"
+                            app:tint="@color/red_color" />
+
+                    </LinearLayout>
+
+                    <Button
+                        android:id="@+id/BtnBuktiChat"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="Upload Bukti Chat"
+                        android:visibility="gone" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:id="@+id/LytPjp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:orientation="horizontal"
+                        android:visibility="gone">
+
+                        <ImageView
+                            android:id="@+id/IVPjp"
+                            android:layout_width="250dp"
+                            android:layout_height="250dp" />
+
+                        <ImageView
+                            android:id="@+id/IVDeletePjp"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_margin="5dp"
+                            android:gravity="center"
+                            android:src="@drawable/ic_delete"
+                            app:tint="@color/red_color" />
+
+                    </LinearLayout>
+
+                    <Button
+                        android:id="@+id/BtnPjp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="Upload PJP Halaman 1"
+                        android:visibility="gone" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:id="@+id/LytPjp1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:orientation="horizontal"
+                        android:visibility="gone">
+
+                        <ImageView
+                            android:id="@+id/IVPjp1"
+                            android:layout_width="250dp"
+                            android:layout_height="250dp" />
+
+                        <ImageView
+                            android:id="@+id/IVDeletePjp1"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_margin="5dp"
+                            android:gravity="center"
+                            android:src="@drawable/ic_delete"
+                            app:tint="@color/red_color" />
+
+                    </LinearLayout>
+
+                    <Button
+                        android:id="@+id/BtnPjp1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="Upload PJP Halaman 2"
+                        android:visibility="gone" />
+
+                </LinearLayout>
+
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/lytluastanah"
                     style="@style/CustomOutlinedBox"
@@ -560,7 +1328,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Keterangan"
-                        android:inputType="text"
+                        android:inputType="textMultiLine"
                         android:textColor="@color/black" />
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -579,6 +1347,285 @@
                         android:inputType="text"
                         android:textColor="@color/black" />
                 </com.google.android.material.textfield.TextInputLayout>
+
+                <LinearLayout
+                    android:id="@+id/lyts1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal"
+                    android:visibility="gone">
+
+                    <ImageView
+                        android:id="@+id/ivs1"
+                        android:layout_width="250dp"
+                        android:layout_height="250dp" />
+
+                    <ImageView
+                        android:id="@+id/IVDelete1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_margin="5dp"
+                        android:gravity="center"
+                        android:src="@drawable/ic_delete"
+                        app:tint="@color/red_color" />
+
+                </LinearLayout>
+
+                <Button
+                    android:id="@+id/btnSelectImage1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:backgroundTint="@color/main"
+                    android:text="Ganti Tampak Depan"
+                    android:textColor="@color/white" />
+
+                <LinearLayout
+                    android:id="@+id/lyts2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal"
+                    android:visibility="gone">
+
+                    <ImageView
+                        android:id="@+id/ivs2"
+                        android:layout_width="250dp"
+                        android:layout_height="250dp" />
+
+                    <ImageView
+                        android:id="@+id/IVDelete2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_margin="5dp"
+                        android:gravity="center"
+                        android:src="@drawable/ic_delete"
+                        app:tint="@color/red_color" />
+
+                </LinearLayout>
+
+                <Button
+                    android:id="@+id/btnSelectImage2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:backgroundTint="@color/main"
+                    android:text="Ganti Gambar"
+                    android:textColor="@color/white"
+                    android:visibility="gone" />
+
+                <LinearLayout
+                    android:id="@+id/lyts3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal"
+                    android:visibility="gone">
+
+                    <ImageView
+                        android:id="@+id/ivs3"
+                        android:layout_width="250dp"
+                        android:layout_height="250dp" />
+
+                    <ImageView
+                        android:id="@+id/IVDelete3"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_margin="5dp"
+                        android:gravity="center"
+                        android:src="@drawable/ic_delete"
+                        app:tint="@color/red_color" />
+
+                </LinearLayout>
+
+                <Button
+                    android:id="@+id/btnSelectImage3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:backgroundTint="@color/main"
+                    android:text="Ganti Gambar"
+                    android:textColor="@color/white"
+                    android:visibility="gone" />
+
+                <LinearLayout
+                    android:id="@+id/lyts4"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal"
+                    android:visibility="gone">
+
+                    <ImageView
+                        android:id="@+id/ivs4"
+                        android:layout_width="250dp"
+                        android:layout_height="250dp" />
+
+                    <ImageView
+                        android:id="@+id/IVDelete4"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_margin="5dp"
+                        android:gravity="center"
+                        android:src="@drawable/ic_delete"
+                        app:tint="@color/red_color" />
+
+                </LinearLayout>
+
+                <Button
+                    android:id="@+id/btnSelectImage4"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:backgroundTint="@color/main"
+                    android:text="Ganti Gambar"
+                    android:textColor="@color/white"
+                    android:visibility="gone" />
+
+                <LinearLayout
+                    android:id="@+id/lyts5"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal"
+                    android:visibility="gone">
+
+                    <ImageView
+                        android:id="@+id/ivs5"
+                        android:layout_width="250dp"
+                        android:layout_height="250dp" />
+
+                    <ImageView
+                        android:id="@+id/IVDelete5"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_margin="5dp"
+                        android:gravity="center"
+                        android:src="@drawable/ic_delete"
+                        app:tint="@color/red_color" />
+
+                </LinearLayout>
+
+                <Button
+                    android:id="@+id/btnSelectImage5"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:backgroundTint="@color/main"
+                    android:text="Ganti Gambar"
+                    android:textColor="@color/white"
+                    android:visibility="gone" />
+
+                <LinearLayout
+                    android:id="@+id/lyts6"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal"
+                    android:visibility="gone">
+
+                    <ImageView
+                        android:id="@+id/ivs6"
+                        android:layout_width="250dp"
+                        android:layout_height="250dp" />
+
+                    <ImageView
+                        android:id="@+id/IVDelete6"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_margin="5dp"
+                        android:gravity="center"
+                        android:src="@drawable/ic_delete"
+                        app:tint="@color/red_color" />
+
+                </LinearLayout>
+
+                <Button
+                    android:id="@+id/btnSelectImage6"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:backgroundTint="@color/main"
+                    android:text="Ganti Gambar"
+                    android:textColor="@color/white"
+                    android:visibility="gone" />
+
+                <LinearLayout
+                    android:id="@+id/lyts7"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal"
+                    android:visibility="gone">
+
+                    <ImageView
+                        android:id="@+id/ivs7"
+                        android:layout_width="250dp"
+                        android:layout_height="250dp" />
+
+                    <ImageView
+                        android:id="@+id/IVDelete7"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_margin="5dp"
+                        android:gravity="center"
+                        android:src="@drawable/ic_delete"
+                        app:tint="@color/red_color" />
+
+                </LinearLayout>
+
+                <Button
+                    android:id="@+id/btnSelectImage7"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:backgroundTint="@color/main"
+                    android:text="Ganti Gambar"
+                    android:textColor="@color/white"
+                    android:visibility="gone" />
+
+                <LinearLayout
+                    android:id="@+id/lyts8"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal"
+                    android:visibility="gone">
+
+                    <ImageView
+                        android:id="@+id/ivs8"
+                        android:layout_width="250dp"
+                        android:layout_height="250dp" />
+
+                    <ImageView
+                        android:id="@+id/IVDelete8"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_margin="5dp"
+                        android:gravity="center"
+                        android:src="@drawable/ic_delete"
+                        app:tint="@color/red_color" />
+
+                </LinearLayout>
+
+                <Button
+                    android:id="@+id/btnSelectImage"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:backgroundTint="@color/main"
+                    android:text="Tambah Gambar"
+                    android:textColor="@color/white"
+                    android:visibility="gone" />
 
                 <LinearLayout
                     android:layout_width="match_parent"

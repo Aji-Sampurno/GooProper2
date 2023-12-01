@@ -13,6 +13,8 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.webkit.WebSettings;
@@ -31,6 +33,20 @@ import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.drive.Drive;
+import com.google.android.gms.drive.DriveContents;
+import com.google.android.gms.drive.DriveFile;
+import com.google.android.gms.drive.DriveFolder;
+import com.google.android.gms.drive.DriveId;
+import com.google.android.gms.drive.DriveResourceClient;
+import com.google.android.gms.drive.MetadataChangeSet;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.storage.FirebaseStorage;
@@ -51,11 +67,16 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.security.GeneralSecurityException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -68,8 +89,9 @@ import okhttp3.OkHttpClient;
 
 public class CobaPesanActivity extends AppCompatActivity {
 
+    private static final int PICK_IMAGE_REQUEST = 1;
+    private static final int REQUEST_CODE_SIGN_IN = 2;
     ProgressDialog PDAgen;
-
     EditText judul, isi;
     Button kirim, upload, unggah;
     WebView webview;
@@ -83,6 +105,10 @@ public class CobaPesanActivity extends AppCompatActivity {
     List<ListingModel> list;
     private ViewPager viewPager;
     private SertifikatPdfAdapter sertifikatPdfAdapter;
+    private static final String UPLOAD_URL = "https://www.googleapis.com/upload/drive/v3/files?uploadType=media";
+    private static final String ACCESS_TOKEN = "YOUR_ACCESS_TOKEN";
+    private static final String FILE_NAME = "UploadedFile.jpg";
+    private static final String FOLDER_ID = "1ZPCHSQ_17q0JNa-AxN-duVBAsUtqE0zl";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -122,62 +148,76 @@ public class CobaPesanActivity extends AppCompatActivity {
         unggah.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                StorageReference storageRef = FirebaseStorage.getInstance().getReference();
-                StorageReference ImgSertifikatshm = storageRef.child("sertifikat/" + fileSertifikat);
-
-                List<StorageTask<UploadTask.TaskSnapshot>> uploadTasks = new ArrayList<>();
-
-                StorageTask<UploadTask.TaskSnapshot> task1 = ImgSertifikatshm.putFile(selectedPdfUri)
-                        .addOnSuccessListener(taskSnapshot -> {
-                            ImgSertifikatshm.getDownloadUrl()
-                                    .addOnSuccessListener(uri -> {
-                                        String imageUrl = uri.toString();
-                                        Toast.makeText(getBaseContext(), "link: " + imageUrl, Toast.LENGTH_SHORT).show();
-                                        pdf = imageUrl;
-                                    })
-                                    .addOnFailureListener(exception -> {
-                                    });
-                        })
-                        .addOnFailureListener(exception -> {
-                        });
-                uploadTasks.add(task1);
-
-                Tasks.whenAllSuccess(uploadTasks)
-                        .addOnSuccessListener(results -> {
-                            Toast.makeText(getBaseContext(), "link: " + pdf, Toast.LENGTH_SHORT).show();
-                        })
-                        .addOnFailureListener(exception -> {
-                            Dialog customDialog = new Dialog(CobaPesanActivity.this);
-                            customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                            customDialog.setContentView(R.layout.custom_dialog_eror_input);
-
-                            if (customDialog.getWindow() != null) {
-                                customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-                            }
-
-                            Button ok = customDialog.findViewById(R.id.BtnOkErorInput);
-                            TextView tv = customDialog.findViewById(R.id.TVDialogErorInput);
-
-                            tv.setText("Gagal Saat Unggah Gambar");
-
-                            ok.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    customDialog.dismiss();
-                                }
-                            });
-
-                            ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
-
-                            Glide.with(CobaPesanActivity.this)
-                                    .load(R.drawable.alert) // You can also use a local resource like R.drawable.your_gif_resource
-                                    .transition(DrawableTransitionOptions.withCrossFade())
-                                    .into(gifImageView);
-
-                            customDialog.show();
-                        });
+                chooseImage();
             }
         });
+
+//        upload.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                signIn();
+//                uploadImageToDrive(selectedPdfUri);
+//            }
+//        });
+//        unggah.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                StorageReference storageRef = FirebaseStorage.getInstance().getReference();
+//                StorageReference ImgSertifikatshm = storageRef.child("sertifikat/" + fileSertifikat);
+//
+//                List<StorageTask<UploadTask.TaskSnapshot>> uploadTasks = new ArrayList<>();
+//
+//                StorageTask<UploadTask.TaskSnapshot> task1 = ImgSertifikatshm.putFile(selectedPdfUri)
+//                        .addOnSuccessListener(taskSnapshot -> {
+//                            ImgSertifikatshm.getDownloadUrl()
+//                                    .addOnSuccessListener(uri -> {
+//                                        String imageUrl = uri.toString();
+//                                        Toast.makeText(getBaseContext(), "link: " + imageUrl, Toast.LENGTH_SHORT).show();
+//                                        pdf = imageUrl;
+//                                    })
+//                                    .addOnFailureListener(exception -> {
+//                                    });
+//                        })
+//                        .addOnFailureListener(exception -> {
+//                        });
+//                uploadTasks.add(task1);
+//
+//                Tasks.whenAllSuccess(uploadTasks)
+//                        .addOnSuccessListener(results -> {
+//                            Toast.makeText(getBaseContext(), "link: " + pdf, Toast.LENGTH_SHORT).show();
+//                        })
+//                        .addOnFailureListener(exception -> {
+//                            Dialog customDialog = new Dialog(CobaPesanActivity.this);
+//                            customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+//                            customDialog.setContentView(R.layout.custom_dialog_eror_input);
+//
+//                            if (customDialog.getWindow() != null) {
+//                                customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+//                            }
+//
+//                            Button ok = customDialog.findViewById(R.id.BtnOkErorInput);
+//                            TextView tv = customDialog.findViewById(R.id.TVDialogErorInput);
+//
+//                            tv.setText("Gagal Saat Unggah Gambar");
+//
+//                            ok.setOnClickListener(new View.OnClickListener() {
+//                                @Override
+//                                public void onClick(View view) {
+//                                    customDialog.dismiss();
+//                                }
+//                            });
+//
+//                            ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
+//
+//                            Glide.with(CobaPesanActivity.this)
+//                                    .load(R.drawable.alert) // You can also use a local resource like R.drawable.your_gif_resource
+//                                    .transition(DrawableTransitionOptions.withCrossFade())
+//                                    .into(gifImageView);
+//
+//                            customDialog.show();
+//                        });
+//            }
+//        });
 
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, ServerApi.URL_GET_DEVICE, null, new Response.Listener<JSONArray>() {
@@ -203,12 +243,12 @@ public class CobaPesanActivity extends AppCompatActivity {
         });
         requestQueue.add(jsonArrayRequest);
 
-        upload.setOnClickListener(view -> {
-            Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-            intent.setType("application/pdf");
-            intent.addCategory(Intent.CATEGORY_OPENABLE);
-            startActivityForResult(Intent.createChooser(intent, "Pilih File PDF"), 123);
-        });
+//        upload.setOnClickListener(view -> {
+//            Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+//            intent.setType("application/pdf");
+//            intent.addCategory(Intent.CATEGORY_OPENABLE);
+//            startActivityForResult(Intent.createChooser(intent, "Pilih File PDF"), 123);
+//        });
 
         kirim.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -243,17 +283,95 @@ public class CobaPesanActivity extends AppCompatActivity {
             }
         });
     }
+    private void chooseImage() {
+        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(intent, PICK_IMAGE_REQUEST);
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 123 && resultCode == RESULT_OK && data != null) {
             selectedPdfUri = data.getData();
-
             // Salin berkas PDF ke penyimpanan internal aplikasi
-            copyPdfToInternalStorage(selectedPdfUri);
+//            copyPdfToInternalStorage(selectedPdfUri);
+        } else if (requestCode == REQUEST_CODE_SIGN_IN && resultCode == RESULT_OK) {
+//            handleSignInResult(data);
         }
     }
+
+//    private void signIn() {
+//        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
+//        if (account == null) {
+//            GoogleSignInOptions signInOptions =
+//                    new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+//                            .requestScopes(Drive.SCOPE_FILE, Drive.SCOPE_APPFOLDER)
+//                            .build();
+//
+//            GoogleSignInClient signInClient = GoogleSignIn.getClient(this, signInOptions);
+//            Intent signInIntent = signInClient.getSignInIntent();
+//            startActivityForResult(signInIntent, REQUEST_CODE_SIGN_IN);
+//        }
+//    }
+//
+//    private void handleSignInResult(Intent data) {
+//        Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+//        try {
+//            GoogleSignInAccount account = task.getResult(ApiException.class);
+//            // Do something with the successfully authenticated account
+//        } catch (ApiException e) {
+//            Log.e("Google Drive", "Error signing in: " + e.getStatusCode());
+//        }
+//    }
+//
+//    private void uploadImageToDrive(Uri imageUri) {
+//        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
+//
+//        if (account != null) {
+//            Drive.getDriveResourceClient(this, account)
+//                    .getRootFolder()
+//                    .continueWithTask(task -> {
+//                        DriveFolder parentFolder = task.getResult();
+//                        return createImageFile(parentFolder, imageUri);
+//                    })
+//                    .addOnCompleteListener(task -> {
+//                        if (task.isSuccessful()) {
+//                            Log.d("Google Drive", "File successfully uploaded to the specified folder.");
+//                        } else {
+//                            Log.e("Google Drive", "Failed to upload file to the specified folder.", task.getException());
+//                        }
+//                    });
+//        }
+//    }
+//
+//    private Task<DriveFile> createImageFile(DriveFolder parentFolder, Uri imageUri) {
+//        return Tasks.call(() -> {
+//            DriveContents contents = Drive.getDriveResourceClient(this, GoogleSignIn.getLastSignedInAccount(this))
+//                    .createContents()
+//                    .getResult();
+//
+//            try (OutputStream outputStream = contents.getOutputStream()) {
+//                byte[] buffer = new byte[4096];
+//                int bytesRead;
+//                while ((bytesRead = getContentResolver().openInputStream(imageUri).read(buffer)) != -1) {
+//                    outputStream.write(buffer, 0, bytesRead);
+//                }
+//            } catch (IOException e) {
+//                Log.e("Google Drive", "Error creating image file contents: " + e.getMessage());
+//            }
+//
+//            MetadataChangeSet changeSet = new MetadataChangeSet.Builder()
+//                    .setTitle("MyImage.jpg")
+//                    .setMimeType("image/jpeg")
+//                    .setStarred(true)
+//                    .build();
+//
+//            return parentFolder.createFile(changeSet, contents).getResult();
+//        });
+//    }
+
+
+
 
     private void copyPdfToInternalStorage(Uri pdfUri) {
         try {

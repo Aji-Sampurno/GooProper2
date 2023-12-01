@@ -163,10 +163,44 @@
                     </LinearLayout>
 
                     <View
+                        android:id="@+id/V2"
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
                         android:layout_marginTop="5dp"
                         android:layout_marginBottom="5dp"
+                        android:background="#717171"/>
+
+                    <LinearLayout
+                        android:id="@+id/LytListingPrimaryAdmin"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="5dp"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="10dp"
+                            android:src="@drawable/ic_listing"
+                            app:tint="@color/second" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:text="Tambah Listing Primary"
+                            android:textColor="@color/second"
+                            style="@style/TextAppearance.Material3.TitleMedium"/>
+
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="5dp"
+                        android:visibility="gone"
                         android:background="#717171"/>
 
                     <LinearLayout
@@ -175,6 +209,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
                         android:layout_marginBottom="5dp"
+                        android:visibility="gone"
                         android:orientation="horizontal">
 
                         <ImageView
@@ -195,7 +230,40 @@
                     </LinearLayout>
 
                     <View
-                        android:id="@+id/V2"
+                        android:id="@+id/V3"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="5dp"
+                        android:background="#717171"/>
+
+                    <LinearLayout
+                        android:id="@+id/LytListinganPrimary"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="5dp"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="10dp"
+                            android:src="@drawable/ic_listing"
+                            app:tint="@color/second" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:text="Listingan Primary"
+                            android:textColor="@color/second"
+                            style="@style/TextAppearance.Material3.TitleMedium"/>
+
+                    </LinearLayout>
+
+                    <View
+                        android:id="@+id/V4"
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
                         android:layout_marginTop="5dp"

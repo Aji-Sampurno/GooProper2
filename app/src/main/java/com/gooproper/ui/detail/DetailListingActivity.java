@@ -88,18 +88,18 @@ import java.util.Map;
 public class DetailListingActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     ProgressDialog PDDetailListing;
-    TextView TVNamaDetailListing, TVAlamatDetailListing, TVHargaDetailListing, TVHargaSewaDetailListing, TVViewsDetailListing, TVLikeDetailListing, TVBedDetailListing, TVNamaAgen, TVBathDetailListing, TVWideDetailListing, TVLandDetailListing, TVDimensiDetailListing, TVTipeDetailListing, TVStatusDetailListing, TVSertifikatDetailListing, TVLuasDetailListing, TVKamarTidurDetailListing, TVKamarMandiDetailListing, TVLantaiDetailListing, TVGarasiDetailListing, TVCarpotDetailListing, TVListrikDetailListing, TVSumberAirDetailListing, TVPerabotDetailListing, TVSizeBanner, TVDeskripsiDetailListing, TVNoData, TVNoDataPdf, TVPriority, TVKondisi, TVNoPjp, TVNoDataPjp, TVFee, TVNamaVendor, TVTelpVendor;
-    ImageView IVFlowUp, IVWhatsapp, IVInstagram, IVFavorite, IVFavoriteOn, IVShare, IVStar1, IVStar2, IVStar3, IVStar4, IVStar5, IVAlamat ;
+    TextView TVNamaDetailListing, TVAlamatDetailListing, TVHargaDetailListing, TVHargaSewaDetailListing, TVViewsDetailListing, TVLikeDetailListing, TVBedDetailListing, TVNamaAgen, TVNamaAgen2, TVBathDetailListing, TVWideDetailListing, TVLandDetailListing, TVDimensiDetailListing, TVTipeDetailListing, TVStatusDetailListing, TVSertifikatDetailListing, TVLuasDetailListing, TVKamarTidurDetailListing, TVKamarMandiDetailListing, TVLantaiDetailListing, TVGarasiDetailListing, TVCarpotDetailListing, TVListrikDetailListing, TVSumberAirDetailListing, TVPerabotDetailListing, TVSizeBanner, TVDeskripsiDetailListing, TVNoData, TVNoDataPdf, TVPriority, TVKondisi, TVNoPjp, TVNoDataPjp, TVFee, TVNamaVendor, TVTelpVendor, TVPJP;
+    ImageView IVFlowUp, IVWhatsapp, IVInstagram, IVFlowUp2, IVWhatsapp2, IVInstagram2, IVFavorite, IVFavoriteOn, IVShare, IVStar1, IVStar2, IVStar3, IVStar4, IVStar5, IVAlamat ;
     Button BtnApproveAdmin, BtnApproveManager, BtnTambahMaps;
     TextInputEditText tambahagen, tambahcoagen, tambahpjp;
     TextInputLayout lytambahagen, lyttambahcoagen, lyttambahpjp;
     CheckBox CBMarketable, CBHarga;
     ScrollView scrollView;
-    CardView agen, CVSold, CVRented;
-    String status, idpralisting, idagen, idlisting, agenid, agencoid, idpengguna, StringNamaListing, StringLuasTanah, StringLuasBangunan, StringKamarTidur, StringKamarTidurArt, StringKamarMandiArt, StringKamarMandi, StringListrik, StringHarga, StringHargaSewa, StringSertifikat;
+    CardView agen, agen2, CVSold, CVRented;
+    String status, idpralisting, idagen, idlisting, agenid, agencoid, idpengguna, StringNamaListing, StringLuasTanah, StringLuasBangunan, StringKamarTidur, StringKamarTidurArt, StringKamarMandiArt, StringKamarMandi, StringListrik, StringHarga, StringHargaSewa, StringSertifikat, StringAlamat;
     String BuyerNama, BuyerTelp, BuyerKeterangan, BuyerTanggal, BuyerIdAgen, BuyerIdListing, BuyerIdInput, BuyerJam, StringNamaBuyer, AgenId;
     String NamaMaps;
-    String imageUrl, namaAgen, telpAgen, UrlSHM, UrlHGB, UrlHSHP, UrlPPJB, UrlStratatitle, UrlAJB, UrlPetokD;
+    String imageUrl, namaAgen, telpAgen, IdCo, UrlSHM, UrlHGB, UrlHSHP, UrlPPJB, UrlStratatitle, UrlAJB, UrlPetokD;
     String productId;
     ProgressDialog pDialog;
     ListingModel lm;
@@ -134,6 +134,7 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
         viewPagerSertifikat = findViewById(R.id.VPSertifikatDetailListing);
         viewPagerPJP = findViewById(R.id.VPPJPDetailListing);
         agen = findViewById(R.id.LytAgenDetailListing);
+        agen2 = findViewById(R.id.LytAgen2DetailListing);
         CVSold = findViewById(R.id.LytSoldDetailListing);
         CVRented = findViewById(R.id.LytRentedDetailListing);
         lytambahagen = findViewById(R.id.LytTambahAgenDetailListing);
@@ -180,6 +181,7 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
         TVSizeBanner = findViewById(R.id.TVUkuranBannerDetailListing);
         TVDeskripsiDetailListing = findViewById(R.id.TVDeskripsiDetailListing);
         TVNamaAgen = findViewById(R.id.TVNamaAgenDetailListing);
+        TVNamaAgen2 = findViewById(R.id.TVNamaAgen2DetailListing);
         TVNoData = findViewById(R.id.TVNoData);
         TVNoDataPjp = findViewById(R.id.TVNoDataPjp);
         TVPriority = findViewById(R.id.TVPriority);
@@ -188,11 +190,15 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
         TVFee = findViewById(R.id.TVFeeDetailListing);
         TVNamaVendor = findViewById(R.id.TVNamaVendorDetailListing);
         TVTelpVendor = findViewById(R.id.TVTelpVendorDetailListing);
+        TVPJP = findViewById(R.id.TVPjp);
 
         IVAlamat = findViewById(R.id.IVAlamatDetailListing);
         IVFlowUp = findViewById(R.id.IVFlowUpAgenDetailListing);
         IVWhatsapp = findViewById(R.id.IVNoTelpAgenDetailListing);
         IVInstagram = findViewById(R.id.IVInstagramAgenDetailListing);
+        IVFlowUp2 = findViewById(R.id.IVFlowUpAgen2DetailListing);
+        IVWhatsapp2 = findViewById(R.id.IVNoTelpAgen2DetailListing);
+        IVInstagram2 = findViewById(R.id.IVInstagramAgen2DetailListing);
         IVFavorite = findViewById(R.id.IVFavoriteDetailListing);
         IVFavoriteOn = findViewById(R.id.IVFavoriteOnDetailListing);
         IVShare = findViewById(R.id.IVShareDetailListing);
@@ -311,6 +317,7 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
         idpralisting = intentIdPraListing;
         idlisting = intentIdListing;
         idagen = intentIdAgen;
+        IdCo = intentIdAgenCo;
         NamaMaps = intentNamaListing;
         BuyerIdAgen = intentIdAgen;
         BuyerIdListing = intentIdListing;
@@ -319,6 +326,7 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
         telpAgen = intentNoTelp;
         productId = intentIdListing;
         StringNamaListing = intentNamaListing;
+        StringAlamat = intentAlamat;
         StringLuasTanah = intentLand;
         StringLuasBangunan = intentWide;
         StringKamarTidur = intentBed;
@@ -538,6 +546,10 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                 });
                 IVShare.setVisibility(View.GONE);
                 IVFavorite.setVisibility(View.GONE);
+                CBMarketable.setVisibility(View.VISIBLE);
+                CBHarga.setVisibility(View.VISIBLE);
+                CBMarketable.setClickable(false);
+                CBHarga.setClickable(false);
                 AgenId = "0";
                 idpengguna = Preferences.getKeyIdAdmin(this);
                 if (!intentImgPjp.equals("0")){
@@ -672,6 +684,7 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                         update.putExtra("Stratatitle",intentStratatitle);
                         update.putExtra("AJB",intentAJB);
                         update.putExtra("PetokD",intentPetokD);
+                        update.putExtra("Pjp",intentPjp);
                         update.putExtra("ImgSHM",intentImgSHM);
                         update.putExtra("ImgHGB",intentImgHGB);
                         update.putExtra("ImgHSHP",intentImgHSHP);
@@ -781,6 +794,8 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                             update.putExtra("ImgStratatitle",intentImgStratatitle);
                             update.putExtra("ImgAJB",intentImgAJB);
                             update.putExtra("ImgPetokD",intentImgPetokD);
+                            update.putExtra("ImgPjp",intentImgPjp);
+                            update.putExtra("ImgPjp1",intentImgPjp1);
                             update.putExtra("NoCertificate",intentNoCertificate);
                             update.putExtra("Pbb",intentPbb);
                             update.putExtra("JenisProperti",intentJenisProperti);
@@ -874,6 +889,8 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                             update.putExtra("ImgStratatitle",intentImgStratatitle);
                             update.putExtra("ImgAJB",intentImgAJB);
                             update.putExtra("ImgPetokD",intentImgPetokD);
+                            update.putExtra("ImgPjp",intentImgPjp);
+                            update.putExtra("ImgPjp1",intentImgPjp1);
                             update.putExtra("NoCertificate",intentNoCertificate);
                             update.putExtra("Pbb",intentPbb);
                             update.putExtra("JenisProperti",intentJenisProperti);
@@ -975,6 +992,8 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                             update.putExtra("ImgStratatitle",intentImgStratatitle);
                             update.putExtra("ImgAJB",intentImgAJB);
                             update.putExtra("ImgPetokD",intentImgPetokD);
+                            update.putExtra("ImgPjp",intentImgPjp);
+                            update.putExtra("ImgPjp1",intentImgPjp1);
                             update.putExtra("NoCertificate",intentNoCertificate);
                             update.putExtra("Pbb",intentPbb);
                             update.putExtra("JenisProperti",intentJenisProperti);
@@ -1127,14 +1146,8 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
             idpengguna = Preferences.getKeyIdCustomer(this);
             AgenId = "0";
         } else {
-//            IVFlowUp.setVisibility(View.INVISIBLE);
-//            BtnApproveAdmin.setVisibility(View.GONE);
-//            BtnApproveManager.setVisibility(View.GONE);
-//            IVFlowUp.setVisibility(View.INVISIBLE);
             TVAlamatDetailListing.setVisibility(View.GONE);
             IVAlamat.setVisibility(View.GONE);
-//            idpengguna = Preferences.getKeyIdCustomer(this);
-//            AgenId = "0";
         }
 
         if (intentPriority.equals("open")){
@@ -1307,6 +1320,15 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
             }
         }
 
+        if (intentIdAgenCo.equals("0")){
+            agen2.setVisibility(View.GONE);
+        } else if (intentIdAgenCo.equals(intentIdAgen)) {
+            agen2.setVisibility(View.GONE);
+        } else {
+            LoadCo();
+            agen2.setVisibility(View.VISIBLE);
+        }
+
         CountLike(idlisting);
         AddViews();
         AddSeen();
@@ -1386,6 +1408,16 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
         });
 
         if (update == 1) {
+            if (intentMarketable.equals("1")){
+                CBMarketable.setChecked(true);
+            } else {
+                CBMarketable.setChecked(false);
+            }
+            if (intentStatusHarga.equals("1")){
+                CBHarga.setChecked(true);
+            } else {
+                CBHarga.setChecked(false);
+            }
             if (intentIdAgen.equals("null")) {
                 if (intentSold.equals("1")){
                     LytBadgeRented.setVisibility(View.GONE);
@@ -1788,6 +1820,8 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
             if (intentImgPjp.equals("0") && intentImgPjp1.equals("0")) {
                 viewPagerPJP.setVisibility(View.GONE);
                 TVNoDataPjp.setVisibility(View.VISIBLE);
+            } else if (intentImgPjp1.equals("0")) {
+                TVPJP.setText("Bukti Chat");
             }
 
             adapter = new ViewPagerAdapter(this, images);
@@ -1822,6 +1856,94 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
     }
     private void showToast(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    }
+    private void LoadCo() {
+        RequestQueue queue = Volley.newRequestQueue(this);
+        JsonArrayRequest reqData = new JsonArrayRequest(Request.Method.GET, ServerApi.URL_GET_CO_LISTING + IdCo, null,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        for (int i = 0; i < response.length(); i++) {
+                            try {
+                                JSONObject data = response.getJSONObject(i);
+                                String NamaCo = data.getString("Nama");
+                                String TelpCo = data.getString("NoTelp");
+                                String IGCo = data.getString("Instagram");
+
+                                TVNamaAgen2.setText(NamaCo);
+                                IVInstagram.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        String url = "http://instagram.com/_u/" + IGCo;
+                                        Intent i = new Intent(Intent.ACTION_VIEW);
+                                        i.setData(Uri.parse(url));
+                                        startActivity(i);
+                                    }
+                                });
+                                if (status.equals("1")) {
+                                    IVWhatsapp.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View view) {
+                                            String deepLinkUrl = "https://gooproper.com/listing/" + idlisting;
+                                            String message = "Halo! Saya Manager, ingin menanyakan update pada listingan " + StringNamaListing + " yang beralamat di " + StringAlamat + ".\nDetail Listingan :\n" + deepLinkUrl;
+                                            String url = "https://api.whatsapp.com/send?phone=+62" + TelpCo + "&text=" + message;
+                                            Intent i = new Intent(Intent.ACTION_VIEW);
+                                            i.setData(Uri.parse(url));
+                                            startActivity(i);
+                                        }
+                                    });
+                                } else if (status.equals("2")) {
+                                    IVWhatsapp.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View view) {
+                                            String deepLinkUrl = "https://gooproper.com/listing/" + idlisting;
+                                            String message = "Halo! Saya Admin, ingin menanyakan update pada listingan " + StringNamaListing + " yang beralamat di " + StringAlamat + ".\nDetail Listingan :\n" + deepLinkUrl;
+                                            String url = "https://api.whatsapp.com/send?phone=+62" + TelpCo + "&text=" + message;
+                                            Intent i = new Intent(Intent.ACTION_VIEW);
+                                            i.setData(Uri.parse(url));
+                                            startActivity(i);
+                                        }
+                                    });
+                                } else if (status.equals("3")) {
+                                    IVWhatsapp.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View view) {
+                                            String deepLinkUrl = "https://gooproper.com/listing/" + idlisting;
+                                            String message = "Halo! Saya " + StringNamaBuyer + ", ingin melakukan cobroke pada listingan " + StringNamaListing + " yang beralamat di " + StringAlamat + ".\nApakah bersedia? \nDetail Listingan :\n" + deepLinkUrl;
+                                            String url = "https://api.whatsapp.com/send?phone=+62" + TelpCo + "&text=" + message;
+                                            Intent i = new Intent(Intent.ACTION_VIEW);
+                                            i.setData(Uri.parse(url));
+                                            startActivity(i);
+                                        }
+                                    });
+                                } else {
+                                    IVWhatsapp.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View view) {
+                                            String deepLinkUrl = "https://gooproper.com/listing/" + idlisting;
+                                            String message = "Halo! Saya " + StringNamaBuyer + ", ingin menanyakan informasi mengenai listingan " + StringNamaListing + " yang beralamat di " + StringAlamat + ".\nApakah masih ada? atau ada update terbaru?\nDetail Listingan :\n" + deepLinkUrl;
+                                            String url = "https://api.whatsapp.com/send?phone=+62" + TelpCo + "&text=" + message;
+                                            Intent i = new Intent(Intent.ACTION_VIEW);
+                                            i.setData(Uri.parse(url));
+                                            startActivity(i);
+                                        }
+                                    });
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+
+                            }
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        error.printStackTrace();
+                    }
+                });
+
+        queue.add(reqData);
     }
     private void AddViews() {
         StringRequest stringRequest = new StringRequest(Request.Method.POST, ServerApi.URL_ADD_VIEWS, new Response.Listener<String>() {

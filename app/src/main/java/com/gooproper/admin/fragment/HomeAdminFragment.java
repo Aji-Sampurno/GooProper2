@@ -1,5 +1,7 @@
 package com.gooproper.admin.fragment;
 
+import static android.app.Activity.RESULT_OK;
+
 import android.Manifest;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -22,8 +24,11 @@ import androidx.core.app.NotificationManagerCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.LinearSmoothScroller;
+import androidx.recyclerview.widget.PagerSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.os.Handler;
 import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -55,16 +60,25 @@ import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.play.core.appupdate.AppUpdateInfo;
+import com.google.android.play.core.appupdate.AppUpdateManager;
+import com.google.android.play.core.appupdate.AppUpdateManagerFactory;
+import com.google.android.play.core.install.model.AppUpdateType;
+import com.google.android.play.core.install.model.UpdateAvailability;
+import com.google.android.play.core.tasks.Task;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.gooproper.R;
 import com.gooproper.adapter.ListingAdapter;
 import com.gooproper.adapter.ListingPopulerAdapter;
 import com.gooproper.adapter.ListingSoldAdapter;
+import com.gooproper.adapter.PrimaryAdapter;
 import com.gooproper.model.ListingModel;
+import com.gooproper.model.PrimaryModel;
 import com.gooproper.ui.MapsActivity;
 import com.gooproper.ui.MapsFragment;
 import com.gooproper.ui.NewActivity;
 import com.gooproper.ui.PopularActivity;
+import com.gooproper.ui.PrimaryActivity;
 import com.gooproper.ui.SoldActivity;
 import com.gooproper.ui.TambahListingActivity;
 import com.gooproper.util.FormatCurrency;
@@ -87,12 +101,15 @@ public class HomeAdminFragment extends Fragment implements OnMapReadyCallback {
 
     private static final int REQUEST_LOCATION_PERMISSION = 1;
     private static final int MY_PERMISSIONS_REQUEST_VIBRATE = 123;
+    private static final int REQUEST_CODE_UPDATE = 2;
+    private int currentPosition = 0;
     private MapView mapView;
     private GoogleMap googleMap;
-    private TextView SeeAllNew, SeeAllPopular, SeeAllSold, SeeAllAgentOM;
-    private RecyclerView recycleListingSold, recycleListingNew, recycleListingPopular, recycleAgent;
-    private RecyclerView.Adapter adapterSold, adapterNew, adapterPopular, adapterAgentOM;
+    private TextView SeeAllPrimary, SeeAllNew, SeeAllPopular, SeeAllSold, SeeAllAgentOM;
+    private RecyclerView recycleListingSold, recycleListingNew, recycleListingPopular, recycleListingPrimary, recycleAgent;
+    private RecyclerView.Adapter adapterSold, adapterNew, adapterPopular, adapterPrimary, adapterAgentOM;
     String Token, Status, IdAdmin;
+    List<PrimaryModel> mItemsPrimary;
     List<ListingModel> mItemsSold;
     List<ListingModel> mItemsHot;
     List<ListingModel> mItemsNew;
@@ -101,6 +118,8 @@ public class HomeAdminFragment extends Fragment implements OnMapReadyCallback {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_home_admin, container, false);
+
+        checkForUpdate();
 
         IdAdmin = Preferences.getKeyIdAdmin(getContext());
         Status = Preferences.getKeyStatus(getContext());
@@ -123,10 +142,12 @@ public class HomeAdminFragment extends Fragment implements OnMapReadyCallback {
                     simpanDevice();
                 });
 
+        recycleListingPrimary = root.findViewById(R.id.ListingPrimary);
         recycleListingSold = root.findViewById(R.id.ListingSold);
         recycleListingNew = root.findViewById(R.id.ListingNew);
         recycleListingPopular = root.findViewById(R.id.ListingPopular);
         recycleAgent = root.findViewById(R.id.ListingAgentOM);
+        SeeAllPrimary = root.findViewById(R.id.SeeAllPrimary);
         SeeAllSold = root.findViewById(R.id.SeeAllSold);
         SeeAllNew = root.findViewById(R.id.SeeAllNew);
         SeeAllPopular = root.findViewById(R.id.SeeAllPopular);
@@ -134,13 +155,20 @@ public class HomeAdminFragment extends Fragment implements OnMapReadyCallback {
         mapView.onCreate(savedInstanceState);
         mapView.getMapAsync(this);
 
+        SeeAllPrimary.setOnClickListener(view -> startActivity(new Intent(getContext(), PrimaryActivity.class)));
         SeeAllSold.setOnClickListener(view -> startActivity(new Intent(getContext(), SoldActivity.class)));
         SeeAllNew.setOnClickListener(view -> startActivity(new Intent(getContext(), NewActivity.class)));
         SeeAllPopular.setOnClickListener(view -> startActivity(new Intent(getContext(), PopularActivity.class)));
 
+        mItemsPrimary = new ArrayList<>();
         mItemsSold = new ArrayList<>();
         mItemsHot = new ArrayList<>();
         mItemsNew = new ArrayList<>();
+
+        LinearLayoutManager layoutManager = new LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false);
+        recycleListingPrimary.setLayoutManager(layoutManager);
+        adapterPrimary = new PrimaryAdapter(getActivity(), mItemsPrimary);
+        recycleListingPrimary.setAdapter(adapterPrimary);
 
         recycleListingSold.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false));
         adapterSold = new ListingSoldAdapter(getActivity(), mItemsSold);
@@ -154,22 +182,29 @@ public class HomeAdminFragment extends Fragment implements OnMapReadyCallback {
         adapterNew = new ListingAdapter(getActivity(), mItemsNew);
         recycleListingNew.setAdapter(adapterNew);
 
+        LoadListingPrimary();
         LoadListingSold();
         LoadListingPopuler();
         LoadListing();
         LoadDevice();
 
-        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(getContext());
-        boolean areNotificationsEnabled = notificationManager.areNotificationsEnabled();
-        if (areNotificationsEnabled) {
-        } else {
-            Intent intent = new Intent();
-            intent.setAction("android.settings.APP_NOTIFICATION_SETTINGS");
-            intent.putExtra("app_package", getContext().getPackageName());
-            intent.putExtra("app_uid", getContext().getApplicationInfo().uid);
-            startActivity(intent);
-        }
+        PagerSnapHelper snapHelper = new PagerSnapHelper();
+        snapHelper.attachToRecyclerView(recycleListingPrimary);
 
+        final Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                if (currentPosition == mItemsPrimary.size()) {
+                    currentPosition = 0;
+                } else {
+                    currentPosition++;
+                }
+                recycleListingPrimary.smoothScrollToPosition(currentPosition);
+                recycleListingPrimary.postDelayed(this, 3000); // Post the runnable again to keep scrolling
+            }
+        };
+
+        recycleListingPrimary.post(runnable);
 
         if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
                 && ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
@@ -179,12 +214,86 @@ public class HomeAdminFragment extends Fragment implements OnMapReadyCallback {
 
         return root;
     }
+    private void checkForUpdate() {
+        AppUpdateManager appUpdateManager = AppUpdateManagerFactory.create(getActivity());
+
+        Task<AppUpdateInfo> appUpdateInfoTask = appUpdateManager.getAppUpdateInfo();
+
+        appUpdateInfoTask.addOnSuccessListener(new com.google.android.play.core.tasks.OnSuccessListener<AppUpdateInfo>() {
+            @Override
+            public void onSuccess(AppUpdateInfo appUpdateInfo) {
+                if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE
+                        && appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.FLEXIBLE)) {
+                    // Ada pembaruan tersedia, tampilkan dialog pembaruan
+                    requestUpdate(appUpdateManager, appUpdateInfo);
+                }
+            }
+        });
+
+        appUpdateInfoTask.addOnFailureListener(new com.google.android.play.core.tasks.OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(getContext(), "Gagal memeriksa pembaruan", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+    private void requestUpdate(AppUpdateManager appUpdateManager, AppUpdateInfo appUpdateInfo) {
+        try {
+            appUpdateManager.startUpdateFlowForResult(appUpdateInfo, AppUpdateType.FLEXIBLE, getActivity(), REQUEST_CODE_UPDATE);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == REQUEST_CODE_UPDATE) {
+            if (resultCode != RESULT_OK) {
+                Toast.makeText(getActivity(), "Pembaruan dibatalkan atau gagal", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
     private void requestNotificationPermission() {
         if (!NotificationManagerCompat.from(requireContext()).areNotificationsEnabled()) {
-            openNotificationSettings();
-        } else {
-            Toast.makeText(requireContext(), "Izin notifikasi sudah diberikan", Toast.LENGTH_SHORT).show();
-        }
+            Dialog customDialog = new Dialog(getContext());
+            customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            customDialog.setContentView(R.layout.custom_dialog_sukses);
+
+            if (customDialog.getWindow() != null) {
+                customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+            }
+
+            TextView dialogTitle = customDialog.findViewById(R.id.dialog_title);
+            Button ok = customDialog.findViewById(R.id.btnya);
+            Button cobalagi = customDialog.findViewById(R.id.btntidak);
+            ImageView gifimage = customDialog.findViewById(R.id.ivdialog);
+
+            dialogTitle.setText("Berikan Izin Notifikasi");
+            cobalagi.setText("Tidak");
+            ok.setText("Ya");
+
+            ok.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    openNotificationSettings();
+                }
+            });
+
+            cobalagi.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    customDialog.dismiss();
+                }
+            });
+
+            Glide.with(getActivity())
+                    .load(R.drawable.alert) // You can also use a local resource like R.drawable.your_gif_resource
+                    .transition(DrawableTransitionOptions.withCrossFade())
+                    .into(gifimage);
+
+            customDialog.show();
+        } else { }
     }
     private void openNotificationSettings() {
         Intent intent = new Intent();
@@ -203,8 +312,7 @@ public class HomeAdminFragment extends Fragment implements OnMapReadyCallback {
         startActivity(intent);
     }
     private void showNotification() {
-        // Logika untuk menampilkan notifikasi
-        // ...
+
     }
     private void simpanDevice() {
         RequestQueue requestQueue = Volley.newRequestQueue(getContext());
@@ -252,6 +360,55 @@ public class HomeAdminFragment extends Fragment implements OnMapReadyCallback {
                                 e.printStackTrace();
                             }
                         }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        error.printStackTrace();
+                    }
+                });
+
+        queue.add(reqData);
+    }
+    private void LoadListingPrimary() {
+        RequestQueue queue = Volley.newRequestQueue(getActivity());
+        JsonArrayRequest reqData = new JsonArrayRequest(Request.Method.GET, ServerApi.URL_GET_PRIMARY, null,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        mItemsPrimary.clear();
+                        for (int i = 0; i < response.length(); i++) {
+                            try {
+                                JSONObject data = response.getJSONObject(i);
+                                PrimaryModel md = new PrimaryModel();
+                                md.setIdListingPrimary(data.getString("IdListingPrimary"));
+                                md.setJudulListingPrimary(data.getString("JudulListingPrimary"));
+                                md.setHargaListingPrimary(data.getString("HargaListingPrimary"));
+                                md.setDeskripsiListingPrimary(data.getString("DeskripsiListingPrimary"));
+                                md.setAlamatListingPrimary(data.getString("AlamatListingPrimary"));
+                                md.setLatitudeListingPrimary(data.getString("LatitudeListingPrimary"));
+                                md.setLongitudeListingPrimary(data.getString("LongitudeListingPrimary"));
+                                md.setLocationListingPrimary(data.getString("LocationListingPrimary"));
+                                md.setKontakPerson1(data.getString("KontakPerson1"));
+                                md.setKontakPerson2(data.getString("KontakPerson2"));
+                                md.setImg1(data.getString("Img1"));
+                                md.setImg2(data.getString("Img2"));
+                                md.setImg3(data.getString("Img3"));
+                                md.setImg4(data.getString("Img4"));
+                                md.setImg5(data.getString("Img5"));
+                                md.setImg6(data.getString("Img6"));
+                                md.setImg7(data.getString("Img7"));
+                                md.setImg8(data.getString("Img8"));
+                                md.setImg9(data.getString("Img9"));
+                                md.setImg10(data.getString("Img10"));
+                                mItemsPrimary.add(md);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+                        adapterPrimary.notifyDataSetChanged();
                     }
                 },
                 new Response.ErrorListener() {

@@ -106,7 +106,6 @@ public class LocationActivity extends AppCompatActivity implements OnMapReadyCal
             getSupportActionBar().hide();
         }
     }
-
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
@@ -126,6 +125,7 @@ public class LocationActivity extends AppCompatActivity implements OnMapReadyCal
                                     .position(currentLocation)
                                     .title("Lokasi Saya"));
                             googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 20));
+                            selectedLocation = currentLocation;
                         }
                     });
         }

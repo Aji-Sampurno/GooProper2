@@ -324,13 +324,33 @@
 
                     </LinearLayout>
 
-                    <Button
-                        android:id="@+id/BtnSHM"
+                    <LinearLayout
+                        android:id="@+id/LytBtnSHM"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:text="Upload SHM"
-                        android:visibility="gone" />
+                        android:orientation="horizontal"
+                        android:visibility="gone"
+                        android:weightSum="2">
+
+                        <Button
+                            android:id="@+id/BtnSHM"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginEnd="5dp"
+                            android:layout_weight="1"
+                            android:text="Upload Gambar SHM" />
+
+                        <Button
+                            android:id="@+id/BtnSHMPDF"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="5dp"
+                            android:layout_marginTop="10dp"
+                            android:layout_weight="1"
+                            android:text="Upload Pdf SHM" />
+
+                    </LinearLayout>
 
                 </LinearLayout>
 
@@ -379,13 +399,33 @@
 
                     </LinearLayout>
 
-                    <Button
-                        android:id="@+id/BtnHGB"
+                    <LinearLayout
+                        android:id="@+id/LytBtnHGB"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:text="Upload HGB"
-                        android:visibility="gone" />
+                        android:orientation="horizontal"
+                        android:visibility="gone"
+                        android:weightSum="2">
+
+                        <Button
+                            android:id="@+id/BtnHGB"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginEnd="5dp"
+                            android:layout_weight="1"
+                            android:text="Upload Gambar HGB " />
+
+                        <Button
+                            android:id="@+id/BtnHGBPDF"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="5dp"
+                            android:layout_marginTop="10dp"
+                            android:layout_weight="1"
+                            android:text="Upload  Pdf  HGB" />
+
+                    </LinearLayout>
 
                 </LinearLayout>
 
@@ -434,13 +474,33 @@
 
                     </LinearLayout>
 
-                    <Button
-                        android:id="@+id/BtnHSHP"
+                    <LinearLayout
+                        android:id="@+id/LytBtnHSHP"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:text="Upload HS/HP"
-                        android:visibility="gone" />
+                        android:orientation="horizontal"
+                        android:visibility="gone"
+                        android:weightSum="2">
+
+                        <Button
+                            android:id="@+id/BtnHSHP"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginEnd="5dp"
+                            android:layout_weight="1"
+                            android:text="Upload Gambar HSHP" />
+
+                        <Button
+                            android:id="@+id/BtnHSHPPDF"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="5dp"
+                            android:layout_marginTop="10dp"
+                            android:layout_weight="1"
+                            android:text="Upload Pdf HSHP" />
+
+                    </LinearLayout>
 
                 </LinearLayout>
 
@@ -489,13 +549,33 @@
 
                     </LinearLayout>
 
-                    <Button
-                        android:id="@+id/BtnPPJB"
+                    <LinearLayout
+                        android:id="@+id/LytBtnPPJB"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:text="Upload PPJB"
-                        android:visibility="gone" />
+                        android:orientation="horizontal"
+                        android:visibility="gone"
+                        android:weightSum="2">
+
+                        <Button
+                            android:id="@+id/BtnPPJB"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginEnd="5dp"
+                            android:layout_weight="1"
+                            android:text="Upload Gambar PPJB" />
+
+                        <Button
+                            android:id="@+id/BtnPPJBPDF"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="5dp"
+                            android:layout_marginTop="10dp"
+                            android:layout_weight="1"
+                            android:text="Upload Pdf PPJB" />
+
+                    </LinearLayout>
 
                 </LinearLayout>
 
@@ -544,13 +624,33 @@
 
                     </LinearLayout>
 
-                    <Button
-                        android:id="@+id/BtnStratatitle"
+                    <LinearLayout
+                        android:id="@+id/LytBtnStratatitle"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:text="Upload Stratatitle"
-                        android:visibility="gone" />
+                        android:orientation="horizontal"
+                        android:visibility="gone"
+                        android:weightSum="2">
+
+                        <Button
+                            android:id="@+id/BtnStratatitle"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginEnd="5dp"
+                            android:layout_weight="1"
+                            android:text="Upload Gambar Stratatitle" />
+
+                        <Button
+                            android:id="@+id/BtnStratatitlePDF"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="5dp"
+                            android:layout_marginTop="10dp"
+                            android:layout_weight="1"
+                            android:text="Upload Pdf Stratatitle" />
+
+                    </LinearLayout>
 
                 </LinearLayout>
 
@@ -599,13 +699,33 @@
 
                     </LinearLayout>
 
-                    <Button
-                        android:id="@+id/BtnAJB"
+                    <LinearLayout
+                        android:id="@+id/LytBtnAJB"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:text="Upload AJB"
-                        android:visibility="gone" />
+                        android:orientation="horizontal"
+                        android:visibility="gone"
+                        android:weightSum="2">
+
+                        <Button
+                            android:id="@+id/BtnAJB"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginEnd="5dp"
+                            android:layout_weight="1"
+                            android:text="Upload Gambar AJB" />
+
+                        <Button
+                            android:id="@+id/BtnAJBPDF"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="5dp"
+                            android:layout_marginTop="10dp"
+                            android:layout_weight="1"
+                            android:text="Upload  Pdf  AJB " />
+
+                    </LinearLayout>
 
                 </LinearLayout>
 
@@ -654,13 +774,33 @@
 
                     </LinearLayout>
 
-                    <Button
-                        android:id="@+id/BtnPetokD"
+                    <LinearLayout
+                        android:id="@+id/LytBtnPetokD"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:text="Upload Petok D"
-                        android:visibility="gone" />
+                        android:orientation="horizontal"
+                        android:visibility="gone"
+                        android:weightSum="2">
+
+                        <Button
+                            android:id="@+id/BtnPetokD"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginEnd="5dp"
+                            android:layout_weight="1"
+                            android:text="Upload Gambar Petok D" />
+
+                        <Button
+                            android:id="@+id/BtnPetokDPDF"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="5dp"
+                            android:layout_marginTop="10dp"
+                            android:layout_weight="1"
+                            android:text="Upload Pdf Petok D" />
+
+                    </LinearLayout>
 
                 </LinearLayout>
 
@@ -760,6 +900,21 @@
                         android:visibility="gone" />
 
                 </LinearLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/lytnopjp"
+                    style="@style/CustomOutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="No PJP">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etnopjp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="none"
+                        android:textColor="@color/black" />
+                </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/lyttipesertifikat"
@@ -1198,7 +1353,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Keterangan"
-                        android:inputType="text"
+                        android:inputType="textMultiLine"
                         android:textColor="@color/black" />
                 </com.google.android.material.textfield.TextInputLayout>
 

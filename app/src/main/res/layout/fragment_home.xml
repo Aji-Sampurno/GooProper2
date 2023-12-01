@@ -87,6 +87,40 @@
                 android:weightSum="2">
 
                 <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Listing Primary"
+                    android:textColor="@color/white"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/SeeAllPrimary"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Lihat Semua"
+                    android:textAlignment="textEnd"
+                    android:textColor="@color/white" />
+
+            </LinearLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/ListingPrimary"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="10dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="11dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="11dp"
+                android:orientation="horizontal"
+                android:weightSum="2">
+
+                <TextView
                     android:id="@+id/textView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -100,7 +134,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="See All"
+                    android:text="Lihat Semua"
                     android:textAlignment="textEnd"
                     android:textColor="@color/white" />
 
@@ -136,7 +170,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="See All"
+                    android:text="Lihat Semua"
                     android:textAlignment="textEnd"
                     android:textColor="@color/white" />
 
@@ -172,7 +206,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="See All"
+                    android:text="Lihat Semua"
                     android:textAlignment="textEnd"
                     android:textColor="@color/white" />
 
@@ -207,7 +241,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="see All"
+                    android:text="Lihat Semua"
                     android:textAlignment="textEnd"
                     android:textColor="@color/white" />
 
@@ -217,8 +251,8 @@
                 android:id="@+id/ListingNew"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp" />
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp" />
 
         </LinearLayout>
     </ScrollView>

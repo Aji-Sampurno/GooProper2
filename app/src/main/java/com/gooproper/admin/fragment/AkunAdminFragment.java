@@ -22,8 +22,9 @@ import com.gooproper.ui.TentangKamiActivity;
 import com.gooproper.ui.AgenActivity;
 import com.gooproper.ui.LaporanListingActivity;
 import com.gooproper.ui.PelamarAgenActivity;
-import com.gooproper.ui.TambahKaryawanActivity;
+import com.gooproper.ui.tambah.TambahKaryawanActivity;
 import com.gooproper.ui.TambahListingActivity;
+import com.gooproper.ui.tambah.TambahListingPrimaryActivity;
 import com.gooproper.util.Preferences;
 import com.squareup.picasso.Picasso;
 
@@ -31,10 +32,10 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class AkunAdminFragment extends Fragment {
 
-    private LinearLayout pelamar, agen, listing, karyawan, laporan, pengaturan, hubungikami, tentangkami, kirimpesan;
+    private LinearLayout pelamar, agen, listing, primary, listprimary, karyawan, laporan, pengaturan, hubungikami, tentangkami, kirimpesan;
     TextView nama, edit;
     CircleImageView cvadmin;
-    View view, view1;
+    View view, view1, view2, view3;
     String imgurl;
     String profile;
     String status;
@@ -51,6 +52,8 @@ public class AkunAdminFragment extends Fragment {
         View root = inflater.inflate(R.layout.fragment_akun_admin, container, false);
 
         listing = root.findViewById(R.id.LytListingAdmin);
+        primary = root.findViewById(R.id.LytListingPrimaryAdmin);
+        listprimary = root.findViewById(R.id.LytListinganPrimary);
         karyawan = root.findViewById(R.id.LytTambahKaryawan);
         laporan = root.findViewById(R.id.LytLaporanListingan);
         pelamar = root.findViewById(R.id.LytPelamarAdmin);
@@ -64,6 +67,8 @@ public class AkunAdminFragment extends Fragment {
         cvadmin = root.findViewById(R.id.CIVAkunAdmin);
         view = root.findViewById(R.id.V1);
         view1 = root.findViewById(R.id.V2);
+        view2 = root.findViewById(R.id.V3);
+        view3 = root.findViewById(R.id.V4);
 
         nama.setText(Preferences.getKeyUsername(getActivity()));
         edit.setOnClickListener(view -> startActivity(new Intent(getActivity(), EditAkunActivity.class)));
@@ -76,6 +81,10 @@ public class AkunAdminFragment extends Fragment {
             view.setVisibility(View.GONE);
             laporan.setVisibility(View.GONE);
             view1.setVisibility(View.GONE);
+            primary.setVisibility(View.GONE);
+            view2.setVisibility(View.GONE);
+            listprimary.setVisibility(View.GONE);
+            view3.setVisibility(View.GONE);
         } else {
             listing.setVisibility(View.VISIBLE);
         }
@@ -88,6 +97,7 @@ public class AkunAdminFragment extends Fragment {
 
         edit.setOnClickListener(view -> startActivity(new Intent(getContext(), EditAkunActivity.class)));
         listing.setOnClickListener(view -> startActivity(new Intent(getContext(), TambahListingActivity.class)));
+        primary.setOnClickListener(view -> startActivity(new Intent(getContext(), TambahListingPrimaryActivity.class)));
         pelamar.setOnClickListener(view -> startActivity(new Intent(getContext(), PelamarAgenActivity.class)));
         agen.setOnClickListener(view -> startActivity(new Intent(getContext(), AgenActivity.class)));
         laporan.setOnClickListener(view -> startActivity(new Intent(getContext(), LaporanListingActivity.class)));

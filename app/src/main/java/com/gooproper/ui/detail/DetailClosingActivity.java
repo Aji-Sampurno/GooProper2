@@ -59,7 +59,7 @@ public class DetailClosingActivity extends AppCompatActivity implements OnMapRea
     Button BtnSold, BtnRented;
     ScrollView scrollView;
     CardView CVSold;
-    String status, idpralisting, idagen, idlisting, StringNamaListing, StringLuasTanah, StringLuasBangunan, StringKamarTidur, StringKamarTidurArt, StringKamarMandiArt, StringKamarMandi, StringListrik, StringHarga, StringSertifikat;
+    String status, idpralisting, idagen, idlisting, StringNamaListing, StringLuasTanah, StringLuasBangunan, StringKamarTidur, StringKamarTidurArt, StringKamarMandiArt, StringKamarMandi, StringListrik, StringHarga, StringHargaSewa, StringSertifikat;
     String BuyerIdAgen, BuyerIdListing;
     String NamaMaps;
     String imageUrl, namaAgen, telpAgen;
@@ -237,7 +237,15 @@ public class DetailClosingActivity extends AppCompatActivity implements OnMapRea
         StringKamarMandiArt = intentBathArt;
         StringListrik = intentListrik;
         StringSertifikat = intentJenisCertificate;
-        StringHarga = currency.formatRupiah(intentHarga);
+
+        if (intentKondisi.equals("Jual")){
+            StringHarga = currency.formatRupiah(intentHarga);
+        } else if (intentKondisi.equals("Sewa")) {
+            StringHargaSewa = currency.formatRupiah(intentHargaSewa);
+        } else {
+            StringHarga = currency.formatRupiah(intentHarga);
+            StringHargaSewa = currency.formatRupiah(intentHargaSewa);
+        }
 
         if (status.equals("1")) {
             CVSold.setVisibility(View.GONE);

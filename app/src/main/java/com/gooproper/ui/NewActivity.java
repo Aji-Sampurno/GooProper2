@@ -141,7 +141,6 @@ public class NewActivity extends AppCompatActivity {
             getSupportActionBar().hide();
         }
     }
-    //searchView
     private void filterList(String text) {
         List<ListingModel> filteredList = new ArrayList<>();
         for (ListingModel item : list) {
@@ -156,7 +155,6 @@ public class NewActivity extends AppCompatActivity {
         }
         adapter.setFilteredlist(filteredList);
     }
-    //filter
     public void showFilterDialog () {
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
         LayoutInflater inflater = getLayoutInflater();
@@ -329,7 +327,6 @@ public class NewActivity extends AppCompatActivity {
         alertDialog = dialogBuilder.create();
         alertDialog.show();
     }
-
     public void showSpecPopUp(View view) {
         androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this);
         builder.setTitle("Jenis Properti");
@@ -357,7 +354,6 @@ public class NewActivity extends AppCompatActivity {
         // Create and show the AlertDialog
         builder.create().show();
     }
-
     public void showPropertyTypePopup(View view) {
         androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this);
         builder.setTitle("Select Property Type");
@@ -385,7 +381,6 @@ public class NewActivity extends AppCompatActivity {
         androidx.appcompat.app.AlertDialog dialog = builder.create();
         dialog.show();
     }
-
     public void applyCustomFilter(View view,
                                   long minPrice,
                                   long maxPrice,
@@ -484,7 +479,6 @@ public class NewActivity extends AppCompatActivity {
 
         applyFilters = false; // Clear the filter flag after applying filters
     }
-
     private void LoadListing(boolean showProgressDialog) {
         PDNew.setMessage("Memuat Data...");
         PDNew.show();

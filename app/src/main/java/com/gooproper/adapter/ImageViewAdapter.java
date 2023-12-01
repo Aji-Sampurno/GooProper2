@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
@@ -24,6 +25,7 @@ import androidx.viewpager.widget.PagerAdapter;
 import com.gooproper.R;
 import com.gooproper.ui.ImageViewActivity;
 import com.gooproper.util.ImageDownloader;
+import com.gooproper.util.ImageDownloaderMIUI;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
@@ -74,36 +76,52 @@ public class ImageViewAdapter extends PagerAdapter {
                 builder.setTitle("Konfirmasi Unduhan");
                 builder.setMessage("Apakah Anda ingin mengunduh gambar ini?");
                 builder.setPositiveButton("Ya", (dialog, which) -> {
-                    bitmapDrawable = (BitmapDrawable) imageView.getDrawable();
-                    bitmap = bitmapDrawable.getBitmap();
-
-                    FileOutputStream fileOutputStream = null;
-
-                    File sdCard = Environment.getExternalStorageDirectory();
-                    File Directory = new File(sdCard.getAbsolutePath()+"/Download");
-                    Directory.mkdir();
-
-                    String filename = String.format("%d.jpg", System.currentTimeMillis());
-                    File outfile = new File(Directory,filename);
-
-                    Toast.makeText(context, "Berhasil Download", Toast.LENGTH_SHORT).show();
-                    try {
-                        fileOutputStream = new FileOutputStream(outfile);
-                        bitmap.compress(Bitmap.CompressFormat.JPEG,100,fileOutputStream);
-                        fileOutputStream.flush();
-                        fileOutputStream.close();
-
-                        Intent intent=new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-                        intent.setData(Uri.fromFile(outfile));
-                        context.sendBroadcast(intent);
-
-                    } catch (FileNotFoundException e) {
-                        throw new RuntimeException(e);
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
+                    String imageUrl = images.get(position);
+                    if (isMIUI()) {
+                        ImageDownloaderMIUI imageDownloaderMIUI = new ImageDownloaderMIUI(context, imageView);
+                        imageDownloaderMIUI.execute(imageUrl);
+                    } else {
+                        ImageDownloaderMIUI imageDownloaderMIUI = new ImageDownloaderMIUI(context, imageView);
+                        imageDownloaderMIUI.execute(imageUrl);
+//                        ImageDownloader imageDownloader = new ImageDownloader(context, imageView);
+//                        imageDownloader.execute(imageUrl);
                     }
-                    //String imageUrl = images.get(position);
-                    //new ImageDownloader(context).execute(imageUrl);
+
+//                    bitmapDrawable = (BitmapDrawable) imageView.getDrawable();
+//                    if (imageView.getDrawable() instanceof BitmapDrawable) {
+//                        bitmapDrawable = (BitmapDrawable) imageView.getDrawable();
+//                        bitmap = bitmapDrawable.getBitmap();
+//
+//                        FileOutputStream fileOutputStream = null;
+//
+//                        File sdCard = Environment.getExternalStorageDirectory();
+//                        File Directory = new File(sdCard.getAbsolutePath()+"/Download");
+//                        Directory.mkdir();
+//
+//                        String filename = String.format("%d.jpg", System.currentTimeMillis());
+//                        File outfile = new File(Directory,filename);
+//
+//                        Toast.makeText(context, "Berhasil Download", Toast.LENGTH_SHORT).show();
+//                        try {
+//                            fileOutputStream = new FileOutputStream(outfile);
+//                            bitmap.compress(Bitmap.CompressFormat.JPEG,100,fileOutputStream);
+//                            fileOutputStream.flush();
+//                            fileOutputStream.close();
+//
+//                            Intent intent=new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+//                            intent.setData(Uri.fromFile(outfile));
+//                            context.sendBroadcast(intent);
+//
+//                        } catch (FileNotFoundException e) {
+//                            throw new RuntimeException(e);
+//                        } catch (IOException e) {
+//                            throw new RuntimeException(e);
+//                        }
+//
+//                    } else {
+//                        // Handle the case where imageView.getDrawable() is not a BitmapDrawable
+//                        // Log or display a message, or take appropriate action.
+//                    }
                 });
                 builder.setNegativeButton("Batal", (dialog, which) -> {
                     dialog.dismiss();
@@ -120,6 +138,28 @@ public class ImageViewAdapter extends PagerAdapter {
         container.removeView((View) object);
     }
 
+    public static boolean isMIUI() {
+        String manufacturer = Build.MANUFACTURER;
+        String model = Build.MODEL;
+
+        if (manufacturer.equalsIgnoreCase("Xiaomi")) {
+            return checkIfModelIsMIUI(model);
+        }
+
+        return false;
+    }
+
+    private static boolean checkIfModelIsMIUI(String model) {
+        String[] miuiModels = {"MI", "Redmi", "POCO"};
+
+        for (String miuiModel : miuiModels) {
+            if (model.contains(miuiModel)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
     private void Download(){
 
     }

@@ -117,7 +117,7 @@
                     style="@style/CustomOutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:boxBackgroundColor="@color/grey">
+                    app:boxBackgroundColor="#DBDDDF">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/etnamavendor"
@@ -134,7 +134,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    app:boxBackgroundColor="@color/grey"
+                    app:boxBackgroundColor="#DBDDDF"
                     app:helperText="cth: 08XXXXXX">
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -1601,7 +1601,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Keterangan"
-                        android:inputType="text"
+                        android:inputType="textMultiLine"
                         android:textColor="@color/black" />
                 </com.google.android.material.textfield.TextInputLayout>
 

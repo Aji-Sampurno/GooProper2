@@ -178,12 +178,12 @@ public class EditListingActivity extends AppCompatActivity {
     private static final int PICK_PDF_AJB = 96;
     private static final int PICK_PDF_PetokD = 97;
     Uri Uri1, Uri2, Uri3, Uri4, Uri5, Uri6, Uri7, Uri8, UriSHM, UriHGB, UriHSHP, UriPPJB, UriSTRA, UriAJB, UriPetokD, UriPJP, UriPJP1;
-    LinearLayout lyt1, lyt2, lyt3, lyt4, lyt5, lyt6, lyt7, lyt8, LytSHM, LytHGB, LytHSHP, LytPPJB, LytStratatitle, LytAJB, LytPetokD, LytPjp, LytPjp1;
+    LinearLayout lyt1, lyt2, lyt3, lyt4, lyt5, lyt6, lyt7, lyt8, LytSHM, LytHGB, LytHSHP, LytPPJB, LytStratatitle, LytAJB, LytPetokD, LytPjp, LytPjp1, LytBtnShm, LytBtnHGB, LytBtnHSHP, LytBtnPPJB, LytBtnStra, LytBtnAJB, LytBtnPetokD;
     ImageView back, iv1, iv2, iv3, iv4, iv5, iv6, iv7, iv8, IVShm, IVHgb, IVHshp, IVPpjb, IVStratatitle, IVAJB, IVPetokD, IVPjp, IVPjp1;
-    Button batal, submit, select, select1, select2, select3, select4, select5, select6, select7, maps, BtnSHM, BtnHGB, BtnHSHP, BtnPPJB, BtnSTRA, BtnAJB, BtnPetokD, BtnPjp, BtnPjp1;
+    Button batal, submit, select, select1, select2, select3, select4, select5, select6, select7, maps, BtnSHM, BtnHGB, BtnHSHP, BtnPPJB, BtnSTRA, BtnAJB, BtnPetokD, BtnSHMPdf, BtnHGBPdf, BtnHSHPPdf, BtnPPJBPdf, BtnSTRAPdf, BtnAJBPdf, BtnPetokDPdf, BtnPjp, BtnPjp1;
     ImageView hps1, hps2, hps3, hps4, hps5, hps6, hps7, hps8, HpsSHM, HpsHGB, HpsHSHP, HpsPPJB, HpsStratatitle, HpsAJB, HpsPetokD, HpsPjp, HpsPjp1;
-    TextInputEditText jenisproperti, namaproperti, alamatproperti, sertifikat, nosertif, luas, land, dimensi, lantai, bed, bath, bedart, bathart, garasi, carpot, listrik, air, pjp, perabot, ketperabot, banner, status, harga, hargasewa, keterangan, hadap, size, EtTglInput, EtFee;
-    TextInputLayout LytSize, LytTglInput, LytHargaJual, LytHargaSewa;
+    TextInputEditText jenisproperti, namaproperti, alamatproperti, sertifikat, nosertif, luas, land, dimensi, lantai, bed, bath, bedart, bathart, garasi, carpot, listrik, air, pjp, perabot, ketperabot, banner, status, harga, hargasewa, keterangan, hadap, size, EtTglInput, EtFee, ETNoPJP;
+    TextInputLayout LytSize, LytTglInput, LytHargaJual, LytHargaSewa, LytNoPJP;
     RadioButton open, exclusive;
     RadioGroup rgpriority;
     CheckBox CBSHM, CBHGB, CBHSHP, CBPPJB, CBSTRA, CBAJB, CBPetokD;
@@ -236,6 +236,7 @@ public class EditListingActivity extends AppCompatActivity {
         LytTglInput = findViewById(R.id.lyttglinputproperti);
         LytHargaJual = findViewById(R.id.lytharga);
         LytHargaSewa = findViewById(R.id.lythargasewa);
+        LytNoPJP = findViewById(R.id.lytnopjp);
         LytSHM = findViewById(R.id.LytSHM);
         LytHGB = findViewById(R.id.LytHGB);
         LytHSHP = findViewById(R.id.LytHSHP);
@@ -245,6 +246,13 @@ public class EditListingActivity extends AppCompatActivity {
         LytPetokD = findViewById(R.id.LytPetokD);
         LytPjp = findViewById(R.id.LytPjp);
         LytPjp1 = findViewById(R.id.LytPjp1);
+        LytBtnShm = findViewById(R.id.LytBtnSHM);
+        LytBtnHGB = findViewById(R.id.LytBtnHGB);
+        LytBtnHSHP = findViewById(R.id.LytBtnHSHP);
+        LytBtnPPJB = findViewById(R.id.LytBtnPPJB);
+        LytBtnStra = findViewById(R.id.LytBtnStratatitle);
+        LytBtnAJB = findViewById(R.id.LytBtnAJB);
+        LytBtnPetokD = findViewById(R.id.LytBtnPetokD);
 
         back = findViewById(R.id.backFormBtn);
 
@@ -306,6 +314,7 @@ public class EditListingActivity extends AppCompatActivity {
         size = findViewById(R.id.etukuranbanner);
         EtTglInput = findViewById(R.id.ettglinputproperti);
         EtFee = findViewById(R.id.etfee);
+        ETNoPJP = findViewById(R.id.etnopjp);
 
         maps = findViewById(R.id.map);
 
@@ -318,12 +327,19 @@ public class EditListingActivity extends AppCompatActivity {
         CBPetokD = findViewById(R.id.CBPetokD);
 
         BtnSHM = findViewById(R.id.BtnSHM);
+        BtnSHMPdf = findViewById(R.id.BtnSHMPDF);
         BtnHGB = findViewById(R.id.BtnHGB);
+        BtnHGBPdf = findViewById(R.id.BtnHGBPDF);
         BtnHSHP = findViewById(R.id.BtnHSHP);
+        BtnHSHPPdf = findViewById(R.id.BtnHSHPPDF);
         BtnPPJB = findViewById(R.id.BtnPPJB);
+        BtnPPJBPdf = findViewById(R.id.BtnPPJBPDF);
         BtnSTRA = findViewById(R.id.BtnStratatitle);
+        BtnSTRAPdf = findViewById(R.id.BtnStratatitlePDF);
         BtnAJB = findViewById(R.id.BtnAJB);
+        BtnAJBPdf = findViewById(R.id.BtnAJBPDF);
         BtnPetokD = findViewById(R.id.BtnPetokD);
+        BtnPetokDPdf = findViewById(R.id.BtnPetokDPDF);
         BtnPjp = findViewById(R.id.BtnPjp);
         BtnPjp1 = findViewById(R.id.BtnPjp1);
 
@@ -454,6 +470,7 @@ public class EditListingActivity extends AppCompatActivity {
             open.setChecked(false);
             exclusive.setChecked(false);
         }
+        ETNoPJP.setText(intentPjp);
         if (intentJenisProperti != null && !intentJenisProperti.isEmpty()) {
             jenisproperti.setText(intentJenisProperti);
         }
@@ -547,43 +564,43 @@ public class EditListingActivity extends AppCompatActivity {
             CBSHM.setChecked(true);
             LytSHM.setVisibility(View.VISIBLE);
             TVSHM.setVisibility(View.VISIBLE);
-            BtnSHM.setVisibility(View.VISIBLE);
+            LytBtnShm.setVisibility(View.VISIBLE);
         }
         if (intentHGB.equals("1")){
             CBHGB.setChecked(true);
             LytHGB.setVisibility(View.VISIBLE);
             TVHGB.setVisibility(View.VISIBLE);
-            BtnHGB.setVisibility(View.VISIBLE);
+            LytBtnHGB.setVisibility(View.VISIBLE);
         }
         if (intentHSHP.equals("1")){
             CBHSHP.setChecked(true);
             LytHSHP.setVisibility(View.VISIBLE);
             TVHSHP.setVisibility(View.VISIBLE);
-            BtnHSHP.setVisibility(View.VISIBLE);
+            LytBtnHSHP.setVisibility(View.VISIBLE);
         }
         if (intentPPJB.equals("1")){
             CBPPJB.setChecked(true);
             LytPPJB.setVisibility(View.VISIBLE);
             TVPPJB.setVisibility(View.VISIBLE);
-            BtnPPJB.setVisibility(View.VISIBLE);
+            LytBtnPPJB.setVisibility(View.VISIBLE);
         }
         if (intentStratatitle.equals("1")){
             CBSTRA.setChecked(true);
             LytStratatitle.setVisibility(View.VISIBLE);
             TVSTRA.setVisibility(View.VISIBLE);
-            BtnSTRA.setVisibility(View.VISIBLE);
+            LytBtnStra.setVisibility(View.VISIBLE);
         }
         if (intentAJB.equals("1")){
             CBAJB.setChecked(true);
             LytAJB.setVisibility(View.VISIBLE);
             TVAJB.setVisibility(View.VISIBLE);
-            BtnAJB.setVisibility(View.VISIBLE);
+            LytBtnAJB.setVisibility(View.VISIBLE);
         }
         if (intentPetokD.equals("1")){
             CBPetokD.setChecked(true);
             LytPetokD.setVisibility(View.VISIBLE);
             TVPetokD.setVisibility(View.VISIBLE);
-            BtnPetokD.setVisibility(View.VISIBLE);
+            LytBtnPetokD.setVisibility(View.VISIBLE);
         }
         if (!intentImgPjp.equals("0")){
             LytPjp.setVisibility(View.VISIBLE);
@@ -747,13 +764,20 @@ public class EditListingActivity extends AppCompatActivity {
         HpsStratatitle.setOnClickListener(view -> clearBitmapSTRA());
         HpsPjp.setOnClickListener(view -> clearBitmapPJP());
         HpsPjp1.setOnClickListener(view -> clearBitmapPJP1());
-        BtnSHM.setOnClickListener(view -> pilihFileSHM(view));
-        BtnHGB.setOnClickListener(view -> pilihFileHGB(view));
-        BtnHSHP.setOnClickListener(view -> pilihFileHSHP(view));
-        BtnPPJB.setOnClickListener(view -> pilihFilePPJB(view));
-        BtnSTRA.setOnClickListener(view -> pilihFileSTRA(view));
-        BtnAJB.setOnClickListener(view -> pilihFileAJB(view));
-        BtnPetokD.setOnClickListener(view -> pilihFilePetokD(view));
+        BtnSHM.setOnClickListener(view -> showPhotoSHM());
+        BtnSHMPdf.setOnClickListener(view -> pilihFileSHM(view));
+        BtnHGB.setOnClickListener(view -> showPhotoHGB());
+        BtnHGBPdf.setOnClickListener(view -> pilihFileHGB(view));
+        BtnHSHP.setOnClickListener(view -> showPhotoHSHP());
+        BtnHSHPPdf.setOnClickListener(view -> pilihFileHSHP(view));
+        BtnPPJB.setOnClickListener(view -> showPhotoPPJB());
+        BtnPPJBPdf.setOnClickListener(view -> pilihFilePPJB(view));
+        BtnSTRA.setOnClickListener(view -> showPhotoSTRA());
+        BtnSTRAPdf.setOnClickListener(view -> pilihFileSTRA(view));
+        BtnAJB.setOnClickListener(view -> showPhotoAJB());
+        BtnAJBPdf.setOnClickListener(view -> pilihFileAJB(view));
+        BtnPetokD.setOnClickListener(view -> showPhotoPetokD());
+        BtnPetokDPdf.setOnClickListener(view -> pilihFilePetokD(view));
         BtnPjp.setOnClickListener(view -> showPhotoPJP());
         BtnPjp1.setOnClickListener(view -> showPhotoPJP1());
         select.setOnClickListener(new View.OnClickListener() {
@@ -1809,6 +1833,44 @@ public class EditListingActivity extends AppCompatActivity {
 
         builder.show();
     }
+    private void showPhotoAJB() {
+        androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this);
+        builder.setTitle("Unggah Gambar")
+                .setItems(new CharSequence[]{"Ambil Foto", "Pilih Dari Galeri"}, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which) {
+                            case 0:
+                                ActivityCompat.requestPermissions(EditListingActivity.this, new String[]{Manifest.permission.CAMERA}, CODE_CAMERA_REQUEST_AJB);
+                                break;
+                            case 1:
+                                requestPermissionsAJB();
+                                break;
+                        }
+                    }
+                });
+
+        builder.show();
+    }
+    private void showPhotoPetokD() {
+        androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this);
+        builder.setTitle("Unggah Gambar")
+                .setItems(new CharSequence[]{"Ambil Foto", "Pilih Dari Galeri"}, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which) {
+                            case 0:
+                                ActivityCompat.requestPermissions(EditListingActivity.this, new String[]{Manifest.permission.CAMERA}, CODE_CAMERA_REQUEST_PetokD);
+                                break;
+                            case 1:
+                                requestPermissionsPetokD();
+                                break;
+                        }
+                    }
+                });
+
+        builder.show();
+    }
     private void showPhotoPJP() {
         androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this);
         builder.setTitle("Unggah Gambar")
@@ -1962,6 +2024,24 @@ public class EditListingActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE_STRA);
         } else {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_MEDIA_IMAGES}, PERMISSION_REQUEST_CODE_MEDIA_IMAGES_STRA);
+        }
+    }
+    private void requestPermissionsAJB() {
+        boolean externalStoragePermissionGranted = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
+
+        if (externalStoragePermissionGranted) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE_AJB);
+        } else {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_MEDIA_IMAGES}, PERMISSION_REQUEST_CODE_MEDIA_IMAGES_AJB);
+        }
+    }
+    private void requestPermissionsPetokD() {
+        boolean externalStoragePermissionGranted = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
+
+        if (externalStoragePermissionGranted) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE_PetokD);
+        } else {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_MEDIA_IMAGES}, PERMISSION_REQUEST_CODE_MEDIA_IMAGES_PetokD);
         }
     }
     private void requestPermissionsPjp() {
@@ -2175,7 +2255,9 @@ public class EditListingActivity extends AppCompatActivity {
     }
     public void pilihFileSHM(View view) {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-            Intent intent = new Intent();
+            //Intent intent = new Intent();
+            Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+            intent.addCategory(Intent.CATEGORY_OPENABLE);
             intent.setType("application/pdf");
             intent.setAction(Intent.ACTION_GET_CONTENT);
             startActivityForResult(Intent.createChooser(intent, "Pilih File PDF"), PICK_PDF_SHM);
@@ -2185,7 +2267,9 @@ public class EditListingActivity extends AppCompatActivity {
     }
     public void pilihFileHGB(View view) {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-            Intent intent = new Intent();
+            //Intent intent = new Intent();
+            Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+            intent.addCategory(Intent.CATEGORY_OPENABLE);
             intent.setType("application/pdf");
             intent.setAction(Intent.ACTION_GET_CONTENT);
             startActivityForResult(Intent.createChooser(intent, "Pilih File PDF"), PICK_PDF_HGB);
@@ -2195,7 +2279,9 @@ public class EditListingActivity extends AppCompatActivity {
     }
     public void pilihFileHSHP(View view) {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-            Intent intent = new Intent();
+            //Intent intent = new Intent();
+            Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+            intent.addCategory(Intent.CATEGORY_OPENABLE);
             intent.setType("application/pdf");
             intent.setAction(Intent.ACTION_GET_CONTENT);
             startActivityForResult(Intent.createChooser(intent, "Pilih File PDF"), PICK_PDF_HSHP);
@@ -2205,7 +2291,9 @@ public class EditListingActivity extends AppCompatActivity {
     }
     public void pilihFilePPJB(View view) {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-            Intent intent = new Intent();
+            //Intent intent = new Intent();
+            Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+            intent.addCategory(Intent.CATEGORY_OPENABLE);
             intent.setType("application/pdf");
             intent.setAction(Intent.ACTION_GET_CONTENT);
             startActivityForResult(Intent.createChooser(intent, "Pilih File PDF"), PICK_PDF_PPJB);
@@ -2215,7 +2303,9 @@ public class EditListingActivity extends AppCompatActivity {
     }
     public void pilihFileSTRA(View view) {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-            Intent intent = new Intent();
+            //Intent intent = new Intent();
+            Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+            intent.addCategory(Intent.CATEGORY_OPENABLE);
             intent.setType("application/pdf");
             intent.setAction(Intent.ACTION_GET_CONTENT);
             startActivityForResult(Intent.createChooser(intent, "Pilih File PDF"), PICK_PDF_Stratatitle);
@@ -2225,7 +2315,9 @@ public class EditListingActivity extends AppCompatActivity {
     }
     public void pilihFileAJB(View view) {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-            Intent intent = new Intent();
+            //Intent intent = new Intent();
+            Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+            intent.addCategory(Intent.CATEGORY_OPENABLE);
             intent.setType("application/pdf");
             intent.setAction(Intent.ACTION_GET_CONTENT);
             startActivityForResult(Intent.createChooser(intent, "Pilih File PDF"), PICK_PDF_AJB);
@@ -2235,7 +2327,9 @@ public class EditListingActivity extends AppCompatActivity {
     }
     public void pilihFilePetokD(View view) {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-            Intent intent = new Intent();
+            //Intent intent = new Intent();
+            Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+            intent.addCategory(Intent.CATEGORY_OPENABLE);
             intent.setType("application/pdf");
             intent.setAction(Intent.ACTION_GET_CONTENT);
             startActivityForResult(Intent.createChooser(intent, "Pilih File PDF"), PICK_PDF_PetokD);
@@ -3920,237 +4014,6 @@ public class EditListingActivity extends AppCompatActivity {
                 TextView tv = customDialog.findViewById(R.id.TVDialogErorInput);
 
                 tv.setText("Harap Isi Ukuran Banner");
-
-                ok.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        customDialog.dismiss();
-                    }
-                });
-
-                ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
-
-                Glide.with(EditListingActivity.this)
-                        .load(R.drawable.alert) // You can also use a local resource like R.drawable.your_gif_resource
-                        .transition(DrawableTransitionOptions.withCrossFade())
-                        .into(gifImageView);
-
-                customDialog.show();
-                return false;
-            }
-        }
-        if (CBSHM.isChecked()) {
-            if (UriSHM == null && isSHM.equals("0")) {
-                Dialog customDialog = new Dialog(EditListingActivity.this);
-                customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                customDialog.setContentView(R.layout.custom_dialog_eror_input);
-
-                if (customDialog.getWindow() != null) {
-                    customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-                }
-
-                Button ok = customDialog.findViewById(R.id.BtnOkErorInput);
-                TextView tv = customDialog.findViewById(R.id.TVDialogErorInput);
-
-                tv.setText("Harap Tambahkan File SHM");
-
-                ok.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        customDialog.dismiss();
-                    }
-                });
-
-                ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
-
-                Glide.with(EditListingActivity.this)
-                        .load(R.drawable.alert) // You can also use a local resource like R.drawable.your_gif_resource
-                        .transition(DrawableTransitionOptions.withCrossFade())
-                        .into(gifImageView);
-
-                customDialog.show();
-                return false;
-            }
-        }
-        if (CBHGB.isChecked()) {
-            if (UriHGB == null && isHGB.equals("0")) {
-                Dialog customDialog = new Dialog(EditListingActivity.this);
-                customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                customDialog.setContentView(R.layout.custom_dialog_eror_input);
-
-                if (customDialog.getWindow() != null) {
-                    customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-                }
-
-                Button ok = customDialog.findViewById(R.id.BtnOkErorInput);
-                TextView tv = customDialog.findViewById(R.id.TVDialogErorInput);
-
-                tv.setText("Harap Tambahkan File HGB");
-
-                ok.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        customDialog.dismiss();
-                    }
-                });
-
-                ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
-
-                Glide.with(EditListingActivity.this)
-                        .load(R.drawable.alert) // You can also use a local resource like R.drawable.your_gif_resource
-                        .transition(DrawableTransitionOptions.withCrossFade())
-                        .into(gifImageView);
-
-                customDialog.show();
-                return false;
-            }
-        }
-        if (CBHSHP.isChecked()) {
-            if (UriHSHP == null && isHSHP.equals("0")) {
-                Dialog customDialog = new Dialog(EditListingActivity.this);
-                customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                customDialog.setContentView(R.layout.custom_dialog_eror_input);
-
-                if (customDialog.getWindow() != null) {
-                    customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-                }
-
-                Button ok = customDialog.findViewById(R.id.BtnOkErorInput);
-                TextView tv = customDialog.findViewById(R.id.TVDialogErorInput);
-
-                tv.setText("Harap Tambahkan File HS/HP");
-
-                ok.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        customDialog.dismiss();
-                    }
-                });
-
-                ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
-
-                Glide.with(EditListingActivity.this)
-                        .load(R.drawable.alert) // You can also use a local resource like R.drawable.your_gif_resource
-                        .transition(DrawableTransitionOptions.withCrossFade())
-                        .into(gifImageView);
-
-                customDialog.show();
-                return false;
-            }
-        }
-        if (CBPPJB.isChecked()) {
-            if (UriPPJB == null && isPPJB.equals("0")) {
-                Dialog customDialog = new Dialog(EditListingActivity.this);
-                customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                customDialog.setContentView(R.layout.custom_dialog_eror_input);
-
-                if (customDialog.getWindow() != null) {
-                    customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-                }
-
-                Button ok = customDialog.findViewById(R.id.BtnOkErorInput);
-                TextView tv = customDialog.findViewById(R.id.TVDialogErorInput);
-
-                tv.setText("Harap Tambahkan File PPJB");
-
-                ok.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        customDialog.dismiss();
-                    }
-                });
-
-                ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
-
-                Glide.with(EditListingActivity.this)
-                        .load(R.drawable.alert) // You can also use a local resource like R.drawable.your_gif_resource
-                        .transition(DrawableTransitionOptions.withCrossFade())
-                        .into(gifImageView);
-
-                customDialog.show();
-                return false;
-            }
-        }
-        if (CBSTRA.isChecked()) {
-            if (UriSTRA == null && isSTRA.equals("0")) {
-                Dialog customDialog = new Dialog(EditListingActivity.this);
-                customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                customDialog.setContentView(R.layout.custom_dialog_eror_input);
-
-                if (customDialog.getWindow() != null) {
-                    customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-                }
-
-                Button ok = customDialog.findViewById(R.id.BtnOkErorInput);
-                TextView tv = customDialog.findViewById(R.id.TVDialogErorInput);
-
-                tv.setText("Harap Tambahkan File STratatitle");
-
-                ok.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        customDialog.dismiss();
-                    }
-                });
-
-                ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
-
-                Glide.with(EditListingActivity.this)
-                        .load(R.drawable.alert) // You can also use a local resource like R.drawable.your_gif_resource
-                        .transition(DrawableTransitionOptions.withCrossFade())
-                        .into(gifImageView);
-
-                customDialog.show();
-                return false;
-            }
-        }
-        if (CBAJB.isChecked()) {
-            if (UriAJB == null && isAJB.equals("0")) {
-                Dialog customDialog = new Dialog(EditListingActivity.this);
-                customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                customDialog.setContentView(R.layout.custom_dialog_eror_input);
-
-                if (customDialog.getWindow() != null) {
-                    customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-                }
-
-                Button ok = customDialog.findViewById(R.id.BtnOkErorInput);
-                TextView tv = customDialog.findViewById(R.id.TVDialogErorInput);
-
-                tv.setText("Harap Tambahkan File AJB");
-
-                ok.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        customDialog.dismiss();
-                    }
-                });
-
-                ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
-
-                Glide.with(EditListingActivity.this)
-                        .load(R.drawable.alert) // You can also use a local resource like R.drawable.your_gif_resource
-                        .transition(DrawableTransitionOptions.withCrossFade())
-                        .into(gifImageView);
-
-                customDialog.show();
-                return false;
-            }
-        }
-        if (CBPetokD.isChecked()) {
-            if (UriPetokD == null && isPetokD.equals("0")) {
-                Dialog customDialog = new Dialog(EditListingActivity.this);
-                customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                customDialog.setContentView(R.layout.custom_dialog_eror_input);
-
-                if (customDialog.getWindow() != null) {
-                    customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-                }
-
-                Button ok = customDialog.findViewById(R.id.BtnOkErorInput);
-                TextView tv = customDialog.findViewById(R.id.TVDialogErorInput);
-
-                tv.setText("Harap Tambahkan File Petok D");
 
                 ok.setOnClickListener(new View.OnClickListener() {
                     @Override
