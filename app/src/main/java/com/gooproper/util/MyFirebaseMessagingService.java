@@ -5,13 +5,11 @@ import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.util.Log;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
@@ -22,10 +20,8 @@ import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.gooproper.R;
 import com.gooproper.admin.MainAdminActivity;
-import com.gooproper.ui.ListingkuActivity;
+import com.gooproper.ui.listing.ListingkuActivity;
 import com.gooproper.ui.PelamarAgenActivity;
-import com.gooproper.ui.SettingActivity;
-import com.gooproper.ui.TambahListingActivity;
 
 import java.util.Map;
 

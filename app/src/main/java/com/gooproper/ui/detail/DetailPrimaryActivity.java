@@ -4,10 +4,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
-import androidx.core.widget.NestedScrollView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import androidx.viewpager.widget.ViewPager;
 
 import android.Manifest;
@@ -19,11 +17,9 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
@@ -45,19 +41,12 @@ import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.material.textfield.TextInputEditText;
-import com.google.android.material.textfield.TextInputLayout;
 import com.gooproper.R;
-import com.gooproper.adapter.PJPAdapter;
-import com.gooproper.adapter.PrimaryAdapter;
-import com.gooproper.adapter.SertifikatAdapter;
 import com.gooproper.adapter.TipeAdapter;
 import com.gooproper.adapter.ViewPagerAdapter;
-import com.gooproper.model.ListingModel;
 import com.gooproper.model.TipeModel;
-import com.gooproper.pager.SertifikatPdfAdapter;
-import com.gooproper.ui.NewActivity;
-import com.gooproper.util.AgenManager;
+import com.gooproper.ui.followup.FollowUpActivity;
+import com.gooproper.ui.followup.FollowUpPrimaryActivity;
 import com.gooproper.util.FormatCurrency;
 import com.gooproper.util.Preferences;
 import com.gooproper.util.ServerApi;
@@ -156,6 +145,111 @@ public class DetailPrimaryActivity extends AppCompatActivity implements OnMapRea
         idPrimary = intentIdListingPrimary;
 
         LoadTipe();
+
+        if (status.equals("1")) {
+            IVFlowUp.setVisibility(View.INVISIBLE);
+            IVFlowup2.setVisibility(View.INVISIBLE);
+            IVWhatsapp.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    String url = "https://api.whatsapp.com/send?phone=+62" + intentKontakPerson1;
+                    Intent i = new Intent(Intent.ACTION_VIEW);
+                    i.setData(Uri.parse(url));
+                    startActivity(i);
+                }
+            });
+            IVWhatsapp2.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    String url = "https://api.whatsapp.com/send?phone=+62" + intentKontakPerson2;
+                    Intent i = new Intent(Intent.ACTION_VIEW);
+                    i.setData(Uri.parse(url));
+                    startActivity(i);
+                }
+            });
+        } else if (status.equals("2")) {
+            IVFlowUp.setVisibility(View.VISIBLE);
+            IVFlowup2.setVisibility(View.VISIBLE);
+            IVWhatsapp.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    String url = "https://api.whatsapp.com/send?phone=+62" + intentKontakPerson1;
+                    Intent i = new Intent(Intent.ACTION_VIEW);
+                    i.setData(Uri.parse(url));
+                    startActivity(i);
+                }
+            });
+            IVWhatsapp2.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    String url = "https://api.whatsapp.com/send?phone=+62" + intentKontakPerson2;
+                    Intent i = new Intent(Intent.ACTION_VIEW);
+                    i.setData(Uri.parse(url));
+                    startActivity(i);
+                }
+            });
+        } else if (status.equals("3")) {
+            IVFlowUp.setVisibility(View.VISIBLE);
+            IVFlowup2.setVisibility(View.VISIBLE);
+            IVWhatsapp.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    String url = "https://api.whatsapp.com/send?phone=+62" + intentKontakPerson1;
+                    Intent i = new Intent(Intent.ACTION_VIEW);
+                    i.setData(Uri.parse(url));
+                    startActivity(i);
+                }
+            });
+            IVWhatsapp2.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    String url = "https://api.whatsapp.com/send?phone=+62" + intentKontakPerson2 ;
+                    Intent i = new Intent(Intent.ACTION_VIEW);
+                    i.setData(Uri.parse(url));
+                    startActivity(i);
+                }
+            });
+        } else {
+            IVFlowUp.setVisibility(View.INVISIBLE);
+            IVFlowup2.setVisibility(View.INVISIBLE);
+            IVWhatsapp.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    String message = "Halo! Saya ingin menanyakan listingan primary " + intentJudulListingPrimary + " yang beralamat di " + intentAlamatListingPrimary + ".\nApakah bersedia?";
+                    String url = "https://api.whatsapp.com/send?phone=+62" + intentKontakPerson1 + "&text=" + message;
+                    Intent i = new Intent(Intent.ACTION_VIEW);
+                    i.setData(Uri.parse(url));
+                    startActivity(i);
+                }
+            });
+            IVWhatsapp2.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    String message = "Halo! Saya ingin menanyakan listingan primary " + intentJudulListingPrimary + " yang beralamat di " + intentAlamatListingPrimary + ".\nApakah bersedia?";
+                    String url = "https://api.whatsapp.com/send?phone=+62" + intentKontakPerson2 + "&text=" + message;
+                    Intent i = new Intent(Intent.ACTION_VIEW);
+                    i.setData(Uri.parse(url));
+                    startActivity(i);
+                }
+            });
+        }
+
+        IVFlowUp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent update = new Intent(DetailPrimaryActivity.this, FollowUpPrimaryActivity.class);
+                update.putExtra("IdListing", intentIdListingPrimary);
+                startActivity(update);
+            }
+        });
+        IVFlowup2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent update = new Intent(DetailPrimaryActivity.this, FollowUpPrimaryActivity.class);
+                update.putExtra("IdListing", intentIdListingPrimary);
+                startActivity(update);
+            }
+        });
 
         if (intentJudulListingPrimary.isEmpty()) {
             TVNamaDetailPrimary.setText("-");

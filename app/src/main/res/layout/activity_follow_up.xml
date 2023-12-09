@@ -7,7 +7,7 @@
     android:background="@color/white"
     android:orientation="vertical"
     android:padding="11dp"
-    tools:context=".ui.FollowUpActivity">
+    tools:context=".ui.followup.FollowUpActivity">
 
     <ScrollView
         android:layout_width="match_parent"

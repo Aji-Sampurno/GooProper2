@@ -100,11 +100,7 @@ public class LaporanListingActivity extends AppCompatActivity {
 
     private void fetchDataAndCreateExcel() {
 
-        Map<String, String> params = new HashMap<>();
-        params.put("TglAwal", "2023-11-11");
-        params.put("TglAkhir", "2023-11-11");
-
-        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, ServerApi.URL_GET_LISTING_LAPORAN,new JSONArray(new ArrayList<>(params.entrySet())),
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, ServerApi.URL_GET_LISTING_LAPORAN,null,
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
@@ -412,7 +408,6 @@ public class LaporanListingActivity extends AppCompatActivity {
                     }
                 });
 
-        // Menambahkan request ke dalam antrian Volley
         Volley.newRequestQueue(this).add(jsonArrayRequest);
     }
 }

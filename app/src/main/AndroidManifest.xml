@@ -33,10 +33,16 @@
         android:theme="@style/Theme.GooProper"
         tools:targetApi="31">
         <activity
+            android:name=".ui.followup.FollowUpPrimaryActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.detail.DetailFollowUpPrimaryActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.detail.DetailPrimaryActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.PrimaryActivity"
+            android:name=".ui.listing.PrimaryActivity"
             android:exported="false" />
         <activity
             android:name=".ui.tambah.TambahTipeListingPrimaryActivity"
@@ -116,13 +122,13 @@
             android:name=".ui.edit.EditPralistingActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.PraListingAgenActivity"
+            android:name=".ui.listing.PraListingAgenActivity"
             android:exported="false" />
         <activity
             android:name=".ui.AddListingActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.PralistingActivity"
+            android:name=".ui.listing.PralistingActivity"
             android:exported="false" />
         <activity
             android:name=".ui.PelamarAgenActivity"
@@ -140,10 +146,10 @@
             android:name=".ui.tambah.TambahKaryawanActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.ListingkuActivity"
+            android:name=".ui.listing.ListingkuActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.FollowUpActivity"
+            android:name=".ui.followup.FollowUpActivity"
             android:exported="false" />
         <activity
             android:name=".ui.detail.DetailAgenDeepActivity"
@@ -230,13 +236,13 @@
             android:name=".ui.TambahListingActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.PopularActivity"
+            android:name=".ui.listing.PopularActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.NewActivity"
+            android:name=".ui.listing.NewActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.SoldActivity"
+            android:name=".ui.listing.SoldActivity"
             android:exported="false" />
         <activity
             android:name=".ui.registrasi.RegistrasiAgenActivity"
@@ -257,10 +263,10 @@
             android:name=".admin.MainAdminActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.ListingTerakhirDilihatActivity"
+            android:name=".ui.listing.ListingTerakhirDilihatActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.ListingFavoriteActivity"
+            android:name=".ui.listing.ListingFavoriteActivity"
             android:exported="false" />
         <activity
             android:name=".ui.UbahSandiActivity"

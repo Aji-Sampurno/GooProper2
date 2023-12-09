@@ -3,10 +3,7 @@ package com.gooproper.customer.fragment;
 import static android.app.Activity.RESULT_OK;
 
 import android.Manifest;
-import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -20,8 +17,9 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.LinearSmoothScroller;
+import androidx.recyclerview.widget.LinearSnapHelper;
 import androidx.recyclerview.widget.PagerSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -67,10 +65,10 @@ import com.gooproper.adapter.PrimaryAdapter;
 import com.gooproper.model.ListingModel;
 import com.gooproper.model.PrimaryModel;
 import com.gooproper.ui.MapsActivity;
-import com.gooproper.ui.NewActivity;
-import com.gooproper.ui.PopularActivity;
-import com.gooproper.ui.PrimaryActivity;
-import com.gooproper.ui.SoldActivity;
+import com.gooproper.ui.listing.NewActivity;
+import com.gooproper.ui.listing.PopularActivity;
+import com.gooproper.ui.listing.PrimaryActivity;
+import com.gooproper.ui.listing.SoldActivity;
 import com.gooproper.util.ServerApi;
 
 import org.json.JSONArray;
@@ -81,6 +79,8 @@ import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class HomeFragment extends Fragment implements OnMapReadyCallback {
 
@@ -98,6 +98,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
     List<ListingModel> mItemsSold;
     List<ListingModel> mItemsHot;
     List<ListingModel> mItemsNew;
+    LinearLayoutManager layoutManager;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -129,7 +130,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         mItemsHot = new ArrayList<>();
         mItemsNew = new ArrayList<>();
 
-        LinearLayoutManager layoutManager = new LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false);
+        layoutManager = new LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false);
         recycleListingPrimary.setLayoutManager(layoutManager);
         adapterPrimary = new PrimaryAdapter(getActivity(), mItemsPrimary);
         recycleListingPrimary.setAdapter(adapterPrimary);
@@ -151,23 +152,23 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         LoadListingPopuler();
         LoadListing();
 
-        PagerSnapHelper snapHelper = new PagerSnapHelper();
+        LinearSnapHelper snapHelper = new LinearSnapHelper();
         snapHelper.attachToRecyclerView(recycleListingPrimary);
 
-        final Runnable runnable = new Runnable() {
+        // Set up Timer for gradual scrolling
+        Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                if (currentPosition == mItemsPrimary.size()) {
-                    currentPosition = 0;
-                } else {
-                    currentPosition++;
-                }
-                recycleListingPrimary.smoothScrollToPosition(currentPosition);
-                recycleListingPrimary.postDelayed(this, 2000); // Post the runnable again to keep scrolling
-            }
-        };
+                int currentPosition = layoutManager.findLastCompletelyVisibleItemPosition();
 
-        recycleListingPrimary.post(runnable);
+                if (currentPosition < (adapterPrimary.getItemCount() - 1)) {
+                    smoothScrollToPosition(currentPosition + 1);
+                } else if (currentPosition == (adapterPrimary.getItemCount() - 1)) {
+                    smoothScrollToPosition(currentPosition - 1);
+                }
+            }
+        }, 0, 3000);
 
         if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
                 && ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
@@ -176,6 +177,22 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         }
 
         return root;
+    }
+    private void smoothScrollToPosition(int targetPosition) {
+        RecyclerView.SmoothScroller smoothScroller = new LinearSmoothScroller(recycleListingPrimary.getContext()) {
+            @Override
+            protected int getHorizontalSnapPreference() {
+                return SNAP_TO_START; // atau SNAP_TO_END
+            }
+
+            @Override
+            protected int calculateTimeForScrolling(int dx) {
+                return super.calculateTimeForScrolling(dx)*4;
+            }
+        };
+
+        smoothScroller.setTargetPosition(targetPosition);
+        layoutManager.startSmoothScroll(smoothScroller);
     }
     private void checkForUpdate() {
         AppUpdateManager appUpdateManager = AppUpdateManagerFactory.create(getActivity());

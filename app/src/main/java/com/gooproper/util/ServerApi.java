@@ -55,6 +55,10 @@ public class ServerApi {
     public static final String URL_UPDATE_FLOWUP = BASE_URL + "/Api/UpdateFlowup";
     public static final String URL_GET_FLOWUP_AGEN = BASE_URL + "/Api/GetFlowUpAgen";
     public static final String URL_GET_FLOWUP = BASE_URL + "/Api/GetFlowUp?idagen=";
+    public static final String URL_ADD_FLOWUP_PRIMARY = BASE_URL + "/Api/AddFlowupPrimary";
+    public static final String URL_UPDATE_FLOWUP_PRIMARY = BASE_URL + "/Api/UpdateFlowupPrimary";
+    public static final String URL_GET_FLOWUP_PRIMARY_AGEN = BASE_URL + "/Api/GetFlowUpPrimaryAgen";
+    public static final String URL_GET_FLOWUP_PRIMARY = BASE_URL + "/Api/GetFlowUpPrimary?idagen=";
     // Closing -------------------------------------------------------------------------------------
     public static final String URL_CLOSING = BASE_URL + "/Api/Closing";
     public static final String URL_SOLD = BASE_URL + "/Api/Sold";

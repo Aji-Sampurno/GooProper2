@@ -156,11 +156,9 @@ public class PrimaryAdapter extends RecyclerView.Adapter<PrimaryAdapter.HolderDa
     public void onBindViewHolder(@NonNull PrimaryAdapter.HolderData holder, int position) {
         FormatCurrency currency = new FormatCurrency();
         PrimaryModel primaryModel = models.get(position);
-        String priceText = currency.formatRupiah(primaryModel.getHargaListingPrimary());
-        String truncatedprice = truncateTextWithEllipsisPrice(priceText);
         holder.TVAlamat.setText(primaryModel.getAlamatListingPrimary());
         holder.TVJudul.setText(primaryModel.getJudulListingPrimary());
-        holder.TVHarga.setText(truncatedprice);
+        holder.TVHarga.setText(primaryModel.getHargaListingPrimary());
         Glide.with(context).load(models.get(position).getImg1()).into(holder.IVPrimary);
         holder.primaryModel = primaryModel;
     }

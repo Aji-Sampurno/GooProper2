@@ -21,27 +21,34 @@
             app:cardCornerRadius="20dp"
             app:cardElevation="4dp">
 
-            <LinearLayout
+            <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:weightSum="2">
-
-                <ImageView
-                    android:id="@+id/IVPrimary"
-                    android:layout_width="match_parent"
-                    android:layout_height="130dp"
-                    android:layout_weight="1"
-                    android:adjustViewBounds="true"
-                    android:scaleType="centerCrop"
-                    app:srcCompat="@mipmap/ic_icon_foreground" />
+                android:layout_height="wrap_content">
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:weightSum="2">
+
+                    <ImageView
+                        android:id="@+id/IVPrimary"
+                        android:layout_width="match_parent"
+                        android:layout_height="200dp"
+                        android:layout_weight="1"
+                        android:adjustViewBounds="true"
+                        android:scaleType="centerCrop"
+                        app:srcCompat="@mipmap/ic_icon_foreground" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:layout_marginBottom="20dp"
                     android:layout_weight="1"
-                    android:background="@color/third"
+                    android:background="#B3330376"
                     android:gravity="center"
                     android:orientation="vertical"
                     android:padding="10dp">
@@ -51,6 +58,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Alamat"
+                        android:textStyle="bold"
                         android:textColor="@color/white"
                         android:textSize="12sp" />
 
@@ -60,6 +68,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
                         android:text="Judul"
+                        android:textStyle="bold"
                         android:textColor="@color/white"
                         android:textSize="12sp" />
 
@@ -70,11 +79,12 @@
                         android:layout_marginTop="8dp"
                         android:text="Rp. 000.000.000"
                         android:textColor="@color/second"
+                        android:visibility="gone"
                         android:textSize="12sp" />
 
                 </LinearLayout>
 
-            </LinearLayout>
+            </FrameLayout>
 
         </androidx.cardview.widget.CardView>
 

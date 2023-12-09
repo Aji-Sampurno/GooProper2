@@ -29,6 +29,7 @@ import android.provider.OpenableColumns;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Base64;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -190,6 +191,7 @@ public class TambahListingActivity extends AppCompatActivity {
     private static final int PICK_PDF_Stratatitle = 95;
     private static final int PICK_PDF_AJB = 96;
     private static final int PICK_PDF_PetokD = 97;
+    private ArrayList<Uri> uriList = new ArrayList<>();
     Uri Uri1, Uri2, Uri3, Uri4, Uri5, Uri6, Uri7, Uri8, UriSHM, UriHGB, UriHSHP, UriPPJB, UriSTRA, UriAJB, UriPetokD, UriSHMPdf, UriHGBPdf, UriHSHPPdf, UriPPJBPdf, UriSTRAPdf, UriAJBPdf, UriPetokDPdf, UriPJP, UriPJP1;
     LinearLayout lyt1, lyt2, lyt3, lyt4, lyt5, lyt6, lyt7, lyt8, LytSHM, LytHGB, LytHSHP, LytPPJB, LytStratatitle, LytAJB, LytPetokD, LytPjp, LytPjp1, LytBtnShm, LytBtnHGB, LytBtnHSHP, LytBtnPPJB, LytBtnStra, LytBtnAJB, LytBtnPetokD;
     ImageView back, iv1, iv2, iv3, iv4, iv5, iv6, iv7, iv8, IVShm, IVHgb, IVHshp, IVPpjb, IVStratatitle, IVAJB, IVPetokD, IVPjp, IVPjp1;
@@ -3447,8 +3449,12 @@ public class TambahListingActivity extends AppCompatActivity {
             }
         } else if (requestCode == PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE2) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                startActivityForResult(intent, CODE_GALLERY_REQUEST2);
+                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                intent.setType("image/*");
+                intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+                startActivityForResult(Intent.createChooser(intent, "Select Picture"), CODE_GALLERY_REQUEST2);
+                //Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                //startActivityForResult(intent, CODE_GALLERY_REQUEST2);
             }
         } else if (requestCode == PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE3) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -3532,8 +3538,12 @@ public class TambahListingActivity extends AppCompatActivity {
             }
         } else if (requestCode == PERMISSION_REQUEST_CODE_MEDIA_IMAGES2) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                startActivityForResult(intent, CODE_GALLERY_REQUEST2);
+                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                intent.setType("image/*");
+                intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+                startActivityForResult(Intent.createChooser(intent, "Select Picture"), CODE_GALLERY_REQUEST2);
+//                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+//                startActivityForResult(intent, CODE_GALLERY_REQUEST2);
             }
         } else if (requestCode == PERMISSION_REQUEST_CODE_MEDIA_IMAGES3) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -3649,8 +3659,12 @@ public class TambahListingActivity extends AppCompatActivity {
             return;
         } else if (requestCode == CODE_GALLERY_REQUEST2) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                Intent intent = new Intent(Intent.ACTION_PICK);
+                intent.setType("image/*");
+                intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
                 startActivityForResult(intent, CODE_GALLERY_REQUEST2);
+//                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+//                startActivityForResult(intent, CODE_GALLERY_REQUEST2);
             } else {
                 Dialog customDialog = new Dialog(TambahListingActivity.this);
                 customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -4452,11 +4466,113 @@ public class TambahListingActivity extends AppCompatActivity {
             select1.setVisibility(View.GONE);
             select2.setVisibility(View.VISIBLE);
         } else if (requestCode == CODE_GALLERY_REQUEST2 && resultCode == RESULT_OK && data != null) {
-            Uri2 = data.getData();
-            iv2.setImageURI(Uri2);
-            lyt2.setVisibility(View.VISIBLE);
-            select2.setVisibility(View.GONE);
-            select3.setVisibility(View.VISIBLE);
+            if (data != null && data.getClipData() != null) {
+                int count = data.getClipData().getItemCount();
+
+                for (int i = 0; i < count; i++) {
+                    Uri uri = data.getClipData().getItemAt(i).getUri();
+                    uriList.add(uri);
+                }
+            } else if (data != null && data.getData() != null) {
+                Uri uri = data.getData();
+                uriList.add(uri);
+            }
+
+            if (uriList.size() > 0) {
+                Uri uri = uriList.get(0);
+                if (uri != null) {
+                    Uri2 = uri;
+                    iv2.setImageURI(Uri2);
+                    lyt2.setVisibility(View.VISIBLE);
+                    select2.setVisibility(View.GONE);
+                    select3.setVisibility(View.VISIBLE);
+                } else {
+                    Toast.makeText(this, "URI kosong untuk ImageView 2", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            if (uriList.size() > 1) {
+                Uri uri = uriList.get(1);
+                if (uri != null) {
+                    Uri3 = uri;
+                    iv3.setImageURI(Uri3);
+                    lyt3.setVisibility(View.VISIBLE);
+                    select3.setVisibility(View.GONE);
+                    select4.setVisibility(View.VISIBLE);
+                } else {
+                    Toast.makeText(this, "URI kosong untuk ImageView 3", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            if (uriList.size() > 2) {
+                Uri uri = uriList.get(2);
+                if (uri != null) {
+                    Uri4 = uri;
+                    iv4.setImageURI(Uri4);
+                    lyt4.setVisibility(View.VISIBLE);
+                    select4.setVisibility(View.GONE);
+                    select5.setVisibility(View.VISIBLE);
+                } else {
+                    Toast.makeText(this, "URI kosong untuk ImageView 4", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            if (uriList.size() > 3) {
+                Uri uri = uriList.get(3);
+                if (uri != null) {
+                    Uri5 = uri;
+                    iv5.setImageURI(Uri5);
+                    lyt5.setVisibility(View.VISIBLE);
+                    select5.setVisibility(View.GONE);
+                    select6.setVisibility(View.VISIBLE);
+                } else {
+                    Toast.makeText(this, "URI kosong untuk ImageView 5", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            if (uriList.size() > 4) {
+                Uri uri = uriList.get(4);
+                if (uri != null) {
+                    Uri6 = uri;
+                    iv6.setImageURI(Uri6);
+                    lyt6.setVisibility(View.VISIBLE);
+                    select6.setVisibility(View.GONE);
+                    select7.setVisibility(View.VISIBLE);
+                } else {
+                    Toast.makeText(this, "URI kosong untuk ImageView 6", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            if (uriList.size() > 5) {
+                Uri uri = uriList.get(5);
+                if (uri != null) {
+                    Uri7 = uri;
+                    iv7.setImageURI(Uri7);
+                    lyt7.setVisibility(View.VISIBLE);
+                    select7.setVisibility(View.GONE);
+                    select.setVisibility(View.VISIBLE);
+                } else {
+                    Toast.makeText(this, "URI kosong untuk ImageView 7", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            if (uriList.size() > 6) {
+                Uri uri = uriList.get(6);
+                if (uri != null) {
+                    Uri8 = uri;
+                    iv8.setImageURI(Uri8);
+                    lyt8.setVisibility(View.VISIBLE);
+                    select.setVisibility(View.GONE);
+                } else {
+                    Toast.makeText(this, "URI kosong untuk ImageView 8", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+//            Uri2 = data.getData();
+//            iv2.setImageURI(Uri2);
+//            lyt2.setVisibility(View.VISIBLE);
+//            select2.setVisibility(View.GONE);
+//            select3.setVisibility(View.VISIBLE);
         } else if (requestCode == CODE_GALLERY_REQUEST3 && resultCode == RESULT_OK && data != null) {
             Uri3 = data.getData();
             iv3.setImageURI(Uri3);

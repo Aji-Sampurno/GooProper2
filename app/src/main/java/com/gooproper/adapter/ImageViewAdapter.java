@@ -22,6 +22,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.viewpager.widget.PagerAdapter;
 
+import com.github.chrisbanes.photoview.PhotoView;
 import com.gooproper.R;
 import com.gooproper.ui.ImageViewActivity;
 import com.gooproper.util.ImageDownloader;
@@ -64,7 +65,7 @@ public class ImageViewAdapter extends PagerAdapter {
     public Object instantiateItem(@NonNull ViewGroup container, int position) {
 
         View view = LayoutInflater.from(context).inflate(R.layout.image_viewpager, null);
-        ImageView imageView = view.findViewById(R.id.ivlisting);
+        PhotoView imageView = view.findViewById(R.id.ivlisting);
         Picasso.get()
                 .load(images.get(position))
                 .into(imageView);

@@ -23,7 +23,9 @@ import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
 import com.gooproper.R;
 import com.gooproper.adapter.FlowUpAdapter;
+import com.gooproper.adapter.FlowUpPrimaryAdapter;
 import com.gooproper.model.FlowUpModel;
+import com.gooproper.model.FlowUpPrimaryModel;
 import com.gooproper.util.Preferences;
 import com.gooproper.util.ServerApi;
 
@@ -38,9 +40,11 @@ public class FlowUpAgenFragment extends Fragment {
 
     ProgressDialog PDFlowUpAgen;
     SwipeRefreshLayout srflowup;
-    RecyclerView rvlist;
+    RecyclerView rvlist, rvprimary;
     RecyclerView.Adapter adapter;
+    FlowUpPrimaryAdapter primaryAdapter;
     List<FlowUpModel> list;
+    List<FlowUpPrimaryModel> primaryModelList;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -49,9 +53,11 @@ public class FlowUpAgenFragment extends Fragment {
 
         PDFlowUpAgen = new ProgressDialog(getActivity());
         rvlist = root.findViewById(R.id.RVFlowUpListAgen);
-        srflowup = root.findViewById(R.id.SRFlowUpAgen);
+        rvprimary = root.findViewById(R.id.RVFlowUpPrimaryListAgen);
+//        srflowup = root.findViewById(R.id.SRFlowUpAgen);
 
         list = new ArrayList<>();
+        primaryModelList = new ArrayList<>();
 
         LoadFlowup(true);
 
@@ -59,12 +65,18 @@ public class FlowUpAgenFragment extends Fragment {
         adapter = new FlowUpAdapter(getActivity(), list);
         rvlist.setAdapter(adapter);
 
-        srflowup.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                LoadFlowup(true);
-            }
-        });
+        LoadFlowupPrimary(true);
+
+        rvprimary.setLayoutManager(new LinearLayoutManager(getActivity(),LinearLayoutManager.VERTICAL, false));
+        primaryAdapter = new FlowUpPrimaryAdapter(getActivity(), primaryModelList);
+        rvprimary.setAdapter(primaryAdapter);
+
+//        srflowup.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+//            @Override
+//            public void onRefresh() {
+//                LoadFlowup(true);
+//            }
+//        });
 
         return root;
     }
@@ -79,7 +91,7 @@ public class FlowUpAgenFragment extends Fragment {
                     @Override
                     public void onResponse(JSONArray response) {
                         PDFlowUpAgen.cancel();
-                        srflowup.setRefreshing(false);
+//                        srflowup.setRefreshing(false);
                         list.clear();
                         for (int i = 0; i < response.length(); i++) {
                             try {
@@ -110,7 +122,7 @@ public class FlowUpAgenFragment extends Fragment {
                                 PDFlowUpAgen.dismiss();
                             } catch (JSONException e) {
                                 e.printStackTrace();
-                                srflowup.setRefreshing(false);
+//                                srflowup.setRefreshing(false);
                                 PDFlowUpAgen.dismiss();
 
                                 Dialog customDialog = new Dialog(getActivity());
@@ -149,7 +161,7 @@ public class FlowUpAgenFragment extends Fragment {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        srflowup.setRefreshing(false);
+//                        srflowup.setRefreshing(false);
                         PDFlowUpAgen.dismiss();
                         error.printStackTrace();
 
@@ -172,6 +184,117 @@ public class FlowUpAgenFragment extends Fragment {
                             }
                         });
 
+                        batal.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                customDialog.dismiss();
+                            }
+                        });
+                        customDialog.show();
+                    }
+                });
+        queue.add(reqData);
+    }
+
+    private void LoadFlowupPrimary(boolean showProgressDialog) {
+        PDFlowUpAgen.setMessage("Memuat Data Follow Up...");
+        PDFlowUpAgen.show();
+
+        RequestQueue queue = Volley.newRequestQueue(getActivity());
+        JsonArrayRequest reqData = new JsonArrayRequest(Request.Method.GET, ServerApi.URL_GET_FLOWUP_PRIMARY+Preferences.getKeyIdAgen(getActivity()), null,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        PDFlowUpAgen.cancel();
+//                        srflowup.setRefreshing(false);
+                        primaryModelList.clear();
+                        for (int i = 0; i < response.length(); i++) {
+                            try {
+                                JSONObject data = response.getJSONObject(i);
+                                FlowUpPrimaryModel md = new FlowUpPrimaryModel();
+                                md.setIdFlowupPrimary(data.getString("IdFlowupPrimary"));
+                                md.setIdAgen(data.getString("IdAgen"));
+                                md.setIdInput(data.getString("IdInput"));
+                                md.setIdListingPrimary(data.getString("IdListingPrimary"));
+                                md.setNamaBuyer(data.getString("NamaBuyer"));
+                                md.setTelpBuyer(data.getString("TelpBuyer"));
+                                md.setSumberBuyer(data.getString("SumberBuyer"));
+                                md.setTanggal(data.getString("Tanggal"));
+                                md.setJam(data.getString("Jam"));
+                                md.setKeterangan(data.getString("Keterangan"));
+                                md.setChat(data.getString("Chat"));
+                                md.setSurvei(data.getString("Survei"));
+                                md.setTawar(data.getString("Tawar"));
+                                md.setLokasi(data.getString("Lokasi"));
+                                md.setDeal(data.getString("Deal"));
+                                md.setSelfie(data.getString("Selfie"));
+                                md.setJudulListingPrimary(data.getString("JudulListingPrimary"));
+                                md.setAlamatListingPrimary(data.getString("AlamatListingPrimary"));
+                                md.setHargaListingPrimary(data.getString("HargaListingPrimary"));
+                                primaryModelList.add(md);
+                                PDFlowUpAgen.dismiss();
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                                PDFlowUpAgen.dismiss();
+//                                srflowup.setRefreshing(false);
+
+                                Dialog customDialog = new Dialog(getActivity());
+                                customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                                customDialog.setContentView(R.layout.alert_eror);
+
+                                if (customDialog.getWindow() != null) {
+                                    customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                                }
+
+                                Button ok = customDialog.findViewById(R.id.BTNOkEror);
+                                Button batal = customDialog.findViewById(R.id.BTNCloseEror);
+
+                                ok.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        customDialog.dismiss();
+                                        LoadFlowupPrimary(true);
+                                    }
+                                });
+                                batal.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        customDialog.dismiss();
+                                    }
+                                });
+
+                                customDialog.show();
+                            }
+                        }
+
+                        primaryAdapter.notifyDataSetChanged();
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+//                        srflowup.setRefreshing(false);
+                        PDFlowUpAgen.dismiss();
+                        error.printStackTrace();
+
+                        Dialog customDialog = new Dialog(getActivity());
+                        customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                        customDialog.setContentView(R.layout.alert_eror);
+
+                        if (customDialog.getWindow() != null) {
+                            customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                        }
+
+                        Button ok = customDialog.findViewById(R.id.BTNOkEror);
+                        Button batal = customDialog.findViewById(R.id.BTNCloseEror);
+
+                        ok.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                customDialog.dismiss();
+                                LoadFlowup(true);
+                            }
+                        });
                         batal.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {

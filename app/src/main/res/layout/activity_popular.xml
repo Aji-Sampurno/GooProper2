@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/main"
     android:orientation="vertical"
-    tools:context=".ui.PopularActivity">
+    tools:context=".ui.listing.PopularActivity">
 
     <LinearLayout
         android:id="@+id/LYTTopPopular"
