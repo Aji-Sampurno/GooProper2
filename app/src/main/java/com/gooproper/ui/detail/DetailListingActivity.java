@@ -27,6 +27,7 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
@@ -63,6 +64,7 @@ import com.gooproper.model.ListingModel;
 import com.gooproper.pager.SertifikatPdfAdapter;
 import com.gooproper.ui.edit.EditListingActivity;
 import com.gooproper.ui.edit.EditListingAgenActivity;
+import com.gooproper.ui.edit.EditMapsListingActivity;
 import com.gooproper.ui.edit.EditPraListingAgenActivity;
 import com.gooproper.ui.edit.EditPralistingActivity;
 import com.gooproper.ui.followup.FollowUpActivity;
@@ -87,22 +89,24 @@ import java.util.Map;
 public class DetailListingActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     ProgressDialog PDDetailListing;
-    TextView TVNamaDetailListing, TVAlamatDetailListing, TVHargaDetailListing, TVHargaSewaDetailListing, TVViewsDetailListing, TVLikeDetailListing, TVBedDetailListing, TVNamaAgen, TVNamaAgen2, TVBathDetailListing, TVWideDetailListing, TVLandDetailListing, TVDimensiDetailListing, TVTipeDetailListing, TVStatusDetailListing, TVSertifikatDetailListing, TVLuasDetailListing, TVKamarTidurDetailListing, TVKamarMandiDetailListing, TVLantaiDetailListing, TVGarasiDetailListing, TVCarpotDetailListing, TVListrikDetailListing, TVSumberAirDetailListing, TVPerabotDetailListing, TVSizeBanner, TVDeskripsiDetailListing, TVNoData, TVNoDataPdf, TVPriority, TVKondisi, TVNoPjp, TVNoDataPjp, TVFee, TVTglInput, TVNamaVendor, TVTelpVendor, TVPJP;
-    ImageView IVFlowUp, IVWhatsapp, IVInstagram, IVFlowUp2, IVWhatsapp2, IVInstagram2, IVFavorite, IVFavoriteOn, IVShare, IVStar1, IVStar2, IVStar3, IVStar4, IVStar5, IVAlamat ;
-    Button BtnApproveAdmin, BtnApproveManager, BtnTambahMaps;
+    TextView TVNamaDetailListing, TVAlamatDetailListing, TVHargaDetailListing, TVHargaSewaDetailListing, TVViewsDetailListing, TVLikeDetailListing, TVBedDetailListing, TVNamaAgen, TVNamaAgen2, TVBathDetailListing, TVWideDetailListing, TVLandDetailListing, TVDimensiDetailListing, TVTipeDetailListing, TVStatusDetailListing, TVSertifikatDetailListing, TVLuasDetailListing, TVKamarTidurDetailListing, TVKamarMandiDetailListing, TVLantaiDetailListing, TVGarasiDetailListing, TVCarpotDetailListing, TVListrikDetailListing, TVSumberAirDetailListing, TVPerabotDetailListing, TVSizeBanner, TVDeskripsiDetailListing, TVNoData, TVNoDataPdf, TVPriority, TVKondisi, TVNoPjp, TVNoDataPjp, TVFee, TVTglInput, TVNamaVendor, TVTelpVendor, TVPJP, TVSelfie, TVRejected, TVPoin;
+    ImageView IVFlowUp, IVWhatsapp, IVInstagram, IVFlowUp2, IVWhatsapp2, IVInstagram2, IVFavorite, IVFavoriteOn, IVShare, IVStar1, IVStar2, IVStar3, IVStar4, IVStar5, IVAlamat, IVNextImg, IVPrevImg, IVSelfie;
+    Button BtnApproveAdmin, BtnApproveManager, BtnRejectedAdmin, BtnRejectedManager, BtnTambahMaps, BtnAjukanUlang;
     TextInputEditText tambahagen, tambahcoagen, tambahpjp;
     TextInputLayout lytambahagen, lyttambahcoagen, lyttambahpjp;
-    CheckBox CBMarketable, CBHarga;
+    CheckBox CBMarketable, CBHarga, CBSelfie, CBLokasi;
+    LinearLayout LytCBMarketable, LytCBHarga, LytCBSelfie, LytCBLokasi;
     ScrollView scrollView;
     CardView agen, agen2, CVSold, CVRented;
     String status, idpralisting, idagen, idlisting, agenid, agencoid, idpengguna, StringNamaListing, StringLuasTanah, StringLuasBangunan, StringKamarTidur, StringKamarTidurArt, StringKamarMandiArt, StringKamarMandi, StringListrik, StringHarga, StringHargaSewa, StringSertifikat, StringAlamat;
-    String BuyerNama, BuyerTelp, BuyerKeterangan, BuyerTanggal, BuyerIdAgen, BuyerIdListing, BuyerIdInput, BuyerJam, StringNamaBuyer, AgenId;
+    String BuyerNama, BuyerTelp, BuyerKeterangan, BuyerTanggal, BuyerIdAgen, BuyerIdListing, BuyerIdInput, BuyerJam, StringNamaBuyer, AgenId, StringKeteranganReject;
     String NamaMaps;
     String imageUrl, namaAgen, telpAgen, IdCo, UrlSHM, UrlHGB, UrlHSHP, UrlPPJB, UrlStratatitle, UrlAJB, UrlPetokD;
-    String productId;
+    String productId, StrIdAgen, StrIntentIdAgenCo, StrIntentIdAgen;
+    int Poin, FinalPoin, CoPoin;
     ProgressDialog pDialog;
     ListingModel lm;
-    LinearLayout LytSertifikat, LytPJP, LytSize, LytFee, LytTglInput, LytBadge, LytBadgeSold, LytBadgeRented, IVEdit, LytNamaVendor, LytTelpVendor;
+    LinearLayout LytSertifikat, LytPJP, LytSize, LytFee, LytTglInput, LytBadge, LytBadgeSold, LytBadgeRented, IVEdit, LytNamaVendor, LytTelpVendor, LytRejected, LytSelfie;
     ViewPager viewPager, viewPagerSertifikat, viewPagerPJP;
     ViewPagerAdapter adapter;
     SertifikatAdapter sertifikatAdapter;
@@ -126,6 +130,8 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
         setContentView(R.layout.activity_detail_listing);
 
         PDDetailListing = new ProgressDialog(DetailListingActivity.this);
+        pDialog = new ProgressDialog(this);
+
         tambahagen = findViewById(R.id.ETTambahAgenDetailListing);
         tambahcoagen = findViewById(R.id.ETTambahCoAgenDetailListing);
         tambahpjp = findViewById(R.id.ETTambahNoPjpDetailListing);
@@ -149,11 +155,16 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
         LytBadgeRented = findViewById(R.id.LytBadgeRented);
         LytNamaVendor = findViewById(R.id.LytNamaVendorDetailListing);
         LytTelpVendor = findViewById(R.id.LytTelpVendorDetailListing);
+        LytRejected = findViewById(R.id.LytRejectedDetailListing);
+        LytSelfie = findViewById(R.id.LytViewSelfie);
         scrollView = findViewById(R.id.SVDetailListing);
 
         BtnApproveAdmin = findViewById(R.id.BtnApproveAdminDetailListing);
         BtnApproveManager = findViewById(R.id.BtnApproveManagerDetailListing);
+        BtnRejectedAdmin = findViewById(R.id.BtnRejectedAdminDetailListing);
+        BtnRejectedManager = findViewById(R.id.BtnRejectedManagerDetailListing);
         BtnTambahMaps = findViewById(R.id.BtnAddMapsDetailListing);
+        BtnAjukanUlang = findViewById(R.id.BtnAjukanUlangDetailListing);
 
         TVNamaDetailListing = findViewById(R.id.TVNamaDetailListing);
         TVAlamatDetailListing = findViewById(R.id.TVAlamatDetailListing);
@@ -192,6 +203,9 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
         TVNamaVendor = findViewById(R.id.TVNamaVendorDetailListing);
         TVTelpVendor = findViewById(R.id.TVTelpVendorDetailListing);
         TVPJP = findViewById(R.id.TVPjp);
+        TVSelfie = findViewById(R.id.TVNoSelfie);
+        TVRejected = findViewById(R.id.TVKeteranganDetailListing);
+        TVPoin = findViewById(R.id.TVPoinListing);
 
         IVAlamat = findViewById(R.id.IVAlamatDetailListing);
         IVFlowUp = findViewById(R.id.IVFlowUpAgenDetailListing);
@@ -204,14 +218,18 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
         IVFavoriteOn = findViewById(R.id.IVFavoriteOnDetailListing);
         IVShare = findViewById(R.id.IVShareDetailListing);
         IVEdit = findViewById(R.id.IVEditDetailListing);
-        IVStar1 = findViewById(R.id.Star1);
-        IVStar2 = findViewById(R.id.Star2);
-        IVStar3 = findViewById(R.id.Star3);
-        IVStar4 = findViewById(R.id.Star4);
-        IVStar5 = findViewById(R.id.Star5);
+        IVNextImg = findViewById(R.id.IVNextImg);
+        IVPrevImg = findViewById(R.id.IVPrevImg);
+        IVSelfie = findViewById(R.id.IVSelfie);
 
         CBMarketable = findViewById(R.id.CBMarketable);
         CBHarga = findViewById(R.id.CBHarga);
+        CBSelfie = findViewById(R.id.CBSelfie);
+        CBLokasi = findViewById(R.id.CBLokasi);
+        LytCBMarketable = findViewById(R.id.LytCBMarketable);
+        LytCBHarga = findViewById(R.id.LytCBHarga);
+        LytCBSelfie = findViewById(R.id.LytCBSelfie);
+        LytCBLokasi = findViewById(R.id.LytCBLokasi);
 
         mapView = findViewById(R.id.MVDetailListing);
         mapView.onCreate(savedInstanceState);
@@ -301,6 +319,7 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
         String intentLinkYoutube = data.getStringExtra("LinkYoutube");
         String intentIsAdmin = data.getStringExtra("IsAdmin");
         String intentIsManager = data.getStringExtra("IsManager");
+        String intentIsRejected = data.getStringExtra("IsRejected");
         String intentSold = data.getStringExtra("Sold");
         String intentRented = data.getStringExtra("Rented");
         String intentView = data.getStringExtra("View");
@@ -312,9 +331,15 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
         String intentFee = data.getStringExtra("Fee");
         String intentNamaVendor = data.getStringExtra("NamaVendor");
         String intentNoTelpVendor = data.getStringExtra("NoTelpVendor");
-        pDialog = new ProgressDialog(this);
-        status = Preferences.getKeyStatus(this);
+        String intentIsSelfie = data.getStringExtra("IsSelfie");
+        String intentIsLokasi = data.getStringExtra("IsLokasi");
+        String intentKeterangan = data.getStringExtra("Keterangan");
 
+        status = Preferences.getKeyStatus(this);
+        StrIdAgen = Preferences.getKeyIdAgen(this);
+
+        StrIntentIdAgen = intentIdAgen;
+        StrIntentIdAgenCo = intentIdAgenCo;
         idpralisting = intentIdPraListing;
         idlisting = intentIdListing;
         idagen = intentIdAgen;
@@ -336,6 +361,12 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
         StringKamarMandiArt = intentBathArt;
         StringListrik = intentListrik;
         StringSertifikat = intentJenisCertificate;
+
+        if (intentIsRejected.equals("1")){
+            BtnAjukanUlang.setVisibility(View.VISIBLE);
+        } else {
+            BtnAjukanUlang.setVisibility(View.GONE);
+        }
 
         if (intentKondisi.equals("Jual")){
             StringHarga = currency.formatRupiah(intentHarga);
@@ -403,6 +434,7 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
             LytNamaVendor.setVisibility(View.GONE);
             LytTelpVendor.setVisibility(View.GONE);
             lytambahagen.setVisibility(View.GONE);
+            LytSelfie.setVisibility(View.GONE);
         } else {
             StringNamaBuyer = Preferences.getKeyNamaLengkap(this);
             IVFlowUp.setVisibility(View.INVISIBLE);
@@ -412,6 +444,7 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
             LytNamaVendor.setVisibility(View.GONE);
             LytTelpVendor.setVisibility(View.GONE);
             lytambahagen.setVisibility(View.GONE);
+            LytSelfie.setVisibility(View.GONE);
             IVWhatsapp.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -429,30 +462,32 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
             if (intentIsAdmin.equals("0")) {
                 BtnApproveAdmin.setVisibility(View.GONE);
                 BtnApproveManager.setVisibility(View.VISIBLE);
+                BtnRejectedAdmin.setVisibility(View.GONE);
+                BtnRejectedManager.setVisibility(View.VISIBLE);
                 IVFlowUp.setVisibility(View.INVISIBLE);
                 IVFlowUp2.setVisibility(View.INVISIBLE);
                 IVEdit.setVisibility(View.VISIBLE);
                 IVShare.setVisibility(View.INVISIBLE);
                 IVFavorite.setVisibility(View.GONE);
-                CBMarketable.setVisibility(View.VISIBLE);
-                CBHarga.setVisibility(View.VISIBLE);
                 AgenId = "0";
                 idpengguna = Preferences.getKeyIdAdmin(this);
             } else if (intentIsManager.equals("0")) {
                 BtnApproveAdmin.setVisibility(View.GONE);
                 BtnApproveManager.setVisibility(View.VISIBLE);
+                BtnRejectedAdmin.setVisibility(View.GONE);
+                BtnRejectedManager.setVisibility(View.VISIBLE);
                 IVFlowUp.setVisibility(View.INVISIBLE);
                 IVFlowUp2.setVisibility(View.INVISIBLE);
                 IVEdit.setVisibility(View.VISIBLE);
                 IVShare.setVisibility(View.INVISIBLE);
                 IVFavorite.setVisibility(View.GONE);
-                CBMarketable.setVisibility(View.VISIBLE);
-                CBHarga.setVisibility(View.VISIBLE);
                 AgenId = "0";
                 idpengguna = Preferences.getKeyIdAdmin(this);
             } else {
                 BtnApproveAdmin.setVisibility(View.GONE);
                 BtnApproveManager.setVisibility(View.GONE);
+                BtnRejectedAdmin.setVisibility(View.GONE);
+                BtnRejectedManager.setVisibility(View.GONE);
                 IVFlowUp.setVisibility(View.VISIBLE);
                 IVFlowUp2.setVisibility(View.VISIBLE);
                 IVEdit.setVisibility(View.VISIBLE);
@@ -465,6 +500,8 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
             if (intentIsAdmin.equals("0")) {
                 BtnApproveAdmin.setVisibility(View.VISIBLE);
                 BtnApproveManager.setVisibility(View.GONE);
+                BtnRejectedAdmin.setVisibility(View.VISIBLE);
+                BtnRejectedManager.setVisibility(View.GONE);
                 IVFlowUp.setVisibility(View.INVISIBLE);
                 IVFlowUp2.setVisibility(View.INVISIBLE);
                 IVEdit.setVisibility(View.VISIBLE);
@@ -553,10 +590,6 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                 });
                 IVShare.setVisibility(View.GONE);
                 IVFavorite.setVisibility(View.GONE);
-                CBMarketable.setVisibility(View.VISIBLE);
-                CBHarga.setVisibility(View.VISIBLE);
-                CBMarketable.setClickable(false);
-                CBHarga.setClickable(false);
                 AgenId = "0";
                 idpengguna = Preferences.getKeyIdAdmin(this);
                 if (!intentImgPjp.equals("0")){
@@ -565,6 +598,8 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
             } else if (intentIsManager.equals("0")) {
                 BtnApproveAdmin.setVisibility(View.VISIBLE);
                 BtnApproveManager.setVisibility(View.GONE);
+                BtnRejectedAdmin.setVisibility(View.VISIBLE);
+                BtnRejectedManager.setVisibility(View.GONE);
                 IVFlowUp.setVisibility(View.INVISIBLE);
                 IVFlowUp2.setVisibility(View.INVISIBLE);
                 IVEdit.setVisibility(View.VISIBLE);
@@ -658,6 +693,8 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
             } else {
                 BtnApproveAdmin.setVisibility(View.GONE);
                 BtnApproveManager.setVisibility(View.GONE);
+                BtnRejectedAdmin.setVisibility(View.GONE);
+                BtnRejectedManager.setVisibility(View.GONE);
                 IVFlowUp.setVisibility(View.VISIBLE);
                 IVFlowUp2.setVisibility(View.VISIBLE);
                 IVEdit.setVisibility(View.VISIBLE);
@@ -755,6 +792,8 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                 if (intentIsAdmin.equals("0")){
                     BtnApproveAdmin.setVisibility(View.GONE);
                     BtnApproveManager.setVisibility(View.GONE);
+                    BtnRejectedAdmin.setVisibility(View.GONE);
+                    BtnRejectedManager.setVisibility(View.GONE);
                     IVFlowUp.setVisibility(View.VISIBLE);
                     IVFlowUp2.setVisibility(View.VISIBLE);
                     idpengguna = "0";
@@ -765,6 +804,10 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                     IVFavorite.setVisibility(View.GONE);
                     TVAlamatDetailListing.setVisibility(View.GONE);
                     IVAlamat.setVisibility(View.GONE);
+                    LytCBMarketable.setVisibility(View.GONE);
+                    LytCBHarga.setVisibility(View.GONE);
+                    LytCBSelfie.setVisibility(View.GONE);
+                    LytCBLokasi.setVisibility(View.GONE);
                     IVEdit.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -845,12 +888,22 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                             update.putExtra("NoTelp",intentNoTelp);
                             update.putExtra("Instagram",intentInstagram);
                             update.putExtra("Fee",intentFee);
+                            startActivity(update);
+                        }
+                    });
+                    BtnTambahMaps.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent update = new Intent(DetailListingActivity.this, EditPralistingActivity.class);
+                            update.putExtra("IdPraListing",idpralisting);
                             startActivity(update);
                         }
                     });
                 } else if (intentIsManager.equals("0")) {
                     BtnApproveAdmin.setVisibility(View.GONE);
                     BtnApproveManager.setVisibility(View.GONE);
+                    BtnRejectedAdmin.setVisibility(View.GONE);
+                    BtnRejectedManager.setVisibility(View.GONE);
                     IVFlowUp.setVisibility(View.VISIBLE);
                     IVFlowUp2.setVisibility(View.VISIBLE);
                     idpengguna = "0";
@@ -861,6 +914,10 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                     IVFavorite.setVisibility(View.GONE);
                     TVAlamatDetailListing.setVisibility(View.GONE);
                     IVAlamat.setVisibility(View.GONE);
+                    LytCBMarketable.setVisibility(View.GONE);
+                    LytCBHarga.setVisibility(View.GONE);
+                    LytCBSelfie.setVisibility(View.GONE);
+                    LytCBLokasi.setVisibility(View.GONE);
                     IVEdit.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -944,20 +1001,49 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                             startActivity(update);
                         }
                     });
+                    BtnTambahMaps.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent update = new Intent(DetailListingActivity.this, EditPralistingActivity.class);
+                            update.putExtra("IdPraListing",idpralisting);
+                            startActivity(update);
+                        }
+                    });
                 } else {
                     BtnApproveAdmin.setVisibility(View.GONE);
                     BtnApproveManager.setVisibility(View.GONE);
+                    BtnRejectedAdmin.setVisibility(View.GONE);
+                    BtnRejectedManager.setVisibility(View.GONE);
                     IVFlowUp.setVisibility(View.VISIBLE);
                     IVFlowUp2.setVisibility(View.VISIBLE);
                     TVAlamatDetailListing.setVisibility(View.GONE);
                     IVAlamat.setVisibility(View.GONE);
                     idpengguna = "0";
                     AgenId = Preferences.getKeyIdAgen(this);
+                    LytCBMarketable.setVisibility(View.GONE);
+                    LytCBHarga.setVisibility(View.GONE);
+                    LytCBSelfie.setVisibility(View.GONE);
+                    LytCBLokasi.setVisibility(View.GONE);
+                    if (StrIdAgen.equals(intentIdAgen)){
+                        BtnTambahMaps.setVisibility(View.VISIBLE);
+                        BtnTambahMaps.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent update = new Intent(DetailListingActivity.this, EditMapsListingActivity.class);
+                                update.putExtra("IdListing",idlisting);
+                                startActivity(update);
+                            }
+                        });
+                    } else {
+                        BtnTambahMaps.setVisibility(View.GONE);
+                    }
                 }
             } else {
                 if (intentIsAdmin.equals("0")){
                     BtnApproveAdmin.setVisibility(View.GONE);
                     BtnApproveManager.setVisibility(View.GONE);
+                    BtnRejectedAdmin.setVisibility(View.GONE);
+                    BtnRejectedManager.setVisibility(View.GONE);
                     IVFlowUp.setVisibility(View.VISIBLE);
                     IVFlowUp2.setVisibility(View.VISIBLE);
                     idpengguna = "0";
@@ -1049,9 +1135,15 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                             startActivity(update);
                         }
                     });
+                    LytCBMarketable.setVisibility(View.GONE);
+                    LytCBHarga.setVisibility(View.GONE);
+                    LytCBSelfie.setVisibility(View.GONE);
+                    LytCBLokasi.setVisibility(View.GONE);
                 } else if (intentIsManager.equals("0")) {
                     BtnApproveAdmin.setVisibility(View.GONE);
                     BtnApproveManager.setVisibility(View.GONE);
+                    BtnRejectedAdmin.setVisibility(View.GONE);
+                    BtnRejectedManager.setVisibility(View.GONE);
                     IVFlowUp.setVisibility(View.VISIBLE);
                     IVFlowUp2.setVisibility(View.VISIBLE);
                     idpengguna = "0";
@@ -1141,201 +1233,51 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                             startActivity(update);
                         }
                     });
+                    LytCBMarketable.setVisibility(View.GONE);
+                    LytCBHarga.setVisibility(View.GONE);
+                    LytCBSelfie.setVisibility(View.GONE);
+                    LytCBLokasi.setVisibility(View.GONE);
                 } else {
                     BtnApproveAdmin.setVisibility(View.GONE);
                     BtnApproveManager.setVisibility(View.GONE);
+                    BtnRejectedAdmin.setVisibility(View.GONE);
+                    BtnRejectedManager.setVisibility(View.GONE);
                     BtnTambahMaps.setVisibility(View.GONE);
                     IVFlowUp.setVisibility(View.VISIBLE);
                     IVFlowUp2.setVisibility(View.VISIBLE);
                     idpengguna = "0";
                     AgenId = Preferences.getKeyIdAgen(this);
+                    LytCBMarketable.setVisibility(View.GONE);
+                    LytCBHarga.setVisibility(View.GONE);
+                    LytCBSelfie.setVisibility(View.GONE);
+                    LytCBLokasi.setVisibility(View.GONE);
                 }
             }
         } else if (status.equals("4")) {
             IVFlowUp.setVisibility(View.INVISIBLE);
             BtnApproveAdmin.setVisibility(View.GONE);
             BtnApproveManager.setVisibility(View.GONE);
+            BtnRejectedAdmin.setVisibility(View.GONE);
+            BtnRejectedManager.setVisibility(View.GONE);
             IVFlowUp.setVisibility(View.INVISIBLE);
             IVFlowUp2.setVisibility(View.INVISIBLE);
             TVAlamatDetailListing.setVisibility(View.GONE);
             IVAlamat.setVisibility(View.GONE);
             idpengguna = Preferences.getKeyIdCustomer(this);
             AgenId = "0";
+            LytCBMarketable.setVisibility(View.GONE);
+            LytCBHarga.setVisibility(View.GONE);
+            LytCBSelfie.setVisibility(View.GONE);
+            LytCBLokasi.setVisibility(View.GONE);
         } else {
             TVAlamatDetailListing.setVisibility(View.GONE);
             IVAlamat.setVisibility(View.GONE);
             IVFlowUp.setVisibility(View.INVISIBLE);
             IVFlowUp2.setVisibility(View.INVISIBLE);
-        }
-
-        if (intentPriority.equals("open")){
-            if (intentBanner.equals("Ya")){
-                if (intentMarketable.equals("1")){
-                    IVStar1.setVisibility(View.VISIBLE);
-                    IVStar2.setVisibility(View.VISIBLE);
-                    IVStar3.setVisibility(View.VISIBLE);
-                } else {
-                    CBMarketable.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                        @Override
-                        public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                            if (b) {
-                                IVStar3.setVisibility(View.VISIBLE);
-                            } else {
-                                IVStar3.setVisibility(View.GONE);
-                            }
-                        }
-                    });
-                    IVStar1.setVisibility(View.VISIBLE);
-                    IVStar2.setVisibility(View.VISIBLE);
-                }
-            } else {
-                if (intentMarketable.equals("1")){
-                    IVStar1.setVisibility(View.VISIBLE);
-                    IVStar2.setVisibility(View.VISIBLE);
-                } else {
-                    CBMarketable.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                        @Override
-                        public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                            if (b) {
-                                IVStar2.setVisibility(View.VISIBLE);
-                            } else {
-                                IVStar2.setVisibility(View.GONE);
-                            }
-                        }
-                    });
-                    IVStar1.setVisibility(View.VISIBLE);
-                }
-            }
-        } else {
-            if (intentBanner.equals("Ya")){
-                if (intentMarketable.equals("1")){
-                    if (intentStatusHarga.equals("1")){
-                        IVStar1.setVisibility(View.VISIBLE);
-                        IVStar2.setVisibility(View.VISIBLE);
-                        IVStar3.setVisibility(View.VISIBLE);
-                        IVStar4.setVisibility(View.VISIBLE);
-                        IVStar5.setVisibility(View.VISIBLE);
-                    } else {
-                        CBHarga.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                            @Override
-                            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                                if (b) {
-                                    IVStar5.setVisibility(View.VISIBLE);
-                                } else {
-                                    IVStar5.setVisibility(View.GONE);
-                                }
-                            }
-                        });
-                        IVStar1.setVisibility(View.VISIBLE);
-                        IVStar2.setVisibility(View.VISIBLE);
-                        IVStar3.setVisibility(View.VISIBLE);
-                        IVStar4.setVisibility(View.VISIBLE);
-                    }
-                } else {
-                    if (intentStatusHarga.equals("1")){
-                        CBMarketable.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                            @Override
-                            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                                if (b) {
-                                    IVStar5.setVisibility(View.VISIBLE);
-                                } else {
-                                    IVStar5.setVisibility(View.GONE);
-                                }
-                            }
-                        });
-                        IVStar1.setVisibility(View.VISIBLE);
-                        IVStar2.setVisibility(View.VISIBLE);
-                        IVStar3.setVisibility(View.VISIBLE);
-                        IVStar4.setVisibility(View.VISIBLE);
-                    } else {
-                        CBMarketable.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                            @Override
-                            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                                if (b) {
-                                    IVStar4.setVisibility(View.VISIBLE);
-                                } else {
-                                    IVStar4.setVisibility(View.GONE);
-                                }
-                            }
-                        });
-                        CBHarga.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                            @Override
-                            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                                if (b) {
-                                    IVStar5.setVisibility(View.VISIBLE);
-                                } else {
-                                    IVStar5.setVisibility(View.GONE);
-                                }
-                            }
-                        });
-                        IVStar1.setVisibility(View.VISIBLE);
-                        IVStar2.setVisibility(View.VISIBLE);
-                        IVStar3.setVisibility(View.VISIBLE);
-                    }
-                }
-            } else {
-                if (intentMarketable.equals("1")){
-                    if (intentStatusHarga.equals("1")){
-                        IVStar1.setVisibility(View.VISIBLE);
-                        IVStar2.setVisibility(View.VISIBLE);
-                        IVStar3.setVisibility(View.VISIBLE);
-                        IVStar4.setVisibility(View.VISIBLE);
-                    } else {
-                        CBHarga.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                            @Override
-                            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                                if (b) {
-                                    IVStar4.setVisibility(View.VISIBLE);
-                                } else {
-                                    IVStar4.setVisibility(View.GONE);
-                                }
-                            }
-                        });
-                        IVStar1.setVisibility(View.VISIBLE);
-                        IVStar2.setVisibility(View.VISIBLE);
-                        IVStar3.setVisibility(View.VISIBLE);
-                    }
-                } else {
-                    if (intentStatusHarga.equals("1")){
-                        CBMarketable.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                            @Override
-                            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                                if (b) {
-                                    IVStar4.setVisibility(View.VISIBLE);
-                                } else {
-                                    IVStar4.setVisibility(View.GONE);
-                                }
-                            }
-                        });
-                        IVStar1.setVisibility(View.VISIBLE);
-                        IVStar2.setVisibility(View.VISIBLE);
-                        IVStar3.setVisibility(View.VISIBLE);
-                    } else {
-                        CBMarketable.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                            @Override
-                            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                                if (b) {
-                                    IVStar3.setVisibility(View.VISIBLE);
-                                } else {
-                                    IVStar3.setVisibility(View.GONE);
-                                }
-                            }
-                        });
-                        CBHarga.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                            @Override
-                            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                                if (b) {
-                                    IVStar4.setVisibility(View.VISIBLE);
-                                } else {
-                                    IVStar4.setVisibility(View.GONE);
-                                }
-                            }
-                        });
-                        IVStar1.setVisibility(View.VISIBLE);
-                        IVStar2.setVisibility(View.VISIBLE);
-                    }
-                }
-            }
+            LytCBMarketable.setVisibility(View.GONE);
+            LytCBHarga.setVisibility(View.GONE);
+            LytCBSelfie.setVisibility(View.GONE);
+            LytCBLokasi.setVisibility(View.GONE);
         }
 
         if (intentIdAgenCo.equals("0")){
@@ -1345,6 +1287,16 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
         } else {
             LoadCo();
             agen2.setVisibility(View.VISIBLE);
+        }
+
+        if (StrIdAgen.equals(intentIdAgen)){
+            TVPoin.setVisibility(View.VISIBLE);
+        } else if (status.equals("1")) {
+            TVPoin.setVisibility(View.VISIBLE);
+        } else if (status.equals("2")) {
+            TVPoin.setVisibility(View.VISIBLE);
+        } else {
+            TVPoin.setVisibility(View.GONE);
         }
 
         CountLike(idlisting);
@@ -1425,16 +1377,426 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
             }
         });
         BtnApproveManager.setOnClickListener(v -> approvemanager());
-        BtnTambahMaps.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent update = new Intent(DetailListingActivity.this, EditPralistingActivity.class);
-                update.putExtra("IdPraListing", intentIdPraListing);
-                startActivity(update);
-            }
-        });
+        BtnRejectedAdmin.setOnClickListener(v -> ShowRejected());
+        BtnRejectedManager.setOnClickListener(v -> ShowRejected());
+        BtnAjukanUlang.setOnClickListener(v -> ajukanulang());
 
         if (update == 1) {
+            if (intentPriority.equals("exclusive") && !intentPjp.isEmpty() && intentBanner.equals("Ya")){
+                if (intentIdAgenCo.equals("0")){
+                    FinalPoin = 50;
+                    TVPoin.setText(String.valueOf(FinalPoin));
+                } else if (intentIdAgenCo.equals(intentIdAgen)) {
+                    FinalPoin = 50;
+                    TVPoin.setText(String.valueOf(FinalPoin));
+                } else {
+                    FinalPoin = 50 / 2;
+                    TVPoin.setText(String.valueOf(FinalPoin));
+                }
+                Poin = 50;
+                if (intentIsSelfie.equals("1") && intentIsLokasi.equals("1")) {
+                    if (intentMarketable.equals("1") && intentStatusHarga.equals("1")) {
+                        updatepoin1();
+                        CBMarketable.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                            @Override
+                            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                                updatepoin1();
+                            }
+                        });
+                        CBHarga.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                            @Override
+                            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                                updatepoin1();
+                            }
+                        });
+                    } else {
+                        updatepoin();
+                        CBSelfie.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                            @Override
+                            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                                updatepoin();
+                            }
+                        });
+                        CBLokasi.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                            @Override
+                            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                                updatepoin();
+                            }
+                        });
+                    }
+                } else {
+                    CBSelfie.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                        @Override
+                        public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                            updatepoint1();
+                        }
+                    });
+                    CBLokasi.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                        @Override
+                        public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                            updatepoint1();
+                        }
+                    });
+                    CBMarketable.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                        @Override
+                        public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                            updatepoint1();
+                        }
+                    });
+                    CBHarga.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                        @Override
+                        public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                            updatepoint1();
+                        }
+                    });
+                }
+            } else if (intentPriority.equals("exclusive") && !intentPjp.isEmpty() && intentBanner.equals("Tidak")) {
+                if (intentIdAgenCo.equals("0")){
+                    FinalPoin = 40;
+                    TVPoin.setText(String.valueOf(FinalPoin));
+                } else if (intentIdAgenCo.equals(intentIdAgen)) {
+                    FinalPoin = 40;
+                    TVPoin.setText(String.valueOf(FinalPoin));
+                } else {
+                    FinalPoin = 40 / 2;
+                    TVPoin.setText(String.valueOf(FinalPoin));
+                }
+                Poin = 40;
+                if (intentIsSelfie.equals("1") && intentIsLokasi.equals("1")) {
+                    if (intentMarketable.equals("1") && intentStatusHarga.equals("1")) {
+                        updatepoin2();
+                        CBMarketable.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                            @Override
+                            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                                updatepoin2();
+                            }
+                        });
+                        CBHarga.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                            @Override
+                            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                                updatepoin2();
+                            }
+                        });
+                    } else {
+                        updatepoin();
+                        CBSelfie.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                            @Override
+                            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                                updatepoin();
+                            }
+                        });
+                        CBLokasi.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                            @Override
+                            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                                updatepoin();
+                            }
+                        });
+                    }
+                } else {
+                    CBSelfie.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                        @Override
+                        public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                            updatepoint2();
+                        }
+                    });
+                    CBLokasi.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                        @Override
+                        public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                            updatepoint2();
+                        }
+                    });
+                    CBMarketable.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                        @Override
+                        public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                            updatepoint2();
+                        }
+                    });
+                    CBHarga.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                        @Override
+                        public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                            updatepoint2();
+                        }
+                    });
+                }
+            } else if (intentPriority.equals("open") && !intentPjp.isEmpty() && intentBanner.equals("Ya")) {
+                if (intentIdAgenCo.equals("0")){
+                    FinalPoin = 30;
+                    TVPoin.setText(String.valueOf(FinalPoin));
+                } else if (intentIdAgenCo.equals(intentIdAgen)) {
+                    FinalPoin = 30;
+                    TVPoin.setText(String.valueOf(FinalPoin));
+                } else {
+                    FinalPoin = 30 / 2;
+                    TVPoin.setText(String.valueOf(FinalPoin));
+                }
+                Poin = 30;
+                if (intentIsSelfie.equals("1") && intentIsLokasi.equals("1")) {
+                    if (intentMarketable.equals("1") && intentStatusHarga.equals("1")) {
+                        updatepoin3();
+                        CBMarketable.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                            @Override
+                            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                                updatepoin3();
+                            }
+                        });
+                        CBHarga.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                            @Override
+                            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                                updatepoin3();
+                            }
+                        });
+                    } else {
+                        updatepoin();
+                        CBSelfie.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                            @Override
+                            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                                updatepoin();
+                            }
+                        });
+                        CBLokasi.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                            @Override
+                            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                                updatepoin();
+                            }
+                        });
+                    }
+                } else {
+                    CBSelfie.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                        @Override
+                        public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                            updatepoint3();
+                        }
+                    });
+                    CBLokasi.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                        @Override
+                        public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                            updatepoint3();
+                        }
+                    });
+                    CBMarketable.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                        @Override
+                        public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                            updatepoint3();
+                        }
+                    });
+                    CBHarga.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                        @Override
+                        public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                            updatepoint3();
+                        }
+                    });
+                }
+            } else if (intentPriority.equals("open") && !intentPjp.isEmpty() && intentBanner.equals("Tidak")) {
+                if (intentIdAgenCo.equals("0")){
+                    FinalPoin = 20;
+                    TVPoin.setText(String.valueOf(FinalPoin));
+                } else if (intentIdAgenCo.equals(intentIdAgen)) {
+                    FinalPoin = 20;
+                    TVPoin.setText(String.valueOf(FinalPoin));
+                } else {
+                    FinalPoin = 20 / 2;
+                    TVPoin.setText(String.valueOf(FinalPoin));
+                }
+                Poin = 20;
+                if (intentIsSelfie.equals("1") && intentIsLokasi.equals("1")) {
+                    if (intentMarketable.equals("1") && intentStatusHarga.equals("1")) {
+                        updatepoin4();
+                        CBMarketable.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                            @Override
+                            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                                updatepoin4();
+                            }
+                        });
+                        CBHarga.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                            @Override
+                            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                                updatepoin4();
+                            }
+                        });
+                    } else {
+                        updatepoin();
+                        CBSelfie.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                            @Override
+                            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                                updatepoin();
+                            }
+                        });
+                        CBLokasi.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                            @Override
+                            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                                updatepoin();
+                            }
+                        });
+                    }
+                } else {
+                    CBSelfie.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                        @Override
+                        public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                            updatepoint4();
+                        }
+                    });
+                    CBLokasi.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                        @Override
+                        public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                            updatepoint3();
+                        }
+                    });
+                    CBMarketable.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                        @Override
+                        public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                            updatepoint4();
+                        }
+                    });
+                    CBHarga.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                        @Override
+                        public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                            updatepoint4();
+                        }
+                    });
+                }
+            } else if (intentPriority.equals("open") && intentPjp.isEmpty() && intentBanner.equals("Ya")) {
+                if (intentIdAgenCo.equals("0")){
+                    FinalPoin = 20;
+                    TVPoin.setText(String.valueOf(FinalPoin));
+                } else if (intentIdAgenCo.equals(intentIdAgen)) {
+                    FinalPoin = 20;
+                    TVPoin.setText(String.valueOf(FinalPoin));
+                } else {
+                    FinalPoin = 20 / 2;
+                    TVPoin.setText(String.valueOf(FinalPoin));
+                }
+                Poin = 20;
+                if (intentIsSelfie.equals("1") && intentIsLokasi.equals("1")) {
+                    if (intentMarketable.equals("1") && intentStatusHarga.equals("1")) {
+                        updatepoin5();
+                        CBMarketable.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                            @Override
+                            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                                updatepoin5();
+                            }
+                        });
+                        CBHarga.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                            @Override
+                            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                                updatepoin5();
+                            }
+                        });
+                    } else {
+                        updatepoin();
+                        CBSelfie.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                            @Override
+                            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                                updatepoin();
+                            }
+                        });
+                        CBLokasi.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                            @Override
+                            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                                updatepoin();
+                            }
+                        });
+                    }
+                } else {
+                    CBSelfie.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                        @Override
+                        public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                            updatepoint5();
+                        }
+                    });
+                    CBLokasi.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                        @Override
+                        public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                            updatepoint5();
+                        }
+                    });
+                    CBMarketable.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                        @Override
+                        public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                            updatepoint5();
+                        }
+                    });
+                    CBHarga.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                        @Override
+                        public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                            updatepoint5();
+                        }
+                    });
+                }
+            } else if (intentPriority.equals("open") && intentPjp.isEmpty() && intentBanner.equals("Tidak")) {
+                if (intentIdAgenCo.equals("0")){
+                    FinalPoin = 10;
+                    TVPoin.setText(String.valueOf(FinalPoin));
+                } else if (intentIdAgenCo.equals(intentIdAgen)) {
+                    FinalPoin = 10;
+                    TVPoin.setText(String.valueOf(FinalPoin));
+                } else {
+                    FinalPoin = 10 / 2;
+                    TVPoin.setText(String.valueOf(FinalPoin));
+                }
+                Poin = 10;
+                if (intentIsSelfie.equals("1") && intentIsLokasi.equals("1")) {
+                    if (intentMarketable.equals("1") && intentStatusHarga.equals("1")) {
+                        updatepoin6();
+                        CBMarketable.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                            @Override
+                            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                                updatepoin6();
+                            }
+                        });
+                        CBHarga.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                            @Override
+                            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                                updatepoin6();
+                            }
+                        });
+                    } else {
+                        updatepoin();
+                        CBSelfie.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                            @Override
+                            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                                updatepoin();
+                            }
+                        });
+                        CBLokasi.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                            @Override
+                            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                                updatepoin();
+                            }
+                        });
+                    }
+                } else {
+                    CBSelfie.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                        @Override
+                        public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                            updatepoint6();
+                        }
+                    });
+                    CBLokasi.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                        @Override
+                        public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                            updatepoint6();
+                        }
+                    });
+                    CBMarketable.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                        @Override
+                        public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                            updatepoint6();
+                        }
+                    });
+                    CBHarga.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                        @Override
+                        public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                            updatepoint6();
+                        }
+                    });
+                }
+            }
+            if (intentIsRejected.equals("0")) {
+                LytRejected.setVisibility(View.GONE);
+            } else {
+                LytRejected.setVisibility(View.VISIBLE);
+                TVRejected.setText(intentKeterangan);
+            }
             if (intentMarketable.equals("1")){
                 CBMarketable.setChecked(true);
             } else {
@@ -1444,6 +1806,16 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                 CBHarga.setChecked(true);
             } else {
                 CBHarga.setChecked(false);
+            }
+            if (intentIsSelfie.equals("1")){
+                CBSelfie.setChecked(true);
+            } else {
+                CBSelfie.setChecked(false);
+            }
+            if (intentIsLokasi.equals("1")){
+                CBLokasi.setChecked(true);
+            } else {
+                CBLokasi.setChecked(false);
             }
             if (intentIdAgen.equals("null")) {
                 if (intentSold.equals("1")){
@@ -1632,13 +2004,26 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                 messageBuilder.append(" SHM");
             }
             if (!intentHGB.isEmpty() && !intentHGB.equals("0")) {
-                messageBuilder.append(" HGB");
+                if (!intentSHM.equals("0")) {
+                    messageBuilder.append(",HGB");
+                } else {
+                    messageBuilder.append(" HGB");
+                }
+
             }
             if (!intentHSHP.isEmpty() && !intentHSHP.equals("0")) {
-                messageBuilder.append(" HS/HP");
+                if (!intentSHM.equals("0") || !intentHGB.equals("0")) {
+                    messageBuilder.append(",HS/HP");
+                } else {
+                    messageBuilder.append(" HS/HP");
+                }
             }
             if (!intentPPJB.isEmpty() && !intentPPJB.equals("0")) {
-                messageBuilder.append(" PPJB");
+                if (!intentSHM.equals("0") || !intentHGB.equals("0") || intentHSHP.equals("0")) {
+                    messageBuilder.append(",PPJB");
+                } else {
+                    messageBuilder.append(" PPJB");
+                }
             }
             if (!intentStratatitle.isEmpty() && !intentStratatitle.equals("0")) {
                 messageBuilder.append(" Stratatitle");
@@ -1744,6 +2129,14 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
             } else {
                 TVTglInput.setText(": " + intentTglInput);
             }
+            if (!intentIsSelfie.equals("0")){
+                IVSelfie.setVisibility(View.VISIBLE);
+                Glide.with(this).load(intentSelfie).into(IVSelfie);
+                TVSelfie.setVisibility(View.GONE);
+            } else {
+                IVSelfie.setVisibility(View.GONE);
+                TVSelfie.setVisibility(View.VISIBLE);
+            }
             TVNamaAgen.setText(intentNama);
             TVNamaAgen.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -1789,73 +2182,64 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
             UrlAJB = intentImgAJB;
             UrlPetokD = intentImgPetokD;
 
-            if (intentImg1.equals("0")) {
-            } else {
+            if (!intentImg1.equals("0")) {
                 images.add(intentImg1);
             }
-            if (intentImg2.equals("0")) {
-            } else {
+            if (!intentImg2.equals("0")) {
                 images.add(intentImg2);
             }
-            if (intentImg3.equals("0")) {
-            } else {
+            if (!intentImg3.equals("0")) {
                 images.add(intentImg3);
             }
-            if (intentImg4.equals("0")) {
-            } else {
+            if (!intentImg4.equals("0")) {
                 images.add(intentImg4);
             }
-            if (intentImg5.equals("0")) {
-            } else {
+            if (!intentImg5.equals("0")) {
                 images.add(intentImg5);
             }
-            if (intentImg6.equals("0")) {
-            } else {
+            if (!intentImg6.equals("0")) {
                 images.add(intentImg6);
             }
-            if (intentImg7.equals("0")) {
-            } else {
+            if (!intentImg7.equals("0")) {
                 images.add(intentImg7);
             }
-            if (intentImg8.equals("0")) {
-            } else {
+            if (!intentImg8.equals("0")) {
                 images.add(intentImg8);
             }
-            if (intentImgSHM.equals("0")) {
-            } else {
+            if (!intentImgSHM.equals("0")) {
                 sertifpdf.add(intentImgSHM);
             }
-            if (intentImgHGB.equals("0")) {
-            } else {
+            if (!intentImgHGB.equals("0")) {
                 sertifpdf.add(intentImgHGB);
             }
-            if (intentImgHSHP.equals("0")) {
-            } else {
+            if (!intentImgHSHP.equals("0")) {
                 sertifpdf.add(intentImgHSHP);
             }
-            if (intentImgPPJB.equals("0")) {
-            } else {
+            if (!intentImgPPJB.equals("0")) {
                 sertifpdf.add(intentImgPPJB);
             }
-            if (intentImgStratatitle.equals("0")) {
-            } else {
+            if (!intentImgStratatitle.equals("0")) {
                 sertifpdf.add(intentImgStratatitle);
             }
-            if (intentImgAJB.equals("0")) {
-            } else {
+            if (!intentImgAJB.equals("0")) {
                 sertifpdf.add(intentImgAJB);
             }
-            if (intentImgPetokD.equals("0")) {
-            } else {
+            if (!intentImgPetokD.equals("0")) {
                 sertifpdf.add(intentImgPetokD);
             }
-            if (intentImgPjp.equals("0")) {
-            } else {
+            if (!intentImgPjp.equals("0")) {
                 pjpimage.add(intentImgPjp);
             }
-            if (intentImgPjp1.equals("0")) {
-            } else {
+            if (!intentImgPjp1.equals("0")) {
                 pjpimage.add(intentImgPjp1);
+            }
+
+            if (intentImg2.equals("0") && intentImg3.equals("0") && intentImg4.equals("0") && intentImg5.equals("0") && intentImg6.equals("0") && intentImg7.equals("0") && intentImg8.equals("0")) {
+                IVNextImg.setVisibility(View.GONE);
+                IVPrevImg.setVisibility(View.GONE);
+            } else {
+                IVNextImg.setVisibility(View.VISIBLE);
+                IVPrevImg.setVisibility(View.VISIBLE);
             }
 
             if (intentImgSHM.equals("0") && intentImgHGB.equals("0") && intentImgHSHP.equals("0") && intentImgPPJB.equals("0") && intentImgStratatitle.equals("0") && intentImgAJB.equals("0") && intentImgPetokD.equals("0")) {
@@ -1874,10 +2258,6 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
             viewPager.setPadding(0, 0, 0, 0);
             viewPager.setAdapter(adapter);
 
-            //sertifikatAdapter = new SertifikatAdapter(this, sertif);
-            //viewPagerSertifikat.setPadding(0, 0, 0, 0);
-            //viewPagerSertifikat.setAdapter(sertifikatAdapter);
-
             sertifikatPdfAdapter = new SertifikatPdfAdapter(this, sertifpdf);
             viewPagerSertifikat.setAdapter(sertifikatPdfAdapter);
 
@@ -1888,6 +2268,332 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
+        }
+    }
+    private void updatepoin() {
+        boolean isCBLokasiChecked = CBLokasi.isChecked();
+        boolean isCBSelfieChecked = CBSelfie.isChecked();
+
+        if (isCBLokasiChecked && isCBSelfieChecked) {
+            if (StrIntentIdAgenCo.equals("0")){
+                int UpdatePoin = Poin * 2;
+                TVPoin.setText(String.valueOf(UpdatePoin));
+            } else if (StrIntentIdAgenCo.equals(StrIntentIdAgen)) {
+                int UpdatePoin = Poin * 2;
+                TVPoin.setText(String.valueOf(UpdatePoin));
+            } else {
+                int UpdatePoin = Poin / 2;
+                TVPoin.setText(String.valueOf(UpdatePoin));
+            }
+        } else {
+            TVPoin.setText(String.valueOf(FinalPoin));
+        }
+    }
+    private void updatepoin1() {
+        boolean isCBLokasiChecked = CBLokasi.isChecked();
+        boolean isCBSelfieChecked = CBSelfie.isChecked();
+
+        if (isCBLokasiChecked && isCBSelfieChecked) {
+            if (StrIntentIdAgenCo.equals("0")){
+                int UpdatePoin = ( Poin * 2 ) + 20;
+                TVPoin.setText(String.valueOf(UpdatePoin));
+            } else if (StrIntentIdAgenCo.equals(StrIntentIdAgen)) {
+                int UpdatePoin = ( Poin * 2 ) + 20;
+                TVPoin.setText(String.valueOf(UpdatePoin));
+            } else {
+                int UpdatePoin = (( Poin * 2 ) + 20) / 2;
+                TVPoin.setText(String.valueOf(UpdatePoin));
+            }
+        } else {
+            TVPoin.setText(String.valueOf(FinalPoin));
+        }
+    }
+    private void updatepoin2() {
+        boolean isCBLokasiChecked = CBLokasi.isChecked();
+        boolean isCBSelfieChecked = CBSelfie.isChecked();
+
+        if (isCBLokasiChecked && isCBSelfieChecked) {
+            if (StrIntentIdAgenCo.equals("0")){
+                int UpdatePoin = ( Poin * 2 ) + 20;
+                TVPoin.setText(String.valueOf(UpdatePoin));
+            } else if (StrIntentIdAgenCo.equals(StrIntentIdAgen)) {
+                int UpdatePoin = ( Poin * 2 ) + 20;
+                TVPoin.setText(String.valueOf(UpdatePoin));
+            } else {
+                int UpdatePoin = (( Poin * 2 ) + 20) / 2;
+                TVPoin.setText(String.valueOf(UpdatePoin));
+            }
+        } else {
+            TVPoin.setText(String.valueOf(FinalPoin));
+        }
+    }
+    private void updatepoin3() {
+        boolean isCBLokasiChecked = CBLokasi.isChecked();
+        boolean isCBSelfieChecked = CBSelfie.isChecked();
+
+        if (isCBLokasiChecked && isCBSelfieChecked) {
+            if (StrIntentIdAgenCo.equals("0")){
+                int UpdatePoin = ( Poin * 2 ) + 10;
+                TVPoin.setText(String.valueOf(UpdatePoin));
+            } else if (StrIntentIdAgenCo.equals(StrIntentIdAgen)) {
+                int UpdatePoin = ( Poin * 2 ) + 10;
+                TVPoin.setText(String.valueOf(UpdatePoin));
+            } else {
+                int UpdatePoin = (( Poin * 2 ) + 10) / 2;
+                TVPoin.setText(String.valueOf(UpdatePoin));
+            }
+        } else {
+            TVPoin.setText(String.valueOf(FinalPoin));
+        }
+    }
+    private void updatepoin4() {
+        boolean isCBLokasiChecked = CBLokasi.isChecked();
+        boolean isCBSelfieChecked = CBSelfie.isChecked();
+
+        if (isCBLokasiChecked && isCBSelfieChecked) {
+            if (StrIntentIdAgenCo.equals("0")){
+                int UpdatePoin = ( Poin * 2 ) + 20;
+                TVPoin.setText(String.valueOf(UpdatePoin));
+            } else if (StrIntentIdAgenCo.equals(StrIntentIdAgen)) {
+                int UpdatePoin = ( Poin * 2 ) + 20;
+                TVPoin.setText(String.valueOf(UpdatePoin));
+            } else {
+                int UpdatePoin = (( Poin * 2 ) + 20) / 2;
+                TVPoin.setText(String.valueOf(UpdatePoin));
+            }
+        } else {
+            TVPoin.setText(String.valueOf(FinalPoin));
+        }
+    }
+    private void updatepoin5() {
+        boolean isCBLokasiChecked = CBLokasi.isChecked();
+        boolean isCBSelfieChecked = CBSelfie.isChecked();
+
+        if (isCBLokasiChecked && isCBSelfieChecked) {
+            if (StrIntentIdAgenCo.equals("0")){
+                int UpdatePoin = ( Poin * 2 ) + 10;
+                TVPoin.setText(String.valueOf(UpdatePoin));
+            } else if (StrIntentIdAgenCo.equals(StrIntentIdAgen)) {
+                int UpdatePoin = ( Poin * 2 ) + 10;
+                TVPoin.setText(String.valueOf(UpdatePoin));
+            } else {
+                int UpdatePoin = (( Poin * 2 ) + 10) / 2;
+                TVPoin.setText(String.valueOf(UpdatePoin));
+            }
+
+        } else {
+            TVPoin.setText(String.valueOf(FinalPoin));
+        }
+    }
+    private void updatepoin6() {
+        boolean isCBLokasiChecked = CBLokasi.isChecked();
+        boolean isCBSelfieChecked = CBSelfie.isChecked();
+
+        if (isCBLokasiChecked && isCBSelfieChecked) {
+            if (StrIntentIdAgenCo.equals("0")){
+                int UpdatePoin = ( Poin * 2 ) + 10;
+                TVPoin.setText(String.valueOf(UpdatePoin));
+            } else if (StrIntentIdAgenCo.equals(StrIntentIdAgen)) {
+                int UpdatePoin = ( Poin * 2 ) + 10;
+                TVPoin.setText(String.valueOf(UpdatePoin));
+            } else {
+                int UpdatePoin = (( Poin * 2 ) + 10) / 2;
+                TVPoin.setText(String.valueOf(UpdatePoin));
+            }
+        } else {
+            TVPoin.setText(String.valueOf(FinalPoin));
+        }
+    }
+    private void updatepoint1() {
+        boolean isCBLokasiChecked = CBLokasi.isChecked();
+        boolean isCBSelfieChecked = CBSelfie.isChecked();
+        boolean isCBMarketableChecked = CBMarketable.isChecked();
+        boolean isCBHargaChecked = CBHarga.isChecked();
+
+        if (isCBLokasiChecked && isCBSelfieChecked && isCBMarketableChecked && isCBHargaChecked) {
+            if (StrIntentIdAgenCo.equals("0")){
+                int UpdatePoin = ( Poin * 2 ) + 20;
+                TVPoin.setText(String.valueOf(UpdatePoin));
+            } else if (StrIntentIdAgenCo.equals(StrIntentIdAgen)) {
+                int UpdatePoin = ( Poin * 2 ) + 20;
+                TVPoin.setText(String.valueOf(UpdatePoin));
+            } else {
+                int UpdatePoin = (( Poin * 2 ) + 20) / 2;
+                TVPoin.setText(String.valueOf(UpdatePoin));
+            }
+        } else if (isCBLokasiChecked && isCBSelfieChecked) {
+            if (StrIntentIdAgenCo.equals("0")){
+                int UpdatePoin = Poin * 2 ;
+                TVPoin.setText(String.valueOf(UpdatePoin));
+            } else if (StrIntentIdAgenCo.equals(StrIntentIdAgen)) {
+                int UpdatePoin = Poin * 2 ;
+                TVPoin.setText(String.valueOf(UpdatePoin));
+            } else {
+                int UpdatePoin = (Poin * 2) / 2;
+                TVPoin.setText(String.valueOf(UpdatePoin));
+            }
+        } else {
+            TVPoin.setText(String.valueOf(FinalPoin));
+        }
+    }
+    private void updatepoint2() {
+        boolean isCBLokasiChecked = CBLokasi.isChecked();
+        boolean isCBSelfieChecked = CBSelfie.isChecked();
+        boolean isCBMarketableChecked = CBMarketable.isChecked();
+        boolean isCBHargaChecked = CBHarga.isChecked();
+
+        if (isCBLokasiChecked && isCBSelfieChecked && isCBMarketableChecked && isCBHargaChecked) {
+            if (StrIntentIdAgenCo.equals("0")){
+                int UpdatePoin = ( Poin * 2 ) + 20;
+                TVPoin.setText(String.valueOf(UpdatePoin));
+            } else if (StrIntentIdAgenCo.equals(StrIntentIdAgen)) {
+                int UpdatePoin = ( Poin * 2 ) + 20;
+                TVPoin.setText(String.valueOf(UpdatePoin));
+            } else {
+                int UpdatePoin = (( Poin * 2 ) + 20) / 2;
+                TVPoin.setText(String.valueOf(UpdatePoin));
+            }
+        } else if (isCBLokasiChecked && isCBSelfieChecked) {
+            if (StrIntentIdAgenCo.equals("0")){
+                int UpdatePoin = Poin * 2 ;
+                TVPoin.setText(String.valueOf(UpdatePoin));
+            } else if (StrIntentIdAgenCo.equals(StrIntentIdAgen)) {
+                int UpdatePoin = Poin * 2 ;
+                TVPoin.setText(String.valueOf(UpdatePoin));
+            } else {
+                int UpdatePoin = (Poin * 2) / 2 ;
+                TVPoin.setText(String.valueOf(UpdatePoin));
+            }
+        } else {
+            TVPoin.setText(String.valueOf(FinalPoin));
+        }
+    }
+    private void updatepoint3() {
+        boolean isCBLokasiChecked = CBLokasi.isChecked();
+        boolean isCBSelfieChecked = CBSelfie.isChecked();
+        boolean isCBMarketableChecked = CBMarketable.isChecked();
+        boolean isCBHargaChecked = CBHarga.isChecked();
+
+        if (isCBLokasiChecked && isCBSelfieChecked && isCBMarketableChecked && isCBHargaChecked) {
+            if (StrIntentIdAgenCo.equals("0")){
+                int UpdatePoin = ( Poin * 2 ) + 10;
+                TVPoin.setText(String.valueOf(UpdatePoin));
+            } else if (StrIntentIdAgenCo.equals(StrIntentIdAgen)) {
+                int UpdatePoin = ( Poin * 2 ) + 10;
+                TVPoin.setText(String.valueOf(UpdatePoin));
+            } else {
+                int UpdatePoin = (( Poin * 2 ) + 10) / 2;
+                TVPoin.setText(String.valueOf(UpdatePoin));
+            }
+        } else if (isCBLokasiChecked && isCBSelfieChecked) {
+            if (StrIntentIdAgenCo.equals("0")){
+                int UpdatePoin = Poin * 2 ;
+                TVPoin.setText(String.valueOf(UpdatePoin));
+            } else if (StrIntentIdAgenCo.equals(StrIntentIdAgen)) {
+                int UpdatePoin = Poin * 2 ;
+                TVPoin.setText(String.valueOf(UpdatePoin));
+            } else {
+                int UpdatePoin = (Poin * 2) / 2 ;
+                TVPoin.setText(String.valueOf(UpdatePoin));
+            }
+        } else {
+            TVPoin.setText(String.valueOf(FinalPoin));
+        }
+    }
+    private void updatepoint4() {
+        boolean isCBLokasiChecked = CBLokasi.isChecked();
+        boolean isCBSelfieChecked = CBSelfie.isChecked();
+        boolean isCBMarketableChecked = CBMarketable.isChecked();
+        boolean isCBHargaChecked = CBHarga.isChecked();
+
+        if (isCBLokasiChecked && isCBSelfieChecked && isCBMarketableChecked && isCBHargaChecked) {
+            if (StrIntentIdAgenCo.equals("0")){
+                int UpdatePoin = ( Poin * 2 ) + 20;
+                TVPoin.setText(String.valueOf(UpdatePoin));
+            } else if (StrIntentIdAgenCo.equals(StrIntentIdAgen)) {
+                int UpdatePoin = ( Poin * 2 ) + 20;
+                TVPoin.setText(String.valueOf(UpdatePoin));
+            } else {
+                int UpdatePoin = (( Poin * 2 ) + 20) / 2;
+                TVPoin.setText(String.valueOf(UpdatePoin));
+            }
+        } else if (isCBLokasiChecked && isCBSelfieChecked) {
+            if (StrIntentIdAgenCo.equals("0")){
+                int UpdatePoin = Poin * 2 ;
+                TVPoin.setText(String.valueOf(UpdatePoin));
+            } else if (StrIntentIdAgenCo.equals(StrIntentIdAgen)) {
+                int UpdatePoin = Poin * 2 ;
+                TVPoin.setText(String.valueOf(UpdatePoin));
+            } else {
+                int UpdatePoin = (Poin * 2) / 2 ;
+                TVPoin.setText(String.valueOf(UpdatePoin));
+            }
+        } else {
+            TVPoin.setText(String.valueOf(FinalPoin));
+        }
+    }
+    private void updatepoint5() {
+        boolean isCBLokasiChecked = CBLokasi.isChecked();
+        boolean isCBSelfieChecked = CBSelfie.isChecked();
+        boolean isCBMarketableChecked = CBMarketable.isChecked();
+        boolean isCBHargaChecked = CBHarga.isChecked();
+
+        if (isCBLokasiChecked && isCBSelfieChecked && isCBMarketableChecked && isCBHargaChecked) {
+            if (StrIntentIdAgenCo.equals("0")){
+                int UpdatePoin = ( Poin * 2 ) + 10;
+                TVPoin.setText(String.valueOf(UpdatePoin));
+            } else if (StrIntentIdAgenCo.equals(StrIntentIdAgen)) {
+                int UpdatePoin = ( Poin * 2 ) + 10;
+                TVPoin.setText(String.valueOf(UpdatePoin));
+            } else {
+                int UpdatePoin = (( Poin * 2 ) + 10) / 2;
+                TVPoin.setText(String.valueOf(UpdatePoin));
+            }
+        } else if (isCBLokasiChecked && isCBSelfieChecked) {
+            if (StrIntentIdAgenCo.equals("0")){
+                int UpdatePoin = Poin * 2 ;
+                TVPoin.setText(String.valueOf(UpdatePoin));
+            } else if (StrIntentIdAgenCo.equals(StrIntentIdAgen)) {
+                int UpdatePoin = Poin * 2 ;
+                TVPoin.setText(String.valueOf(UpdatePoin));
+            } else {
+                int UpdatePoin = (Poin * 2) / 2 ;
+                TVPoin.setText(String.valueOf(UpdatePoin));
+            }
+        } else {
+            TVPoin.setText(String.valueOf(FinalPoin));
+        }
+    }
+    private void updatepoint6() {
+        boolean isCBLokasiChecked = CBLokasi.isChecked();
+        boolean isCBSelfieChecked = CBSelfie.isChecked();
+        boolean isCBMarketableChecked = CBMarketable.isChecked();
+        boolean isCBHargaChecked = CBHarga.isChecked();
+
+        if (isCBLokasiChecked && isCBSelfieChecked && isCBMarketableChecked && isCBHargaChecked) {
+            if (StrIntentIdAgenCo.equals("0")){
+                int UpdatePoin = ( Poin * 2 ) + 10;
+                TVPoin.setText(String.valueOf(UpdatePoin));
+            } else if (StrIntentIdAgenCo.equals(StrIntentIdAgen)) {
+                int UpdatePoin = ( Poin * 2 ) + 10;
+                TVPoin.setText(String.valueOf(UpdatePoin));
+            } else {
+                int UpdatePoin = (( Poin * 2 ) + 10) / 2;
+                TVPoin.setText(String.valueOf(UpdatePoin));
+            }
+        } else if (isCBLokasiChecked && isCBSelfieChecked) {
+            if (StrIntentIdAgenCo.equals("0")){
+                int UpdatePoin = Poin * 2 ;
+                TVPoin.setText(String.valueOf(UpdatePoin));
+            } else if (StrIntentIdAgenCo.equals(StrIntentIdAgen)) {
+                int UpdatePoin = Poin * 2 ;
+                TVPoin.setText(String.valueOf(UpdatePoin));
+            } else {
+                int UpdatePoin = (Poin * 2) / 2 ;
+                TVPoin.setText(String.valueOf(UpdatePoin));
+            }
+        } else {
+            TVPoin.setText(String.valueOf(FinalPoin));
         }
     }
     @Override
@@ -1902,6 +2608,40 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
     }
     private void showToast(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    }
+    private void ShowRejected() {
+        AlertDialog.Builder customBuilder = new AlertDialog.Builder(this, R.style.CustomAlertDialogStyle);
+        customBuilder.setTitle("Keterangan Reject");
+
+        LinearLayout containerLayout = new LinearLayout(this);
+        containerLayout.setOrientation(LinearLayout.VERTICAL);
+        containerLayout.setPadding(30, 20, 30, 0);
+
+        final EditText customKetInput = new EditText(this);
+
+        customKetInput.setPadding(15,15,15,15);
+        customKetInput.setTextColor(getResources().getColor(android.R.color.black));
+        customKetInput.setHint("Masukkan Keterangan");
+        customKetInput.setHintTextColor(getResources().getColor(android.R.color.black));
+        customKetInput.setBackgroundResource(R.drawable.backgroundbox);
+
+        containerLayout.addView(customKetInput);
+
+        customBuilder.setView(containerLayout);
+
+        customBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                String customBankName = customKetInput.getText().toString();
+                StringKeteranganReject = customBankName;
+                reject();
+            }
+        });
+
+        customBuilder.setNegativeButton("Batal", null);
+
+        AlertDialog customDialog = customBuilder.create();
+        customDialog.show();
     }
     private void LoadCo() {
         RequestQueue queue = Volley.newRequestQueue(this);
@@ -2238,6 +2978,8 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
 
         final String StringMarketable = CBMarketable.isChecked()?"1":"0";
         final String StringHarga = CBHarga.isChecked()?"1":"0";
+        final String StringSelfie = CBSelfie.isChecked()?"1":"0";
+        final String StringLokasi = CBLokasi.isChecked()?"1":"0";
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, ServerApi.URL_APPROVE_MANAGER, new Response.Listener<String>() {
             @Override
@@ -2333,6 +3075,215 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                 map.put("IdPraListing", idpralisting);
                 map.put("Marketable", StringMarketable);
                 map.put("StatusHarga", StringHarga);
+                return map;
+            }
+        };
+
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(stringRequest);
+    }
+    private void ajukanulang() {
+        pDialog.setMessage("Sedang Diproses...");
+        pDialog.setCancelable(false);
+        pDialog.show();
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, ServerApi.URL_AJUKAN_ULANG, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                pDialog.cancel();
+                Dialog customDialog = new Dialog(DetailListingActivity.this);
+                customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                customDialog.setContentView(R.layout.custom_dialog_sukses);
+
+                if (customDialog.getWindow() != null) {
+                    customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                }
+
+                TextView dialogTitle = customDialog.findViewById(R.id.dialog_title);
+                Button ok = customDialog.findViewById(R.id.btnya);
+                Button cobalagi = customDialog.findViewById(R.id.btntidak);
+                ImageView gifimage = customDialog.findViewById(R.id.ivdialog);
+
+                dialogTitle.setText("Listing di Ajukan Ulang");
+                cobalagi.setVisibility(View.GONE);
+
+                ok.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
+                        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, ServerApi.URL_GET_DEVICE, null, new Response.Listener<JSONArray>() {
+                            @Override
+                            public void onResponse(JSONArray response) {
+                                try {
+                                    ArrayList<String> tokens = new ArrayList<>();
+                                    for (int i = 0; i < response.length(); i++) {
+                                        JSONObject tokenObject = response.getJSONObject(i);
+                                        String token = tokenObject.getString("Token");
+                                        tokens.add(token);
+                                    }
+                                    new SendMessageTaskAjukanUlang().execute(tokens.toArray(new String[0]));
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }, new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                // Tangani kesalahan jika terjadi
+                            }
+                        });
+                        requestQueue.add(jsonArrayRequest);
+                        customDialog.dismiss();
+                        finish();
+                    }
+                });
+
+                Glide.with(DetailListingActivity.this)
+                        .load(R.mipmap.ic_yes) // You can also use a local resource like R.drawable.your_gif_resource
+                        .transition(DrawableTransitionOptions.withCrossFade())
+                        .into(gifimage);
+
+                customDialog.show();
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                pDialog.cancel();
+                Dialog customDialog = new Dialog(DetailListingActivity.this);
+                customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                customDialog.setContentView(R.layout.custom_dialog_sukses);
+
+                if (customDialog.getWindow() != null) {
+                    customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                }
+
+                TextView dialogTitle = customDialog.findViewById(R.id.dialog_title);
+                Button ok = customDialog.findViewById(R.id.btnya);
+                Button cobalagi = customDialog.findViewById(R.id.btntidak);
+                ImageView gifimage = customDialog.findViewById(R.id.ivdialog);
+
+                dialogTitle.setText("Gagal Ajukan Ulang Listing");
+                ok.setVisibility(View.GONE);
+
+                Glide.with(DetailListingActivity.this)
+                        .load(R.mipmap.ic_no)
+                        .transition(DrawableTransitionOptions.withCrossFade())
+                        .into(gifimage);
+
+                customDialog.show();
+            }
+        }) {
+            @Nullable
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> map = new HashMap<>();
+                System.out.println(map);
+                map.put("IdPraListing", idpralisting);
+                return map;
+            }
+        };
+
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(stringRequest);
+    }
+    private void reject() {
+        pDialog.setMessage("Sedang Diproses...");
+        pDialog.setCancelable(false);
+        pDialog.show();
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, ServerApi.URL_REJECTED, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                pDialog.cancel();
+                Dialog customDialog = new Dialog(DetailListingActivity.this);
+                customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                customDialog.setContentView(R.layout.custom_dialog_sukses);
+
+                if (customDialog.getWindow() != null) {
+                    customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                }
+
+                TextView dialogTitle = customDialog.findViewById(R.id.dialog_title);
+                Button ok = customDialog.findViewById(R.id.btnya);
+                Button cobalagi = customDialog.findViewById(R.id.btntidak);
+                ImageView gifimage = customDialog.findViewById(R.id.ivdialog);
+
+                dialogTitle.setText("Listing Rejected");
+                cobalagi.setVisibility(View.GONE);
+
+                ok.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
+                        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, ServerApi.URL_GET_DEVICE_AGEN+idagen, null, new Response.Listener<JSONArray>() {
+                            @Override
+                            public void onResponse(JSONArray response) {
+                                try {
+                                    ArrayList<String> tokens = new ArrayList<>();
+                                    for (int i = 0; i < response.length(); i++) {
+                                        JSONObject tokenObject = response.getJSONObject(i);
+                                        String token = tokenObject.getString("Token");
+                                        tokens.add(token);
+                                    }
+                                    new SendMessageTaskReject().execute(tokens.toArray(new String[0]));
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }, new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                // Tangani kesalahan jika terjadi
+                            }
+                        });
+                        requestQueue.add(jsonArrayRequest);
+                        customDialog.dismiss();
+                        finish();
+                    }
+                });
+
+                Glide.with(DetailListingActivity.this)
+                        .load(R.mipmap.ic_yes) // You can also use a local resource like R.drawable.your_gif_resource
+                        .transition(DrawableTransitionOptions.withCrossFade())
+                        .into(gifimage);
+
+                customDialog.show();
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                pDialog.cancel();
+                Dialog customDialog = new Dialog(DetailListingActivity.this);
+                customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                customDialog.setContentView(R.layout.custom_dialog_sukses);
+
+                if (customDialog.getWindow() != null) {
+                    customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                }
+
+                TextView dialogTitle = customDialog.findViewById(R.id.dialog_title);
+                Button ok = customDialog.findViewById(R.id.btnya);
+                Button cobalagi = customDialog.findViewById(R.id.btntidak);
+                ImageView gifimage = customDialog.findViewById(R.id.ivdialog);
+
+                dialogTitle.setText("Gagal Reject Listing");
+                ok.setVisibility(View.GONE);
+
+                Glide.with(DetailListingActivity.this)
+                        .load(R.mipmap.ic_no)
+                        .transition(DrawableTransitionOptions.withCrossFade())
+                        .into(gifimage);
+
+                customDialog.show();
+            }
+        }) {
+            @Nullable
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> map = new HashMap<>();
+                System.out.println(map);
+                map.put("IdPraListing", idpralisting);
+                map.put("Keterangan", StringKeteranganReject);
                 return map;
             }
         };
@@ -2553,6 +3504,46 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
     private void sendNotificationToToken(String token, String notificationType) {
         String title = "Admin Goo Proper";
         String message = "Listing Anda Sudah di Approve";
+        String response = SendMessageToFCM.sendMessage(token, title, message, notificationType);
+    }
+    private class SendMessageTaskReject extends AsyncTask<String, Void, String> {
+        @Override
+        protected String doInBackground(String... params) {
+            for (String token : params) {
+                sendNotificationToToken(token, "rejected");
+            }
+            return null;
+        }
+        @Override
+        protected void onPostExecute(String response) {
+            if (response != null) {
+                Toast.makeText(getApplicationContext(), response, Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+    private void sendNotificationToTokenReject(String token, String notificationType) {
+        String title = "Admin Goo Proper";
+        String message = "Listing Anda Ditolak";
+        String response = SendMessageToFCM.sendMessage(token, title, message, notificationType);
+    }
+    private class SendMessageTaskAjukanUlang extends AsyncTask<String, Void, String> {
+        @Override
+        protected String doInBackground(String... params) {
+            for (String token : params) {
+                sendNotificationToToken(token, "pralisting");
+            }
+            return null;
+        }
+        @Override
+        protected void onPostExecute(String response) {
+            if (response != null) {
+                Toast.makeText(getApplicationContext(), response, Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+    private void sendNotificationToTokenAjukanUlang(String token, String notificationType) {
+        String title = Preferences.getKeyNama(this);
+        String message = "Pengajuan Ulang Listing";
         String response = SendMessageToFCM.sendMessage(token, title, message, notificationType);
     }
 }

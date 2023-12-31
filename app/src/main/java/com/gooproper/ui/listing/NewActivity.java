@@ -39,6 +39,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class NewActivity extends AppCompatActivity {
 
@@ -49,7 +50,6 @@ public class NewActivity extends AppCompatActivity {
     ListingAdapter adapter;
     List<ListingModel> list;
     private AlertDialog alertDialog;
-    //private SearchView searchView;
     private EditText searchView;
     private boolean applyFilters = false;
 
@@ -58,11 +58,15 @@ public class NewActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new);
 
+        PDNew = new ProgressDialog(NewActivity.this);
+
         IVSortAsc = findViewById(R.id.sortAscendingBtn);
         IVSortDesc = findViewById(R.id.sortDescendingBtn);
         IVFilter = findViewById(R.id.filterBtn);
-        searchView  = findViewById(R.id.etsearchView);
-        //searchView.clearFocus();
+        searchView = findViewById(R.id.etsearchView);
+        srnew = findViewById(R.id.SRNew);
+        rvgrid = findViewById(R.id.RVListingGridNew);
+
         searchView.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -80,19 +84,6 @@ public class NewActivity extends AppCompatActivity {
 
             }
         });
-        /*searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                filterList(newText);
-                return true;
-            }
-        });*/
-
         IVSortAsc.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -101,7 +92,6 @@ public class NewActivity extends AppCompatActivity {
                 IVSortAsc.setVisibility(View.GONE);
             }
         });
-
         IVSortDesc.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -111,19 +101,6 @@ public class NewActivity extends AppCompatActivity {
             }
         });
         IVFilter.setOnClickListener(view -> showFilterDialog());
-
-        PDNew = new ProgressDialog(NewActivity.this);
-        srnew = findViewById(R.id.SRNew);
-        rvgrid = findViewById(R.id.RVListingGridNew);
-
-        list = new ArrayList<>();
-
-        rvgrid.setLayoutManager(new LinearLayoutManager(NewActivity.this, LinearLayoutManager.VERTICAL, false));
-        adapter = new ListingAdapter(this,list);
-        rvgrid.setAdapter(adapter);
-
-        LoadListing(true);
-
         srnew.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -131,10 +108,19 @@ public class NewActivity extends AppCompatActivity {
             }
         });
 
+        LoadListing(true);
+
+        list = new ArrayList<>();
+
+        rvgrid.setLayoutManager(new LinearLayoutManager(NewActivity.this, LinearLayoutManager.VERTICAL, false));
+        adapter = new ListingAdapter(this, list);
+        rvgrid.setAdapter(adapter);
+
         if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
         }
     }
+
     private void filterList(String text) {
         List<ListingModel> filteredList = new ArrayList<>();
         for (ListingModel item : list) {
@@ -149,34 +135,100 @@ public class NewActivity extends AppCompatActivity {
         }
         adapter.setFilteredlist(filteredList);
     }
-    public void showFilterDialog () {
+
+    public void showFilterDialog() {
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
         LayoutInflater inflater = getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.filter, null);
         dialogBuilder.setView(dialogView);
 
-        EditText editTextMinPrice               = dialogView.findViewById(R.id.editTextMinPrice);
-        EditText editTextMaxPrice               = dialogView.findViewById(R.id.editTextMaxPrice);
-        EditText bedSearchEditText              = dialogView.findViewById(R.id.BedSearch);
-        EditText bathSearchEditText             = dialogView.findViewById(R.id.BathSearch);
-        EditText landWideSearchEditText         = dialogView.findViewById(R.id.LandWideSearch);
-        EditText buildingWideSearchEditText     = dialogView.findViewById(R.id.BuildingWideSearch);
-        EditText garageSearchEditText           = dialogView.findViewById(R.id.garageSearch);
-        EditText carpotSearchEditText           = dialogView.findViewById(R.id.carpotSearch);
-        EditText levelSearchEditText            = dialogView.findViewById(R.id.levelSearch);
-        EditText textViewPropertyTypeText       = dialogView.findViewById(R.id.textViewPropertyType);
-        EditText textViewSpec                   = dialogView.findViewById(R.id.textViewSpec);
+        EditText editTextMinPrice = dialogView.findViewById(R.id.editTextMinPrice);
+        EditText editTextMaxPrice = dialogView.findViewById(R.id.editTextMaxPrice);
+        EditText bedSearchEditText = dialogView.findViewById(R.id.BedSearch);
+        EditText bathSearchEditText = dialogView.findViewById(R.id.BathSearch);
+        EditText landWideSearchEditText = dialogView.findViewById(R.id.LandWideSearch);
+        EditText buildingWideSearchEditText = dialogView.findViewById(R.id.BuildingWideSearch);
+        EditText garageSearchEditText = dialogView.findViewById(R.id.garageSearch);
+        EditText carpotSearchEditText = dialogView.findViewById(R.id.carpotSearch);
+        EditText levelSearchEditText = dialogView.findViewById(R.id.levelSearch);
+        EditText textViewPropertyTypeText = dialogView.findViewById(R.id.textViewPropertyType);
+        EditText textViewSpec = dialogView.findViewById(R.id.textViewSpec);
 
         RadioGroup kondisiRadioGroup = dialogView.findViewById(R.id.kondisi);
         int selectedRadioButtonId = kondisiRadioGroup.getCheckedRadioButtonId();
 
-        String selectedKondisi = ""; // Initialize the selected kondisi
+        String selectedKondisi = "";
 
         if (selectedRadioButtonId == R.id.jual) {
             selectedKondisi = "Jual";
         } else if (selectedRadioButtonId == R.id.sewa) {
             selectedKondisi = "Sewa";
+        } else if (selectedRadioButtonId == R.id.jualsewa) {
+            selectedKondisi = "Jual/Sewa";
         }
+
+        editTextMinPrice.addTextChangedListener(new TextWatcher() {
+            private String current = "";
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (!s.toString().equals(current)) {
+                    editTextMinPrice.removeTextChangedListener(this);
+
+                    String cleanString = s.toString().replaceAll("[Rp,.\\s]", "");
+                    if (!cleanString.isEmpty()) {
+                        double parsed = Double.parseDouble(cleanString);
+                        String formatted = String.format(Locale.US, "%,.0f", parsed);
+                        current = formatted;
+                        editTextMinPrice.setText(formatted);
+                        editTextMinPrice.setSelection(formatted.length());
+                    } else {
+                        editTextMinPrice.setText("");
+                    }
+
+                    editTextMinPrice.addTextChangedListener(this);
+                }
+            }
+        });
+        editTextMaxPrice.addTextChangedListener(new TextWatcher() {
+            private String current = "";
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (!s.toString().equals(current)) {
+                    editTextMaxPrice.removeTextChangedListener(this);
+
+                    String cleanString = s.toString().replaceAll("[Rp,.\\s]", "");
+                    if (!cleanString.isEmpty()) {
+                        double parsed = Double.parseDouble(cleanString);
+                        String formatted = String.format(Locale.US, "%,.0f", parsed);
+                        current = formatted;
+                        editTextMaxPrice.setText(formatted);
+                        editTextMaxPrice.setSelection(formatted.length());
+                    } else {
+                        editTextMaxPrice.setText("");
+                    }
+
+                    editTextMaxPrice.addTextChangedListener(this);
+                }
+            }
+        });
 
         textViewSpec.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -197,17 +249,17 @@ public class NewActivity extends AppCompatActivity {
         btnApply.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String minPriceStr              = editTextMinPrice.getText().toString();
-                String maxPriceStr              = editTextMaxPrice.getText().toString();
-                String bedSearchStr             = bedSearchEditText.getText().toString();
-                String bathSearchStr            = bathSearchEditText.getText().toString();
-                String landWideSearchStr        = landWideSearchEditText.getText().toString();
-                String buildingWideSearchStr    = buildingWideSearchEditText.getText().toString();
-                String garageSearchStr          = garageSearchEditText.getText().toString();
-                String carpotSearchStr          = carpotSearchEditText.getText().toString();
-                String levelSearchStr           = levelSearchEditText.getText().toString();
-                String specStr                  = textViewSpec.getText().toString();
-                String typeStr                  = textViewPropertyTypeText.getText().toString();
+                String minPriceStr = editTextMinPrice.getText().toString();
+                String maxPriceStr = editTextMaxPrice.getText().toString();
+                String bedSearchStr = bedSearchEditText.getText().toString();
+                String bathSearchStr = bathSearchEditText.getText().toString();
+                String landWideSearchStr = landWideSearchEditText.getText().toString();
+                String buildingWideSearchStr = buildingWideSearchEditText.getText().toString();
+                String garageSearchStr = garageSearchEditText.getText().toString();
+                String carpotSearchStr = carpotSearchEditText.getText().toString();
+                String levelSearchStr = levelSearchEditText.getText().toString();
+                String specStr = textViewSpec.getText().toString();
+                String typeStr = textViewPropertyTypeText.getText().toString();
 
                 RadioGroup kondisiRadioGroup = alertDialog.findViewById(R.id.kondisi);
                 int selectedRadioButtonId = kondisiRadioGroup.getCheckedRadioButtonId();
@@ -218,16 +270,20 @@ public class NewActivity extends AppCompatActivity {
                     selectedKondisi = "Jual";
                 } else if (selectedRadioButtonId == R.id.sewa) {
                     selectedKondisi = "Sewa";
+                } else if (selectedRadioButtonId == R.id.jualsewa) {
+                    selectedKondisi = "Jual/Sewa";
                 }
 
                 long minPrice = 0;
                 if (!minPriceStr.isEmpty()) {
-                    minPrice = Long.parseLong(minPriceStr.replace(".", "").trim());
+                    String cleanString = minPriceStr.toString().replaceAll("[Rp,.\\s]", "");
+                    minPrice = Long.parseLong(cleanString);
                 }
 
                 long maxPrice = 0;
                 if (!maxPriceStr.isEmpty()) {
-                    maxPrice = Long.parseLong(maxPriceStr.replace(".", "").trim());
+                    String cleanString = maxPriceStr.toString().replaceAll("[Rp,.\\s]", "");
+                    maxPrice = Long.parseLong(cleanString);
                 }
 
                 String bedSearch = String.valueOf(0);
@@ -251,27 +307,27 @@ public class NewActivity extends AppCompatActivity {
                 }
 
                 String garageSearch = String.valueOf(0);
-                if (!garageSearchStr.isEmpty()){
+                if (!garageSearchStr.isEmpty()) {
                     garageSearch = garageSearchStr;
                 }
 
                 String carpotSearch = String.valueOf(0);
-                if (!carpotSearchStr.isEmpty()){
+                if (!carpotSearchStr.isEmpty()) {
                     carpotSearch = carpotSearchStr;
                 }
 
                 String levelSearch = String.valueOf(0);
-                if (!levelSearchStr.isEmpty()){
+                if (!levelSearchStr.isEmpty()) {
                     levelSearch = levelSearchStr;
                 }
 
                 String viewSpec = String.valueOf(0);
-                if (!specStr.isEmpty()){
+                if (!specStr.isEmpty()) {
                     viewSpec = specStr;
                 }
 
                 String viewType = String.valueOf(0);
-                if (!typeStr.isEmpty()){
+                if (!typeStr.isEmpty()) {
                     viewType = typeStr;
                 }
 
@@ -279,18 +335,19 @@ public class NewActivity extends AppCompatActivity {
                     if (minPrice <= maxPrice) {
                         applyCustomFilter(v, minPrice, maxPrice, true, bedSearchStr, bathSearchStr, landWideSearchStr, buildingWideSearchStr, garageSearchStr, carpotSearchStr, levelSearchStr, specStr, typeStr, selectedKondisi);
                     } else {
-                        // Handle invalid input, show a message or toast if needed
-                        Toast.makeText(NewActivity.this, "Invalid price range", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(NewActivity.this, "Batas Harga Salah", Toast.LENGTH_SHORT).show();
                     }
                 } else if (!minPriceStr.isEmpty()) {
                     applyCustomFilter(v, minPrice, maxPrice, true, bedSearchStr, bathSearchStr, landWideSearchStr, buildingWideSearchStr, garageSearchStr, carpotSearchStr, levelSearchStr, specStr, typeStr, selectedKondisi);
                 } else if (!maxPriceStr.isEmpty()) {
                     applyCustomFilter(v, minPrice, maxPrice, true, bedSearchStr, bathSearchStr, landWideSearchStr, buildingWideSearchStr, garageSearchStr, carpotSearchStr, levelSearchStr, specStr, typeStr, selectedKondisi);
+                } else if (!selectedKondisi.isEmpty() || !selectedKondisi.equals("")) {
+                    applyCustomFilter(v, 0, 0, true, bedSearchStr, bathSearchStr, landWideSearchStr, buildingWideSearchStr, garageSearchStr, carpotSearchStr, levelSearchStr, specStr, typeStr, selectedKondisi);
                 } else if (!bedSearchStr.isEmpty()) {
                     applyCustomFilter(v, 0, 0, true, bedSearchStr, bathSearchStr, landWideSearchStr, buildingWideSearchStr, garageSearchStr, carpotSearchStr, levelSearchStr, specStr, typeStr, selectedKondisi);
                 } else if (!bathSearchStr.isEmpty()) {
                     applyCustomFilter(v, 0, 0, true, bedSearchStr, bathSearchStr, landWideSearchStr, buildingWideSearchStr, garageSearchStr, carpotSearchStr, levelSearchStr, specStr, typeStr, selectedKondisi);
-                } else if(!landWideSearchStr.isEmpty()){
+                } else if (!landWideSearchStr.isEmpty()) {
                     applyCustomFilter(v, 0, 0, true, bedSearchStr, bathSearchStr, landWideSearchStr, buildingWideSearchStr, garageSearchStr, carpotSearchStr, levelSearchStr, specStr, typeStr, selectedKondisi);
                 } else if (!buildingWideSearchStr.isEmpty()) {
                     applyCustomFilter(v, 0, 0, true, bedSearchStr, bathSearchStr, landWideSearchStr, buildingWideSearchStr, garageSearchStr, carpotSearchStr, levelSearchStr, specStr, typeStr, selectedKondisi);
@@ -299,7 +356,7 @@ public class NewActivity extends AppCompatActivity {
                 } else if (!typeStr.isEmpty()) {
                     applyCustomFilter(v, 0, 0, true, bedSearchStr, bathSearchStr, landWideSearchStr, buildingWideSearchStr, garageSearchStr, carpotSearchStr, levelSearchStr, specStr, typeStr, selectedKondisi);
                 } else {
-                    applyFilters = true; // Apply filters
+                    applyFilters = true;
                     adapter.setFilteredlist(list);
                 }
             }
@@ -321,33 +378,33 @@ public class NewActivity extends AppCompatActivity {
         alertDialog = dialogBuilder.create();
         alertDialog.show();
     }
+
     public void showSpecPopUp(View view) {
         androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this);
         builder.setTitle("Jenis Properti");
 
         final CharSequence[] spec = {"Rumah", "Ruko", "Tanah", "Gudang", "Ruang Usaha", "Villa", "Apartemen", "Pabrik", "Kantor", "Hotel", "Rukost"};
-        final int[] selectedSpecIndex = {0}; // to store the index of the selected property type
+        final int[] selectedSpecIndex = {0};
 
         builder.setSingleChoiceItems(spec, selectedSpecIndex[0], new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                selectedSpecIndex[0] = which; // update the selected property type index
+                selectedSpecIndex[0] = which;
             }
         });
 
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                // Update the TextView with the selected property type
                 TextView textViewSpec = alertDialog.findViewById(R.id.textViewSpec);
                 if (textViewSpec != null) {
                     textViewSpec.setText(spec[selectedSpecIndex[0]]);
                 }
             }
         });
-        // Create and show the AlertDialog
         builder.create().show();
     }
+
     public void showPropertyTypePopup(View view) {
         androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this);
         builder.setTitle("Select Property Type");
@@ -358,7 +415,7 @@ public class NewActivity extends AppCompatActivity {
         builder.setSingleChoiceItems(options, selectedOptionIndex[0], new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                selectedOptionIndex[0] = which; // Assign the selected index to the array
+                selectedOptionIndex[0] = which;
             }
         });
 
@@ -375,93 +432,176 @@ public class NewActivity extends AppCompatActivity {
         androidx.appcompat.app.AlertDialog dialog = builder.create();
         dialog.show();
     }
-    public void applyCustomFilter(View view,
-                                  long minPrice,
-                                  long maxPrice,
-                                  boolean isAbove,
-                                  String bedSearch,
-                                  String bathSearch,
-                                  String landWideSearch,
-                                  String buildingWideSearch,
-                                  String garageSearch,
-                                  String carpotSearch,
-                                  String levelSearch,
-                                  String viewSpec,
-                                  String viewType,
-                                  String kondisi) {
-        //applyFilters = true; // Set the boolean to true before applying filters
+
+    public void applyCustomFilter(View view, long minPrice, long maxPrice, boolean isAbove, String bedSearch, String bathSearch, String landWideSearch, String buildingWideSearch, String garageSearch, String carpotSearch, String levelSearch, String viewSpec, String viewType, String kondisi) {
         ArrayList<ListingModel> filteredList = new ArrayList<>();
-        for (ListingModel product : list) {
-            long productPrice = Long.parseLong(product.getHarga().replace(".", "").trim());
-            boolean isPriceMatched          = false;
-            boolean isBedMatched            = true; // Assume bed is matched unless bedSearch is not empty and not equal to the listing's bed value
-            boolean isBathMatched           = true; // Assume bath is matched unless bathSearch is not empty and not equal to the listing's bath value
-            boolean isLandWideMatched       = true; // Assume landwide is matched unless landWideSearch is not empty and not equal to the listing's landwide value
-            boolean isBuildingWideMatched   = true; // Assume buildingwide is matched unless buildingWideSearch is not empty and not equal to the listing's buildingwide value
-            boolean isGarageMatched         = true;
-            boolean isCarpotMatched         = true;
-            boolean isLevelMatched          = true;
-            boolean isViewSpecMatched       = true; //tipe hunian
-            boolean isViewTypeMatched       = true;
-            boolean isKondisiMatched        = true; //kondisi
+        if (minPrice > 0 || maxPrice > 0) {
+            for (ListingModel product : list) {
+                long productPrice = Long.parseLong(product.getHarga().replace(".", "").trim());
+                long productPriceSewa = Long.parseLong(product.getHargaSewa().replace(".", "").trim());
+                boolean isPriceMatched = false;
+                boolean isBedMatched = true;
+                boolean isBathMatched = true;
+                boolean isLandWideMatched = true;
+                boolean isBuildingWideMatched = true;
+                boolean isGarageMatched = true;
+                boolean isCarpotMatched = true;
+                boolean isLevelMatched = true;
+                boolean isViewSpecMatched = true;
+                boolean isViewTypeMatched = true;
+                boolean isKondisiMatched = true;
 
-            if (isAbove) {
-                if (productPrice >= minPrice) {
-                    isPriceMatched = true;
+                if (kondisi.equals("Jual")) {
+                    if (minPrice > 0 && maxPrice > 0){
+                        if (productPrice >= minPrice && productPrice <= maxPrice) {
+                            isPriceMatched = true;
+                        }
+                    } else if (minPrice > 0) {
+                        if (productPrice >= minPrice) {
+                            isPriceMatched = true;
+                        }
+                    } else if (maxPrice > 0){
+                        if (productPrice <= maxPrice) {
+                            isPriceMatched = true;
+                        }
+                    }
+                } else if (kondisi.equals("Sewa")) {
+                    if (minPrice > 0 && maxPrice > 0){
+                        if (productPriceSewa >= minPrice && productPriceSewa <= maxPrice) {
+                            isPriceMatched = true;
+                        }
+                    } else if (minPrice > 0) {
+                        if (productPriceSewa >= minPrice) {
+                            isPriceMatched = true;
+                        }
+                    } else if (maxPrice > 0){
+                        if (productPriceSewa <= maxPrice) {
+                            isPriceMatched = true;
+                        }
+                    }
+                } else if (kondisi.equals("Jual/Sewa")) {
+                    if (minPrice > 0 && maxPrice > 0){
+                        if (productPriceSewa >= minPrice && productPriceSewa <= maxPrice) {
+                            isPriceMatched = true;
+                        }
+                    } else if (minPrice > 0) {
+                        if (productPrice >= minPrice || productPriceSewa >= minPrice) {
+                            isPriceMatched = true;
+                        }
+                    } else if (maxPrice > 0){
+                        if (productPrice <= maxPrice || productPriceSewa >= maxPrice) {
+                            isPriceMatched = true;
+                        }
+                    }
+                } else {
+                    if (minPrice > 0 && maxPrice > 0){
+                        if (productPrice >= minPrice && productPrice <= maxPrice || productPriceSewa >= minPrice && productPriceSewa <= maxPrice) {
+                            isPriceMatched = true;
+                        }
+                    } else if (minPrice > 0) {
+                        if (productPrice >= minPrice || productPriceSewa >= minPrice) {
+                            isPriceMatched = true;
+                        }
+                    } else if (maxPrice > 0){
+                        if (productPrice <= maxPrice || productPriceSewa >= maxPrice) {
+                            isPriceMatched = true;
+                        }
+                    }
                 }
-            } else {
-                if (productPrice <= maxPrice) {
-                    isPriceMatched = true;
+
+                if (!bedSearch.isEmpty() && !bedSearch.equals(product.getBed())) {
+                    isBedMatched = false;
+                }
+                if (!bathSearch.isEmpty() && !bathSearch.equals(product.getBath())) {
+                    isBathMatched = false;
+                }
+                if (!landWideSearch.isEmpty() && !landWideSearch.equalsIgnoreCase(product.getWide())) {
+                    isLandWideMatched = false;
+                }
+                if (!buildingWideSearch.isEmpty() && !buildingWideSearch.equalsIgnoreCase(product.getLand())) {
+                    isBuildingWideMatched = false;
+                }
+                if (!garageSearch.isEmpty() && !garageSearch.equals(product.getGarage())) {
+                    isGarageMatched = false;
+                }
+                if (!carpotSearch.isEmpty() && !carpotSearch.equals(product.getCarpot())) {
+                    isCarpotMatched = false;
+                }
+                if (!levelSearch.isEmpty() && !levelSearch.equals(product.getLevel())) {
+                    isLevelMatched = false;
+                }
+                if (!viewSpec.isEmpty() && !viewSpec.equalsIgnoreCase(product.getJenisProperti())) {
+                    isViewSpecMatched = false;
+                }
+                if (!viewType.isEmpty() && !viewType.equalsIgnoreCase(product.getJenisCertificate())) {
+                    isViewTypeMatched = false;
+                }
+                if (!kondisi.isEmpty() && !kondisi.equals(product.getKondisi())) {
+                    isKondisiMatched = false;
+                }
+                if (isPriceMatched && isBedMatched && isBathMatched && isLandWideMatched && isBuildingWideMatched && isGarageMatched && isCarpotMatched && isLevelMatched && isViewSpecMatched && isViewTypeMatched && isKondisiMatched) {
+                    filteredList.add(product);
                 }
             }
+        } else {
+            for (ListingModel product : list) {
+                long productPrice = Long.parseLong(product.getHarga().replace(".", "").trim());
+                long productPriceSewa = Long.parseLong(product.getHargaSewa().replace(".", "").trim());
+                boolean isPriceMatched = false;
+                boolean isBedMatched = true;
+                boolean isBathMatched = true;
+                boolean isLandWideMatched = true;
+                boolean isBuildingWideMatched = true;
+                boolean isGarageMatched = true;
+                boolean isCarpotMatched = true;
+                boolean isLevelMatched = true;
+                boolean isViewSpecMatched = true;
+                boolean isViewTypeMatched = true;
+                boolean isKondisiMatched = true;
 
-            // Check if bedSearch is not empty and does not match the listing's bed value
-            if (!bedSearch.isEmpty() && !bedSearch.equals(product.getBed())) {
-                isBedMatched = false;
-            }
+                if (isAbove) {
+                    if (productPrice >= minPrice) {
+                        isPriceMatched = true;
+                    }
+                } else {
+                    if (productPrice <= maxPrice) {
+                        isPriceMatched = true;
+                    }
+                }
 
-            // Check if bathSearch is not empty and does not match the listing's bath value
-            if (!bathSearch.isEmpty() && !bathSearch.equals(product.getBath())) {
-                isBathMatched = false;
-            }
-
-            // Check if landWideSearch is not empty and does not match the listing's landwide value
-            if (!landWideSearch.isEmpty() && !landWideSearch.equalsIgnoreCase(product.getWide())) {
-                isLandWideMatched = false;
-            }
-
-            // Check if buildingWideSearch is not empty and does not match the listing's buildingwide value
-            if (!buildingWideSearch.isEmpty() && !buildingWideSearch.equalsIgnoreCase(product.getLand())) {
-                isBuildingWideMatched = false;
-            }
-
-            if (!garageSearch.isEmpty() && !garageSearch.equals(product.getGarage())) {
-                isGarageMatched = false;
-            }
-
-            if (!carpotSearch.isEmpty() && !carpotSearch.equals(product.getCarpot())){
-                isCarpotMatched = false;
-            }
-
-            if (!levelSearch.isEmpty() && !levelSearch.equals(product.getLevel())){
-                isLevelMatched = false;
-            }
-
-            if (!viewSpec.isEmpty() && !viewSpec.equalsIgnoreCase(product.getJenisProperti())) {
-                isViewSpecMatched = false;
-            }
-
-            if (!viewType.isEmpty() && !viewType.equalsIgnoreCase(product.getJenisCertificate())) {
-                isViewTypeMatched = false;
-            }
-
-            if (!kondisi.isEmpty() && !kondisi.equals(product.getKondisi())) {
-                isKondisiMatched = false;
-            }
-
-            // Check other filter criteria and include the listing if all conditions are met
-            if (isPriceMatched && isBedMatched && isBathMatched && isLandWideMatched && isBuildingWideMatched && isGarageMatched && isCarpotMatched && isLevelMatched && isViewSpecMatched && isViewTypeMatched && isKondisiMatched) {
-                filteredList.add(product);
+                if (!bedSearch.isEmpty() && !bedSearch.equals(product.getBed())) {
+                    isBedMatched = false;
+                }
+                if (!bathSearch.isEmpty() && !bathSearch.equals(product.getBath())) {
+                    isBathMatched = false;
+                }
+                if (!landWideSearch.isEmpty() && !landWideSearch.equalsIgnoreCase(product.getWide())) {
+                    isLandWideMatched = false;
+                }
+                if (!buildingWideSearch.isEmpty() && !buildingWideSearch.equalsIgnoreCase(product.getLand())) {
+                    isBuildingWideMatched = false;
+                }
+                if (!garageSearch.isEmpty() && !garageSearch.equals(product.getGarage())) {
+                    isGarageMatched = false;
+                }
+                if (!carpotSearch.isEmpty() && !carpotSearch.equals(product.getCarpot())) {
+                    isCarpotMatched = false;
+                }
+                if (!levelSearch.isEmpty() && !levelSearch.equals(product.getLevel())) {
+                    isLevelMatched = false;
+                }
+                if (!viewSpec.isEmpty() && !viewSpec.equalsIgnoreCase(product.getJenisProperti())) {
+                    isViewSpecMatched = false;
+                }
+                if (!viewType.isEmpty() && !viewType.equalsIgnoreCase(product.getJenisCertificate())) {
+                    isViewTypeMatched = false;
+                }
+                if (!kondisi.isEmpty() && !kondisi.equals(product.getKondisi())) {
+                    isKondisiMatched = false;
+                }
+                if (isPriceMatched && isBedMatched && isBathMatched && isLandWideMatched && isBuildingWideMatched && isGarageMatched && isCarpotMatched && isLevelMatched && isViewSpecMatched && isViewTypeMatched && isKondisiMatched) {
+                    filteredList.add(product);
+                }
             }
         }
 
@@ -471,8 +611,9 @@ public class NewActivity extends AppCompatActivity {
             alertDialog.dismiss();
         }
 
-        applyFilters = false; // Clear the filter flag after applying filters
+        applyFilters = false;
     }
+
     private void LoadListing(boolean showProgressDialog) {
         PDNew.setMessage("Memuat Data...");
         PDNew.show();
@@ -480,15 +621,14 @@ public class NewActivity extends AppCompatActivity {
         else PDNew.cancel();
 
         RequestQueue queue = Volley.newRequestQueue(this);
-        JsonArrayRequest reqData = new JsonArrayRequest(Request.Method.GET, ServerApi.URL_GET_LISTING,null,
+        JsonArrayRequest reqData = new JsonArrayRequest(Request.Method.GET, ServerApi.URL_GET_LISTING, null,
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
                         if (showProgressDialog) PDNew.cancel();
                         else srnew.setRefreshing(false);
                         list.clear();
-                        for(int i = 0 ; i < response.length(); i++)
-                        {
+                        for (int i = 0; i < response.length(); i++) {
                             try {
                                 JSONObject data = response.getJSONObject(i);
                                 ListingModel md = new ListingModel();
@@ -562,6 +702,7 @@ public class NewActivity extends AppCompatActivity {
                                 md.setLinkYoutube(data.getString("LinkYoutube"));
                                 md.setIsAdmin(data.getString("IsAdmin"));
                                 md.setIsManager(data.getString("IsManager"));
+                                md.setIsRejected(data.getString("IsRejected"));
                                 md.setSold(data.getString("Sold"));
                                 md.setRented(data.getString("Rented"));
                                 md.setView(data.getString("View"));
@@ -573,6 +714,8 @@ public class NewActivity extends AppCompatActivity {
                                 md.setFee(data.getString("Fee"));
                                 md.setNamaVendor(data.getString("NamaVendor"));
                                 md.setNoTelpVendor(data.getString("NoTelpVendor"));
+                                md.setIsSelfie(data.getString("IsSelfie"));
+                                md.setIsLokasi(data.getString("IsLokasi"));
                                 list.add(md);
                                 PDNew.dismiss();
                             } catch (JSONException e) {

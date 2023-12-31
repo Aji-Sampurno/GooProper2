@@ -61,6 +61,7 @@ import com.google.android.play.core.appupdate.AppUpdateManagerFactory;
 import com.google.android.play.core.install.model.AppUpdateType;
 import com.google.android.play.core.install.model.UpdateAvailability;
 import com.google.android.play.core.tasks.Task;
+import com.google.firebase.FirebaseApp;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.gooproper.R;
 import com.gooproper.adapter.ListingAdapter;
@@ -108,6 +109,7 @@ public class HomeAdminFragment extends Fragment implements OnMapReadyCallback {
     List<ListingModel> mItemsHot;
     List<ListingModel> mItemsNew;
     LinearLayoutManager layoutManager;
+    boolean isForward = true;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -115,6 +117,8 @@ public class HomeAdminFragment extends Fragment implements OnMapReadyCallback {
         View root = inflater.inflate(R.layout.fragment_home_admin, container, false);
 
         checkForUpdate();
+
+        FirebaseApp.initializeApp(getContext());
 
         IdAdmin = Preferences.getKeyIdAdmin(getContext());
         Status = Preferences.getKeyStatus(getContext());
@@ -186,23 +190,36 @@ public class HomeAdminFragment extends Fragment implements OnMapReadyCallback {
         LinearSnapHelper snapHelper = new LinearSnapHelper();
         snapHelper.attachToRecyclerView(recycleListingPrimary);
 
-        // Set up Timer for gradual scrolling
         Timer timer = new Timer();
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
                 int currentPosition = layoutManager.findLastCompletelyVisibleItemPosition();
+                int lastPosition = adapterPrimary.getItemCount() - 1;
 
-                if (currentPosition < (adapterPrimary.getItemCount() - 1)) {
-                    smoothScrollToPosition(currentPosition + 1);
-                } else if (currentPosition == (adapterPrimary.getItemCount() - 1)) {
-                    smoothScrollToPosition(currentPosition - 1);
+                if (isForward) {
+                    if (currentPosition < lastPosition) {
+                        smoothScrollToPosition(currentPosition + 1);
+                    } else {
+                        isForward = false;
+                    }
+                } else {
+                    if (currentPosition > 0) {
+                        // Gulir ke posisi sebelumnya
+                        smoothScrollToPosition(currentPosition - 1);
+                    } else {
+                        isForward = true;
+                    }
                 }
+//                if (currentPosition < lastPosition) {
+//                    smoothScrollToPosition(currentPosition + 1);
+//                } else if (currentPosition == lastPosition && currentPosition > 0) {
+//                    smoothScrollToPosition(currentPosition - 1);
+//                }
             }
         }, 0, 3000);
 
-        if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
-                && ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+        if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
         } else {
             ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, REQUEST_LOCATION_PERMISSION);
         }
@@ -512,6 +529,7 @@ public class HomeAdminFragment extends Fragment implements OnMapReadyCallback {
                                 md.setLinkYoutube(data.getString("LinkYoutube"));
                                 md.setIsAdmin(data.getString("IsAdmin"));
                                 md.setIsManager(data.getString("IsManager"));
+                                md.setIsRejected(data.getString("IsRejected"));
                                 md.setSold(data.getString("Sold"));
                                 md.setRented(data.getString("Rented"));
                                 md.setView(data.getString("View"));
@@ -523,6 +541,8 @@ public class HomeAdminFragment extends Fragment implements OnMapReadyCallback {
                                 md.setFee(data.getString("Fee"));
                                 md.setNamaVendor(data.getString("NamaVendor"));
                                 md.setNoTelpVendor(data.getString("NoTelpVendor"));
+                                md.setIsSelfie(data.getString("IsSelfie"));
+                                md.setIsLokasi(data.getString("IsLokasi"));
                                 mItemsSold.add(md);
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -622,6 +642,7 @@ public class HomeAdminFragment extends Fragment implements OnMapReadyCallback {
                                 md.setLinkYoutube(data.getString("LinkYoutube"));
                                 md.setIsAdmin(data.getString("IsAdmin"));
                                 md.setIsManager(data.getString("IsManager"));
+                                md.setIsRejected(data.getString("IsRejected"));
                                 md.setSold(data.getString("Sold"));
                                 md.setRented(data.getString("Rented"));
                                 md.setView(data.getString("View"));
@@ -633,6 +654,8 @@ public class HomeAdminFragment extends Fragment implements OnMapReadyCallback {
                                 md.setFee(data.getString("Fee"));
                                 md.setNamaVendor(data.getString("NamaVendor"));
                                 md.setNoTelpVendor(data.getString("NoTelpVendor"));
+                                md.setIsSelfie(data.getString("IsSelfie"));
+                                md.setIsLokasi(data.getString("IsLokasi"));
                                 mItemsHot.add(md);
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -732,6 +755,7 @@ public class HomeAdminFragment extends Fragment implements OnMapReadyCallback {
                                 md.setLinkYoutube(data.getString("LinkYoutube"));
                                 md.setIsAdmin(data.getString("IsAdmin"));
                                 md.setIsManager(data.getString("IsManager"));
+                                md.setIsRejected(data.getString("IsRejected"));
                                 md.setSold(data.getString("Sold"));
                                 md.setRented(data.getString("Rented"));
                                 md.setView(data.getString("View"));
@@ -743,6 +767,8 @@ public class HomeAdminFragment extends Fragment implements OnMapReadyCallback {
                                 md.setFee(data.getString("Fee"));
                                 md.setNamaVendor(data.getString("NamaVendor"));
                                 md.setNoTelpVendor(data.getString("NoTelpVendor"));
+                                md.setIsSelfie(data.getString("IsSelfie"));
+                                md.setIsLokasi(data.getString("IsLokasi"));
                                 mItemsNew.add(md);
                             } catch (JSONException e) {
                                 e.printStackTrace();

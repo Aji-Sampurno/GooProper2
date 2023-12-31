@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_marginBottom="?attr/actionBarSize"
     android:background="@color/main"
     android:orientation="vertical"
     tools:context=".admin.fragment.AkunAdminFragment">
@@ -13,27 +13,27 @@
         android:id="@+id/LytTopAkunAdmin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@drawable/top_bar"
         android:orientation="vertical"
-        android:padding="10dp"
-        android:background="@drawable/top_bar">
+        android:padding="10dp">
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/CIVAkunAdmin"
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_gravity="center"
-            android:src="@color/white"/>
+            android:src="@color/white" />
 
         <TextView
             android:id="@+id/TVNamaAkunAdmin"
+            style="@style/TextAppearance.Material3.TitleLarge"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:gravity="center"
-            android:textStyle="bold"
-            style="@style/TextAppearance.Material3.TitleLarge"
             android:text="Nama Akun"
-            android:textColor="@color/second"/>
+            android:textColor="@color/second"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/TVEditAkunAdmin"
@@ -41,13 +41,14 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="Edit Profile"
-            android:textColor="@color/second"/>
+            android:textColor="@color/second" />
 
     </LinearLayout>
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:scrollbars="none">
 
         <LinearLayout
             android:id="@+id/LytAkunAdmin"
@@ -60,17 +61,17 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="30dp"
-                android:layout_marginEnd="30dp"
                 android:layout_marginTop="20dp"
-                app:cardElevation="5dp"
-                app:cardCornerRadius="10dp">
+                android:layout_marginEnd="30dp"
+                app:cardCornerRadius="10dp"
+                app:cardElevation="5dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="10dp"
+                    android:background="@color/main"
                     android:orientation="vertical"
-                    android:background="@color/main">
+                    android:padding="10dp">
 
                     <LinearLayout
                         android:id="@+id/LytPelamarAdmin"
@@ -88,12 +89,12 @@
                             app:tint="@color/second" />
 
                         <TextView
+                            style="@style/TextAppearance.Material3.TitleMedium"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:text="Pelamar"
-                            android:textColor="@color/second"
-                            style="@style/TextAppearance.Material3.TitleMedium"/>
+                            android:textColor="@color/second" />
 
                     </LinearLayout>
 
@@ -102,7 +103,7 @@
                         android:layout_height="1dp"
                         android:layout_marginTop="5dp"
                         android:layout_marginBottom="5dp"
-                        android:background="#717171"/>
+                        android:background="#717171" />
 
                     <LinearLayout
                         android:id="@+id/LytAgenAdmin"
@@ -120,12 +121,12 @@
                             app:tint="@color/second" />
 
                         <TextView
+                            style="@style/TextAppearance.Material3.TitleMedium"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:text="Agen"
-                            android:textColor="@color/second"
-                            style="@style/TextAppearance.Material3.TitleMedium"/>
+                            android:textColor="@color/second" />
 
                     </LinearLayout>
 
@@ -135,7 +136,7 @@
                         android:layout_height="1dp"
                         android:layout_marginTop="5dp"
                         android:layout_marginBottom="5dp"
-                        android:background="#717171"/>
+                        android:background="#717171" />
 
                     <LinearLayout
                         android:id="@+id/LytListingAdmin"
@@ -153,12 +154,76 @@
                             app:tint="@color/second" />
 
                         <TextView
+                            style="@style/TextAppearance.Material3.TitleMedium"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:text="Tambah Listing"
-                            android:textColor="@color/second"
-                            style="@style/TextAppearance.Material3.TitleMedium"/>
+                            android:textColor="@color/second" />
+
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="5dp"
+                        android:background="#717171" />
+
+                    <LinearLayout
+                        android:id="@+id/LytInfoAdmin"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="5dp"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="10dp"
+                            android:src="@drawable/ic_info_property"
+                            app:tint="@color/second" />
+
+                        <TextView
+                            style="@style/TextAppearance.Material3.TitleMedium"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:text="Info Property"
+                            android:textColor="@color/second" />
+
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="5dp"
+                        android:background="#717171" />
+
+                    <LinearLayout
+                        android:id="@+id/LytPraListingRejectedAdmin"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="5dp"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="10dp"
+                            android:src="@drawable/ic_listing"
+                            app:tint="@color/second" />
+
+                        <TextView
+                            style="@style/TextAppearance.Material3.TitleMedium"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:text="PraListing Rejected"
+                            android:textColor="@color/second" />
 
                     </LinearLayout>
 
@@ -168,7 +233,7 @@
                         android:layout_height="1dp"
                         android:layout_marginTop="5dp"
                         android:layout_marginBottom="5dp"
-                        android:background="#717171"/>
+                        android:background="#717171" />
 
                     <LinearLayout
                         android:id="@+id/LytListingPrimaryAdmin"
@@ -186,12 +251,12 @@
                             app:tint="@color/second" />
 
                         <TextView
+                            style="@style/TextAppearance.Material3.TitleMedium"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:text="Tambah Listing Primary"
-                            android:textColor="@color/second"
-                            style="@style/TextAppearance.Material3.TitleMedium"/>
+                            android:textColor="@color/second" />
 
                     </LinearLayout>
 
@@ -200,8 +265,8 @@
                         android:layout_height="1dp"
                         android:layout_marginTop="5dp"
                         android:layout_marginBottom="5dp"
-                        android:visibility="gone"
-                        android:background="#717171"/>
+                        android:background="#717171"
+                        android:visibility="gone" />
 
                     <LinearLayout
                         android:id="@+id/LytTambahKaryawan"
@@ -209,8 +274,8 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
                         android:layout_marginBottom="5dp"
-                        android:visibility="gone"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        android:visibility="gone">
 
                         <ImageView
                             android:layout_width="wrap_content"
@@ -220,12 +285,12 @@
                             app:tint="@color/second" />
 
                         <TextView
+                            style="@style/TextAppearance.Material3.TitleMedium"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:text="Tambah Karyawan"
-                            android:textColor="@color/second"
-                            style="@style/TextAppearance.Material3.TitleMedium"/>
+                            android:textColor="@color/second" />
 
                     </LinearLayout>
 
@@ -235,8 +300,8 @@
                         android:layout_height="1dp"
                         android:layout_marginTop="5dp"
                         android:layout_marginBottom="5dp"
-                        android:visibility="gone"
-                        android:background="#717171"/>
+                        android:background="#717171"
+                        android:visibility="gone" />
 
                     <LinearLayout
                         android:id="@+id/LytListinganPrimary"
@@ -244,8 +309,8 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
                         android:layout_marginBottom="5dp"
-                        android:visibility="gone"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        android:visibility="gone">
 
                         <ImageView
                             android:layout_width="wrap_content"
@@ -255,12 +320,12 @@
                             app:tint="@color/second" />
 
                         <TextView
+                            style="@style/TextAppearance.Material3.TitleMedium"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:text="Listingan Primary"
-                            android:textColor="@color/second"
-                            style="@style/TextAppearance.Material3.TitleMedium"/>
+                            android:textColor="@color/second" />
 
                     </LinearLayout>
 
@@ -270,7 +335,7 @@
                         android:layout_height="1dp"
                         android:layout_marginTop="5dp"
                         android:layout_marginBottom="5dp"
-                        android:background="#717171"/>
+                        android:background="#717171" />
 
                     <LinearLayout
                         android:id="@+id/LytLaporanListingan"
@@ -288,12 +353,12 @@
                             app:tint="@color/second" />
 
                         <TextView
+                            style="@style/TextAppearance.Material3.TitleMedium"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:text="Laporan Listingan"
-                            android:textColor="@color/second"
-                            style="@style/TextAppearance.Material3.TitleMedium"/>
+                            android:textColor="@color/second" />
 
                     </LinearLayout>
 
@@ -302,8 +367,7 @@
                         android:layout_height="1dp"
                         android:layout_marginTop="5dp"
                         android:layout_marginBottom="5dp"
-                        android:visibility="gone"
-                        android:background="#717171"/>
+                        android:background="#717171" />
 
                     <LinearLayout
                         android:id="@+id/LytKirimPesan"
@@ -311,7 +375,6 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
                         android:layout_marginBottom="5dp"
-                        android:visibility="gone"
                         android:orientation="horizontal">
 
                         <ImageView
@@ -322,12 +385,12 @@
                             app:tint="@color/second" />
 
                         <TextView
+                            style="@style/TextAppearance.Material3.TitleMedium"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:text="Kirim Pesan"
-                            android:textColor="@color/second"
-                            style="@style/TextAppearance.Material3.TitleMedium"/>
+                            android:textColor="@color/second" />
 
                     </LinearLayout>
 
@@ -340,18 +403,18 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="30dp"
-                android:layout_marginEnd="30dp"
                 android:layout_marginTop="20dp"
+                android:layout_marginEnd="30dp"
                 android:layout_marginBottom="20dp"
-                app:cardElevation="5dp"
-                app:cardCornerRadius="10dp">
+                app:cardCornerRadius="10dp"
+                app:cardElevation="5dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="10dp"
+                    android:background="@color/main"
                     android:orientation="vertical"
-                    android:background="@color/main">
+                    android:padding="10dp">
 
                     <LinearLayout
                         android:id="@+id/LytPengaturanAdmin"
@@ -365,17 +428,17 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
+                            android:layout_marginEnd="10dp"
                             android:src="@drawable/ic_setting"
-                            app:tint="@color/second"
-                            android:layout_marginEnd="10dp"/>
+                            app:tint="@color/second" />
 
                         <TextView
+                            style="@style/TextAppearance.Material3.TitleMedium"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:text="Pengaturan"
-                            android:textColor="@color/second"
-                            style="@style/TextAppearance.Material3.TitleMedium"/>
+                            android:textColor="@color/second" />
 
                     </LinearLayout>
 
@@ -384,7 +447,7 @@
                         android:layout_height="1dp"
                         android:layout_marginTop="5dp"
                         android:layout_marginBottom="5dp"
-                        android:background="#717171"/>
+                        android:background="#717171" />
 
                     <LinearLayout
                         android:id="@+id/LytHubungiKamiAdmin"
@@ -398,17 +461,17 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
+                            android:layout_marginEnd="10dp"
                             android:src="@drawable/ic_call_me"
-                            app:tint="@color/second"
-                            android:layout_marginEnd="10dp"/>
+                            app:tint="@color/second" />
 
                         <TextView
+                            style="@style/TextAppearance.Material3.TitleMedium"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:text="Hubungi Kami"
-                            android:textColor="@color/second"
-                            style="@style/TextAppearance.Material3.TitleMedium"/>
+                            android:textColor="@color/second" />
 
                     </LinearLayout>
 
@@ -417,7 +480,7 @@
                         android:layout_height="1dp"
                         android:layout_marginTop="5dp"
                         android:layout_marginBottom="5dp"
-                        android:background="#717171"/>
+                        android:background="#717171" />
 
                     <LinearLayout
                         android:id="@+id/LytTentangKamiAdmin"
@@ -431,17 +494,17 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
+                            android:layout_marginEnd="10dp"
                             android:src="@drawable/ic_about_us"
-                            app:tint="@color/second"
-                            android:layout_marginEnd="10dp"/>
+                            app:tint="@color/second" />
 
                         <TextView
+                            style="@style/TextAppearance.Material3.TitleMedium"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:text="Tentang Kami"
-                            android:textColor="@color/second"
-                            style="@style/TextAppearance.Material3.TitleMedium"/>
+                            android:textColor="@color/second" />
 
                     </LinearLayout>
 

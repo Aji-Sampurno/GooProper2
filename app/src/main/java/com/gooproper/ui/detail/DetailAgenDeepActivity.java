@@ -135,12 +135,14 @@ public class DetailAgenDeepActivity extends AppCompatActivity {
                                 ListingModel md = new ListingModel();
                                 md.setIdListing(data.getString("IdListing"));
                                 md.setIdAgen(data.getString("IdAgen"));
+                                md.setIdAgenCo(data.getString("IdAgenCo"));
                                 md.setIdInput(data.getString("IdInput"));
                                 md.setNamaListing(data.getString("NamaListing"));
                                 md.setAlamat(data.getString("Alamat"));
                                 md.setLatitude(data.getString("Latitude"));
                                 md.setLongitude(data.getString("Longitude"));
                                 md.setLocation(data.getString("Location"));
+                                md.setSelfie(data.getString("Selfie"));
                                 md.setWide(data.getString("Wide"));
                                 md.setLand(data.getString("Land"));
                                 md.setDimensi(data.getString("Dimensi"));
@@ -158,11 +160,18 @@ public class DetailAgenDeepActivity extends AppCompatActivity {
                                 md.setHSHP(data.getString("HSHP"));
                                 md.setPPJB(data.getString("PPJB"));
                                 md.setStratatitle(data.getString("Stratatitle"));
+                                md.setAJB(data.getString("AJB"));
+                                md.setPetokD(data.getString("PetokD"));
+                                md.setPjp(data.getString("Pjp"));
                                 md.setImgSHM(data.getString("ImgSHM"));
                                 md.setImgHGB(data.getString("ImgHGB"));
                                 md.setImgHSHP(data.getString("ImgHSHP"));
                                 md.setImgPPJB(data.getString("ImgPPJB"));
                                 md.setImgStratatitle(data.getString("ImgStratatitle"));
+                                md.setImgAJB(data.getString("ImgAJB"));
+                                md.setImgPetokD(data.getString("ImgPetokD"));
+                                md.setImgPjp(data.getString("ImgPjp"));
+                                md.setImgPjp1(data.getString("ImgPjp1"));
                                 md.setNoCertificate(data.getString("NoCertificate"));
                                 md.setPbb(data.getString("Pbb"));
                                 md.setJenisProperti(data.getString("JenisProperti"));
@@ -177,6 +186,7 @@ public class DetailAgenDeepActivity extends AppCompatActivity {
                                 md.setBanner(data.getString("Banner"));
                                 md.setSize(data.getString("Size"));
                                 md.setHarga(data.getString("Harga"));
+                                md.setHargaSewa(data.getString("HargaSewa"));
                                 md.setTglInput(data.getString("TglInput"));
                                 md.setImg1(data.getString("Img1"));
                                 md.setImg2(data.getString("Img2"));
@@ -193,6 +203,7 @@ public class DetailAgenDeepActivity extends AppCompatActivity {
                                 md.setLinkYoutube(data.getString("LinkYoutube"));
                                 md.setIsAdmin(data.getString("IsAdmin"));
                                 md.setIsManager(data.getString("IsManager"));
+                                md.setIsRejected(data.getString("IsRejected"));
                                 md.setSold(data.getString("Sold"));
                                 md.setRented(data.getString("Rented"));
                                 md.setView(data.getString("View"));
@@ -201,8 +212,11 @@ public class DetailAgenDeepActivity extends AppCompatActivity {
                                 md.setNama(data.getString("Nama"));
                                 md.setNoTelp(data.getString("NoTelp"));
                                 md.setInstagram(data.getString("Instagram"));
+                                md.setFee(data.getString("Fee"));
                                 md.setNamaVendor(data.getString("NamaVendor"));
                                 md.setNoTelpVendor(data.getString("NoTelpVendor"));
+                                md.setIsSelfie(data.getString("IsSelfie"));
+                                md.setIsLokasi(data.getString("IsLokasi"));
                                 list.add(md);
                                 PDAgen.dismiss();
                             } catch (JSONException e) {

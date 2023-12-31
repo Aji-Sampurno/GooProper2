@@ -427,6 +427,7 @@ public class DetailAgenActivity extends AppCompatActivity {
                                 md.setLinkYoutube(data.getString("LinkYoutube"));
                                 md.setIsAdmin(data.getString("IsAdmin"));
                                 md.setIsManager(data.getString("IsManager"));
+                                md.setIsRejected(data.getString("IsRejected"));
                                 md.setSold(data.getString("Sold"));
                                 md.setRented(data.getString("Rented"));
                                 md.setView(data.getString("View"));
@@ -438,6 +439,8 @@ public class DetailAgenActivity extends AppCompatActivity {
                                 md.setFee(data.getString("Fee"));
                                 md.setNamaVendor(data.getString("NamaVendor"));
                                 md.setNoTelpVendor(data.getString("NoTelpVendor"));
+                                md.setIsSelfie(data.getString("IsSelfie"));
+                                md.setIsLokasi(data.getString("IsLokasi"));
                                 list.add(md);
                                 PDAgen.dismiss();
                             } catch (JSONException e) {

@@ -22,8 +22,9 @@ import com.gooproper.ui.TentangKamiActivity;
 import com.gooproper.ui.AgenActivity;
 import com.gooproper.ui.LaporanListingActivity;
 import com.gooproper.ui.PelamarAgenActivity;
+import com.gooproper.ui.listing.PraListingRejectedAdminActivity;
 import com.gooproper.ui.tambah.TambahKaryawanActivity;
-import com.gooproper.ui.TambahListingActivity;
+import com.gooproper.ui.tambah.TambahListingActivity;
 import com.gooproper.ui.tambah.TambahListingPrimaryActivity;
 import com.gooproper.util.Preferences;
 import com.squareup.picasso.Picasso;
@@ -32,7 +33,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class AkunAdminFragment extends Fragment {
 
-    private LinearLayout pelamar, agen, listing, primary, listprimary, karyawan, laporan, pengaturan, hubungikami, tentangkami, kirimpesan;
+    private LinearLayout pelamar, agen, listing, pralistingrejected, primary, listprimary, karyawan, laporan, pengaturan, hubungikami, tentangkami, kirimpesan;
     TextView nama, edit;
     CircleImageView cvadmin;
     View view, view1, view2, view3;
@@ -52,6 +53,7 @@ public class AkunAdminFragment extends Fragment {
         View root = inflater.inflate(R.layout.fragment_akun_admin, container, false);
 
         listing = root.findViewById(R.id.LytListingAdmin);
+        pralistingrejected = root.findViewById(R.id.LytPraListingRejectedAdmin);
         primary = root.findViewById(R.id.LytListingPrimaryAdmin);
         listprimary = root.findViewById(R.id.LytListinganPrimary);
         karyawan = root.findViewById(R.id.LytTambahKaryawan);
@@ -97,6 +99,7 @@ public class AkunAdminFragment extends Fragment {
 
         edit.setOnClickListener(view -> startActivity(new Intent(getContext(), EditAkunActivity.class)));
         listing.setOnClickListener(view -> startActivity(new Intent(getContext(), TambahListingActivity.class)));
+        pralistingrejected.setOnClickListener(view -> startActivity(new Intent(getContext(), PraListingRejectedAdminActivity.class)));
         primary.setOnClickListener(view -> startActivity(new Intent(getContext(), TambahListingPrimaryActivity.class)));
         pelamar.setOnClickListener(view -> startActivity(new Intent(getContext(), PelamarAgenActivity.class)));
         agen.setOnClickListener(view -> startActivity(new Intent(getContext(), AgenActivity.class)));

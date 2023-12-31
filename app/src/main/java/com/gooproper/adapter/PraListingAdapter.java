@@ -22,23 +22,19 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.gooproper.R;
 import com.gooproper.model.ListingModel;
-import com.gooproper.ui.TambahListingActivity;
 import com.gooproper.ui.detail.DetailListingActivity;
 import com.gooproper.util.FormatCurrency;
 import com.gooproper.util.ServerApi;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -53,6 +49,7 @@ public class PraListingAdapter extends RecyclerView.Adapter<PraListingAdapter.Ho
     private static final int MAX_TEXT_LENGTH = 20;
     private static final int MAX_TEXT_LENGTH_PRICE = 10;
     private static final int MAX_TEXT_LENGTH_PRICE_JUTA = 19;
+    private static final int MAX_TEXT_LENGTH_PRICE_RIBU = 15;
 
     public PraListingAdapter(Context context, List<ListingModel> list) {
         this.models = list;
@@ -70,7 +67,11 @@ public class PraListingAdapter extends RecyclerView.Adapter<PraListingAdapter.Ho
 
     private String truncateTextWithEllipsisPrice(String text) {
         if (text.length() > MAX_TEXT_LENGTH_PRICE) {
-            if (text.length() < MAX_TEXT_LENGTH_PRICE_JUTA) {
+            if (text.length() < MAX_TEXT_LENGTH_PRICE_RIBU) {
+                //return text.substring(0, MAX_TEXT_LENGTH_PRICE) + " Rb";
+                String truncatedText = removeTrailingZeroK(text.substring(0, MAX_TEXT_LENGTH_PRICE)) + " Rb";
+                return truncatedText;
+            } else if (text.length() < MAX_TEXT_LENGTH_PRICE_JUTA) {
                 //return text.substring(0, MAX_TEXT_LENGTH_PRICE) + " Jt";
                 String truncatedText = removeTrailingZeroJ(text.substring(0, MAX_TEXT_LENGTH_PRICE)) + " Jt";
                 return truncatedText;
@@ -119,6 +120,20 @@ public class PraListingAdapter extends RecyclerView.Adapter<PraListingAdapter.Ho
             return text.substring(0, text.length() - 3);
         } else if (text.endsWith(".")) {
             return text.substring(0, text.length() - 1);
+        } else if (text.endsWith("00")) {
+            return text.substring(0, text.length() - 2);
+        } else {
+            return text;
+        }
+    }
+
+    private String removeTrailingZeroK(String text) {
+        if (text.endsWith(".000")) {
+            return text.substring(0, text.length() - 4);
+        } else if (text.endsWith(".00")) {
+            return text.substring(0, text.length() - 3);
+        } else if (text.endsWith(".0")) {
+            return text.substring(0, text.length() - 2);
         } else {
             return text;
         }
@@ -254,6 +269,8 @@ public class PraListingAdapter extends RecyclerView.Adapter<PraListingAdapter.Ho
                                 ok.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View view) {
+                                        models.remove(position);
+                                        notifyItemRemoved(position);
                                         customDialog.dismiss();
                                     }
                                 });
@@ -393,6 +410,7 @@ public class PraListingAdapter extends RecyclerView.Adapter<PraListingAdapter.Ho
                     update.putExtra("LinkYoutube",listingModel.getLinkYoutube());
                     update.putExtra("IsAdmin",listingModel.getIsAdmin());
                     update.putExtra("IsManager",listingModel.getIsManager());
+                    update.putExtra("IsRejected",listingModel.getIsRejected());
                     update.putExtra("View",listingModel.getView());
                     update.putExtra("Sold",listingModel.getSold());
                     update.putExtra("Rented",listingModel.getRented());
@@ -404,6 +422,8 @@ public class PraListingAdapter extends RecyclerView.Adapter<PraListingAdapter.Ho
                     update.putExtra("Fee",listingModel.getFee());
                     update.putExtra("NamaVendor",listingModel.getNamaVendor());
                     update.putExtra("NoTelpVendor",listingModel.getNoTelpVendor());
+                    update.putExtra("IsSelfie",listingModel.getIsSelfie());
+                    update.putExtra("IsLokasi",listingModel.getIsLokasi());
                     context.startActivity(update);
                 }
             });

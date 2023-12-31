@@ -69,7 +69,7 @@ public class EditPralistingActivity extends AppCompatActivity {
     ImageView back, IVselfie;
     TextInputEditText longitude, latitude;
     Uri bselfie;
-    String latitudeStr, longitudeStr, addressStr, Selfie, StrIdPraListing;
+    String latitudeStr, longitudeStr, addressStr,lokasiStr, Selfie, StrIdPraListing;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,7 +93,6 @@ public class EditPralistingActivity extends AppCompatActivity {
         batal.setOnClickListener(view -> finish());
 
         Intent data = getIntent();
-        final int update = data.getIntExtra("update", 0);
         String intentIdPraListing = data.getStringExtra("IdPraListing");
 
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
@@ -101,6 +100,7 @@ public class EditPralistingActivity extends AppCompatActivity {
 
         StrIdPraListing = intentIdPraListing;
 
+        latitude.setText(intentIdPraListing);
         submit.setOnClickListener(view -> {
             if (Validate()) {
                 if (bselfie == null) {
@@ -309,13 +309,14 @@ public class EditPralistingActivity extends AppCompatActivity {
             if (resultCode == RESULT_OK && data != null) {
 
                 latitudeStr = data.getStringExtra("latitude");
-                latitude.setText(latitudeStr);
                 longitudeStr = data.getStringExtra("longitude");
-                longitude.setText(longitudeStr);
                 addressStr = data.getStringExtra("address");
+                lokasiStr = data.getStringExtra("lokasi");
+                latitude.setText(addressStr);
             }
 
             if (requestCode == KODE_REQUEST_KAMERA && resultCode == RESULT_OK) {
+                selfiebtn.setVisibility(View.GONE);
                 IVselfie.setImageURI(bselfie);
                 IVselfie.setVisibility(View.VISIBLE);
             }
@@ -445,11 +446,6 @@ public class EditPralistingActivity extends AppCompatActivity {
         if (latitude.getText().toString().equals("")) {
             latitude.setError("Harap Isi koordinat latitude");
             latitude.requestFocus();
-            return false;
-        }
-        if (longitude.getText().toString().equals("")) {
-            longitude.setError("Harap Isi Nama Lengkap Vendor");
-            longitude.requestFocus();
             return false;
         }
         if (bselfie == null) {

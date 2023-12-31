@@ -129,9 +129,8 @@ public class TipeAdapter extends RecyclerView.Adapter<TipeAdapter.HolderData> {
     public void onBindViewHolder(@NonNull TipeAdapter.HolderData holder, int position) {
         FormatCurrency currency = new FormatCurrency();
         TipeModel tipeModel = models.get(position);
-        String priceText = currency.formatRupiah(tipeModel.getHargaTipe());
         holder.TVJudul.setText(tipeModel.getNamaTipe());
-        holder.TVHarga.setText(priceText);
+        holder.TVHarga.setText(tipeModel.getHargaTipe());
         holder.TVDeskripsi.setText(tipeModel.getDeskripsiTipe());
         Glide.with(context).load(models.get(position).getGambarTipe()).into(holder.IVGambar);
         holder.tipeModel = tipeModel;

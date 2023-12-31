@@ -30,6 +30,7 @@ public class ListingClosingAdapter extends RecyclerView.Adapter<ListingClosingAd
     private static final int MAX_TEXT_LENGTH = 20;
     private static final int MAX_TEXT_LENGTH_PRICE = 10;
     private static final int MAX_TEXT_LENGTH_PRICE_JUTA = 19;
+    private static final int MAX_TEXT_LENGTH_PRICE_RIBU = 15;
     public ListingClosingAdapter(Context context, List<ListingModel> list){
         this.models = list;
         this.originalList = list;
@@ -45,7 +46,11 @@ public class ListingClosingAdapter extends RecyclerView.Adapter<ListingClosingAd
 
     private String truncateTextWithEllipsisPrice(String text) {
         if (text.length() > MAX_TEXT_LENGTH_PRICE) {
-            if (text.length() < MAX_TEXT_LENGTH_PRICE_JUTA) {
+            if (text.length() < MAX_TEXT_LENGTH_PRICE_RIBU) {
+                //return text.substring(0, MAX_TEXT_LENGTH_PRICE) + " Rb";
+                String truncatedText = removeTrailingZeroK(text.substring(0, MAX_TEXT_LENGTH_PRICE)) + " Rb";
+                return truncatedText;
+            } else if (text.length() < MAX_TEXT_LENGTH_PRICE_JUTA) {
                 //return text.substring(0, MAX_TEXT_LENGTH_PRICE) + " Jt";
                 String truncatedText = removeTrailingZeroJ(text.substring(0, MAX_TEXT_LENGTH_PRICE)) + " Jt";
                 return truncatedText;
@@ -94,6 +99,20 @@ public class ListingClosingAdapter extends RecyclerView.Adapter<ListingClosingAd
             return text.substring(0, text.length() - 3);
         } else if (text.endsWith(".")) {
             return text.substring(0, text.length() - 1);
+        } else if (text.endsWith("00")) {
+            return text.substring(0, text.length() - 2);
+        } else {
+            return text;
+        }
+    }
+
+    private String removeTrailingZeroK(String text) {
+        if (text.endsWith(".000")) {
+            return text.substring(0, text.length() - 4);
+        } else if (text.endsWith(".00")) {
+            return text.substring(0, text.length() - 3);
+        } else if (text.endsWith(".0")) {
+            return text.substring(0, text.length() - 2);
         } else {
             return text;
         }
@@ -315,6 +334,8 @@ public class ListingClosingAdapter extends RecyclerView.Adapter<ListingClosingAd
                     update.putExtra("Fee",listingModel.getFee());
                     update.putExtra("NamaVendor",listingModel.getNamaVendor());
                     update.putExtra("NoTelpVendor",listingModel.getNoTelpVendor());
+                    update.putExtra("IsSelfie",listingModel.getIsSelfie());
+                    update.putExtra("IsLokasi",listingModel.getIsLokasi());
                     context.startActivity(update);
                 }
             });

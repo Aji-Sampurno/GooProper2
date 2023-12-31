@@ -121,12 +121,16 @@ public class ListingTerakhirDilihatActivity extends AppCompatActivity {
                                 md.setHSHP(data.getString("HSHP"));
                                 md.setPPJB(data.getString("PPJB"));
                                 md.setStratatitle(data.getString("Stratatitle"));
+                                md.setAJB(data.getString("AJB"));
+                                md.setPetokD(data.getString("PetokD"));
                                 md.setPjp(data.getString("Pjp"));
                                 md.setImgSHM(data.getString("ImgSHM"));
                                 md.setImgHGB(data.getString("ImgHGB"));
                                 md.setImgHSHP(data.getString("ImgHSHP"));
                                 md.setImgPPJB(data.getString("ImgPPJB"));
                                 md.setImgStratatitle(data.getString("ImgStratatitle"));
+                                md.setImgAJB(data.getString("ImgAJB"));
+                                md.setImgPetokD(data.getString("ImgPetokD"));
                                 md.setImgPjp(data.getString("ImgPjp"));
                                 md.setImgPjp1(data.getString("ImgPjp1"));
                                 md.setNoCertificate(data.getString("NoCertificate"));
@@ -160,6 +164,7 @@ public class ListingTerakhirDilihatActivity extends AppCompatActivity {
                                 md.setLinkYoutube(data.getString("LinkYoutube"));
                                 md.setIsAdmin(data.getString("IsAdmin"));
                                 md.setIsManager(data.getString("IsManager"));
+                                md.setIsRejected(data.getString("IsRejected"));
                                 md.setSold(data.getString("Sold"));
                                 md.setRented(data.getString("Rented"));
                                 md.setView(data.getString("View"));
@@ -171,6 +176,8 @@ public class ListingTerakhirDilihatActivity extends AppCompatActivity {
                                 md.setFee(data.getString("Fee"));
                                 md.setNamaVendor(data.getString("NamaVendor"));
                                 md.setNoTelpVendor(data.getString("NoTelpVendor"));
+                                md.setIsSelfie(data.getString("IsSelfie"));
+                                md.setIsLokasi(data.getString("IsLokasi"));
                                 list.add(md);
                                 PDSeen.dismiss();
                             } catch (JSONException e) {
@@ -334,6 +341,7 @@ public class ListingTerakhirDilihatActivity extends AppCompatActivity {
                                 md.setLinkYoutube(data.getString("LinkYoutube"));
                                 md.setIsAdmin(data.getString("IsAdmin"));
                                 md.setIsManager(data.getString("IsManager"));
+                                md.setIsRejected(data.getString("IsRejected"));
                                 md.setSold(data.getString("Sold"));
                                 md.setRented(data.getString("Rented"));
                                 md.setView(data.getString("View"));
@@ -345,6 +353,8 @@ public class ListingTerakhirDilihatActivity extends AppCompatActivity {
                                 md.setFee(data.getString("Fee"));
                                 md.setNamaVendor(data.getString("NamaVendor"));
                                 md.setNoTelpVendor(data.getString("NoTelpVendor"));
+                                md.setIsSelfie(data.getString("IsSelfie"));
+                                md.setIsLokasi(data.getString("IsLokasi"));
                                 list.add(md);
                                 PDSeen.dismiss();
                             } catch (JSONException e) {

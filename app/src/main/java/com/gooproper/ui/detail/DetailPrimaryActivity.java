@@ -261,7 +261,7 @@ public class DetailPrimaryActivity extends AppCompatActivity implements OnMapRea
         if (intentHargaListingPrimary.isEmpty()) {
             TVHargaDetailPrimary.setText("Rp. -");
         } else {
-            TVHargaDetailPrimary.setText(currency.formatRupiah(intentHargaListingPrimary));
+            TVHargaDetailPrimary.setText(intentHargaListingPrimary);
         }
         if (intentAlamatListingPrimary.isEmpty()) {
             TVAlamatDetailPrimary.setText("-");

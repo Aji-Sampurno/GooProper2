@@ -33,6 +33,45 @@
         android:theme="@style/Theme.GooProper"
         tools:targetApi="31">
         <activity
+            android:name=".ui.edit.EditMapsListingActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.tambah.TambahDetailListingSementaraActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.listing.ListListingSementaraActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.tambah.TambahListingSementaraActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.listing.InfoPropertySpekActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.listing.InfoPropertyKuActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.edit.EditInfoActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.tambah.TambahListingInfoActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.listing.PraListingRejectedAdminActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.detail.DetailInfoActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.listing.InfoPropertyActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.tambah.TambahInfoActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.listing.PraListingRejectedActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.followup.FollowUpPrimaryActivity"
             android:exported="false" />
         <activity
@@ -233,7 +272,7 @@
             android:name=".ui.RewardActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.TambahListingActivity"
+            android:name=".ui.tambah.TambahListingActivity"
             android:exported="false" />
         <activity
             android:name=".ui.listing.PopularActivity"

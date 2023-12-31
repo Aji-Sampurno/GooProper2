@@ -40,6 +40,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class PraListingAgenActivity extends AppCompatActivity {
 
@@ -80,7 +81,6 @@ public class PraListingAgenActivity extends AppCompatActivity {
 
             }
         });
-
         IVSortAsc.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -89,7 +89,6 @@ public class PraListingAgenActivity extends AppCompatActivity {
                 IVSortAsc.setVisibility(View.GONE);
             }
         });
-
         IVSortDesc.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -180,6 +179,69 @@ public class PraListingAgenActivity extends AppCompatActivity {
             selectedPrioritas = "open";
         }
 
+        editTextMinPrice.addTextChangedListener(new TextWatcher() {
+            private String current = "";
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (!s.toString().equals(current)) {
+                    editTextMinPrice.removeTextChangedListener(this);
+
+                    String cleanString = s.toString().replaceAll("[Rp,.\\s]", "");
+                    if (!cleanString.isEmpty()) {
+                        double parsed = Double.parseDouble(cleanString);
+                        String formatted = String.format(Locale.US, "%,.0f", parsed);
+                        current = formatted;
+                        editTextMinPrice.setText(formatted);
+                        editTextMinPrice.setSelection(formatted.length());
+                    } else {
+                        editTextMinPrice.setText("");
+                    }
+
+                    editTextMinPrice.addTextChangedListener(this);
+                }
+            }
+        });
+        editTextMaxPrice.addTextChangedListener(new TextWatcher() {
+            private String current = "";
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (!s.toString().equals(current)) {
+                    editTextMaxPrice.removeTextChangedListener(this);
+
+                    String cleanString = s.toString().replaceAll("[Rp,.\\s]", "");
+                    if (!cleanString.isEmpty()) {
+                        double parsed = Double.parseDouble(cleanString);
+                        String formatted = String.format(Locale.US, "%,.0f", parsed);
+                        current = formatted;
+                        editTextMaxPrice.setText(formatted);
+                        editTextMaxPrice.setSelection(formatted.length());
+                    } else {
+                        editTextMaxPrice.setText("");
+                    }
+
+                    editTextMaxPrice.addTextChangedListener(this);
+                }
+            }
+        });
+
         textViewSpec.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -220,6 +282,8 @@ public class PraListingAgenActivity extends AppCompatActivity {
                     selectedKondisi = "Jual";
                 } else if (selectedRadioButtonId == R.id.sewa) {
                     selectedKondisi = "Sewa";
+                } else if (selectedRadioButtonId == R.id.jualsewa) {
+                    selectedKondisi = "Jual/Sewa";
                 }
 
                 RadioGroup prioritasRG = dialogView.findViewById(R.id.prioritas);
@@ -235,12 +299,14 @@ public class PraListingAgenActivity extends AppCompatActivity {
 
                 long minPrice = 0;
                 if (!minPriceStr.isEmpty()) {
-                    minPrice = Long.parseLong(minPriceStr.replace(".", "").trim());
+                    String cleanString = minPriceStr.toString().replaceAll("[Rp,.\\s]", "");
+                    minPrice = Long.parseLong(cleanString);
                 }
 
                 long maxPrice = 0;
                 if (!maxPriceStr.isEmpty()) {
-                    maxPrice = Long.parseLong(maxPriceStr.replace(".", "").trim());
+                    String cleanString = maxPriceStr.toString().replaceAll("[Rp,.\\s]", "");
+                    maxPrice = Long.parseLong(cleanString);
                 }
 
                 String bedSearch = String.valueOf(0);
@@ -290,29 +356,30 @@ public class PraListingAgenActivity extends AppCompatActivity {
 
                 if (!minPriceStr.isEmpty() && !maxPriceStr.isEmpty()) {
                     if (minPrice <= maxPrice) {
-                        applyCustomFilter(v, minPrice, maxPrice, true, bedSearchStr, bathSearchStr, landWideSearchStr, buildingWideSearchStr, garageSearchStr, carpotSearchStr, levelSearchStr, specStr, typeStr, selectedKondisi, selectedPrioritas);
+                        applyCustomFilter(v, minPrice, maxPrice, true, bedSearchStr, bathSearchStr, landWideSearchStr, buildingWideSearchStr, garageSearchStr, carpotSearchStr, levelSearchStr, specStr, typeStr, selectedKondisi);
                     } else {
-                        // Handle invalid input, show a message or toast if needed
-                        Toast.makeText(PraListingAgenActivity.this, "Invalid price range", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(PraListingAgenActivity.this, "Batas Harga Salah", Toast.LENGTH_SHORT).show();
                     }
                 } else if (!minPriceStr.isEmpty()) {
-                    applyCustomFilter(v, minPrice, maxPrice, true, bedSearchStr, bathSearchStr, landWideSearchStr, buildingWideSearchStr, garageSearchStr, carpotSearchStr, levelSearchStr, specStr, typeStr, selectedKondisi, selectedPrioritas);
+                    applyCustomFilter(v, minPrice, maxPrice, true, bedSearchStr, bathSearchStr, landWideSearchStr, buildingWideSearchStr, garageSearchStr, carpotSearchStr, levelSearchStr, specStr, typeStr, selectedKondisi);
                 } else if (!maxPriceStr.isEmpty()) {
-                    applyCustomFilter(v, minPrice, maxPrice, true, bedSearchStr, bathSearchStr, landWideSearchStr, buildingWideSearchStr, garageSearchStr, carpotSearchStr, levelSearchStr, specStr, typeStr, selectedKondisi, selectedPrioritas);
+                    applyCustomFilter(v, minPrice, maxPrice, true, bedSearchStr, bathSearchStr, landWideSearchStr, buildingWideSearchStr, garageSearchStr, carpotSearchStr, levelSearchStr, specStr, typeStr, selectedKondisi);
+                } else if (!selectedKondisi.isEmpty() || !selectedKondisi.equals("")) {
+                    applyCustomFilter(v, 0, 0, true, bedSearchStr, bathSearchStr, landWideSearchStr, buildingWideSearchStr, garageSearchStr, carpotSearchStr, levelSearchStr, specStr, typeStr, selectedKondisi);
                 } else if (!bedSearchStr.isEmpty()) {
-                    applyCustomFilter(v, 0, 0, true, bedSearchStr, bathSearchStr, landWideSearchStr, buildingWideSearchStr, garageSearchStr, carpotSearchStr, levelSearchStr, specStr, typeStr, selectedKondisi, selectedPrioritas);
+                    applyCustomFilter(v, 0, 0, true, bedSearchStr, bathSearchStr, landWideSearchStr, buildingWideSearchStr, garageSearchStr, carpotSearchStr, levelSearchStr, specStr, typeStr, selectedKondisi);
                 } else if (!bathSearchStr.isEmpty()) {
-                    applyCustomFilter(v, 0, 0, true, bedSearchStr, bathSearchStr, landWideSearchStr, buildingWideSearchStr, garageSearchStr, carpotSearchStr, levelSearchStr, specStr, typeStr, selectedKondisi, selectedPrioritas);
+                    applyCustomFilter(v, 0, 0, true, bedSearchStr, bathSearchStr, landWideSearchStr, buildingWideSearchStr, garageSearchStr, carpotSearchStr, levelSearchStr, specStr, typeStr, selectedKondisi);
                 } else if (!landWideSearchStr.isEmpty()) {
-                    applyCustomFilter(v, 0, 0, true, bedSearchStr, bathSearchStr, landWideSearchStr, buildingWideSearchStr, garageSearchStr, carpotSearchStr, levelSearchStr, specStr, typeStr, selectedKondisi, selectedPrioritas);
+                    applyCustomFilter(v, 0, 0, true, bedSearchStr, bathSearchStr, landWideSearchStr, buildingWideSearchStr, garageSearchStr, carpotSearchStr, levelSearchStr, specStr, typeStr, selectedKondisi);
                 } else if (!buildingWideSearchStr.isEmpty()) {
-                    applyCustomFilter(v, 0, 0, true, bedSearchStr, bathSearchStr, landWideSearchStr, buildingWideSearchStr, garageSearchStr, carpotSearchStr, levelSearchStr, specStr, typeStr, selectedKondisi, selectedPrioritas);
+                    applyCustomFilter(v, 0, 0, true, bedSearchStr, bathSearchStr, landWideSearchStr, buildingWideSearchStr, garageSearchStr, carpotSearchStr, levelSearchStr, specStr, typeStr, selectedKondisi);
                 } else if (!specStr.isEmpty()) {
-                    applyCustomFilter(v, 0, 0, true, bedSearchStr, bathSearchStr, landWideSearchStr, buildingWideSearchStr, garageSearchStr, carpotSearchStr, levelSearchStr, specStr, typeStr, selectedKondisi, selectedPrioritas);
+                    applyCustomFilter(v, 0, 0, true, bedSearchStr, bathSearchStr, landWideSearchStr, buildingWideSearchStr, garageSearchStr, carpotSearchStr, levelSearchStr, specStr, typeStr, selectedKondisi);
                 } else if (!typeStr.isEmpty()) {
-                    applyCustomFilter(v, 0, 0, true, bedSearchStr, bathSearchStr, landWideSearchStr, buildingWideSearchStr, garageSearchStr, carpotSearchStr, levelSearchStr, specStr, typeStr, selectedKondisi, selectedPrioritas);
+                    applyCustomFilter(v, 0, 0, true, bedSearchStr, bathSearchStr, landWideSearchStr, buildingWideSearchStr, garageSearchStr, carpotSearchStr, levelSearchStr, specStr, typeStr, selectedKondisi);
                 } else {
-                    applyFilters = true; // Apply filters
+                    applyFilters = true;
                     adapter.setFilteredlist(list);
                 }
             }
@@ -345,7 +412,7 @@ public class PraListingAgenActivity extends AppCompatActivity {
         builder.setSingleChoiceItems(spec, selectedSpecIndex[0], new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                selectedSpecIndex[0] = which; // update the selected property type index
+                selectedSpecIndex[0] = which;
             }
         });
 
@@ -391,99 +458,175 @@ public class PraListingAgenActivity extends AppCompatActivity {
         dialog.show();
     }
 
-    public void applyCustomFilter(View view,
-                                  long minPrice,
-                                  long maxPrice,
-                                  boolean isAbove,
-                                  String bedSearch,
-                                  String bathSearch,
-                                  String landWideSearch,
-                                  String buildingWideSearch,
-                                  String garageSearch,
-                                  String carpotSearch,
-                                  String levelSearch,
-                                  String viewSpec,
-                                  String viewType,
-                                  String kondisi,
-                                  String prioritas) {
-        //applyFilters = true; // Set the boolean to true before applying filters
+    public void applyCustomFilter(View view, long minPrice, long maxPrice, boolean isAbove, String bedSearch, String bathSearch, String landWideSearch, String buildingWideSearch, String garageSearch, String carpotSearch, String levelSearch, String viewSpec, String viewType, String kondisi) {
         ArrayList<ListingModel> filteredList = new ArrayList<>();
-        for (ListingModel product : list) {
-            long productPrice = Long.parseLong(product.getHarga().replace(".", "").trim());
-            boolean isPriceMatched = false;
-            boolean isBedMatched = true; // Assume bed is matched unless bedSearch is not empty and not equal to the listing's bed value
-            boolean isBathMatched = true; // Assume bath is matched unless bathSearch is not empty and not equal to the listing's bath value
-            boolean isLandWideMatched = true; // Assume landwide is matched unless landWideSearch is not empty and not equal to the listing's landwide value
-            boolean isBuildingWideMatched = true; // Assume buildingwide is matched unless buildingWideSearch is not empty and not equal to the listing's buildingwide value
-            boolean isGarageMatched = true;
-            boolean isCarpotMatched = true;
-            boolean isLevelMatched = true;
-            boolean isViewSpecMatched = true; //tipe hunian
-            boolean isViewTypeMatched = true;
-            boolean isKondisiMatched = true; //kondisi
-            boolean isPrioritasMatched = true;
+        if (minPrice > 0 || maxPrice > 0) {
+            for (ListingModel product : list) {
+                long productPrice = Long.parseLong(product.getHarga().replace(".", "").trim());
+                long productPriceSewa = Long.parseLong(product.getHargaSewa().replace(".", "").trim());
+                boolean isPriceMatched = false;
+                boolean isBedMatched = true;
+                boolean isBathMatched = true;
+                boolean isLandWideMatched = true;
+                boolean isBuildingWideMatched = true;
+                boolean isGarageMatched = true;
+                boolean isCarpotMatched = true;
+                boolean isLevelMatched = true;
+                boolean isViewSpecMatched = true;
+                boolean isViewTypeMatched = true;
+                boolean isKondisiMatched = true;
 
-            if (isAbove) {
-                if (productPrice >= minPrice) {
-                    isPriceMatched = true;
+                if (kondisi.equals("Jual")) {
+                    if (minPrice > 0 && maxPrice > 0){
+                        if (productPrice >= minPrice && productPrice <= maxPrice) {
+                            isPriceMatched = true;
+                        }
+                    } else if (minPrice > 0) {
+                        if (productPrice >= minPrice) {
+                            isPriceMatched = true;
+                        }
+                    } else if (maxPrice > 0){
+                        if (productPrice <= maxPrice) {
+                            isPriceMatched = true;
+                        }
+                    }
+                } else if (kondisi.equals("Sewa")) {
+                    if (minPrice > 0 && maxPrice > 0){
+                        if (productPriceSewa >= minPrice && productPriceSewa <= maxPrice) {
+                            isPriceMatched = true;
+                        }
+                    } else if (minPrice > 0) {
+                        if (productPriceSewa >= minPrice) {
+                            isPriceMatched = true;
+                        }
+                    } else if (maxPrice > 0){
+                        if (productPriceSewa <= maxPrice) {
+                            isPriceMatched = true;
+                        }
+                    }
+                } else if (kondisi.equals("Jual/Sewa")) {
+                    if (minPrice > 0 && maxPrice > 0){
+                        if (productPriceSewa >= minPrice && productPriceSewa <= maxPrice) {
+                            isPriceMatched = true;
+                        }
+                    } else if (minPrice > 0) {
+                        if (productPrice >= minPrice || productPriceSewa >= minPrice) {
+                            isPriceMatched = true;
+                        }
+                    } else if (maxPrice > 0){
+                        if (productPrice <= maxPrice || productPriceSewa >= maxPrice) {
+                            isPriceMatched = true;
+                        }
+                    }
+                } else {
+                    if (minPrice > 0 && maxPrice > 0){
+                        if (productPrice >= minPrice && productPrice <= maxPrice || productPriceSewa >= minPrice && productPriceSewa <= maxPrice) {
+                            isPriceMatched = true;
+                        }
+                    } else if (minPrice > 0) {
+                        if (productPrice >= minPrice || productPriceSewa >= minPrice) {
+                            isPriceMatched = true;
+                        }
+                    } else if (maxPrice > 0){
+                        if (productPrice <= maxPrice || productPriceSewa >= maxPrice) {
+                            isPriceMatched = true;
+                        }
+                    }
                 }
-            } else {
-                if (productPrice <= maxPrice) {
-                    isPriceMatched = true;
+
+                if (!bedSearch.isEmpty() && !bedSearch.equals(product.getBed())) {
+                    isBedMatched = false;
+                }
+                if (!bathSearch.isEmpty() && !bathSearch.equals(product.getBath())) {
+                    isBathMatched = false;
+                }
+                if (!landWideSearch.isEmpty() && !landWideSearch.equalsIgnoreCase(product.getWide())) {
+                    isLandWideMatched = false;
+                }
+                if (!buildingWideSearch.isEmpty() && !buildingWideSearch.equalsIgnoreCase(product.getLand())) {
+                    isBuildingWideMatched = false;
+                }
+                if (!garageSearch.isEmpty() && !garageSearch.equals(product.getGarage())) {
+                    isGarageMatched = false;
+                }
+                if (!carpotSearch.isEmpty() && !carpotSearch.equals(product.getCarpot())) {
+                    isCarpotMatched = false;
+                }
+                if (!levelSearch.isEmpty() && !levelSearch.equals(product.getLevel())) {
+                    isLevelMatched = false;
+                }
+                if (!viewSpec.isEmpty() && !viewSpec.equalsIgnoreCase(product.getJenisProperti())) {
+                    isViewSpecMatched = false;
+                }
+                if (!viewType.isEmpty() && !viewType.equalsIgnoreCase(product.getJenisCertificate())) {
+                    isViewTypeMatched = false;
+                }
+                if (!kondisi.isEmpty() && !kondisi.equals(product.getKondisi())) {
+                    isKondisiMatched = false;
+                }
+                if (isPriceMatched && isBedMatched && isBathMatched && isLandWideMatched && isBuildingWideMatched && isGarageMatched && isCarpotMatched && isLevelMatched && isViewSpecMatched && isViewTypeMatched && isKondisiMatched) {
+                    filteredList.add(product);
                 }
             }
+        } else {
+            for (ListingModel product : list) {
+                long productPrice = Long.parseLong(product.getHarga().replace(".", "").trim());
+                long productPriceSewa = Long.parseLong(product.getHargaSewa().replace(".", "").trim());
+                boolean isPriceMatched = false;
+                boolean isBedMatched = true;
+                boolean isBathMatched = true;
+                boolean isLandWideMatched = true;
+                boolean isBuildingWideMatched = true;
+                boolean isGarageMatched = true;
+                boolean isCarpotMatched = true;
+                boolean isLevelMatched = true;
+                boolean isViewSpecMatched = true;
+                boolean isViewTypeMatched = true;
+                boolean isKondisiMatched = true;
 
-            // Check if bedSearch is not empty and does not match the listing's bed value
-            if (!bedSearch.isEmpty() && !bedSearch.equals(product.getBed())) {
-                isBedMatched = false;
-            }
+                if (isAbove) {
+                    if (productPrice >= minPrice) {
+                        isPriceMatched = true;
+                    }
+                } else {
+                    if (productPrice <= maxPrice) {
+                        isPriceMatched = true;
+                    }
+                }
 
-            // Check if bathSearch is not empty and does not match the listing's bath value
-            if (!bathSearch.isEmpty() && !bathSearch.equals(product.getBath())) {
-                isBathMatched = false;
-            }
-
-            // Check if landWideSearch is not empty and does not match the listing's landwide value
-            if (!landWideSearch.isEmpty() && !landWideSearch.equalsIgnoreCase(product.getWide())) {
-                isLandWideMatched = false;
-            }
-
-            // Check if buildingWideSearch is not empty and does not match the listing's buildingwide value
-            if (!buildingWideSearch.isEmpty() && !buildingWideSearch.equalsIgnoreCase(product.getLand())) {
-                isBuildingWideMatched = false;
-            }
-
-            if (!garageSearch.isEmpty() && !garageSearch.equals(product.getGarage())) {
-                isGarageMatched = false;
-            }
-
-            if (!carpotSearch.isEmpty() && !carpotSearch.equals(product.getCarpot())) {
-                isCarpotMatched = false;
-            }
-
-            if (!levelSearch.isEmpty() && !levelSearch.equals(product.getLevel())) {
-                isLevelMatched = false;
-            }
-
-            if (!viewSpec.isEmpty() && !viewSpec.equalsIgnoreCase(product.getJenisProperti())) {
-                isViewSpecMatched = false;
-            }
-
-            if (!viewType.isEmpty() && !viewType.equalsIgnoreCase(product.getJenisCertificate())) {
-                isViewTypeMatched = false;
-            }
-
-            if (!kondisi.isEmpty() && !kondisi.equals(product.getKondisi())) {
-                isKondisiMatched = false;
-            }
-
-            if (!prioritas.isEmpty() && !prioritas.equals(product.getPriority())) {
-                isPrioritasMatched = false;
-            }
-
-            // Check other filter criteria and include the listing if all conditions are met
-            if (isPriceMatched && isBedMatched && isBathMatched && isLandWideMatched && isBuildingWideMatched && isGarageMatched && isCarpotMatched && isLevelMatched && isViewSpecMatched && isViewTypeMatched && isKondisiMatched && isPrioritasMatched) {
-                filteredList.add(product);
+                if (!bedSearch.isEmpty() && !bedSearch.equals(product.getBed())) {
+                    isBedMatched = false;
+                }
+                if (!bathSearch.isEmpty() && !bathSearch.equals(product.getBath())) {
+                    isBathMatched = false;
+                }
+                if (!landWideSearch.isEmpty() && !landWideSearch.equalsIgnoreCase(product.getWide())) {
+                    isLandWideMatched = false;
+                }
+                if (!buildingWideSearch.isEmpty() && !buildingWideSearch.equalsIgnoreCase(product.getLand())) {
+                    isBuildingWideMatched = false;
+                }
+                if (!garageSearch.isEmpty() && !garageSearch.equals(product.getGarage())) {
+                    isGarageMatched = false;
+                }
+                if (!carpotSearch.isEmpty() && !carpotSearch.equals(product.getCarpot())) {
+                    isCarpotMatched = false;
+                }
+                if (!levelSearch.isEmpty() && !levelSearch.equals(product.getLevel())) {
+                    isLevelMatched = false;
+                }
+                if (!viewSpec.isEmpty() && !viewSpec.equalsIgnoreCase(product.getJenisProperti())) {
+                    isViewSpecMatched = false;
+                }
+                if (!viewType.isEmpty() && !viewType.equalsIgnoreCase(product.getJenisCertificate())) {
+                    isViewTypeMatched = false;
+                }
+                if (!kondisi.isEmpty() && !kondisi.equals(product.getKondisi())) {
+                    isKondisiMatched = false;
+                }
+                if (isPriceMatched && isBedMatched && isBathMatched && isLandWideMatched && isBuildingWideMatched && isGarageMatched && isCarpotMatched && isLevelMatched && isViewSpecMatched && isViewTypeMatched && isKondisiMatched) {
+                    filteredList.add(product);
+                }
             }
         }
 
@@ -493,7 +636,7 @@ public class PraListingAgenActivity extends AppCompatActivity {
             alertDialog.dismiss();
         }
 
-        applyFilters = false; // Clear the filter flag after applying filters
+        applyFilters = false;
     }
 
     private void LoadListing(boolean showProgressDialog) {
@@ -582,6 +725,7 @@ public class PraListingAgenActivity extends AppCompatActivity {
                                 md.setLinkYoutube(data.getString("LinkYoutube"));
                                 md.setIsAdmin(data.getString("IsAdmin"));
                                 md.setIsManager(data.getString("IsManager"));
+                                md.setIsRejected(data.getString("IsRejected"));
                                 md.setSold(data.getString("Sold"));
                                 md.setRented(data.getString("Rented"));
                                 md.setView(data.getString("View"));
@@ -593,6 +737,8 @@ public class PraListingAgenActivity extends AppCompatActivity {
                                 md.setFee(data.getString("Fee"));
                                 md.setNamaVendor(data.getString("NamaVendor"));
                                 md.setNoTelpVendor(data.getString("NoTelpVendor"));
+                                md.setIsSelfie(data.getString("IsSelfie"));
+                                md.setIsLokasi(data.getString("IsLokasi"));
                                 list.add(md);
                                 PDListingKu.cancel();
                             } catch (JSONException e) {

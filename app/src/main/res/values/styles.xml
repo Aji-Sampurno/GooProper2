@@ -69,7 +69,8 @@
 
     <style name="SearchViewMyStyle" parent="Widget.AppCompat.SearchView">
         <item name="android:editTextColor">@color/white</item>
-        <item name="android:background">@color/main</item>
+        <item name="windowActionBar">true</item>
+        <item name="android:queryBackground">@drawable/backgroundroundyellow</item>
     </style>
 
 </resources>

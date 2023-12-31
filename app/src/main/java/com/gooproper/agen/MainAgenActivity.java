@@ -21,7 +21,7 @@ public class MainAgenActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main_agen);
 
         BottomNavigationView navigationView = findViewById(R.id.nav_view_agen);
-        AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(R.id.flowUpAgen_nav, R.id.homeAgen_nav, R.id.listingAgen_nav, R.id.akunAgen_nav).build();
+        AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(R.id.flowUpAgen_nav, R.id.infoAgen_nav, R.id.homeAgen_nav, R.id.listingAgen_nav, R.id.akunAgen_nav).build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_agen);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);

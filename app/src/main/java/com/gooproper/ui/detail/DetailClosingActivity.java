@@ -56,7 +56,7 @@ public class DetailClosingActivity extends AppCompatActivity implements OnMapRea
     ProgressDialog PDDetailListing;
     TextView TVNamaDetailListing, TVAlamatDetailListing, TVHargaDetailListing, TVHargaSewaDetailListing, TVViewsDetailListing, TVBedDetailListing, TVNamaAgen, TVBathDetailListing, TVWideDetailListing, TVLandDetailListing, TVDimensiDetailListing, TVTipeDetailListing, TVStatusDetailListing, TVSertifikatDetailListing, TVLuasDetailListing, TVKamarTidurDetailListing, TVKamarMandiDetailListing, TVLantaiDetailListing, TVGarasiDetailListing, TVCarpotDetailListing, TVListrikDetailListing, TVSumberAirDetailListing, TVPerabotDetailListing, TVSizeBanner, TVDeskripsiDetailListing, TVNoData, TVPriority, TVKondisi, TVNoPjp, TVNoDataPjp, TVFee;
     ImageView IVStar1, IVStar2, IVStar3, IVStar4, IVStar5 ;
-    Button BtnSold, BtnRented;
+    Button BtnSold, BtnRented, BtnSoldAgen, BtnRentedAgen;
     ScrollView scrollView;
     CardView CVSold;
     String status, idpralisting, idagen, idlisting, StringNamaListing, StringLuasTanah, StringLuasBangunan, StringKamarTidur, StringKamarTidurArt, StringKamarMandiArt, StringKamarMandi, StringListrik, StringHarga, StringHargaSewa, StringSertifikat;
@@ -122,6 +122,8 @@ public class DetailClosingActivity extends AppCompatActivity implements OnMapRea
 
         BtnSold = findViewById(R.id.BtnSold);
         BtnRented = findViewById(R.id.BtnRented);
+        BtnSoldAgen = findViewById(R.id.BtnSoldAgen);
+        BtnRentedAgen = findViewById(R.id.BtnRentedAgen);
 
         mapView = findViewById(R.id.MVDetailListing);
         mapView.onCreate(savedInstanceState);
@@ -334,6 +336,18 @@ public class DetailClosingActivity extends AppCompatActivity implements OnMapRea
             @Override
             public void onClick(View v) {
                 rented();
+            }
+        });
+        BtnSoldAgen.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                soldagen();
+            }
+        });
+        BtnRentedAgen.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                rentedagen();
             }
         });
 
@@ -820,6 +834,182 @@ public class DetailClosingActivity extends AppCompatActivity implements OnMapRea
         pDialog.show();
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, ServerApi.URL_RENTED, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                pDialog.cancel();
+                Dialog customDialog = new Dialog(DetailClosingActivity.this);
+                customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                customDialog.setContentView(R.layout.custom_dialog_sukses);
+
+                if (customDialog.getWindow() != null) {
+                    customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                }
+
+                TextView dialogTitle = customDialog.findViewById(R.id.dialog_title);
+                Button ok = customDialog.findViewById(R.id.btnya);
+                Button cobalagi = customDialog.findViewById(R.id.btntidak);
+                ImageView gifimage = customDialog.findViewById(R.id.ivdialog);
+
+                dialogTitle.setText("Berhasil");
+                cobalagi.setVisibility(View.GONE);
+
+                ok.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        finish();
+                    }
+                });
+
+                Glide.with(DetailClosingActivity.this)
+                        .load(R.mipmap.ic_yes)
+                        .transition(DrawableTransitionOptions.withCrossFade())
+                        .into(gifimage);
+
+                customDialog.show();
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                pDialog.cancel();
+                Dialog customDialog = new Dialog(DetailClosingActivity.this);
+                customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                customDialog.setContentView(R.layout.custom_dialog_sukses);
+
+                if (customDialog.getWindow() != null) {
+                    customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                }
+
+                TextView dialogTitle = customDialog.findViewById(R.id.dialog_title);
+                Button ok = customDialog.findViewById(R.id.btnya);
+                Button cobalagi = customDialog.findViewById(R.id.btntidak);
+                ImageView gifimage = customDialog.findViewById(R.id.ivdialog);
+
+                dialogTitle.setText("Gagal");
+                ok.setVisibility(View.GONE);
+
+                cobalagi.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        customDialog.dismiss();
+                    }
+                });
+
+                Glide.with(DetailClosingActivity.this)
+                        .load(R.mipmap.ic_no) // You can also use a local resource like R.drawable.your_gif_resource
+                        .transition(DrawableTransitionOptions.withCrossFade())
+                        .into(gifimage);
+
+                customDialog.show();
+            }
+        }) {
+            @Nullable
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> map = new HashMap<>();
+                System.out.println(map);
+                map.put("IdListing", idlisting);
+                return map;
+            }
+        };
+
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(stringRequest);
+    }
+
+    private void soldagen() {
+        pDialog.setMessage("Sedang Diproses...");
+        pDialog.setCancelable(false);
+        pDialog.show();
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, ServerApi.URL_SOLD_AGEN, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                pDialog.cancel();
+                Dialog customDialog = new Dialog(DetailClosingActivity.this);
+                customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                customDialog.setContentView(R.layout.custom_dialog_sukses);
+
+                if (customDialog.getWindow() != null) {
+                    customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                }
+
+                TextView dialogTitle = customDialog.findViewById(R.id.dialog_title);
+                Button ok = customDialog.findViewById(R.id.btnya);
+                Button cobalagi = customDialog.findViewById(R.id.btntidak);
+                ImageView gifimage = customDialog.findViewById(R.id.ivdialog);
+
+                dialogTitle.setText("Berhasil");
+                cobalagi.setVisibility(View.GONE);
+
+                ok.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        finish();
+                    }
+                });
+
+                Glide.with(DetailClosingActivity.this)
+                        .load(R.mipmap.ic_yes)
+                        .transition(DrawableTransitionOptions.withCrossFade())
+                        .into(gifimage);
+
+                customDialog.show();
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                pDialog.cancel();
+                Dialog customDialog = new Dialog(DetailClosingActivity.this);
+                customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                customDialog.setContentView(R.layout.custom_dialog_sukses);
+
+                if (customDialog.getWindow() != null) {
+                    customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                }
+
+                TextView dialogTitle = customDialog.findViewById(R.id.dialog_title);
+                Button ok = customDialog.findViewById(R.id.btnya);
+                Button cobalagi = customDialog.findViewById(R.id.btntidak);
+                ImageView gifimage = customDialog.findViewById(R.id.ivdialog);
+
+                dialogTitle.setText("Gagal");
+                ok.setVisibility(View.GONE);
+
+                cobalagi.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        customDialog.dismiss();
+                    }
+                });
+
+                Glide.with(DetailClosingActivity.this)
+                        .load(R.mipmap.ic_no) // You can also use a local resource like R.drawable.your_gif_resource
+                        .transition(DrawableTransitionOptions.withCrossFade())
+                        .into(gifimage);
+
+                customDialog.show();
+            }
+        }) {
+            @Nullable
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> map = new HashMap<>();
+                System.out.println(map);
+                map.put("IdListing", idlisting);
+                return map;
+            }
+        };
+
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(stringRequest);
+    }
+
+    private void rentedagen() {
+        pDialog.setMessage("Sedang Diproses...");
+        pDialog.setCancelable(false);
+        pDialog.show();
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, ServerApi.URL_RENTED_AGEN, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 pDialog.cancel();

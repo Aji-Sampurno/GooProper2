@@ -20,8 +20,10 @@ import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.gooproper.R;
 import com.gooproper.admin.MainAdminActivity;
+import com.gooproper.ui.listing.InfoPropertyActivity;
 import com.gooproper.ui.listing.ListingkuActivity;
 import com.gooproper.ui.PelamarAgenActivity;
+import com.gooproper.ui.listing.PraListingRejectedActivity;
 
 import java.util.Map;
 
@@ -38,6 +40,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     public void onMessageReceived(RemoteMessage remoteMessage) {
         Log.d(TAG, "Pesan push diterima: " + remoteMessage.getData());
         Map<String, String> data = remoteMessage.getData();
+
+        int notificationId = (int) System.currentTimeMillis();
 
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
             String channelId = "my_channel_id";
@@ -59,8 +63,12 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         } else if ("pralisting".equals(notificationType)) {
             intent = new Intent(this, MainAdminActivity.class);
             intent.putExtra("fragment_to_open", "pralisting");
+        } else if ("infoproperty".equals(notificationType)) {
+            intent = new Intent(this, InfoPropertyActivity.class);
         } else if ("pelamar".equals(notificationType)) {
             intent = new Intent(this, PelamarAgenActivity.class);
+        } else if ("rejected".equals(notificationType)) {
+            intent = new Intent(this, PraListingRejectedActivity.class);
         } else {
             intent = new Intent(this, MainAdminActivity.class);
             intent.putExtra("fragment_to_open", "pralisting");
@@ -78,7 +86,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                         .setSmallIcon(R.drawable.logogp)
                         .setContentTitle(title)
                         .setContentText(messageBody)
-                        .setPriority(NotificationCompat.PRIORITY_HIGH)
+                        .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                         .setDefaults(Notification.DEFAULT_LIGHTS | Notification.DEFAULT_SOUND)
                         .setSound(defaultSoundUri)
                         .setAutoCancel(true)
@@ -95,6 +103,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             // for ActivityCompat#requestPermissions for more details.
             return;
         }
-        notificationManager.notify(0, notificationBuilder.build());
+        notificationManager.notify(notificationId, notificationBuilder.build());
     }
 }

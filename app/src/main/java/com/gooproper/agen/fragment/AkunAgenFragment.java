@@ -14,16 +14,23 @@ import android.view.Window;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.gooproper.ui.AgenActivity;
 import com.gooproper.ui.edit.EditAkunActivity;
 import com.gooproper.R;
 import com.gooproper.ui.SettingActivity;
 import com.gooproper.ui.TentangKamiActivity;
+import com.gooproper.ui.listing.InfoPropertyKuActivity;
+import com.gooproper.ui.listing.InfoPropertySpekActivity;
+import com.gooproper.ui.listing.ListListingSementaraActivity;
 import com.gooproper.ui.listing.ListingFavoriteActivity;
 import com.gooproper.ui.listing.ListingTerakhirDilihatActivity;
 import com.gooproper.ui.listing.ListingkuActivity;
 import com.gooproper.ui.listing.PraListingAgenActivity;
 import com.gooproper.ui.RewardActivity;
-import com.gooproper.ui.TambahListingActivity;
+import com.gooproper.ui.tambah.TambahListingActivity;
+import com.gooproper.ui.listing.PraListingRejectedActivity;
+import com.gooproper.ui.tambah.TambahInfoActivity;
+import com.gooproper.ui.tambah.TambahListingSementaraActivity;
 import com.gooproper.util.Preferences;
 import com.squareup.picasso.Picasso;
 
@@ -31,7 +38,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class AkunAgenFragment extends Fragment {
 
-    private LinearLayout reward, listing, listingmitra, listingkl, agen, mitra, kl, listingku, favorite, favoritemitra, favoritekl, seen, seenmitra, seenkl, pengaturan, pengaturanmitra, pengaturankl, hubungikami, hubungikamimitra, hubungikamikl, tentangkami, tentangkamimitra, tentangkamikl, pralising;
+    private LinearLayout reward, listing, agengoo, listingsementara, daftarsementara, listingmitra, listingkl, agen, mitra, kl, listingku, favorite, favoritemitra, favoritekl, seen, seenmitra, seenkl, pengaturan, pengaturanmitra, pengaturankl, hubungikami, hubungikamimitra, hubungikamikl, tentangkami, tentangkamimitra, tentangkamikl, pralising, pralistingreject, info, infoku, prainfo;
     TextView nama, edit;
     CircleImageView cvagen;
     String imgurl;
@@ -53,6 +60,7 @@ public class AkunAgenFragment extends Fragment {
         mitra = root.findViewById(R.id.lytkl);
         kl = root.findViewById(R.id.lytmitra);
         reward = root.findViewById(R.id.lytreward);
+        agengoo = root.findViewById(R.id.lytagengoo);
         listingku = root.findViewById(R.id.lytlistingku);
         favorite = root.findViewById(R.id.lytfavorite);
         favoritemitra = root.findViewById(R.id.lytfavoritemitra);
@@ -61,8 +69,13 @@ public class AkunAgenFragment extends Fragment {
         seenmitra = root.findViewById(R.id.lytterakhirdilihatmitra);
         seenkl = root.findViewById(R.id.lytterakhirdilihatkl);
         listing = root.findViewById(R.id.lytlisting);
+        listingsementara = root.findViewById(R.id.lytsementara);
+        daftarsementara = root.findViewById(R.id.lytdaftarsementara);
         listingmitra = root.findViewById(R.id.lytlistingmitra);
         listingkl = root.findViewById(R.id.lytlistingkl);
+        info = root.findViewById(R.id.lytinfo);
+        infoku = root.findViewById(R.id.lytinfoagen);
+        prainfo = root.findViewById(R.id.lytinfospek);
         pengaturan = root.findViewById(R.id.lytpengaturan);
         pengaturanmitra = root.findViewById(R.id.lytpengaturanmitra);
         pengaturankl = root.findViewById(R.id.lytpengaturankl);
@@ -73,6 +86,7 @@ public class AkunAgenFragment extends Fragment {
         tentangkamimitra = root.findViewById(R.id.lyttentangkamimitra);
         tentangkamikl = root.findViewById(R.id.lyttentangkamikl);
         pralising = root.findViewById(R.id.lytpralisting);
+        pralistingreject = root.findViewById(R.id.lytpralistingrejected);
         nama = root.findViewById(R.id.tvnamaakunagen);
         edit = root.findViewById(R.id.tveditakunagen);
         cvagen = root.findViewById(R.id.cvprofileagen);
@@ -111,6 +125,7 @@ public class AkunAgenFragment extends Fragment {
             kl.setVisibility(View.GONE);
         }
 
+        agengoo.setOnClickListener(view -> startActivity(new Intent(getContext(), AgenActivity.class)));
         listingku.setOnClickListener(view -> startActivity(new Intent(getContext(), ListingkuActivity.class)));
         favorite.setOnClickListener(view -> startActivity(new Intent(getContext(), ListingFavoriteActivity.class)));
         favoritemitra.setOnClickListener(view -> startActivity(new Intent(getContext(), ListingFavoriteActivity.class)));
@@ -119,8 +134,13 @@ public class AkunAgenFragment extends Fragment {
         seenmitra.setOnClickListener(view -> startActivity(new Intent(getContext(), ListingTerakhirDilihatActivity.class)));
         seenkl.setOnClickListener(view -> startActivity(new Intent(getContext(), ListingTerakhirDilihatActivity.class)));
         listing.setOnClickListener(view -> startActivity(new Intent(getContext(), TambahListingActivity.class)));
+        listingsementara.setOnClickListener(view -> startActivity(new Intent(getContext(), TambahListingSementaraActivity.class)));
+        daftarsementara.setOnClickListener(view -> startActivity(new Intent(getContext(), ListListingSementaraActivity.class)));
         listingmitra.setOnClickListener(view -> startActivity(new Intent(getContext(), TambahListingActivity.class)));
         listingkl.setOnClickListener(view -> startActivity(new Intent(getContext(), TambahListingActivity.class)));
+        info.setOnClickListener(view -> startActivity(new Intent(getContext(), TambahInfoActivity.class)));
+        infoku.setOnClickListener(view -> startActivity(new Intent(getContext(), InfoPropertyKuActivity.class)));
+        prainfo.setOnClickListener(view -> startActivity(new Intent(getContext(), InfoPropertySpekActivity.class)));
         pengaturan.setOnClickListener(view -> startActivity(new Intent(getContext(), SettingActivity.class)));
         pengaturanmitra.setOnClickListener(view -> startActivity(new Intent(getContext(), SettingActivity.class)));
         pengaturankl.setOnClickListener(view -> startActivity(new Intent(getContext(), SettingActivity.class)));
@@ -132,6 +152,7 @@ public class AkunAgenFragment extends Fragment {
         hubungikamikl.setOnClickListener(view -> showCustomAlertDialog(view));
         reward.setOnClickListener(view -> startActivity(new Intent(getContext(), RewardActivity.class)));
         pralising.setOnClickListener(v -> startActivity(new Intent(getContext(), PraListingAgenActivity.class)));
+        pralistingreject.setOnClickListener(v -> startActivity(new Intent(getContext(), PraListingRejectedActivity.class)));
 
         return root;
     }

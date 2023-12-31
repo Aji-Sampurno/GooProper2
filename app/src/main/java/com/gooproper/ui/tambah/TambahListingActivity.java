@@ -1,4 +1,4 @@
-package com.gooproper.ui;
+package com.gooproper.ui.tambah;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -11,14 +11,10 @@ import android.Manifest;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -28,8 +24,6 @@ import android.provider.MediaStore;
 import android.provider.OpenableColumns;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Base64;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -53,7 +47,6 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
-import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
@@ -64,27 +57,21 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
 import com.gooproper.R;
+import com.gooproper.ui.LocationActivity;
 import com.gooproper.util.AgenManager;
 import com.gooproper.util.Preferences;
 import com.gooproper.util.SendMessageToFCM;
 import com.gooproper.util.ServerApi;
-import com.theartofdev.edmodo.cropper.CropImage;
-import com.theartofdev.edmodo.cropper.CropImageView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
 import java.text.MessageFormat;
-import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -139,72 +126,79 @@ public class TambahListingActivity extends AppCompatActivity {
     final int CODE_GALLERY_REQUEST_PetokD = 43;
     final int CODE_CAMERA_REQUEST_PetokD = 44;
     final int KODE_REQUEST_KAMERA_PetokD = 45;
-    final int CODE_GALLERY_REQUEST_PJP = 46;
-    final int CODE_CAMERA_REQUEST_PJP = 47;
-    final int KODE_REQUEST_KAMERA_PJP = 48;
-    final int CODE_GALLERY_REQUEST_PJP1 = 49;
-    final int CODE_CAMERA_REQUEST_PJP1 = 50;
-    final int KODE_REQUEST_KAMERA_PJP1 = 51;
-    final int CODE_GALLERY_REQUEST_Bukti = 52;
-    final int CODE_CAMERA_REQUEST_Bukti = 53;
-    final int KODE_REQUEST_KAMERA_Bukti = 54;
-    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE1 = 55;
-    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES1 = 56;
-    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE2 = 57;
-    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES2 = 58;
-    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE3 = 59;
-    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES3 = 60;
-    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE4 = 61;
-    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES4 = 62;
-    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE5 = 63;
-    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES5 = 64;
-    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE6 = 65;
-    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES6 = 66;
-    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE7 = 67;
-    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES7 = 68;
-    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE8 = 69;
-    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES8 = 70;
-    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE_SHM = 71;
-    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES_SHM = 72;
-    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE_HGB = 73;
-    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES_HGB = 74;
-    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE_HSHP = 75;
-    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES_HSHP = 76;
-    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE_PPJB = 77;
-    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES_PPJB = 78;
-    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE_STRA = 79;
-    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES_STRA = 80;
-    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE_AJB = 81;
-    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES_AJB = 82;
-    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE_PetokD = 83;
-    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES_PetokD = 84;
-    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE_PJP = 85;
-    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES_PJP = 86;
-    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE_PJP1 = 87;
-    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES_PJP1 = 88;
-    private static final int MAPS_ACTIVITY_REQUEST_CODE = 89;
-    private static final int STORAGE_PERMISSION_CODE = 90;
-    private static final int PICK_PDF_SHM = 91;
-    private static final int PICK_PDF_HGB = 92;
-    private static final int PICK_PDF_HSHP = 93;
-    private static final int PICK_PDF_PPJB = 94;
-    private static final int PICK_PDF_Stratatitle = 95;
-    private static final int PICK_PDF_AJB = 96;
-    private static final int PICK_PDF_PetokD = 97;
+    final int CODE_GALLERY_REQUEST_Selfie = 46;
+    final int CODE_CAMERA_REQUEST_Selfie = 47;
+    final int KODE_REQUEST_KAMERA_Selfie = 48;
+    final int CODE_GALLERY_REQUEST_KTP = 49;
+    final int CODE_CAMERA_REQUEST_KTP = 50;
+    final int KODE_REQUEST_KAMERA_KTP = 51;
+    final int CODE_GALLERY_REQUEST_PJP = 52;
+    final int CODE_CAMERA_REQUEST_PJP = 53;
+    final int KODE_REQUEST_KAMERA_PJP = 54;
+    final int CODE_GALLERY_REQUEST_PJP1 = 55;
+    final int CODE_CAMERA_REQUEST_PJP1 = 56;
+    final int KODE_REQUEST_KAMERA_PJP1 = 57;
+    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE1 = 58;
+    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES1 = 59;
+    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE2 = 60;
+    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES2 = 61;
+    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE3 = 62;
+    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES3 = 63;
+    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE4 = 64;
+    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES4 = 65;
+    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE5 = 66;
+    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES5 = 67;
+    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE6 = 68;
+    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES6 = 69;
+    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE7 = 70;
+    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES7 = 71;
+    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE8 = 72;
+    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES8 = 73;
+    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE_SHM = 74;
+    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES_SHM = 75;
+    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE_HGB = 76;
+    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES_HGB = 77;
+    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE_HSHP = 78;
+    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES_HSHP = 79;
+    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE_PPJB = 80;
+    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES_PPJB = 81;
+    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE_STRA = 82;
+    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES_STRA = 83;
+    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE_AJB = 84;
+    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES_AJB = 85;
+    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE_PetokD = 86;
+    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES_PetokD = 87;
+    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE_PJP = 88;
+    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES_PJP = 89;
+    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE_PJP1 = 90;
+    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES_PJP1 = 91;
+    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE_SELFIE = 92;
+    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES_SELFIE = 93;
+    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE_KTP = 94;
+    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES_KTP = 95;
+    private static final int MAPS_ACTIVITY_REQUEST_CODE = 96;
+    private static final int STORAGE_PERMISSION_CODE = 97;
+    private static final int PICK_PDF_SHM = 98;
+    private static final int PICK_PDF_HGB = 99;
+    private static final int PICK_PDF_HSHP = 100;
+    private static final int PICK_PDF_PPJB = 101;
+    private static final int PICK_PDF_Stratatitle = 102;
+    private static final int PICK_PDF_AJB = 103;
+    private static final int PICK_PDF_PetokD = 104;
     private ArrayList<Uri> uriList = new ArrayList<>();
-    Uri Uri1, Uri2, Uri3, Uri4, Uri5, Uri6, Uri7, Uri8, UriSHM, UriHGB, UriHSHP, UriPPJB, UriSTRA, UriAJB, UriPetokD, UriSHMPdf, UriHGBPdf, UriHSHPPdf, UriPPJBPdf, UriSTRAPdf, UriAJBPdf, UriPetokDPdf, UriPJP, UriPJP1;
-    LinearLayout lyt1, lyt2, lyt3, lyt4, lyt5, lyt6, lyt7, lyt8, LytSHM, LytHGB, LytHSHP, LytPPJB, LytStratatitle, LytAJB, LytPetokD, LytPjp, LytPjp1, LytBtnShm, LytBtnHGB, LytBtnHSHP, LytBtnPPJB, LytBtnStra, LytBtnAJB, LytBtnPetokD;
-    ImageView back, iv1, iv2, iv3, iv4, iv5, iv6, iv7, iv8, IVShm, IVHgb, IVHshp, IVPpjb, IVStratatitle, IVAJB, IVPetokD, IVPjp, IVPjp1;
-    Button batal, submit, select, select1, select2, select3, select4, select5, select6, select7, maps, BtnSHM, BtnHGB, BtnHSHP, BtnPPJB, BtnSTRA, BtnAJB, BtnPetokD, BtnSHMPdf, BtnHGBPdf, BtnHSHPPdf, BtnPPJBPdf, BtnSTRAPdf, BtnAJBPdf, BtnPetokDPdf, BtnPjp, BtnPjp1;
-    ImageView hps1, hps2, hps3, hps4, hps5, hps6, hps7, hps8, HpsSHM, HpsHGB, HpsHSHP, HpsPPJB, HpsStratatitle, HpsAJB, HpsPetokD, HpsPjp, HpsPjp1;
-    TextInputEditText namalengkap, nohp, nik, alamat, tgllhir, rekening, bank, atasnama, jenisproperti, namaproperti, alamatproperti, sertifikat, nosertif, luas, satuanluas, land, satuanland, dimensi, lantai, bed, bath, bedart, bathart, garasi, carpot, listrik, air, pjp, perabot, ketperabot, banner, status, harga, hargasewa, keterangan, hadap, size, EtTglInput, EtFee, CoListing;
+    Uri Uri1, Uri2, Uri3, Uri4, Uri5, Uri6, Uri7, Uri8, UriSHM, UriHGB, UriHSHP, UriPPJB, UriSTRA, UriAJB, UriPetokD, UriSHMPdf, UriHGBPdf, UriHSHPPdf, UriPPJBPdf, UriSTRAPdf, UriAJBPdf, UriPetokDPdf, UriPJP, UriPJP1, UriSelfie, UriKTP;
+    LinearLayout lyt1, lyt2, lyt3, lyt4, lyt5, lyt6, lyt7, lyt8, LytSHM, LytHGB, LytHSHP, LytPPJB, LytStratatitle, LytAJB, LytPetokD, LytPjp, LytPjp1, LytBtnShm, LytBtnHGB, LytBtnHSHP, LytBtnPPJB, LytBtnStra, LytBtnAJB, LytBtnPetokD, LytSelfie, LytKTP;
+    ImageView back, iv1, iv2, iv3, iv4, iv5, iv6, iv7, iv8, IVShm, IVHgb, IVHshp, IVPpjb, IVStratatitle, IVAJB, IVPetokD, IVPjp, IVPjp1, IVSelfie, IVKTP;
+    Button batal, submit, select, select1, select2, select3, select4, select5, select6, select7, maps, BtnSHM, BtnHGB, BtnHSHP, BtnPPJB, BtnSTRA, BtnAJB, BtnPetokD, BtnSHMPdf, BtnHGBPdf, BtnHSHPPdf, BtnPPJBPdf, BtnSTRAPdf, BtnAJBPdf, BtnPetokDPdf, BtnPjp, BtnPjp1, BtnSelfie, BtnKTP;
+    ImageView hps1, hps2, hps3, hps4, hps5, hps6, hps7, hps8, HpsSHM, HpsHGB, HpsHSHP, HpsPPJB, HpsStratatitle, HpsAJB, HpsPetokD, HpsPjp, HpsPjp1, HpsSelfie, HpsKTP;
+    TextInputEditText namalengkap, nohp, nik, alamat, tgllhir, rekening, bank, atasnama, jenisproperti, namaproperti, alamatproperti, sertifikat, nosertif, luas, satuanluas, land, satuanland, dimensi, lantai, bed, bath, bedart, bathart, garasi, carpot, listrik, air, pjp, perabot, ketperabot, banner, status, harga, hargasewa, keterangan, hadap, size, EtTglInput, EtFee, CoListing, ktp;
     TextInputLayout LytSize, LytTglInput, LytHargaJual, LytHargaSewa;
     RadioButton open, exclusive;
     RadioGroup rgpriority;
-    CheckBox CBSHM, CBHGB, CBHSHP, CBPPJB, CBSTRA, CBAJB, CBPetokD;
+    CheckBox CBSHM, CBHGB, CBHSHP, CBPPJB, CBSTRA, CBAJB, CBPetokD, CBMarketable, CBHarga, CBSelfie, CBLokasi;
     String idagen, idnull, sstatus, priority, namalisting, isAdmin, idadmin, idinput, HargaString, HargaSewaString, SHarga, SHargaSewa, agenid, agencoid;
-    String image1, image2, image3, image4, image5, image6, image7, image8, SHM, HGB, HSHP, PPJB, STRA, AJB, PetokD, PJPHal1, PJPHal2;
-    String latitudeStr, longitudeStr, addressStr, Lat, Lng, token;
+    String image1, image2, image3, image4, image5, image6, image7, image8, SHM, HGB, HSHP, PPJB, STRA, AJB, PetokD, PJPHal1, PJPHal2, ImgSelfie, ImgKTP;
+    String latitudeStr, longitudeStr, addressStr, lokasiStr, Lat, Lng, token;
     Drawable DrawableSHM, DrawableHGB, DrawableHSHP, DrawablePPJB, DrawableSTRA;
     TextView TVSHM, TVHGB, TVHSHP, TVPPJB, TVSTRA, TVAJB, TVPetokD;
     private AgenManager agenManager;
@@ -238,6 +232,8 @@ public class TambahListingActivity extends AppCompatActivity {
         IVPetokD = findViewById(R.id.IVPetokD);
         IVPjp = findViewById(R.id.IVPjp);
         IVPjp1 = findViewById(R.id.IVPjp1);
+        IVSelfie = findViewById(R.id.IVSelfie);
+        IVKTP = findViewById(R.id.IVKtp);
 
         lyt1 = findViewById(R.id.lyts1);
         lyt2 = findViewById(R.id.lyts2);
@@ -267,6 +263,8 @@ public class TambahListingActivity extends AppCompatActivity {
         LytBtnStra = findViewById(R.id.LytBtnStratatitle);
         LytBtnAJB = findViewById(R.id.LytBtnAJB);
         LytBtnPetokD = findViewById(R.id.LytBtnPetokD);
+        LytSelfie = findViewById(R.id.LytSelfie);
+        LytKTP = findViewById(R.id.LytKtp);
 
         back = findViewById(R.id.backFormBtn);
 
@@ -298,6 +296,8 @@ public class TambahListingActivity extends AppCompatActivity {
         HpsPetokD = findViewById(R.id.IVDeletePetokD);
         HpsPjp = findViewById(R.id.IVDeletePjp);
         HpsPjp1 = findViewById(R.id.IVDeletePjp1);
+        HpsSelfie = findViewById(R.id.IVDeleteSelfie);
+        HpsKTP = findViewById(R.id.IVDeleteKtp);
 
         namalengkap = findViewById(R.id.etnamavendor);
         nohp = findViewById(R.id.etnohpvendor);
@@ -339,6 +339,7 @@ public class TambahListingActivity extends AppCompatActivity {
         EtTglInput = findViewById(R.id.ettglinputproperti);
         EtFee = findViewById(R.id.etfee);
         CoListing = findViewById(R.id.etCoListing);
+        ktp = findViewById(R.id.etnoktpvendor);
 
         maps = findViewById(R.id.map);
 
@@ -349,6 +350,10 @@ public class TambahListingActivity extends AppCompatActivity {
         CBSTRA = findViewById(R.id.CBStratatitle);
         CBAJB = findViewById(R.id.CBAJB);
         CBPetokD = findViewById(R.id.CBPetokD);
+        CBMarketable = findViewById(R.id.CBMarketable);
+        CBHarga = findViewById(R.id.CBHarga);
+        CBSelfie = findViewById(R.id.CBSelfie);
+        CBLokasi = findViewById(R.id.CBLokasi);
 
         BtnSHM = findViewById(R.id.BtnSHM);
         BtnSHMPdf = findViewById(R.id.BtnSHMPDF);
@@ -366,6 +371,8 @@ public class TambahListingActivity extends AppCompatActivity {
         BtnPetokDPdf = findViewById(R.id.BtnPetokDPDF);
         BtnPjp = findViewById(R.id.BtnPjp);
         BtnPjp1 = findViewById(R.id.BtnPjp1);
+        BtnSelfie = findViewById(R.id.selfie);
+        BtnKTP = findViewById(R.id.ktp);
 
         TVSHM = findViewById(R.id.TVSHM);
         TVHGB = findViewById(R.id.TVHGB);
@@ -420,6 +427,8 @@ public class TambahListingActivity extends AppCompatActivity {
         String fileSertifikatpetokdpdf = "PetokD_" + timeStamp + ".pdf";
         String filePjp1 = "PJP1_" + timeStamp + ".jpg";
         String filePjp2 = "PJP2_" + timeStamp + ".jpg";
+        String fileSelfie = "Selfie_" + timeStamp + ".jpg";
+        String fileKTP = "KTP_" + timeStamp + ".jpg";
 
         if (isAdmin.equals("2")) {
             submit.setOnClickListener(view -> {
@@ -515,6 +524,8 @@ public class TambahListingActivity extends AppCompatActivity {
                             StorageReference ImgSertifikatpetokdpdf = storageRef.child("sertifikat/" + fileSertifikatpetokdpdf);
                             StorageReference ImgPjp = storageRef.child("pjp/" + filePjp1);
                             StorageReference ImgPjp1 = storageRef.child("pjp/" + filePjp2);
+                            StorageReference ImageSelfie = storageRef.child("selfie/" + fileSelfie);
+                            StorageReference ImageKTP = storageRef.child("ktp/" + fileKTP);
 
                             List<StorageTask<UploadTask.TaskSnapshot>> uploadTasks = new ArrayList<>();
 
@@ -905,6 +916,40 @@ public class TambahListingActivity extends AppCompatActivity {
                             } else {
                                 PJPHal2 = "0";
                             }
+                            if (UriSelfie != null) {
+                                StorageTask<UploadTask.TaskSnapshot> taskSelfie = ImageSelfie.putFile(UriSelfie)
+                                        .addOnSuccessListener(taskSnapshot -> {
+                                            ImageSelfie.getDownloadUrl()
+                                                    .addOnSuccessListener(uri -> {
+                                                        String imageUrl = uri.toString();
+                                                        ImgSelfie = imageUrl;
+                                                    })
+                                                    .addOnFailureListener(exception -> {
+                                                    });
+                                        })
+                                        .addOnFailureListener(exception -> {
+                                        });
+                                uploadTasks.add(taskSelfie);
+                            } else {
+                                ImgSelfie = "0";
+                            }
+                            if (UriKTP != null) {
+                                StorageTask<UploadTask.TaskSnapshot> taskKTP = ImageKTP.putFile(UriKTP)
+                                        .addOnSuccessListener(taskSnapshot -> {
+                                            ImageKTP.getDownloadUrl()
+                                                    .addOnSuccessListener(uri -> {
+                                                        String imageUrl = uri.toString();
+                                                        ImgKTP = imageUrl;
+                                                    })
+                                                    .addOnFailureListener(exception -> {
+                                                    });
+                                        })
+                                        .addOnFailureListener(exception -> {
+                                        });
+                                uploadTasks.add(taskKTP);
+                            } else {
+                                ImgKTP = "0";
+                            }
 
                             Tasks.whenAllSuccess(uploadTasks)
                                     .addOnSuccessListener(results -> {
@@ -1031,8 +1076,17 @@ public class TambahListingActivity extends AppCompatActivity {
                                 StorageReference ImgSertifikatstra = storageRef.child("sertifikat/" + fileSertifikatstra);
                                 StorageReference ImgSertifikatajb = storageRef.child("sertifikat/" + fileSertifikatajb);
                                 StorageReference ImgSertifikatpetokd = storageRef.child("sertifikat/" + fileSertifikatpetokd);
+                                StorageReference ImgSertifikatshmpdf = storageRef.child("sertifikat/" + fileSertifikatshmpdf);
+                                StorageReference ImgSertifikathgbpdf = storageRef.child("sertifikat/" + fileSertifikathgbpdf);
+                                StorageReference ImgSertifikathshppdf = storageRef.child("sertifikat/" + fileSertifikathshppdf);
+                                StorageReference ImgSertifikatppjbpdf = storageRef.child("sertifikat/" + fileSertifikatppjbpdf);
+                                StorageReference ImgSertifikatstrapdf = storageRef.child("sertifikat/" + fileSertifikatstrapdf);
+                                StorageReference ImgSertifikatajbpdf = storageRef.child("sertifikat/" + fileSertifikatajbpdf);
+                                StorageReference ImgSertifikatpetokdpdf = storageRef.child("sertifikat/" + fileSertifikatpetokdpdf);
                                 StorageReference ImgPjp = storageRef.child("pjp/" + filePjp1);
                                 StorageReference ImgPjp1 = storageRef.child("pjp/" + filePjp2);
+                                StorageReference ImageSelfie = storageRef.child("selfie/" + fileSelfie);
+                                StorageReference ImageKTP = storageRef.child("ktp/" + fileKTP);
 
                                 List<StorageTask<UploadTask.TaskSnapshot>> uploadTasks = new ArrayList<>();
 
@@ -1186,6 +1240,20 @@ public class TambahListingActivity extends AppCompatActivity {
                                             .addOnFailureListener(exception -> {
                                             });
                                     uploadTasks.add(taskSHM);
+                                } else if (UriSHMPdf != null) {
+                                    StorageTask<UploadTask.TaskSnapshot> taskSHM = ImgSertifikatshmpdf.putFile(UriSHMPdf)
+                                            .addOnSuccessListener(taskSnapshot -> {
+                                                ImgSertifikatshmpdf.getDownloadUrl()
+                                                        .addOnSuccessListener(uri -> {
+                                                            String imageUrl = uri.toString();
+                                                            SHM = imageUrl;
+                                                        })
+                                                        .addOnFailureListener(exception -> {
+                                                        });
+                                            })
+                                            .addOnFailureListener(exception -> {
+                                            });
+                                    uploadTasks.add(taskSHM);
                                 } else {
                                     SHM = "0";
                                 }
@@ -1193,6 +1261,20 @@ public class TambahListingActivity extends AppCompatActivity {
                                     StorageTask<UploadTask.TaskSnapshot> taskHGB = ImgSertifikathgb.putFile(UriHGB)
                                             .addOnSuccessListener(taskSnapshot -> {
                                                 ImgSertifikathgb.getDownloadUrl()
+                                                        .addOnSuccessListener(uri -> {
+                                                            String imageUrl = uri.toString();
+                                                            HGB = imageUrl;
+                                                        })
+                                                        .addOnFailureListener(exception -> {
+                                                        });
+                                            })
+                                            .addOnFailureListener(exception -> {
+                                            });
+                                    uploadTasks.add(taskHGB);
+                                } else if (UriHGBPdf != null) {
+                                    StorageTask<UploadTask.TaskSnapshot> taskHGB = ImgSertifikathgbpdf.putFile(UriHGBPdf)
+                                            .addOnSuccessListener(taskSnapshot -> {
+                                                ImgSertifikathgbpdf.getDownloadUrl()
                                                         .addOnSuccessListener(uri -> {
                                                             String imageUrl = uri.toString();
                                                             HGB = imageUrl;
@@ -1220,6 +1302,20 @@ public class TambahListingActivity extends AppCompatActivity {
                                             .addOnFailureListener(exception -> {
                                             });
                                     uploadTasks.add(taskHSHP);
+                                } else if (UriHSHPPdf != null) {
+                                    StorageTask<UploadTask.TaskSnapshot> taskHSHP = ImgSertifikathshppdf.putFile(UriHSHPPdf)
+                                            .addOnSuccessListener(taskSnapshot -> {
+                                                ImgSertifikathshppdf.getDownloadUrl()
+                                                        .addOnSuccessListener(uri -> {
+                                                            String imageUrl = uri.toString();
+                                                            HSHP = imageUrl;
+                                                        })
+                                                        .addOnFailureListener(exception -> {
+                                                        });
+                                            })
+                                            .addOnFailureListener(exception -> {
+                                            });
+                                    uploadTasks.add(taskHSHP);
                                 } else {
                                     HSHP = "0";
                                 }
@@ -1227,6 +1323,20 @@ public class TambahListingActivity extends AppCompatActivity {
                                     StorageTask<UploadTask.TaskSnapshot> taskPPJB = ImgSertifikatppjb.putFile(UriPPJB)
                                             .addOnSuccessListener(taskSnapshot -> {
                                                 ImgSertifikatppjb.getDownloadUrl()
+                                                        .addOnSuccessListener(uri -> {
+                                                            String imageUrl = uri.toString();
+                                                            PPJB = imageUrl;
+                                                        })
+                                                        .addOnFailureListener(exception -> {
+                                                        });
+                                            })
+                                            .addOnFailureListener(exception -> {
+                                            });
+                                    uploadTasks.add(taskPPJB);
+                                } else if (UriPPJBPdf != null) {
+                                    StorageTask<UploadTask.TaskSnapshot> taskPPJB = ImgSertifikatppjbpdf.putFile(UriPPJBPdf)
+                                            .addOnSuccessListener(taskSnapshot -> {
+                                                ImgSertifikatppjbpdf.getDownloadUrl()
                                                         .addOnSuccessListener(uri -> {
                                                             String imageUrl = uri.toString();
                                                             PPJB = imageUrl;
@@ -1254,6 +1364,20 @@ public class TambahListingActivity extends AppCompatActivity {
                                             .addOnFailureListener(exception -> {
                                             });
                                     uploadTasks.add(taskSTRA);
+                                } else if (UriSTRAPdf != null) {
+                                    StorageTask<UploadTask.TaskSnapshot> taskSTRA = ImgSertifikatstrapdf.putFile(UriSTRAPdf)
+                                            .addOnSuccessListener(taskSnapshot -> {
+                                                ImgSertifikatstrapdf.getDownloadUrl()
+                                                        .addOnSuccessListener(uri -> {
+                                                            String imageUrl = uri.toString();
+                                                            STRA = imageUrl;
+                                                        })
+                                                        .addOnFailureListener(exception -> {
+                                                        });
+                                            })
+                                            .addOnFailureListener(exception -> {
+                                            });
+                                    uploadTasks.add(taskSTRA);
                                 } else {
                                     STRA = "0";
                                 }
@@ -1271,6 +1395,20 @@ public class TambahListingActivity extends AppCompatActivity {
                                             .addOnFailureListener(exception -> {
                                             });
                                     uploadTasks.add(taskAJB);
+                                } else if (UriAJBPdf != null) {
+                                    StorageTask<UploadTask.TaskSnapshot> taskAJB = ImgSertifikatajbpdf.putFile(UriAJBPdf)
+                                            .addOnSuccessListener(taskSnapshot -> {
+                                                ImgSertifikatajbpdf.getDownloadUrl()
+                                                        .addOnSuccessListener(uri -> {
+                                                            String imageUrl = uri.toString();
+                                                            AJB = imageUrl;
+                                                        })
+                                                        .addOnFailureListener(exception -> {
+                                                        });
+                                            })
+                                            .addOnFailureListener(exception -> {
+                                            });
+                                    uploadTasks.add(taskAJB);
                                 } else {
                                     AJB = "0";
                                 }
@@ -1278,6 +1416,20 @@ public class TambahListingActivity extends AppCompatActivity {
                                     StorageTask<UploadTask.TaskSnapshot> taskPetokD = ImgSertifikatpetokd.putFile(UriPetokD)
                                             .addOnSuccessListener(taskSnapshot -> {
                                                 ImgSertifikatpetokd.getDownloadUrl()
+                                                        .addOnSuccessListener(uri -> {
+                                                            String imageUrl = uri.toString();
+                                                            PetokD = imageUrl;
+                                                        })
+                                                        .addOnFailureListener(exception -> {
+                                                        });
+                                            })
+                                            .addOnFailureListener(exception -> {
+                                            });
+                                    uploadTasks.add(taskPetokD);
+                                } else if (UriPetokDPdf != null) {
+                                    StorageTask<UploadTask.TaskSnapshot> taskPetokD = ImgSertifikatpetokdpdf.putFile(UriPetokDPdf)
+                                            .addOnSuccessListener(taskSnapshot -> {
+                                                ImgSertifikatpetokdpdf.getDownloadUrl()
                                                         .addOnSuccessListener(uri -> {
                                                             String imageUrl = uri.toString();
                                                             PetokD = imageUrl;
@@ -1324,6 +1476,40 @@ public class TambahListingActivity extends AppCompatActivity {
                                     uploadTasks.add(taskPJP1);
                                 } else {
                                     PJPHal2 = "0";
+                                }
+                                if (UriSelfie != null) {
+                                    StorageTask<UploadTask.TaskSnapshot> taskSelfie = ImageSelfie.putFile(UriSelfie)
+                                            .addOnSuccessListener(taskSnapshot -> {
+                                                ImageSelfie.getDownloadUrl()
+                                                        .addOnSuccessListener(uri -> {
+                                                            String imageUrl = uri.toString();
+                                                            ImgSelfie = imageUrl;
+                                                        })
+                                                        .addOnFailureListener(exception -> {
+                                                        });
+                                            })
+                                            .addOnFailureListener(exception -> {
+                                            });
+                                    uploadTasks.add(taskSelfie);
+                                } else {
+                                    ImgSelfie = "0";
+                                }
+                                if (UriKTP != null) {
+                                    StorageTask<UploadTask.TaskSnapshot> taskKTP = ImageKTP.putFile(UriKTP)
+                                            .addOnSuccessListener(taskSnapshot -> {
+                                                ImageKTP.getDownloadUrl()
+                                                        .addOnSuccessListener(uri -> {
+                                                            String imageUrl = uri.toString();
+                                                            ImgKTP = imageUrl;
+                                                        })
+                                                        .addOnFailureListener(exception -> {
+                                                        });
+                                            })
+                                            .addOnFailureListener(exception -> {
+                                            });
+                                    uploadTasks.add(taskKTP);
+                                } else {
+                                    ImgKTP = "0";
                                 }
 
                                 Tasks.whenAllSuccess(uploadTasks)
@@ -1450,8 +1636,17 @@ public class TambahListingActivity extends AppCompatActivity {
                                 StorageReference ImgSertifikatstra = storageRef.child("sertifikat/" + fileSertifikatstra);
                                 StorageReference ImgSertifikatajb = storageRef.child("sertifikat/" + fileSertifikatajb);
                                 StorageReference ImgSertifikatpetokd = storageRef.child("sertifikat/" + fileSertifikatpetokd);
+                                StorageReference ImgSertifikatshmpdf = storageRef.child("sertifikat/" + fileSertifikatshmpdf);
+                                StorageReference ImgSertifikathgbpdf = storageRef.child("sertifikat/" + fileSertifikathgbpdf);
+                                StorageReference ImgSertifikathshppdf = storageRef.child("sertifikat/" + fileSertifikathshppdf);
+                                StorageReference ImgSertifikatppjbpdf = storageRef.child("sertifikat/" + fileSertifikatppjbpdf);
+                                StorageReference ImgSertifikatstrapdf = storageRef.child("sertifikat/" + fileSertifikatstrapdf);
+                                StorageReference ImgSertifikatajbpdf = storageRef.child("sertifikat/" + fileSertifikatajbpdf);
+                                StorageReference ImgSertifikatpetokdpdf = storageRef.child("sertifikat/" + fileSertifikatpetokdpdf);
                                 StorageReference ImgPjp = storageRef.child("pjp/" + filePjp1);
                                 StorageReference ImgPjp1 = storageRef.child("pjp/" + filePjp2);
+                                StorageReference ImageSelfie = storageRef.child("selfie/" + fileSelfie);
+                                StorageReference ImageKTP = storageRef.child("ktp/" + fileKTP);
 
                                 List<StorageTask<UploadTask.TaskSnapshot>> uploadTasks = new ArrayList<>();
 
@@ -1605,6 +1800,20 @@ public class TambahListingActivity extends AppCompatActivity {
                                             .addOnFailureListener(exception -> {
                                             });
                                     uploadTasks.add(taskSHM);
+                                } else if (UriSHMPdf != null) {
+                                    StorageTask<UploadTask.TaskSnapshot> taskSHM = ImgSertifikatshmpdf.putFile(UriSHMPdf)
+                                            .addOnSuccessListener(taskSnapshot -> {
+                                                ImgSertifikatshmpdf.getDownloadUrl()
+                                                        .addOnSuccessListener(uri -> {
+                                                            String imageUrl = uri.toString();
+                                                            SHM = imageUrl;
+                                                        })
+                                                        .addOnFailureListener(exception -> {
+                                                        });
+                                            })
+                                            .addOnFailureListener(exception -> {
+                                            });
+                                    uploadTasks.add(taskSHM);
                                 } else {
                                     SHM = "0";
                                 }
@@ -1612,6 +1821,20 @@ public class TambahListingActivity extends AppCompatActivity {
                                     StorageTask<UploadTask.TaskSnapshot> taskHGB = ImgSertifikathgb.putFile(UriHGB)
                                             .addOnSuccessListener(taskSnapshot -> {
                                                 ImgSertifikathgb.getDownloadUrl()
+                                                        .addOnSuccessListener(uri -> {
+                                                            String imageUrl = uri.toString();
+                                                            HGB = imageUrl;
+                                                        })
+                                                        .addOnFailureListener(exception -> {
+                                                        });
+                                            })
+                                            .addOnFailureListener(exception -> {
+                                            });
+                                    uploadTasks.add(taskHGB);
+                                } else if (UriHGBPdf != null) {
+                                    StorageTask<UploadTask.TaskSnapshot> taskHGB = ImgSertifikathgbpdf.putFile(UriHGBPdf)
+                                            .addOnSuccessListener(taskSnapshot -> {
+                                                ImgSertifikathgbpdf.getDownloadUrl()
                                                         .addOnSuccessListener(uri -> {
                                                             String imageUrl = uri.toString();
                                                             HGB = imageUrl;
@@ -1639,6 +1862,20 @@ public class TambahListingActivity extends AppCompatActivity {
                                             .addOnFailureListener(exception -> {
                                             });
                                     uploadTasks.add(taskHSHP);
+                                } else if (UriHSHPPdf != null) {
+                                    StorageTask<UploadTask.TaskSnapshot> taskHSHP = ImgSertifikathshppdf.putFile(UriHSHPPdf)
+                                            .addOnSuccessListener(taskSnapshot -> {
+                                                ImgSertifikathshppdf.getDownloadUrl()
+                                                        .addOnSuccessListener(uri -> {
+                                                            String imageUrl = uri.toString();
+                                                            HSHP = imageUrl;
+                                                        })
+                                                        .addOnFailureListener(exception -> {
+                                                        });
+                                            })
+                                            .addOnFailureListener(exception -> {
+                                            });
+                                    uploadTasks.add(taskHSHP);
                                 } else {
                                     HSHP = "0";
                                 }
@@ -1646,6 +1883,20 @@ public class TambahListingActivity extends AppCompatActivity {
                                     StorageTask<UploadTask.TaskSnapshot> taskPPJB = ImgSertifikatppjb.putFile(UriPPJB)
                                             .addOnSuccessListener(taskSnapshot -> {
                                                 ImgSertifikatppjb.getDownloadUrl()
+                                                        .addOnSuccessListener(uri -> {
+                                                            String imageUrl = uri.toString();
+                                                            PPJB = imageUrl;
+                                                        })
+                                                        .addOnFailureListener(exception -> {
+                                                        });
+                                            })
+                                            .addOnFailureListener(exception -> {
+                                            });
+                                    uploadTasks.add(taskPPJB);
+                                } else if (UriPPJBPdf != null) {
+                                    StorageTask<UploadTask.TaskSnapshot> taskPPJB = ImgSertifikatppjbpdf.putFile(UriPPJBPdf)
+                                            .addOnSuccessListener(taskSnapshot -> {
+                                                ImgSertifikatppjbpdf.getDownloadUrl()
                                                         .addOnSuccessListener(uri -> {
                                                             String imageUrl = uri.toString();
                                                             PPJB = imageUrl;
@@ -1673,6 +1924,20 @@ public class TambahListingActivity extends AppCompatActivity {
                                             .addOnFailureListener(exception -> {
                                             });
                                     uploadTasks.add(taskSTRA);
+                                } else if (UriSTRAPdf != null) {
+                                    StorageTask<UploadTask.TaskSnapshot> taskSTRA = ImgSertifikatstrapdf.putFile(UriSTRAPdf)
+                                            .addOnSuccessListener(taskSnapshot -> {
+                                                ImgSertifikatstrapdf.getDownloadUrl()
+                                                        .addOnSuccessListener(uri -> {
+                                                            String imageUrl = uri.toString();
+                                                            STRA = imageUrl;
+                                                        })
+                                                        .addOnFailureListener(exception -> {
+                                                        });
+                                            })
+                                            .addOnFailureListener(exception -> {
+                                            });
+                                    uploadTasks.add(taskSTRA);
                                 } else {
                                     STRA = "0";
                                 }
@@ -1690,6 +1955,20 @@ public class TambahListingActivity extends AppCompatActivity {
                                             .addOnFailureListener(exception -> {
                                             });
                                     uploadTasks.add(taskAJB);
+                                } else if (UriAJBPdf != null) {
+                                    StorageTask<UploadTask.TaskSnapshot> taskAJB = ImgSertifikatajbpdf.putFile(UriAJBPdf)
+                                            .addOnSuccessListener(taskSnapshot -> {
+                                                ImgSertifikatajbpdf.getDownloadUrl()
+                                                        .addOnSuccessListener(uri -> {
+                                                            String imageUrl = uri.toString();
+                                                            AJB = imageUrl;
+                                                        })
+                                                        .addOnFailureListener(exception -> {
+                                                        });
+                                            })
+                                            .addOnFailureListener(exception -> {
+                                            });
+                                    uploadTasks.add(taskAJB);
                                 } else {
                                     AJB = "0";
                                 }
@@ -1697,6 +1976,20 @@ public class TambahListingActivity extends AppCompatActivity {
                                     StorageTask<UploadTask.TaskSnapshot> taskPetokD = ImgSertifikatpetokd.putFile(UriPetokD)
                                             .addOnSuccessListener(taskSnapshot -> {
                                                 ImgSertifikatpetokd.getDownloadUrl()
+                                                        .addOnSuccessListener(uri -> {
+                                                            String imageUrl = uri.toString();
+                                                            PetokD = imageUrl;
+                                                        })
+                                                        .addOnFailureListener(exception -> {
+                                                        });
+                                            })
+                                            .addOnFailureListener(exception -> {
+                                            });
+                                    uploadTasks.add(taskPetokD);
+                                } else if (UriPetokDPdf != null) {
+                                    StorageTask<UploadTask.TaskSnapshot> taskPetokD = ImgSertifikatpetokdpdf.putFile(UriPetokDPdf)
+                                            .addOnSuccessListener(taskSnapshot -> {
+                                                ImgSertifikatpetokdpdf.getDownloadUrl()
                                                         .addOnSuccessListener(uri -> {
                                                             String imageUrl = uri.toString();
                                                             PetokD = imageUrl;
@@ -1743,6 +2036,40 @@ public class TambahListingActivity extends AppCompatActivity {
                                     uploadTasks.add(taskPJP1);
                                 } else {
                                     PJPHal2 = "0";
+                                }
+                                if (UriSelfie != null) {
+                                    StorageTask<UploadTask.TaskSnapshot> taskSelfie = ImageSelfie.putFile(UriSelfie)
+                                            .addOnSuccessListener(taskSnapshot -> {
+                                                ImageSelfie.getDownloadUrl()
+                                                        .addOnSuccessListener(uri -> {
+                                                            String imageUrl = uri.toString();
+                                                            ImgSelfie = imageUrl;
+                                                        })
+                                                        .addOnFailureListener(exception -> {
+                                                        });
+                                            })
+                                            .addOnFailureListener(exception -> {
+                                            });
+                                    uploadTasks.add(taskSelfie);
+                                } else {
+                                    ImgSelfie = "0";
+                                }
+                                if (UriKTP != null) {
+                                    StorageTask<UploadTask.TaskSnapshot> taskKTP = ImageKTP.putFile(UriKTP)
+                                            .addOnSuccessListener(taskSnapshot -> {
+                                                ImageKTP.getDownloadUrl()
+                                                        .addOnSuccessListener(uri -> {
+                                                            String imageUrl = uri.toString();
+                                                            ImgKTP = imageUrl;
+                                                        })
+                                                        .addOnFailureListener(exception -> {
+                                                        });
+                                            })
+                                            .addOnFailureListener(exception -> {
+                                            });
+                                    uploadTasks.add(taskKTP);
+                                } else {
+                                    ImgKTP = "0";
                                 }
 
                                 Tasks.whenAllSuccess(uploadTasks)
@@ -1869,8 +2196,17 @@ public class TambahListingActivity extends AppCompatActivity {
                                 StorageReference ImgSertifikatstra = storageRef.child("sertifikat/" + fileSertifikatstra);
                                 StorageReference ImgSertifikatajb = storageRef.child("sertifikat/" + fileSertifikatajb);
                                 StorageReference ImgSertifikatpetokd = storageRef.child("sertifikat/" + fileSertifikatpetokd);
+                                StorageReference ImgSertifikatshmpdf = storageRef.child("sertifikat/" + fileSertifikatshmpdf);
+                                StorageReference ImgSertifikathgbpdf = storageRef.child("sertifikat/" + fileSertifikathgbpdf);
+                                StorageReference ImgSertifikathshppdf = storageRef.child("sertifikat/" + fileSertifikathshppdf);
+                                StorageReference ImgSertifikatppjbpdf = storageRef.child("sertifikat/" + fileSertifikatppjbpdf);
+                                StorageReference ImgSertifikatstrapdf = storageRef.child("sertifikat/" + fileSertifikatstrapdf);
+                                StorageReference ImgSertifikatajbpdf = storageRef.child("sertifikat/" + fileSertifikatajbpdf);
+                                StorageReference ImgSertifikatpetokdpdf = storageRef.child("sertifikat/" + fileSertifikatpetokdpdf);
                                 StorageReference ImgPjp = storageRef.child("pjp/" + filePjp1);
                                 StorageReference ImgPjp1 = storageRef.child("pjp/" + filePjp2);
+                                StorageReference ImageSelfie = storageRef.child("selfie/" + fileSelfie);
+                                StorageReference ImageKTP = storageRef.child("ktp/" + fileKTP);
 
                                 List<StorageTask<UploadTask.TaskSnapshot>> uploadTasks = new ArrayList<>();
 
@@ -2024,6 +2360,20 @@ public class TambahListingActivity extends AppCompatActivity {
                                             .addOnFailureListener(exception -> {
                                             });
                                     uploadTasks.add(taskSHM);
+                                } else if (UriSHMPdf != null) {
+                                    StorageTask<UploadTask.TaskSnapshot> taskSHM = ImgSertifikatshmpdf.putFile(UriSHMPdf)
+                                            .addOnSuccessListener(taskSnapshot -> {
+                                                ImgSertifikatshmpdf.getDownloadUrl()
+                                                        .addOnSuccessListener(uri -> {
+                                                            String imageUrl = uri.toString();
+                                                            SHM = imageUrl;
+                                                        })
+                                                        .addOnFailureListener(exception -> {
+                                                        });
+                                            })
+                                            .addOnFailureListener(exception -> {
+                                            });
+                                    uploadTasks.add(taskSHM);
                                 } else {
                                     SHM = "0";
                                 }
@@ -2031,6 +2381,20 @@ public class TambahListingActivity extends AppCompatActivity {
                                     StorageTask<UploadTask.TaskSnapshot> taskHGB = ImgSertifikathgb.putFile(UriHGB)
                                             .addOnSuccessListener(taskSnapshot -> {
                                                 ImgSertifikathgb.getDownloadUrl()
+                                                        .addOnSuccessListener(uri -> {
+                                                            String imageUrl = uri.toString();
+                                                            HGB = imageUrl;
+                                                        })
+                                                        .addOnFailureListener(exception -> {
+                                                        });
+                                            })
+                                            .addOnFailureListener(exception -> {
+                                            });
+                                    uploadTasks.add(taskHGB);
+                                } else if (UriHGBPdf != null) {
+                                    StorageTask<UploadTask.TaskSnapshot> taskHGB = ImgSertifikathgbpdf.putFile(UriHGBPdf)
+                                            .addOnSuccessListener(taskSnapshot -> {
+                                                ImgSertifikathgbpdf.getDownloadUrl()
                                                         .addOnSuccessListener(uri -> {
                                                             String imageUrl = uri.toString();
                                                             HGB = imageUrl;
@@ -2058,6 +2422,20 @@ public class TambahListingActivity extends AppCompatActivity {
                                             .addOnFailureListener(exception -> {
                                             });
                                     uploadTasks.add(taskHSHP);
+                                } else if (UriHSHPPdf != null) {
+                                    StorageTask<UploadTask.TaskSnapshot> taskHSHP = ImgSertifikathshppdf.putFile(UriHSHPPdf)
+                                            .addOnSuccessListener(taskSnapshot -> {
+                                                ImgSertifikathshppdf.getDownloadUrl()
+                                                        .addOnSuccessListener(uri -> {
+                                                            String imageUrl = uri.toString();
+                                                            HSHP = imageUrl;
+                                                        })
+                                                        .addOnFailureListener(exception -> {
+                                                        });
+                                            })
+                                            .addOnFailureListener(exception -> {
+                                            });
+                                    uploadTasks.add(taskHSHP);
                                 } else {
                                     HSHP = "0";
                                 }
@@ -2065,6 +2443,20 @@ public class TambahListingActivity extends AppCompatActivity {
                                     StorageTask<UploadTask.TaskSnapshot> taskPPJB = ImgSertifikatppjb.putFile(UriPPJB)
                                             .addOnSuccessListener(taskSnapshot -> {
                                                 ImgSertifikatppjb.getDownloadUrl()
+                                                        .addOnSuccessListener(uri -> {
+                                                            String imageUrl = uri.toString();
+                                                            PPJB = imageUrl;
+                                                        })
+                                                        .addOnFailureListener(exception -> {
+                                                        });
+                                            })
+                                            .addOnFailureListener(exception -> {
+                                            });
+                                    uploadTasks.add(taskPPJB);
+                                } else if (UriPPJBPdf != null) {
+                                    StorageTask<UploadTask.TaskSnapshot> taskPPJB = ImgSertifikatppjbpdf.putFile(UriPPJBPdf)
+                                            .addOnSuccessListener(taskSnapshot -> {
+                                                ImgSertifikatppjbpdf.getDownloadUrl()
                                                         .addOnSuccessListener(uri -> {
                                                             String imageUrl = uri.toString();
                                                             PPJB = imageUrl;
@@ -2092,6 +2484,20 @@ public class TambahListingActivity extends AppCompatActivity {
                                             .addOnFailureListener(exception -> {
                                             });
                                     uploadTasks.add(taskSTRA);
+                                } else if (UriSTRAPdf != null) {
+                                    StorageTask<UploadTask.TaskSnapshot> taskSTRA = ImgSertifikatstrapdf.putFile(UriSTRAPdf)
+                                            .addOnSuccessListener(taskSnapshot -> {
+                                                ImgSertifikatstrapdf.getDownloadUrl()
+                                                        .addOnSuccessListener(uri -> {
+                                                            String imageUrl = uri.toString();
+                                                            STRA = imageUrl;
+                                                        })
+                                                        .addOnFailureListener(exception -> {
+                                                        });
+                                            })
+                                            .addOnFailureListener(exception -> {
+                                            });
+                                    uploadTasks.add(taskSTRA);
                                 } else {
                                     STRA = "0";
                                 }
@@ -2109,6 +2515,20 @@ public class TambahListingActivity extends AppCompatActivity {
                                             .addOnFailureListener(exception -> {
                                             });
                                     uploadTasks.add(taskAJB);
+                                } else if (UriAJBPdf != null) {
+                                    StorageTask<UploadTask.TaskSnapshot> taskAJB = ImgSertifikatajbpdf.putFile(UriAJBPdf)
+                                            .addOnSuccessListener(taskSnapshot -> {
+                                                ImgSertifikatajbpdf.getDownloadUrl()
+                                                        .addOnSuccessListener(uri -> {
+                                                            String imageUrl = uri.toString();
+                                                            AJB = imageUrl;
+                                                        })
+                                                        .addOnFailureListener(exception -> {
+                                                        });
+                                            })
+                                            .addOnFailureListener(exception -> {
+                                            });
+                                    uploadTasks.add(taskAJB);
                                 } else {
                                     AJB = "0";
                                 }
@@ -2116,6 +2536,20 @@ public class TambahListingActivity extends AppCompatActivity {
                                     StorageTask<UploadTask.TaskSnapshot> taskPetokD = ImgSertifikatpetokd.putFile(UriPetokD)
                                             .addOnSuccessListener(taskSnapshot -> {
                                                 ImgSertifikatpetokd.getDownloadUrl()
+                                                        .addOnSuccessListener(uri -> {
+                                                            String imageUrl = uri.toString();
+                                                            PetokD = imageUrl;
+                                                        })
+                                                        .addOnFailureListener(exception -> {
+                                                        });
+                                            })
+                                            .addOnFailureListener(exception -> {
+                                            });
+                                    uploadTasks.add(taskPetokD);
+                                } else if (UriPetokDPdf != null) {
+                                    StorageTask<UploadTask.TaskSnapshot> taskPetokD = ImgSertifikatpetokdpdf.putFile(UriPetokDPdf)
+                                            .addOnSuccessListener(taskSnapshot -> {
+                                                ImgSertifikatpetokdpdf.getDownloadUrl()
                                                         .addOnSuccessListener(uri -> {
                                                             String imageUrl = uri.toString();
                                                             PetokD = imageUrl;
@@ -2162,6 +2596,40 @@ public class TambahListingActivity extends AppCompatActivity {
                                     uploadTasks.add(taskPJP1);
                                 } else {
                                     PJPHal2 = "0";
+                                }
+                                if (UriSelfie != null) {
+                                    StorageTask<UploadTask.TaskSnapshot> taskSelfie = ImageSelfie.putFile(UriSelfie)
+                                            .addOnSuccessListener(taskSnapshot -> {
+                                                ImageSelfie.getDownloadUrl()
+                                                        .addOnSuccessListener(uri -> {
+                                                            String imageUrl = uri.toString();
+                                                            ImgSelfie = imageUrl;
+                                                        })
+                                                        .addOnFailureListener(exception -> {
+                                                        });
+                                            })
+                                            .addOnFailureListener(exception -> {
+                                            });
+                                    uploadTasks.add(taskSelfie);
+                                } else {
+                                    ImgSelfie = "0";
+                                }
+                                if (UriKTP != null) {
+                                    StorageTask<UploadTask.TaskSnapshot> taskKTP = ImageKTP.putFile(UriKTP)
+                                            .addOnSuccessListener(taskSnapshot -> {
+                                                ImageKTP.getDownloadUrl()
+                                                        .addOnSuccessListener(uri -> {
+                                                            String imageUrl = uri.toString();
+                                                            ImgKTP = imageUrl;
+                                                        })
+                                                        .addOnFailureListener(exception -> {
+                                                        });
+                                            })
+                                            .addOnFailureListener(exception -> {
+                                            });
+                                    uploadTasks.add(taskKTP);
+                                } else {
+                                    ImgKTP = "0";
                                 }
 
                                 Tasks.whenAllSuccess(uploadTasks)
@@ -2237,6 +2705,8 @@ public class TambahListingActivity extends AppCompatActivity {
         HpsPetokD.setOnClickListener(view -> clearBitmapPetokD());
         HpsPjp.setOnClickListener(view -> clearBitmapPJP());
         HpsPjp1.setOnClickListener(view -> clearBitmapPJP1());
+        HpsSelfie.setOnClickListener(view -> clearBitmapSelfie());
+        HpsKTP.setOnClickListener(view -> clearBitmapKtp());
         banner.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -2433,6 +2903,8 @@ public class TambahListingActivity extends AppCompatActivity {
         BtnPetokDPdf.setOnClickListener(view -> pilihFilePetokD(view));
         BtnPjp.setOnClickListener(view -> showPhotoPJP());
         BtnPjp1.setOnClickListener(view -> showPhotoPJP1());
+        BtnSelfie.setOnClickListener(view -> showPhotoSelfie());
+        BtnKTP.setOnClickListener(view -> showPhotoKtp());
 
         select.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -2516,7 +2988,7 @@ public class TambahListingActivity extends AppCompatActivity {
                 materialDatePicker.addOnPositiveButtonClickListener(new MaterialPickerOnPositiveButtonClickListener<Long>() {
                     @Override
                     public void onPositiveButtonClick(Long selection) {
-                        String tanggal = new SimpleDateFormat("yyyy-dd-MM", Locale.getDefault()).format(new Date(selection));
+                        String tanggal = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date(selection));
                         EtTglInput.setText(MessageFormat.format("{0}", tanggal));
                     }
                 });
@@ -2989,6 +3461,44 @@ public class TambahListingActivity extends AppCompatActivity {
 
         builder.show();
     }
+    private void showPhotoSelfie() {
+        androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this);
+        builder.setTitle("Unggah Gambar")
+                .setItems(new CharSequence[]{"Ambil Foto", "Pilih Dari Galeri"}, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which) {
+                            case 0:
+                                ActivityCompat.requestPermissions(TambahListingActivity.this, new String[]{Manifest.permission.CAMERA}, CODE_CAMERA_REQUEST_Selfie);
+                                break;
+                            case 1:
+                                requestPermissionsSelfie();
+                                break;
+                        }
+                    }
+                });
+
+        builder.show();
+    }
+    private void showPhotoKtp() {
+        androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this);
+        builder.setTitle("Unggah Gambar")
+                .setItems(new CharSequence[]{"Ambil Foto", "Pilih Dari Galeri"}, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which) {
+                            case 0:
+                                ActivityCompat.requestPermissions(TambahListingActivity.this, new String[]{Manifest.permission.CAMERA}, CODE_CAMERA_REQUEST_KTP);
+                                break;
+                            case 1:
+                                requestPermissionsKtp();
+                                break;
+                        }
+                    }
+                });
+
+        builder.show();
+    }
     private void requestPermissions1() {
         boolean externalStoragePermissionGranted = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
 
@@ -3140,6 +3650,24 @@ public class TambahListingActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE_PJP1);
         } else {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_MEDIA_IMAGES}, PERMISSION_REQUEST_CODE_MEDIA_IMAGES_PJP1);
+        }
+    }
+    private void requestPermissionsSelfie() {
+        boolean externalStoragePermissionGranted = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
+
+        if (externalStoragePermissionGranted) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE_SELFIE);
+        } else {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_MEDIA_IMAGES}, PERMISSION_REQUEST_CODE_MEDIA_IMAGES_SELFIE);
+        }
+    }
+    private void requestPermissionsKtp() {
+        boolean externalStoragePermissionGranted = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
+
+        if (externalStoragePermissionGranted) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE_KTP);
+        } else {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_MEDIA_IMAGES}, PERMISSION_REQUEST_CODE_MEDIA_IMAGES_KTP);
         }
     }
     private void bukaKamera1() {
@@ -3326,6 +3854,28 @@ public class TambahListingActivity extends AppCompatActivity {
                 UriPJP1 = FileProvider.getUriForFile(this, "com.gooproper", photoFile);
                 intentKamera.putExtra(MediaStore.EXTRA_OUTPUT, UriPJP1);
                 startActivityForResult(intentKamera, KODE_REQUEST_KAMERA_PJP1);
+            }
+        }
+    }
+    private void bukaKameraSelfie() {
+        Intent intentKamera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (intentKamera.resolveActivity(getPackageManager()) != null) {
+            File photoFile = createImageFile();
+            if (photoFile != null) {
+                UriSelfie = FileProvider.getUriForFile(this, "com.gooproper", photoFile);
+                intentKamera.putExtra(MediaStore.EXTRA_OUTPUT, UriSelfie);
+                startActivityForResult(intentKamera, KODE_REQUEST_KAMERA_Selfie);
+            }
+        }
+    }
+    private void bukaKameraKtp() {
+        Intent intentKamera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (intentKamera.resolveActivity(getPackageManager()) != null) {
+            File photoFile = createImageFile();
+            if (photoFile != null) {
+                UriKTP = FileProvider.getUriForFile(this, "com.gooproper", photoFile);
+                intentKamera.putExtra(MediaStore.EXTRA_OUTPUT, UriKTP);
+                startActivityForResult(intentKamera, KODE_REQUEST_KAMERA_KTP);
             }
         }
     }
@@ -3531,6 +4081,16 @@ public class TambahListingActivity extends AppCompatActivity {
                 Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 startActivityForResult(intent, CODE_GALLERY_REQUEST_PJP1);
             }
+        } else if (requestCode == PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE_SELFIE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(intent, CODE_GALLERY_REQUEST_Selfie);
+            }
+        } else if (requestCode == PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE_KTP) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(intent, CODE_GALLERY_REQUEST_KTP);
+            }
         } else if (requestCode == PERMISSION_REQUEST_CODE_MEDIA_IMAGES1) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
@@ -3619,6 +4179,16 @@ public class TambahListingActivity extends AppCompatActivity {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 startActivityForResult(intent, CODE_GALLERY_REQUEST_PJP1);
+            }
+        } else if (requestCode == PERMISSION_REQUEST_CODE_MEDIA_IMAGES_SELFIE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(intent, CODE_GALLERY_REQUEST_Selfie);
+            }
+        } else if (requestCode == PERMISSION_REQUEST_CODE_MEDIA_IMAGES_KTP) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(intent, CODE_GALLERY_REQUEST_KTP);
             }
         } else if (requestCode == STORAGE_PERMISSION_CODE) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {} else {}
@@ -4221,6 +4791,76 @@ public class TambahListingActivity extends AppCompatActivity {
                 customDialog.show();
             }
             return;
+        } else if (requestCode == CODE_GALLERY_REQUEST_Selfie) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(intent, CODE_GALLERY_REQUEST_Selfie);
+            } else {
+                Dialog customDialog = new Dialog(TambahListingActivity.this);
+                customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                customDialog.setContentView(R.layout.custom_dialog_eror_input);
+
+                if (customDialog.getWindow() != null) {
+                    customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                }
+
+                Button ok = customDialog.findViewById(R.id.BtnOkErorInput);
+                TextView tv = customDialog.findViewById(R.id.TVDialogErorInput);
+
+                tv.setText("Akses Galeri Ditolak");
+
+                ok.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        customDialog.dismiss();
+                    }
+                });
+
+                ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
+
+                Glide.with(TambahListingActivity.this)
+                        .load(R.drawable.alert) // You can also use a local resource like R.drawable.your_gif_resource
+                        .transition(DrawableTransitionOptions.withCrossFade())
+                        .into(gifImageView);
+
+                customDialog.show();
+            }
+            return;
+        } else if (requestCode == CODE_GALLERY_REQUEST_KTP) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(intent, CODE_GALLERY_REQUEST_KTP);
+            } else {
+                Dialog customDialog = new Dialog(TambahListingActivity.this);
+                customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                customDialog.setContentView(R.layout.custom_dialog_eror_input);
+
+                if (customDialog.getWindow() != null) {
+                    customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                }
+
+                Button ok = customDialog.findViewById(R.id.BtnOkErorInput);
+                TextView tv = customDialog.findViewById(R.id.TVDialogErorInput);
+
+                tv.setText("Akses Galeri Ditolak");
+
+                ok.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        customDialog.dismiss();
+                    }
+                });
+
+                ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
+
+                Glide.with(TambahListingActivity.this)
+                        .load(R.drawable.alert) // You can also use a local resource like R.drawable.your_gif_resource
+                        .transition(DrawableTransitionOptions.withCrossFade())
+                        .into(gifImageView);
+
+                customDialog.show();
+            }
+            return;
         } else if (requestCode == CODE_CAMERA_REQUEST1) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 bukaKamera1();
@@ -4441,7 +5081,32 @@ public class TambahListingActivity extends AppCompatActivity {
                 AlertDialog alert = builder.create();
                 alert.show();
             }
-
+            return;
+        } else if (requestCode == CODE_CAMERA_REQUEST_Selfie) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                bukaKameraSelfie();
+            } else {
+                AlertDialog.Builder builder = new AlertDialog.Builder(TambahListingActivity.this);
+                builder.setTitle("Izin Kamera Ditolak").
+                        setMessage("Aplikasi memerlukan izin kamera untuk mengambil gambar.");
+                builder.setPositiveButton("OK",
+                        (dialog, id) -> dialog.cancel());
+                AlertDialog alert = builder.create();
+                alert.show();
+            }
+            return;
+        } else if (requestCode == CODE_CAMERA_REQUEST_KTP) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                bukaKameraKtp();
+            } else {
+                AlertDialog.Builder builder = new AlertDialog.Builder(TambahListingActivity.this);
+                builder.setTitle("Izin Kamera Ditolak").
+                        setMessage("Aplikasi memerlukan izin kamera untuk mengambil gambar.");
+                builder.setPositiveButton("OK",
+                        (dialog, id) -> dialog.cancel());
+                AlertDialog alert = builder.create();
+                alert.show();
+            }
             return;
         }
 
@@ -4456,6 +5121,13 @@ public class TambahListingActivity extends AppCompatActivity {
                 latitudeStr = data.getStringExtra("latitude");
                 longitudeStr = data.getStringExtra("longitude");
                 addressStr = data.getStringExtra("address");
+                lokasiStr = data.getStringExtra("lokasi");
+                if (latitudeStr == null && longitudeStr == null){
+                    CBLokasi.setChecked(false);
+                } else {
+                    CBLokasi.setChecked(true);
+                    maps.setVisibility(View.GONE);
+                }
             }
         }
 
@@ -4567,12 +5239,6 @@ public class TambahListingActivity extends AppCompatActivity {
                     Toast.makeText(this, "URI kosong untuk ImageView 8", Toast.LENGTH_SHORT).show();
                 }
             }
-
-//            Uri2 = data.getData();
-//            iv2.setImageURI(Uri2);
-//            lyt2.setVisibility(View.VISIBLE);
-//            select2.setVisibility(View.GONE);
-//            select3.setVisibility(View.VISIBLE);
         } else if (requestCode == CODE_GALLERY_REQUEST3 && resultCode == RESULT_OK && data != null) {
             Uri3 = data.getData();
             iv3.setImageURI(Uri3);
@@ -4667,6 +5333,17 @@ public class TambahListingActivity extends AppCompatActivity {
             IVPjp1.setImageURI(UriPJP1);
             LytPjp1.setVisibility(View.VISIBLE);
             BtnPjp1.setVisibility(View.GONE);
+        } else if (requestCode == CODE_GALLERY_REQUEST_Selfie && resultCode == RESULT_OK && data != null) {
+            UriSelfie = data.getData();
+            IVSelfie.setImageURI(UriSelfie);
+            LytSelfie.setVisibility(View.VISIBLE);
+            BtnSelfie.setVisibility(View.GONE);
+            CBSelfie.setChecked(true);
+        } else if (requestCode == CODE_GALLERY_REQUEST_KTP && resultCode == RESULT_OK && data != null) {
+            UriKTP = data.getData();
+            IVKTP.setImageURI(UriKTP);
+            LytKTP.setVisibility(View.VISIBLE);
+            BtnKTP.setVisibility(View.GONE);
         } else if (requestCode == KODE_REQUEST_KAMERA1 && resultCode == RESULT_OK) {
             iv1.setImageURI(Uri1);
             lyt1.setVisibility(View.VISIBLE);
@@ -4756,6 +5433,15 @@ public class TambahListingActivity extends AppCompatActivity {
             IVPjp1.setImageURI(UriPJP1);
             LytPjp1.setVisibility(View.VISIBLE);
             BtnPjp1.setVisibility(View.GONE);
+        } else if (requestCode == KODE_REQUEST_KAMERA_Selfie && resultCode == RESULT_OK) {
+            IVSelfie.setImageURI(UriSelfie);
+            LytSelfie.setVisibility(View.VISIBLE);
+            BtnSelfie.setVisibility(View.GONE);
+            CBSelfie.setChecked(true);
+        } else if (requestCode == KODE_REQUEST_KAMERA_KTP && resultCode == RESULT_OK) {
+            IVKTP.setImageURI(UriKTP);
+            LytKTP.setVisibility(View.VISIBLE);
+            BtnKTP.setVisibility(View.GONE);
         } else if (requestCode == PICK_PDF_SHM && resultCode == RESULT_OK && data != null && data.getData() != null) {
             UriSHMPdf = data.getData();
             LytSHM.setVisibility(View.VISIBLE);
@@ -4927,6 +5613,21 @@ public class TambahListingActivity extends AppCompatActivity {
             BtnPjp1.setVisibility(View.VISIBLE);
         }
     }
+    private void clearBitmapSelfie() {
+        if (UriSelfie != null) {
+            UriSelfie = null;
+            LytSelfie.setVisibility(View.GONE);
+            BtnSelfie.setVisibility(View.VISIBLE);
+            CBSelfie.setChecked(false);
+        }
+    }
+    private void clearBitmapKtp() {
+        if (UriKTP != null) {
+            UriKTP = null;
+            LytKTP.setVisibility(View.GONE);
+            BtnKTP.setVisibility(View.VISIBLE);
+        }
+    }
     private void simpanData() {
         pDialog.setMessage("Menyimpan Data");
         pDialog.setCancelable(false);
@@ -5090,12 +5791,12 @@ public class TambahListingActivity extends AppCompatActivity {
                 } else {
                     Lng = longitudeStr;
                 }
-                if (HargaString == null){
+                if (HargaString == null || HargaString.equals("")){
                     SHarga = "0";
                 } else {
                     SHarga = HargaString;
                 }
-                if (HargaSewaString == null){
+                if (HargaSewaString == null || HargaSewaString.equals("")){
                     SHargaSewa = "0";
                 } else {
                     SHargaSewa = HargaSewaString;
@@ -5111,6 +5812,10 @@ public class TambahListingActivity extends AppCompatActivity {
                 final String StringSTRA = CBSTRA.isChecked() ? "1" : "0";
                 final String StringAJB = CBAJB.isChecked() ? "1" : "0";
                 final String StringPetokD = CBPetokD.isChecked() ? "1" : "0";
+                final String StringMarketable = CBMarketable.isChecked() ? "1" : "0";
+                final String StringHarga = CBHarga.isChecked() ? "1" : "0";
+                final String StringSelfie = CBSelfie.isChecked() ? "1" : "0";
+                final String StringLokasi = CBLokasi.isChecked() ? "1" : "0";
 
                 map.put("NamaLengkap", namalengkap.getText().toString());
                 map.put("NoTelp", nohp.getText().toString());
@@ -5127,7 +5832,7 @@ public class TambahListingActivity extends AppCompatActivity {
                 map.put("Alamat", alamatproperti.getText().toString());
                 map.put("Latitude", Lat);
                 map.put("Longitude", Lng);
-                map.put("Location", alamatproperti.getText().toString());
+                map.put("Location", lokasiStr);
                 map.put("Wide", tanah);
                 map.put("Land", bangunan);
                 map.put("Dimensi", dimensi.getText().toString());
@@ -5182,6 +5887,11 @@ public class TambahListingActivity extends AppCompatActivity {
                 map.put("LinkInstagram", idnull);
                 map.put("LinkYoutube", idnull);
                 map.put("Fee", EtFee.getText().toString());
+                map.put("IsMarketable", StringMarketable);
+                map.put("IsHarga", StringHarga);
+                map.put("IsSelfie", StringSelfie);
+                map.put("IsLokasi", StringLokasi);
+                map.put("Selfie", ImgSelfie);
                 System.out.println(map);
 
                 return map;
@@ -5354,12 +6064,12 @@ public class TambahListingActivity extends AppCompatActivity {
                 } else {
                     Lng = longitudeStr;
                 }
-                if (HargaString == null){
+                if (HargaString == null || HargaString.equals("")){
                     SHarga = "0";
                 } else {
                     SHarga = HargaString;
                 }
-                if (HargaSewaString == null){
+                if (HargaSewaString == null || HargaSewaString.equals("")){
                     SHargaSewa = "0";
                 } else {
                     SHargaSewa = HargaSewaString;
@@ -5375,6 +6085,10 @@ public class TambahListingActivity extends AppCompatActivity {
                 final String StringSTRA = CBSTRA.isChecked() ? "1" : "0";
                 final String StringAJB = CBAJB.isChecked() ? "1" : "0";
                 final String StringPetokD = CBPetokD.isChecked() ? "1" : "0";
+                final String StringMarketable = CBMarketable.isChecked() ? "1" : "0";
+                final String StringHarga = CBHarga.isChecked() ? "1" : "0";
+                final String StringSelfie = CBSelfie.isChecked() ? "1" : "0";
+                final String StringLokasi = CBLokasi.isChecked() ? "1" : "0";
 
                 map.put("NamaLengkap", namalengkap.getText().toString());
                 map.put("NoTelp", nohp.getText().toString());
@@ -5391,9 +6105,9 @@ public class TambahListingActivity extends AppCompatActivity {
                 map.put("Alamat", alamatproperti.getText().toString());
                 map.put("Latitude", Lat);
                 map.put("Longitude", Lng);
-                map.put("Location", alamatproperti.getText().toString());
-                map.put("Wide", luas.getText().toString());
-                map.put("Land", land.getText().toString());
+                map.put("Location", lokasiStr);
+                map.put("Wide", tanah);
+                map.put("Land", bangunan);
                 map.put("Dimensi", dimensi.getText().toString());
                 map.put("Listrik", listrik.getText().toString());
                 map.put("Level", lantai.getText().toString());
@@ -5446,6 +6160,11 @@ public class TambahListingActivity extends AppCompatActivity {
                 map.put("LinkInstagram", idnull);
                 map.put("LinkYoutube", idnull);
                 map.put("Fee", EtFee.getText().toString());
+                map.put("IsMarketable", StringMarketable);
+                map.put("IsHarga", StringHarga);
+                map.put("IsSelfie", StringSelfie);
+                map.put("IsLokasi", StringLokasi);
+                map.put("Selfie", ImgSelfie);
                 System.out.println(map);
 
                 return map;
@@ -5632,6 +6351,10 @@ public class TambahListingActivity extends AppCompatActivity {
                 final String StringSTRA = CBSTRA.isChecked() ? "1" : "0";
                 final String StringAJB = CBAJB.isChecked() ? "1" : "0";
                 final String StringPetokD = CBPetokD.isChecked() ? "1" : "0";
+                final String StringMarketable = CBMarketable.isChecked() ? "1" : "0";
+                final String StringHarga = CBHarga.isChecked() ? "1" : "0";
+                final String StringSelfie = CBSelfie.isChecked() ? "1" : "0";
+                final String StringLokasi = CBLokasi.isChecked() ? "1" : "0";
 
                 map.put("NamaLengkap", namalengkap.getText().toString());
                 map.put("NoTelp", nohp.getText().toString());
@@ -5648,9 +6371,9 @@ public class TambahListingActivity extends AppCompatActivity {
                 map.put("Alamat", alamatproperti.getText().toString());
                 map.put("Latitude", Lat);
                 map.put("Longitude", Lng);
-                map.put("Location", alamatproperti.getText().toString());
-                map.put("Wide", luas.getText().toString());
-                map.put("Land", land.getText().toString());
+                map.put("Location", lokasiStr);
+                map.put("Wide", tanah);
+                map.put("Land", bangunan);
                 map.put("Dimensi", dimensi.getText().toString());
                 map.put("Listrik", listrik.getText().toString());
                 map.put("Level", lantai.getText().toString());
@@ -5703,6 +6426,11 @@ public class TambahListingActivity extends AppCompatActivity {
                 map.put("LinkInstagram", idnull);
                 map.put("LinkYoutube", idnull);
                 map.put("Fee", EtFee.getText().toString());
+                map.put("IsMarketable", StringMarketable);
+                map.put("IsHarga", StringHarga);
+                map.put("IsSelfie", StringSelfie);
+                map.put("IsLokasi", StringLokasi);
+                map.put("Selfie", ImgSelfie);
                 System.out.println(map);
 
                 return map;

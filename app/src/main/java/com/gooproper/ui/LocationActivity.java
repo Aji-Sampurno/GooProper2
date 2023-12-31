@@ -46,7 +46,7 @@ import java.util.Locale;
 
 public class LocationActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMapLongClickListener {
 
-    private static final int AUTOCOMPLETE_REQUEST_CODE = 1; // You can use any integer value
+    private static final int AUTOCOMPLETE_REQUEST_CODE = 1;
     private GoogleMap mMap;
     private SearchView searchedit;
     private Button shareButton;
@@ -194,6 +194,7 @@ public class LocationActivity extends AppCompatActivity implements OnMapReadyCal
                     intent.putExtra("latitude", latitudeStr);
                     intent.putExtra("longitude", longitudeStr);
                     intent.putExtra("address", completeAddress);
+                    intent.putExtra("lokasi", city);
                     setResult(RESULT_OK, intent);
 
                     finish();
