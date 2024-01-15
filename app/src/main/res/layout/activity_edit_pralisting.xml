@@ -98,8 +98,7 @@
             android:id="@+id/ivselfie"
             android:layout_width="match_parent"
             android:layout_height="217dp"
-            android:src="@mipmap/ic_icon_foreground"
-            android:visibility="gone"/>
+            android:src="@mipmap/ic_icon_foreground"/>
 
         <Button
             android:id="@+id/uploadselfie"

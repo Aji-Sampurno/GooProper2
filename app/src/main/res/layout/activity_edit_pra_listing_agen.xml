@@ -94,6 +94,108 @@
                     android:layout_marginTop="8dp"
                     android:background="#000000" />
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="4">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <CheckBox
+                            android:id="@+id/CBSelfie"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:buttonTint="@color/black"
+                            android:textColor="@color/black" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="Selfie"
+                            android:textColor="@color/black" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <CheckBox
+                            android:id="@+id/CBLokasi"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:buttonTint="@color/black"
+                            android:textColor="@color/black" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="Lokasi"
+                            android:textColor="@color/black" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <CheckBox
+                            android:id="@+id/CBMarketable"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:buttonTint="@color/black"
+                            android:textColor="@color/black" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="Marketable"
+                            android:textColor="@color/black" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <CheckBox
+                            android:id="@+id/CBHarga"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:buttonTint="@color/black"
+                            android:textColor="@color/black" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="Harga"
+                            android:textColor="@color/black" />
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="8dp"
+                    android:background="#000000" />
+
             </LinearLayout>
 
             <LinearLayout
@@ -168,6 +270,43 @@
                     android:backgroundTint="@color/main"
                     android:text="Tambahkan Lokasi Maps"
                     android:textColor="@color/white" />
+
+                <Button
+                    android:id="@+id/selfie"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:backgroundTint="@color/main"
+                    android:text="Tambahkan Selfie"
+                    android:textColor="@color/white" />
+
+                <LinearLayout
+                    android:id="@+id/LytSelfie"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal"
+                    android:visibility="gone"
+                    android:weightSum="3">
+
+                    <ImageView
+                        android:id="@+id/IVSelfie"
+                        android:layout_width="250dp"
+                        android:layout_height="250dp"
+                        android:layout_weight="1"/>
+
+                    <ImageView
+                        android:id="@+id/IVDeleteSelfie"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_margin="5dp"
+                        android:layout_weight="2"
+                        android:gravity="center"
+                        android:src="@drawable/ic_delete"
+                        app:tint="@color/red_color" />
+
+                </LinearLayout>
 
                 <TextView
                     android:layout_width="match_parent"
@@ -1413,7 +1552,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:backgroundTint="@color/main"
-                    android:text="Ganti Gambar"
+                    android:text="Tambah Gambar"
                     android:textColor="@color/white"
                     android:visibility="gone" />
 
@@ -1448,7 +1587,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:backgroundTint="@color/main"
-                    android:text="Ganti Gambar"
+                    android:text="Tambah Gambar"
                     android:textColor="@color/white"
                     android:visibility="gone" />
 
@@ -1483,7 +1622,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:backgroundTint="@color/main"
-                    android:text="Ganti Gambar"
+                    android:text="Tambah Gambar"
                     android:textColor="@color/white"
                     android:visibility="gone" />
 
@@ -1518,7 +1657,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:backgroundTint="@color/main"
-                    android:text="Ganti Gambar"
+                    android:text="Tambah Gambar"
                     android:textColor="@color/white"
                     android:visibility="gone" />
 
@@ -1553,7 +1692,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:backgroundTint="@color/main"
-                    android:text="Ganti Gambar"
+                    android:text="Tambah Gambar"
                     android:textColor="@color/white"
                     android:visibility="gone" />
 
@@ -1588,7 +1727,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:backgroundTint="@color/main"
-                    android:text="Ganti Gambar"
+                    android:text="Tambah Gambar"
                     android:textColor="@color/white"
                     android:visibility="gone" />
 

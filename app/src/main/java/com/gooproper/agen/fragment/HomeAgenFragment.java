@@ -15,6 +15,7 @@ import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.core.content.ContextCompat;
@@ -185,6 +186,7 @@ public class HomeAgenFragment extends Fragment implements OnMapReadyCallback{
         LoadListingSold();
         LoadListingPopuler();
         LoadListing();
+        AddLastSeen();
 
         LinearSnapHelper snapHelper = new LinearSnapHelper();
         snapHelper.attachToRecyclerView(recycleListingPrimary);
@@ -341,6 +343,29 @@ public class HomeAgenFragment extends Fragment implements OnMapReadyCallback{
     }
     private void showNotification() {
 
+    }
+    private void AddLastSeen() {
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, ServerApi.URL_LAST_SEEN, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+            }
+        }) {
+            @Nullable
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> map = new HashMap<>();
+                System.out.println(map);
+                map.put("IdAgen", IdAdmin);
+                return map;
+            }
+        };
+
+        RequestQueue requestQueue = Volley.newRequestQueue(getContext());
+        requestQueue.add(stringRequest);
     }
     private void simpanDevice() {
         RequestQueue requestQueue = Volley.newRequestQueue(getContext());

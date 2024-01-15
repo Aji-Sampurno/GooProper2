@@ -198,7 +198,7 @@ public class TambahDetailListingSementaraActivity extends AppCompatActivity {
     CheckBox CBSHM, CBHGB, CBHSHP, CBPPJB, CBSTRA, CBAJB, CBPetokD, CBMarketable, CBHarga, CBSelfie, CBLokasi;
     String idagen, idnull, sstatus, priority, namalisting, isAdmin, idadmin, idinput, HargaString, HargaSewaString, SHarga, SHargaSewa, agenid, agencoid;
     String image1, image2, image3, image4, image5, image6, image7, image8, SHM, HGB, HSHP, PPJB, STRA, AJB, PetokD, PJPHal1, PJPHal2, ImgSelfie, ImgKTP;
-    String latitudeStr, longitudeStr, addressStr, lokasiStr, Lat, Lng, token, IdAgenStr, IdShareLokasiStr;
+    String latitudeStr, longitudeStr, addressStr, lokasiStr, Lat, Lng, token, IdAgenStr, IdShareLokasiStr, IsSelfie;
     Drawable DrawableSHM, DrawableHGB, DrawableHSHP, DrawablePPJB, DrawableSTRA;
     TextView TVSHM, TVHGB, TVHSHP, TVPPJB, TVSTRA, TVAJB, TVPetokD;
     private AgenManager agenManager;
@@ -414,6 +414,7 @@ public class TambahDetailListingSementaraActivity extends AppCompatActivity {
 
         IdAgenStr = intentIdAgen;
         IdShareLokasiStr = intentIdShareLokasi;
+        IsSelfie = intentSelfie;
 
         if (!intentAlamat.isEmpty()){
             CBLokasi.setChecked(true);
@@ -943,7 +944,7 @@ public class TambahDetailListingSementaraActivity extends AppCompatActivity {
                         } else {
                             PJPHal2 = "0";
                         }
-                        if (UriSelfie != null) {
+                        if (UriSelfie != null && !intentSelfie.isEmpty()) {
                             StorageTask<UploadTask.TaskSnapshot> taskSelfie = ImageSelfie.putFile(UriSelfie)
                                     .addOnSuccessListener(taskSnapshot -> {
                                         ImageSelfie.getDownloadUrl()

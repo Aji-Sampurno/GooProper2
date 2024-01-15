@@ -1,6 +1,8 @@
 package com.gooproper.adapter;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.gooproper.R;
 import com.gooproper.model.ListingSementaraModel;
 import com.gooproper.ui.detail.DetailListingActivity;
+import com.gooproper.ui.tambah.TambahDetailInfoSementaraActivity;
 import com.gooproper.ui.tambah.TambahDetailListingSementaraActivity;
 
 import java.util.List;
@@ -58,16 +61,45 @@ public class ListingSementaraAdapter extends RecyclerView.Adapter<ListingSementa
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent update = new Intent(context, TambahDetailListingSementaraActivity.class);
-                    update.putExtra("update",1);
-                    update.putExtra("IdShareLokasi",listingSementaraModel.getIdShareLokasi());
-                    update.putExtra("IdAgen",listingSementaraModel.getIdAgen());
-                    update.putExtra("Alamat",listingSementaraModel.getAlamat());
-                    update.putExtra("Lokasi",listingSementaraModel.getLokasi());
-                    update.putExtra("Latitude",listingSementaraModel.getLatitude());
-                    update.putExtra("Longitude",listingSementaraModel.getLongitude());
-                    update.putExtra("Selfie",listingSementaraModel.getSelfie());
-                    context.startActivity(update);
+                    AlertDialog.Builder builder = new AlertDialog.Builder(context, R.style.CustomAlertDialogStyle);
+                    builder.setTitle("Konfimasi Info Sementara");
+
+                    builder.setMessage("Masukkan Listing / Info");
+
+                    builder.setPositiveButton("Tambah Listing", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Intent update = new Intent(context, TambahDetailListingSementaraActivity.class);
+                            update.putExtra("update",1);
+                            update.putExtra("IdShareLokasi",listingSementaraModel.getIdShareLokasi());
+                            update.putExtra("IdAgen",listingSementaraModel.getIdAgen());
+                            update.putExtra("Alamat",listingSementaraModel.getAlamat());
+                            update.putExtra("Lokasi",listingSementaraModel.getLokasi());
+                            update.putExtra("Latitude",listingSementaraModel.getLatitude());
+                            update.putExtra("Longitude",listingSementaraModel.getLongitude());
+                            update.putExtra("Selfie",listingSementaraModel.getSelfie());
+                            context.startActivity(update);
+                        }
+                    });
+
+                    builder.setNegativeButton("Tambah Info", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Intent update = new Intent(context, TambahDetailInfoSementaraActivity.class);
+                            update.putExtra("update",1);
+                            update.putExtra("IdShareLokasi",listingSementaraModel.getIdShareLokasi());
+                            update.putExtra("IdAgen",listingSementaraModel.getIdAgen());
+                            update.putExtra("Alamat",listingSementaraModel.getAlamat());
+                            update.putExtra("Lokasi",listingSementaraModel.getLokasi());
+                            update.putExtra("Latitude",listingSementaraModel.getLatitude());
+                            update.putExtra("Longitude",listingSementaraModel.getLongitude());
+                            update.putExtra("Selfie",listingSementaraModel.getSelfie());
+                            context.startActivity(update);
+                        }
+                    });
+
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
                 }
             });
         }

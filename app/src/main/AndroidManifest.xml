@@ -33,6 +33,15 @@
         android:theme="@style/Theme.GooProper"
         tools:targetApi="31">
         <activity
+            android:name=".ui.tambah.TambahDetailInfoSementaraActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.tambah.TambahSelfieActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.ReportAgenActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.edit.EditMapsListingActivity"
             android:exported="false" />
         <activity

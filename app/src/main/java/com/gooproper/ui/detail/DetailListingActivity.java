@@ -788,7 +788,7 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                 idpengguna = Preferences.getKeyIdAdmin(this);
             }
         } else if (status.equals("3")) {
-            if (intentLatitude.equals("0") && intentLongitude.equals("0")){
+            if (intentLatitude.equals("0") && intentLongitude.equals("0")) {
                 if (intentIsAdmin.equals("0")){
                     BtnApproveAdmin.setVisibility(View.GONE);
                     BtnApproveManager.setVisibility(View.GONE);
@@ -815,12 +815,14 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                             update.putExtra("IdPraListing",idpralisting);
                             update.putExtra("IdListing",intentIdListing);
                             update.putExtra("IdAgen",intentIdAgen);
+                            update.putExtra("IdAgenCo",intentIdAgenCo);
                             update.putExtra("IdInput",intentIdInput);
                             update.putExtra("NamaListing",intentNamaListing);
                             update.putExtra("Alamat",intentAlamat);
                             update.putExtra("Latitude",intentLatitude);
                             update.putExtra("Longitude",intentLongitude);
                             update.putExtra("Location",intentLocation);
+                            update.putExtra("Selfie",intentSelfie);
                             update.putExtra("Wide",intentWide);
                             update.putExtra("Land",intentLand);
                             update.putExtra("Dimensi",intentDimensi);
@@ -840,6 +842,7 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                             update.putExtra("Stratatitle",intentStratatitle);
                             update.putExtra("AJB",intentAJB);
                             update.putExtra("PetokD",intentPetokD);
+                            update.putExtra("Pjp",intentPjp);
                             update.putExtra("ImgSHM",intentImgSHM);
                             update.putExtra("ImgHGB",intentImgHGB);
                             update.putExtra("ImgHSHP",intentImgHSHP);
@@ -880,14 +883,21 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                             update.putExtra("LinkYoutube",intentLinkYoutube);
                             update.putExtra("IsAdmin",intentIsAdmin);
                             update.putExtra("IsManager",intentIsManager);
-                            update.putExtra("View",intentView);
+                            update.putExtra("IsRejected",intentIsRejected);
                             update.putExtra("Sold",intentSold);
+                            update.putExtra("Rented",intentRented);
+                            update.putExtra("View",intentView);
                             update.putExtra("Marketable",intentMarketable);
                             update.putExtra("StatusHarga",intentStatusHarga);
                             update.putExtra("Nama",intentNama);
                             update.putExtra("NoTelp",intentNoTelp);
                             update.putExtra("Instagram",intentInstagram);
                             update.putExtra("Fee",intentFee);
+                            update.putExtra("NamaVendor",intentNamaVendor);
+                            update.putExtra("NoTelpVendor",intentNoTelpVendor);
+                            update.putExtra("IsSelfie",intentIsSelfie);
+                            update.putExtra("IsLokasi",intentIsLokasi);
+                            update.putExtra("Keterangan",intentKeterangan);
                             startActivity(update);
                         }
                     });
@@ -925,12 +935,14 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                             update.putExtra("IdPraListing",idpralisting);
                             update.putExtra("IdListing",intentIdListing);
                             update.putExtra("IdAgen",intentIdAgen);
+                            update.putExtra("IdAgenCo",intentIdAgenCo);
                             update.putExtra("IdInput",intentIdInput);
                             update.putExtra("NamaListing",intentNamaListing);
                             update.putExtra("Alamat",intentAlamat);
                             update.putExtra("Latitude",intentLatitude);
                             update.putExtra("Longitude",intentLongitude);
                             update.putExtra("Location",intentLocation);
+                            update.putExtra("Selfie",intentSelfie);
                             update.putExtra("Wide",intentWide);
                             update.putExtra("Land",intentLand);
                             update.putExtra("Dimensi",intentDimensi);
@@ -950,6 +962,7 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                             update.putExtra("Stratatitle",intentStratatitle);
                             update.putExtra("AJB",intentAJB);
                             update.putExtra("PetokD",intentPetokD);
+                            update.putExtra("Pjp",intentPjp);
                             update.putExtra("ImgSHM",intentImgSHM);
                             update.putExtra("ImgHGB",intentImgHGB);
                             update.putExtra("ImgHSHP",intentImgHSHP);
@@ -990,14 +1003,291 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                             update.putExtra("LinkYoutube",intentLinkYoutube);
                             update.putExtra("IsAdmin",intentIsAdmin);
                             update.putExtra("IsManager",intentIsManager);
-                            update.putExtra("View",intentView);
+                            update.putExtra("IsRejected",intentIsRejected);
                             update.putExtra("Sold",intentSold);
+                            update.putExtra("Rented",intentRented);
+                            update.putExtra("View",intentView);
                             update.putExtra("Marketable",intentMarketable);
                             update.putExtra("StatusHarga",intentStatusHarga);
                             update.putExtra("Nama",intentNama);
                             update.putExtra("NoTelp",intentNoTelp);
                             update.putExtra("Instagram",intentInstagram);
                             update.putExtra("Fee",intentFee);
+                            update.putExtra("NamaVendor",intentNamaVendor);
+                            update.putExtra("NoTelpVendor",intentNoTelpVendor);
+                            update.putExtra("IsSelfie",intentIsSelfie);
+                            update.putExtra("IsLokasi",intentIsLokasi);
+                            update.putExtra("Keterangan",intentKeterangan);
+                            startActivity(update);
+                        }
+                    });
+                    BtnTambahMaps.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent update = new Intent(DetailListingActivity.this, EditPralistingActivity.class);
+                            update.putExtra("IdPraListing",idpralisting);
+                            startActivity(update);
+                        }
+                    });
+                } else {
+                    BtnApproveAdmin.setVisibility(View.GONE);
+                    BtnApproveManager.setVisibility(View.GONE);
+                    BtnRejectedAdmin.setVisibility(View.GONE);
+                    BtnRejectedManager.setVisibility(View.GONE);
+                    IVFlowUp.setVisibility(View.VISIBLE);
+                    IVFlowUp2.setVisibility(View.VISIBLE);
+                    TVAlamatDetailListing.setVisibility(View.GONE);
+                    IVAlamat.setVisibility(View.GONE);
+                    idpengguna = "0";
+                    AgenId = Preferences.getKeyIdAgen(this);
+                    LytCBMarketable.setVisibility(View.GONE);
+                    LytCBHarga.setVisibility(View.GONE);
+                    LytCBSelfie.setVisibility(View.GONE);
+                    LytCBLokasi.setVisibility(View.GONE);
+                    if (StrIdAgen.equals(intentIdAgen)){
+                        BtnTambahMaps.setVisibility(View.VISIBLE);
+                        BtnTambahMaps.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent update = new Intent(DetailListingActivity.this, EditMapsListingActivity.class);
+                                update.putExtra("IdListing",idlisting);
+                                startActivity(update);
+                            }
+                        });
+                    } else {
+                        BtnTambahMaps.setVisibility(View.GONE);
+                    }
+                }
+            } else if (intentSelfie.equals("0") || intentSelfie.equals("") || intentSelfie.isEmpty()) {
+                if (intentIsAdmin.equals("0")){
+                    BtnApproveAdmin.setVisibility(View.GONE);
+                    BtnApproveManager.setVisibility(View.GONE);
+                    BtnRejectedAdmin.setVisibility(View.GONE);
+                    BtnRejectedManager.setVisibility(View.GONE);
+                    IVFlowUp.setVisibility(View.VISIBLE);
+                    IVFlowUp2.setVisibility(View.VISIBLE);
+                    idpengguna = "0";
+                    AgenId = Preferences.getKeyIdAgen(this);
+                    BtnTambahMaps.setVisibility(View.VISIBLE);
+                    IVEdit.setVisibility(View.VISIBLE);
+                    IVShare.setVisibility(View.GONE);
+                    IVFavorite.setVisibility(View.GONE);
+                    TVAlamatDetailListing.setVisibility(View.GONE);
+                    IVAlamat.setVisibility(View.GONE);
+                    LytCBMarketable.setVisibility(View.GONE);
+                    LytCBHarga.setVisibility(View.GONE);
+                    LytCBSelfie.setVisibility(View.GONE);
+                    LytCBLokasi.setVisibility(View.GONE);
+                    IVEdit.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent update = new Intent(DetailListingActivity.this, EditPraListingAgenActivity.class);
+                            update.putExtra("IdPraListing",idpralisting);
+                            update.putExtra("IdListing",intentIdListing);
+                            update.putExtra("IdAgen",intentIdAgen);
+                            update.putExtra("IdAgenCo",intentIdAgenCo);
+                            update.putExtra("IdInput",intentIdInput);
+                            update.putExtra("NamaListing",intentNamaListing);
+                            update.putExtra("Alamat",intentAlamat);
+                            update.putExtra("Latitude",intentLatitude);
+                            update.putExtra("Longitude",intentLongitude);
+                            update.putExtra("Location",intentLocation);
+                            update.putExtra("Selfie",intentSelfie);
+                            update.putExtra("Wide",intentWide);
+                            update.putExtra("Land",intentLand);
+                            update.putExtra("Dimensi",intentDimensi);
+                            update.putExtra("Listrik",intentListrik);
+                            update.putExtra("Level",intentLevel);
+                            update.putExtra("Bed",intentBed);
+                            update.putExtra("BedArt",intentBedArt);
+                            update.putExtra("Bath",intentBath);
+                            update.putExtra("BathArt",intentBathArt);
+                            update.putExtra("Garage",intentGarage);
+                            update.putExtra("Carpot",intentCarpot);
+                            update.putExtra("Hadap",intentHadap);
+                            update.putExtra("SHM",intentSHM);
+                            update.putExtra("HGB",intentHGB);
+                            update.putExtra("HSHP",intentHSHP);
+                            update.putExtra("PPJB",intentPPJB);
+                            update.putExtra("Stratatitle",intentStratatitle);
+                            update.putExtra("AJB",intentAJB);
+                            update.putExtra("PetokD",intentPetokD);
+                            update.putExtra("Pjp",intentPjp);
+                            update.putExtra("ImgSHM",intentImgSHM);
+                            update.putExtra("ImgHGB",intentImgHGB);
+                            update.putExtra("ImgHSHP",intentImgHSHP);
+                            update.putExtra("ImgPPJB",intentImgPPJB);
+                            update.putExtra("ImgStratatitle",intentImgStratatitle);
+                            update.putExtra("ImgAJB",intentImgAJB);
+                            update.putExtra("ImgPetokD",intentImgPetokD);
+                            update.putExtra("ImgPjp",intentImgPjp);
+                            update.putExtra("ImgPjp1",intentImgPjp1);
+                            update.putExtra("NoCertificate",intentNoCertificate);
+                            update.putExtra("Pbb",intentPbb);
+                            update.putExtra("JenisProperti",intentJenisProperti);
+                            update.putExtra("JenisCertificate",intentJenisCertificate);
+                            update.putExtra("SumberAir",intentSumberAir);
+                            update.putExtra("Kondisi",intentKondisi);
+                            update.putExtra("Deskripsi",intentDeskripsi);
+                            update.putExtra("Prabot",intentPrabot);
+                            update.putExtra("KetPrabot",intentKetPrabot);
+                            update.putExtra("Priority",intentPriority);
+                            update.putExtra("Ttd",intentTtd);
+                            update.putExtra("Banner",intentBanner);
+                            update.putExtra("Size",intentSize);
+                            update.putExtra("Harga",intentHarga);
+                            update.putExtra("HargaSewa",intentHargaSewa);
+                            update.putExtra("TglInput",intentTglInput);
+                            update.putExtra("Img1",intentImg1);
+                            update.putExtra("Img2",intentImg2);
+                            update.putExtra("Img3",intentImg3);
+                            update.putExtra("Img4",intentImg4);
+                            update.putExtra("Img5",intentImg5);
+                            update.putExtra("Img6",intentImg6);
+                            update.putExtra("Img7",intentImg7);
+                            update.putExtra("Img8",intentImg8);
+                            update.putExtra("Video",intentVideo);
+                            update.putExtra("LinkFacebook",intentLinkFacebook);
+                            update.putExtra("LinkTiktok",intentLinkTiktok);
+                            update.putExtra("LinkInstagram",intentLinkInstagram);
+                            update.putExtra("LinkYoutube",intentLinkYoutube);
+                            update.putExtra("IsAdmin",intentIsAdmin);
+                            update.putExtra("IsManager",intentIsManager);
+                            update.putExtra("IsRejected",intentIsRejected);
+                            update.putExtra("Sold",intentSold);
+                            update.putExtra("Rented",intentRented);
+                            update.putExtra("View",intentView);
+                            update.putExtra("Marketable",intentMarketable);
+                            update.putExtra("StatusHarga",intentStatusHarga);
+                            update.putExtra("Nama",intentNama);
+                            update.putExtra("NoTelp",intentNoTelp);
+                            update.putExtra("Instagram",intentInstagram);
+                            update.putExtra("Fee",intentFee);
+                            update.putExtra("NamaVendor",intentNamaVendor);
+                            update.putExtra("NoTelpVendor",intentNoTelpVendor);
+                            update.putExtra("IsSelfie",intentIsSelfie);
+                            update.putExtra("IsLokasi",intentIsLokasi);
+                            update.putExtra("Keterangan",intentKeterangan);
+                            startActivity(update);
+                        }
+                    });
+                    BtnTambahMaps.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent update = new Intent(DetailListingActivity.this, EditPralistingActivity.class);
+                            update.putExtra("IdPraListing",idpralisting);
+                            startActivity(update);
+                        }
+                    });
+                } else if (intentIsManager.equals("0")) {
+                    BtnApproveAdmin.setVisibility(View.GONE);
+                    BtnApproveManager.setVisibility(View.GONE);
+                    BtnRejectedAdmin.setVisibility(View.GONE);
+                    BtnRejectedManager.setVisibility(View.GONE);
+                    IVFlowUp.setVisibility(View.VISIBLE);
+                    IVFlowUp2.setVisibility(View.VISIBLE);
+                    idpengguna = "0";
+                    AgenId = Preferences.getKeyIdAgen(this);
+                    BtnTambahMaps.setVisibility(View.VISIBLE);
+                    IVEdit.setVisibility(View.VISIBLE);
+                    IVShare.setVisibility(View.GONE);
+                    IVFavorite.setVisibility(View.GONE);
+                    TVAlamatDetailListing.setVisibility(View.GONE);
+                    IVAlamat.setVisibility(View.GONE);
+                    LytCBMarketable.setVisibility(View.GONE);
+                    LytCBHarga.setVisibility(View.GONE);
+                    LytCBSelfie.setVisibility(View.GONE);
+                    LytCBLokasi.setVisibility(View.GONE);
+                    IVEdit.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent update = new Intent(DetailListingActivity.this, EditPraListingAgenActivity.class);
+                            update.putExtra("IdPraListing",idpralisting);
+                            update.putExtra("IdListing",intentIdListing);
+                            update.putExtra("IdAgen",intentIdAgen);
+                            update.putExtra("IdAgenCo",intentIdAgenCo);
+                            update.putExtra("IdInput",intentIdInput);
+                            update.putExtra("NamaListing",intentNamaListing);
+                            update.putExtra("Alamat",intentAlamat);
+                            update.putExtra("Latitude",intentLatitude);
+                            update.putExtra("Longitude",intentLongitude);
+                            update.putExtra("Location",intentLocation);
+                            update.putExtra("Selfie",intentSelfie);
+                            update.putExtra("Wide",intentWide);
+                            update.putExtra("Land",intentLand);
+                            update.putExtra("Dimensi",intentDimensi);
+                            update.putExtra("Listrik",intentListrik);
+                            update.putExtra("Level",intentLevel);
+                            update.putExtra("Bed",intentBed);
+                            update.putExtra("BedArt",intentBedArt);
+                            update.putExtra("Bath",intentBath);
+                            update.putExtra("BathArt",intentBathArt);
+                            update.putExtra("Garage",intentGarage);
+                            update.putExtra("Carpot",intentCarpot);
+                            update.putExtra("Hadap",intentHadap);
+                            update.putExtra("SHM",intentSHM);
+                            update.putExtra("HGB",intentHGB);
+                            update.putExtra("HSHP",intentHSHP);
+                            update.putExtra("PPJB",intentPPJB);
+                            update.putExtra("Stratatitle",intentStratatitle);
+                            update.putExtra("AJB",intentAJB);
+                            update.putExtra("PetokD",intentPetokD);
+                            update.putExtra("Pjp",intentPjp);
+                            update.putExtra("ImgSHM",intentImgSHM);
+                            update.putExtra("ImgHGB",intentImgHGB);
+                            update.putExtra("ImgHSHP",intentImgHSHP);
+                            update.putExtra("ImgPPJB",intentImgPPJB);
+                            update.putExtra("ImgStratatitle",intentImgStratatitle);
+                            update.putExtra("ImgAJB",intentImgAJB);
+                            update.putExtra("ImgPetokD",intentImgPetokD);
+                            update.putExtra("ImgPjp",intentImgPjp);
+                            update.putExtra("ImgPjp1",intentImgPjp1);
+                            update.putExtra("NoCertificate",intentNoCertificate);
+                            update.putExtra("Pbb",intentPbb);
+                            update.putExtra("JenisProperti",intentJenisProperti);
+                            update.putExtra("JenisCertificate",intentJenisCertificate);
+                            update.putExtra("SumberAir",intentSumberAir);
+                            update.putExtra("Kondisi",intentKondisi);
+                            update.putExtra("Deskripsi",intentDeskripsi);
+                            update.putExtra("Prabot",intentPrabot);
+                            update.putExtra("KetPrabot",intentKetPrabot);
+                            update.putExtra("Priority",intentPriority);
+                            update.putExtra("Ttd",intentTtd);
+                            update.putExtra("Banner",intentBanner);
+                            update.putExtra("Size",intentSize);
+                            update.putExtra("Harga",intentHarga);
+                            update.putExtra("HargaSewa",intentHargaSewa);
+                            update.putExtra("TglInput",intentTglInput);
+                            update.putExtra("Img1",intentImg1);
+                            update.putExtra("Img2",intentImg2);
+                            update.putExtra("Img3",intentImg3);
+                            update.putExtra("Img4",intentImg4);
+                            update.putExtra("Img5",intentImg5);
+                            update.putExtra("Img6",intentImg6);
+                            update.putExtra("Img7",intentImg7);
+                            update.putExtra("Img8",intentImg8);
+                            update.putExtra("Video",intentVideo);
+                            update.putExtra("LinkFacebook",intentLinkFacebook);
+                            update.putExtra("LinkTiktok",intentLinkTiktok);
+                            update.putExtra("LinkInstagram",intentLinkInstagram);
+                            update.putExtra("LinkYoutube",intentLinkYoutube);
+                            update.putExtra("IsAdmin",intentIsAdmin);
+                            update.putExtra("IsManager",intentIsManager);
+                            update.putExtra("IsRejected",intentIsRejected);
+                            update.putExtra("Sold",intentSold);
+                            update.putExtra("Rented",intentRented);
+                            update.putExtra("View",intentView);
+                            update.putExtra("Marketable",intentMarketable);
+                            update.putExtra("StatusHarga",intentStatusHarga);
+                            update.putExtra("Nama",intentNama);
+                            update.putExtra("NoTelp",intentNoTelp);
+                            update.putExtra("Instagram",intentInstagram);
+                            update.putExtra("Fee",intentFee);
+                            update.putExtra("NamaVendor",intentNamaVendor);
+                            update.putExtra("NoTelpVendor",intentNoTelpVendor);
+                            update.putExtra("IsSelfie",intentIsSelfie);
+                            update.putExtra("IsLokasi",intentIsLokasi);
+                            update.putExtra("Keterangan",intentKeterangan);
                             startActivity(update);
                         }
                     });
@@ -1059,12 +1349,14 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                             update.putExtra("IdPraListing",idpralisting);
                             update.putExtra("IdListing",intentIdListing);
                             update.putExtra("IdAgen",intentIdAgen);
+                            update.putExtra("IdAgenCo",intentIdAgenCo);
                             update.putExtra("IdInput",intentIdInput);
                             update.putExtra("NamaListing",intentNamaListing);
                             update.putExtra("Alamat",intentAlamat);
                             update.putExtra("Latitude",intentLatitude);
                             update.putExtra("Longitude",intentLongitude);
                             update.putExtra("Location",intentLocation);
+                            update.putExtra("Selfie",intentSelfie);
                             update.putExtra("Wide",intentWide);
                             update.putExtra("Land",intentLand);
                             update.putExtra("Dimensi",intentDimensi);
@@ -1084,6 +1376,7 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                             update.putExtra("Stratatitle",intentStratatitle);
                             update.putExtra("AJB",intentAJB);
                             update.putExtra("PetokD",intentPetokD);
+                            update.putExtra("Pjp",intentPjp);
                             update.putExtra("ImgSHM",intentImgSHM);
                             update.putExtra("ImgHGB",intentImgHGB);
                             update.putExtra("ImgHSHP",intentImgHSHP);
@@ -1124,14 +1417,21 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                             update.putExtra("LinkYoutube",intentLinkYoutube);
                             update.putExtra("IsAdmin",intentIsAdmin);
                             update.putExtra("IsManager",intentIsManager);
-                            update.putExtra("View",intentView);
+                            update.putExtra("IsRejected",intentIsRejected);
                             update.putExtra("Sold",intentSold);
+                            update.putExtra("Rented",intentRented);
+                            update.putExtra("View",intentView);
                             update.putExtra("Marketable",intentMarketable);
                             update.putExtra("StatusHarga",intentStatusHarga);
                             update.putExtra("Nama",intentNama);
                             update.putExtra("NoTelp",intentNoTelp);
                             update.putExtra("Instagram",intentInstagram);
                             update.putExtra("Fee",intentFee);
+                            update.putExtra("NamaVendor",intentNamaVendor);
+                            update.putExtra("NoTelpVendor",intentNoTelpVendor);
+                            update.putExtra("IsSelfie",intentIsSelfie);
+                            update.putExtra("IsLokasi",intentIsLokasi);
+                            update.putExtra("Keterangan",intentKeterangan);
                             startActivity(update);
                         }
                     });
@@ -1159,12 +1459,14 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                             update.putExtra("IdPraListing",idpralisting);
                             update.putExtra("IdListing",intentIdListing);
                             update.putExtra("IdAgen",intentIdAgen);
+                            update.putExtra("IdAgenCo",intentIdAgenCo);
                             update.putExtra("IdInput",intentIdInput);
                             update.putExtra("NamaListing",intentNamaListing);
                             update.putExtra("Alamat",intentAlamat);
                             update.putExtra("Latitude",intentLatitude);
                             update.putExtra("Longitude",intentLongitude);
                             update.putExtra("Location",intentLocation);
+                            update.putExtra("Selfie",intentSelfie);
                             update.putExtra("Wide",intentWide);
                             update.putExtra("Land",intentLand);
                             update.putExtra("Dimensi",intentDimensi);
@@ -1184,6 +1486,7 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                             update.putExtra("Stratatitle",intentStratatitle);
                             update.putExtra("AJB",intentAJB);
                             update.putExtra("PetokD",intentPetokD);
+                            update.putExtra("Pjp",intentPjp);
                             update.putExtra("ImgSHM",intentImgSHM);
                             update.putExtra("ImgHGB",intentImgHGB);
                             update.putExtra("ImgHSHP",intentImgHSHP);
@@ -1191,6 +1494,8 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                             update.putExtra("ImgStratatitle",intentImgStratatitle);
                             update.putExtra("ImgAJB",intentImgAJB);
                             update.putExtra("ImgPetokD",intentImgPetokD);
+                            update.putExtra("ImgPjp",intentImgPjp);
+                            update.putExtra("ImgPjp1",intentImgPjp1);
                             update.putExtra("NoCertificate",intentNoCertificate);
                             update.putExtra("Pbb",intentPbb);
                             update.putExtra("JenisProperti",intentJenisProperti);
@@ -1222,14 +1527,21 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                             update.putExtra("LinkYoutube",intentLinkYoutube);
                             update.putExtra("IsAdmin",intentIsAdmin);
                             update.putExtra("IsManager",intentIsManager);
-                            update.putExtra("View",intentView);
+                            update.putExtra("IsRejected",intentIsRejected);
                             update.putExtra("Sold",intentSold);
+                            update.putExtra("Rented",intentRented);
+                            update.putExtra("View",intentView);
                             update.putExtra("Marketable",intentMarketable);
                             update.putExtra("StatusHarga",intentStatusHarga);
                             update.putExtra("Nama",intentNama);
                             update.putExtra("NoTelp",intentNoTelp);
                             update.putExtra("Instagram",intentInstagram);
                             update.putExtra("Fee",intentFee);
+                            update.putExtra("NamaVendor",intentNamaVendor);
+                            update.putExtra("NoTelpVendor",intentNoTelpVendor);
+                            update.putExtra("IsSelfie",intentIsSelfie);
+                            update.putExtra("IsLokasi",intentIsLokasi);
+                            update.putExtra("Keterangan",intentKeterangan);
                             startActivity(update);
                         }
                     });
@@ -1383,20 +1695,19 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
 
         if (update == 1) {
             if (intentPriority.equals("exclusive") && !intentPjp.isEmpty() && intentBanner.equals("Ya")){
-                if (intentIdAgenCo.equals("0")){
-                    FinalPoin = 50;
-                    TVPoin.setText(String.valueOf(FinalPoin));
-                } else if (intentIdAgenCo.equals(intentIdAgen)) {
-                    FinalPoin = 50;
-                    TVPoin.setText(String.valueOf(FinalPoin));
-                } else {
-                    FinalPoin = 50 / 2;
-                    TVPoin.setText(String.valueOf(FinalPoin));
-                }
-                Poin = 50;
                 if (intentIsSelfie.equals("1") && intentIsLokasi.equals("1")) {
                     if (intentMarketable.equals("1") && intentStatusHarga.equals("1")) {
-                        updatepoin1();
+                        if (intentIdAgenCo.equals("0")){
+                            FinalPoin = 120;
+                            TVPoin.setText(String.valueOf(FinalPoin));
+                        } else if (intentIdAgenCo.equals(intentIdAgen)) {
+                            FinalPoin = 120;
+                            TVPoin.setText(String.valueOf(FinalPoin));
+                        } else {
+                            FinalPoin = 120 / 2;
+                            TVPoin.setText(String.valueOf(FinalPoin));
+                        }
+                        Poin = 50;
                         CBMarketable.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                             @Override
                             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
@@ -1410,21 +1721,42 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                             }
                         });
                     } else {
-                        updatepoin();
-                        CBSelfie.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                        if (intentIdAgenCo.equals("0")){
+                            FinalPoin = 100;
+                            TVPoin.setText(String.valueOf(FinalPoin));
+                        } else if (intentIdAgenCo.equals(intentIdAgen)) {
+                            FinalPoin = 100;
+                            TVPoin.setText(String.valueOf(FinalPoin));
+                        } else {
+                            FinalPoin = 100 / 2;
+                            TVPoin.setText(String.valueOf(FinalPoin));
+                        }
+                        Poin = 50;
+                        CBMarketable.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                             @Override
                             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                                updatepoin();
+                                updatepoin1();
                             }
                         });
-                        CBLokasi.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                        CBHarga.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                             @Override
                             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                                updatepoin();
+                                updatepoin1();
                             }
                         });
                     }
                 } else {
+                    if (intentIdAgenCo.equals("0")){
+                        FinalPoin = 50;
+                        TVPoin.setText(String.valueOf(FinalPoin));
+                    } else if (intentIdAgenCo.equals(intentIdAgen)) {
+                        FinalPoin = 50;
+                        TVPoin.setText(String.valueOf(FinalPoin));
+                    } else {
+                        FinalPoin = 50 / 2;
+                        TVPoin.setText(String.valueOf(FinalPoin));
+                    }
+                    Poin = 50;
                     CBSelfie.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                         @Override
                         public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
@@ -1451,20 +1783,19 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                     });
                 }
             } else if (intentPriority.equals("exclusive") && !intentPjp.isEmpty() && intentBanner.equals("Tidak")) {
-                if (intentIdAgenCo.equals("0")){
-                    FinalPoin = 40;
-                    TVPoin.setText(String.valueOf(FinalPoin));
-                } else if (intentIdAgenCo.equals(intentIdAgen)) {
-                    FinalPoin = 40;
-                    TVPoin.setText(String.valueOf(FinalPoin));
-                } else {
-                    FinalPoin = 40 / 2;
-                    TVPoin.setText(String.valueOf(FinalPoin));
-                }
-                Poin = 40;
                 if (intentIsSelfie.equals("1") && intentIsLokasi.equals("1")) {
                     if (intentMarketable.equals("1") && intentStatusHarga.equals("1")) {
-                        updatepoin2();
+                        if (intentIdAgenCo.equals("0")){
+                            FinalPoin = 100;
+                            TVPoin.setText(String.valueOf(FinalPoin));
+                        } else if (intentIdAgenCo.equals(intentIdAgen)) {
+                            FinalPoin = 100;
+                            TVPoin.setText(String.valueOf(FinalPoin));
+                        } else {
+                            FinalPoin = 100 / 2;
+                            TVPoin.setText(String.valueOf(FinalPoin));
+                        }
+                        Poin = 40;
                         CBMarketable.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                             @Override
                             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
@@ -1478,21 +1809,42 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                             }
                         });
                     } else {
-                        updatepoin();
-                        CBSelfie.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                        if (intentIdAgenCo.equals("0")){
+                            FinalPoin = 80;
+                            TVPoin.setText(String.valueOf(FinalPoin));
+                        } else if (intentIdAgenCo.equals(intentIdAgen)) {
+                            FinalPoin = 80;
+                            TVPoin.setText(String.valueOf(FinalPoin));
+                        } else {
+                            FinalPoin = 80 / 2;
+                            TVPoin.setText(String.valueOf(FinalPoin));
+                        }
+                        Poin = 40;
+                        CBMarketable.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                             @Override
                             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                                updatepoin();
+                                updatepoin2();
                             }
                         });
-                        CBLokasi.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                        CBHarga.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                             @Override
                             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                                updatepoin();
+                                updatepoin2();
                             }
                         });
                     }
                 } else {
+                    if (intentIdAgenCo.equals("0")){
+                        FinalPoin = 40;
+                        TVPoin.setText(String.valueOf(FinalPoin));
+                    } else if (intentIdAgenCo.equals(intentIdAgen)) {
+                        FinalPoin = 40;
+                        TVPoin.setText(String.valueOf(FinalPoin));
+                    } else {
+                        FinalPoin = 40 / 2;
+                        TVPoin.setText(String.valueOf(FinalPoin));
+                    }
+                    Poin = 40;
                     CBSelfie.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                         @Override
                         public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
@@ -1519,20 +1871,19 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                     });
                 }
             } else if (intentPriority.equals("open") && !intentPjp.isEmpty() && intentBanner.equals("Ya")) {
-                if (intentIdAgenCo.equals("0")){
-                    FinalPoin = 30;
-                    TVPoin.setText(String.valueOf(FinalPoin));
-                } else if (intentIdAgenCo.equals(intentIdAgen)) {
-                    FinalPoin = 30;
-                    TVPoin.setText(String.valueOf(FinalPoin));
-                } else {
-                    FinalPoin = 30 / 2;
-                    TVPoin.setText(String.valueOf(FinalPoin));
-                }
-                Poin = 30;
                 if (intentIsSelfie.equals("1") && intentIsLokasi.equals("1")) {
                     if (intentMarketable.equals("1") && intentStatusHarga.equals("1")) {
-                        updatepoin3();
+                        if (intentIdAgenCo.equals("0")){
+                            FinalPoin = 70;
+                            TVPoin.setText(String.valueOf(FinalPoin));
+                        } else if (intentIdAgenCo.equals(intentIdAgen)) {
+                            FinalPoin = 70;
+                            TVPoin.setText(String.valueOf(FinalPoin));
+                        } else {
+                            FinalPoin = 70 / 2;
+                            TVPoin.setText(String.valueOf(FinalPoin));
+                        }
+                        Poin = 30;
                         CBMarketable.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                             @Override
                             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
@@ -1546,21 +1897,42 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                             }
                         });
                     } else {
-                        updatepoin();
-                        CBSelfie.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                        if (intentIdAgenCo.equals("0")){
+                            FinalPoin = 60;
+                            TVPoin.setText(String.valueOf(FinalPoin));
+                        } else if (intentIdAgenCo.equals(intentIdAgen)) {
+                            FinalPoin = 60;
+                            TVPoin.setText(String.valueOf(FinalPoin));
+                        } else {
+                            FinalPoin = 60 / 2;
+                            TVPoin.setText(String.valueOf(FinalPoin));
+                        }
+                        Poin = 30;
+                        CBMarketable.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                             @Override
                             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                                updatepoin();
+                                updatepoin3();
                             }
                         });
-                        CBLokasi.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                        CBHarga.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                             @Override
                             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                                updatepoin();
+                                updatepoin3();
                             }
                         });
                     }
                 } else {
+                    if (intentIdAgenCo.equals("0")){
+                        FinalPoin = 30;
+                        TVPoin.setText(String.valueOf(FinalPoin));
+                    } else if (intentIdAgenCo.equals(intentIdAgen)) {
+                        FinalPoin = 30;
+                        TVPoin.setText(String.valueOf(FinalPoin));
+                    } else {
+                        FinalPoin = 30 / 2;
+                        TVPoin.setText(String.valueOf(FinalPoin));
+                    }
+                    Poin = 30;
                     CBSelfie.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                         @Override
                         public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
@@ -1587,20 +1959,19 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                     });
                 }
             } else if (intentPriority.equals("open") && !intentPjp.isEmpty() && intentBanner.equals("Tidak")) {
-                if (intentIdAgenCo.equals("0")){
-                    FinalPoin = 20;
-                    TVPoin.setText(String.valueOf(FinalPoin));
-                } else if (intentIdAgenCo.equals(intentIdAgen)) {
-                    FinalPoin = 20;
-                    TVPoin.setText(String.valueOf(FinalPoin));
-                } else {
-                    FinalPoin = 20 / 2;
-                    TVPoin.setText(String.valueOf(FinalPoin));
-                }
-                Poin = 20;
                 if (intentIsSelfie.equals("1") && intentIsLokasi.equals("1")) {
                     if (intentMarketable.equals("1") && intentStatusHarga.equals("1")) {
-                        updatepoin4();
+                        if (intentIdAgenCo.equals("0")){
+                            FinalPoin = 60;
+                            TVPoin.setText(String.valueOf(FinalPoin));
+                        } else if (intentIdAgenCo.equals(intentIdAgen)) {
+                            FinalPoin = 60;
+                            TVPoin.setText(String.valueOf(FinalPoin));
+                        } else {
+                            FinalPoin = 60 / 2;
+                            TVPoin.setText(String.valueOf(FinalPoin));
+                        }
+                        Poin = 20;
                         CBMarketable.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                             @Override
                             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
@@ -1614,21 +1985,42 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                             }
                         });
                     } else {
-                        updatepoin();
-                        CBSelfie.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                        if (intentIdAgenCo.equals("0")){
+                            FinalPoin = 40;
+                            TVPoin.setText(String.valueOf(FinalPoin));
+                        } else if (intentIdAgenCo.equals(intentIdAgen)) {
+                            FinalPoin = 40;
+                            TVPoin.setText(String.valueOf(FinalPoin));
+                        } else {
+                            FinalPoin = 40 / 2;
+                            TVPoin.setText(String.valueOf(FinalPoin));
+                        }
+                        Poin = 20;
+                        CBMarketable.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                             @Override
                             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                                updatepoin();
+                                updatepoin4();
                             }
                         });
-                        CBLokasi.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                        CBHarga.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                             @Override
                             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                                updatepoin();
+                                updatepoin4();
                             }
                         });
                     }
                 } else {
+                    if (intentIdAgenCo.equals("0")){
+                        FinalPoin = 20;
+                        TVPoin.setText(String.valueOf(FinalPoin));
+                    } else if (intentIdAgenCo.equals(intentIdAgen)) {
+                        FinalPoin = 20;
+                        TVPoin.setText(String.valueOf(FinalPoin));
+                    } else {
+                        FinalPoin = 20 / 2;
+                        TVPoin.setText(String.valueOf(FinalPoin));
+                    }
+                    Poin = 20;
                     CBSelfie.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                         @Override
                         public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
@@ -1638,7 +2030,7 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                     CBLokasi.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                         @Override
                         public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                            updatepoint3();
+                            updatepoint4();
                         }
                     });
                     CBMarketable.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -1655,20 +2047,19 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                     });
                 }
             } else if (intentPriority.equals("open") && intentPjp.isEmpty() && intentBanner.equals("Ya")) {
-                if (intentIdAgenCo.equals("0")){
-                    FinalPoin = 20;
-                    TVPoin.setText(String.valueOf(FinalPoin));
-                } else if (intentIdAgenCo.equals(intentIdAgen)) {
-                    FinalPoin = 20;
-                    TVPoin.setText(String.valueOf(FinalPoin));
-                } else {
-                    FinalPoin = 20 / 2;
-                    TVPoin.setText(String.valueOf(FinalPoin));
-                }
-                Poin = 20;
                 if (intentIsSelfie.equals("1") && intentIsLokasi.equals("1")) {
                     if (intentMarketable.equals("1") && intentStatusHarga.equals("1")) {
-                        updatepoin5();
+                        if (intentIdAgenCo.equals("0")){
+                            FinalPoin = 50;
+                            TVPoin.setText(String.valueOf(FinalPoin));
+                        } else if (intentIdAgenCo.equals(intentIdAgen)) {
+                            FinalPoin = 50;
+                            TVPoin.setText(String.valueOf(FinalPoin));
+                        } else {
+                            FinalPoin = 50 / 2;
+                            TVPoin.setText(String.valueOf(FinalPoin));
+                        }
+                        Poin = 10;
                         CBMarketable.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                             @Override
                             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
@@ -1682,21 +2073,42 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                             }
                         });
                     } else {
-                        updatepoin();
-                        CBSelfie.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                        if (intentIdAgenCo.equals("0")){
+                            FinalPoin = 20;
+                            TVPoin.setText(String.valueOf(FinalPoin));
+                        } else if (intentIdAgenCo.equals(intentIdAgen)) {
+                            FinalPoin = 20;
+                            TVPoin.setText(String.valueOf(FinalPoin));
+                        } else {
+                            FinalPoin = 20 / 2;
+                            TVPoin.setText(String.valueOf(FinalPoin));
+                        }
+                        Poin = 10;
+                        CBMarketable.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                             @Override
                             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                                updatepoin();
+                                updatepoin5();
                             }
                         });
-                        CBLokasi.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                        CBHarga.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                             @Override
                             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                                updatepoin();
+                                updatepoin5();
                             }
                         });
                     }
                 } else {
+                    if (intentIdAgenCo.equals("0")){
+                        FinalPoin = 10;
+                        TVPoin.setText(String.valueOf(FinalPoin));
+                    } else if (intentIdAgenCo.equals(intentIdAgen)) {
+                        FinalPoin = 10;
+                        TVPoin.setText(String.valueOf(FinalPoin));
+                    } else {
+                        FinalPoin = 10 / 2;
+                        TVPoin.setText(String.valueOf(FinalPoin));
+                    }
+                    Poin = 10;
                     CBSelfie.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                         @Override
                         public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
@@ -1723,20 +2135,19 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                     });
                 }
             } else if (intentPriority.equals("open") && intentPjp.isEmpty() && intentBanner.equals("Tidak")) {
-                if (intentIdAgenCo.equals("0")){
-                    FinalPoin = 10;
-                    TVPoin.setText(String.valueOf(FinalPoin));
-                } else if (intentIdAgenCo.equals(intentIdAgen)) {
-                    FinalPoin = 10;
-                    TVPoin.setText(String.valueOf(FinalPoin));
-                } else {
-                    FinalPoin = 10 / 2;
-                    TVPoin.setText(String.valueOf(FinalPoin));
-                }
-                Poin = 10;
                 if (intentIsSelfie.equals("1") && intentIsLokasi.equals("1")) {
                     if (intentMarketable.equals("1") && intentStatusHarga.equals("1")) {
-                        updatepoin6();
+                        if (intentIdAgenCo.equals("0")){
+                            FinalPoin = 30;
+                            TVPoin.setText(String.valueOf(FinalPoin));
+                        } else if (intentIdAgenCo.equals(intentIdAgen)) {
+                            FinalPoin = 30;
+                            TVPoin.setText(String.valueOf(FinalPoin));
+                        } else {
+                            FinalPoin = 30 / 2;
+                            TVPoin.setText(String.valueOf(FinalPoin));
+                        }
+                        Poin = 10;
                         CBMarketable.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                             @Override
                             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
@@ -1750,21 +2161,42 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                             }
                         });
                     } else {
-                        updatepoin();
-                        CBSelfie.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                        if (intentIdAgenCo.equals("0")){
+                            FinalPoin = 20;
+                            TVPoin.setText(String.valueOf(FinalPoin));
+                        } else if (intentIdAgenCo.equals(intentIdAgen)) {
+                            FinalPoin = 20;
+                            TVPoin.setText(String.valueOf(FinalPoin));
+                        } else {
+                            FinalPoin = 20 / 2;
+                            TVPoin.setText(String.valueOf(FinalPoin));
+                        }
+                        Poin = 10;
+                        CBMarketable.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                             @Override
                             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                                updatepoin();
+                                updatepoin6();
                             }
                         });
-                        CBLokasi.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                        CBHarga.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                             @Override
                             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                                updatepoin();
+                                updatepoin6();
                             }
                         });
                     }
                 } else {
+                    if (intentIdAgenCo.equals("0")){
+                        FinalPoin = 10;
+                        TVPoin.setText(String.valueOf(FinalPoin));
+                    } else if (intentIdAgenCo.equals(intentIdAgen)) {
+                        FinalPoin = 10;
+                        TVPoin.setText(String.valueOf(FinalPoin));
+                    } else {
+                        FinalPoin = 10 / 2;
+                        TVPoin.setText(String.valueOf(FinalPoin));
+                    }
+                    Poin = 10;
                     CBSelfie.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                         @Override
                         public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
@@ -2371,13 +2803,13 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
 
         if (isCBLokasiChecked && isCBSelfieChecked) {
             if (StrIntentIdAgenCo.equals("0")){
-                int UpdatePoin = ( Poin * 2 ) + 10;
+                int UpdatePoin = ( Poin * 2 ) + 30;
                 TVPoin.setText(String.valueOf(UpdatePoin));
             } else if (StrIntentIdAgenCo.equals(StrIntentIdAgen)) {
-                int UpdatePoin = ( Poin * 2 ) + 10;
+                int UpdatePoin = ( Poin * 2 ) + 30;
                 TVPoin.setText(String.valueOf(UpdatePoin));
             } else {
-                int UpdatePoin = (( Poin * 2 ) + 10) / 2;
+                int UpdatePoin = (( Poin * 2 ) + 30) / 2;
                 TVPoin.setText(String.valueOf(UpdatePoin));
             }
 
@@ -2540,13 +2972,13 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
 
         if (isCBLokasiChecked && isCBSelfieChecked && isCBMarketableChecked && isCBHargaChecked) {
             if (StrIntentIdAgenCo.equals("0")){
-                int UpdatePoin = ( Poin * 2 ) + 10;
+                int UpdatePoin = ( Poin * 2 ) + 30;
                 TVPoin.setText(String.valueOf(UpdatePoin));
             } else if (StrIntentIdAgenCo.equals(StrIntentIdAgen)) {
-                int UpdatePoin = ( Poin * 2 ) + 10;
+                int UpdatePoin = ( Poin * 2 ) + 30;
                 TVPoin.setText(String.valueOf(UpdatePoin));
             } else {
-                int UpdatePoin = (( Poin * 2 ) + 10) / 2;
+                int UpdatePoin = (( Poin * 2 ) + 30) / 2;
                 TVPoin.setText(String.valueOf(UpdatePoin));
             }
         } else if (isCBLokasiChecked && isCBSelfieChecked) {
@@ -2960,10 +3392,22 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> map = new HashMap<>();
-                System.out.println(map);
+
+                final String StringMarketable = CBMarketable.isChecked()?"1":"0";
+                final String StringHarga = CBHarga.isChecked()?"1":"0";
+                final String StringSelfie = CBSelfie.isChecked()?"1":"0";
+                final String StringLokasi = CBLokasi.isChecked()?"1":"0";
+
                 map.put("IdAgen", idagen);
                 map.put("IdPraListing", idpralisting);
                 map.put("Pjp", tambahpjp.getText().toString().trim());
+                map.put("Marketable", StringMarketable);
+                map.put("StatusHarga", StringHarga);
+                map.put("IsSelfie", StringSelfie);
+                map.put("IsLokasi",StringLokasi);
+
+                System.out.println(map);
+
                 return map;
             }
         };
@@ -2975,11 +3419,6 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
         pDialog.setMessage("Sedang Diproses...");
         pDialog.setCancelable(false);
         pDialog.show();
-
-        final String StringMarketable = CBMarketable.isChecked()?"1":"0";
-        final String StringHarga = CBHarga.isChecked()?"1":"0";
-        final String StringSelfie = CBSelfie.isChecked()?"1":"0";
-        final String StringLokasi = CBLokasi.isChecked()?"1":"0";
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, ServerApi.URL_APPROVE_MANAGER, new Response.Listener<String>() {
             @Override
@@ -3071,10 +3510,19 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> map = new HashMap<>();
-                System.out.println(map);
+
+                final String StringMarketable = CBMarketable.isChecked()?"1":"0";
+                final String StringHarga = CBHarga.isChecked()?"1":"0";
+                final String StringSelfie = CBSelfie.isChecked()?"1":"0";
+                final String StringLokasi = CBLokasi.isChecked()?"1":"0";
+
                 map.put("IdPraListing", idpralisting);
                 map.put("Marketable", StringMarketable);
                 map.put("StatusHarga", StringHarga);
+                map.put("IsSelfie", StringSelfie);
+                map.put("IsLokasi",StringLokasi);
+                System.out.println(map);
+
                 return map;
             }
         };

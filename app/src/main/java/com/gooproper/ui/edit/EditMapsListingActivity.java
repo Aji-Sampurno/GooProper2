@@ -4,11 +4,14 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -20,6 +23,7 @@ import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,6 +45,7 @@ import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
 import com.gooproper.R;
 import com.gooproper.ui.LocationActivity;
+import com.gooproper.ui.tambah.TambahListingActivity;
 import com.gooproper.util.Preferences;
 import com.gooproper.util.SendMessageToFCM;
 import com.gooproper.util.ServerApi;
@@ -61,13 +66,18 @@ import java.util.Map;
 
 public class EditMapsListingActivity extends AppCompatActivity {
 
-    private static final int MAPS_ACTIVITY_REQUEST_CODE = 1;
-    private static final int CODE_CAMERA_REQUEST = 2;
-    final int KODE_REQUEST_KAMERA = 3;
+    final int CODE_GALLERY_REQUEST_Selfie = 46;
+    final int CODE_CAMERA_REQUEST_Selfie = 47;
+    final int KODE_REQUEST_KAMERA_Selfie = 48;
+    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE_SELFIE = 92;
+    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES_SELFIE = 93;
+    private static final int MAPS_ACTIVITY_REQUEST_CODE = 96;
+    private static final int STORAGE_PERMISSION_CODE = 97;
     private ProgressDialog pDialog;
     Button batal, submit, selfiebtn, maps;
     ImageView back, IVselfie;
     TextInputEditText longitude, latitude;
+    LinearLayout LytSelfie;
     Uri bselfie;
     String latitudeStr, longitudeStr, lokasiStr, addressStr, Selfie, StrIdPraListing;
 
@@ -86,8 +96,9 @@ public class EditMapsListingActivity extends AppCompatActivity {
         IVselfie = findViewById(R.id.ivselfie);
         batal = findViewById(R.id.btnbatal);
         submit = findViewById(R.id.btnsubmit);
+        LytSelfie = findViewById(R.id.LytSelfie);
 
-        selfiebtn.setOnClickListener(view -> ActivityCompat.requestPermissions(EditMapsListingActivity.this, new String[]{Manifest.permission.CAMERA}, CODE_CAMERA_REQUEST));
+        selfiebtn.setOnClickListener(view -> showPhotoSelfie());
         maps.setOnClickListener(view -> startMapsActivityForResult());
         back.setOnClickListener(view -> finish());
         batal.setOnClickListener(view -> finish());
@@ -237,6 +248,34 @@ public class EditMapsListingActivity extends AppCompatActivity {
         Intent intent = new Intent(this, LocationActivity.class);
         startActivityForResult(intent, MAPS_ACTIVITY_REQUEST_CODE);
     }
+    private void showPhotoSelfie() {
+        androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this);
+        builder.setTitle("Unggah Gambar")
+                .setItems(new CharSequence[]{"Ambil Foto", "Pilih Dari Galeri"}, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which) {
+                            case 0:
+                                ActivityCompat.requestPermissions(EditMapsListingActivity.this, new String[]{Manifest.permission.CAMERA}, CODE_CAMERA_REQUEST_Selfie);
+                                break;
+                            case 1:
+                                requestPermissionsSelfie();
+                                break;
+                        }
+                    }
+                });
+
+        builder.show();
+    }
+    private void requestPermissionsSelfie() {
+        boolean externalStoragePermissionGranted = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
+
+        if (externalStoragePermissionGranted) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE_SELFIE);
+        } else {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_MEDIA_IMAGES}, PERMISSION_REQUEST_CODE_MEDIA_IMAGES_SELFIE);
+        }
+    }
     private void bukaKamera() {
         Intent intentKamera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (intentKamera.resolveActivity(getPackageManager()) != null) {
@@ -244,7 +283,7 @@ public class EditMapsListingActivity extends AppCompatActivity {
             if (photoFile != null) {
                 bselfie = FileProvider.getUriForFile(this, "com.gooproper", photoFile);
                 intentKamera.putExtra(MediaStore.EXTRA_OUTPUT, bselfie);
-                startActivityForResult(intentKamera, KODE_REQUEST_KAMERA);
+                startActivityForResult(intentKamera, KODE_REQUEST_KAMERA_Selfie);
             }
         }
     }
@@ -263,9 +302,22 @@ public class EditMapsListingActivity extends AppCompatActivity {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
-        if (requestCode == CODE_CAMERA_REQUEST) {
+        if (requestCode == PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE_SELFIE) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                bukaKamera();
+                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(intent, CODE_GALLERY_REQUEST_Selfie);
+            }
+        } else if (requestCode == PERMISSION_REQUEST_CODE_MEDIA_IMAGES_SELFIE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(intent, CODE_GALLERY_REQUEST_Selfie);
+            }
+        } else if (requestCode == STORAGE_PERMISSION_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {} else {}
+        } else if (requestCode == CODE_GALLERY_REQUEST_Selfie) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(intent, CODE_GALLERY_REQUEST_Selfie);
             } else {
                 Dialog customDialog = new Dialog(EditMapsListingActivity.this);
                 customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -278,7 +330,7 @@ public class EditMapsListingActivity extends AppCompatActivity {
                 Button ok = customDialog.findViewById(R.id.BtnOkErorInput);
                 TextView tv = customDialog.findViewById(R.id.TVDialogErorInput);
 
-                tv.setText("Akses Kamera Ditolak");
+                tv.setText("Akses Galeri Ditolak");
 
                 ok.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -296,7 +348,19 @@ public class EditMapsListingActivity extends AppCompatActivity {
 
                 customDialog.show();
             }
-
+            return;
+        } else if (requestCode == CODE_CAMERA_REQUEST_Selfie) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                bukaKamera();
+            } else {
+                AlertDialog.Builder builder = new AlertDialog.Builder(EditMapsListingActivity.this);
+                builder.setTitle("Izin Kamera Ditolak").
+                        setMessage("Aplikasi memerlukan izin kamera untuk mengambil gambar.");
+                builder.setPositiveButton("OK",
+                        (dialog, id) -> dialog.cancel());
+                AlertDialog alert = builder.create();
+                alert.show();
+            }
             return;
         }
 
@@ -314,12 +378,17 @@ public class EditMapsListingActivity extends AppCompatActivity {
                 lokasiStr = data.getStringExtra("lokasi");
                 latitude.setText(addressStr);
             }
+        }
 
-            if (requestCode == KODE_REQUEST_KAMERA && resultCode == RESULT_OK) {
-                selfiebtn.setVisibility(View.GONE);
-                IVselfie.setImageURI(bselfie);
-                IVselfie.setVisibility(View.VISIBLE);
-            }
+        if (requestCode == CODE_GALLERY_REQUEST_Selfie && resultCode == RESULT_OK && data != null) {
+            bselfie = data.getData();
+            IVselfie.setImageURI(bselfie);
+            IVselfie.setVisibility(View.VISIBLE);
+            selfiebtn.setText("Ganti Foto Selfie");
+        } else if (requestCode == KODE_REQUEST_KAMERA_Selfie && resultCode == RESULT_OK) {
+            IVselfie.setImageURI(bselfie);
+            IVselfie.setVisibility(View.VISIBLE);
+            selfiebtn.setText("Ganti Foto Selfie");
         }
         super.onActivityResult(requestCode, resultCode, data);
     }

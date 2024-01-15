@@ -47,6 +47,9 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
@@ -186,7 +189,7 @@ public class TambahListingActivity extends AppCompatActivity {
     private static final int PICK_PDF_AJB = 103;
     private static final int PICK_PDF_PetokD = 104;
     private ArrayList<Uri> uriList = new ArrayList<>();
-    Uri Uri1, Uri2, Uri3, Uri4, Uri5, Uri6, Uri7, Uri8, UriSHM, UriHGB, UriHSHP, UriPPJB, UriSTRA, UriAJB, UriPetokD, UriSHMPdf, UriHGBPdf, UriHSHPPdf, UriPPJBPdf, UriSTRAPdf, UriAJBPdf, UriPetokDPdf, UriPJP, UriPJP1, UriSelfie, UriKTP;
+    Uri Uri1, Uri2, Uri3, Uri4, Uri5, Uri6, Uri7, Uri8, UriSHM, UriHGB, UriHSHP, UriPPJB, UriSTRA, UriAJB, UriPetokD, UriSHMPdf, UriHGBPdf, UriHSHPPdf, UriPPJBPdf, UriSTRAPdf, UriAJBPdf, UriPetokDPdf, UriSHMF, UriHGBF, UriHSHPF, UriPPJBF, UriSTRAF, UriAJBF, UriPetokDF, UriPJP, UriPJP1, UriSelfie, UriKTP;
     LinearLayout lyt1, lyt2, lyt3, lyt4, lyt5, lyt6, lyt7, lyt8, LytSHM, LytHGB, LytHSHP, LytPPJB, LytStratatitle, LytAJB, LytPetokD, LytPjp, LytPjp1, LytBtnShm, LytBtnHGB, LytBtnHSHP, LytBtnPPJB, LytBtnStra, LytBtnAJB, LytBtnPetokD, LytSelfie, LytKTP;
     ImageView back, iv1, iv2, iv3, iv4, iv5, iv6, iv7, iv8, IVShm, IVHgb, IVHshp, IVPpjb, IVStratatitle, IVAJB, IVPetokD, IVPjp, IVPjp1, IVSelfie, IVKTP;
     Button batal, submit, select, select1, select2, select3, select4, select5, select6, select7, maps, BtnSHM, BtnHGB, BtnHSHP, BtnPPJB, BtnSTRA, BtnAJB, BtnPetokD, BtnSHMPdf, BtnHGBPdf, BtnHSHPPdf, BtnPPJBPdf, BtnSTRAPdf, BtnAJBPdf, BtnPetokDPdf, BtnPjp, BtnPjp1, BtnSelfie, BtnKTP;
@@ -198,7 +201,7 @@ public class TambahListingActivity extends AppCompatActivity {
     CheckBox CBSHM, CBHGB, CBHSHP, CBPPJB, CBSTRA, CBAJB, CBPetokD, CBMarketable, CBHarga, CBSelfie, CBLokasi;
     String idagen, idnull, sstatus, priority, namalisting, isAdmin, idadmin, idinput, HargaString, HargaSewaString, SHarga, SHargaSewa, agenid, agencoid;
     String image1, image2, image3, image4, image5, image6, image7, image8, SHM, HGB, HSHP, PPJB, STRA, AJB, PetokD, PJPHal1, PJPHal2, ImgSelfie, ImgKTP;
-    String latitudeStr, longitudeStr, addressStr, lokasiStr, Lat, Lng, token;
+    String latitudeStr, longitudeStr, addressStr, lokasiStr, Lat, Lng, token, StrLokasi;
     Drawable DrawableSHM, DrawableHGB, DrawableHSHP, DrawablePPJB, DrawableSTRA;
     TextView TVSHM, TVHGB, TVHSHP, TVPPJB, TVSTRA, TVAJB, TVPetokD;
     private AgenManager agenManager;
@@ -3763,7 +3766,8 @@ public class TambahListingActivity extends AppCompatActivity {
         if (intentKamera.resolveActivity(getPackageManager()) != null) {
             File photoFile = createImageFile();
             if (photoFile != null) {
-                UriSHM = FileProvider.getUriForFile(this, "com.gooproper", photoFile); // Gantilah "com.example.android.fileprovider" dengan authority Anda
+                UriSHM = FileProvider.getUriForFile(this, "com.gooproper", photoFile);
+                UriSHMF = FileProvider.getUriForFile(this, "com.gooproper", photoFile);
                 intentKamera.putExtra(MediaStore.EXTRA_OUTPUT, UriSHM);
                 startActivityForResult(intentKamera, KODE_REQUEST_KAMERA_SHM);
             }
@@ -3775,6 +3779,7 @@ public class TambahListingActivity extends AppCompatActivity {
             File photoFile = createImageFile();
             if (photoFile != null) {
                 UriHGB = FileProvider.getUriForFile(this, "com.gooproper", photoFile);
+                UriHGBF = FileProvider.getUriForFile(this, "com.gooproper", photoFile);
                 intentKamera.putExtra(MediaStore.EXTRA_OUTPUT, UriHGB);
                 startActivityForResult(intentKamera, KODE_REQUEST_KAMERA_HGB);
             }
@@ -3786,6 +3791,7 @@ public class TambahListingActivity extends AppCompatActivity {
             File photoFile = createImageFile();
             if (photoFile != null) {
                 UriHSHP = FileProvider.getUriForFile(this, "com.gooproper", photoFile);
+                UriHSHPF = FileProvider.getUriForFile(this, "com.gooproper", photoFile);
                 intentKamera.putExtra(MediaStore.EXTRA_OUTPUT, UriHSHP);
                 startActivityForResult(intentKamera, KODE_REQUEST_KAMERA_HSHP);
             }
@@ -3797,6 +3803,7 @@ public class TambahListingActivity extends AppCompatActivity {
             File photoFile = createImageFile();
             if (photoFile != null) {
                 UriPPJB = FileProvider.getUriForFile(this, "com.gooproper", photoFile);
+                UriPPJBF = FileProvider.getUriForFile(this, "com.gooproper", photoFile);
                 intentKamera.putExtra(MediaStore.EXTRA_OUTPUT, UriPPJB);
                 startActivityForResult(intentKamera, KODE_REQUEST_KAMERA_PPJB);
             }
@@ -3808,6 +3815,7 @@ public class TambahListingActivity extends AppCompatActivity {
             File photoFile = createImageFile();
             if (photoFile != null) {
                 UriSTRA = FileProvider.getUriForFile(this, "com.gooproper", photoFile);
+                UriSTRAF = FileProvider.getUriForFile(this, "com.gooproper", photoFile);
                 intentKamera.putExtra(MediaStore.EXTRA_OUTPUT, UriSTRA);
                 startActivityForResult(intentKamera, KODE_REQUEST_KAMERA_STRA);
             }
@@ -3819,6 +3827,7 @@ public class TambahListingActivity extends AppCompatActivity {
             File photoFile = createImageFile();
             if (photoFile != null) {
                 UriAJB = FileProvider.getUriForFile(this, "com.gooproper", photoFile);
+                UriAJBF = FileProvider.getUriForFile(this, "com.gooproper", photoFile);
                 intentKamera.putExtra(MediaStore.EXTRA_OUTPUT, UriAJB);
                 startActivityForResult(intentKamera, KODE_REQUEST_KAMERA_AJB);
             }
@@ -3830,6 +3839,7 @@ public class TambahListingActivity extends AppCompatActivity {
             File photoFile = createImageFile();
             if (photoFile != null) {
                 UriPetokD = FileProvider.getUriForFile(this, "com.gooproper", photoFile);
+                UriPetokDF = FileProvider.getUriForFile(this, "com.gooproper", photoFile);
                 intentKamera.putExtra(MediaStore.EXTRA_OUTPUT, UriPetokD);
                 startActivityForResult(intentKamera, KODE_REQUEST_KAMERA_PetokD);
             }
@@ -5276,6 +5286,7 @@ public class TambahListingActivity extends AppCompatActivity {
             select.setVisibility(View.GONE);
         } else if (requestCode == CODE_GALLERY_REQUEST_SHM && resultCode == RESULT_OK && data != null) {
             UriSHM = data.getData();
+            UriSHMF = data.getData();
             IVShm.setImageURI(UriSHM);
             IVShm.setVisibility(View.VISIBLE);
             TVSHM.setVisibility(View.GONE);
@@ -5283,6 +5294,7 @@ public class TambahListingActivity extends AppCompatActivity {
             LytBtnShm.setVisibility(View.GONE);
         } else if (requestCode == CODE_GALLERY_REQUEST_HGB && resultCode == RESULT_OK && data != null) {
             UriHGB = data.getData();
+            UriHGBF = data.getData();
             IVHgb.setImageURI(UriHGB);
             IVHgb.setVisibility(View.VISIBLE);
             TVHGB.setVisibility(View.GONE);
@@ -5290,6 +5302,7 @@ public class TambahListingActivity extends AppCompatActivity {
             LytBtnHGB.setVisibility(View.GONE);
         } else if (requestCode == CODE_GALLERY_REQUEST_HSHP && resultCode == RESULT_OK && data != null) {
             UriHSHP = data.getData();
+            UriHSHPF = data.getData();
             IVHshp.setImageURI(UriHSHP);
             IVHshp.setVisibility(View.VISIBLE);
             TVHSHP.setVisibility(View.GONE);
@@ -5297,6 +5310,7 @@ public class TambahListingActivity extends AppCompatActivity {
             LytBtnHSHP.setVisibility(View.GONE);
         } else if (requestCode == CODE_GALLERY_REQUEST_PPJB && resultCode == RESULT_OK && data != null) {
             UriPPJB = data.getData();
+            UriPPJBF = data.getData();
             IVPpjb.setImageURI(UriPPJB);
             IVPpjb.setVisibility(View.VISIBLE);
             TVPPJB.setVisibility(View.GONE);
@@ -5304,6 +5318,7 @@ public class TambahListingActivity extends AppCompatActivity {
             LytBtnPPJB.setVisibility(View.GONE);
         } else if (requestCode == CODE_GALLERY_REQUEST_STRA && resultCode == RESULT_OK && data != null) {
             UriSTRA = data.getData();
+            UriSTRAF = data.getData();
             IVStratatitle.setImageURI(UriSTRA);
             IVStratatitle.setVisibility(View.VISIBLE);
             TVSTRA.setVisibility(View.GONE);
@@ -5311,6 +5326,7 @@ public class TambahListingActivity extends AppCompatActivity {
             LytBtnStra.setVisibility(View.GONE);
         }  else if (requestCode == CODE_GALLERY_REQUEST_AJB && resultCode == RESULT_OK && data != null) {
             UriAJB = data.getData();
+            UriAJBF = data.getData();
             IVAJB.setImageURI(UriSTRA);
             IVAJB.setVisibility(View.VISIBLE);
             TVAJB.setVisibility(View.GONE);
@@ -5318,6 +5334,7 @@ public class TambahListingActivity extends AppCompatActivity {
             LytBtnAJB.setVisibility(View.GONE);
         }  else if (requestCode == CODE_GALLERY_REQUEST_PetokD && resultCode == RESULT_OK && data != null) {
             UriPetokD = data.getData();
+            UriPetokDF = data.getData();
             IVPetokD.setImageURI(UriSTRA);
             IVPetokD.setVisibility(View.VISIBLE);
             TVPetokD.setVisibility(View.GONE);
@@ -5444,6 +5461,7 @@ public class TambahListingActivity extends AppCompatActivity {
             BtnKTP.setVisibility(View.GONE);
         } else if (requestCode == PICK_PDF_SHM && resultCode == RESULT_OK && data != null && data.getData() != null) {
             UriSHMPdf = data.getData();
+            UriSHMF = data.getData();
             LytSHM.setVisibility(View.VISIBLE);
             LytBtnShm.setVisibility(View.GONE);
             TVSHM.setVisibility(View.VISIBLE);
@@ -5452,6 +5470,7 @@ public class TambahListingActivity extends AppCompatActivity {
             TVSHM.setText(pdfFileName);
         } else if (requestCode == PICK_PDF_HGB && resultCode == RESULT_OK && data != null && data.getData() != null) {
             UriHGBPdf = data.getData();
+            UriHGBF = data.getData();
             LytHGB.setVisibility(View.VISIBLE);
             LytBtnHGB.setVisibility(View.GONE);
             TVHGB.setVisibility(View.VISIBLE);
@@ -5460,6 +5479,7 @@ public class TambahListingActivity extends AppCompatActivity {
             TVHGB.setText(pdfFileName);
         } else if (requestCode == PICK_PDF_PPJB && resultCode == RESULT_OK && data != null && data.getData() != null) {
             UriPPJBPdf = data.getData();
+            UriPPJBF = data.getData();
             LytPPJB.setVisibility(View.VISIBLE);
             LytBtnPPJB.setVisibility(View.GONE);
             TVPPJB.setVisibility(View.VISIBLE);
@@ -5468,6 +5488,7 @@ public class TambahListingActivity extends AppCompatActivity {
             TVPPJB.setText(pdfFileName);
         } else if (requestCode == PICK_PDF_HSHP && resultCode == RESULT_OK && data != null && data.getData() != null) {
             UriHSHPPdf = data.getData();
+            UriHSHPF = data.getData();
             LytHSHP.setVisibility(View.VISIBLE);
             LytBtnHSHP.setVisibility(View.GONE);
             TVHSHP.setVisibility(View.VISIBLE);
@@ -5476,6 +5497,7 @@ public class TambahListingActivity extends AppCompatActivity {
             TVHSHP.setText(pdfFileName);
         } else if (requestCode == PICK_PDF_Stratatitle && resultCode == RESULT_OK && data != null && data.getData() != null) {
             UriSTRAPdf = data.getData();
+            UriSTRAF = data.getData();
             LytStratatitle.setVisibility(View.VISIBLE);
             LytBtnStra.setVisibility(View.GONE);
             TVSTRA.setVisibility(View.VISIBLE);
@@ -5484,6 +5506,7 @@ public class TambahListingActivity extends AppCompatActivity {
             TVSTRA.setText(pdfFileName);
         } else if (requestCode == PICK_PDF_AJB && resultCode == RESULT_OK && data != null && data.getData() != null) {
             UriAJBPdf = data.getData();
+            UriAJBF = data.getData();
             LytAJB.setVisibility(View.VISIBLE);
             LytBtnAJB.setVisibility(View.GONE);
             TVAJB.setVisibility(View.VISIBLE);
@@ -5492,6 +5515,7 @@ public class TambahListingActivity extends AppCompatActivity {
             TVAJB.setText(pdfFileName);
         } else if (requestCode == PICK_PDF_PetokD && resultCode == RESULT_OK && data != null && data.getData() != null) {
             UriPetokDPdf = data.getData();
+            UriPetokDF = data.getData();
             LytPetokD.setVisibility(View.VISIBLE);
             LytBtnPetokD.setVisibility(View.GONE);
             TVPetokD.setVisibility(View.VISIBLE);
@@ -5560,42 +5584,49 @@ public class TambahListingActivity extends AppCompatActivity {
     private void clearBitmapSHM() {
         UriSHM = null;
         UriSHMPdf = null;
+        UriSHMF = null;
         LytSHM.setVisibility(View.GONE);
         LytBtnShm.setVisibility(View.VISIBLE);
     }
     private void clearBitmapHGB() {
         UriHGB = null;
         UriHGBPdf = null;
+        UriHGBF = null;
         LytHGB.setVisibility(View.GONE);
         LytBtnHGB.setVisibility(View.VISIBLE);
     }
     private void clearBitmapHSHP() {
         UriHSHP = null;
         UriHSHPPdf = null;
+        UriHSHPF = null;
         LytHSHP.setVisibility(View.GONE);
         LytBtnHSHP.setVisibility(View.VISIBLE);
     }
     private void clearBitmapPPJB() {
         UriPPJB = null;
         UriPPJBPdf = null;
+        UriPPJBF = null;
         LytPPJB.setVisibility(View.GONE);
         LytBtnPPJB.setVisibility(View.VISIBLE);
     }
     private void clearBitmapSTRA() {
         UriSTRA = null;
         UriSTRAPdf = null;
+        UriSTRAF = null;
         LytStratatitle.setVisibility(View.GONE);
         LytBtnStra.setVisibility(View.VISIBLE);
     }
     private void clearBitmapAJB() {
         UriAJB = null;
         UriAJBPdf = null;
+        UriAJBF = null;
         LytAJB.setVisibility(View.GONE);
         LytBtnAJB.setVisibility(View.VISIBLE);
     }
     private void clearBitmapPetokD() {
         UriPetokD = null;
         UriPetokDPdf = null;
+        UriPetokDF = null;
         LytPetokD.setVisibility(View.GONE);
         LytBtnPetokD.setVisibility(View.VISIBLE);
     }
@@ -5627,6 +5658,63 @@ public class TambahListingActivity extends AppCompatActivity {
             LytKTP.setVisibility(View.GONE);
             BtnKTP.setVisibility(View.VISIBLE);
         }
+    }
+    private void handleImage1Success(Uri uri) {
+        image1 = uri.toString();
+    }
+    private void handleImage2Success(Uri uri) {
+        image2 = uri.toString();
+    }
+    private void handleImage3Success(Uri uri) {
+        image3 = uri.toString();
+    }
+    private void handleImage4Success(Uri uri) {
+        image4 = uri.toString();
+    }
+    private void handleImage5Success(Uri uri) {
+        image5 = uri.toString();
+    }
+    private void handleImage6Success(Uri uri) {
+        image6 = uri.toString();
+    }
+    private void handleImage7Success(Uri uri) {
+        image7 = uri.toString();
+    }
+    private void handleImage8Success(Uri uri) {
+        image8 = uri.toString();
+    }
+    private void handleImageSHMSuccess(Uri uri) {
+        SHM = uri.toString();
+    }
+    private void handleImageHGBSuccess(Uri uri) {
+        HGB = uri.toString();
+    }
+    private void handleImageHSHPSuccess(Uri uri) {
+        HSHP = uri.toString();
+    }
+    private void handleImagePPJBSuccess(Uri uri) {
+        PPJB = uri.toString();
+    }
+    private void handleImageSTRASuccess(Uri uri) {
+        STRA = uri.toString();
+    }
+    private void handleImageAJBSuccess(Uri uri) {
+        AJB = uri.toString();
+    }
+    private void handleImagePetokDSuccess(Uri uri) {
+        PetokD = uri.toString();
+    }
+    private void handleImagePJP1Success(Uri uri) {
+        PJPHal1 = uri.toString();
+    }
+    private void handleImagePJP2Success(Uri uri) {
+        PJPHal2 = uri.toString();
+    }
+    private void handleImageKTPSuccess(Uri uri) {
+        ImgKTP = uri.toString();
+    }
+    private void handleImageSelfieSuccess(Uri uri) {
+        ImgSelfie = uri.toString();
     }
     private void simpanData() {
         pDialog.setMessage("Menyimpan Data");
@@ -5791,6 +5879,11 @@ public class TambahListingActivity extends AppCompatActivity {
                 } else {
                     Lng = longitudeStr;
                 }
+                if (lokasiStr == null) {
+                    StrLokasi = "0";
+                } else {
+                    StrLokasi = lokasiStr;
+                }
                 if (HargaString == null || HargaString.equals("")){
                     SHarga = "0";
                 } else {
@@ -5832,7 +5925,7 @@ public class TambahListingActivity extends AppCompatActivity {
                 map.put("Alamat", alamatproperti.getText().toString());
                 map.put("Latitude", Lat);
                 map.put("Longitude", Lng);
-                map.put("Location", lokasiStr);
+                map.put("Location", StrLokasi);
                 map.put("Wide", tanah);
                 map.put("Land", bangunan);
                 map.put("Dimensi", dimensi.getText().toString());
@@ -5892,6 +5985,8 @@ public class TambahListingActivity extends AppCompatActivity {
                 map.put("IsSelfie", StringSelfie);
                 map.put("IsLokasi", StringLokasi);
                 map.put("Selfie", ImgSelfie);
+                map.put("NoKtp", ktp.getText().toString());
+                map.put("ImgKtp", ImgKTP);
                 System.out.println(map);
 
                 return map;
@@ -5959,6 +6054,7 @@ public class TambahListingActivity extends AppCompatActivity {
                                         });
                                         requestQueue.add(jsonArrayRequest);
                                         customDialog.dismiss();
+                                        AddLastSeen();
                                         finish();
                                     }
                                 });
@@ -6064,6 +6160,11 @@ public class TambahListingActivity extends AppCompatActivity {
                 } else {
                     Lng = longitudeStr;
                 }
+                if (lokasiStr == null) {
+                    StrLokasi = "0";
+                } else {
+                    StrLokasi = lokasiStr;
+                }
                 if (HargaString == null || HargaString.equals("")){
                     SHarga = "0";
                 } else {
@@ -6105,7 +6206,7 @@ public class TambahListingActivity extends AppCompatActivity {
                 map.put("Alamat", alamatproperti.getText().toString());
                 map.put("Latitude", Lat);
                 map.put("Longitude", Lng);
-                map.put("Location", lokasiStr);
+                map.put("Location", StrLokasi);
                 map.put("Wide", tanah);
                 map.put("Land", bangunan);
                 map.put("Dimensi", dimensi.getText().toString());
@@ -6165,6 +6266,8 @@ public class TambahListingActivity extends AppCompatActivity {
                 map.put("IsSelfie", StringSelfie);
                 map.put("IsLokasi", StringLokasi);
                 map.put("Selfie", ImgSelfie);
+                map.put("NoKtp", ktp.getText().toString());
+                map.put("ImgKtp", ImgKTP);
                 System.out.println(map);
 
                 return map;
@@ -6229,6 +6332,7 @@ public class TambahListingActivity extends AppCompatActivity {
                                             }
                                         });
                                         requestQueue.add(jsonArrayRequest);
+                                        AddLastSeen();
                                         customDialog.dismiss();
                                         finish();
                                     }
@@ -6330,6 +6434,11 @@ public class TambahListingActivity extends AppCompatActivity {
                 } else {
                     Lng = longitudeStr;
                 }
+                if (lokasiStr == null) {
+                    StrLokasi = "0";
+                } else {
+                    StrLokasi = lokasiStr;
+                }
                 if (HargaString == null){
                     SHarga = "0";
                 } else {
@@ -6371,7 +6480,7 @@ public class TambahListingActivity extends AppCompatActivity {
                 map.put("Alamat", alamatproperti.getText().toString());
                 map.put("Latitude", Lat);
                 map.put("Longitude", Lng);
-                map.put("Location", lokasiStr);
+                map.put("Location", StringLokasi);
                 map.put("Wide", tanah);
                 map.put("Land", bangunan);
                 map.put("Dimensi", dimensi.getText().toString());
@@ -6431,6 +6540,8 @@ public class TambahListingActivity extends AppCompatActivity {
                 map.put("IsSelfie", StringSelfie);
                 map.put("IsLokasi", StringLokasi);
                 map.put("Selfie", ImgSelfie);
+                map.put("NoKtp", ktp.getText().toString());
+                map.put("ImgKtp", ImgKTP);
                 System.out.println(map);
 
                 return map;
@@ -6981,6 +7092,29 @@ public class TambahListingActivity extends AppCompatActivity {
             }
         }
         return true;
+    }
+    private void AddLastSeen() {
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, ServerApi.URL_LAST_SEEN, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+            }
+        }) {
+            @Nullable
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> map = new HashMap<>();
+                System.out.println(map);
+                map.put("IdAgen", idagen);
+                return map;
+            }
+        };
+
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(stringRequest);
     }
     private class SendMessageTask extends AsyncTask<String, Void, String> {
         @Override

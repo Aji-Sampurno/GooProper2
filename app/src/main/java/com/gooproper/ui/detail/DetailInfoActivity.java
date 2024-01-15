@@ -65,7 +65,7 @@ import java.util.ArrayList;
 public class DetailInfoActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     ProgressDialog pDialog;
-    TextView TVJudul, TVLokasi, TVHarga, TVHargaSewa, TVNamaAgen, TVLuas, TVLTanah, TVLBangunan, TVJenis, TVStatus, TVDeskripsi, TVTglInput, TVNarahubung, TVTelpNarahubung, TVNoSelfie;
+    TextView TVJudul, TVLokasi, TVHarga, TVHargaSewa, TVNamaAgen, TVLuas, TVLTanah, TVLBangunan, TVJenis, TVStatus, TVDeskripsi, TVTglInput, TVNarahubung, TVTelpNarahubung, TVNoSelfie, TVPoin;
     LinearLayout LytNarahubung, LytTelpNarahubung, LytTglInput;
     ImageView IVAddListing, IVWhatsapp, IVInstagram, IVSelfie;
     Button BtnTambah, BtnTambahSpek;
@@ -82,6 +82,7 @@ public class DetailInfoActivity extends AppCompatActivity implements OnMapReadyC
     private GoogleMap googleMap;
     double lat, lng;
     private static final int REQUEST_WRITE_STORAGE = 112;
+    int Poin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -117,6 +118,7 @@ public class DetailInfoActivity extends AppCompatActivity implements OnMapReadyC
         TVTglInput = findViewById(R.id.TVTglInput);
         TVNarahubung = findViewById(R.id.TVNarahubung);
         TVTelpNarahubung = findViewById(R.id.TVTelpNarahubung);
+        TVPoin = findViewById(R.id.TVPoinDetailInfo);
 
         LytNarahubung = findViewById(R.id.LytNarahubungProperti);
         LytTelpNarahubung = findViewById(R.id.LytTelpNarahubung);
@@ -189,6 +191,7 @@ public class DetailInfoActivity extends AppCompatActivity implements OnMapReadyC
         } else {
             LytSelfie.setVisibility(View.GONE);
             BtnTambahSpek.setVisibility(View.GONE);
+            TVPoin.setVisibility(View.GONE);
             StringNamaBuyer = Preferences.getKeyNamaLengkap(this);
         }
 
@@ -196,16 +199,30 @@ public class DetailInfoActivity extends AppCompatActivity implements OnMapReadyC
 //            IVAddListing.setVisibility(View.VISIBLE);
             if (IntentIsSpek.equals("0")) {
                 BtnTambahSpek.setVisibility(View.VISIBLE);
+                TVPoin.setVisibility(View.VISIBLE);
             } else {
                 BtnTambahSpek.setVisibility(View.GONE);
+                TVPoin.setVisibility(View.VISIBLE);
             }
         } else {
 //            IVAddListing.setVisibility(View.INVISIBLE);
             BtnTambahSpek.setVisibility(View.GONE);
+            TVPoin.setVisibility(View.GONE);
         }
 
         if (update == 1) {
-
+            if (IntentIsSpek.equals("0")){
+                Poin = 0;
+                TVPoin.setText(String.valueOf(Poin));
+            } else if (IntentIsSpek.equals("1")) {
+                if (IntentImgSelfie.equals("0") && IntentLatitude.equals("") && IntentLongitude.equals("")) {
+                    Poin = 10;
+                    TVPoin.setText(String.valueOf(Poin));
+                } else {
+                    Poin = 10 * 2;
+                    TVPoin.setText(String.valueOf(Poin));
+                }
+            }
             if (IntentStatusProperty.isEmpty() && IntentJenisProperty.isEmpty()) {
                 TVJudul.setText("-");
             } else {

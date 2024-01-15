@@ -33,7 +33,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class AkunAdminFragment extends Fragment {
 
-    private LinearLayout pelamar, agen, listing, pralistingrejected, primary, listprimary, karyawan, laporan, pengaturan, hubungikami, tentangkami, kirimpesan;
+    private LinearLayout pelamar, agen, reportagen, listing, pralistingrejected, primary, listprimary, karyawan, laporan, pengaturan, hubungikami, tentangkami, kirimpesan;
     TextView nama, edit;
     CircleImageView cvadmin;
     View view, view1, view2, view3;
@@ -60,6 +60,7 @@ public class AkunAdminFragment extends Fragment {
         laporan = root.findViewById(R.id.LytLaporanListingan);
         pelamar = root.findViewById(R.id.LytPelamarAdmin);
         agen = root.findViewById(R.id.LytAgenAdmin);
+        reportagen = root.findViewById(R.id.LytreportAgen);
         pengaturan = root.findViewById(R.id.LytPengaturanAdmin);
         hubungikami = root.findViewById(R.id.LytHubungiKamiAdmin);
         tentangkami = root.findViewById(R.id.LytTentangKamiAdmin);

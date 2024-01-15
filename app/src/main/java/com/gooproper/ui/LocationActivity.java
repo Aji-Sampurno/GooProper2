@@ -5,10 +5,14 @@ import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentActivity;
 
 import android.Manifest;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -26,6 +30,7 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
@@ -47,6 +52,7 @@ import java.util.Locale;
 public class LocationActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMapLongClickListener {
 
     private static final int AUTOCOMPLETE_REQUEST_CODE = 1;
+    private MapView mapView;
     private GoogleMap mMap;
     private SearchView searchedit;
     private Button shareButton;
@@ -98,7 +104,11 @@ public class LocationActivity extends AppCompatActivity implements OnMapReadyCal
         shareButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                shareSelectedLocation();
+                if (isLocationEnabled()) {
+                    ShowLocation(v);
+                } else {
+                    ShowLocationEnable(v);
+                }
             }
         });
 
@@ -131,35 +141,6 @@ public class LocationActivity extends AppCompatActivity implements OnMapReadyCal
         }
 
         mMap.setOnMapLongClickListener(this);
-
-        /*if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            googleMap.setMyLocationEnabled(true); // Enable user's location button
-            googleMap.getUiSettings().setMyLocationButtonEnabled(true); // Enable user's location button in UI
-
-            // Get the last known location using FusedLocationProviderClient
-            FusedLocationProviderClient fusedLocationClient =  LocationServices.getFusedLocationProviderClient(this);
-            fusedLocationClient.getLastLocation()
-                    .addOnSuccessListener(location -> {
-                        if (location != null) {
-                            // Get latitude and longitude
-                            double latitude = location.getLatitude();
-                            double longitude = location.getLongitude();
-
-                            // Create LatLng object
-                            LatLng currentLocation = new LatLng(latitude, longitude);
-
-                            // Add a marker at current location
-                            mMap.addMarker(new MarkerOptions().position(currentLocation).title("Property"));
-
-                            // Move camera to the current location
-                            CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(currentLocation, 15);
-                            mMap.moveCamera(cameraUpdate);
-
-                            // Set the selectedLocation to the current location
-                            selectedLocation = currentLocation;
-                        }
-                    });
-        }*/
     }
     @Override
     public void onMapLongClick(LatLng latLng) {
@@ -207,6 +188,69 @@ public class LocationActivity extends AppCompatActivity implements OnMapReadyCal
             // ... (Rest of your code)
         }
     }
+    public void ShowLocation(View view) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.CustomAlertDialogStyle);
+        builder.setTitle("Konfimasi Lokasi");
+
+        if (selectedLocation != null) {
+
+            String latitudeStr = String.valueOf(selectedLocation.latitude);
+            String longitudeStr = String.valueOf(selectedLocation.longitude);
+
+            Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+
+            try {
+                List<Address> addresses = geocoder.getFromLocationName(latitudeStr + "," + longitudeStr, 1);
+                if (!addresses.isEmpty()) {
+                    Address address = addresses.get(0);
+
+                    String addressLine = address.getAddressLine(0);
+                    String city = address.getLocality();
+                    String state = address.getAdminArea();
+                    String country = address.getCountryName();
+                    String postalCode = address.getPostalCode();
+
+                    String completeAddress = addressLine + ", " + city + ", " + state + ", " + country + ", " + postalCode;
+
+                    builder.setMessage(completeAddress);
+
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+
+        }
+
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                shareSelectedLocation();
+            }
+        });
+
+        builder.setNegativeButton("Batal", null);
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+    public void ShowLocationEnable(View view) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.CustomAlertDialogStyle);
+        builder.setTitle("Konfimasi Lokasi");
+
+        builder.setMessage("Lokasi Belum Aktif");
+
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+            }
+        });
+
+        builder.setNegativeButton("Batal", null);
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -224,4 +268,13 @@ public class LocationActivity extends AppCompatActivity implements OnMapReadyCal
             }
         }
     }
+    public boolean isLocationEnabled() {
+        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+
+        boolean isGpsEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+        boolean isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+
+        return isGpsEnabled || isNetworkEnabled;
+    }
+
 }
