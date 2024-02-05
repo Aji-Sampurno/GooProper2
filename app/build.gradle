@@ -6,14 +6,14 @@ plugins {
 
 android {
     namespace 'com.gooproper'
-    compileSdk 33
+    compileSdk 34
 
     defaultConfig {
         applicationId "com.gooproper"
         minSdk 23
-        targetSdk 33
-        versionCode 48
-        versionName "1.48"
+        targetSdk 34
+        versionCode 56
+        versionName "1.56"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -61,6 +61,9 @@ dependencies {
     implementation 'com.google.android.gms:play-services-auth:20.0.0'
     implementation 'com.google.android.gms:play-services-drive:17.0.0'
     implementation 'com.github.chrisbanes:PhotoView:2.3.0'
+    implementation "androidx.media3:media3-exoplayer:1.2.1"
+    implementation "androidx.media3:media3-exoplayer-dash:1.2.1"
+    implementation "androidx.media3:media3-ui:1.2.1"
 
     annotationProcessor 'com.github.bumptech.glide:compiler:4.12.0'
 

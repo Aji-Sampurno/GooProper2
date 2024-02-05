@@ -7,6 +7,7 @@ import android.app.Dialog;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
@@ -14,6 +15,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
@@ -26,6 +28,8 @@ import androidx.recyclerview.widget.LinearSnapHelper;
 import androidx.recyclerview.widget.PagerSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -96,8 +100,9 @@ import java.util.TimerTask;
 public class HomeAgenFragment extends Fragment implements OnMapReadyCallback{
 
     private static final int REQUEST_LOCATION_PERMISSION = 1;
-    private static final int MY_PERMISSIONS_REQUEST_VIBRATE = 123;
-    private static final int REQUEST_CODE_UPDATE = 2;
+    private static final int MY_PERMISSIONS_REQUEST_VIBRATE = 2;
+    private static final int REQUEST_CODE_UPDATE = 3;
+    private static final int RC_NOTIFICATION = 4;
     private int currentPosition = 0;
     private MapView mapView;
     private GoogleMap googleMap;
@@ -111,6 +116,7 @@ public class HomeAgenFragment extends Fragment implements OnMapReadyCallback{
     List<ListingModel> mItemsNew;
     LinearLayoutManager layoutManager;
     boolean isForward = true;
+    private boolean doubleBackToExitPressedOnce = false;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -124,23 +130,25 @@ public class HomeAgenFragment extends Fragment implements OnMapReadyCallback{
         IdAdmin = Preferences.getKeyIdAgen(getContext());
         Status = Preferences.getKeyStatus(getContext());
 
-        requestNotificationPermission();
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
             NotificationChannel channel = new NotificationChannel("1","notification", NotificationManager.IMPORTANCE_HIGH);
             NotificationManager notificationManager = requireContext().getSystemService(NotificationManager.class);
             notificationManager.createNotificationChannel(channel);
         }
 
-        FirebaseMessaging.getInstance().getToken()
-                .addOnCompleteListener(task -> {
-                    if (!task.isSuccessful()) {
-                        return;
-                    }
-                    Token = task.getResult();
-                    Toast.makeText(getContext(), "Selamat Datang" + Token, Toast.LENGTH_SHORT);
-                    simpanDevice();
-                });
+        if (isFirstTime()) {
+            FirebaseMessaging.getInstance().getToken()
+                    .addOnCompleteListener(task -> {
+                        if (!task.isSuccessful()) {
+                            return;
+                        }
+                        Token = task.getResult();
+                        Toast.makeText(getContext(), "Selamat Datang" + Token, Toast.LENGTH_LONG).show();
+                        simpanDevice();
+                    });
+
+            setFirstTime(false);
+        }
 
         recycleListingPrimary = root.findViewById(R.id.ListingPrimary);
         recycleListingSold = root.findViewById(R.id.ListingSold);
@@ -211,12 +219,6 @@ public class HomeAgenFragment extends Fragment implements OnMapReadyCallback{
                         isForward = true;
                     }
                 }
-
-//                if (currentPosition < (adapterPrimary.getItemCount() - 1)) {
-//                    smoothScrollToPosition(currentPosition + 1);
-//                } else if (currentPosition == (adapterPrimary.getItemCount() - 1)) {
-//                    smoothScrollToPosition(currentPosition - 1);
-//                }
             }
         }, 0, 3000);
 
@@ -226,7 +228,72 @@ public class HomeAgenFragment extends Fragment implements OnMapReadyCallback{
             ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, REQUEST_LOCATION_PERMISSION);
         }
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.POST_NOTIFICATIONS}, RC_NOTIFICATION);
+//            requestPermissions(new String[]{Manifest.permission.POST_NOTIFICATIONS}, RC_NOTIFICATION);
+        }
+
+        if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.VIBRATE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.VIBRATE}, MY_PERMISSIONS_REQUEST_VIBRATE);
+        }
+
+        requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                if (doubleBackToExitPressedOnce) {
+                    SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+                    SharedPreferences.Editor editor = preferences.edit();
+                    editor.putBoolean("firstTime", true);
+                    editor.apply();
+                    requireActivity().finish();
+                } else {
+                    Toast.makeText(requireContext(), "Tekan kembali lagi untuk keluar", Toast.LENGTH_SHORT).show();
+                    doubleBackToExitPressedOnce = true;
+                    new Handler().postDelayed(() -> doubleBackToExitPressedOnce = false, 2000);
+                }
+            }
+        });
+
         return root;
+    }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == REQUEST_LOCATION_PERMISSION) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED
+                    && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
+                if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    return;
+                }
+                googleMap.setMyLocationEnabled(true);
+            } else {
+                Toast.makeText(getActivity(), "Izin lokasi ditolak", Toast.LENGTH_SHORT).show();
+            }
+        }
+        if (requestCode == MY_PERMISSIONS_REQUEST_VIBRATE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(getActivity(),"ALLOWED",Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(getActivity(),"DENIED",Toast.LENGTH_SHORT).show();
+            }
+        }
+        if (requestCode == RC_NOTIFICATION) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(getActivity(),"ALLOWED",Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(getActivity(),"DENIED",Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+    private boolean isFirstTime() {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+        return preferences.getBoolean("firstTime", true);
+    }
+    private void setFirstTime(boolean firstTime) {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean("firstTime", firstTime);
+        editor.apply();
     }
     private void smoothScrollToPosition(int targetPosition) {
         RecyclerView.SmoothScroller smoothScroller = new LinearSmoothScroller(recycleListingPrimary.getContext()) {
@@ -340,9 +407,6 @@ public class HomeAgenFragment extends Fragment implements OnMapReadyCallback{
             intent.setData(Uri.parse("package:" + requireContext().getPackageName()));
         }
         startActivity(intent);
-    }
-    private void showNotification() {
-
     }
     private void AddLastSeen() {
         StringRequest stringRequest = new StringRequest(Request.Method.POST, ServerApi.URL_LAST_SEEN, new Response.Listener<String>() {
@@ -831,27 +895,6 @@ public class HomeAgenFragment extends Fragment implements OnMapReadyCallback{
     public void onLowMemory() {
         super.onLowMemory();
         mapView.onLowMemory();
-    }
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == REQUEST_LOCATION_PERMISSION) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED
-                    && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
-                if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                    return;
-                }
-                googleMap.setMyLocationEnabled(true);
-            } else {
-                Toast.makeText(getActivity(), "Izin lokasi ditolak", Toast.LENGTH_SHORT).show();
-            }
-        }
-        if (requestCode == MY_PERMISSIONS_REQUEST_VIBRATE) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                showNotification();
-            } else {
-            }
-        }
     }
     @Override
     public void onMapReady(@NonNull GoogleMap map) {

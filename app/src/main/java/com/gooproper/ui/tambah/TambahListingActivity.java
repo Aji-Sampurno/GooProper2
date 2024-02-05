@@ -15,6 +15,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -24,6 +25,8 @@ import android.provider.MediaStore;
 import android.provider.OpenableColumns;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -47,6 +50,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
+import com.github.chrisbanes.photoview.PhotoView;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -71,6 +75,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
@@ -188,6 +193,7 @@ public class TambahListingActivity extends AppCompatActivity {
     private static final int PICK_PDF_Stratatitle = 102;
     private static final int PICK_PDF_AJB = 103;
     private static final int PICK_PDF_PetokD = 104;
+    private static final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 105;
     private ArrayList<Uri> uriList = new ArrayList<>();
     Uri Uri1, Uri2, Uri3, Uri4, Uri5, Uri6, Uri7, Uri8, UriSHM, UriHGB, UriHSHP, UriPPJB, UriSTRA, UriAJB, UriPetokD, UriSHMPdf, UriHGBPdf, UriHSHPPdf, UriPPJBPdf, UriSTRAPdf, UriAJBPdf, UriPetokDPdf, UriSHMF, UriHGBF, UriHSHPF, UriPPJBF, UriSTRAF, UriAJBF, UriPetokDF, UriPJP, UriPJP1, UriSelfie, UriKTP;
     LinearLayout lyt1, lyt2, lyt3, lyt4, lyt5, lyt6, lyt7, lyt8, LytSHM, LytHGB, LytHSHP, LytPPJB, LytStratatitle, LytAJB, LytPetokD, LytPjp, LytPjp1, LytBtnShm, LytBtnHGB, LytBtnHSHP, LytBtnPPJB, LytBtnStra, LytBtnAJB, LytBtnPetokD, LytSelfie, LytKTP;
@@ -2906,7 +2912,7 @@ public class TambahListingActivity extends AppCompatActivity {
         BtnPetokDPdf.setOnClickListener(view -> pilihFilePetokD(view));
         BtnPjp.setOnClickListener(view -> showPhotoPJP());
         BtnPjp1.setOnClickListener(view -> showPhotoPJP1());
-        BtnSelfie.setOnClickListener(view -> showPhotoSelfie());
+        BtnSelfie.setOnClickListener(view -> requestPermissionsSelfie());
         BtnKTP.setOnClickListener(view -> showPhotoKtp());
 
         select.setOnClickListener(new View.OnClickListener() {
@@ -3891,14 +3897,17 @@ public class TambahListingActivity extends AppCompatActivity {
     }
     public void pilihFileSHM(View view) {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-            //Intent intent = new Intent();
             Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
             intent.addCategory(Intent.CATEGORY_OPENABLE);
             intent.setType("application/pdf");
             intent.setAction(Intent.ACTION_GET_CONTENT);
             startActivityForResult(Intent.createChooser(intent, "Pilih File PDF"), PICK_PDF_SHM);
         } else {
-            requestStoragePermission();
+            Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+            intent.addCategory(Intent.CATEGORY_OPENABLE);
+            intent.setType("application/pdf");
+
+            startActivityForResult(intent, PICK_PDF_SHM);
         }
     }
     public void pilihFileHGB(View view) {
@@ -3910,7 +3919,11 @@ public class TambahListingActivity extends AppCompatActivity {
             intent.setAction(Intent.ACTION_GET_CONTENT);
             startActivityForResult(Intent.createChooser(intent, "Pilih File PDF"), PICK_PDF_HGB);
         } else {
-            requestStoragePermission();
+            Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+            intent.addCategory(Intent.CATEGORY_OPENABLE);
+            intent.setType("application/pdf");
+
+            startActivityForResult(intent, PICK_PDF_HGB);
         }
     }
     public void pilihFileHSHP(View view) {
@@ -3922,7 +3935,11 @@ public class TambahListingActivity extends AppCompatActivity {
             intent.setAction(Intent.ACTION_GET_CONTENT);
             startActivityForResult(Intent.createChooser(intent, "Pilih File PDF"), PICK_PDF_HSHP);
         } else {
-            requestStoragePermission();
+            Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+            intent.addCategory(Intent.CATEGORY_OPENABLE);
+            intent.setType("application/pdf");
+
+            startActivityForResult(intent, PICK_PDF_HSHP);
         }
     }
     public void pilihFilePPJB(View view) {
@@ -3934,7 +3951,11 @@ public class TambahListingActivity extends AppCompatActivity {
             intent.setAction(Intent.ACTION_GET_CONTENT);
             startActivityForResult(Intent.createChooser(intent, "Pilih File PDF"), PICK_PDF_PPJB);
         } else {
-            requestStoragePermission();
+            Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+            intent.addCategory(Intent.CATEGORY_OPENABLE);
+            intent.setType("application/pdf");
+
+            startActivityForResult(intent, PICK_PDF_PPJB);
         }
     }
     public void pilihFileSTRA(View view) {
@@ -3946,7 +3967,11 @@ public class TambahListingActivity extends AppCompatActivity {
             intent.setAction(Intent.ACTION_GET_CONTENT);
             startActivityForResult(Intent.createChooser(intent, "Pilih File PDF"), PICK_PDF_Stratatitle);
         } else {
-            requestStoragePermission();
+            Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+            intent.addCategory(Intent.CATEGORY_OPENABLE);
+            intent.setType("application/pdf");
+
+            startActivityForResult(intent, PICK_PDF_Stratatitle);
         }
     }
     public void pilihFileAJB(View view) {
@@ -3958,7 +3983,11 @@ public class TambahListingActivity extends AppCompatActivity {
             intent.setAction(Intent.ACTION_GET_CONTENT);
             startActivityForResult(Intent.createChooser(intent, "Pilih File PDF"), PICK_PDF_AJB);
         } else {
-            requestStoragePermission();
+            Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+            intent.addCategory(Intent.CATEGORY_OPENABLE);
+            intent.setType("application/pdf");
+
+            startActivityForResult(intent, PICK_PDF_AJB);
         }
     }
     public void pilihFilePetokD(View view) {
@@ -3970,7 +3999,11 @@ public class TambahListingActivity extends AppCompatActivity {
             intent.setAction(Intent.ACTION_GET_CONTENT);
             startActivityForResult(Intent.createChooser(intent, "Pilih File PDF"), PICK_PDF_PetokD);
         } else {
-            requestStoragePermission();
+            Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+            intent.addCategory(Intent.CATEGORY_OPENABLE);
+            intent.setType("application/pdf");
+
+            startActivityForResult(intent, PICK_PDF_PetokD);
         }
     }
     private File createImageFile() {
@@ -4002,7 +4035,17 @@ public class TambahListingActivity extends AppCompatActivity {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
-        if (requestCode == PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE1) {
+        if (requestCode == MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Izin diberikan, lanjutkan memilih file
+                pilihFileSHM(null); // Anda dapat mengganti parameter dengan null atau view yang sesuai
+            } else {
+                // Izin ditolak, berikan pesan atau ambil tindakan yang sesuai
+                int permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE);
+                Log.d("MyApp", "Permission check result: " + permissionCheck);
+                Toast.makeText(this, "Izin akses penyimpanan ditolak.", Toast.LENGTH_SHORT).show();
+            }
+        } else if (requestCode == PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE1) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 startActivityForResult(intent, CODE_GALLERY_REQUEST1);
@@ -5144,6 +5187,7 @@ public class TambahListingActivity extends AppCompatActivity {
         if (requestCode == CODE_GALLERY_REQUEST1 && resultCode == RESULT_OK && data != null) {
             Uri1 = data.getData();
             iv1.setImageURI(Uri1);
+            iv1.setTag(Uri1);
             lyt1.setVisibility(View.VISIBLE);
             select1.setVisibility(View.GONE);
             select2.setVisibility(View.VISIBLE);
@@ -5165,6 +5209,7 @@ public class TambahListingActivity extends AppCompatActivity {
                 if (uri != null) {
                     Uri2 = uri;
                     iv2.setImageURI(Uri2);
+                    iv2.setTag(Uri2);
                     lyt2.setVisibility(View.VISIBLE);
                     select2.setVisibility(View.GONE);
                     select3.setVisibility(View.VISIBLE);
@@ -5178,6 +5223,7 @@ public class TambahListingActivity extends AppCompatActivity {
                 if (uri != null) {
                     Uri3 = uri;
                     iv3.setImageURI(Uri3);
+                    iv3.setTag(Uri3);
                     lyt3.setVisibility(View.VISIBLE);
                     select3.setVisibility(View.GONE);
                     select4.setVisibility(View.VISIBLE);
@@ -5191,6 +5237,7 @@ public class TambahListingActivity extends AppCompatActivity {
                 if (uri != null) {
                     Uri4 = uri;
                     iv4.setImageURI(Uri4);
+                    iv4.setTag(Uri4);
                     lyt4.setVisibility(View.VISIBLE);
                     select4.setVisibility(View.GONE);
                     select5.setVisibility(View.VISIBLE);
@@ -5204,6 +5251,7 @@ public class TambahListingActivity extends AppCompatActivity {
                 if (uri != null) {
                     Uri5 = uri;
                     iv5.setImageURI(Uri5);
+                    iv5.setTag(Uri5);
                     lyt5.setVisibility(View.VISIBLE);
                     select5.setVisibility(View.GONE);
                     select6.setVisibility(View.VISIBLE);
@@ -5217,6 +5265,7 @@ public class TambahListingActivity extends AppCompatActivity {
                 if (uri != null) {
                     Uri6 = uri;
                     iv6.setImageURI(Uri6);
+                    iv6.setTag(Uri6);
                     lyt6.setVisibility(View.VISIBLE);
                     select6.setVisibility(View.GONE);
                     select7.setVisibility(View.VISIBLE);
@@ -5230,6 +5279,7 @@ public class TambahListingActivity extends AppCompatActivity {
                 if (uri != null) {
                     Uri7 = uri;
                     iv7.setImageURI(Uri7);
+                    iv7.setTag(Uri7);
                     lyt7.setVisibility(View.VISIBLE);
                     select7.setVisibility(View.GONE);
                     select.setVisibility(View.VISIBLE);
@@ -5243,6 +5293,7 @@ public class TambahListingActivity extends AppCompatActivity {
                 if (uri != null) {
                     Uri8 = uri;
                     iv8.setImageURI(Uri8);
+                    iv8.setTag(Uri8);
                     lyt8.setVisibility(View.VISIBLE);
                     select.setVisibility(View.GONE);
                 } else {
@@ -5252,42 +5303,49 @@ public class TambahListingActivity extends AppCompatActivity {
         } else if (requestCode == CODE_GALLERY_REQUEST3 && resultCode == RESULT_OK && data != null) {
             Uri3 = data.getData();
             iv3.setImageURI(Uri3);
+            iv3.setTag(Uri3);
             lyt3.setVisibility(View.VISIBLE);
             select3.setVisibility(View.GONE);
             select4.setVisibility(View.VISIBLE);
         } else if (requestCode == CODE_GALLERY_REQUEST4 && resultCode == RESULT_OK && data != null) {
             Uri4 = data.getData();
             iv4.setImageURI(Uri4);
+            iv4.setTag(Uri4);
             lyt4.setVisibility(View.VISIBLE);
             select4.setVisibility(View.GONE);
             select5.setVisibility(View.VISIBLE);
         } else if (requestCode == CODE_GALLERY_REQUEST5 && resultCode == RESULT_OK && data != null) {
             Uri5 = data.getData();
             iv5.setImageURI(Uri5);
+            iv5.setTag(Uri5);
             lyt5.setVisibility(View.VISIBLE);
             select5.setVisibility(View.GONE);
             select6.setVisibility(View.VISIBLE);
         } else if (requestCode == CODE_GALLERY_REQUEST6 && resultCode == RESULT_OK && data != null) {
             Uri6 = data.getData();
             iv6.setImageURI(Uri6);
+            iv6.setTag(Uri6);
             lyt6.setVisibility(View.VISIBLE);
             select6.setVisibility(View.GONE);
             select7.setVisibility(View.VISIBLE);
         } else if (requestCode == CODE_GALLERY_REQUEST7 && resultCode == RESULT_OK && data != null) {
             Uri7 = data.getData();
             iv7.setImageURI(Uri7);
+            iv7.setTag(Uri7);
             lyt7.setVisibility(View.VISIBLE);
             select7.setVisibility(View.GONE);
             select.setVisibility(View.VISIBLE);
         } else if (requestCode == CODE_GALLERY_REQUEST8 && resultCode == RESULT_OK && data != null) {
             Uri8 = data.getData();
             iv8.setImageURI(Uri8);
+            iv8.setTag(Uri8);
             lyt8.setVisibility(View.VISIBLE);
             select.setVisibility(View.GONE);
         } else if (requestCode == CODE_GALLERY_REQUEST_SHM && resultCode == RESULT_OK && data != null) {
             UriSHM = data.getData();
             UriSHMF = data.getData();
             IVShm.setImageURI(UriSHM);
+            IVShm.setTag(UriSHM);
             IVShm.setVisibility(View.VISIBLE);
             TVSHM.setVisibility(View.GONE);
             LytSHM.setVisibility(View.VISIBLE);
@@ -5296,6 +5354,7 @@ public class TambahListingActivity extends AppCompatActivity {
             UriHGB = data.getData();
             UriHGBF = data.getData();
             IVHgb.setImageURI(UriHGB);
+            IVHgb.setTag(UriHGB);
             IVHgb.setVisibility(View.VISIBLE);
             TVHGB.setVisibility(View.GONE);
             LytHGB.setVisibility(View.VISIBLE);
@@ -5304,6 +5363,7 @@ public class TambahListingActivity extends AppCompatActivity {
             UriHSHP = data.getData();
             UriHSHPF = data.getData();
             IVHshp.setImageURI(UriHSHP);
+            IVHshp.setTag(UriHSHP);
             IVHshp.setVisibility(View.VISIBLE);
             TVHSHP.setVisibility(View.GONE);
             LytHSHP.setVisibility(View.VISIBLE);
@@ -5312,6 +5372,7 @@ public class TambahListingActivity extends AppCompatActivity {
             UriPPJB = data.getData();
             UriPPJBF = data.getData();
             IVPpjb.setImageURI(UriPPJB);
+            IVPpjb.setTag(UriPPJB);
             IVPpjb.setVisibility(View.VISIBLE);
             TVPPJB.setVisibility(View.GONE);
             LytPPJB.setVisibility(View.VISIBLE);
@@ -5327,7 +5388,8 @@ public class TambahListingActivity extends AppCompatActivity {
         }  else if (requestCode == CODE_GALLERY_REQUEST_AJB && resultCode == RESULT_OK && data != null) {
             UriAJB = data.getData();
             UriAJBF = data.getData();
-            IVAJB.setImageURI(UriSTRA);
+            IVAJB.setImageURI(UriAJB);
+            IVAJB.setTag(UriAJB);
             IVAJB.setVisibility(View.VISIBLE);
             TVAJB.setVisibility(View.GONE);
             LytAJB.setVisibility(View.VISIBLE);
@@ -5335,7 +5397,8 @@ public class TambahListingActivity extends AppCompatActivity {
         }  else if (requestCode == CODE_GALLERY_REQUEST_PetokD && resultCode == RESULT_OK && data != null) {
             UriPetokD = data.getData();
             UriPetokDF = data.getData();
-            IVPetokD.setImageURI(UriSTRA);
+            IVPetokD.setImageURI(UriPetokD);
+            IVPetokD.setTag(UriPetokD);
             IVPetokD.setVisibility(View.VISIBLE);
             TVPetokD.setVisibility(View.GONE);
             LytPetokD.setVisibility(View.VISIBLE);
@@ -5343,11 +5406,13 @@ public class TambahListingActivity extends AppCompatActivity {
         } else if (requestCode == CODE_GALLERY_REQUEST_PJP && resultCode == RESULT_OK && data != null) {
             UriPJP = data.getData();
             IVPjp.setImageURI(UriPJP);
+            IVPjp.setTag(UriPJP);
             LytPjp.setVisibility(View.VISIBLE);
             BtnPjp.setVisibility(View.GONE);
         } else if (requestCode == CODE_GALLERY_REQUEST_PJP1 && resultCode == RESULT_OK && data != null) {
             UriPJP1 = data.getData();
             IVPjp1.setImageURI(UriPJP1);
+            IVPjp1.setTag(UriPJP1);
             LytPjp1.setVisibility(View.VISIBLE);
             BtnPjp1.setVisibility(View.GONE);
         } else if (requestCode == CODE_GALLERY_REQUEST_Selfie && resultCode == RESULT_OK && data != null) {
@@ -5402,52 +5467,61 @@ public class TambahListingActivity extends AppCompatActivity {
             select.setVisibility(View.GONE);
         } else if (requestCode == KODE_REQUEST_KAMERA_SHM && resultCode == RESULT_OK) {
             IVShm.setImageURI(UriSHM);
+            IVShm.setTag(UriSHM);
             TVSHM.setVisibility(View.GONE);
             IVShm.setVisibility(View.VISIBLE);
             LytSHM.setVisibility(View.VISIBLE);
             LytBtnShm.setVisibility(View.GONE);
         } else if (requestCode == KODE_REQUEST_KAMERA_HGB && resultCode == RESULT_OK) {
             IVHgb.setImageURI(UriHGB);
+            IVHgb.setTag(UriHGB);
             TVHGB.setVisibility(View.GONE);
             IVHgb.setVisibility(View.VISIBLE);
             LytHGB.setVisibility(View.VISIBLE);
             LytBtnHGB.setVisibility(View.GONE);
         } else if (requestCode == KODE_REQUEST_KAMERA_HSHP && resultCode == RESULT_OK) {
             IVHshp.setImageURI(UriHSHP);
+            IVHshp.setTag(UriHSHP);
             TVHSHP.setVisibility(View.GONE);
             IVHshp.setVisibility(View.VISIBLE);
             LytHSHP.setVisibility(View.VISIBLE);
             LytBtnHSHP.setVisibility(View.GONE);
         } else if (requestCode == KODE_REQUEST_KAMERA_PPJB && resultCode == RESULT_OK) {
             IVPpjb.setImageURI(UriPPJB);
+            IVPpjb.setTag(UriPPJB);
             TVPPJB.setVisibility(View.GONE);
             IVPpjb.setVisibility(View.VISIBLE);
             LytPPJB.setVisibility(View.VISIBLE);
             LytBtnPPJB.setVisibility(View.GONE);
         } else if (requestCode == KODE_REQUEST_KAMERA_STRA && resultCode == RESULT_OK) {
-            IVStratatitle.setImageURI(UriSHM);
+            IVStratatitle.setImageURI(UriSTRA);
+            IVStratatitle.setTag(UriSTRA);
             TVSTRA.setVisibility(View.GONE);
             IVStratatitle.setVisibility(View.VISIBLE);
             LytStratatitle.setVisibility(View.VISIBLE);
             LytBtnStra.setVisibility(View.GONE);
         }  else if (requestCode == KODE_REQUEST_KAMERA_AJB && resultCode == RESULT_OK) {
             IVAJB.setImageURI(UriAJB);
+            IVAJB.setTag(UriAJB);
             TVAJB.setVisibility(View.GONE);
             IVAJB.setVisibility(View.VISIBLE);
             LytAJB.setVisibility(View.VISIBLE);
             LytBtnAJB.setVisibility(View.GONE);
         }  else if (requestCode == KODE_REQUEST_KAMERA_PetokD && resultCode == RESULT_OK) {
             IVPetokD.setImageURI(UriPetokD);
+            IVPetokD.setTag(UriPetokD);
             TVPetokD.setVisibility(View.GONE);
             IVPetokD.setVisibility(View.VISIBLE);
             LytPetokD.setVisibility(View.VISIBLE);
             LytBtnPetokD.setVisibility(View.GONE);
         } else if (requestCode == KODE_REQUEST_KAMERA_PJP && resultCode == RESULT_OK) {
             IVPjp.setImageURI(UriPJP);
+            IVPjp.setTag(UriPJP);
             LytPjp.setVisibility(View.VISIBLE);
             BtnPjp.setVisibility(View.VISIBLE);
         } else if (requestCode == KODE_REQUEST_KAMERA_PJP1 && resultCode == RESULT_OK) {
             IVPjp1.setImageURI(UriPJP1);
+            IVPjp1.setTag(UriPJP1);
             LytPjp1.setVisibility(View.VISIBLE);
             BtnPjp1.setVisibility(View.GONE);
         } else if (requestCode == KODE_REQUEST_KAMERA_Selfie && resultCode == RESULT_OK) {
@@ -5884,12 +5958,12 @@ public class TambahListingActivity extends AppCompatActivity {
                 } else {
                     StrLokasi = lokasiStr;
                 }
-                if (HargaString == null || HargaString.equals("")){
+                if (HargaString == null || HargaString.equals("") || harga.getText().equals("")){
                     SHarga = "0";
                 } else {
                     SHarga = HargaString;
                 }
-                if (HargaSewaString == null || HargaSewaString.equals("")){
+                if (HargaSewaString == null || HargaSewaString.equals("") || hargasewa.getText().equals("")){
                     SHargaSewa = "0";
                 } else {
                     SHargaSewa = HargaSewaString;
@@ -5985,7 +6059,7 @@ public class TambahListingActivity extends AppCompatActivity {
                 map.put("IsSelfie", StringSelfie);
                 map.put("IsLokasi", StringLokasi);
                 map.put("Selfie", ImgSelfie);
-                map.put("NoKtp", ktp.getText().toString());
+                map.put("NoKtp", nik.getText().toString());
                 map.put("ImgKtp", ImgKTP);
                 System.out.println(map);
 
@@ -6165,12 +6239,12 @@ public class TambahListingActivity extends AppCompatActivity {
                 } else {
                     StrLokasi = lokasiStr;
                 }
-                if (HargaString == null || HargaString.equals("")){
+                if (HargaString == null || HargaString.equals("") || harga.getText().equals("")){
                     SHarga = "0";
                 } else {
                     SHarga = HargaString;
                 }
-                if (HargaSewaString == null || HargaSewaString.equals("")){
+                if (HargaSewaString == null || HargaSewaString.equals("") || hargasewa.getText().equals("")){
                     SHargaSewa = "0";
                 } else {
                     SHargaSewa = HargaSewaString;
@@ -6266,7 +6340,7 @@ public class TambahListingActivity extends AppCompatActivity {
                 map.put("IsSelfie", StringSelfie);
                 map.put("IsLokasi", StringLokasi);
                 map.put("Selfie", ImgSelfie);
-                map.put("NoKtp", ktp.getText().toString());
+                map.put("NoKtp", nik.getText().toString());
                 map.put("ImgKtp", ImgKTP);
                 System.out.println(map);
 
@@ -6439,12 +6513,12 @@ public class TambahListingActivity extends AppCompatActivity {
                 } else {
                     StrLokasi = lokasiStr;
                 }
-                if (HargaString == null){
+                if (HargaString == null || HargaString.equals("") || harga.getText().equals("")){
                     SHarga = "0";
                 } else {
                     SHarga = HargaString;
                 }
-                if (HargaSewaString == null){
+                if (HargaSewaString == null || HargaSewaString.equals("") || hargasewa.getText().equals("")){
                     SHargaSewa = "0";
                 } else {
                     SHargaSewa = HargaSewaString;
@@ -6540,7 +6614,7 @@ public class TambahListingActivity extends AppCompatActivity {
                 map.put("IsSelfie", StringSelfie);
                 map.put("IsLokasi", StringLokasi);
                 map.put("Selfie", ImgSelfie);
-                map.put("NoKtp", ktp.getText().toString());
+                map.put("NoKtp", nik.getText().toString());
                 map.put("ImgKtp", ImgKTP);
                 System.out.println(map);
 
@@ -6932,6 +7006,23 @@ public class TambahListingActivity extends AppCompatActivity {
 
         AlertDialog dialog = builder.create();
 
+        dialog.show();
+    }
+    public void tampilkanPreview(View view) {
+        Uri imageUri = getImageUriFromImageView((ImageView) view);
+        tampilkanDialogGambarBesar(imageUri);
+    }
+    private Uri getImageUriFromImageView(ImageView imageView) {
+        return (Uri) imageView.getTag();
+    }
+    private void tampilkanDialogGambarBesar(Uri imageUri) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        LayoutInflater inflater = getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.preview_gambar, null);
+        PhotoView imageView = dialogView.findViewById(R.id.imageViewPreview);
+        imageView.setImageURI(imageUri);
+        builder.setView(dialogView);
+        AlertDialog dialog = builder.create();
         dialog.show();
     }
     public boolean Validate() {

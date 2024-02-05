@@ -43,7 +43,6 @@ import java.util.List;
 import java.util.Locale;
 
 public class ListingkuActivity extends AppCompatActivity {
-
     ProgressDialog PDListingKu;
     ImageView IVSortAsc, IVSortDesc, IVFilter;
     SwipeRefreshLayout srlistingku;
@@ -54,9 +53,7 @@ public class ListingkuActivity extends AppCompatActivity {
     //private SearchView searchView;
     private EditText searchView;
     private boolean applyFilters = false;
-
     Button open, exclusive;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -84,19 +81,6 @@ public class ListingkuActivity extends AppCompatActivity {
 
             }
         });
-        /*searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                filterList(newText);
-                return true;
-            }
-        });*/
-
         IVSortAsc.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -105,7 +89,6 @@ public class ListingkuActivity extends AppCompatActivity {
                 IVSortAsc.setVisibility(View.GONE);
             }
         });
-
         IVSortDesc.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -139,8 +122,6 @@ public class ListingkuActivity extends AppCompatActivity {
             getSupportActionBar().hide();
         }
     }
-
-    //searchView
     private void filterList(String text) {
         List<ListingModel> filteredList = new ArrayList<>();
         for (ListingModel item : list) {
@@ -154,9 +135,6 @@ public class ListingkuActivity extends AppCompatActivity {
         }
         adapter.setFilteredlist(filteredList);
     }
-
-
-    //filter
     public void showFilterDialog () {
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
         LayoutInflater inflater = getLayoutInflater();
@@ -419,7 +397,6 @@ public class ListingkuActivity extends AppCompatActivity {
         alertDialog = dialogBuilder.create();
         alertDialog.show();
     }
-
     public void showSpecPopUp(View view) {
         androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this);
         builder.setTitle("Jenis Properti");
@@ -447,7 +424,6 @@ public class ListingkuActivity extends AppCompatActivity {
         // Create and show the AlertDialog
         builder.create().show();
     }
-
     public void showPropertyTypePopup(View view) {
         androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this);
         builder.setTitle("Select Property Type");
@@ -475,7 +451,6 @@ public class ListingkuActivity extends AppCompatActivity {
         androidx.appcompat.app.AlertDialog dialog = builder.create();
         dialog.show();
     }
-
     public void applyCustomFilter(View view, long minPrice, long maxPrice, boolean isAbove, String bedSearch, String bathSearch, String landWideSearch, String buildingWideSearch, String garageSearch, String carpotSearch, String levelSearch, String viewSpec, String viewType, String kondisi) {
         ArrayList<ListingModel> filteredList = new ArrayList<>();
         if (minPrice > 0 || maxPrice > 0) {
@@ -656,7 +631,6 @@ public class ListingkuActivity extends AppCompatActivity {
 
         applyFilters = false;
     }
-
     private void LoadListing(boolean showProgressDialog) {
         PDListingKu.setMessage("Memuat Data...");
         PDListingKu.show();

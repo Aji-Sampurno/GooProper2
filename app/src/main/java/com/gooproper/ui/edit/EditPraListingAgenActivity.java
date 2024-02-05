@@ -356,6 +356,124 @@ public class EditPraListingAgenActivity extends AppCompatActivity {
         Etsize = findViewById(R.id.etukuranbanner);
         EtFee = findViewById(R.id.etfee);
 
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
+        String fileListing1 = "Listing1_" + timeStamp + ".jpg";
+        String fileListing2 = "Listing2_" + timeStamp + ".jpg";
+        String fileListing3 = "Listing3_" + timeStamp + ".jpg";
+        String fileListing4 = "Listing4_" + timeStamp + ".jpg";
+        String fileListing5 = "Listing5_" + timeStamp + ".jpg";
+        String fileListing6 = "Listing6_" + timeStamp + ".jpg";
+        String fileListing7 = "Listing7_" + timeStamp + ".jpg";
+        String fileListing8 = "Listing8_" + timeStamp + ".jpg";
+        String fileSertifikatshm = "SHM_" + timeStamp + ".jpg";
+        String fileSertifikatshmpdf = "SHM_" + timeStamp + ".pdf";
+        String fileSertifikathgb = "HGB_" + timeStamp + ".jpg";
+        String fileSertifikathgbpdf = "HGB_" + timeStamp + ".pdf";
+        String fileSertifikathshp = "HSHP_" + timeStamp + ".jpg";
+        String fileSertifikathshppdf = "HSHP_" + timeStamp + ".pdf";
+        String fileSertifikatppjb = "PPJB_" + timeStamp + ".jpg";
+        String fileSertifikatppjbpdf = "PPJB_" + timeStamp + ".pdf";
+        String fileSertifikatstra = "Stratatitle_" + timeStamp + ".jpg";
+        String fileSertifikatstrapdf = "Stratatitle_" + timeStamp + ".pdf";
+        String fileSertifikatajb = "Ajb_" + timeStamp + ".jpg";
+        String fileSertifikatajbpdf = "Ajb_" + timeStamp + ".pdf";
+        String fileSertifikatpetokd = "PetokD_" + timeStamp + ".jpg";
+        String fileSertifikatpetokdpdf = "PetokD_" + timeStamp + ".pdf";
+        String filePjp1 = "PJP1_" + timeStamp + ".jpg";
+        String filePjp2 = "PJP2_" + timeStamp + ".jpg";
+        String fileSelfie = "Selfie_" + timeStamp + ".jpg";
+
+        Intent data = getIntent();
+        String intentIdPraListing = data.getStringExtra("IdPraListing");
+        String intentIdAgen = data.getStringExtra("IdAgen");
+        String intentIdAgenCo = data.getStringExtra("IdAgenCo");
+        String intentIdInput = data.getStringExtra("IdInput");
+        String intentNamaListing = data.getStringExtra("NamaListing");
+        String intentAlamat = data.getStringExtra("Alamat");
+        String intentLatitude = data.getStringExtra("Latitude");
+        String intentLongitude = data.getStringExtra("Longitude");
+        String intentLocation = data.getStringExtra("Location");
+        String intentSelfie = data.getStringExtra("Selfie");
+        String intentWide = data.getStringExtra("Wide");
+        String intentLand = data.getStringExtra("Land");
+        String intentDimensi = data.getStringExtra("Dimensi");
+        String intentListrik = data.getStringExtra("Listrik");
+        String intentLevel = data.getStringExtra("Level");
+        String intentBed = data.getStringExtra("Bed");
+        String intentBedArt = data.getStringExtra("BedArt");
+        String intentBath = data.getStringExtra("Bath");
+        String intentBathArt = data.getStringExtra("BathArt");
+        String intentGarage = data.getStringExtra("Garage");
+        String intentCarpot = data.getStringExtra("Carpot");
+        String intentHadap = data.getStringExtra("Hadap");
+        String intentSHM = data.getStringExtra("SHM");
+        String intentHGB = data.getStringExtra("HGB");
+        String intentHSHP = data.getStringExtra("HSHP");
+        String intentPPJB = data.getStringExtra("PPJB");
+        String intentStratatitle = data.getStringExtra("Stratatitle");
+        String intentAJB = data.getStringExtra("AJB");
+        String intentPetokD = data.getStringExtra("PetokD");
+        String intentPjp = data.getStringExtra("Pjp");
+        String intentImgSHM = data.getStringExtra("ImgSHM");
+        String intentImgHGB = data.getStringExtra("ImgHGB");
+        String intentImgHSHP = data.getStringExtra("ImgHSHP");
+        String intentImgPPJB = data.getStringExtra("ImgPPJB");
+        String intentImgStratatitle = data.getStringExtra("ImgStratatitle");
+        String intentImgAJB = data.getStringExtra("ImgAJB");
+        String intentImgPetokD = data.getStringExtra("ImgPetokD");
+        String intentImgPjp = data.getStringExtra("ImgPjp");
+        String intentImgPjp1 = data.getStringExtra("ImgPjp1");
+        String intentNoCertificate = data.getStringExtra("NoCertificate");
+        String intentPbb = data.getStringExtra("Pbb");
+        String intentJenisProperti = data.getStringExtra("JenisProperti");
+        String intentJenisCertificate = data.getStringExtra("JenisCertificate");
+        String intentSumberAir = data.getStringExtra("SumberAir");
+        String intentKondisi = data.getStringExtra("Kondisi");
+        String intentDeskripsi = data.getStringExtra("Deskripsi");
+        String intentPrabot = data.getStringExtra("Prabot");
+        String intentKetPrabot = data.getStringExtra("KetPrabot");
+        String intentPriority = data.getStringExtra("Priority");
+        String intentTtd = data.getStringExtra("Ttd");
+        String intentBanner = data.getStringExtra("Banner");
+        String intentSize = data.getStringExtra("Size");
+        String intentHarga = data.getStringExtra("Harga");
+        String intentHargaSewa = data.getStringExtra("HargaSewa");
+        String intentTglInput = data.getStringExtra("TglInput");
+        String intentImg1 = data.getStringExtra("Img1");
+        String intentImg2 = data.getStringExtra("Img2");
+        String intentImg3 = data.getStringExtra("Img3");
+        String intentImg4 = data.getStringExtra("Img4");
+        String intentImg5 = data.getStringExtra("Img5");
+        String intentImg6 = data.getStringExtra("Img6");
+        String intentImg7 = data.getStringExtra("Img7");
+        String intentImg8 = data.getStringExtra("Img8");
+        String intentVideo = data.getStringExtra("Video");
+        String intentLinkFacebook = data.getStringExtra("LinkFacebook");
+        String intentLinkTiktok = data.getStringExtra("LinkTiktok");
+        String intentLinkInstagram = data.getStringExtra("LinkInstagram");
+        String intentLinkYoutube = data.getStringExtra("LinkYoutube");
+        String intentIsAdmin = data.getStringExtra("IsAdmin");
+        String intentIsManager = data.getStringExtra("IsManager");
+        String intentIsRejected = data.getStringExtra("IsRejected");
+        String intentSold = data.getStringExtra("Sold");
+        String intentRented = data.getStringExtra("Rented");
+        String intentView = data.getStringExtra("View");
+        String intentMarketable = data.getStringExtra("Marketable");
+        String intentStatusHarga = data.getStringExtra("StatusHarga");
+        String intentNama = data.getStringExtra("Nama");
+        String intentNoTelp = data.getStringExtra("NoTelp");
+        String intentInstagram = data.getStringExtra("Instagram");
+        String intentFee = data.getStringExtra("Fee");
+        String intentNamaVendor = data.getStringExtra("NamaVendor");
+        String intentNoTelpVendor = data.getStringExtra("NoTelpVendor");
+        String intentIsSelfie = data.getStringExtra("IsSelfie");
+        String intentIsLokasi = data.getStringExtra("IsLokasi");
+        String intentKeterangan = data.getStringExtra("Keterangan");
+
+        StringIdAgen = intentIdAgen;
+        isimage1 = intentImg1;
+        idnull = "0";
+
         maps.setOnClickListener(view -> startMapsActivityForResult());
         BtnSHM.setOnClickListener(view -> showPhotoSHM());
         BtnSHMPdf.setOnClickListener(view -> pilihFileSHM(view));
@@ -373,7 +491,7 @@ public class EditPraListingAgenActivity extends AppCompatActivity {
         BtnPetokDPdf.setOnClickListener(view -> pilihFilePetokD(view));
         BtnPjp.setOnClickListener(view -> showPhotoPJP());
         BtnPjp1.setOnClickListener(view -> showPhotoPJP1());
-        BtnSelfie.setOnClickListener(view -> showPhotoSelfie());
+        BtnSelfie.setOnClickListener(view -> requestPermissionsSelfie());
         back.setOnClickListener(view -> finish());
         batal.setOnClickListener(view -> finish());
         hps1.setOnClickListener(view -> clearBitmap1());
@@ -414,7 +532,7 @@ public class EditPraListingAgenActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable editable) {
                 if (editable.toString().equalsIgnoreCase("Ya")) {
-                    if (UriPJP == null) {
+                    if (UriPJP == null && intentImgPjp.equals("0")) {
                         BtnPjp.setVisibility(View.VISIBLE);
                         BtnPjp.setText("Upload Pjp Halaman 1");
                     } else {
@@ -426,7 +544,7 @@ public class EditPraListingAgenActivity extends AppCompatActivity {
                         BtnPjp1.setVisibility(View.GONE);
                     }
                 } else if (editable.toString().equalsIgnoreCase("Tidak")) {
-                    if (UriPJP == null) {
+                    if (UriPJP == null && intentImgPjp.equals("0")) {
                         BtnPjp.setVisibility(View.VISIBLE);
                         BtnPjp.setText("Upload Bukti Chat");
                         BtnPjp1.setVisibility(View.GONE);
@@ -505,17 +623,6 @@ public class EditPraListingAgenActivity extends AppCompatActivity {
                     Etharga.removeTextChangedListener(this);
 
                     String cleanString = s.toString().replaceAll("[Rp,.\\s]", "");
-                    /*
-                    double parsed = Double.parseDouble(cleanString);
-                    String formatted = String.format(Locale.US, "%,.0f", parsed);
-
-                    HargaString = cleanString;
-
-                    current = formatted;
-                    harga.setText(formatted);
-                    harga.setSelection(formatted.length());
-                    harga.addTextChangedListener(this);
-                     */
                     if (!cleanString.isEmpty()) {
                         double parsed = Double.parseDouble(cleanString);
                         String formatted = String.format(Locale.US, "%,.0f", parsed);
@@ -549,17 +656,6 @@ public class EditPraListingAgenActivity extends AppCompatActivity {
                     Ethargasewa.removeTextChangedListener(this);
 
                     String cleanString = s.toString().replaceAll("[Rp,.\\s]", "");
-                    /*
-                    double parsed = Double.parseDouble(cleanString);
-                    String formatted = String.format(Locale.US, "%,.0f", parsed);
-
-                    HargaString = cleanString;
-
-                    current = formatted;
-                    harga.setText(formatted);
-                    harga.setSelection(formatted.length());
-                    harga.addTextChangedListener(this);
-                     */
                     if (!cleanString.isEmpty()) {
                         double parsed = Double.parseDouble(cleanString);
                         String formatted = String.format(Locale.US, "%,.0f", parsed);
@@ -715,124 +811,6 @@ public class EditPraListingAgenActivity extends AppCompatActivity {
                 showPhotoSelectionDialog7();
             }
         });
-
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
-        String fileListing1 = "Listing1_" + timeStamp + ".jpg";
-        String fileListing2 = "Listing2_" + timeStamp + ".jpg";
-        String fileListing3 = "Listing3_" + timeStamp + ".jpg";
-        String fileListing4 = "Listing4_" + timeStamp + ".jpg";
-        String fileListing5 = "Listing5_" + timeStamp + ".jpg";
-        String fileListing6 = "Listing6_" + timeStamp + ".jpg";
-        String fileListing7 = "Listing7_" + timeStamp + ".jpg";
-        String fileListing8 = "Listing8_" + timeStamp + ".jpg";
-        String fileSertifikatshm = "SHM_" + timeStamp + ".jpg";
-        String fileSertifikatshmpdf = "SHM_" + timeStamp + ".pdf";
-        String fileSertifikathgb = "HGB_" + timeStamp + ".jpg";
-        String fileSertifikathgbpdf = "HGB_" + timeStamp + ".pdf";
-        String fileSertifikathshp = "HSHP_" + timeStamp + ".jpg";
-        String fileSertifikathshppdf = "HSHP_" + timeStamp + ".pdf";
-        String fileSertifikatppjb = "PPJB_" + timeStamp + ".jpg";
-        String fileSertifikatppjbpdf = "PPJB_" + timeStamp + ".pdf";
-        String fileSertifikatstra = "Stratatitle_" + timeStamp + ".jpg";
-        String fileSertifikatstrapdf = "Stratatitle_" + timeStamp + ".pdf";
-        String fileSertifikatajb = "Ajb_" + timeStamp + ".jpg";
-        String fileSertifikatajbpdf = "Ajb_" + timeStamp + ".pdf";
-        String fileSertifikatpetokd = "PetokD_" + timeStamp + ".jpg";
-        String fileSertifikatpetokdpdf = "PetokD_" + timeStamp + ".pdf";
-        String filePjp1 = "PJP1_" + timeStamp + ".jpg";
-        String filePjp2 = "PJP2_" + timeStamp + ".jpg";
-        String fileSelfie = "Selfie_" + timeStamp + ".jpg";
-
-        Intent data = getIntent();
-        String intentIdPraListing = data.getStringExtra("IdPraListing");
-        String intentIdAgen = data.getStringExtra("IdAgen");
-        String intentIdAgenCo = data.getStringExtra("IdAgenCo");
-        String intentIdInput = data.getStringExtra("IdInput");
-        String intentNamaListing = data.getStringExtra("NamaListing");
-        String intentAlamat = data.getStringExtra("Alamat");
-        String intentLatitude = data.getStringExtra("Latitude");
-        String intentLongitude = data.getStringExtra("Longitude");
-        String intentLocation = data.getStringExtra("Location");
-        String intentSelfie = data.getStringExtra("Selfie");
-        String intentWide = data.getStringExtra("Wide");
-        String intentLand = data.getStringExtra("Land");
-        String intentDimensi = data.getStringExtra("Dimensi");
-        String intentListrik = data.getStringExtra("Listrik");
-        String intentLevel = data.getStringExtra("Level");
-        String intentBed = data.getStringExtra("Bed");
-        String intentBedArt = data.getStringExtra("BedArt");
-        String intentBath = data.getStringExtra("Bath");
-        String intentBathArt = data.getStringExtra("BathArt");
-        String intentGarage = data.getStringExtra("Garage");
-        String intentCarpot = data.getStringExtra("Carpot");
-        String intentHadap = data.getStringExtra("Hadap");
-        String intentSHM = data.getStringExtra("SHM");
-        String intentHGB = data.getStringExtra("HGB");
-        String intentHSHP = data.getStringExtra("HSHP");
-        String intentPPJB = data.getStringExtra("PPJB");
-        String intentStratatitle = data.getStringExtra("Stratatitle");
-        String intentAJB = data.getStringExtra("AJB");
-        String intentPetokD = data.getStringExtra("PetokD");
-        String intentPjp = data.getStringExtra("Pjp");
-        String intentImgSHM = data.getStringExtra("ImgSHM");
-        String intentImgHGB = data.getStringExtra("ImgHGB");
-        String intentImgHSHP = data.getStringExtra("ImgHSHP");
-        String intentImgPPJB = data.getStringExtra("ImgPPJB");
-        String intentImgStratatitle = data.getStringExtra("ImgStratatitle");
-        String intentImgAJB = data.getStringExtra("ImgAJB");
-        String intentImgPetokD = data.getStringExtra("ImgPetokD");
-        String intentImgPjp = data.getStringExtra("ImgPjp");
-        String intentImgPjp1 = data.getStringExtra("ImgPjp1");
-        String intentNoCertificate = data.getStringExtra("NoCertificate");
-        String intentPbb = data.getStringExtra("Pbb");
-        String intentJenisProperti = data.getStringExtra("JenisProperti");
-        String intentJenisCertificate = data.getStringExtra("JenisCertificate");
-        String intentSumberAir = data.getStringExtra("SumberAir");
-        String intentKondisi = data.getStringExtra("Kondisi");
-        String intentDeskripsi = data.getStringExtra("Deskripsi");
-        String intentPrabot = data.getStringExtra("Prabot");
-        String intentKetPrabot = data.getStringExtra("KetPrabot");
-        String intentPriority = data.getStringExtra("Priority");
-        String intentTtd = data.getStringExtra("Ttd");
-        String intentBanner = data.getStringExtra("Banner");
-        String intentSize = data.getStringExtra("Size");
-        String intentHarga = data.getStringExtra("Harga");
-        String intentHargaSewa = data.getStringExtra("HargaSewa");
-        String intentTglInput = data.getStringExtra("TglInput");
-        String intentImg1 = data.getStringExtra("Img1");
-        String intentImg2 = data.getStringExtra("Img2");
-        String intentImg3 = data.getStringExtra("Img3");
-        String intentImg4 = data.getStringExtra("Img4");
-        String intentImg5 = data.getStringExtra("Img5");
-        String intentImg6 = data.getStringExtra("Img6");
-        String intentImg7 = data.getStringExtra("Img7");
-        String intentImg8 = data.getStringExtra("Img8");
-        String intentVideo = data.getStringExtra("Video");
-        String intentLinkFacebook = data.getStringExtra("LinkFacebook");
-        String intentLinkTiktok = data.getStringExtra("LinkTiktok");
-        String intentLinkInstagram = data.getStringExtra("LinkInstagram");
-        String intentLinkYoutube = data.getStringExtra("LinkYoutube");
-        String intentIsAdmin = data.getStringExtra("IsAdmin");
-        String intentIsManager = data.getStringExtra("IsManager");
-        String intentIsRejected = data.getStringExtra("IsRejected");
-        String intentSold = data.getStringExtra("Sold");
-        String intentRented = data.getStringExtra("Rented");
-        String intentView = data.getStringExtra("View");
-        String intentMarketable = data.getStringExtra("Marketable");
-        String intentStatusHarga = data.getStringExtra("StatusHarga");
-        String intentNama = data.getStringExtra("Nama");
-        String intentNoTelp = data.getStringExtra("NoTelp");
-        String intentInstagram = data.getStringExtra("Instagram");
-        String intentFee = data.getStringExtra("Fee");
-        String intentNamaVendor = data.getStringExtra("NamaVendor");
-        String intentNoTelpVendor = data.getStringExtra("NoTelpVendor");
-        String intentIsSelfie = data.getStringExtra("IsSelfie");
-        String intentIsLokasi = data.getStringExtra("IsLokasi");
-        String intentKeterangan = data.getStringExtra("Keterangan");
-
-        StringIdAgen = intentIdAgen;
-        isimage1 = intentImg1;
-        idnull = "0";
 
         if (intentPriority.equals("open")){
             open.setChecked(true);
@@ -1583,7 +1561,7 @@ public class EditPraListingAgenActivity extends AppCompatActivity {
                                     });
                             uploadTasks.add(taskSelfie);
                         } else {
-                            ImgSelfie = "0";
+                            ImgSelfie = intentSelfie;
                         }
 
                         Tasks.whenAllSuccess(uploadTasks)
@@ -2694,7 +2672,6 @@ public class EditPraListingAgenActivity extends AppCompatActivity {
 
                 customDialog.show();
             }
-
             return;
         } else if (requestCode == CODE_GALLERY_REQUEST3) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -2730,7 +2707,6 @@ public class EditPraListingAgenActivity extends AppCompatActivity {
 
                 customDialog.show();
             }
-
             return;
         } else if (requestCode == CODE_GALLERY_REQUEST4) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -2766,7 +2742,6 @@ public class EditPraListingAgenActivity extends AppCompatActivity {
 
                 customDialog.show();
             }
-
             return;
         } else if (requestCode == CODE_GALLERY_REQUEST5) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -2802,7 +2777,6 @@ public class EditPraListingAgenActivity extends AppCompatActivity {
 
                 customDialog.show();
             }
-
             return;
         } else if (requestCode == CODE_GALLERY_REQUEST6) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -2838,7 +2812,6 @@ public class EditPraListingAgenActivity extends AppCompatActivity {
 
                 customDialog.show();
             }
-
             return;
         } else if (requestCode == CODE_GALLERY_REQUEST7) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -2874,7 +2847,6 @@ public class EditPraListingAgenActivity extends AppCompatActivity {
 
                 customDialog.show();
             }
-
             return;
         } else if (requestCode == CODE_GALLERY_REQUEST8) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -2910,7 +2882,6 @@ public class EditPraListingAgenActivity extends AppCompatActivity {
 
                 customDialog.show();
             }
-
             return;
         } else if (requestCode == CODE_GALLERY_REQUEST_SHM) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -2946,7 +2917,6 @@ public class EditPraListingAgenActivity extends AppCompatActivity {
 
                 customDialog.show();
             }
-
             return;
         } else if (requestCode == CODE_GALLERY_REQUEST_HGB) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -2982,7 +2952,6 @@ public class EditPraListingAgenActivity extends AppCompatActivity {
 
                 customDialog.show();
             }
-
             return;
         } else if (requestCode == CODE_GALLERY_REQUEST_HSHP) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -3018,7 +2987,6 @@ public class EditPraListingAgenActivity extends AppCompatActivity {
 
                 customDialog.show();
             }
-
             return;
         } else if (requestCode == CODE_GALLERY_REQUEST_PPJB) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -3054,7 +3022,6 @@ public class EditPraListingAgenActivity extends AppCompatActivity {
 
                 customDialog.show();
             }
-
             return;
         } else if (requestCode == CODE_GALLERY_REQUEST_STRA) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -3090,7 +3057,6 @@ public class EditPraListingAgenActivity extends AppCompatActivity {
 
                 customDialog.show();
             }
-
             return;
         }  else if (requestCode == CODE_GALLERY_REQUEST_AJB) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -3126,7 +3092,6 @@ public class EditPraListingAgenActivity extends AppCompatActivity {
 
                 customDialog.show();
             }
-
             return;
         }  else if (requestCode == CODE_GALLERY_REQUEST_PetokD) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -3162,7 +3127,6 @@ public class EditPraListingAgenActivity extends AppCompatActivity {
 
                 customDialog.show();
             }
-
             return;
         } else if (requestCode == CODE_GALLERY_REQUEST_PJP) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -3198,7 +3162,6 @@ public class EditPraListingAgenActivity extends AppCompatActivity {
 
                 customDialog.show();
             }
-
             return;
         } else if (requestCode == CODE_GALLERY_REQUEST_PJP1) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -3234,7 +3197,6 @@ public class EditPraListingAgenActivity extends AppCompatActivity {
 
                 customDialog.show();
             }
-
             return;
         } else if (requestCode == CODE_GALLERY_REQUEST_Selfie) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -3283,7 +3245,6 @@ public class EditPraListingAgenActivity extends AppCompatActivity {
                 AlertDialog alert = builder.create();
                 alert.show();
             }
-
             return;
         } else if (requestCode == CODE_CAMERA_REQUEST2) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -3297,7 +3258,6 @@ public class EditPraListingAgenActivity extends AppCompatActivity {
                 AlertDialog alert = builder.create();
                 alert.show();
             }
-
             return;
         } else if (requestCode == CODE_CAMERA_REQUEST3) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -3311,7 +3271,6 @@ public class EditPraListingAgenActivity extends AppCompatActivity {
                 AlertDialog alert = builder.create();
                 alert.show();
             }
-
             return;
         } else if (requestCode == CODE_CAMERA_REQUEST4) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -3325,7 +3284,6 @@ public class EditPraListingAgenActivity extends AppCompatActivity {
                 AlertDialog alert = builder.create();
                 alert.show();
             }
-
             return;
         } else if (requestCode == CODE_CAMERA_REQUEST5) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -3339,7 +3297,6 @@ public class EditPraListingAgenActivity extends AppCompatActivity {
                 AlertDialog alert = builder.create();
                 alert.show();
             }
-
             return;
         } else if (requestCode == CODE_CAMERA_REQUEST6) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -3353,7 +3310,6 @@ public class EditPraListingAgenActivity extends AppCompatActivity {
                 AlertDialog alert = builder.create();
                 alert.show();
             }
-
             return;
         } else if (requestCode == CODE_CAMERA_REQUEST7) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -3367,7 +3323,6 @@ public class EditPraListingAgenActivity extends AppCompatActivity {
                 AlertDialog alert = builder.create();
                 alert.show();
             }
-
             return;
         } else if (requestCode == CODE_CAMERA_REQUEST8) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -3381,7 +3336,6 @@ public class EditPraListingAgenActivity extends AppCompatActivity {
                 AlertDialog alert = builder.create();
                 alert.show();
             }
-
             return;
         } else if (requestCode == CODE_CAMERA_REQUEST_SHM) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -3395,7 +3349,6 @@ public class EditPraListingAgenActivity extends AppCompatActivity {
                 AlertDialog alert = builder.create();
                 alert.show();
             }
-
             return;
         } else if (requestCode == CODE_CAMERA_REQUEST_HGB) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -3409,7 +3362,6 @@ public class EditPraListingAgenActivity extends AppCompatActivity {
                 AlertDialog alert = builder.create();
                 alert.show();
             }
-
             return;
         } else if (requestCode == CODE_CAMERA_REQUEST_HSHP) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -3423,7 +3375,6 @@ public class EditPraListingAgenActivity extends AppCompatActivity {
                 AlertDialog alert = builder.create();
                 alert.show();
             }
-
             return;
         } else if (requestCode == CODE_CAMERA_REQUEST_PPJB) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -3437,7 +3388,6 @@ public class EditPraListingAgenActivity extends AppCompatActivity {
                 AlertDialog alert = builder.create();
                 alert.show();
             }
-
             return;
         } else if (requestCode == CODE_CAMERA_REQUEST_STRA) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -3451,7 +3401,6 @@ public class EditPraListingAgenActivity extends AppCompatActivity {
                 AlertDialog alert = builder.create();
                 alert.show();
             }
-
             return;
         }  else if (requestCode == CODE_CAMERA_REQUEST_AJB) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -3465,7 +3414,6 @@ public class EditPraListingAgenActivity extends AppCompatActivity {
                 AlertDialog alert = builder.create();
                 alert.show();
             }
-
             return;
         }  else if (requestCode == CODE_CAMERA_REQUEST_PetokD) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -3479,7 +3427,6 @@ public class EditPraListingAgenActivity extends AppCompatActivity {
                 AlertDialog alert = builder.create();
                 alert.show();
             }
-
             return;
         } else if (requestCode == CODE_CAMERA_REQUEST_PJP) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -3493,7 +3440,6 @@ public class EditPraListingAgenActivity extends AppCompatActivity {
                 AlertDialog alert = builder.create();
                 alert.show();
             }
-
             return;
         } else if (requestCode == CODE_CAMERA_REQUEST_PJP1) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -3507,7 +3453,6 @@ public class EditPraListingAgenActivity extends AppCompatActivity {
                 AlertDialog alert = builder.create();
                 alert.show();
             }
-
             return;
         } else if (requestCode == CODE_CAMERA_REQUEST_Selfie) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -5111,7 +5056,7 @@ public class EditPraListingAgenActivity extends AppCompatActivity {
                 map.put("Alamat", Etalamatproperti.getText().toString());
                 map.put("Latitude", Lat);
                 map.put("Longitude", Lng);
-                map.put("Location", Etalamatproperti.getText().toString());
+                map.put("Location", addressStr);
                 map.put("Wide", Etluas.getText().toString());
                 map.put("Land", Etland.getText().toString());
                 map.put("Dimensi", Etdimensi.getText().toString());

@@ -17,6 +17,7 @@ public class ImageViewActivity extends AppCompatActivity {
     ImageView IVBack;
     ArrayList<String> images = new ArrayList<>();
     private ViewPager viewPager;
+    private ImageViewAdapter imageViewAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,14 +32,23 @@ public class ImageViewActivity extends AppCompatActivity {
         Intent intent = getIntent();
         images = intent.getStringArrayListExtra("imageResources");
 
-        ImageViewAdapter newPagerAdapter = new ImageViewAdapter(this, images);
-        viewPager.setAdapter(newPagerAdapter);
+        imageViewAdapter = new ImageViewAdapter(this, images);
+        viewPager.setAdapter(imageViewAdapter);
 
         viewPager.setCurrentItem(0);
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
         }
-
+    }
+    @Override
+    public void onBackPressed() {
+        // Hentikan pemutaran video jika sedang berlangsung
+        if (imageViewAdapter != null && imageViewAdapter.getCurrentExoPlayer() != null && imageViewAdapter.getCurrentExoPlayer().isPlaying()) {
+            imageViewAdapter.getCurrentExoPlayer().stop();
+            super.onBackPressed();
+        } else {
+            super.onBackPressed();
+        }
     }
 }

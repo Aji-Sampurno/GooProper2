@@ -30,6 +30,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_weight="3"
+            android:visibility="invisible"
             android:src="@drawable/ic_arrow"
             android:rotation="270"
             app:tint="@color/second" />

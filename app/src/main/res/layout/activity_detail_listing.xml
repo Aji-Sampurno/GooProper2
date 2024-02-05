@@ -321,6 +321,27 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
+                <Button
+                    android:id="@+id/BtnLihatTemplate"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:text="Template lengkap"/>
+
+                <Button
+                    android:id="@+id/BtnLihatTemplateKosong"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:text="template tanpa foto"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
                 <TextView
                     android:id="@+id/TVPoinListing"
                     android:layout_width="match_parent"
@@ -741,6 +762,29 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text=": Dimensi"
+                        android:textColor="@color/white" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:weightSum="2">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Hadap"
+                        android:textColor="@color/white" />
+
+                    <TextView
+                        android:id="@+id/TVHadapDetailListing"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text=": Hadap"
                         android:textColor="@color/white" />
 
                 </LinearLayout>
@@ -1327,6 +1371,18 @@
                 android:layout_marginRight="5dp"
                 android:layout_marginBottom="10dp"
                 android:text="Tambah Lokasi Maps"
+                android:textColor="@color/black"
+                android:visibility="gone" />
+
+            <Button
+                android:id="@+id/BtnAddSelfieDetailListing"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginBottom="10dp"
+                android:text="Tambah Selfie"
                 android:textColor="@color/black"
                 android:visibility="gone" />
 

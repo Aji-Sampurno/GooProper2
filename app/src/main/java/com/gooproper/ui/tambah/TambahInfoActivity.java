@@ -69,7 +69,6 @@ import java.util.Locale;
 import java.util.Map;
 
 public class TambahInfoActivity extends AppCompatActivity {
-
     private ProgressDialog pDialog;
     final int CODE_GALLERY_REQUEST1 = 1;
     final int CODE_GALLERY_REQUEST2 = 2;
@@ -94,7 +93,6 @@ public class TambahInfoActivity extends AppCompatActivity {
     String IdAgen, IdNull, IdInput;
     String ImageSelfie, ImageProperty, IsSpek, StrHJual, StrHSewa, StrHargaJual, StrHargaSewa;
     String Lat, Lng, token,StringLatitude, StringLongitude, StringAlamat, StringLokasi;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -228,7 +226,7 @@ public class TambahInfoActivity extends AppCompatActivity {
         Batal.setOnClickListener(view -> finish());
         IVDeleteSelfie.setOnClickListener(view -> ClearSelfie());
         IVDeleteProperty.setOnClickListener(view -> ClearProperty());
-        BtnSelfie.setOnClickListener(view -> showPhotoSelfie());
+        BtnSelfie.setOnClickListener(view -> requestPermissionsSelfie());
         BtnProperty.setOnClickListener(view -> showPhotoProperty());
         ETStatusProperty.setOnClickListener(view -> ShowStatus(view));
         ETJenisProperty.setOnClickListener(view -> ShowJenisProperti(view));
@@ -564,7 +562,7 @@ public class TambahInfoActivity extends AppCompatActivity {
                                 Button cobalagi = customDialog.findViewById(R.id.btntidak);
                                 ImageView gifimage = customDialog.findViewById(R.id.ivdialog);
 
-                                dialogTitle.setText("Berhasil Menambahkan Listingan");
+                                dialogTitle.setText("Berhasil Menambahkan Info Property");
                                 cobalagi.setVisibility(View.GONE);
 
                                 ok.setOnClickListener(new View.OnClickListener() {
@@ -618,7 +616,7 @@ public class TambahInfoActivity extends AppCompatActivity {
                                 Button cobalagi = customDialog.findViewById(R.id.btntidak);
                                 ImageView gifimage = customDialog.findViewById(R.id.ivdialog);
 
-                                dialogTitle.setText("Gagal Menambahkan Listingan");
+                                dialogTitle.setText("Gagal Menambahkan Info Property");
                                 ok.setVisibility(View.GONE);
 
                                 cobalagi.setOnClickListener(new View.OnClickListener() {
@@ -705,7 +703,7 @@ public class TambahInfoActivity extends AppCompatActivity {
                 }
 
                 String tanah = ETLTanah.getText().toString() + " " + ETSLTanah.getText().toString();
-                String bangunan = ETSLBangunan.getText().toString() + " " + ETSLBangunan.getText().toString();
+                String bangunan = ETLBangunan.getText().toString() + " " + ETSLBangunan.getText().toString();
 
                 map.put("IdAgen", IdInput);
                 map.put("JenisProperty", ETJenisProperty.getText().toString());
@@ -968,37 +966,6 @@ public class TambahInfoActivity extends AppCompatActivity {
             IsSpek = "0";
         } else {
             IsSpek = "1";
-        }
-        if (UriSelfie == null) {
-            Dialog customDialog = new Dialog(TambahInfoActivity.this);
-            customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-            customDialog.setContentView(R.layout.custom_dialog_eror_input);
-
-            if (customDialog.getWindow() != null) {
-                customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-            }
-
-            Button ok = customDialog.findViewById(R.id.BtnOkErorInput);
-            TextView tv = customDialog.findViewById(R.id.TVDialogErorInput);
-
-            tv.setText("Harap Foto Selfie");
-
-            ok.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    customDialog.dismiss();
-                }
-            });
-
-            ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
-
-            Glide.with(TambahInfoActivity.this)
-                    .load(R.drawable.alert) // You can also use a local resource like R.drawable.your_gif_resource
-                    .transition(DrawableTransitionOptions.withCrossFade())
-                    .into(gifImageView);
-
-            customDialog.show();
-            return false;
         }
         if (UriProperty == null) {
             Dialog customDialog = new Dialog(TambahInfoActivity.this);

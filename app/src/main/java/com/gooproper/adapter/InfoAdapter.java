@@ -138,6 +138,30 @@ public class InfoAdapter extends RecyclerView.Adapter<InfoAdapter.HolderData> {
         return Long.parseLong(priceString.replaceAll(",", "").trim());
     }
 
+    public void sortAscending() {
+        Collections.sort(models, new Comparator<InfoModel>() {
+            @Override
+            public int compare(InfoModel item1, InfoModel item2) {
+                long price1 = parsePrice(item1.getHarga());
+                long price2 = parsePrice(item2.getHarga());
+                return Long.compare(price1, price2);
+            }
+        });
+        notifyDataSetChanged();
+    }
+
+    public void sortDescending() {
+        Collections.sort(models, new Comparator<InfoModel>() {
+            @Override
+            public int compare(InfoModel item1, InfoModel item2) {
+                long price1 = parsePrice(item1.getHarga());
+                long price2 = parsePrice(item2.getHarga());
+                return Long.compare(price2, price1);
+            }
+        });
+        notifyDataSetChanged();
+    }
+
     @NonNull
     @Override
     public InfoAdapter.HolderData onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {

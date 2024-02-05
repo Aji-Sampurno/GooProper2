@@ -205,17 +205,11 @@ public class HomeAdminFragment extends Fragment implements OnMapReadyCallback {
                     }
                 } else {
                     if (currentPosition > 0) {
-                        // Gulir ke posisi sebelumnya
                         smoothScrollToPosition(currentPosition - 1);
                     } else {
                         isForward = true;
                     }
                 }
-//                if (currentPosition < lastPosition) {
-//                    smoothScrollToPosition(currentPosition + 1);
-//                } else if (currentPosition == lastPosition && currentPosition > 0) {
-//                    smoothScrollToPosition(currentPosition - 1);
-//                }
             }
         }, 0, 3000);
 

@@ -96,9 +96,8 @@ public class EditMapsListingActivity extends AppCompatActivity {
         IVselfie = findViewById(R.id.ivselfie);
         batal = findViewById(R.id.btnbatal);
         submit = findViewById(R.id.btnsubmit);
-        LytSelfie = findViewById(R.id.LytSelfie);
 
-        selfiebtn.setOnClickListener(view -> showPhotoSelfie());
+        selfiebtn.setOnClickListener(view -> requestPermissionsSelfie());
         maps.setOnClickListener(view -> startMapsActivityForResult());
         back.setOnClickListener(view -> finish());
         batal.setOnClickListener(view -> finish());
@@ -106,6 +105,7 @@ public class EditMapsListingActivity extends AppCompatActivity {
         Intent data = getIntent();
         final int update = data.getIntExtra("update", 0);
         String intentIdPraListing = data.getStringExtra("IdPraListing");
+        String intentSelfie = data.getStringExtra("Selfie");
 
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
         String selfie = "Selfie_" + timeStamp + ".jpg";
@@ -114,7 +114,7 @@ public class EditMapsListingActivity extends AppCompatActivity {
 
         submit.setOnClickListener(view -> {
             if (Validate()) {
-                if (bselfie == null) {
+                if (bselfie == null && intentSelfie.equals("0")) {
                     Dialog customDialog = new Dialog(EditMapsListingActivity.this);
                     customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                     customDialog.setContentView(R.layout.custom_dialog_eror_input);
@@ -198,7 +198,7 @@ public class EditMapsListingActivity extends AppCompatActivity {
                                     });
                             uploadTasks.add(task1);
                         } else {
-                            Selfie = "0";
+                            Selfie = intentSelfie;
                         }
                         Tasks.whenAllSuccess(uploadTasks)
                                 .addOnSuccessListener(results -> {
@@ -503,7 +503,7 @@ public class EditMapsListingActivity extends AppCompatActivity {
                 map.put("IdListing", StrIdPraListing);
                 map.put("Latitude", latitudeStr);
                 map.put("Longitude", longitudeStr);
-                map.put("Location", lokasiStr);
+                map.put("Location", addressStr);
                 map.put("Selfie", Selfie);
                 return map;
             }
@@ -518,38 +518,6 @@ public class EditMapsListingActivity extends AppCompatActivity {
             latitude.requestFocus();
             return false;
         }
-        if (bselfie == null) {
-            Dialog customDialog = new Dialog(EditMapsListingActivity.this);
-            customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-            customDialog.setContentView(R.layout.custom_dialog_eror_input);
-
-            if (customDialog.getWindow() != null) {
-                customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-            }
-
-            Button ok = customDialog.findViewById(R.id.BtnOkErorInput);
-            TextView tv = customDialog.findViewById(R.id.TVDialogErorInput);
-
-            tv.setText("Harap Tambahkan Selfie");
-
-            ok.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    customDialog.dismiss();
-                }
-            });
-
-            ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
-
-            Glide.with(EditMapsListingActivity.this)
-                    .load(R.drawable.alert) // You can also use a local resource like R.drawable.your_gif_resource
-                    .transition(DrawableTransitionOptions.withCrossFade())
-                    .into(gifImageView);
-
-            customDialog.show();
-            return false;
-        }
-
         return true;
     }
     private class SendMessageTask extends AsyncTask<String, Void, String> {

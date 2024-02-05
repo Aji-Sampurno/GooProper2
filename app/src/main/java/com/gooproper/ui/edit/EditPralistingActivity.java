@@ -8,6 +8,7 @@ import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
@@ -67,16 +68,16 @@ import java.util.Map;
 public class EditPralistingActivity extends AppCompatActivity {
 
     private static final int MAPS_ACTIVITY_REQUEST_CODE = 1;
-    final int CODE_GALLERY_REQUEST_Selfie = 2;
-    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE_SELFIE = 3;
-    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES_SELFIE = 4;
-    private static final int CODE_CAMERA_REQUEST = 5;
-    final int KODE_REQUEST_KAMERA = 6;
+    final int CODE_GALLERY_REQUEST_Selfie = 46;
+    final int CODE_CAMERA_REQUEST_Selfie = 47;
+    final int KODE_REQUEST_KAMERA_Selfie = 48;
+    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE_SELFIE = 92;
+    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES_SELFIE = 93;
     private ProgressDialog pDialog;
     Button batal, submit, selfiebtn, maps;
     ImageView back, IVselfie;
     TextInputEditText longitude, latitude;
-    Uri bselfie;
+    Uri bselfie, UriSelfie;
     String latitudeStr, longitudeStr, addressStr,lokasiStr, Selfie, StrIdPraListing;
 
     @Override
@@ -95,23 +96,23 @@ public class EditPralistingActivity extends AppCompatActivity {
         batal = findViewById(R.id.btnbatal);
         submit = findViewById(R.id.btnsubmit);
 
-        selfiebtn.setOnClickListener(view -> showPhotoSelfie());
+        selfiebtn.setOnClickListener(view -> requestPermissionsSelfie());
         maps.setOnClickListener(view -> startMapsActivityForResult());
         back.setOnClickListener(view -> finish());
         batal.setOnClickListener(view -> finish());
 
         Intent data = getIntent();
         String intentIdPraListing = data.getStringExtra("IdPraListing");
+        String intentSelfie = data.getStringExtra("Selfie");
 
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
         String selfie = "Selfie_" + timeStamp + ".jpg";
 
         StrIdPraListing = intentIdPraListing;
 
-        latitude.setText(intentIdPraListing);
         submit.setOnClickListener(view -> {
             if (Validate()) {
-                if (bselfie == null) {
+                if (UriSelfie == null && intentSelfie.equals("0")) {
                     Dialog customDialog = new Dialog(EditPralistingActivity.this);
                     customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                     customDialog.setContentView(R.layout.custom_dialog_eror_input);
@@ -135,7 +136,7 @@ public class EditPralistingActivity extends AppCompatActivity {
                     ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
 
                     Glide.with(EditPralistingActivity.this)
-                            .load(R.drawable.alert) // You can also use a local resource like R.drawable.your_gif_resource
+                            .load(R.drawable.alert)
                             .transition(DrawableTransitionOptions.withCrossFade())
                             .into(gifImageView);
 
@@ -165,7 +166,7 @@ public class EditPralistingActivity extends AppCompatActivity {
                         ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
 
                         Glide.with(EditPralistingActivity.this)
-                                .load(R.drawable.alert) // You can also use a local resource like R.drawable.your_gif_resource
+                                .load(R.drawable.alert)
                                 .transition(DrawableTransitionOptions.withCrossFade())
                                 .into(gifImageView);
 
@@ -180,8 +181,8 @@ public class EditPralistingActivity extends AppCompatActivity {
 
                         List<StorageTask<UploadTask.TaskSnapshot>> uploadTasks = new ArrayList<>();
 
-                        if ( bselfie != null) {
-                            StorageTask<UploadTask.TaskSnapshot> task1 = ImgSelfie.putFile(bselfie)
+                        if ( UriSelfie != null) {
+                            StorageTask<UploadTask.TaskSnapshot> task1 = ImgSelfie.putFile(UriSelfie)
                                     .addOnSuccessListener(taskSnapshot -> {
                                         ImgSelfie.getDownloadUrl()
                                                 .addOnSuccessListener(uri -> {
@@ -195,7 +196,7 @@ public class EditPralistingActivity extends AppCompatActivity {
                                     });
                             uploadTasks.add(task1);
                         } else {
-                            Selfie = "0";
+                            Selfie = intentSelfie;
                         }
                         Tasks.whenAllSuccess(uploadTasks)
                                 .addOnSuccessListener(results -> {
@@ -253,7 +254,7 @@ public class EditPralistingActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int which) {
                         switch (which) {
                             case 0:
-                                ActivityCompat.requestPermissions(EditPralistingActivity.this, new String[]{Manifest.permission.CAMERA}, CODE_CAMERA_REQUEST);
+                                ActivityCompat.requestPermissions(EditPralistingActivity.this, new String[]{Manifest.permission.CAMERA}, CODE_CAMERA_REQUEST_Selfie);
                                 break;
                             case 1:
                                 requestPermissionsSelfie();
@@ -278,9 +279,9 @@ public class EditPralistingActivity extends AppCompatActivity {
         if (intentKamera.resolveActivity(getPackageManager()) != null) {
             File photoFile = createImageFile();
             if (photoFile != null) {
-                bselfie = FileProvider.getUriForFile(this, "com.gooproper", photoFile);
-                intentKamera.putExtra(MediaStore.EXTRA_OUTPUT, bselfie);
-                startActivityForResult(intentKamera, KODE_REQUEST_KAMERA);
+                UriSelfie = FileProvider.getUriForFile(this, "com.gooproper", photoFile);
+                intentKamera.putExtra(MediaStore.EXTRA_OUTPUT, UriSelfie);
+                startActivityForResult(intentKamera, KODE_REQUEST_KAMERA_Selfie);
             }
         }
     }
@@ -304,11 +305,58 @@ public class EditPralistingActivity extends AppCompatActivity {
                 Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 startActivityForResult(intent, CODE_GALLERY_REQUEST_Selfie);
             }
-        } else if (requestCode == CODE_CAMERA_REQUEST) {
+        } else if (requestCode == PERMISSION_REQUEST_CODE_MEDIA_IMAGES_SELFIE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(intent, CODE_GALLERY_REQUEST_Selfie);
+            }
+        } else if (requestCode == CODE_GALLERY_REQUEST_Selfie) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(intent, CODE_GALLERY_REQUEST_Selfie);
+            } else {
+                Dialog customDialog = new Dialog(EditPralistingActivity.this);
+                customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                customDialog.setContentView(R.layout.custom_dialog_eror_input);
+
+                if (customDialog.getWindow() != null) {
+                    customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                }
+
+                Button ok = customDialog.findViewById(R.id.BtnOkErorInput);
+                TextView tv = customDialog.findViewById(R.id.TVDialogErorInput);
+
+                tv.setText("Akses Galeri Ditolak");
+
+                ok.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        customDialog.dismiss();
+                    }
+                });
+
+                ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
+
+                Glide.with(EditPralistingActivity.this)
+                        .load(R.drawable.alert) // You can also use a local resource like R.drawable.your_gif_resource
+                        .transition(DrawableTransitionOptions.withCrossFade())
+                        .into(gifImageView);
+
+                customDialog.show();
+            }
+            return;
+        } else if (requestCode == CODE_CAMERA_REQUEST_Selfie) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 bukaKamera();
+            } else {
+                AlertDialog.Builder builder = new AlertDialog.Builder(EditPralistingActivity.this);
+                builder.setTitle("Izin Kamera Ditolak").
+                        setMessage("Aplikasi memerlukan izin kamera untuk mengambil gambar.");
+                builder.setPositiveButton("OK",
+                        (dialog, id) -> dialog.cancel());
+                AlertDialog alert = builder.create();
+                alert.show();
             }
-
             return;
         }
 
@@ -326,17 +374,17 @@ public class EditPralistingActivity extends AppCompatActivity {
                 lokasiStr = data.getStringExtra("lokasi");
                 latitude.setText(addressStr);
             }
+        }
 
-            if (requestCode == KODE_REQUEST_KAMERA && resultCode == RESULT_OK) {
-                selfiebtn.setVisibility(View.GONE);
-                IVselfie.setVisibility(View.VISIBLE);
-                IVselfie.setImageURI(bselfie);
-            } else if (requestCode == CODE_GALLERY_REQUEST_Selfie && resultCode == RESULT_OK && data != null) {
-                bselfie = data.getData();
-                selfiebtn.setVisibility(View.GONE);
-                IVselfie.setVisibility(View.VISIBLE);
-                IVselfie.setImageURI(bselfie);
-            }
+        if (requestCode == KODE_REQUEST_KAMERA_Selfie && resultCode == RESULT_OK) {
+            IVselfie.setImageURI(UriSelfie);
+            IVselfie.setVisibility(View.VISIBLE);
+            selfiebtn.setVisibility(View.GONE);
+        } else if (requestCode == CODE_GALLERY_REQUEST_Selfie && resultCode == RESULT_OK && data != null) {
+            UriSelfie = data.getData();
+            IVselfie.setImageURI(UriSelfie);
+            IVselfie.setVisibility(View.VISIBLE);
+            selfiebtn.setVisibility(View.GONE);
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
@@ -465,38 +513,6 @@ public class EditPralistingActivity extends AppCompatActivity {
             latitude.requestFocus();
             return false;
         }
-        if (bselfie == null) {
-            Dialog customDialog = new Dialog(EditPralistingActivity.this);
-            customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-            customDialog.setContentView(R.layout.custom_dialog_eror_input);
-
-            if (customDialog.getWindow() != null) {
-                customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-            }
-
-            Button ok = customDialog.findViewById(R.id.BtnOkErorInput);
-            TextView tv = customDialog.findViewById(R.id.TVDialogErorInput);
-
-            tv.setText("Harap Tambahkan Selfie");
-
-            ok.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    customDialog.dismiss();
-                }
-            });
-
-            ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
-
-            Glide.with(EditPralistingActivity.this)
-                    .load(R.drawable.alert) // You can also use a local resource like R.drawable.your_gif_resource
-                    .transition(DrawableTransitionOptions.withCrossFade())
-                    .into(gifImageView);
-
-            customDialog.show();
-            return false;
-        }
-
         return true;
     }
     private class SendMessageTask extends AsyncTask<String, Void, String> {

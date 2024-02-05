@@ -91,7 +91,7 @@ public class TambahDetailInfoSementaraActivity extends AppCompatActivity {
     ImageView Back, IVSelfie, IVProperty;
     Button Batal, Submit, BtnSelfie, BtnProperty, BtnMap;
     ImageView IVDeleteSelfie, IVDeleteProperty;
-    String IdAgen, IdNull, IdInput;
+    String IdAgen, IdNull, IdInput, IdShareLokasi;
     String ImageSelfie, ImageProperty, IsSpek, StrHJual, StrHSewa, StrHargaJual, StrHargaSewa, IsSelfie;
     String Lat, Lng, token,StringLatitude, StringLongitude, StringAlamat, StringLokasi;
 
@@ -144,6 +144,7 @@ public class TambahDetailInfoSementaraActivity extends AppCompatActivity {
         IdAgen = Preferences.getKeyIdAgen(TambahDetailInfoSementaraActivity.this);
         IdNull = "0";
         IsSelfie = intentSelfie;
+        IdShareLokasi = intentIdShareLokasi;
 
         if (!intentLatitude.equals("") && !intentLongitude.equals("")) {
             StringLatitude = intentLatitude;
@@ -255,7 +256,7 @@ public class TambahDetailInfoSementaraActivity extends AppCompatActivity {
         Batal.setOnClickListener(view -> finish());
         IVDeleteSelfie.setOnClickListener(view -> ClearSelfie());
         IVDeleteProperty.setOnClickListener(view -> ClearProperty());
-        BtnSelfie.setOnClickListener(view -> showPhotoSelfie());
+        BtnSelfie.setOnClickListener(view -> requestPermissionsSelfie());
         BtnProperty.setOnClickListener(view -> showPhotoProperty());
         ETStatusProperty.setOnClickListener(view -> ShowStatus(view));
         ETJenisProperty.setOnClickListener(view -> ShowJenisProperti(view));
@@ -567,7 +568,7 @@ public class TambahDetailInfoSementaraActivity extends AppCompatActivity {
 
         RequestQueue requestQueue = Volley.newRequestQueue(this);
 
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, ServerApi.URL_TAMBAH_INFO,
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, ServerApi.URL_TAMBAH_DETAIL_INFO,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -730,8 +731,9 @@ public class TambahDetailInfoSementaraActivity extends AppCompatActivity {
                 }
 
                 String tanah = ETLTanah.getText().toString() + " " + ETSLTanah.getText().toString();
-                String bangunan = ETSLBangunan.getText().toString() + " " + ETSLBangunan.getText().toString();
+                String bangunan = ETLBangunan.getText().toString() + " " + ETSLBangunan.getText().toString();
 
+                map.put("IdShareLokasi", IdShareLokasi);
                 map.put("IdAgen", IdInput);
                 map.put("JenisProperty", ETJenisProperty.getText().toString());
                 map.put("StatusProperty", ETStatusProperty.getText().toString());

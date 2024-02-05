@@ -167,9 +167,10 @@ public class LocationActivity extends AppCompatActivity implements OnMapReadyCal
                     String state = address.getAdminArea();
                     String country = address.getCountryName();
                     String postalCode = address.getPostalCode();
+                    String streetName = address.getThoroughfare();
 
                     // Create a formatted complete address
-                    String completeAddress = addressLine + ", " + city + ", " + state + ", " + country + ", " + postalCode;
+                    String completeAddress = addressLine + ", " + city + ", " + state;
 
                     Intent intent = new Intent();
                     intent.putExtra("latitude", latitudeStr);
@@ -210,7 +211,7 @@ public class LocationActivity extends AppCompatActivity implements OnMapReadyCal
                     String country = address.getCountryName();
                     String postalCode = address.getPostalCode();
 
-                    String completeAddress = addressLine + ", " + city + ", " + state + ", " + country + ", " + postalCode;
+                    String completeAddress = addressLine + ", " + city + ", " + state;
 
                     builder.setMessage(completeAddress);
 

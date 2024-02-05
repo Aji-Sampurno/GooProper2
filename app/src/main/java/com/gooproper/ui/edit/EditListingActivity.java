@@ -478,6 +478,9 @@ public class EditListingActivity extends AppCompatActivity {
         if (intentAlamat != null && !intentAlamat.isEmpty()) {
             alamatproperti.setText(intentAlamat);
         }
+        if (intentLocation != null && !intentLocation.isEmpty()) {
+            addressStr = intentLocation;
+        }
         if (intentLatitude != null && !intentLatitude.isEmpty()) {
             latitudeStr = intentLatitude;
         }
@@ -896,12 +899,12 @@ public class EditListingActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable editable) {
                 if (editable.toString().equalsIgnoreCase("Ya")) {
-                    if (intentImgPjp == null) {
+                    if (intentImgPjp.equals("0")) {
                         BtnPjp.setVisibility(View.VISIBLE);
                     } else {
                         BtnPjp.setVisibility(View.GONE);
                     }
-                    if (intentImgPjp1 == null) {
+                    if (intentImgPjp1.equals("0")) {
                         BtnPjp1.setVisibility(View.VISIBLE);
                     } else {
                         BtnPjp1.setVisibility(View.GONE);
@@ -3503,7 +3506,6 @@ public class EditListingActivity extends AppCompatActivity {
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
-
     private void clearBitmap1() {
         if (Uri1 != null) {
             Uri1 = null;
@@ -3623,7 +3625,6 @@ public class EditListingActivity extends AppCompatActivity {
             BtnPjp1.setVisibility(View.VISIBLE);
         }
     }
-
     public void ShowJenisProperti(View view) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.CustomAlertDialogStyle);
         builder.setTitle("Silahkan Pilih Jenis Properti");
@@ -3650,7 +3651,6 @@ public class EditListingActivity extends AppCompatActivity {
         AlertDialog dialog = builder.create();
         dialog.show();
     }
-
     public void ShowPjp(View view) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.CustomAlertDialogStyle);
         builder.setTitle("Ketersediaan PJP");
@@ -3677,7 +3677,6 @@ public class EditListingActivity extends AppCompatActivity {
         AlertDialog dialog = builder.create();
         dialog.show();
     }
-
     public void ShowTipeSertifikat(View view) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.CustomAlertDialogStyle);
         builder.setTitle("Silahkan Pilih Tipe Sertifikat");
@@ -3702,7 +3701,6 @@ public class EditListingActivity extends AppCompatActivity {
         AlertDialog dialog = builder.create();
         dialog.show();
     }
-
     private void showCustomTypeInputDialog() {
         final EditText editTextCustomType = new EditText(this);
         editTextCustomType.setHint("Masukkan Tipe Sertifikat");
@@ -3730,7 +3728,6 @@ public class EditListingActivity extends AppCompatActivity {
         AlertDialog dialog = builder.create();
         dialog.show();
     }
-
     public void ShowSumberAir(View view) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.CustomAlertDialogStyle);
         builder.setTitle("Silahkan Pilih Sumber Air");
@@ -3757,7 +3754,6 @@ public class EditListingActivity extends AppCompatActivity {
         AlertDialog dialog = builder.create();
         dialog.show();
     }
-
     public void ShowPerabot(View view) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.CustomAlertDialogStyle);
         builder.setTitle("Ketersediaan Prabot");
@@ -3784,7 +3780,6 @@ public class EditListingActivity extends AppCompatActivity {
         AlertDialog dialog = builder.create();
         dialog.show();
     }
-
     public void ShowBanner(View view) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.CustomAlertDialogStyle);
         builder.setTitle("Pemasangan Banner");
@@ -3817,7 +3812,6 @@ public class EditListingActivity extends AppCompatActivity {
         AlertDialog dialog = builder.create();
         dialog.show();
     }
-
     public void ShowSize(View view) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.CustomAlertDialogStyle);
         builder.setTitle("Ukuran Banner");
@@ -3842,7 +3836,6 @@ public class EditListingActivity extends AppCompatActivity {
         AlertDialog dialog = builder.create();
         dialog.show();
     }
-
     private void ShowCustomSize() {
         final EditText editTextCustomType = new EditText(this);
         editTextCustomType.setHint("Masukkan Ukuran Banner");
@@ -3874,7 +3867,6 @@ public class EditListingActivity extends AppCompatActivity {
         AlertDialog dialog = builder.create();
         dialog.show();
     }
-
     public void ShowStatus(View view) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.CustomAlertDialogStyle);
         builder.setTitle("Silahkan Pilih Status Properti");
@@ -3902,7 +3894,6 @@ public class EditListingActivity extends AppCompatActivity {
 
         dialog.show();
     }
-
     public boolean Validate() {
         if (namaproperti.getText().toString().equals("")) {
             namaproperti.setError("Harap Isi Nama Properti");
@@ -4033,7 +4024,6 @@ public class EditListingActivity extends AppCompatActivity {
         }
         return true;
     }
-
     private void simpanData() {
         pDialog.setMessage("Menyimpan Pembaruan Data");
         pDialog.setCancelable(false);
@@ -4208,7 +4198,7 @@ public class EditListingActivity extends AppCompatActivity {
                 map.put("Alamat", alamatproperti.getText().toString());
                 map.put("Latitude", Lat);
                 map.put("Longitude", Lng);
-                map.put("Location", alamatproperti.getText().toString());
+                map.put("Location", addressStr);
                 map.put("Wide", luas.getText().toString());
                 map.put("Land", land.getText().toString());
                 map.put("Dimensi", dimensi.getText().toString());

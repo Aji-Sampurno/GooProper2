@@ -114,7 +114,8 @@
                             android:layout_height="wrap_content"
                             android:gravity="center"
                             android:buttonTint="@color/black"
-                            android:textColor="@color/black" />
+                            android:textColor="@color/black"
+                            android:clickable="false"/>
 
                         <TextView
                             android:layout_width="match_parent"
@@ -136,7 +137,8 @@
                             android:layout_height="wrap_content"
                             android:gravity="center"
                             android:buttonTint="@color/black"
-                            android:textColor="@color/black" />
+                            android:textColor="@color/black"
+                            android:clickable="false" />
 
                         <TextView
                             android:layout_width="match_parent"
@@ -365,7 +367,8 @@
                     style="@style/CustomOutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp">
+                    android:layout_marginTop="10dp"
+                    android:visibility="gone">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/etnoktpvendor"
@@ -659,7 +662,9 @@
                             android:layout_width="250dp"
                             android:layout_height="250dp"
                             android:layout_weight="1"
-                            android:visibility="gone" />
+                            android:visibility="gone"
+                            android:clickable="true"
+                            android:onClick="tampilkanPreview" />
 
                         <ImageView
                             android:id="@+id/IVDeleteSHM"
@@ -735,7 +740,9 @@
                             android:layout_width="250dp"
                             android:layout_height="250dp"
                             android:layout_weight="1"
-                            android:visibility="gone" />
+                            android:visibility="gone"
+                            android:clickable="true"
+                            android:onClick="tampilkanPreview" />
 
                         <ImageView
                             android:id="@+id/IVDeleteHGB"
@@ -811,7 +818,9 @@
                             android:layout_width="250dp"
                             android:layout_height="250dp"
                             android:layout_weight="1"
-                            android:visibility="gone" />
+                            android:visibility="gone"
+                            android:clickable="true"
+                            android:onClick="tampilkanPreview" />
 
                         <ImageView
                             android:id="@+id/IVDeleteHSHP"
@@ -887,7 +896,9 @@
                             android:layout_width="250dp"
                             android:layout_height="250dp"
                             android:layout_weight="1"
-                            android:visibility="gone" />
+                            android:visibility="gone"
+                            android:clickable="true"
+                            android:onClick="tampilkanPreview" />
 
                         <ImageView
                             android:id="@+id/IVDeletePPJB"
@@ -963,7 +974,9 @@
                             android:layout_width="250dp"
                             android:layout_height="250dp"
                             android:layout_weight="1"
-                            android:visibility="gone" />
+                            android:visibility="gone"
+                            android:clickable="true"
+                            android:onClick="tampilkanPreview" />
 
                         <ImageView
                             android:id="@+id/IVDeleteStratatitle"
@@ -1039,7 +1052,9 @@
                             android:layout_width="250dp"
                             android:layout_height="250dp"
                             android:layout_weight="1"
-                            android:visibility="gone" />
+                            android:visibility="gone"
+                            android:clickable="true"
+                            android:onClick="tampilkanPreview" />
 
                         <ImageView
                             android:id="@+id/IVDeleteAJB"
@@ -1115,7 +1130,9 @@
                             android:layout_width="250dp"
                             android:layout_height="250dp"
                             android:layout_weight="1"
-                            android:visibility="gone" />
+                            android:visibility="gone"
+                            android:clickable="true"
+                            android:onClick="tampilkanPreview" />
 
                         <ImageView
                             android:id="@+id/IVDeletePetokD"
@@ -1234,7 +1251,9 @@
                         <ImageView
                             android:id="@+id/IVPjp"
                             android:layout_width="250dp"
-                            android:layout_height="250dp" />
+                            android:layout_height="250dp"
+                            android:clickable="true"
+                            android:onClick="tampilkanPreview" />
 
                         <ImageView
                             android:id="@+id/IVDeletePjp"
@@ -1274,7 +1293,9 @@
                         <ImageView
                             android:id="@+id/IVPjp1"
                             android:layout_width="250dp"
-                            android:layout_height="250dp" />
+                            android:layout_height="250dp"
+                            android:clickable="true"
+                            android:onClick="tampilkanPreview" />
 
                         <ImageView
                             android:id="@+id/IVDeletePjp1"

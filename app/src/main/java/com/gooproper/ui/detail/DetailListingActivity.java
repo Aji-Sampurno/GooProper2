@@ -62,6 +62,7 @@ import com.gooproper.adapter.SertifikatAdapter;
 import com.gooproper.adapter.ViewPagerAdapter;
 import com.gooproper.model.ListingModel;
 import com.gooproper.pager.SertifikatPdfAdapter;
+import com.gooproper.ui.LihatTemplateActivity;
 import com.gooproper.ui.edit.EditListingActivity;
 import com.gooproper.ui.edit.EditListingAgenActivity;
 import com.gooproper.ui.edit.EditMapsListingActivity;
@@ -69,6 +70,8 @@ import com.gooproper.ui.edit.EditPraListingAgenActivity;
 import com.gooproper.ui.edit.EditPralistingActivity;
 import com.gooproper.ui.followup.FollowUpActivity;
 import com.gooproper.ui.ImageViewActivity;
+import com.gooproper.ui.tambah.TambahSelfieActivity;
+import com.gooproper.ui.tambah.TambahSelfieListingActivity;
 import com.gooproper.util.AgenManager;
 import com.gooproper.util.FormatCurrency;
 import com.gooproper.util.Preferences;
@@ -89,9 +92,9 @@ import java.util.Map;
 public class DetailListingActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     ProgressDialog PDDetailListing;
-    TextView TVNamaDetailListing, TVAlamatDetailListing, TVHargaDetailListing, TVHargaSewaDetailListing, TVViewsDetailListing, TVLikeDetailListing, TVBedDetailListing, TVNamaAgen, TVNamaAgen2, TVBathDetailListing, TVWideDetailListing, TVLandDetailListing, TVDimensiDetailListing, TVTipeDetailListing, TVStatusDetailListing, TVSertifikatDetailListing, TVLuasDetailListing, TVKamarTidurDetailListing, TVKamarMandiDetailListing, TVLantaiDetailListing, TVGarasiDetailListing, TVCarpotDetailListing, TVListrikDetailListing, TVSumberAirDetailListing, TVPerabotDetailListing, TVSizeBanner, TVDeskripsiDetailListing, TVNoData, TVNoDataPdf, TVPriority, TVKondisi, TVNoPjp, TVNoDataPjp, TVFee, TVTglInput, TVNamaVendor, TVTelpVendor, TVPJP, TVSelfie, TVRejected, TVPoin;
+    TextView TVNamaDetailListing, TVAlamatDetailListing, TVHargaDetailListing, TVHargaSewaDetailListing, TVViewsDetailListing, TVLikeDetailListing, TVBedDetailListing, TVNamaAgen, TVNamaAgen2, TVBathDetailListing, TVWideDetailListing, TVLandDetailListing, TVDimensiDetailListing, TVTipeDetailListing, TVStatusDetailListing, TVSertifikatDetailListing, TVLuasDetailListing, TVKamarTidurDetailListing, TVKamarMandiDetailListing, TVLantaiDetailListing, TVGarasiDetailListing, TVCarpotDetailListing, TVListrikDetailListing, TVSumberAirDetailListing, TVPerabotDetailListing, TVSizeBanner, TVDeskripsiDetailListing, TVNoData, TVNoDataPdf, TVPriority, TVKondisi, TVNoPjp, TVNoDataPjp, TVFee, TVTglInput, TVNamaVendor, TVTelpVendor, TVPJP, TVSelfie, TVRejected, TVPoin, TVHadap;
     ImageView IVFlowUp, IVWhatsapp, IVInstagram, IVFlowUp2, IVWhatsapp2, IVInstagram2, IVFavorite, IVFavoriteOn, IVShare, IVStar1, IVStar2, IVStar3, IVStar4, IVStar5, IVAlamat, IVNextImg, IVPrevImg, IVSelfie;
-    Button BtnApproveAdmin, BtnApproveManager, BtnRejectedAdmin, BtnRejectedManager, BtnTambahMaps, BtnAjukanUlang;
+    Button BtnApproveAdmin, BtnApproveManager, BtnRejectedAdmin, BtnRejectedManager, BtnTambahMaps, BtnTambahSelfie, BtnAjukanUlang, BtnLihatTemplate, BtnLihatTemplateKosong;
     TextInputEditText tambahagen, tambahcoagen, tambahpjp;
     TextInputLayout lytambahagen, lyttambahcoagen, lyttambahpjp;
     CheckBox CBMarketable, CBHarga, CBSelfie, CBLokasi;
@@ -164,7 +167,10 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
         BtnRejectedAdmin = findViewById(R.id.BtnRejectedAdminDetailListing);
         BtnRejectedManager = findViewById(R.id.BtnRejectedManagerDetailListing);
         BtnTambahMaps = findViewById(R.id.BtnAddMapsDetailListing);
+        BtnTambahSelfie = findViewById(R.id.BtnAddSelfieDetailListing);
         BtnAjukanUlang = findViewById(R.id.BtnAjukanUlangDetailListing);
+        BtnLihatTemplate = findViewById(R.id.BtnLihatTemplate);
+        BtnLihatTemplateKosong = findViewById(R.id.BtnLihatTemplateKosong);
 
         TVNamaDetailListing = findViewById(R.id.TVNamaDetailListing);
         TVAlamatDetailListing = findViewById(R.id.TVAlamatDetailListing);
@@ -181,6 +187,7 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
         TVSertifikatDetailListing = findViewById(R.id.TVSertifikatDetailListing);
         TVLuasDetailListing = findViewById(R.id.TVLuasHunianDetailListing);
         TVDimensiDetailListing = findViewById(R.id.TVDimensiDetailListing);
+        TVHadap = findViewById(R.id.TVHadapDetailListing);
         TVKamarTidurDetailListing = findViewById(R.id.TVKamarTidurHunianDetailListing);
         TVKamarMandiDetailListing = findViewById(R.id.TVKamarMandiHunianDetailListing);
         TVLantaiDetailListing = findViewById(R.id.TVLevelDetailListing);
@@ -488,6 +495,8 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                 BtnApproveManager.setVisibility(View.GONE);
                 BtnRejectedAdmin.setVisibility(View.GONE);
                 BtnRejectedManager.setVisibility(View.GONE);
+                BtnLihatTemplate.setVisibility(View.GONE);
+                BtnLihatTemplateKosong.setVisibility(View.GONE);
                 IVFlowUp.setVisibility(View.VISIBLE);
                 IVFlowUp2.setVisibility(View.VISIBLE);
                 IVEdit.setVisibility(View.VISIBLE);
@@ -695,6 +704,8 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                 BtnApproveManager.setVisibility(View.GONE);
                 BtnRejectedAdmin.setVisibility(View.GONE);
                 BtnRejectedManager.setVisibility(View.GONE);
+                BtnLihatTemplate.setVisibility(View.GONE);
+                BtnLihatTemplateKosong.setVisibility(View.GONE);
                 IVFlowUp.setVisibility(View.VISIBLE);
                 IVFlowUp2.setVisibility(View.VISIBLE);
                 IVEdit.setVisibility(View.VISIBLE);
@@ -790,6 +801,8 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
         } else if (status.equals("3")) {
             if (intentLatitude.equals("0") && intentLongitude.equals("0")) {
                 if (intentIsAdmin.equals("0")){
+                    TVAlamatDetailListing.setVisibility(View.GONE);
+                    IVAlamat.setVisibility(View.GONE);
                     BtnApproveAdmin.setVisibility(View.GONE);
                     BtnApproveManager.setVisibility(View.GONE);
                     BtnRejectedAdmin.setVisibility(View.GONE);
@@ -802,8 +815,6 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                     IVEdit.setVisibility(View.VISIBLE);
                     IVShare.setVisibility(View.GONE);
                     IVFavorite.setVisibility(View.GONE);
-                    TVAlamatDetailListing.setVisibility(View.GONE);
-                    IVAlamat.setVisibility(View.GONE);
                     LytCBMarketable.setVisibility(View.GONE);
                     LytCBHarga.setVisibility(View.GONE);
                     LytCBSelfie.setVisibility(View.GONE);
@@ -906,10 +917,13 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                         public void onClick(View v) {
                             Intent update = new Intent(DetailListingActivity.this, EditPralistingActivity.class);
                             update.putExtra("IdPraListing",idpralisting);
+                            update.putExtra("Selfie",intentSelfie);
                             startActivity(update);
                         }
                     });
                 } else if (intentIsManager.equals("0")) {
+                    TVAlamatDetailListing.setVisibility(View.GONE);
+                    IVAlamat.setVisibility(View.GONE);
                     BtnApproveAdmin.setVisibility(View.GONE);
                     BtnApproveManager.setVisibility(View.GONE);
                     BtnRejectedAdmin.setVisibility(View.GONE);
@@ -922,8 +936,6 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                     IVEdit.setVisibility(View.VISIBLE);
                     IVShare.setVisibility(View.GONE);
                     IVFavorite.setVisibility(View.GONE);
-                    TVAlamatDetailListing.setVisibility(View.GONE);
-                    IVAlamat.setVisibility(View.GONE);
                     LytCBMarketable.setVisibility(View.GONE);
                     LytCBHarga.setVisibility(View.GONE);
                     LytCBSelfie.setVisibility(View.GONE);
@@ -1026,18 +1038,21 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                         public void onClick(View v) {
                             Intent update = new Intent(DetailListingActivity.this, EditPralistingActivity.class);
                             update.putExtra("IdPraListing",idpralisting);
+                            update.putExtra("Selfie",intentSelfie);
                             startActivity(update);
                         }
                     });
                 } else {
+                    TVAlamatDetailListing.setVisibility(View.GONE);
+                    IVAlamat.setVisibility(View.GONE);
                     BtnApproveAdmin.setVisibility(View.GONE);
                     BtnApproveManager.setVisibility(View.GONE);
                     BtnRejectedAdmin.setVisibility(View.GONE);
                     BtnRejectedManager.setVisibility(View.GONE);
+                    BtnLihatTemplate.setVisibility(View.GONE);
+                    BtnLihatTemplateKosong.setVisibility(View.GONE);
                     IVFlowUp.setVisibility(View.VISIBLE);
                     IVFlowUp2.setVisibility(View.VISIBLE);
-                    TVAlamatDetailListing.setVisibility(View.GONE);
-                    IVAlamat.setVisibility(View.GONE);
                     idpengguna = "0";
                     AgenId = Preferences.getKeyIdAgen(this);
                     LytCBMarketable.setVisibility(View.GONE);
@@ -1051,6 +1066,7 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                             public void onClick(View v) {
                                 Intent update = new Intent(DetailListingActivity.this, EditMapsListingActivity.class);
                                 update.putExtra("IdListing",idlisting);
+                                update.putExtra("Selfie",intentSelfie);
                                 startActivity(update);
                             }
                         });
@@ -1060,6 +1076,8 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                 }
             } else if (intentSelfie.equals("0") || intentSelfie.equals("") || intentSelfie.isEmpty()) {
                 if (intentIsAdmin.equals("0")){
+                    TVAlamatDetailListing.setVisibility(View.GONE);
+                    IVAlamat.setVisibility(View.GONE);
                     BtnApproveAdmin.setVisibility(View.GONE);
                     BtnApproveManager.setVisibility(View.GONE);
                     BtnRejectedAdmin.setVisibility(View.GONE);
@@ -1068,12 +1086,10 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                     IVFlowUp2.setVisibility(View.VISIBLE);
                     idpengguna = "0";
                     AgenId = Preferences.getKeyIdAgen(this);
-                    BtnTambahMaps.setVisibility(View.VISIBLE);
+                    BtnTambahSelfie.setVisibility(View.VISIBLE);
                     IVEdit.setVisibility(View.VISIBLE);
                     IVShare.setVisibility(View.GONE);
                     IVFavorite.setVisibility(View.GONE);
-                    TVAlamatDetailListing.setVisibility(View.GONE);
-                    IVAlamat.setVisibility(View.GONE);
                     LytCBMarketable.setVisibility(View.GONE);
                     LytCBHarga.setVisibility(View.GONE);
                     LytCBSelfie.setVisibility(View.GONE);
@@ -1171,15 +1187,17 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                             startActivity(update);
                         }
                     });
-                    BtnTambahMaps.setOnClickListener(new View.OnClickListener() {
+                    BtnTambahSelfie.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            Intent update = new Intent(DetailListingActivity.this, EditPralistingActivity.class);
+                            Intent update = new Intent(DetailListingActivity.this, TambahSelfieActivity.class);
                             update.putExtra("IdPraListing",idpralisting);
                             startActivity(update);
                         }
                     });
                 } else if (intentIsManager.equals("0")) {
+                    TVAlamatDetailListing.setVisibility(View.GONE);
+                    IVAlamat.setVisibility(View.GONE);
                     BtnApproveAdmin.setVisibility(View.GONE);
                     BtnApproveManager.setVisibility(View.GONE);
                     BtnRejectedAdmin.setVisibility(View.GONE);
@@ -1188,12 +1206,10 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                     IVFlowUp2.setVisibility(View.VISIBLE);
                     idpengguna = "0";
                     AgenId = Preferences.getKeyIdAgen(this);
-                    BtnTambahMaps.setVisibility(View.VISIBLE);
+                    BtnTambahSelfie.setVisibility(View.VISIBLE);
                     IVEdit.setVisibility(View.VISIBLE);
                     IVShare.setVisibility(View.GONE);
                     IVFavorite.setVisibility(View.GONE);
-                    TVAlamatDetailListing.setVisibility(View.GONE);
-                    IVAlamat.setVisibility(View.GONE);
                     LytCBMarketable.setVisibility(View.GONE);
                     LytCBHarga.setVisibility(View.GONE);
                     LytCBSelfie.setVisibility(View.GONE);
@@ -1291,23 +1307,25 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                             startActivity(update);
                         }
                     });
-                    BtnTambahMaps.setOnClickListener(new View.OnClickListener() {
+                    BtnTambahSelfie.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            Intent update = new Intent(DetailListingActivity.this, EditPralistingActivity.class);
+                            Intent update = new Intent(DetailListingActivity.this, TambahSelfieActivity.class);
                             update.putExtra("IdPraListing",idpralisting);
                             startActivity(update);
                         }
                     });
                 } else {
+                    TVAlamatDetailListing.setVisibility(View.GONE);
+                    IVAlamat.setVisibility(View.GONE);
                     BtnApproveAdmin.setVisibility(View.GONE);
                     BtnApproveManager.setVisibility(View.GONE);
                     BtnRejectedAdmin.setVisibility(View.GONE);
                     BtnRejectedManager.setVisibility(View.GONE);
+                    BtnLihatTemplate.setVisibility(View.GONE);
+                    BtnLihatTemplateKosong.setVisibility(View.GONE);
                     IVFlowUp.setVisibility(View.VISIBLE);
                     IVFlowUp2.setVisibility(View.VISIBLE);
-                    TVAlamatDetailListing.setVisibility(View.GONE);
-                    IVAlamat.setVisibility(View.GONE);
                     idpengguna = "0";
                     AgenId = Preferences.getKeyIdAgen(this);
                     LytCBMarketable.setVisibility(View.GONE);
@@ -1315,21 +1333,25 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                     LytCBSelfie.setVisibility(View.GONE);
                     LytCBLokasi.setVisibility(View.GONE);
                     if (StrIdAgen.equals(intentIdAgen)){
-                        BtnTambahMaps.setVisibility(View.VISIBLE);
-                        BtnTambahMaps.setOnClickListener(new View.OnClickListener() {
+                        BtnTambahSelfie.setVisibility(View.VISIBLE);
+                        BtnTambahMaps.setVisibility(View.GONE);
+                        BtnTambahSelfie.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                Intent update = new Intent(DetailListingActivity.this, EditMapsListingActivity.class);
+                                Intent update = new Intent(DetailListingActivity.this, TambahSelfieListingActivity.class);
                                 update.putExtra("IdListing",idlisting);
                                 startActivity(update);
                             }
                         });
                     } else {
+                        BtnTambahSelfie.setVisibility(View.GONE);
                         BtnTambahMaps.setVisibility(View.GONE);
                     }
                 }
             } else {
                 if (intentIsAdmin.equals("0")){
+                    TVAlamatDetailListing.setVisibility(View.GONE);
+                    IVAlamat.setVisibility(View.GONE);
                     BtnApproveAdmin.setVisibility(View.GONE);
                     BtnApproveManager.setVisibility(View.GONE);
                     BtnRejectedAdmin.setVisibility(View.GONE);
@@ -1339,6 +1361,7 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                     idpengguna = "0";
                     AgenId = Preferences.getKeyIdAgen(this);
                     BtnTambahMaps.setVisibility(View.GONE);
+                    BtnTambahSelfie.setVisibility(View.GONE);
                     IVEdit.setVisibility(View.VISIBLE);
                     IVShare.setVisibility(View.GONE);
                     IVFavorite.setVisibility(View.GONE);
@@ -1440,6 +1463,8 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                     LytCBSelfie.setVisibility(View.GONE);
                     LytCBLokasi.setVisibility(View.GONE);
                 } else if (intentIsManager.equals("0")) {
+                    TVAlamatDetailListing.setVisibility(View.GONE);
+                    IVAlamat.setVisibility(View.GONE);
                     BtnApproveAdmin.setVisibility(View.GONE);
                     BtnApproveManager.setVisibility(View.GONE);
                     BtnRejectedAdmin.setVisibility(View.GONE);
@@ -1449,6 +1474,7 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                     idpengguna = "0";
                     AgenId = Preferences.getKeyIdAgen(this);
                     BtnTambahMaps.setVisibility(View.GONE);
+                    BtnTambahSelfie.setVisibility(View.GONE);
                     IVEdit.setVisibility(View.VISIBLE);
                     IVShare.setVisibility(View.GONE);
                     IVFavorite.setVisibility(View.GONE);
@@ -1550,11 +1576,16 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                     LytCBSelfie.setVisibility(View.GONE);
                     LytCBLokasi.setVisibility(View.GONE);
                 } else {
+                    TVAlamatDetailListing.setVisibility(View.GONE);
+                    IVAlamat.setVisibility(View.GONE);
                     BtnApproveAdmin.setVisibility(View.GONE);
                     BtnApproveManager.setVisibility(View.GONE);
                     BtnRejectedAdmin.setVisibility(View.GONE);
                     BtnRejectedManager.setVisibility(View.GONE);
                     BtnTambahMaps.setVisibility(View.GONE);
+                    BtnTambahSelfie.setVisibility(View.GONE);
+                    BtnLihatTemplate.setVisibility(View.GONE);
+                    BtnLihatTemplateKosong.setVisibility(View.GONE);
                     IVFlowUp.setVisibility(View.VISIBLE);
                     IVFlowUp2.setVisibility(View.VISIBLE);
                     idpengguna = "0";
@@ -1571,6 +1602,8 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
             BtnApproveManager.setVisibility(View.GONE);
             BtnRejectedAdmin.setVisibility(View.GONE);
             BtnRejectedManager.setVisibility(View.GONE);
+            BtnLihatTemplate.setVisibility(View.GONE);
+            BtnLihatTemplateKosong.setVisibility(View.GONE);
             IVFlowUp.setVisibility(View.INVISIBLE);
             IVFlowUp2.setVisibility(View.INVISIBLE);
             TVAlamatDetailListing.setVisibility(View.GONE);
@@ -1583,6 +1616,8 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
             LytCBLokasi.setVisibility(View.GONE);
         } else {
             TVAlamatDetailListing.setVisibility(View.GONE);
+            BtnLihatTemplate.setVisibility(View.GONE);
+            BtnLihatTemplateKosong.setVisibility(View.GONE);
             IVAlamat.setVisibility(View.GONE);
             IVFlowUp.setVisibility(View.INVISIBLE);
             IVFlowUp2.setVisibility(View.INVISIBLE);
@@ -1692,6 +1727,22 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
         BtnRejectedAdmin.setOnClickListener(v -> ShowRejected());
         BtnRejectedManager.setOnClickListener(v -> ShowRejected());
         BtnAjukanUlang.setOnClickListener(v -> ajukanulang());
+        BtnLihatTemplate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String url = "https://app.gooproper.com/GooProper/template/"+idpralisting;
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                startActivity(intent);
+            }
+        });
+        BtnLihatTemplateKosong.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String url = "https://app.gooproper.com/GooProper/templateblank/"+idpralisting;
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                startActivity(intent);
+            }
+        });
 
         if (update == 1) {
             if (intentPriority.equals("exclusive") && !intentPjp.isEmpty() && intentBanner.equals("Ya")){
@@ -2485,6 +2536,11 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
             } else {
                 TVDimensiDetailListing.setText(": " + intentDimensi);
             }
+            if (intentHadap.isEmpty()){
+                TVHadap.setText(": -");
+            } else {
+                TVHadap.setText(": " + intentHadap);
+            }
             if (intentBed.isEmpty()) {
                 if (intentBedArt.isEmpty()) {
                     TVKamarTidurDetailListing.setText(": -");
@@ -2561,13 +2617,13 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
             } else {
                 TVTglInput.setText(": " + intentTglInput);
             }
-            if (!intentIsSelfie.equals("0")){
+            if (intentSelfie.equals("0") || intentSelfie.isEmpty()){
+                IVSelfie.setVisibility(View.GONE);
+                TVSelfie.setVisibility(View.VISIBLE);
+            } else {
                 IVSelfie.setVisibility(View.VISIBLE);
                 Glide.with(this).load(intentSelfie).into(IVSelfie);
                 TVSelfie.setVisibility(View.GONE);
-            } else {
-                IVSelfie.setVisibility(View.GONE);
-                TVSelfie.setVisibility(View.VISIBLE);
             }
             TVNamaAgen.setText(intentNama);
             TVNamaAgen.setOnClickListener(new View.OnClickListener() {
@@ -2638,6 +2694,9 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
             if (!intentImg8.equals("0")) {
                 images.add(intentImg8);
             }
+            if (!intentVideo.equals("0")) {
+                images.add(intentVideo);
+            }
             if (!intentImgSHM.equals("0")) {
                 sertifpdf.add(intentImgSHM);
             }
@@ -2700,6 +2759,15 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
+        }
+    }
+    @Override
+    public void onBackPressed() {
+        if (adapter != null && adapter.getCurrentExoPlayer() != null && adapter.getCurrentExoPlayer().isPlaying()) {
+            adapter.getCurrentExoPlayer().stop();
+            super.onBackPressed();
+        } else {
+            super.onBackPressed();
         }
     }
     private void updatepoin() {

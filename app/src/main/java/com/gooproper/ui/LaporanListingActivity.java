@@ -34,7 +34,9 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -48,7 +50,7 @@ import jxl.write.WritableWorkbook;
 
 public class LaporanListingActivity extends AppCompatActivity {
 
-    Button BtnUnduh, BtnUnduhAgen;
+    Button BtnUnduh, BtnUnduhInfo, BtnUnduhAgen;
     TextView TVListingSold, TVListingRent, TVListingSoldRent, TVListingSolded, TVListingRented, TVListingReady, TVAllListing, TVListingTahun, TVListingBulan;
     int Poin, UpdatePoin, FinalPoin;
     String Grade;
@@ -59,6 +61,7 @@ public class LaporanListingActivity extends AppCompatActivity {
         setContentView(R.layout.activity_laporan_listing);
 
         BtnUnduh = findViewById(R.id.BtnUnduh);
+        BtnUnduhInfo = findViewById(R.id.BtnUnduhInfo);
         BtnUnduhAgen = findViewById(R.id.BtnUnduhAgen);
         TVListingSold = findViewById(R.id.TVSold);
         TVListingSoldRent = findViewById(R.id.TVListing);
@@ -74,6 +77,12 @@ public class LaporanListingActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 fetchDataAndCreateExcel();
+            }
+        });
+        BtnUnduhInfo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                fetchDataInfoAndCreateExcel();
             }
         });
         BtnUnduhAgen.setOnClickListener(new View.OnClickListener() {
@@ -132,7 +141,6 @@ public class LaporanListingActivity extends AppCompatActivity {
         return dataList;
     }
     private void fetchDataAndCreateExcel() {
-
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, ServerApi.URL_GET_LISTING_LAPORAN,null,
                 new Response.Listener<JSONArray>() {
                     @Override
@@ -144,7 +152,10 @@ public class LaporanListingActivity extends AppCompatActivity {
                             File directory = new File(sdCard.getAbsolutePath() + "/Download");
                             directory.mkdir();
 
-                            String filename = String.format(Locale.getDefault(), "%d.xls", System.currentTimeMillis());
+                            long currentTimeMillis = System.currentTimeMillis();
+                            long adjustedTimeMillis = currentTimeMillis - (currentTimeMillis % (24 * 60 * 60 * 1000)) + (9 * 60 * 60 * 1000);
+                            String filename = new SimpleDateFormat("yyyyMMddHHmmss", Locale.getDefault()).format(new Date(currentTimeMillis)) + ".xls";
+//                            String filename = String.format(Locale.getDefault(), "%d.xls", System.currentTimeMillis());
                             File outFile = new File(directory, filename);
 
                             WorkbookSettings wbSettings = new WorkbookSettings();
@@ -469,8 +480,8 @@ public class LaporanListingActivity extends AppCompatActivity {
                                 sheet.addCell(new Label(11, i + 1, Land));
                                 sheet.addCell(new Label(12, i + 1, Dimensi));
                                 sheet.addCell(new Label(13, i + 1, Level));
-                                sheet.addCell(new Label(14, i + 1, Harga));
-                                sheet.addCell(new Label(15, i + 1, HargaSewa));
+                                sheet.addCell(new Label(14, i + 1, Harga.trim()));
+                                sheet.addCell(new Label(15, i + 1, HargaSewa.trim()));
                                 sheet.addCell(new Label(16, i + 1, Deskripsi));
                                 sheet.addCell(new Label(17, i + 1, Hadap));
                                 sheet.addCell(new Label(18, i + 1, Listrik));
@@ -772,8 +783,288 @@ public class LaporanListingActivity extends AppCompatActivity {
 
         Volley.newRequestQueue(this).add(jsonArrayRequest);
     }
-    private void fetchDataAgenAndCreateExcel() {
+    private void fetchDataInfoAndCreateExcel() {
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, ServerApi.URL_GET_INFO_LAPORAN,null,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        try {
+                            WritableWorkbook workbook = null;
 
+                            File sdCard = Environment.getExternalStorageDirectory();
+                            File directory = new File(sdCard.getAbsolutePath() + "/Download");
+                            directory.mkdir();
+
+                            long currentTimeMillis = System.currentTimeMillis();
+                            long adjustedTimeMillis = currentTimeMillis - (currentTimeMillis % (24 * 60 * 60 * 1000)) + (9 * 60 * 60 * 1000);
+                            String filename = new SimpleDateFormat("yyyyMMddHHmmss", Locale.getDefault()).format(new Date(currentTimeMillis)) + "Info" + ".xls";
+                            File outFile = new File(directory, filename);
+
+                            WorkbookSettings wbSettings = new WorkbookSettings();
+                            wbSettings.setLocale(new Locale("en", "EN"));
+                            workbook = Workbook.createWorkbook(outFile, wbSettings);
+
+                            WritableSheet sheet = workbook.createSheet("Data", 0);
+
+                            sheet.addCell(new Label(0, 0, "No"));
+                            sheet.addCell(new Label(1, 0, "JENIS PROPERTY"));
+                            sheet.addCell(new Label(2, 0, "STATUS PROPERTY"));
+                            sheet.addCell(new Label(3, 0, "NARAHUBUNG"));
+                            sheet.addCell(new Label(4, 0, "NO TELP NARAHUBUNG"));
+                            sheet.addCell(new Label(5, 0, "LOKASI"));
+                            sheet.addCell(new Label(6, 0, "ALAMAT"));
+                            sheet.addCell(new Label(7, 0, "TANGGAL INPUT"));
+                            sheet.addCell(new Label(8, 0, "JAM INPUT"));
+                            sheet.addCell(new Label(9, 0, "LUAS BANGUNAN"));
+                            sheet.addCell(new Label(10, 0, "LUAS TANAH"));
+                            sheet.addCell(new Label(11, 0, "HARGA JUAL"));
+                            sheet.addCell(new Label(12, 0, "HARGA SEWA"));
+                            sheet.addCell(new Label(13, 0, "KETERANGAN"));
+                            sheet.addCell(new Label(14, 0, "NAMA AGEN"));
+                            sheet.addCell(new Label(15, 0, "POIN"));
+                            sheet.addCell(new Label(16, 0, "STATUS LISTING"));
+
+                            for (int i = 0; i < response.length(); i++) {
+                                JSONObject jsonObject = response.getJSONObject(i);
+
+                                String IdInfo = jsonObject.getString("IdInfo");
+                                String IdAgen = jsonObject.getString("IdAgen");
+                                String JenisProperty = jsonObject.getString("JenisProperty");
+                                String StatusProperty = jsonObject.getString("StatusProperty");
+                                String Narahubung = jsonObject.getString("Narahubung");
+                                String ImgSelfie = jsonObject.getString("ImgSelfie");
+                                String ImgProperty = jsonObject.getString("ImgProperty");
+                                String Lokasi = jsonObject.getString("Lokasi");
+                                String Alamat = jsonObject.getString("Alamat");
+                                String NoTelp = jsonObject.getString("NoTelp");
+                                String Latitude = jsonObject.getString("Latitude");
+                                String Longitude = jsonObject.getString("Longitude");
+                                String TglInput = jsonObject.getString("TglInput");
+                                String JamInput = jsonObject.getString("JamInput");
+                                String IsListing = jsonObject.getString("IsListing");
+                                String IsAgen = jsonObject.getString("IsAgen");
+                                String LBangunan = jsonObject.getString("LBangunan");
+                                String LTanah = jsonObject.getString("LTanah");
+                                String Harga = jsonObject.getString("Harga");
+                                String HargaSewa = jsonObject.getString("HargaSewa");
+                                String Keterangan = jsonObject.getString("Keterangan");
+                                String IsSpek = jsonObject.getString("IsSpek");
+                                String Nama = jsonObject.getString("Nama");
+                                String Instagram = jsonObject.getString("Instagram");
+                                String No = String.valueOf(i + 1);
+
+                                if (!ImgSelfie.equals("0") && !Latitude.equals("0") && !Longitude.equals("0")){
+                                    if (IsSpek.equals("1")) {
+                                        Poin = 20;
+                                    } else {
+                                        Poin = 0;
+                                    }
+                                } else {
+                                    if (IsSpek.equals("1")) {
+                                        Poin = 10;
+                                    } else {
+                                        Poin = 0;
+                                    }
+                                }
+
+                                sheet.addCell(new Label(0, i + 1, No));
+                                sheet.addCell(new Label(1, i + 1, JenisProperty));
+                                sheet.addCell(new Label(2, i + 1, StatusProperty));
+                                sheet.addCell(new Label(3, i + 1, Narahubung));
+                                sheet.addCell(new Label(4, i + 1, NoTelp));
+                                sheet.addCell(new Label(5, i + 1, Lokasi));
+                                sheet.addCell(new Label(6, i + 1, Alamat));
+                                sheet.addCell(new Label(7, i + 1, TglInput));
+                                sheet.addCell(new Label(8, i + 1, JamInput));
+                                sheet.addCell(new Label(9, i + 1, LBangunan));
+                                sheet.addCell(new Label(10, i + 1, LTanah));
+                                sheet.addCell(new Label(11, i + 1, Harga));
+                                sheet.addCell(new Label(12, i + 1, HargaSewa));
+                                sheet.addCell(new Label(13, i + 1, Keterangan));
+                                sheet.addCell(new Label(14, i + 1, Nama));
+                                sheet.addCell(new Label(15, i + 1, String.valueOf(Poin)));
+                                sheet.addCell(new Label(16, i + 1, IsListing));
+                            }
+
+                            workbook.write();
+                            workbook.close();
+
+                            Toast.makeText(LaporanListingActivity.this, "File Excel berhasil disimpan", Toast.LENGTH_SHORT).show();
+
+                            Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+                            mediaScanIntent.setData(Uri.fromFile(outFile));
+                            sendBroadcast(mediaScanIntent);
+
+                            Dialog customDialog = new Dialog(LaporanListingActivity.this);
+                            customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                            customDialog.setContentView(R.layout.custom_dialog_sukses);
+
+                            if (customDialog.getWindow() != null) {
+                                customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                            }
+
+                            TextView dialogTitle = customDialog.findViewById(R.id.dialog_title);
+                            Button ok = customDialog.findViewById(R.id.btnya);
+                            Button cobalagi = customDialog.findViewById(R.id.btntidak);
+                            ImageView gifimage = customDialog.findViewById(R.id.ivdialog);
+
+                            dialogTitle.setText("Berhasil Menyimpan Laporan di :"+ outFile.getAbsolutePath());
+                            cobalagi.setVisibility(View.GONE);
+
+                            ok.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    customDialog.dismiss();
+                                    finish();
+                                }
+                            });
+
+                            Glide.with(LaporanListingActivity.this)
+                                    .load(R.mipmap.ic_yes) // You can also use a local resource like R.drawable.your_gif_resource
+                                    .transition(DrawableTransitionOptions.withCrossFade())
+                                    .into(gifimage);
+
+                            customDialog.show();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                            Dialog customDialog = new Dialog(LaporanListingActivity.this);
+                            customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                            customDialog.setContentView(R.layout.custom_dialog_sukses);
+
+                            if (customDialog.getWindow() != null) {
+                                customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                            }
+
+                            TextView dialogTitle = customDialog.findViewById(R.id.dialog_title);
+                            Button ok = customDialog.findViewById(R.id.btnya);
+                            Button cobalagi = customDialog.findViewById(R.id.btntidak);
+                            ImageView gifimage = customDialog.findViewById(R.id.ivdialog);
+
+                            dialogTitle.setText("Gagal Menyimpan Laporan" + e.getMessage());
+                            cobalagi.setVisibility(View.GONE);
+
+                            ok.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    customDialog.dismiss();
+                                    finish();
+                                }
+                            });
+
+                            Glide.with(LaporanListingActivity.this)
+                                    .load(R.mipmap.ic_yes) // You can also use a local resource like R.drawable.your_gif_resource
+                                    .transition(DrawableTransitionOptions.withCrossFade())
+                                    .into(gifimage);
+
+                            customDialog.show();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Dialog customDialog = new Dialog(LaporanListingActivity.this);
+                            customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                            customDialog.setContentView(R.layout.custom_dialog_sukses);
+
+                            if (customDialog.getWindow() != null) {
+                                customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                            }
+
+                            TextView dialogTitle = customDialog.findViewById(R.id.dialog_title);
+                            Button ok = customDialog.findViewById(R.id.btnya);
+                            Button cobalagi = customDialog.findViewById(R.id.btntidak);
+                            ImageView gifimage = customDialog.findViewById(R.id.ivdialog);
+
+                            dialogTitle.setText("Gagal Menyimpan Laporan" + e.getMessage());
+                            cobalagi.setVisibility(View.GONE);
+
+                            ok.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    customDialog.dismiss();
+                                    finish();
+                                }
+                            });
+
+                            Glide.with(LaporanListingActivity.this)
+                                    .load(R.mipmap.ic_yes) // You can also use a local resource like R.drawable.your_gif_resource
+                                    .transition(DrawableTransitionOptions.withCrossFade())
+                                    .into(gifimage);
+
+                            customDialog.show();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            Dialog customDialog = new Dialog(LaporanListingActivity.this);
+                            customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                            customDialog.setContentView(R.layout.custom_dialog_sukses);
+
+                            if (customDialog.getWindow() != null) {
+                                customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                            }
+
+                            TextView dialogTitle = customDialog.findViewById(R.id.dialog_title);
+                            Button ok = customDialog.findViewById(R.id.btnya);
+                            Button cobalagi = customDialog.findViewById(R.id.btntidak);
+                            ImageView gifimage = customDialog.findViewById(R.id.ivdialog);
+
+                            dialogTitle.setText("Gagal Menyimpan Laporan" + e.getMessage());
+                            cobalagi.setVisibility(View.GONE);
+
+                            ok.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    customDialog.dismiss();
+                                    finish();
+                                }
+                            });
+
+                            Glide.with(LaporanListingActivity.this)
+                                    .load(R.mipmap.ic_yes) // You can also use a local resource like R.drawable.your_gif_resource
+                                    .transition(DrawableTransitionOptions.withCrossFade())
+                                    .into(gifimage);
+
+                            customDialog.show();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        error.printStackTrace();
+
+                        Dialog customDialog = new Dialog(LaporanListingActivity.this);
+                        customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                        customDialog.setContentView(R.layout.custom_dialog_sukses);
+
+                        if (customDialog.getWindow() != null) {
+                            customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                        }
+
+                        TextView dialogTitle = customDialog.findViewById(R.id.dialog_title);
+                        Button ok = customDialog.findViewById(R.id.btnya);
+                        Button cobalagi = customDialog.findViewById(R.id.btntidak);
+                        ImageView gifimage = customDialog.findViewById(R.id.ivdialog);
+
+                        dialogTitle.setText("Gagal Menyimpan Laporan" + error.getMessage());
+                        cobalagi.setVisibility(View.GONE);
+
+                        ok.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                customDialog.dismiss();
+                                finish();
+                            }
+                        });
+
+                        Glide.with(LaporanListingActivity.this)
+                                .load(R.mipmap.ic_yes) // You can also use a local resource like R.drawable.your_gif_resource
+                                .transition(DrawableTransitionOptions.withCrossFade())
+                                .into(gifimage);
+
+                        customDialog.show();
+                    }
+                });
+
+        Volley.newRequestQueue(this).add(jsonArrayRequest);
+    }
+    private void fetchDataAgenAndCreateExcel() {
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, ServerApi.URL_GET_REPORT_AGEN,null,
                 new Response.Listener<JSONArray>() {
                     @Override

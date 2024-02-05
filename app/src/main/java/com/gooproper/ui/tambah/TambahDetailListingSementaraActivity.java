@@ -1248,7 +1248,7 @@ public class TambahDetailListingSementaraActivity extends AppCompatActivity {
         BtnPetokDPdf.setOnClickListener(view -> pilihFilePetokD(view));
         BtnPjp.setOnClickListener(view -> showPhotoPJP());
         BtnPjp1.setOnClickListener(view -> showPhotoPJP1());
-        BtnSelfie.setOnClickListener(view -> showPhotoSelfie());
+        BtnSelfie.setOnClickListener(view -> requestPermissionsSelfie());
         BtnKTP.setOnClickListener(view -> showPhotoKtp());
 
         select.setOnClickListener(new View.OnClickListener() {

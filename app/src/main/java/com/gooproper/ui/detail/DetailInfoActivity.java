@@ -49,6 +49,7 @@ import com.gooproper.adapter.ViewPagerAdapter;
 import com.gooproper.model.InfoModel;
 import com.gooproper.model.ListingModel;
 import com.gooproper.pager.SertifikatPdfAdapter;
+import com.gooproper.ui.edit.EditDetailInfoActivity;
 import com.gooproper.ui.edit.EditInfoActivity;
 import com.gooproper.ui.tambah.TambahListingInfoActivity;
 import com.gooproper.util.AgenManager;
@@ -66,7 +67,7 @@ public class DetailInfoActivity extends AppCompatActivity implements OnMapReadyC
 
     ProgressDialog pDialog;
     TextView TVJudul, TVLokasi, TVHarga, TVHargaSewa, TVNamaAgen, TVLuas, TVLTanah, TVLBangunan, TVJenis, TVStatus, TVDeskripsi, TVTglInput, TVNarahubung, TVTelpNarahubung, TVNoSelfie, TVPoin;
-    LinearLayout LytNarahubung, LytTelpNarahubung, LytTglInput;
+    LinearLayout LytNarahubung, LytTelpNarahubung, LytTglInput, LytEdit;
     ImageView IVAddListing, IVWhatsapp, IVInstagram, IVSelfie;
     Button BtnTambah, BtnTambahSpek;
     LinearLayout LytSelfie;
@@ -120,9 +121,9 @@ public class DetailInfoActivity extends AppCompatActivity implements OnMapReadyC
         TVTelpNarahubung = findViewById(R.id.TVTelpNarahubung);
         TVPoin = findViewById(R.id.TVPoinDetailInfo);
 
-        LytNarahubung = findViewById(R.id.LytNarahubungProperti);
         LytTelpNarahubung = findViewById(R.id.LytTelpNarahubung);
         LytTglInput = findViewById(R.id.LytTglInput);
+        LytEdit = findViewById(R.id.LytEditDetailInfo);
 
         mapView = findViewById(R.id.MVDetailInfo);
         mapView.onCreate(savedInstanceState);
@@ -158,6 +159,12 @@ public class DetailInfoActivity extends AppCompatActivity implements OnMapReadyC
         StringJudul = IntentStatusProperty + " " + IntentJenisProperty;
         StringLokasi = IntentLokasi;
 
+        if (StrIdAgen.equals(StringIdAgen)) {
+            LytEdit.setVisibility(View.VISIBLE);
+        } else {
+            LytEdit.setVisibility(View.GONE);
+        }
+
         LoadAgen();
 
         FormatCurrency currency = new FormatCurrency();
@@ -176,6 +183,60 @@ public class DetailInfoActivity extends AppCompatActivity implements OnMapReadyC
             @Override
             public void onClick(View v) {
                 Intent update = new Intent(DetailInfoActivity.this, TambahListingInfoActivity.class);
+            }
+        });
+        LytEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent update = new Intent(DetailInfoActivity.this, EditDetailInfoActivity.class);
+                update.putExtra("IdInfo",IntentIdInfo);
+                update.putExtra("JenisProperty",IntentJenisProperty);
+                update.putExtra("StatusProperty",IntentStatusProperty);
+                update.putExtra("Narahubung",IntentNarahubung);
+                update.putExtra("ImgSelfie",IntentImgSelfie);
+                update.putExtra("ImgProperty",IntentImgProperty);
+                update.putExtra("Lokasi",IntentLokasi);
+                update.putExtra("Alamat",IntentAlamat);
+                update.putExtra("NoTelp",IntentNoTelp);
+                update.putExtra("Latitude",IntentLatitude);
+                update.putExtra("Longitude",IntentLongitude);
+                update.putExtra("TglInput",IntentTglInput);
+                update.putExtra("JamInput",IntentJamInput);
+                update.putExtra("IsListing",IntentIsListing);
+                update.putExtra("LBangunan",IntentLBangunan);
+                update.putExtra("LTanah",IntentLTanah);
+                update.putExtra("Harga",IntentHarga);
+                update.putExtra("HargaSewa",IntentHargaSewa);
+                update.putExtra("Keterangan",IntentKeterangan);
+                update.putExtra("IsSpek",IntentIsSpek);
+                startActivity(update);
+            }
+        });
+        IVAddListing.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent update = new Intent(DetailInfoActivity.this, TambahListingInfoActivity.class);
+                update.putExtra("IdInfo",IntentIdInfo);
+                update.putExtra("JenisProperty",IntentJenisProperty);
+                update.putExtra("StatusProperty",IntentStatusProperty);
+                update.putExtra("Narahubung",IntentNarahubung);
+                update.putExtra("ImgSelfie",IntentImgSelfie);
+                update.putExtra("ImgProperty",IntentImgProperty);
+                update.putExtra("Lokasi",IntentLokasi);
+                update.putExtra("Alamat",IntentAlamat);
+                update.putExtra("NoTelp",IntentNoTelp);
+                update.putExtra("Latitude",IntentLatitude);
+                update.putExtra("Longitude",IntentLongitude);
+                update.putExtra("TglInput",IntentTglInput);
+                update.putExtra("JamInput",IntentJamInput);
+                update.putExtra("IsListing",IntentIsListing);
+                update.putExtra("LBangunan",IntentLBangunan);
+                update.putExtra("LTanah",IntentLTanah);
+                update.putExtra("Harga",IntentHarga);
+                update.putExtra("HargaSewa",IntentHargaSewa);
+                update.putExtra("Keterangan",IntentKeterangan);
+                update.putExtra("IsSpek",IntentIsSpek);
+                startActivity(update);
             }
         });
 
@@ -215,11 +276,11 @@ public class DetailInfoActivity extends AppCompatActivity implements OnMapReadyC
                 Poin = 0;
                 TVPoin.setText(String.valueOf(Poin));
             } else if (IntentIsSpek.equals("1")) {
-                if (IntentImgSelfie.equals("0") && IntentLatitude.equals("") && IntentLongitude.equals("")) {
-                    Poin = 10;
+                if (!IntentImgSelfie.equals("0") && !IntentLatitude.equals("") && !IntentLongitude.equals("")) {
+                    Poin = 20;
                     TVPoin.setText(String.valueOf(Poin));
                 } else {
-                    Poin = 10 * 2;
+                    Poin = 10;
                     TVPoin.setText(String.valueOf(Poin));
                 }
             }

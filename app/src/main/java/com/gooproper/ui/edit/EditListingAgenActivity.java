@@ -484,6 +484,9 @@ public class EditListingAgenActivity extends AppCompatActivity {
         if (intentAlamat != null && !intentAlamat.isEmpty()) {
             alamatproperti.setText(intentAlamat);
         }
+        if (intentLocation != null && !intentLocation.isEmpty()) {
+            addressStr = intentLocation;
+        }
         if (intentLatitude != null && !intentLatitude.isEmpty()) {
             latitudeStr = intentLatitude;
         }
@@ -902,12 +905,12 @@ public class EditListingAgenActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable editable) {
                 if (editable.toString().equalsIgnoreCase("Ya")) {
-                    if (intentImgPjp == null) {
+                    if (intentImgPjp.equals("0")) {
                         BtnPjp.setVisibility(View.VISIBLE);
                     } else {
                         BtnPjp.setVisibility(View.GONE);
                     }
-                    if (intentImgPjp1 == null) {
+                    if (intentImgPjp1.equals("0")) {
                         BtnPjp1.setVisibility(View.VISIBLE);
                     } else {
                         BtnPjp1.setVisibility(View.GONE);
@@ -4478,7 +4481,7 @@ public class EditListingAgenActivity extends AppCompatActivity {
                 map.put("Alamat", alamatproperti.getText().toString());
                 map.put("Latitude", Lat);
                 map.put("Longitude", Lng);
-                map.put("Location", alamatproperti.getText().toString());
+                map.put("Location", addressStr);
                 map.put("Wide", luas.getText().toString());
                 map.put("Land", land.getText().toString());
                 map.put("Dimensi", dimensi.getText().toString());

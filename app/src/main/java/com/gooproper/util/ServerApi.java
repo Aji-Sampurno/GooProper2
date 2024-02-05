@@ -115,13 +115,20 @@ public class ServerApi {
     public static final String URL_DELETE_PRIMARY = BASE_URL + "/Api/DeletePrimary";
     // Info ----------------------------------------------------------------------------------------
     public static final String URL_TAMBAH_INFO = BASE_URL + "/Api/TambahInfo";
+    public static final String URL_EDIT_INFO = BASE_URL + "/Api/EditInfo";
+    public static final String URL_TAMBAH_DETAIL_INFO = BASE_URL + "/Api/TambahDetailInfo";
     public static final String URL_UPDATE_INFO = BASE_URL + "/Api/UpdateInfo";
     public static final String URL_GET_INFO = BASE_URL + "/Api/GetInfo";
-    public static final String URL_GET_INFO_AGEN = BASE_URL + "/Api/GetInfoAgen";
+    public static final String URL_GET_INFO_AGEN = BASE_URL + "/Api/GetInfoAgen?idagen=";
+    public static final String URL_GET_INFO_LAPORAN = BASE_URL + "/Api/GetLaporanInfo";
     public static final String URL_GET_PRAINFO = BASE_URL + "/Api/GetPraInfo";
     public static final String URL_LISTING_INFO = BASE_URL + "/Api/ListingInfo";
     public static final String URL_GET_AGEN_INFO = BASE_URL + "/Api/GetAgenInfo?id=";
     public static final String URL_GET_REPORT_AGEN = BASE_URL + "/Api/GetReportAgen";
+    public static final String URL_GET_AGEN_AKTIF = BASE_URL + "/Api/LastSeenAgenAktif";
+    public static final String URL_GET_AGEN_TIDAK_AKTIF = BASE_URL + "/Api/LastSeenAgenTidakAktif";
+    public static final String URL_UPDATE_PRALISTING_SELFIE = BASE_URL + "/Api/UpdateSelfiePraListing";
+    public static final String URL_UPDATE_LISTING_SELFIE = BASE_URL + "/Api/UpdateSelfieListing";
 
 }
 

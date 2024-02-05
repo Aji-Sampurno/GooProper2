@@ -272,7 +272,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
-                                android:text="Tambah Info Sementara"
+                                android:text="Tambah Tampungan Sementara"
                                 android:textColor="@color/second" />
 
                         </LinearLayout>
@@ -305,7 +305,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
-                                android:text="Daftar Info Sementara"
+                                android:text="Daftar Tampungan Sementara"
                                 android:textColor="@color/second" />
 
                         </LinearLayout>
@@ -476,7 +476,6 @@
                             android:layout_width="match_parent"
                             android:layout_height="1dp"
                             android:layout_marginTop="10dp"
-                            android:visibility="gone"
                             android:layout_marginBottom="10dp"
                             android:background="#717171"/>
 
@@ -486,7 +485,6 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="5dp"
                             android:layout_marginBottom="5dp"
-                            android:visibility="gone"
                             android:orientation="horizontal">
 
                             <ImageView

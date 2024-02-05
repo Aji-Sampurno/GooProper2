@@ -15,6 +15,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.gooproper.ui.CobaPesanActivity;
+import com.gooproper.ui.ReportAgenActivity;
 import com.gooproper.ui.edit.EditAkunActivity;
 import com.gooproper.R;
 import com.gooproper.ui.SettingActivity;
@@ -33,7 +34,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class AkunAdminFragment extends Fragment {
 
-    private LinearLayout pelamar, agen, reportagen, listing, pralistingrejected, primary, listprimary, karyawan, laporan, pengaturan, hubungikami, tentangkami, kirimpesan;
+    private LinearLayout pelamar, agen, reportagen, tambahpenghargaan, listing, pralistingrejected, primary, listprimary, karyawan, laporan, pengaturan, hubungikami, tentangkami, kirimpesan;
     TextView nama, edit;
     CircleImageView cvadmin;
     View view, view1, view2, view3;
@@ -61,6 +62,7 @@ public class AkunAdminFragment extends Fragment {
         pelamar = root.findViewById(R.id.LytPelamarAdmin);
         agen = root.findViewById(R.id.LytAgenAdmin);
         reportagen = root.findViewById(R.id.LytreportAgen);
+        tambahpenghargaan = root.findViewById(R.id.LytTambahPenghargaan);
         pengaturan = root.findViewById(R.id.LytPengaturanAdmin);
         hubungikami = root.findViewById(R.id.LytHubungiKamiAdmin);
         tentangkami = root.findViewById(R.id.LytTentangKamiAdmin);
@@ -104,6 +106,8 @@ public class AkunAdminFragment extends Fragment {
         primary.setOnClickListener(view -> startActivity(new Intent(getContext(), TambahListingPrimaryActivity.class)));
         pelamar.setOnClickListener(view -> startActivity(new Intent(getContext(), PelamarAgenActivity.class)));
         agen.setOnClickListener(view -> startActivity(new Intent(getContext(), AgenActivity.class)));
+        reportagen.setOnClickListener(view -> startActivity(new Intent(getContext(), ReportAgenActivity.class)));
+        tambahpenghargaan.setOnClickListener(view -> startActivity(new Intent(getContext(), TambahListingActivity.class)));
         laporan.setOnClickListener(view -> startActivity(new Intent(getContext(), LaporanListingActivity.class)));
         kirimpesan.setOnClickListener(view -> startActivity(new Intent(getContext(), CobaPesanActivity.class)));
         karyawan.setOnClickListener(view -> startActivity(new Intent(getContext(), TambahKaryawanActivity.class)));
