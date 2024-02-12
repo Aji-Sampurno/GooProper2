@@ -17,6 +17,7 @@ public class ServerApi {
     public static final String URL_UPDATE_MITRA = BASE_URL + "/Api/UpdateMitra";
     public static final String URL_UPDATE_KL = BASE_URL + "/Api/UpdateKl";
     public static final String URL_UPDATE_ADMIN = BASE_URL + "/Api/UpdateAdmin";
+    public static final String URL_CEK_AKTIF = BASE_URL + "/Api/CekAktif?idagen=";
     // Info Property -------------------------------------------------------------------------------
     public static final String URL_COUNT_LISTING_JUAL = BASE_URL + "/Api/CountListingSold";
     public static final String URL_COUNT_LISTING_SEWA = BASE_URL + "/Api/CountListingRent";
@@ -28,7 +29,7 @@ public class ServerApi {
     public static final String URL_COUNT_LISTING_TAHUN = BASE_URL + "/Api/CountListingTahun";
     public static final String URL_COUNT_LISTING_BULAN = BASE_URL + "/Api/CountListingBulan";
     // Pra Listing ---------------------------------------------------------------------------------
-    public static final String URL_TAMBAH_PRALISTING = BASE_URL + "/Api/PraListingFinall";
+    public static final String URL_TAMBAH_PRALISTING = BASE_URL + "/Api/PraListing";
     public static final String URL_AJUKAN_ULANG = BASE_URL + "/Api/AjukanUlang";
     public static final String URL_TAMBAH_PRALISTING_LOKASI = BASE_URL + "/Api/PraListingFinalLokasi";
     public static final String URL_UPDATE_PRALISTING = BASE_URL + "/Api/UpdatePraListing";

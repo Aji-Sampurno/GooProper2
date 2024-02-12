@@ -62,6 +62,7 @@ import com.google.android.play.core.install.model.AppUpdateType;
 import com.google.android.play.core.install.model.UpdateAvailability;
 import com.google.android.play.core.tasks.Task;
 import com.google.firebase.FirebaseApp;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.gooproper.R;
 import com.gooproper.adapter.ListingAdapter;
@@ -123,12 +124,12 @@ public class HomeAdminFragment extends Fragment implements OnMapReadyCallback {
         IdAdmin = Preferences.getKeyIdAdmin(getContext());
         Status = Preferences.getKeyStatus(getContext());
 
-        requestNotificationPermission();
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
             NotificationChannel channel = new NotificationChannel("1","notification", NotificationManager.IMPORTANCE_HIGH);
             NotificationManager notificationManager = requireContext().getSystemService(NotificationManager.class);
             notificationManager.createNotificationChannel(channel);
+        } else {
+            requestNotificationPermission();
         }
 
         FirebaseMessaging.getInstance().getToken()
@@ -138,6 +139,10 @@ public class HomeAdminFragment extends Fragment implements OnMapReadyCallback {
                     }
                     Token = task.getResult();
                     Toast.makeText(getContext(), "Selamat Datang" + Token, Toast.LENGTH_SHORT);
+                    FirebaseAnalytics firebaseAnalytics = FirebaseAnalytics.getInstance(getContext());
+                    Bundle bundle = new Bundle();
+                    bundle.putString("token_received", Token);
+                    firebaseAnalytics.logEvent("token_received", bundle);
                     simpanDevice();
                 });
 

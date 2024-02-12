@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.media.RingtoneManager;
 import android.net.Uri;
+import android.os.Build;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -43,9 +44,9 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
         int notificationId = (int) System.currentTimeMillis();
 
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             String channelId = "notification";
-            CharSequence channelName = "My Notification Channel";
+            CharSequence channelName = "pralisting";
             int importance = NotificationManager.IMPORTANCE_HIGH;
 
             NotificationChannel notificationChannel = new NotificationChannel(channelId, channelName, importance);
@@ -53,6 +54,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             NotificationManager notificationManager = getSystemService(NotificationManager.class);
             notificationManager.createNotificationChannel(notificationChannel);
         }
+
         String title = data.get("title");
         String messageBody = data.get("message");
         String notificationType = data.get("type");
@@ -82,7 +84,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         Uri customSoundUri = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.listing_masuk);
 
         NotificationCompat.Builder notificationBuilder =
-                new NotificationCompat.Builder(this, "my_channel_id")
+                new NotificationCompat.Builder(this, "notification")
                         .setSmallIcon(R.drawable.logogp)
                         .setContentTitle(title)
                         .setContentText(messageBody)

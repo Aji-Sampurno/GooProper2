@@ -1068,94 +1068,6 @@ public class EditListingActivity extends AppCompatActivity {
                 }
             }
         });
-        harga.addTextChangedListener(new TextWatcher() {
-            private String current = "";
-
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                if (!s.toString().equals(current)) {
-                    harga.removeTextChangedListener(this);
-
-                    String cleanString = s.toString().replaceAll("[Rp,.\\s]", "");
-                    /*
-                    double parsed = Double.parseDouble(cleanString);
-                    String formatted = String.format(Locale.US, "%,.0f", parsed);
-
-                    HargaString = cleanString;
-
-                    current = formatted;
-                    harga.setText(formatted);
-                    harga.setSelection(formatted.length());
-                    harga.addTextChangedListener(this);
-                     */
-                    if (!cleanString.isEmpty()) {
-                        double parsed = Double.parseDouble(cleanString);
-                        String formatted = String.format(Locale.US, "%,.0f", parsed);
-                        HargaString = cleanString;
-                        current = formatted;
-                        harga.setText(formatted);
-                        harga.setSelection(formatted.length());
-                    } else {
-                        harga.setText("");
-                        HargaString = "";
-                    }
-
-                    harga.addTextChangedListener(this);
-                }
-            }
-        });
-        hargasewa.addTextChangedListener(new TextWatcher() {
-            private String current = "";
-
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                if (!s.toString().equals(current)) {
-                    hargasewa.removeTextChangedListener(this);
-
-                    String cleanString = s.toString().replaceAll("[Rp,.\\s]", "");
-                    /*
-                    double parsed = Double.parseDouble(cleanString);
-                    String formatted = String.format(Locale.US, "%,.0f", parsed);
-
-                    HargaString = cleanString;
-
-                    current = formatted;
-                    harga.setText(formatted);
-                    harga.setSelection(formatted.length());
-                    harga.addTextChangedListener(this);
-                     */
-                    if (!cleanString.isEmpty()) {
-                        double parsed = Double.parseDouble(cleanString);
-                        String formatted = String.format(Locale.US, "%,.0f", parsed);
-                        HargaSewaString = cleanString;
-                        current = formatted;
-                        hargasewa.setText(formatted);
-                        hargasewa.setSelection(formatted.length());
-                    } else {
-                        hargasewa.setText("");
-                        HargaSewaString = "";
-                    }
-
-                    hargasewa.addTextChangedListener(this);
-                }
-            }
-        });
 
         submit.setOnClickListener(view -> {
             int checkedRadioButtonId = rgpriority.getCheckedRadioButtonId();
@@ -2263,7 +2175,11 @@ public class EditListingActivity extends AppCompatActivity {
             intent.setAction(Intent.ACTION_GET_CONTENT);
             startActivityForResult(Intent.createChooser(intent, "Pilih File PDF"), PICK_PDF_SHM);
         } else {
-            requestStoragePermission();
+            Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+            intent.addCategory(Intent.CATEGORY_OPENABLE);
+            intent.setType("application/pdf");
+
+            startActivityForResult(intent, PICK_PDF_SHM);
         }
     }
     public void pilihFileHGB(View view) {
@@ -2275,7 +2191,11 @@ public class EditListingActivity extends AppCompatActivity {
             intent.setAction(Intent.ACTION_GET_CONTENT);
             startActivityForResult(Intent.createChooser(intent, "Pilih File PDF"), PICK_PDF_HGB);
         } else {
-            requestStoragePermission();
+            Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+            intent.addCategory(Intent.CATEGORY_OPENABLE);
+            intent.setType("application/pdf");
+
+            startActivityForResult(intent, PICK_PDF_HGB);
         }
     }
     public void pilihFileHSHP(View view) {
@@ -2287,7 +2207,11 @@ public class EditListingActivity extends AppCompatActivity {
             intent.setAction(Intent.ACTION_GET_CONTENT);
             startActivityForResult(Intent.createChooser(intent, "Pilih File PDF"), PICK_PDF_HSHP);
         } else {
-            requestStoragePermission();
+            Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+            intent.addCategory(Intent.CATEGORY_OPENABLE);
+            intent.setType("application/pdf");
+
+            startActivityForResult(intent, PICK_PDF_HSHP);
         }
     }
     public void pilihFilePPJB(View view) {
@@ -2299,7 +2223,11 @@ public class EditListingActivity extends AppCompatActivity {
             intent.setAction(Intent.ACTION_GET_CONTENT);
             startActivityForResult(Intent.createChooser(intent, "Pilih File PDF"), PICK_PDF_PPJB);
         } else {
-            requestStoragePermission();
+            Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+            intent.addCategory(Intent.CATEGORY_OPENABLE);
+            intent.setType("application/pdf");
+
+            startActivityForResult(intent, PICK_PDF_PPJB);
         }
     }
     public void pilihFileSTRA(View view) {
@@ -2311,7 +2239,11 @@ public class EditListingActivity extends AppCompatActivity {
             intent.setAction(Intent.ACTION_GET_CONTENT);
             startActivityForResult(Intent.createChooser(intent, "Pilih File PDF"), PICK_PDF_Stratatitle);
         } else {
-            requestStoragePermission();
+            Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+            intent.addCategory(Intent.CATEGORY_OPENABLE);
+            intent.setType("application/pdf");
+
+            startActivityForResult(intent, PICK_PDF_Stratatitle);
         }
     }
     public void pilihFileAJB(View view) {
@@ -2323,7 +2255,11 @@ public class EditListingActivity extends AppCompatActivity {
             intent.setAction(Intent.ACTION_GET_CONTENT);
             startActivityForResult(Intent.createChooser(intent, "Pilih File PDF"), PICK_PDF_AJB);
         } else {
-            requestStoragePermission();
+            Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+            intent.addCategory(Intent.CATEGORY_OPENABLE);
+            intent.setType("application/pdf");
+
+            startActivityForResult(intent, PICK_PDF_AJB);
         }
     }
     public void pilihFilePetokD(View view) {
@@ -2335,7 +2271,11 @@ public class EditListingActivity extends AppCompatActivity {
             intent.setAction(Intent.ACTION_GET_CONTENT);
             startActivityForResult(Intent.createChooser(intent, "Pilih File PDF"), PICK_PDF_PetokD);
         } else {
-            requestStoragePermission();
+            Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+            intent.addCategory(Intent.CATEGORY_OPENABLE);
+            intent.setType("application/pdf");
+
+            startActivityForResult(intent, PICK_PDF_PetokD);
         }
     }
     private String getFileNameFromUri(Uri uri) {

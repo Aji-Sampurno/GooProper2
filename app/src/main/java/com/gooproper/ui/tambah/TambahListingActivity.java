@@ -200,12 +200,12 @@ public class TambahListingActivity extends AppCompatActivity {
     ImageView back, iv1, iv2, iv3, iv4, iv5, iv6, iv7, iv8, IVShm, IVHgb, IVHshp, IVPpjb, IVStratatitle, IVAJB, IVPetokD, IVPjp, IVPjp1, IVSelfie, IVKTP;
     Button batal, submit, select, select1, select2, select3, select4, select5, select6, select7, maps, BtnSHM, BtnHGB, BtnHSHP, BtnPPJB, BtnSTRA, BtnAJB, BtnPetokD, BtnSHMPdf, BtnHGBPdf, BtnHSHPPdf, BtnPPJBPdf, BtnSTRAPdf, BtnAJBPdf, BtnPetokDPdf, BtnPjp, BtnPjp1, BtnSelfie, BtnKTP;
     ImageView hps1, hps2, hps3, hps4, hps5, hps6, hps7, hps8, HpsSHM, HpsHGB, HpsHSHP, HpsPPJB, HpsStratatitle, HpsAJB, HpsPetokD, HpsPjp, HpsPjp1, HpsSelfie, HpsKTP;
-    TextInputEditText namalengkap, nohp, nik, alamat, tgllhir, rekening, bank, atasnama, jenisproperti, namaproperti, alamatproperti, sertifikat, nosertif, luas, satuanluas, land, satuanland, dimensi, lantai, bed, bath, bedart, bathart, garasi, carpot, listrik, air, pjp, perabot, ketperabot, banner, status, harga, hargasewa, keterangan, hadap, size, EtTglInput, EtFee, CoListing, ktp;
-    TextInputLayout LytSize, LytTglInput, LytHargaJual, LytHargaSewa;
+    TextInputEditText namalengkap, nohp, nik, alamat, tgllhir, rekening, bank, atasnama, jenisproperti, namaproperti, alamatproperti, alamatpropertitemplate, sertifikat, nosertif, luas, satuanluas, land, satuanland, dimensi, lantai, bed, bath, bedart, bathart, garasi, carpot, listrik, air, pjp, perabot, ketperabot, banner, status, harga, hargasewa, rangeharga, keterangan, hadap, size, EtTglInput, EtFee, CoListing, ktp;
+    TextInputLayout LytSize, LytTglInput, LytHargaJual, LytHargaSewa, LytRangeHarga;
     RadioButton open, exclusive;
     RadioGroup rgpriority;
     CheckBox CBSHM, CBHGB, CBHSHP, CBPPJB, CBSTRA, CBAJB, CBPetokD, CBMarketable, CBHarga, CBSelfie, CBLokasi;
-    String idagen, idnull, sstatus, priority, namalisting, isAdmin, idadmin, idinput, HargaString, HargaSewaString, SHarga, SHargaSewa, agenid, agencoid;
+    String idagen, idnull, sstatus, priority, namalisting, isAdmin, idadmin, idinput, HargaString, HargaSewaString, SHarga, SHargaSewa, agenid, agencoid, SRangeHarga, SRange, RangeHargaString;
     String image1, image2, image3, image4, image5, image6, image7, image8, SHM, HGB, HSHP, PPJB, STRA, AJB, PetokD, PJPHal1, PJPHal2, ImgSelfie, ImgKTP;
     String latitudeStr, longitudeStr, addressStr, lokasiStr, Lat, Lng, token, StrLokasi;
     Drawable DrawableSHM, DrawableHGB, DrawableHSHP, DrawablePPJB, DrawableSTRA;
@@ -256,6 +256,7 @@ public class TambahListingActivity extends AppCompatActivity {
         LytTglInput = findViewById(R.id.lyttglinputproperti);
         LytHargaJual = findViewById(R.id.lytharga);
         LytHargaSewa = findViewById(R.id.lythargasewa);
+        LytRangeHarga = findViewById(R.id.lytrangeharga);
         LytSHM = findViewById(R.id.LytSHM);
         LytHGB = findViewById(R.id.LytHGB);
         LytHSHP = findViewById(R.id.LytHSHP);
@@ -319,6 +320,7 @@ public class TambahListingActivity extends AppCompatActivity {
         jenisproperti = findViewById(R.id.etjenisproperti);
         namaproperti = findViewById(R.id.etnamaproperti);
         alamatproperti = findViewById(R.id.etalamatproperti);
+        alamatpropertitemplate = findViewById(R.id.etalamatpropertitemplate);
         sertifikat = findViewById(R.id.ettipesertifikat);
         pjp = findViewById(R.id.etkonfirmasipjp);
         nosertif = findViewById(R.id.etnomorsertifikat);
@@ -342,6 +344,7 @@ public class TambahListingActivity extends AppCompatActivity {
         status = findViewById(R.id.etstatusproperti);
         harga = findViewById(R.id.etharga);
         hargasewa = findViewById(R.id.ethargasewa);
+        rangeharga = findViewById(R.id.etrangeharga);
         keterangan = findViewById(R.id.etketerangan);
         hadap = findViewById(R.id.ethadap);
         size = findViewById(R.id.etukuranbanner);
@@ -2736,6 +2739,26 @@ public class TambahListingActivity extends AppCompatActivity {
                 }
             }
         });
+        jenisproperti.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if (editable.toString().equalsIgnoreCase("Rukost")) {
+                    LytRangeHarga.setVisibility(View.VISIBLE);
+                } else {
+                    LytRangeHarga.setVisibility(View.GONE);
+                }
+            }
+        });
         status.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -3068,6 +3091,39 @@ public class TambahListingActivity extends AppCompatActivity {
                     }
 
                     hargasewa.addTextChangedListener(this);
+                }
+            }
+        });
+        rangeharga.addTextChangedListener(new TextWatcher() {
+            private String current = "";
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (!s.toString().equals(current)) {
+                    rangeharga.removeTextChangedListener(this);
+
+                    String cleanString = s.toString().replaceAll("[Rp,.\\s]", "");
+                    if (!cleanString.isEmpty()) {
+                        double parsed = Double.parseDouble(cleanString);
+                        String formatted = String.format(Locale.US, "%,.0f", parsed);
+                        RangeHargaString = cleanString;
+                        current = formatted;
+                        rangeharga.setText(formatted);
+                        rangeharga.setSelection(formatted.length());
+                    } else {
+                        rangeharga.setText("");
+                        RangeHargaString = "";
+                    }
+
+                    rangeharga.addTextChangedListener(this);
                 }
             }
         });
@@ -5968,6 +6024,11 @@ public class TambahListingActivity extends AppCompatActivity {
                 } else {
                     SHargaSewa = HargaSewaString;
                 }
+                if (RangeHargaString == null || RangeHargaString.equals("") || rangeharga.getText().equals("")){
+                    SRangeHarga = "0";
+                } else {
+                    SRangeHarga = RangeHargaString;
+                }
 
                 String tanah = luas.getText().toString() + " " + satuanluas.getText().toString();
                 String bangunan = land.getText().toString() + " " + satuanland.getText().toString();
@@ -5986,7 +6047,7 @@ public class TambahListingActivity extends AppCompatActivity {
 
                 map.put("NamaLengkap", namalengkap.getText().toString());
                 map.put("NoTelp", nohp.getText().toString());
-                map.put("Alamat", alamat.getText().toString());
+                map.put("AlamatVendor", alamat.getText().toString());
                 map.put("TglLahir", tgllhir.getText().toString());
                 map.put("Nik", nik.getText().toString());
                 map.put("NoRekening", rekening.getText().toString());
@@ -5997,6 +6058,7 @@ public class TambahListingActivity extends AppCompatActivity {
                 map.put("IdInput", idnull);
                 map.put("NamaListing", namaproperti.getText().toString());
                 map.put("Alamat", alamatproperti.getText().toString());
+                map.put("AlamatTemplate", alamatpropertitemplate.getText().toString());
                 map.put("Latitude", Lat);
                 map.put("Longitude", Lng);
                 map.put("Location", StrLokasi);
@@ -6039,6 +6101,7 @@ public class TambahListingActivity extends AppCompatActivity {
                 map.put("Size", size.getText().toString());
                 map.put("Harga", SHarga);
                 map.put("HargaSewa", SHargaSewa);
+                map.put("RangeHarga", SRangeHarga);
                 map.put("TglInput", EtTglInput.getText().toString());
                 map.put("Img1", image1);
                 map.put("Img2", image2);
@@ -6249,6 +6312,11 @@ public class TambahListingActivity extends AppCompatActivity {
                 } else {
                     SHargaSewa = HargaSewaString;
                 }
+                if (RangeHargaString == null || RangeHargaString.equals("") || rangeharga.getText().equals("")){
+                    SRangeHarga = "0";
+                } else {
+                    SRangeHarga = RangeHargaString;
+                }
 
                 String tanah = luas.getText().toString() + " " + satuanluas.getText().toString();
                 String bangunan = land.getText().toString() + " " + satuanland.getText().toString();
@@ -6267,7 +6335,7 @@ public class TambahListingActivity extends AppCompatActivity {
 
                 map.put("NamaLengkap", namalengkap.getText().toString());
                 map.put("NoTelp", nohp.getText().toString());
-                map.put("Alamat", alamat.getText().toString());
+                map.put("AlamatVendor", alamat.getText().toString());
                 map.put("TglLahir", tgllhir.getText().toString());
                 map.put("Nik", nik.getText().toString());
                 map.put("NoRekening", rekening.getText().toString());
@@ -6278,6 +6346,7 @@ public class TambahListingActivity extends AppCompatActivity {
                 map.put("IdInput", idagen);
                 map.put("NamaListing", namaproperti.getText().toString());
                 map.put("Alamat", alamatproperti.getText().toString());
+                map.put("AlamatTemplate", alamatpropertitemplate.getText().toString());
                 map.put("Latitude", Lat);
                 map.put("Longitude", Lng);
                 map.put("Location", StrLokasi);
@@ -6320,6 +6389,7 @@ public class TambahListingActivity extends AppCompatActivity {
                 map.put("Size", size.getText().toString());
                 map.put("Harga", SHarga);
                 map.put("HargaSewa", SHargaSewa);
+                map.put("RangeHarga", SRangeHarga);
                 map.put("TglInput", idnull);
                 map.put("Img1", image1);
                 map.put("Img2", image2);
@@ -6523,6 +6593,11 @@ public class TambahListingActivity extends AppCompatActivity {
                 } else {
                     SHargaSewa = HargaSewaString;
                 }
+                if (RangeHargaString == null || RangeHargaString.equals("") || rangeharga.getText().equals("")){
+                    SRangeHarga = "0";
+                } else {
+                    SRangeHarga = RangeHargaString;
+                }
 
                 String tanah = luas.getText().toString() + " " + satuanluas.getText().toString();
                 String bangunan = land.getText().toString() + " " + satuanland.getText().toString();
@@ -6541,7 +6616,7 @@ public class TambahListingActivity extends AppCompatActivity {
 
                 map.put("NamaLengkap", namalengkap.getText().toString());
                 map.put("NoTelp", nohp.getText().toString());
-                map.put("Alamat", alamat.getText().toString());
+                map.put("AlamatVendor", alamat.getText().toString());
                 map.put("TglLahir", tgllhir.getText().toString());
                 map.put("Nik", nik.getText().toString());
                 map.put("NoRekening", rekening.getText().toString());
@@ -6552,6 +6627,7 @@ public class TambahListingActivity extends AppCompatActivity {
                 map.put("IdInput", idagen);
                 map.put("NamaListing", namaproperti.getText().toString());
                 map.put("Alamat", alamatproperti.getText().toString());
+                map.put("AlamatTemplate", alamatpropertitemplate.getText().toString());
                 map.put("Latitude", Lat);
                 map.put("Longitude", Lng);
                 map.put("Location", StringLokasi);
@@ -6594,6 +6670,7 @@ public class TambahListingActivity extends AppCompatActivity {
                 map.put("Size", size.getText().toString());
                 map.put("Harga", SHarga);
                 map.put("HargaSewa", SHargaSewa);
+                map.put("RangeHarga", SRangeHarga);
                 map.put("TglInput", idnull);
                 map.put("Img1", image1);
                 map.put("Img2", image2);
@@ -7224,7 +7301,7 @@ public class TambahListingActivity extends AppCompatActivity {
     }
     private void sendNotificationToToken(String token, String notificationType) {
         String title = Preferences.getKeyNama(this);
-        String message = "Menambahkan Listingan Baru";
+        String message = "Menambahkan PraListing Baru";
         String response = SendMessageToFCM.sendMessage(token, title, message, notificationType);
     }
 }

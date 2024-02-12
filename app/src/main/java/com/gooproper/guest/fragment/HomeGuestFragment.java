@@ -109,12 +109,12 @@ public class HomeGuestFragment extends Fragment implements OnMapReadyCallback {
 
         checkForUpdate();
 
-        requestNotificationPermission();
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
             NotificationChannel channel = new NotificationChannel("1","notification", NotificationManager.IMPORTANCE_HIGH);
             NotificationManager notificationManager = requireContext().getSystemService(NotificationManager.class);
             notificationManager.createNotificationChannel(channel);
+        } else {
+            requestNotificationPermission();
         }
 
         recycleListingPrimary = root.findViewById(R.id.ListingPrimary);

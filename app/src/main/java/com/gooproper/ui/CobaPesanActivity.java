@@ -399,7 +399,6 @@ public class CobaPesanActivity extends AppCompatActivity {
     private class SendMessageTask extends AsyncTask<String, Void, String> {
         @Override
         protected String doInBackground(String... params) {
-            // Ambil token dari parameter dan kirim pesan ke token tersebut
             for (String token : params) {
                 sendNotificationToToken(token, "pralisting");
             }

@@ -532,7 +532,7 @@ public class EditPralistingActivity extends AppCompatActivity {
     }
     private void sendNotificationToToken(String token, String notificationType) {
         String title = Preferences.getKeyNama(this);
-        String message = "Melakukan Update Listing";
+        String message = "Melakukan Update Lokasi dan Selfie PraListing";
         String response = SendMessageToFCM.sendMessage(token, title, message, notificationType);
     }
 }

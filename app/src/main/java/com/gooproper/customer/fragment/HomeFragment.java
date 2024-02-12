@@ -4,6 +4,8 @@ import static android.app.Activity.RESULT_OK;
 
 import android.Manifest;
 import android.app.Dialog;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -110,6 +112,14 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         checkForUpdate();
 
         FirebaseApp.initializeApp(getContext());
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+            NotificationChannel channel = new NotificationChannel("1","notification", NotificationManager.IMPORTANCE_HIGH);
+            NotificationManager notificationManager = requireContext().getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        } else {
+            requestNotificationPermission();
+        }
 
         recycleListingPrimary = root.findViewById(R.id.ListingPrimary);
         recycleListingSold = root.findViewById(R.id.ListingSold);

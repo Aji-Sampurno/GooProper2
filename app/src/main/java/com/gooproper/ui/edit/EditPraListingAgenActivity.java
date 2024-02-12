@@ -942,6 +942,7 @@ public class EditPraListingAgenActivity extends AppCompatActivity {
         if (!intentImg1.equals("0")){
             lyt1.setVisibility(View.VISIBLE);
             select1.setVisibility(View.VISIBLE);
+            select1.setText("Ganti Gambar");
             select2.setVisibility(View.VISIBLE);
             Picasso.get()
                     .load(intentImg1)
@@ -1020,6 +1021,9 @@ public class EditPraListingAgenActivity extends AppCompatActivity {
         }
         if (intentLongitude != null && !intentLongitude.isEmpty()) {
             longitudeStr = intentLongitude;
+        }
+        if (intentLocation != null && !intentLocation.isEmpty()) {
+            addressStr = intentLocation;
         }
         if (intentIsSelfie.equals("1")){
             CBSelfie.setChecked(true);
@@ -2331,7 +2335,11 @@ public class EditPraListingAgenActivity extends AppCompatActivity {
             intent.setAction(Intent.ACTION_GET_CONTENT);
             startActivityForResult(Intent.createChooser(intent, "Pilih File PDF"), PICK_PDF_SHM);
         } else {
-            requestStoragePermission();
+            Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+            intent.addCategory(Intent.CATEGORY_OPENABLE);
+            intent.setType("application/pdf");
+
+            startActivityForResult(intent, PICK_PDF_SHM);
         }
     }
     public void pilihFileHGB(View view) {
@@ -2341,7 +2349,11 @@ public class EditPraListingAgenActivity extends AppCompatActivity {
             intent.setAction(Intent.ACTION_GET_CONTENT);
             startActivityForResult(Intent.createChooser(intent, "Pilih File PDF"), PICK_PDF_HGB);
         } else {
-            requestStoragePermission();
+            Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+            intent.addCategory(Intent.CATEGORY_OPENABLE);
+            intent.setType("application/pdf");
+
+            startActivityForResult(intent, PICK_PDF_HGB);
         }
     }
     public void pilihFileHSHP(View view) {
@@ -2351,7 +2363,11 @@ public class EditPraListingAgenActivity extends AppCompatActivity {
             intent.setAction(Intent.ACTION_GET_CONTENT);
             startActivityForResult(Intent.createChooser(intent, "Pilih File PDF"), PICK_PDF_HSHP);
         } else {
-            requestStoragePermission();
+            Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+            intent.addCategory(Intent.CATEGORY_OPENABLE);
+            intent.setType("application/pdf");
+
+            startActivityForResult(intent, PICK_PDF_HSHP);
         }
     }
     public void pilihFilePPJB(View view) {
@@ -2361,7 +2377,11 @@ public class EditPraListingAgenActivity extends AppCompatActivity {
             intent.setAction(Intent.ACTION_GET_CONTENT);
             startActivityForResult(Intent.createChooser(intent, "Pilih File PDF"), PICK_PDF_PPJB);
         } else {
-            requestStoragePermission();
+            Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+            intent.addCategory(Intent.CATEGORY_OPENABLE);
+            intent.setType("application/pdf");
+
+            startActivityForResult(intent, PICK_PDF_PPJB);
         }
     }
     public void pilihFileSTRA(View view) {
@@ -2371,7 +2391,11 @@ public class EditPraListingAgenActivity extends AppCompatActivity {
             intent.setAction(Intent.ACTION_GET_CONTENT);
             startActivityForResult(Intent.createChooser(intent, "Pilih File PDF"), PICK_PDF_Stratatitle);
         } else {
-            requestStoragePermission();
+            Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+            intent.addCategory(Intent.CATEGORY_OPENABLE);
+            intent.setType("application/pdf");
+
+            startActivityForResult(intent, PICK_PDF_Stratatitle);
         }
     }
     public void pilihFileAJB(View view) {
@@ -2381,7 +2405,11 @@ public class EditPraListingAgenActivity extends AppCompatActivity {
             intent.setAction(Intent.ACTION_GET_CONTENT);
             startActivityForResult(Intent.createChooser(intent, "Pilih File PDF"), PICK_PDF_AJB);
         } else {
-            requestStoragePermission();
+            Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+            intent.addCategory(Intent.CATEGORY_OPENABLE);
+            intent.setType("application/pdf");
+
+            startActivityForResult(intent, PICK_PDF_AJB);
         }
     }
     public void pilihFilePetokD(View view) {
@@ -2391,7 +2419,11 @@ public class EditPraListingAgenActivity extends AppCompatActivity {
             intent.setAction(Intent.ACTION_GET_CONTENT);
             startActivityForResult(Intent.createChooser(intent, "Pilih File PDF"), PICK_PDF_PetokD);
         } else {
-            requestStoragePermission();
+            Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+            intent.addCategory(Intent.CATEGORY_OPENABLE);
+            intent.setType("application/pdf");
+
+            startActivityForResult(intent, PICK_PDF_PetokD);
         }
     }
     private File createImageFile() {
@@ -3779,7 +3811,7 @@ public class EditPraListingAgenActivity extends AppCompatActivity {
                                 if (status.equals("Sukses")) {
                                     lyt1.setVisibility(View.GONE);
                                     select1.setVisibility(View.VISIBLE);
-                                    select1.setText("Tambah Gambar");
+                                    select1.setText("Tambah Gambar Tampak Depan");
                                     isDelete1 = "0";
                                 } else if (status.equals("Error")) {
                                     Dialog customDialog = new Dialog(EditPraListingAgenActivity.this);
@@ -5358,7 +5390,7 @@ public class EditPraListingAgenActivity extends AppCompatActivity {
     }
     private void sendNotificationToToken(String token, String notificationType) {
         String title = Preferences.getKeyNama(this);
-        String message = "Melakukan Update Listing";
+        String message = "Melakukan Update PraListing";
         String response = SendMessageToFCM.sendMessage(token, title, message, notificationType);
     }
 }

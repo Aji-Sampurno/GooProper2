@@ -1,5 +1,6 @@
 package com.gooproper.agen.fragment;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Intent;
 import android.net.Uri;
@@ -11,9 +12,24 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
+import com.gooproper.guest.MainGuestActivity;
+import com.gooproper.model.ListingModel;
 import com.gooproper.ui.AgenActivity;
 import com.gooproper.ui.edit.EditAkunActivity;
 import com.gooproper.R;
@@ -32,7 +48,15 @@ import com.gooproper.ui.listing.PraListingRejectedActivity;
 import com.gooproper.ui.tambah.TambahInfoActivity;
 import com.gooproper.ui.tambah.TambahListingSementaraActivity;
 import com.gooproper.util.Preferences;
+import com.gooproper.util.ServerApi;
 import com.squareup.picasso.Picasso;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -41,7 +65,7 @@ public class AkunAgenFragment extends Fragment {
     private LinearLayout reward, listing, agengoo, listingsementara, daftarsementara, listingmitra, listingkl, agen, mitra, kl, listingku, favorite, favoritemitra, favoritekl, seen, seenmitra, seenkl, pengaturan, pengaturanmitra, pengaturankl, hubungikami, hubungikamimitra, hubungikamikl, tentangkami, tentangkamimitra, tentangkamikl, pralising, pralistingreject, info, infoku, prainfo;
     TextView nama, edit;
     CircleImageView cvagen;
-    String imgurl;
+    String imgurl, IsAktif;
     String profile;
     String status;
     String wa = "811 333 8838";
@@ -103,6 +127,49 @@ public class AkunAgenFragment extends Fragment {
             imgurl = profile;
         }
 
+        RequestQueue queue = Volley.newRequestQueue(getContext());
+        JsonArrayRequest reqData = new JsonArrayRequest(Request.Method.GET, ServerApi.URL_CEK_AKTIF+ Preferences.getKeyIdAgen(getContext()),null,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        for(int i = 0 ; i < response.length(); i++)
+                        {
+                            try {
+                                JSONObject data = response.getJSONObject(i);
+
+                                IsAktif = data.getString("IsAktif");
+                                if (IsAktif.equals("1")) {
+                                    listing.setOnClickListener(view -> startActivity(new Intent(getContext(), TambahListingActivity.class)));
+                                    listingsementara.setOnClickListener(view -> startActivity(new Intent(getContext(), TambahListingSementaraActivity.class)));
+                                    daftarsementara.setOnClickListener(view -> startActivity(new Intent(getContext(), ListListingSementaraActivity.class)));
+                                    listingmitra.setOnClickListener(view -> startActivity(new Intent(getContext(), TambahListingActivity.class)));
+                                    listingkl.setOnClickListener(view -> startActivity(new Intent(getContext(), TambahListingActivity.class)));
+                                    info.setOnClickListener(view -> startActivity(new Intent(getContext(), TambahInfoActivity.class)));
+
+                                } else {
+                                    listing.setOnClickListener(view -> showAktifAlertDialog(view));
+                                    listingsementara.setOnClickListener(view -> showAktifAlertDialog(view));
+                                    daftarsementara.setOnClickListener(view -> showAktifAlertDialog(view));
+                                    listingmitra.setOnClickListener(view -> showAktifAlertDialog(view));
+                                    listingkl.setOnClickListener(view -> showAktifAlertDialog(view));
+                                    info.setOnClickListener(view -> showAktifAlertDialog(view));
+
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        error.printStackTrace();
+                    }
+                });
+
+        queue.add(reqData);
+
         Picasso.get()
                 .load(imgurl)
                 .into(cvagen);
@@ -133,12 +200,7 @@ public class AkunAgenFragment extends Fragment {
         seen.setOnClickListener(view -> startActivity(new Intent(getContext(), ListingTerakhirDilihatActivity.class)));
         seenmitra.setOnClickListener(view -> startActivity(new Intent(getContext(), ListingTerakhirDilihatActivity.class)));
         seenkl.setOnClickListener(view -> startActivity(new Intent(getContext(), ListingTerakhirDilihatActivity.class)));
-        listing.setOnClickListener(view -> startActivity(new Intent(getContext(), TambahListingActivity.class)));
-        listingsementara.setOnClickListener(view -> startActivity(new Intent(getContext(), TambahListingSementaraActivity.class)));
-        daftarsementara.setOnClickListener(view -> startActivity(new Intent(getContext(), ListListingSementaraActivity.class)));
-        listingmitra.setOnClickListener(view -> startActivity(new Intent(getContext(), TambahListingActivity.class)));
-        listingkl.setOnClickListener(view -> startActivity(new Intent(getContext(), TambahListingActivity.class)));
-        info.setOnClickListener(view -> startActivity(new Intent(getContext(), TambahInfoActivity.class)));
+
         infoku.setOnClickListener(view -> startActivity(new Intent(getContext(), InfoPropertyKuActivity.class)));
         prainfo.setOnClickListener(view -> startActivity(new Intent(getContext(), InfoPropertySpekActivity.class)));
         pengaturan.setOnClickListener(view -> startActivity(new Intent(getContext(), SettingActivity.class)));
@@ -242,5 +304,67 @@ public class AkunAgenFragment extends Fragment {
         });
 
         customDialog.show();
+    }
+
+    public void showAktifAlertDialog(View view) {
+        Dialog customDialog = new Dialog(getContext());
+        customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        customDialog.setContentView(R.layout.custom_dialog_akun);
+
+        if (customDialog.getWindow() != null) {
+            customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        }
+
+        TextView dialogTitle = customDialog.findViewById(R.id.dialog_title);
+        Button ya = customDialog.findViewById(R.id.btnya);
+
+        ya.setText("Hubungi Admin");
+
+        ya.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                customDialog.dismiss();
+            }
+        });
+
+        dialogTitle.setText("Akun Anda Sedang Ditangguhkan");
+
+        ImageView gifImageView = customDialog.findViewById(R.id.ivdialog);
+
+        Glide.with(this)
+                .load(R.drawable.alert) // You can also use a local resource like R.drawable.your_gif_resource
+                .transition(DrawableTransitionOptions.withCrossFade())
+                .into(gifImageView);
+
+        customDialog.show();
+    }
+
+    private void CekAktif() {
+
+        RequestQueue queue = Volley.newRequestQueue(getContext());
+        JsonArrayRequest reqData = new JsonArrayRequest(Request.Method.GET, ServerApi.URL_CEK_AKTIF+ Preferences.getKeyIdAgen(getContext()),null,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        for(int i = 0 ; i < response.length(); i++)
+                        {
+                            try {
+                                JSONObject data = response.getJSONObject(i);
+
+                                IsAktif = data.getString("IsAktif");
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        error.printStackTrace();
+                    }
+                });
+
+        queue.add(reqData);
     }
 }
