@@ -41,6 +41,8 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Tasks;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
@@ -50,6 +52,7 @@ import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
 import com.gooproper.R;
 import com.gooproper.ui.LocationActivity;
+import com.gooproper.ui.edit.EditListingActivity;
 import com.gooproper.util.Preferences;
 import com.gooproper.util.SendMessageToFCM;
 import com.gooproper.util.ServerApi;
@@ -90,9 +93,12 @@ public class TambahInfoActivity extends AppCompatActivity {
     ImageView Back, IVSelfie, IVProperty;
     Button Batal, Submit, BtnSelfie, BtnProperty, BtnMap;
     ImageView IVDeleteSelfie, IVDeleteProperty;
-    String IdAgen, IdNull, IdInput;
+    String IdAgen, IdNull, IdInput, NamaAgen;
     String ImageSelfie, ImageProperty, IsSpek, StrHJual, StrHSewa, StrHargaJual, StrHargaSewa;
     String Lat, Lng, token,StringLatitude, StringLongitude, StringAlamat, StringLokasi;
+    String timeStamp,fileListing1,fileSelfie;
+    private StorageReference mStorageRef;
+    StorageReference storageRef,ImgListing1,ImgSelfie;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -132,93 +138,19 @@ public class TambahInfoActivity extends AppCompatActivity {
 
         IdAgen = Preferences.getKeyIdAgen(TambahInfoActivity.this);
         IdNull = "0";
+        NamaAgen = Preferences.getKeyUsername(TambahInfoActivity.this);
 
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
-        String fileListing = "Property_" + timeStamp + ".jpg";
-        String fileSelfie = "Selfie_" + timeStamp + ".jpg";
+        timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
+        fileListing1 = "Listing1_" + timeStamp + ".jpg";
+        fileSelfie = NamaAgen + "_Selfie_" + timeStamp + ".jpg";
+
+        storageRef = FirebaseStorage.getInstance().getReference();
+        ImgListing1 = storageRef.child("listing/" + fileListing1);
+        ImgSelfie = storageRef.child("selfie/" + fileSelfie);
 
         Submit.setOnClickListener(view -> {
             if (Validate()) {
-                pDialog.setMessage("Menyimpan Data");
-                pDialog.setCancelable(false);
-                pDialog.show();
-
-                StorageReference storageRef = FirebaseStorage.getInstance().getReference();
-                StorageReference ImgListing = storageRef.child("listing/" + fileListing);
-                StorageReference ImgSelfie = storageRef.child("selfie/" + fileSelfie);
-
-                List<StorageTask<UploadTask.TaskSnapshot>> uploadTasks = new ArrayList<>();
-
-                if (UriProperty != null) {
-                    StorageTask<UploadTask.TaskSnapshot> task1 = ImgListing.putFile(UriProperty)
-                            .addOnSuccessListener(taskSnapshot -> {
-                                ImgListing.getDownloadUrl()
-                                        .addOnSuccessListener(uri -> {
-                                            String imageUrl = uri.toString();
-                                            ImageProperty = imageUrl;
-                                        })
-                                        .addOnFailureListener(exception -> {
-                                        });
-                            })
-                            .addOnFailureListener(exception -> {
-                            });
-                    uploadTasks.add(task1);
-                } else {
-                    ImageProperty = "0";
-                }
-                if (UriSelfie != null) {
-                    StorageTask<UploadTask.TaskSnapshot> task2 = ImgSelfie.putFile(UriSelfie)
-                            .addOnSuccessListener(taskSnapshot -> {
-                                ImgSelfie.getDownloadUrl()
-                                        .addOnSuccessListener(uri -> {
-                                            String imageUrl = uri.toString();
-                                            ImageSelfie = imageUrl;
-                                        })
-                                        .addOnFailureListener(exception -> {
-                                        });
-                            })
-                            .addOnFailureListener(exception -> {
-                            });
-                    uploadTasks.add(task2);
-                } else {
-                    ImageSelfie = "0";
-                }
-
-                Tasks.whenAllSuccess(uploadTasks)
-                        .addOnSuccessListener(results -> {
-                            pDialog.cancel();
-                            simpanData();
-                        })
-                        .addOnFailureListener(exception -> {
-                            Dialog customDialog = new Dialog(TambahInfoActivity.this);
-                            customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                            customDialog.setContentView(R.layout.custom_dialog_eror_input);
-
-                            if (customDialog.getWindow() != null) {
-                                customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-                            }
-
-                            Button ok = customDialog.findViewById(R.id.BtnOkErorInput);
-                            TextView tv = customDialog.findViewById(R.id.TVDialogErorInput);
-
-                            tv.setText("Gagal Saat Unggah Gambar");
-
-                            ok.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    customDialog.dismiss();
-                                }
-                            });
-
-                            ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
-
-                            Glide.with(TambahInfoActivity.this)
-                                    .load(R.drawable.alert) // You can also use a local resource like R.drawable.your_gif_resource
-                                    .transition(DrawableTransitionOptions.withCrossFade())
-                                    .into(gifImageView);
-
-                            customDialog.show();
-                        });
+                handleImage1Success();
             }
         });
         BtnMap.setOnClickListener(view -> startMapsActivityForResult());
@@ -541,6 +473,78 @@ public class TambahInfoActivity extends AppCompatActivity {
             UriProperty = null;
             LytProperty.setVisibility(View.GONE);
             BtnProperty.setVisibility(View.VISIBLE);
+        }
+    }
+    private void showProgressDialog() {
+        pDialog.setMessage("Unggah Gambar");
+        pDialog.setCancelable(false);
+        pDialog.show();
+    }
+    private void HideProgressDialog() {
+        pDialog.dismiss();
+        pDialog.cancel();
+    }
+    private void handleImage1Success() {
+        if (UriProperty != null) {
+            showProgressDialog();
+            ImgListing1.putFile(UriProperty)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            ImgListing1.getDownloadUrl()
+                                    .addOnSuccessListener(uri -> {
+                                        String imageUrl = uri.toString();
+                                        ImageProperty = imageUrl;
+                                        handleImage2Success();
+                                    })
+                                    .addOnFailureListener(exception -> {
+                                        handleImage1Success();
+                                        Toast.makeText(TambahInfoActivity.this, "Upload failed: " + exception.getMessage(), Toast.LENGTH_SHORT).show();
+                                    });
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            handleImage1Success();
+                            Toast.makeText(TambahInfoActivity.this, "Upload failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        } else {
+            ImageProperty = "0";
+            handleImage2Success();
+        }
+    }
+    private void handleImage2Success() {
+        if (UriSelfie != null) {
+            ImgSelfie.putFile(UriSelfie)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            ImgSelfie.getDownloadUrl()
+                                    .addOnSuccessListener(uri -> {
+                                        String imageUrl = uri.toString();
+                                        ImageSelfie = imageUrl;
+                                        HideProgressDialog();
+                                        simpanData();
+                                    })
+                                    .addOnFailureListener(exception -> {
+                                        handleImage2Success();
+                                        Toast.makeText(TambahInfoActivity.this, "Upload failed: " + exception.getMessage(), Toast.LENGTH_SHORT).show();
+                                    });
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            handleImage2Success();
+                            Toast.makeText(TambahInfoActivity.this, "Upload failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        } else {
+            ImageSelfie = "0";
+            HideProgressDialog();
+            simpanData();
         }
     }
     private void simpanData() {

@@ -138,11 +138,6 @@ public class HomeAdminFragment extends Fragment implements OnMapReadyCallback {
                         return;
                     }
                     Token = task.getResult();
-                    Toast.makeText(getContext(), "Selamat Datang" + Token, Toast.LENGTH_SHORT);
-                    FirebaseAnalytics firebaseAnalytics = FirebaseAnalytics.getInstance(getContext());
-                    Bundle bundle = new Bundle();
-                    bundle.putString("token_received", Token);
-                    firebaseAnalytics.logEvent("token_received", bundle);
                     simpanDevice();
                 });
 
@@ -512,6 +507,7 @@ public class HomeAdminFragment extends Fragment implements OnMapReadyCallback {
                                 md.setSize(data.getString("Size"));
                                 md.setHarga(data.getString("Harga"));
                                 md.setHargaSewa(data.getString("HargaSewa"));
+                                md.setRangeHarga(data.getString("RangeHarga"));
                                 md.setTglInput(data.getString("TglInput"));
                                 md.setImg1(data.getString("Img1"));
                                 md.setImg2(data.getString("Img2"));
@@ -625,6 +621,7 @@ public class HomeAdminFragment extends Fragment implements OnMapReadyCallback {
                                 md.setSize(data.getString("Size"));
                                 md.setHarga(data.getString("Harga"));
                                 md.setHargaSewa(data.getString("HargaSewa"));
+                                md.setRangeHarga(data.getString("RangeHarga"));
                                 md.setTglInput(data.getString("TglInput"));
                                 md.setImg1(data.getString("Img1"));
                                 md.setImg2(data.getString("Img2"));
@@ -738,6 +735,7 @@ public class HomeAdminFragment extends Fragment implements OnMapReadyCallback {
                                 md.setSize(data.getString("Size"));
                                 md.setHarga(data.getString("Harga"));
                                 md.setHargaSewa(data.getString("HargaSewa"));
+                                md.setRangeHarga(data.getString("RangeHarga"));
                                 md.setTglInput(data.getString("TglInput"));
                                 md.setImg1(data.getString("Img1"));
                                 md.setImg2(data.getString("Img2"));

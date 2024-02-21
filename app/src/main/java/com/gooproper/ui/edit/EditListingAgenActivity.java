@@ -47,6 +47,8 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Tasks;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
@@ -56,6 +58,7 @@ import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
 import com.gooproper.R;
 import com.gooproper.ui.LocationActivity;
+import com.gooproper.ui.tambah.TambahListingActivity;
 import com.gooproper.util.Preferences;
 import com.gooproper.util.SendMessageToFCM;
 import com.gooproper.util.ServerApi;
@@ -186,10 +189,13 @@ public class EditListingAgenActivity extends AppCompatActivity {
     CheckBox CBSHM, CBHGB, CBHSHP, CBPPJB, CBSTRA, CBAJB, CBPetokD;
     String idnull, priority, HargaString, HargaSewaString, SHarga, SHargaSewa, idpralisting;
     String image1, image2, image3, image4, image5, image6, image7, image8, SHM, HGB, HSHP, PPJB, STRA, AJB, PetokD, PJPHal1, PJPHal2;
-    String isimage1, isSHM, isHGB, isHSHP, isPPJB, isSTRA, isAJB, isPetokD;
+    String isimage1, isimage2, isimage3, isimage4, isimage5, isimage6, isimage7, isimage8, isSHM, isHGB, isHSHP, isPPJB, isSTRA, isAJB, isPetokD, isPJP1, isPJP2;
     String latitudeStr, longitudeStr, addressStr, Lat, Lng;
     Drawable DrawableSHM, DrawableHGB, DrawableHSHP, DrawablePPJB, DrawableSTRA, Drawable1, Drawable2, Drawable3, Drawable4, Drawable5, Drawable6, Drawable7, Drawable8;
     TextView TVSHM, TVHGB, TVHSHP, TVPPJB, TVSTRA, TVAJB, TVPetokD;
+    String timeStamp,fileListing1,fileListing2,fileListing3,fileListing4,fileListing5,fileListing6,fileListing7,fileListing8,fileSertifikatshm,fileSertifikatshmpdf,fileSertifikathgb,fileSertifikathgbpdf,fileSertifikathshp,fileSertifikathshppdf,fileSertifikatppjb,fileSertifikatppjbpdf,fileSertifikatstra,fileSertifikatstrapdf,fileSertifikatajb,fileSertifikatajbpdf,fileSertifikatpetokd,fileSertifikatpetokdpdf,filePjp1,filePjp2,fileSelfie,fileKTP;
+    private StorageReference mStorageRef;
+    StorageReference storageRef,ImgListing1,ImgListing2,ImgListing3,ImgListing4,ImgListing5,ImgListing6,ImgListing7,ImgListing8,ImgSertifikatshm,ImgSertifikathgb,ImgSertifikathshp,ImgSertifikatppjb,ImgSertifikatstra,ImgSertifikatajb,ImgSertifikatpetokd,ImgSertifikatshmpdf,ImgSertifikathgbpdf,ImgSertifikathshppdf,ImgSertifikatppjbpdf,ImgSertifikatstrapdf,ImgSertifikatajbpdf,ImgSertifikatpetokdpdf,ImgPjp,ImgPjp1,ImageSelfie,ImageKTP;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -347,31 +353,61 @@ public class EditListingAgenActivity extends AppCompatActivity {
         TVAJB = findViewById(R.id.TVAJB);
         TVPetokD = findViewById(R.id.TVPetokD);
 
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
-        String fileListing1 = "Listing1_" + timeStamp + ".jpg";
-        String fileListing2 = "Listing2_" + timeStamp + ".jpg";
-        String fileListing3 = "Listing3_" + timeStamp + ".jpg";
-        String fileListing4 = "Listing4_" + timeStamp + ".jpg";
-        String fileListing5 = "Listing5_" + timeStamp + ".jpg";
-        String fileListing6 = "Listing6_" + timeStamp + ".jpg";
-        String fileListing7 = "Listing7_" + timeStamp + ".jpg";
-        String fileListing8 = "Listing8_" + timeStamp + ".jpg";
-        String fileSertifikatshm = "SHM_" + timeStamp + ".jpg";
-        String fileSertifikatshmpdf = "SHM_" + timeStamp + ".pdf";
-        String fileSertifikathgb = "HGB_" + timeStamp + ".jpg";
-        String fileSertifikathgbpdf = "HGB_" + timeStamp + ".pdf";
-        String fileSertifikathshp = "HSHP_" + timeStamp + ".jpg";
-        String fileSertifikathshppdf = "HSHP_" + timeStamp + ".pdf";
-        String fileSertifikatppjb = "PPJB_" + timeStamp + ".jpg";
-        String fileSertifikatppjbpdf = "PPJB_" + timeStamp + ".pdf";
-        String fileSertifikatstra = "Stratatitle_" + timeStamp + ".jpg";
-        String fileSertifikatstrapdf = "Stratatitle_" + timeStamp + ".pdf";
-        String fileSertifikatajb = "Ajb_" + timeStamp + ".jpg";
-        String fileSertifikatajbpdf = "Ajb_" + timeStamp + ".pdf";
-        String fileSertifikatpetokd = "PetokD_" + timeStamp + ".jpg";
-        String fileSertifikatpetokdpdf = "PetokD_" + timeStamp + ".pdf";
-        String filePjp1 = "PJP1_" + timeStamp + ".jpg";
-        String filePjp2 = "PJP2_" + timeStamp + ".jpg";
+        timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
+        fileListing1 = "Listing1_" + timeStamp + ".jpg";
+        fileListing2 = "Listing2_" + timeStamp + ".jpg";
+        fileListing3 = "Listing3_" + timeStamp + ".jpg";
+        fileListing4 = "Listing4_" + timeStamp + ".jpg";
+        fileListing5 = "Listing5_" + timeStamp + ".jpg";
+        fileListing6 = "Listing6_" + timeStamp + ".jpg";
+        fileListing7 = "Listing7_" + timeStamp + ".jpg";
+        fileListing8 = "Listing8_" + timeStamp + ".jpg";
+        fileSertifikatshm = "SHM_" + timeStamp + ".jpg";
+        fileSertifikatshmpdf = "SHM_" + timeStamp + ".pdf";
+        fileSertifikathgb = "HGB_" + timeStamp + ".jpg";
+        fileSertifikathgbpdf = "HGB_" + timeStamp + ".pdf";
+        fileSertifikathshp = "HSHP_" + timeStamp + ".jpg";
+        fileSertifikathshppdf = "HSHP_" + timeStamp + ".pdf";
+        fileSertifikatppjb = "PPJB_" + timeStamp + ".jpg";
+        fileSertifikatppjbpdf = "PPJB_" + timeStamp + ".pdf";
+        fileSertifikatstra = "Stratatitle_" + timeStamp + ".jpg";
+        fileSertifikatstrapdf = "Stratatitle_" + timeStamp + ".pdf";
+        fileSertifikatajb = "Ajb_" + timeStamp + ".jpg";
+        fileSertifikatajbpdf = "Ajb_" + timeStamp + ".pdf";
+        fileSertifikatpetokd = "PetokD_" + timeStamp + ".jpg";
+        fileSertifikatpetokdpdf = "PetokD_" + timeStamp + ".pdf";
+        filePjp1 = "PJP1_" + timeStamp + ".jpg";
+        filePjp2 = "PJP2_" + timeStamp + ".jpg";
+        fileSelfie = "Selfie_" + timeStamp + ".jpg";
+        fileKTP = "KTP_" + timeStamp + ".jpg";
+
+        storageRef = FirebaseStorage.getInstance().getReference();
+        ImgListing1 = storageRef.child("listing/" + fileListing1);
+        ImgListing2 = storageRef.child("listing/" + fileListing2);
+        ImgListing3 = storageRef.child("listing/" + fileListing3);
+        ImgListing4 = storageRef.child("listing/" + fileListing4);
+        ImgListing5 = storageRef.child("listing/" + fileListing5);
+        ImgListing6 = storageRef.child("listing/" + fileListing6);
+        ImgListing7 = storageRef.child("listing/" + fileListing7);
+        ImgListing8 = storageRef.child("listing/" + fileListing8);
+        ImgSertifikatshm = storageRef.child("sertifikat/" + fileSertifikatshm);
+        ImgSertifikathgb = storageRef.child("sertifikat/" + fileSertifikathgb);
+        ImgSertifikathshp = storageRef.child("sertifikat/" + fileSertifikathshp);
+        ImgSertifikatppjb = storageRef.child("sertifikat/" + fileSertifikatppjb);
+        ImgSertifikatstra = storageRef.child("sertifikat/" + fileSertifikatstra);
+        ImgSertifikatajb = storageRef.child("sertifikat/" + fileSertifikatajb);
+        ImgSertifikatpetokd = storageRef.child("sertifikat/" + fileSertifikatpetokd);
+        ImgSertifikatshmpdf = storageRef.child("sertifikat/" + fileSertifikatshmpdf);
+        ImgSertifikathgbpdf = storageRef.child("sertifikat/" + fileSertifikathgbpdf);
+        ImgSertifikathshppdf = storageRef.child("sertifikat/" + fileSertifikathshppdf);
+        ImgSertifikatppjbpdf = storageRef.child("sertifikat/" + fileSertifikatppjbpdf);
+        ImgSertifikatstrapdf = storageRef.child("sertifikat/" + fileSertifikatstrapdf);
+        ImgSertifikatajbpdf = storageRef.child("sertifikat/" + fileSertifikatajbpdf);
+        ImgSertifikatpetokdpdf = storageRef.child("sertifikat/" + fileSertifikatpetokdpdf);
+        ImgPjp = storageRef.child("pjp/" + filePjp1);
+        ImgPjp1 = storageRef.child("pjp/" + filePjp2);
+        ImageSelfie = storageRef.child("selfie/" + fileSelfie);
+        ImageKTP = storageRef.child("ktp/" + fileKTP);
 
         Intent data = getIntent();
         String intentIdPraListing = data.getStringExtra("IdPraListing");
@@ -456,6 +492,13 @@ public class EditListingAgenActivity extends AppCompatActivity {
         String intentFee = data.getStringExtra("Fee");
 
         isimage1 = intentImg1;
+        isimage2 = intentImg2;
+        isimage3 = intentImg3;
+        isimage4 = intentImg4;
+        isimage5 = intentImg5;
+        isimage6 = intentImg6;
+        isimage7 = intentImg7;
+        isimage8 = intentImg8;
         isSHM = intentImgSHM;
         isHGB = intentImgHGB;
         isPPJB = intentImgPPJB;
@@ -463,6 +506,8 @@ public class EditListingAgenActivity extends AppCompatActivity {
         isSTRA = intentImgStratatitle;
         isAJB = intentImgAJB;
         isPetokD = intentImgPetokD;
+        isPJP1 = intentImgPjp;
+        isPJP2 = intentImgPjp1;
 
         if (intentPriority.equals("open")){
             open.setChecked(true);
@@ -1146,461 +1191,7 @@ public class EditListingAgenActivity extends AppCompatActivity {
 
                         customDialog.show();
                     } else {
-                        pDialog.setMessage("Menyimpan Data");
-                        pDialog.setCancelable(false);
-                        pDialog.show();
-
-                        StorageReference storageRef = FirebaseStorage.getInstance().getReference();
-                        StorageReference ImgListing1 = storageRef.child("listing/" + fileListing1);
-                        StorageReference ImgListing2 = storageRef.child("listing/" + fileListing2);
-                        StorageReference ImgListing3 = storageRef.child("listing/" + fileListing3);
-                        StorageReference ImgListing4 = storageRef.child("listing/" + fileListing4);
-                        StorageReference ImgListing5 = storageRef.child("listing/" + fileListing5);
-                        StorageReference ImgListing6 = storageRef.child("listing/" + fileListing6);
-                        StorageReference ImgListing7 = storageRef.child("listing/" + fileListing7);
-                        StorageReference ImgListing8 = storageRef.child("listing/" + fileListing8);
-                        StorageReference ImgSertifikatshm = storageRef.child("sertifikat/" + fileSertifikatshm);
-                        StorageReference ImgSertifikathgb = storageRef.child("sertifikat/" + fileSertifikathgb);
-                        StorageReference ImgSertifikathshp = storageRef.child("sertifikat/" + fileSertifikathshp);
-                        StorageReference ImgSertifikatppjb = storageRef.child("sertifikat/" + fileSertifikatppjb);
-                        StorageReference ImgSertifikatstra = storageRef.child("sertifikat/" + fileSertifikatstra);
-                        StorageReference ImgSertifikatajb = storageRef.child("sertifikat/" + fileSertifikatajb);
-                        StorageReference ImgSertifikatpetokd = storageRef.child("sertifikat/" + fileSertifikatpetokd);
-                        StorageReference ImgSertifikatshmpdf = storageRef.child("sertifikat/" + fileSertifikatshmpdf);
-                        StorageReference ImgSertifikathgbpdf = storageRef.child("sertifikat/" + fileSertifikathgbpdf);
-                        StorageReference ImgSertifikathshppdf = storageRef.child("sertifikat/" + fileSertifikathshppdf);
-                        StorageReference ImgSertifikatppjbpdf = storageRef.child("sertifikat/" + fileSertifikatppjbpdf);
-                        StorageReference ImgSertifikatstrapdf = storageRef.child("sertifikat/" + fileSertifikatstrapdf);
-                        StorageReference ImgSertifikatajbpdf = storageRef.child("sertifikat/" + fileSertifikatajbpdf);
-                        StorageReference ImgSertifikatpetokdpdf = storageRef.child("sertifikat/" + fileSertifikatpetokdpdf);
-                        StorageReference ImgPjp = storageRef.child("pjp/" + filePjp1);
-                        StorageReference ImgPjp1 = storageRef.child("pjp/" + filePjp2);
-
-                        List<StorageTask<UploadTask.TaskSnapshot>> uploadTasks = new ArrayList<>();
-
-                        if (Uri1 != null) {
-                            StorageTask<UploadTask.TaskSnapshot> task1 = ImgListing1.putFile(Uri1)
-                                    .addOnSuccessListener(taskSnapshot -> {
-                                        ImgListing1.getDownloadUrl()
-                                                .addOnSuccessListener(uri -> {
-                                                    String imageUrl = uri.toString();
-                                                    image1 = imageUrl;
-                                                })
-                                                .addOnFailureListener(exception -> {
-                                                });
-                                    })
-                                    .addOnFailureListener(exception -> {
-                                    });
-                            uploadTasks.add(task1);
-                        } else {
-                            image1 = intentImg1;
-                        }
-                        if (Uri2 != null) {
-                            StorageTask<UploadTask.TaskSnapshot> task2 = ImgListing2.putFile(Uri2)
-                                    .addOnSuccessListener(taskSnapshot -> {
-                                        ImgListing2.getDownloadUrl()
-                                                .addOnSuccessListener(uri -> {
-                                                    String imageUrl = uri.toString();
-                                                    image2 = imageUrl;
-                                                })
-                                                .addOnFailureListener(exception -> {
-                                                });
-                                    })
-                                    .addOnFailureListener(exception -> {
-                                    });
-                            uploadTasks.add(task2);
-                        } else {
-                            image2 = intentImg2;
-                        }
-                        if (Uri3 != null) {
-                            StorageTask<UploadTask.TaskSnapshot> task3 = ImgListing3.putFile(Uri3)
-                                    .addOnSuccessListener(taskSnapshot -> {
-                                        ImgListing3.getDownloadUrl()
-                                                .addOnSuccessListener(uri -> {
-                                                    String imageUrl = uri.toString();
-                                                    image3 = imageUrl;
-                                                })
-                                                .addOnFailureListener(exception -> {
-                                                });
-                                    })
-                                    .addOnFailureListener(exception -> {
-                                    });
-                            uploadTasks.add(task3);
-                        } else {
-                            image3 = intentImg3;
-                        }
-                        if (Uri4 != null) {
-                            StorageTask<UploadTask.TaskSnapshot> task4 = ImgListing4.putFile(Uri4)
-                                    .addOnSuccessListener(taskSnapshot -> {
-                                        ImgListing4.getDownloadUrl()
-                                                .addOnSuccessListener(uri -> {
-                                                    String imageUrl = uri.toString();
-                                                    image4 = imageUrl;
-                                                })
-                                                .addOnFailureListener(exception -> {
-                                                });
-                                    })
-                                    .addOnFailureListener(exception -> {
-                                    });
-                            uploadTasks.add(task4);
-                        } else {
-                            image4 = intentImg4;
-                        }
-                        if (Uri5 != null) {
-                            StorageTask<UploadTask.TaskSnapshot> task5 = ImgListing5.putFile(Uri5)
-                                    .addOnSuccessListener(taskSnapshot -> {
-                                        ImgListing5.getDownloadUrl()
-                                                .addOnSuccessListener(uri -> {
-                                                    String imageUrl = uri.toString();
-                                                    image5 = imageUrl;
-                                                })
-                                                .addOnFailureListener(exception -> {
-                                                });
-                                    })
-                                    .addOnFailureListener(exception -> {
-                                    });
-                            uploadTasks.add(task5);
-                        } else {
-                            image5 = intentImg5;
-                        }
-                        if (Uri6 != null) {
-                            StorageTask<UploadTask.TaskSnapshot> task6 = ImgListing6.putFile(Uri6)
-                                    .addOnSuccessListener(taskSnapshot -> {
-                                        ImgListing6.getDownloadUrl()
-                                                .addOnSuccessListener(uri -> {
-                                                    String imageUrl = uri.toString();
-                                                    image6 = imageUrl;
-                                                })
-                                                .addOnFailureListener(exception -> {
-                                                });
-                                    })
-                                    .addOnFailureListener(exception -> {
-                                    });
-                            uploadTasks.add(task6);
-                        } else {
-                            image6 = intentImg6;
-                        }
-                        if (Uri7 != null) {
-                            StorageTask<UploadTask.TaskSnapshot> task7 = ImgListing7.putFile(Uri7)
-                                    .addOnSuccessListener(taskSnapshot -> {
-                                        ImgListing7.getDownloadUrl()
-                                                .addOnSuccessListener(uri -> {
-                                                    String imageUrl = uri.toString();
-                                                    image7 = imageUrl;
-                                                })
-                                                .addOnFailureListener(exception -> {
-                                                });
-                                    })
-                                    .addOnFailureListener(exception -> {
-                                    });
-                            uploadTasks.add(task7);
-                        } else {
-                            image7 = intentImg7;
-                        }
-                        if (Uri8 != null) {
-                            StorageTask<UploadTask.TaskSnapshot> task8 = ImgListing8.putFile(Uri8)
-                                    .addOnSuccessListener(taskSnapshot -> {
-                                        ImgListing8.getDownloadUrl()
-                                                .addOnSuccessListener(uri -> {
-                                                    String imageUrl = uri.toString();
-                                                    image8 = imageUrl;
-                                                })
-                                                .addOnFailureListener(exception -> {
-                                                });
-                                    })
-                                    .addOnFailureListener(exception -> {
-                                    });
-                            uploadTasks.add(task8);
-                        } else {
-                            image8 = intentImg8;
-                        }
-                        if (UriSHM != null) {
-                            StorageTask<UploadTask.TaskSnapshot> taskSHM = ImgSertifikatshm.putFile(UriSHM)
-                                    .addOnSuccessListener(taskSnapshot -> {
-                                        ImgSertifikatshm.getDownloadUrl()
-                                                .addOnSuccessListener(uri -> {
-                                                    String imageUrl = uri.toString();
-                                                    SHM = imageUrl;
-                                                })
-                                                .addOnFailureListener(exception -> {
-                                                });
-                                    })
-                                    .addOnFailureListener(exception -> {
-                                    });
-                            uploadTasks.add(taskSHM);
-                        } else if (UriSHMPdf != null) {
-                            StorageTask<UploadTask.TaskSnapshot> taskSHM = ImgSertifikatshmpdf.putFile(UriSHMPdf)
-                                    .addOnSuccessListener(taskSnapshot -> {
-                                        ImgSertifikatshmpdf.getDownloadUrl()
-                                                .addOnSuccessListener(uri -> {
-                                                    String imageUrl = uri.toString();
-                                                    SHM = imageUrl;
-                                                })
-                                                .addOnFailureListener(exception -> {
-                                                });
-                                    })
-                                    .addOnFailureListener(exception -> {
-                                    });
-                            uploadTasks.add(taskSHM);
-                        } else {
-                            SHM = intentImgSHM;
-                        }
-                        if (UriHGB != null) {
-                            StorageTask<UploadTask.TaskSnapshot> taskHGB = ImgSertifikathgb.putFile(UriHGB)
-                                    .addOnSuccessListener(taskSnapshot -> {
-                                        ImgSertifikathgb.getDownloadUrl()
-                                                .addOnSuccessListener(uri -> {
-                                                    String imageUrl = uri.toString();
-                                                    HGB = imageUrl;
-                                                })
-                                                .addOnFailureListener(exception -> {
-                                                });
-                                    })
-                                    .addOnFailureListener(exception -> {
-                                    });
-                            uploadTasks.add(taskHGB);
-                        } else if (UriHGBPdf != null) {
-                            StorageTask<UploadTask.TaskSnapshot> taskHGB = ImgSertifikathgbpdf.putFile(UriHGBPdf)
-                                    .addOnSuccessListener(taskSnapshot -> {
-                                        ImgSertifikathgbpdf.getDownloadUrl()
-                                                .addOnSuccessListener(uri -> {
-                                                    String imageUrl = uri.toString();
-                                                    HGB = imageUrl;
-                                                })
-                                                .addOnFailureListener(exception -> {
-                                                });
-                                    })
-                                    .addOnFailureListener(exception -> {
-                                    });
-                            uploadTasks.add(taskHGB);
-                        } else {
-                            HGB = intentImgHGB;
-                        }
-                        if (UriHSHP != null) {
-                            StorageTask<UploadTask.TaskSnapshot> taskHSHP = ImgSertifikathshp.putFile(UriHSHP)
-                                    .addOnSuccessListener(taskSnapshot -> {
-                                        ImgSertifikathshp.getDownloadUrl()
-                                                .addOnSuccessListener(uri -> {
-                                                    String imageUrl = uri.toString();
-                                                    HSHP = imageUrl;
-                                                })
-                                                .addOnFailureListener(exception -> {
-                                                });
-                                    })
-                                    .addOnFailureListener(exception -> {
-                                    });
-                            uploadTasks.add(taskHSHP);
-                        } else if (UriHSHPPdf != null) {
-                            StorageTask<UploadTask.TaskSnapshot> taskHSHP = ImgSertifikathshppdf.putFile(UriHSHPPdf)
-                                    .addOnSuccessListener(taskSnapshot -> {
-                                        ImgSertifikathshppdf.getDownloadUrl()
-                                                .addOnSuccessListener(uri -> {
-                                                    String imageUrl = uri.toString();
-                                                    HSHP = imageUrl;
-                                                })
-                                                .addOnFailureListener(exception -> {
-                                                });
-                                    })
-                                    .addOnFailureListener(exception -> {
-                                    });
-                            uploadTasks.add(taskHSHP);
-                        } else {
-                            HSHP = intentImgHSHP;
-                        }
-                        if (UriPPJB != null) {
-                            StorageTask<UploadTask.TaskSnapshot> taskPPJB = ImgSertifikatppjb.putFile(UriPPJB)
-                                    .addOnSuccessListener(taskSnapshot -> {
-                                        ImgSertifikatppjb.getDownloadUrl()
-                                                .addOnSuccessListener(uri -> {
-                                                    String imageUrl = uri.toString();
-                                                    PPJB = imageUrl;
-                                                })
-                                                .addOnFailureListener(exception -> {
-                                                });
-                                    })
-                                    .addOnFailureListener(exception -> {
-                                    });
-                            uploadTasks.add(taskPPJB);
-                        } else if (UriPPJBPdf != null) {
-                            StorageTask<UploadTask.TaskSnapshot> taskPPJB = ImgSertifikatppjbpdf.putFile(UriPPJBPdf)
-                                    .addOnSuccessListener(taskSnapshot -> {
-                                        ImgSertifikatppjbpdf.getDownloadUrl()
-                                                .addOnSuccessListener(uri -> {
-                                                    String imageUrl = uri.toString();
-                                                    PPJB = imageUrl;
-                                                })
-                                                .addOnFailureListener(exception -> {
-                                                });
-                                    })
-                                    .addOnFailureListener(exception -> {
-                                    });
-                            uploadTasks.add(taskPPJB);
-                        } else {
-                            PPJB = intentImgPPJB;
-                        }
-                        if (UriSTRA != null) {
-                            StorageTask<UploadTask.TaskSnapshot> taskSTRA = ImgSertifikatstra.putFile(UriSTRA)
-                                    .addOnSuccessListener(taskSnapshot -> {
-                                        ImgSertifikatstra.getDownloadUrl()
-                                                .addOnSuccessListener(uri -> {
-                                                    String imageUrl = uri.toString();
-                                                    STRA = imageUrl;
-                                                })
-                                                .addOnFailureListener(exception -> {
-                                                });
-                                    })
-                                    .addOnFailureListener(exception -> {
-                                    });
-                            uploadTasks.add(taskSTRA);
-                        } else if (UriSTRAPdf != null) {
-                            StorageTask<UploadTask.TaskSnapshot> taskSTRA = ImgSertifikatstrapdf.putFile(UriSTRAPdf)
-                                    .addOnSuccessListener(taskSnapshot -> {
-                                        ImgSertifikatstrapdf.getDownloadUrl()
-                                                .addOnSuccessListener(uri -> {
-                                                    String imageUrl = uri.toString();
-                                                    STRA = imageUrl;
-                                                })
-                                                .addOnFailureListener(exception -> {
-                                                });
-                                    })
-                                    .addOnFailureListener(exception -> {
-                                    });
-                            uploadTasks.add(taskSTRA);
-                        } else {
-                            STRA = intentImgStratatitle;
-                        }
-                        if (UriAJB != null) {
-                            StorageTask<UploadTask.TaskSnapshot> taskAJB = ImgSertifikatajb.putFile(UriAJB)
-                                    .addOnSuccessListener(taskSnapshot -> {
-                                        ImgSertifikatajb.getDownloadUrl()
-                                                .addOnSuccessListener(uri -> {
-                                                    String imageUrl = uri.toString();
-                                                    AJB = imageUrl;
-                                                })
-                                                .addOnFailureListener(exception -> {
-                                                });
-                                    })
-                                    .addOnFailureListener(exception -> {
-                                    });
-                            uploadTasks.add(taskAJB);
-                        } else if (UriAJBPdf != null) {
-                            StorageTask<UploadTask.TaskSnapshot> taskAJB = ImgSertifikatajbpdf.putFile(UriAJBPdf)
-                                    .addOnSuccessListener(taskSnapshot -> {
-                                        ImgSertifikatajbpdf.getDownloadUrl()
-                                                .addOnSuccessListener(uri -> {
-                                                    String imageUrl = uri.toString();
-                                                    AJB = imageUrl;
-                                                })
-                                                .addOnFailureListener(exception -> {
-                                                });
-                                    })
-                                    .addOnFailureListener(exception -> {
-                                    });
-                            uploadTasks.add(taskAJB);
-                        } else {
-                            AJB = intentImgAJB;
-                        }
-                        if (UriPetokD != null) {
-                            StorageTask<UploadTask.TaskSnapshot> taskPetokD = ImgSertifikatpetokd.putFile(UriPetokD)
-                                    .addOnSuccessListener(taskSnapshot -> {
-                                        ImgSertifikatpetokd.getDownloadUrl()
-                                                .addOnSuccessListener(uri -> {
-                                                    String imageUrl = uri.toString();
-                                                    PetokD = imageUrl;
-                                                })
-                                                .addOnFailureListener(exception -> {
-                                                });
-                                    })
-                                    .addOnFailureListener(exception -> {
-                                    });
-                            uploadTasks.add(taskPetokD);
-                        } else if (UriPetokDPdf != null) {
-                            StorageTask<UploadTask.TaskSnapshot> taskPetokD = ImgSertifikatpetokdpdf.putFile(UriPetokDPdf)
-                                    .addOnSuccessListener(taskSnapshot -> {
-                                        ImgSertifikatpetokdpdf.getDownloadUrl()
-                                                .addOnSuccessListener(uri -> {
-                                                    String imageUrl = uri.toString();
-                                                    PetokD = imageUrl;
-                                                })
-                                                .addOnFailureListener(exception -> {
-                                                });
-                                    })
-                                    .addOnFailureListener(exception -> {
-                                    });
-                            uploadTasks.add(taskPetokD);
-                        } else {
-                            PetokD = intentImgPetokD;
-                        }
-                        if (UriPJP != null) {
-                            StorageTask<UploadTask.TaskSnapshot> taskPJP = ImgPjp.putFile(UriPJP)
-                                    .addOnSuccessListener(taskSnapshot -> {
-                                        ImgPjp.getDownloadUrl()
-                                                .addOnSuccessListener(uri -> {
-                                                    String imageUrl = uri.toString();
-                                                    PJPHal1 = imageUrl;
-                                                })
-                                                .addOnFailureListener(exception -> {
-                                                });
-                                    })
-                                    .addOnFailureListener(exception -> {
-                                    });
-                            uploadTasks.add(taskPJP);
-                        } else {
-                            PJPHal1 = intentImgPjp;
-                        }
-                        if (UriPJP1 != null) {
-                            StorageTask<UploadTask.TaskSnapshot> taskPJP1 = ImgPjp1.putFile(UriPJP1)
-                                    .addOnSuccessListener(taskSnapshot -> {
-                                        ImgPjp1.getDownloadUrl()
-                                                .addOnSuccessListener(uri -> {
-                                                    String imageUrl = uri.toString();
-                                                    PJPHal2 = imageUrl;
-                                                })
-                                                .addOnFailureListener(exception -> {
-                                                });
-                                    })
-                                    .addOnFailureListener(exception -> {
-                                    });
-                            uploadTasks.add(taskPJP1);
-                        } else {
-                            PJPHal2 = intentImgPjp1;
-                        }
-
-                        Tasks.whenAllSuccess(uploadTasks)
-                                .addOnSuccessListener(results -> {
-                                    pDialog.cancel();
-                                    simpanData();
-                                })
-                                .addOnFailureListener(exception -> {
-                                    Dialog customDialog = new Dialog(EditListingAgenActivity.this);
-                                    customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                                    customDialog.setContentView(R.layout.custom_dialog_eror_input);
-
-                                    if (customDialog.getWindow() != null) {
-                                        customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-                                    }
-
-                                    Button ok = customDialog.findViewById(R.id.BtnOkErorInput);
-                                    TextView tv = customDialog.findViewById(R.id.TVDialogErorInput);
-
-                                    tv.setText("Gagal Saat Unggah Gambar");
-
-                                    ok.setOnClickListener(new View.OnClickListener() {
-                                        @Override
-                                        public void onClick(View view) {
-                                            customDialog.dismiss();
-                                        }
-                                    });
-
-                                    ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
-
-                                    Glide.with(EditListingAgenActivity.this)
-                                            .load(R.drawable.alert) // You can also use a local resource like R.drawable.your_gif_resource
-                                            .transition(DrawableTransitionOptions.withCrossFade())
-                                            .into(gifImageView);
-
-                                    customDialog.show();
-                                });
+                        handleImage1Success();
                     }
                 }
             }
@@ -3818,6 +3409,699 @@ public class EditListingAgenActivity extends AppCompatActivity {
             UriPJP1 = null;
             LytPjp1.setVisibility(View.GONE);
             BtnPjp1.setVisibility(View.VISIBLE);
+        }
+    }
+    private void showProgressDialog() {
+        pDialog.setMessage("Unggah Gambar");
+        pDialog.setCancelable(false);
+        pDialog.show();
+    }
+    private void HideProgressDialog() {
+        pDialog.dismiss();
+        pDialog.cancel();
+    }
+    private void handleImage1Success() {
+        if (Uri1 != null) {
+            showProgressDialog();
+            ImgListing1.putFile(Uri1)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            ImgListing1.getDownloadUrl()
+                                    .addOnSuccessListener(uri -> {
+                                        String imageUrl = uri.toString();
+                                        image1 = imageUrl;
+                                        handleImage2Success();
+                                    })
+                                    .addOnFailureListener(exception -> {
+                                        HideProgressDialog();
+                                        handleImage1Success();
+                                        Toast.makeText(EditListingAgenActivity.this, "Upload failed: " + exception.getMessage(), Toast.LENGTH_SHORT).show();
+                                    });
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            HideProgressDialog();
+                            handleImage1Success();
+                            Toast.makeText(EditListingAgenActivity.this, "Upload failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        } else {
+            image1 = isimage1;
+            showProgressDialog();
+            handleImage2Success();
+        }
+    }
+    private void handleImage2Success() {
+        if (Uri2 != null) {
+            ImgListing2.putFile(Uri2)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            ImgListing2.getDownloadUrl()
+                                    .addOnSuccessListener(uri -> {
+                                        String imageUrl = uri.toString();
+                                        image2 = imageUrl;
+                                        handleImage3Success();
+                                    })
+                                    .addOnFailureListener(exception -> {
+                                        handleImage2Success();
+                                        Toast.makeText(EditListingAgenActivity.this, "Upload failed: " + exception.getMessage(), Toast.LENGTH_SHORT).show();
+                                    });
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            handleImage2Success();
+                            Toast.makeText(EditListingAgenActivity.this, "Upload failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        } else {
+            image2 = isimage2;
+            handleImage3Success();
+        }
+    }
+    private void handleImage3Success() {
+        if (Uri3 != null) {
+            ImgListing3.putFile(Uri3)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            ImgListing3.getDownloadUrl()
+                                    .addOnSuccessListener(uri -> {
+                                        String imageUrl = uri.toString();
+                                        image3 = imageUrl;
+                                        handleImage4Success();
+                                    })
+                                    .addOnFailureListener(exception -> {
+                                        handleImage3Success();
+                                        Toast.makeText(EditListingAgenActivity.this, "Upload failed: " + exception.getMessage(), Toast.LENGTH_SHORT).show();
+                                    });
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            handleImage3Success();
+                            Toast.makeText(EditListingAgenActivity.this, "Upload failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        } else {
+            image3 = isimage3;
+            handleImage4Success();
+        }
+    }
+    private void handleImage4Success() {
+        if (Uri4 != null) {
+            ImgListing4.putFile(Uri4)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            ImgListing4.getDownloadUrl()
+                                    .addOnSuccessListener(uri -> {
+                                        String imageUrl = uri.toString();
+                                        image4 = imageUrl;
+                                        handleImage5Success();
+                                    })
+                                    .addOnFailureListener(exception -> {
+                                        handleImage4Success();
+                                        Toast.makeText(EditListingAgenActivity.this, "Upload failed: " + exception.getMessage(), Toast.LENGTH_SHORT).show();
+                                    });
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            handleImage4Success();
+                            Toast.makeText(EditListingAgenActivity.this, "Upload failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        } else {
+            image4 = isimage4;
+            handleImage5Success();
+        }
+    }
+    private void handleImage5Success() {
+        if (Uri5 != null) {
+            ImgListing5.putFile(Uri5)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            ImgListing5.getDownloadUrl()
+                                    .addOnSuccessListener(uri -> {
+                                        String imageUrl = uri.toString();
+                                        image5 = imageUrl;
+                                        handleImage6Success();
+                                    })
+                                    .addOnFailureListener(exception -> {
+                                        handleImage5Success();
+                                        Toast.makeText(EditListingAgenActivity.this, "Upload failed: " + exception.getMessage(), Toast.LENGTH_SHORT).show();
+                                    });
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            handleImage5Success();
+                            Toast.makeText(EditListingAgenActivity.this, "Upload failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        } else {
+            image5 = isimage5;
+            handleImage6Success();
+        }
+    }
+    private void handleImage6Success() {
+        if (Uri6 != null) {
+            ImgListing6.putFile(Uri6)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            ImgListing6.getDownloadUrl()
+                                    .addOnSuccessListener(uri -> {
+                                        String imageUrl = uri.toString();
+                                        image6 = imageUrl;
+                                        handleImage7Success();
+                                    })
+                                    .addOnFailureListener(exception -> {
+                                        handleImage6Success();
+                                        Toast.makeText(EditListingAgenActivity.this, "Upload failed: " + exception.getMessage(), Toast.LENGTH_SHORT).show();
+                                    });
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            handleImage6Success();
+                            Toast.makeText(EditListingAgenActivity.this, "Upload failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        } else {
+            image6 = isimage6;
+            handleImage7Success();
+        }
+    }
+    private void handleImage7Success() {
+        if (Uri7 != null) {
+            ImgListing7.putFile(Uri7)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            ImgListing7.getDownloadUrl()
+                                    .addOnSuccessListener(uri -> {
+                                        String imageUrl = uri.toString();
+                                        image7 = imageUrl;
+                                        handleImage8Success();
+                                    })
+                                    .addOnFailureListener(exception -> {
+                                        handleImage7Success();
+                                        Toast.makeText(EditListingAgenActivity.this, "Upload failed: " + exception.getMessage(), Toast.LENGTH_SHORT).show();
+                                    });
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            handleImage7Success();
+                            Toast.makeText(EditListingAgenActivity.this, "Upload failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        } else {
+            image7 = isimage7;
+            handleImage8Success();
+        }
+    }
+    private void handleImage8Success() {
+        if (Uri8 != null) {
+            ImgListing8.putFile(Uri8)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            ImgListing8.getDownloadUrl()
+                                    .addOnSuccessListener(uri -> {
+                                        String imageUrl = uri.toString();
+                                        image8 = imageUrl;
+                                        handleImageSHMSuccess();
+                                    })
+                                    .addOnFailureListener(exception -> {
+                                        handleImage8Success();
+                                        Toast.makeText(EditListingAgenActivity.this, "Upload failed: " + exception.getMessage(), Toast.LENGTH_SHORT).show();
+                                    });
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            handleImage8Success();
+                            Toast.makeText(EditListingAgenActivity.this, "Upload failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        } else {
+            image8 = isimage8;
+            handleImageSHMSuccess();
+        }
+    }
+    private void handleImageSHMSuccess() {
+        if (UriSHM != null) {
+            ImgSertifikatshm.putFile(UriSHM)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            ImgSertifikatshm.getDownloadUrl()
+                                    .addOnSuccessListener(uri -> {
+                                        String imageUrl = uri.toString();
+                                        SHM = imageUrl;
+                                        handleImageHGBSuccess();
+                                    })
+                                    .addOnFailureListener(exception -> {
+                                        handleImageSHMSuccess();
+                                        Toast.makeText(EditListingAgenActivity.this, "Upload failed: " + exception.getMessage(), Toast.LENGTH_SHORT).show();
+                                    });
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            handleImageSHMSuccess();
+                            Toast.makeText(EditListingAgenActivity.this, "Upload failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        } else if (UriSHMPdf != null) {
+            ImgSertifikatshmpdf.putFile(UriSHMPdf)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            ImgSertifikatshmpdf.getDownloadUrl()
+                                    .addOnSuccessListener(uri -> {
+                                        String imageUrl = uri.toString();
+                                        SHM = imageUrl;
+                                        handleImageHGBSuccess();
+                                    })
+                                    .addOnFailureListener(exception -> {
+                                        handleImageSHMSuccess();
+                                        Toast.makeText(EditListingAgenActivity.this, "Upload failed: " + exception.getMessage(), Toast.LENGTH_SHORT).show();
+                                    });
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            handleImageSHMSuccess();
+                            Toast.makeText(EditListingAgenActivity.this, "Upload failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        } else {
+            SHM = isSHM;
+            handleImageHGBSuccess();
+        }
+    }
+    private void handleImageHGBSuccess() {
+        if (UriHGB != null) {
+            ImgSertifikathgb.putFile(UriHGB)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            ImgSertifikathgb.getDownloadUrl()
+                                    .addOnSuccessListener(uri -> {
+                                        String imageUrl = uri.toString();
+                                        HGB = imageUrl;
+                                        handleImageHSHPSuccess();
+                                    })
+                                    .addOnFailureListener(exception -> {
+                                        handleImageSHMSuccess();
+                                        Toast.makeText(EditListingAgenActivity.this, "Upload failed: " + exception.getMessage(), Toast.LENGTH_SHORT).show();
+                                    });
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            handleImageSHMSuccess();
+                            Toast.makeText(EditListingAgenActivity.this, "Upload failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        } else if (UriHGBPdf != null) {
+            ImgSertifikathgbpdf.putFile(UriHGBPdf)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            ImgSertifikathgbpdf.getDownloadUrl()
+                                    .addOnSuccessListener(uri -> {
+                                        String imageUrl = uri.toString();
+                                        HGB = imageUrl;
+                                        handleImageHSHPSuccess();
+                                    })
+                                    .addOnFailureListener(exception -> {
+                                        handleImageSHMSuccess();
+                                        Toast.makeText(EditListingAgenActivity.this, "Upload failed: " + exception.getMessage(), Toast.LENGTH_SHORT).show();
+                                    });
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            handleImageSHMSuccess();
+                            Toast.makeText(EditListingAgenActivity.this, "Upload failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        } else {
+            HGB = isHGB;
+            handleImageHSHPSuccess();
+        }
+    }
+    private void handleImageHSHPSuccess() {
+        if (UriHSHP != null) {
+            ImgSertifikathshp.putFile(UriHSHP)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            ImgSertifikathshp.getDownloadUrl()
+                                    .addOnSuccessListener(uri -> {
+                                        String imageUrl = uri.toString();
+                                        HSHP = imageUrl;
+                                        handleImagePPJBSuccess();
+                                    })
+                                    .addOnFailureListener(exception -> {
+                                        handleImageHSHPSuccess();
+                                        Toast.makeText(EditListingAgenActivity.this, "Upload failed: " + exception.getMessage(), Toast.LENGTH_SHORT).show();
+                                    });
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            handleImageHSHPSuccess();
+                            Toast.makeText(EditListingAgenActivity.this, "Upload failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        } else if (UriHSHPPdf != null) {
+            ImgSertifikathshppdf.putFile(UriHSHPPdf)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            ImgSertifikathshppdf.getDownloadUrl()
+                                    .addOnSuccessListener(uri -> {
+                                        String imageUrl = uri.toString();
+                                        HSHP = imageUrl;
+                                        handleImagePPJBSuccess();
+                                    })
+                                    .addOnFailureListener(exception -> {
+                                        handleImageHSHPSuccess();
+                                        Toast.makeText(EditListingAgenActivity.this, "Upload failed: " + exception.getMessage(), Toast.LENGTH_SHORT).show();
+                                    });
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            handleImageHSHPSuccess();
+                            Toast.makeText(EditListingAgenActivity.this, "Upload failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        } else {
+            HSHP = isHSHP;
+            handleImagePPJBSuccess();
+        }
+    }
+    private void handleImagePPJBSuccess() {
+        if (UriPPJB != null) {
+            ImgSertifikatppjb.putFile(UriPPJB)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            ImgSertifikatppjb.getDownloadUrl()
+                                    .addOnSuccessListener(uri -> {
+                                        String imageUrl = uri.toString();
+                                        PPJB = imageUrl;
+                                        handleImageSTRASuccess();
+                                    })
+                                    .addOnFailureListener(exception -> {
+                                        handleImagePPJBSuccess();
+                                        Toast.makeText(EditListingAgenActivity.this, "Upload failed: " + exception.getMessage(), Toast.LENGTH_SHORT).show();
+                                    });
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            handleImagePPJBSuccess();
+                            Toast.makeText(EditListingAgenActivity.this, "Upload failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        } else if (UriPPJBPdf != null) {
+            ImgSertifikatppjbpdf.putFile(UriPPJBPdf)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            ImgSertifikatppjbpdf.getDownloadUrl()
+                                    .addOnSuccessListener(uri -> {
+                                        String imageUrl = uri.toString();
+                                        PPJB = imageUrl;
+                                        handleImageSTRASuccess();
+                                    })
+                                    .addOnFailureListener(exception -> {
+                                        handleImagePPJBSuccess();
+                                        Toast.makeText(EditListingAgenActivity.this, "Upload failed: " + exception.getMessage(), Toast.LENGTH_SHORT).show();
+                                    });
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            handleImagePPJBSuccess();
+                            Toast.makeText(EditListingAgenActivity.this, "Upload failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        } else {
+            PPJB = isPPJB;
+            handleImageSTRASuccess();
+        }
+    }
+    private void handleImageSTRASuccess() {
+        if (UriSTRA != null) {
+            ImgSertifikatstra.putFile(UriSTRA)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            ImgSertifikatstra.getDownloadUrl()
+                                    .addOnSuccessListener(uri -> {
+                                        String imageUrl = uri.toString();
+                                        STRA = imageUrl;
+                                        handleImageAJBSuccess();
+                                    })
+                                    .addOnFailureListener(exception -> {
+                                        handleImageSTRASuccess();
+                                        Toast.makeText(EditListingAgenActivity.this, "Upload failed: " + exception.getMessage(), Toast.LENGTH_SHORT).show();
+                                    });
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            handleImageSTRASuccess();
+                            Toast.makeText(EditListingAgenActivity.this, "Upload failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        } else if (UriSTRAPdf != null) {
+            ImgSertifikatstrapdf.putFile(UriSTRAPdf)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            ImgSertifikatstrapdf.getDownloadUrl()
+                                    .addOnSuccessListener(uri -> {
+                                        String imageUrl = uri.toString();
+                                        STRA = imageUrl;
+                                        handleImageAJBSuccess();
+                                    })
+                                    .addOnFailureListener(exception -> {
+                                        handleImageSTRASuccess();
+                                        Toast.makeText(EditListingAgenActivity.this, "Upload failed: " + exception.getMessage(), Toast.LENGTH_SHORT).show();
+                                    });
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            handleImageSTRASuccess();
+                            Toast.makeText(EditListingAgenActivity.this, "Upload failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        } else {
+            STRA = isSTRA;
+            handleImageAJBSuccess();
+        }
+    }
+    private void handleImageAJBSuccess() {
+        if (UriAJB != null) {
+            ImgSertifikatajb.putFile(UriAJB)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            ImgSertifikatajb.getDownloadUrl()
+                                    .addOnSuccessListener(uri -> {
+                                        String imageUrl = uri.toString();
+                                        AJB = imageUrl;
+                                        handleImagePetokDSuccess();
+                                    })
+                                    .addOnFailureListener(exception -> {
+                                        handleImageAJBSuccess();
+                                        Toast.makeText(EditListingAgenActivity.this, "Upload failed: " + exception.getMessage(), Toast.LENGTH_SHORT).show();
+                                    });
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            handleImageAJBSuccess();
+                            Toast.makeText(EditListingAgenActivity.this, "Upload failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        } else if (UriAJBPdf != null) {
+            ImgSertifikatajbpdf.putFile(UriAJBPdf)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            ImgSertifikatajbpdf.getDownloadUrl()
+                                    .addOnSuccessListener(uri -> {
+                                        String imageUrl = uri.toString();
+                                        AJB = imageUrl;
+                                        handleImagePetokDSuccess();
+                                    })
+                                    .addOnFailureListener(exception -> {
+                                        handleImageAJBSuccess();
+                                        Toast.makeText(EditListingAgenActivity.this, "Upload failed: " + exception.getMessage(), Toast.LENGTH_SHORT).show();
+                                    });
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            handleImageAJBSuccess();
+                            Toast.makeText(EditListingAgenActivity.this, "Upload failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        } else {
+            AJB = isAJB;
+            handleImagePetokDSuccess();
+        }
+    }
+    private void handleImagePetokDSuccess() {
+        if (UriPetokD != null) {
+            ImgSertifikatpetokd.putFile(UriPetokD)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            ImgSertifikatpetokd.getDownloadUrl()
+                                    .addOnSuccessListener(uri -> {
+                                        String imageUrl = uri.toString();
+                                        PetokD = imageUrl;
+                                        handleImagePJP1Success();
+                                    })
+                                    .addOnFailureListener(exception -> {
+                                        handleImagePetokDSuccess();
+                                        Toast.makeText(EditListingAgenActivity.this, "Upload failed: " + exception.getMessage(), Toast.LENGTH_SHORT).show();
+                                    });
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            handleImagePetokDSuccess();
+                            Toast.makeText(EditListingAgenActivity.this, "Upload failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        } else if (UriPetokDPdf != null) {
+            ImgSertifikatpetokdpdf.putFile(UriPetokDPdf)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            ImgSertifikatpetokdpdf.getDownloadUrl()
+                                    .addOnSuccessListener(uri -> {
+                                        String imageUrl = uri.toString();
+                                        PetokD = imageUrl;
+                                        handleImagePJP1Success();
+                                    })
+                                    .addOnFailureListener(exception -> {
+                                        handleImagePetokDSuccess();
+                                        Toast.makeText(EditListingAgenActivity.this, "Upload failed: " + exception.getMessage(), Toast.LENGTH_SHORT).show();
+                                    });
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            handleImagePetokDSuccess();
+                            Toast.makeText(EditListingAgenActivity.this, "Upload failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        } else {
+            PetokD = isPetokD;
+            handleImagePJP1Success();
+        }
+    }
+    private void handleImagePJP1Success() {
+        if (UriPJP != null) {
+            ImgPjp.putFile(UriPJP)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            ImgPjp.getDownloadUrl()
+                                    .addOnSuccessListener(uri -> {
+                                        String imageUrl = uri.toString();
+                                        PJPHal1 = imageUrl;
+                                        handleImagePJP2Success();
+                                    })
+                                    .addOnFailureListener(exception -> {
+                                        handleImagePJP1Success();
+                                        Toast.makeText(EditListingAgenActivity.this, "Upload failed: " + exception.getMessage(), Toast.LENGTH_SHORT).show();
+                                    });
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            handleImagePJP1Success();
+                            Toast.makeText(EditListingAgenActivity.this, "Upload failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        } else {
+            PJPHal1 = isPJP1;
+            handleImagePJP2Success();
+        }
+    }
+    private void handleImagePJP2Success() {
+        if (UriPJP1 != null) {
+            ImgPjp1.putFile(UriPJP1)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            ImgPjp1.getDownloadUrl()
+                                    .addOnSuccessListener(uri -> {
+                                        String imageUrl = uri.toString();
+                                        PJPHal2 = imageUrl;
+                                        HideProgressDialog();
+                                        simpanData();
+                                    })
+                                    .addOnFailureListener(exception -> {
+                                        handleImagePJP2Success();
+                                        Toast.makeText(EditListingAgenActivity.this, "Upload failed: " + exception.getMessage(), Toast.LENGTH_SHORT).show();
+                                    });
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            handleImagePJP2Success();
+                            Toast.makeText(EditListingAgenActivity.this, "Upload failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        } else {
+            PJPHal2 = isPJP2;
+            HideProgressDialog();
+            simpanData();
         }
     }
     public void ShowJenisProperti(View view) {

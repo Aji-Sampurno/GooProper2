@@ -42,6 +42,8 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Tasks;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
@@ -52,6 +54,7 @@ import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
 import com.gooproper.ui.LoginActivity;
 import com.gooproper.R;
+import com.gooproper.ui.tambah.TambahListingActivity;
 import com.gooproper.util.Preferences;
 import com.gooproper.util.SendMessageToFCM;
 import com.gooproper.util.ServerApi;
@@ -96,7 +99,8 @@ public class RegistrasiAgenActivity extends AppCompatActivity {
     Button submit, batal, SubmitMitra, BatalMitra, SubmitKantorLain, BatalKantroLain, upload, pas;
     ImageView back, imgktp, imgpas;
     TextInputLayout LytNpwp;
-
+    String timeStamp, FotoPas, FotoKtp;
+    StorageReference storageRef, ImgPas, ImgKtp;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -159,9 +163,13 @@ public class RegistrasiAgenActivity extends AppCompatActivity {
         pDialog = new ProgressDialog(RegistrasiAgenActivity.this);
 
         RandomPassword = generateRandomPassword(12);
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
-        String FotoPas = "Pas_" + timeStamp + ".jpg";
-        String FotoKtp = "KTP_" + timeStamp + ".jpg";
+        timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
+        FotoPas = "Pas_" + timeStamp + ".jpg";
+        FotoKtp = "KTP_" + timeStamp + ".jpg";
+
+        storageRef = FirebaseStorage.getInstance().getReference();
+        ImgPas = storageRef.child("profil/" + FotoPas);
+        ImgKtp = storageRef.child("ktp/" + FotoKtp);
 
         pendterakhir.setOnClickListener(v -> showEducationPopup(v));
         konfirmasi.setOnClickListener(v -> showKonfirmasiPopup(v));
@@ -209,86 +217,7 @@ public class RegistrasiAgenActivity extends AppCompatActivity {
         });
         submit.setOnClickListener(v -> {
             if (validateAgent()) {
-                pDialog.setMessage("Menyimpan Data");
-                pDialog.setCancelable(false);
-                pDialog.show();
-
-                StorageReference storageRef = FirebaseStorage.getInstance().getReference();
-                StorageReference ImgPas = storageRef.child("profil/" + FotoPas);
-                StorageReference ImgKtp = storageRef.child("ktp/" + FotoKtp);
-
-                List<StorageTask<UploadTask.TaskSnapshot>> uploadTasks = new ArrayList<>();
-
-                if (UriPas != null) {
-                    StorageTask<UploadTask.TaskSnapshot> task1 = ImgPas.putFile(UriPas)
-                            .addOnSuccessListener(taskSnapshot -> {
-                                ImgPas.getDownloadUrl()
-                                        .addOnSuccessListener(uri -> {
-                                            String imageUrl = uri.toString();
-                                            StringPas = imageUrl;
-                                        })
-                                        .addOnFailureListener(exception -> {
-                                        });
-                            })
-                            .addOnFailureListener(exception -> {
-                            });
-                    uploadTasks.add(task1);
-                } else {
-                    StringPas = "0";
-                }
-                if (UriKtp != null) {
-                    StorageTask<UploadTask.TaskSnapshot> task2 = ImgKtp.putFile(UriKtp)
-                            .addOnSuccessListener(taskSnapshot -> {
-                                ImgKtp.getDownloadUrl()
-                                        .addOnSuccessListener(uri -> {
-                                            String imageUrl = uri.toString();
-                                            StringKtp = imageUrl;
-                                        })
-                                        .addOnFailureListener(exception -> {
-                                        });
-                            })
-                            .addOnFailureListener(exception -> {
-                            });
-                    uploadTasks.add(task2);
-                } else {
-                    StringKtp = "0";
-                }
-
-                Tasks.whenAllSuccess(uploadTasks)
-                        .addOnSuccessListener(results -> {
-                            regisagen();
-                        })
-                        .addOnFailureListener(exception -> {
-                            pDialog.cancel();
-                            Dialog customDialog = new Dialog(RegistrasiAgenActivity.this);
-                            customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                            customDialog.setContentView(R.layout.custom_dialog_eror_input);
-
-                            if (customDialog.getWindow() != null) {
-                                customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-                            }
-
-                            Button ok = customDialog.findViewById(R.id.BtnOkErorInput);
-                            TextView tv = customDialog.findViewById(R.id.TVDialogErorInput);
-
-                            tv.setText("Gagal Saat Unggah Gambar");
-
-                            ok.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    customDialog.dismiss();
-                                }
-                            });
-
-                            ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
-
-                            Glide.with(RegistrasiAgenActivity.this)
-                                    .load(R.drawable.alert) // You can also use a local resource like R.drawable.your_gif_resource
-                                    .transition(DrawableTransitionOptions.withCrossFade())
-                                    .into(gifImageView);
-
-                            customDialog.show();
-                        });
+                handleImagePasSuccess();
             }
         });
         SubmitMitra.setOnClickListener(v -> {
@@ -405,7 +334,80 @@ public class RegistrasiAgenActivity extends AppCompatActivity {
             getSupportActionBar().hide();
         }
     }
-
+    private void showProgressDialog() {
+        pDialog.setMessage("Unggah Gambar");
+        pDialog.setCancelable(false);
+        pDialog.show();
+    }
+    private void HideProgressDialog() {
+        pDialog.dismiss();
+        pDialog.cancel();
+    }
+    private void handleImagePasSuccess() {
+        if (UriPas != null) {
+            showProgressDialog();
+            ImgPas.putFile(UriPas)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            ImgPas.getDownloadUrl()
+                                    .addOnSuccessListener(uri -> {
+                                        String imageUrl = uri.toString();
+                                        StringPas = imageUrl;
+                                        handleImageKTPSuccess();
+                                    })
+                                    .addOnFailureListener(exception -> {
+                                        HideProgressDialog();
+                                        handleImagePasSuccess();
+                                        Toast.makeText(RegistrasiAgenActivity.this, "Upload failed: " + exception.getMessage(), Toast.LENGTH_SHORT).show();
+                                    });
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            HideProgressDialog();
+                            handleImagePasSuccess();
+                            Toast.makeText(RegistrasiAgenActivity.this, "Upload failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        } else {
+            StringPas = "0";
+            handleImageKTPSuccess();
+        }
+    }
+    private void handleImageKTPSuccess() {
+        if (UriKtp != null) {
+            ImgKtp.putFile(UriKtp)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            ImgKtp.getDownloadUrl()
+                                    .addOnSuccessListener(uri -> {
+                                        String imageUrl = uri.toString();
+                                        StringKtp = imageUrl;
+                                        HideProgressDialog();
+                                        regisagen();
+                                    })
+                                    .addOnFailureListener(exception -> {
+                                        handleImageKTPSuccess();
+                                        Toast.makeText(RegistrasiAgenActivity.this, "Upload failed: " + exception.getMessage(), Toast.LENGTH_SHORT).show();
+                                    });
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            handleImageKTPSuccess();
+                            Toast.makeText(RegistrasiAgenActivity.this, "Upload failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        } else {
+            StringKtp = "0";
+            HideProgressDialog();
+            regisagen();
+        }
+    }
     private void regisagen() {
         pDialog.setMessage("Proses Registrasi...");
         pDialog.setCancelable(false);

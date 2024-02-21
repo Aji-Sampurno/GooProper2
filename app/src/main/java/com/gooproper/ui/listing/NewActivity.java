@@ -49,6 +49,7 @@ public class NewActivity extends AppCompatActivity {
     RecyclerView rvgrid;
     ListingAdapter adapter;
     List<ListingModel> list;
+    String StringKondisi;
     private AlertDialog alertDialog;
     private EditText searchView;
     private boolean applyFilters = false;
@@ -67,6 +68,8 @@ public class NewActivity extends AppCompatActivity {
         srnew = findViewById(R.id.SRNew);
         rvgrid = findViewById(R.id.RVListingGridNew);
 
+        StringKondisi = "None";
+
         searchView.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -84,22 +87,77 @@ public class NewActivity extends AppCompatActivity {
 
             }
         });
-        IVSortAsc.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                adapter.sortAscending();
-                IVSortDesc.setVisibility(View.VISIBLE);
-                IVSortAsc.setVisibility(View.GONE);
-            }
-        });
-        IVSortDesc.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                adapter.sortDescending();
-                IVSortDesc.setVisibility(View.GONE);
-                IVSortAsc.setVisibility(View.VISIBLE);
-            }
-        });
+
+        if (StringKondisi.equals("Jual")) {
+            IVSortAsc.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    adapter.sortAscending();
+                    IVSortDesc.setVisibility(View.VISIBLE);
+                    IVSortAsc.setVisibility(View.GONE);
+                }
+            });
+            IVSortDesc.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    adapter.sortDescending();
+                    IVSortDesc.setVisibility(View.GONE);
+                    IVSortAsc.setVisibility(View.VISIBLE);
+                }
+            });
+        } else if (StringKondisi.equals("Sewa")) {
+            IVSortAsc.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    adapter.sortAscendingSewa();
+                    IVSortDesc.setVisibility(View.VISIBLE);
+                    IVSortAsc.setVisibility(View.GONE);
+                }
+            });
+            IVSortDesc.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    adapter.sortDescendingSewa();
+                    IVSortDesc.setVisibility(View.GONE);
+                    IVSortAsc.setVisibility(View.VISIBLE);
+                }
+            });
+        } else if (StringKondisi.equals("Jual/Sewa")) {
+            IVSortAsc.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    adapter.sortAscending();
+                    IVSortDesc.setVisibility(View.VISIBLE);
+                    IVSortAsc.setVisibility(View.GONE);
+                }
+            });
+            IVSortDesc.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    adapter.sortDescending();
+                    IVSortDesc.setVisibility(View.GONE);
+                    IVSortAsc.setVisibility(View.VISIBLE);
+                }
+            });
+        } else {
+            IVSortAsc.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    adapter.sortAscending();
+                    IVSortDesc.setVisibility(View.VISIBLE);
+                    IVSortAsc.setVisibility(View.GONE);
+                }
+            });
+            IVSortDesc.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    adapter.sortDescending();
+                    IVSortDesc.setVisibility(View.GONE);
+                    IVSortAsc.setVisibility(View.VISIBLE);
+                }
+            });
+        }
+
         IVFilter.setOnClickListener(view -> showFilterDialog());
         srnew.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -268,10 +326,13 @@ public class NewActivity extends AppCompatActivity {
 
                 if (selectedRadioButtonId == R.id.jual) {
                     selectedKondisi = "Jual";
+                    StringKondisi = "Jual";
                 } else if (selectedRadioButtonId == R.id.sewa) {
                     selectedKondisi = "Sewa";
+                    StringKondisi = "Sewa";
                 } else if (selectedRadioButtonId == R.id.jualsewa) {
                     selectedKondisi = "Jual/Sewa";
+                    StringKondisi = "Jual/Sewa";
                 }
 
                 long minPrice = 0;
@@ -686,6 +747,7 @@ public class NewActivity extends AppCompatActivity {
                                 md.setSize(data.getString("Size"));
                                 md.setHarga(data.getString("Harga"));
                                 md.setHargaSewa(data.getString("HargaSewa"));
+                                md.setRangeHarga(data.getString("RangeHarga"));
                                 md.setTglInput(data.getString("TglInput"));
                                 md.setImg1(data.getString("Img1"));
                                 md.setImg2(data.getString("Img2"));

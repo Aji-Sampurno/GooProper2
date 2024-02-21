@@ -37,6 +37,8 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Tasks;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.storage.FirebaseStorage;
@@ -49,6 +51,7 @@ import com.gooproper.ui.tambah.TambahListingActivity;
 import com.gooproper.util.Preferences;
 import com.gooproper.util.SendMessageToFCM;
 import com.gooproper.util.ServerApi;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -79,7 +82,10 @@ public class EditMapsListingActivity extends AppCompatActivity {
     TextInputEditText longitude, latitude;
     LinearLayout LytSelfie;
     Uri bselfie;
-    String latitudeStr, longitudeStr, lokasiStr, addressStr, Selfie, StrIdPraListing;
+    String latitudeStr, longitudeStr, lokasiStr, addressStr, Selfie, StrIdPraListing, isSelfie;
+    String timeStamp,fileSelfie;
+    private StorageReference mStorageRef;
+    StorageReference storageRef,ImageSelfie;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,13 +110,27 @@ public class EditMapsListingActivity extends AppCompatActivity {
 
         Intent data = getIntent();
         final int update = data.getIntExtra("update", 0);
-        String intentIdPraListing = data.getStringExtra("IdPraListing");
+        String intentIdPraListing = data.getStringExtra("IdListing");
         String intentSelfie = data.getStringExtra("Selfie");
 
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
-        String selfie = "Selfie_" + timeStamp + ".jpg";
+        timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
+        fileSelfie = "Selfie_" + timeStamp + ".jpg";
+
+        storageRef = FirebaseStorage.getInstance().getReference();
+        ImageSelfie = storageRef.child("selfie/" + fileSelfie);
 
         StrIdPraListing = intentIdPraListing;
+        isSelfie = intentSelfie;
+
+        if (!isSelfie.equals("0")) {
+            selfiebtn.setText("Ganti Selfie");
+            IVselfie.setVisibility(View.VISIBLE);
+            Picasso.get()
+                    .load(intentSelfie)
+                    .into(IVselfie);
+        }
+
+        latitude.setText(StrIdPraListing);
 
         submit.setOnClickListener(view -> {
             if (Validate()) {
@@ -174,67 +194,7 @@ public class EditMapsListingActivity extends AppCompatActivity {
 
                         customDialog.show();
                     } else {
-                        pDialog.setMessage("Menyimpan Data");
-                        pDialog.setCancelable(false);
-                        pDialog.show();
-
-                        StorageReference storageRef = FirebaseStorage.getInstance().getReference();
-                        StorageReference ImgSelfie = storageRef.child("selfie/" + selfie);
-
-                        List<StorageTask<UploadTask.TaskSnapshot>> uploadTasks = new ArrayList<>();
-
-                        if ( bselfie != null) {
-                            StorageTask<UploadTask.TaskSnapshot> task1 = ImgSelfie.putFile(bselfie)
-                                    .addOnSuccessListener(taskSnapshot -> {
-                                        ImgSelfie.getDownloadUrl()
-                                                .addOnSuccessListener(uri -> {
-                                                    String imageUrl = uri.toString();
-                                                    Selfie = imageUrl;
-                                                })
-                                                .addOnFailureListener(exception -> {
-                                                });
-                                    })
-                                    .addOnFailureListener(exception -> {
-                                    });
-                            uploadTasks.add(task1);
-                        } else {
-                            Selfie = intentSelfie;
-                        }
-                        Tasks.whenAllSuccess(uploadTasks)
-                                .addOnSuccessListener(results -> {
-                                    pDialog.cancel();
-                                    simpanData();
-                                })
-                                .addOnFailureListener(exception -> {
-                                    Dialog customDialog = new Dialog(EditMapsListingActivity.this);
-                                    customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                                    customDialog.setContentView(R.layout.custom_dialog_eror_input);
-
-                                    if (customDialog.getWindow() != null) {
-                                        customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-                                    }
-
-                                    Button ok = customDialog.findViewById(R.id.BtnOkErorInput);
-                                    TextView tv = customDialog.findViewById(R.id.TVDialogErorInput);
-
-                                    tv.setText("Gagal Saat Unggah Gambar");
-
-                                    ok.setOnClickListener(new View.OnClickListener() {
-                                        @Override
-                                        public void onClick(View view) {
-                                            customDialog.dismiss();
-                                        }
-                                    });
-
-                                    ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
-
-                                    Glide.with(EditMapsListingActivity.this)
-                                            .load(R.drawable.alert) // You can also use a local resource like R.drawable.your_gif_resource
-                                            .transition(DrawableTransitionOptions.withCrossFade())
-                                            .into(gifImageView);
-
-                                    customDialog.show();
-                                });
+                        handleImageSelfieSuccess();
                     }
                 }
             }
@@ -392,6 +352,49 @@ public class EditMapsListingActivity extends AppCompatActivity {
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
+    private void showProgressDialog() {
+        pDialog.setMessage("Unggah Gambar");
+        pDialog.setCancelable(false);
+        pDialog.show();
+    }
+    private void HideProgressDialog() {
+        pDialog.dismiss();
+        pDialog.cancel();
+    }
+    private void handleImageSelfieSuccess() {
+        if (bselfie != null) {
+            showProgressDialog();
+            ImageSelfie.putFile(bselfie)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            ImageSelfie.getDownloadUrl()
+                                    .addOnSuccessListener(uri -> {
+                                        String imageUrl = uri.toString();
+                                        Selfie = imageUrl;
+                                        HideProgressDialog();
+                                        simpanData();
+                                    })
+                                    .addOnFailureListener(exception -> {
+                                        handleImageSelfieSuccess();
+                                        Toast.makeText(EditMapsListingActivity.this, "Upload failed: " + exception.getMessage(), Toast.LENGTH_SHORT).show();
+                                    });
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            HideProgressDialog();
+                            handleImageSelfieSuccess();
+                            Toast.makeText(EditMapsListingActivity.this, "Upload failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        } else {
+            Selfie = isSelfie;
+            HideProgressDialog();
+            simpanData();
+        }
+    }
     private void simpanData() {
         pDialog.setMessage("Menyimpan Data");
         pDialog.setCancelable(false);
@@ -417,7 +420,7 @@ public class EditMapsListingActivity extends AppCompatActivity {
                             Button cobalagi = customDialog.findViewById(R.id.btntidak);
                             ImageView gifimage = customDialog.findViewById(R.id.ivdialog);
 
-                            dialogTitle.setText("Berhasil Menambahkan Listingan");
+                            dialogTitle.setText("Berhasil Menambahkan Maps dan Selfie");
                             cobalagi.setVisibility(View.GONE);
 
                             ok.setOnClickListener(new View.OnClickListener() {
@@ -479,7 +482,7 @@ public class EditMapsListingActivity extends AppCompatActivity {
                         Button cobalagi = customDialog.findViewById(R.id.btntidak);
                         ImageView gifimage = customDialog.findViewById(R.id.ivdialog);
 
-                        dialogTitle.setText("Gagal Tambah Listingan");
+                        dialogTitle.setText("Gagal Menambahkan Maps dan Selfie");
                         ok.setVisibility(View.GONE);
 
                         cobalagi.setOnClickListener(new View.OnClickListener() {
@@ -503,7 +506,6 @@ public class EditMapsListingActivity extends AppCompatActivity {
                 map.put("IdListing", StrIdPraListing);
                 map.put("Latitude", latitudeStr);
                 map.put("Longitude", longitudeStr);
-                map.put("Location", addressStr);
                 map.put("Selfie", Selfie);
                 return map;
             }

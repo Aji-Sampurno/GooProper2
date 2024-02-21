@@ -30,6 +30,7 @@ public class ListingAdapter extends RecyclerView.Adapter<ListingAdapter.HolderDa
     private Context context;
     private static final int MAX_TEXT_LENGTH = 20;
     private static final int MAX_TEXT_LENGTH_PRICE = 10;
+    private static final int MAX_TEXT_LENGTH_PRICE_MILIAR = 23;
     private static final int MAX_TEXT_LENGTH_PRICE_JUTA = 19;
     private static final int MAX_TEXT_LENGTH_PRICE_RIBU = 15;
 
@@ -50,18 +51,38 @@ public class ListingAdapter extends RecyclerView.Adapter<ListingAdapter.HolderDa
     private String truncateTextWithEllipsisPrice(String text) {
         if (text.length() > MAX_TEXT_LENGTH_PRICE) {
             if (text.length() < MAX_TEXT_LENGTH_PRICE_RIBU) {
-                //return text.substring(0, MAX_TEXT_LENGTH_PRICE) + " Rb";
                 String truncatedText = removeTrailingZeroK(text.substring(0, MAX_TEXT_LENGTH_PRICE)) + " Rb";
                 return truncatedText;
             } else if (text.length() < MAX_TEXT_LENGTH_PRICE_JUTA) {
-                //return text.substring(0, MAX_TEXT_LENGTH_PRICE) + " Jt";
                 String truncatedText = removeTrailingZeroJ(text.substring(0, MAX_TEXT_LENGTH_PRICE)) + " Jt";
                 return truncatedText;
-            } else {
-                //return text.substring(0, MAX_TEXT_LENGTH_PRICE) + " M";
+            } else if (text.length() < MAX_TEXT_LENGTH_PRICE_MILIAR) {
                 String truncatedText = removeTrailingZeroM(text.substring(0, MAX_TEXT_LENGTH_PRICE)) + " M";
                 return truncatedText;
+            } else {
+                String truncatedText = removeTrailingZeroT(text.substring(0, MAX_TEXT_LENGTH_PRICE)) + " T";
+                return truncatedText;
             }
+        } else {
+            return text;
+        }
+    }
+
+    private String removeTrailingZeroT(String text) {
+        if (text.endsWith(".000")) {
+            return text.substring(0, text.length() - 4);
+        } else if (text.endsWith(".00")) {
+            return text.substring(0, text.length() - 3);
+        } else if (text.endsWith(".0")) {
+            return text.substring(0, text.length() - 2);
+        } else if (text.endsWith(".000.")) {
+            return text.substring(0, text.length() - 5);
+        } else if (text.endsWith("000.")) {
+            return text.substring(0, text.length() - 4);
+        } else if (text.endsWith("00.")) {
+            return text.substring(0, text.length() - 3);
+        } else if (text.endsWith("0.")) {
+            return text.substring(0, text.length() - 2);
         } else {
             return text;
         }
@@ -157,6 +178,30 @@ public class ListingAdapter extends RecyclerView.Adapter<ListingAdapter.HolderDa
             public int compare(ListingModel item1, ListingModel item2) {
                 long price1 = parsePrice(item1.getHarga());
                 long price2 = parsePrice(item2.getHarga());
+                return Long.compare(price2, price1);
+            }
+        });
+        notifyDataSetChanged();
+    }
+
+    public void sortAscendingSewa() {
+        Collections.sort(models, new Comparator<ListingModel>() {
+            @Override
+            public int compare(ListingModel item1, ListingModel item2) {
+                long price1 = parsePrice(item1.getHargaSewa());
+                long price2 = parsePrice(item2.getHargaSewa());
+                return Long.compare(price1, price2);
+            }
+        });
+        notifyDataSetChanged();
+    }
+
+    public void sortDescendingSewa() {
+        Collections.sort(models, new Comparator<ListingModel>() {
+            @Override
+            public int compare(ListingModel item1, ListingModel item2) {
+                long price1 = parsePrice(item1.getHargaSewa());
+                long price2 = parsePrice(item2.getHargaSewa());
                 return Long.compare(price2, price1);
             }
         });

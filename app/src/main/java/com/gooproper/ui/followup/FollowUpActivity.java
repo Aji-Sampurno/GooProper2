@@ -16,6 +16,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -28,6 +29,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -48,6 +50,7 @@ import com.google.firebase.storage.UploadTask;
 import com.gooproper.R;
 import com.gooproper.ui.tambah.TambahSelfieActivity;
 import com.gooproper.util.Preferences;
+import com.gooproper.util.SendMessageToFCM;
 import com.gooproper.util.ServerApi;
 
 import java.io.File;
@@ -530,5 +533,25 @@ public class FollowUpActivity extends AppCompatActivity {
 
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(stringRequest);
+    }
+    private class SendMessageTask extends AsyncTask<String, Void, String> {
+        @Override
+        protected String doInBackground(String... params) {
+            for (String token : params) {
+                sendNotificationToToken(token, "followup");
+            }
+            return null;
+        }
+        @Override
+        protected void onPostExecute(String response) {
+            if (response != null) {
+                Toast.makeText(getApplicationContext(), response, Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+    private void sendNotificationToToken(String token, String notificationType) {
+        String title = Preferences.getKeyNama(this);
+        String message = "Menambahkan Follow Up Baru";
+        String response = SendMessageToFCM.sendMessage(token, title, message, notificationType);
     }
 }

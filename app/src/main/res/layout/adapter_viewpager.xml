@@ -8,9 +8,11 @@
     <ImageView
         android:id="@+id/ivlisting"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:clickable="true"
-        android:scaleType="fitCenter"/>
+        android:layout_height="match_parent"
+        android:adjustViewBounds="true"
+        android:layout_weight="1"
+        android:scaleType="centerCrop"
+        android:clickable="true"/>
 
     <androidx.media3.ui.PlayerView
         android:id="@+id/playerView"

@@ -81,6 +81,7 @@ import com.gooproper.ui.listing.NewActivity;
 import com.gooproper.ui.listing.PopularActivity;
 import com.gooproper.ui.listing.PrimaryActivity;
 import com.gooproper.ui.listing.SoldActivity;
+import com.gooproper.ui.tambah.TambahListingActivity;
 import com.gooproper.util.Preferences;
 import com.gooproper.util.PreferencesDevice;
 import com.gooproper.util.ServerApi;
@@ -139,23 +140,32 @@ public class HomeAgenFragment extends Fragment implements OnMapReadyCallback{
             requestNotificationPermission();
         }
 
-        if (isFirstTime()) {
-            FirebaseMessaging.getInstance().getToken()
-                    .addOnCompleteListener(task -> {
-                        if (!task.isSuccessful()) {
-                            return;
-                        }
-                        Token = task.getResult();
-                        Toast.makeText(getContext(), "Selamat Datang" + Token, Toast.LENGTH_LONG).show();
-                        FirebaseAnalytics firebaseAnalytics = FirebaseAnalytics.getInstance(getContext());
-                        Bundle bundle = new Bundle();
-                        bundle.putString("token_received", Token);
-                        firebaseAnalytics.logEvent("token_received", bundle);
-                        simpanDevice();
-                    });
+        FirebaseMessaging.getInstance().getToken()
+                .addOnCompleteListener(task -> {
+                    if (!task.isSuccessful()) {
+                        return;
+                    }
+                    Token = task.getResult();
+                    simpanDevice();
+                });
 
-            setFirstTime(false);
-        }
+//        if (isFirstTime()) {
+//            FirebaseMessaging.getInstance().getToken()
+//                    .addOnCompleteListener(task -> {
+//                        if (!task.isSuccessful()) {
+//                            return;
+//                        }
+//                        Token = task.getResult();
+//                        Toast.makeText(getContext(), "Selamat Datang" + Token, Toast.LENGTH_LONG).show();
+//                        FirebaseAnalytics firebaseAnalytics = FirebaseAnalytics.getInstance(getContext());
+//                        Bundle bundle = new Bundle();
+//                        bundle.putString("token_received", Token);
+//                        firebaseAnalytics.logEvent("token_received", bundle);
+//                        simpanDevice();
+//                    });
+//
+//            setFirstTime(false);
+//        }
 
         recycleListingPrimary = root.findViewById(R.id.ListingPrimary);
         recycleListingSold = root.findViewById(R.id.ListingSold);
@@ -446,6 +456,68 @@ public class HomeAgenFragment extends Fragment implements OnMapReadyCallback{
                     public void onResponse(String response) {
                         try {
                             JSONObject res = new JSONObject(response);
+                            String status = res.getString("Status");
+                            if (status.equals("Sukses")) {
+                                Dialog customDialog = new Dialog(getContext());
+                                customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                                customDialog.setContentView(R.layout.custom_dialog_sukses);
+
+                                if (customDialog.getWindow() != null) {
+                                    customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                                }
+
+                                TextView dialogTitle = customDialog.findViewById(R.id.dialog_title);
+                                Button ok = customDialog.findViewById(R.id.btnya);
+                                Button cobalagi = customDialog.findViewById(R.id.btntidak);
+                                ImageView gifimage = customDialog.findViewById(R.id.ivdialog);
+
+                                dialogTitle.setText("Berhasil Menambahkan Listingan");
+                                cobalagi.setVisibility(View.GONE);
+
+                                ok.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        customDialog.dismiss();
+                                    }
+                                });
+
+                                Glide.with(getActivity())
+                                        .load(R.mipmap.ic_yes) // You can also use a local resource like R.drawable.your_gif_resource
+                                        .transition(DrawableTransitionOptions.withCrossFade())
+                                        .into(gifimage);
+
+                                customDialog.show();
+                            } else if (status.equals("Error")) {
+                                Dialog customDialog = new Dialog(getContext());
+                                customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                                customDialog.setContentView(R.layout.custom_dialog_sukses);
+
+                                if (customDialog.getWindow() != null) {
+                                    customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                                }
+
+                                TextView dialogTitle = customDialog.findViewById(R.id.dialog_title);
+                                Button ok = customDialog.findViewById(R.id.btnya);
+                                Button cobalagi = customDialog.findViewById(R.id.btntidak);
+                                ImageView gifimage = customDialog.findViewById(R.id.ivdialog);
+
+                                dialogTitle.setText("Gagal Menambahkan Listingan");
+                                ok.setVisibility(View.GONE);
+
+                                cobalagi.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        customDialog.dismiss();
+                                    }
+                                });
+
+                                Glide.with(getActivity())
+                                        .load(R.mipmap.ic_no) // You can also use a local resource like R.drawable.your_gif_resource
+                                        .transition(DrawableTransitionOptions.withCrossFade())
+                                        .into(gifimage);
+
+                                customDialog.show();
+                            }
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -609,6 +681,7 @@ public class HomeAgenFragment extends Fragment implements OnMapReadyCallback{
                                 md.setSize(data.getString("Size"));
                                 md.setHarga(data.getString("Harga"));
                                 md.setHargaSewa(data.getString("HargaSewa"));
+                                md.setRangeHarga(data.getString("RangeHarga"));
                                 md.setTglInput(data.getString("TglInput"));
                                 md.setImg1(data.getString("Img1"));
                                 md.setImg2(data.getString("Img2"));
@@ -722,6 +795,7 @@ public class HomeAgenFragment extends Fragment implements OnMapReadyCallback{
                                 md.setSize(data.getString("Size"));
                                 md.setHarga(data.getString("Harga"));
                                 md.setHargaSewa(data.getString("HargaSewa"));
+                                md.setRangeHarga(data.getString("RangeHarga"));
                                 md.setTglInput(data.getString("TglInput"));
                                 md.setImg1(data.getString("Img1"));
                                 md.setImg2(data.getString("Img2"));
@@ -835,6 +909,7 @@ public class HomeAgenFragment extends Fragment implements OnMapReadyCallback{
                                 md.setSize(data.getString("Size"));
                                 md.setHarga(data.getString("Harga"));
                                 md.setHargaSewa(data.getString("HargaSewa"));
+                                md.setRangeHarga(data.getString("RangeHarga"));
                                 md.setTglInput(data.getString("TglInput"));
                                 md.setImg1(data.getString("Img1"));
                                 md.setImg2(data.getString("Img2"));

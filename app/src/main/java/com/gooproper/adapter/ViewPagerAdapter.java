@@ -31,6 +31,7 @@ import androidx.media3.exoplayer.ExoPlayer;
 import androidx.media3.ui.PlayerView;
 import androidx.viewpager.widget.PagerAdapter;
 
+import com.bumptech.glide.Glide;
 import com.gooproper.R;
 import com.gooproper.ui.ImageViewActivity;
 import com.gooproper.util.ImageDownloader;
@@ -92,9 +93,12 @@ public class ViewPagerAdapter extends PagerAdapter {
             }
             videoView.setVisibility(View.GONE);
             imageView.setVisibility(View.VISIBLE);
-            Picasso.get()
+            Glide.with(context)
                     .load(currentLink)
                     .into(imageView);
+//            Picasso.get()
+//                    .load(currentLink)
+//                    .into(imageView);
             container.addView(view, 0);
             imageView.setOnClickListener(new View.OnClickListener() {
                 @Override

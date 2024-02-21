@@ -564,6 +564,7 @@ public class ListingFragment extends Fragment {
                                 md.setSize(data.getString("Size"));
                                 md.setHarga(data.getString("Harga"));
                                 md.setHargaSewa(data.getString("HargaSewa"));
+                                md.setRangeHarga(data.getString("RangeHarga"));
                                 md.setTglInput(data.getString("TglInput"));
                                 md.setImg1(data.getString("Img1"));
                                 md.setImg2(data.getString("Img2"));

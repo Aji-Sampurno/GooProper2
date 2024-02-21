@@ -30,6 +30,7 @@ import androidx.media3.exoplayer.ExoPlayer;
 import androidx.media3.ui.PlayerView;
 import androidx.viewpager.widget.PagerAdapter;
 
+import com.bumptech.glide.Glide;
 import com.github.chrisbanes.photoview.PhotoView;
 import com.gooproper.R;
 import com.gooproper.ui.ImageViewActivity;
@@ -95,10 +96,12 @@ public class ImageViewAdapter extends PagerAdapter {
 
             playerView.setVisibility(View.GONE);
             imageView.setVisibility(View.VISIBLE);
-
-            Picasso.get()
-                    .load(images.get(position))
+            Glide.with(context)
+                    .load(currentLink)
                     .into(imageView);
+//            Picasso.get()
+//                    .load(images.get(position))
+//                    .into(imageView);
             container.addView(view, 0);
             imageView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override

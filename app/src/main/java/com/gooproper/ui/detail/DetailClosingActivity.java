@@ -188,6 +188,7 @@ public class DetailClosingActivity extends AppCompatActivity implements OnMapRea
         String intentSize = data.getStringExtra("Size");
         String intentHarga = data.getStringExtra("Harga");
         String intentHargaSewa = data.getStringExtra("HargaSewa");
+        String intentRangeHarga = data.getStringExtra("RangeHarga");
         String intentTglInput = data.getStringExtra("TglInput");
         String intentImg1 = data.getStringExtra("Img1");
         String intentImg2 = data.getStringExtra("Img2");

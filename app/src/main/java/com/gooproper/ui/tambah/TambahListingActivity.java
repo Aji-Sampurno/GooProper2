@@ -210,14 +210,18 @@ public class TambahListingActivity extends AppCompatActivity {
     String latitudeStr, longitudeStr, addressStr, lokasiStr, Lat, Lng, token, StrLokasi;
     Drawable DrawableSHM, DrawableHGB, DrawableHSHP, DrawablePPJB, DrawableSTRA;
     TextView TVSHM, TVHGB, TVHSHP, TVPPJB, TVSTRA, TVAJB, TVPetokD;
+    String timeStamp,fileListing1,fileListing2,fileListing3,fileListing4,fileListing5,fileListing6,fileListing7,fileListing8,fileSertifikatshm,fileSertifikatshmpdf,fileSertifikathgb,fileSertifikathgbpdf,fileSertifikathshp,fileSertifikathshppdf,fileSertifikatppjb,fileSertifikatppjbpdf,fileSertifikatstra,fileSertifikatstrapdf,fileSertifikatajb,fileSertifikatajbpdf,fileSertifikatpetokd,fileSertifikatpetokdpdf,filePjp1,filePjp2,fileSelfie,fileKTP;
+    private StorageReference mStorageRef;
+    StorageReference storageRef,ImgListing1,ImgListing2,ImgListing3,ImgListing4,ImgListing5,ImgListing6,ImgListing7,ImgListing8,ImgSertifikatshm,ImgSertifikathgb,ImgSertifikathshp,ImgSertifikatppjb,ImgSertifikatstra,ImgSertifikatajb,ImgSertifikatpetokd,ImgSertifikatshmpdf,ImgSertifikathgbpdf,ImgSertifikathshppdf,ImgSertifikatppjbpdf,ImgSertifikatstrapdf,ImgSertifikatajbpdf,ImgSertifikatpetokdpdf,ImgPjp,ImgPjp1,ImageSelfie,ImageKTP;
     private AgenManager agenManager;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tambah_listing);
 
         pDialog = new ProgressDialog(TambahListingActivity.this);
+
+        mStorageRef = FirebaseStorage.getInstance().getReference();
 
         rgpriority = findViewById(R.id.rgstatus);
 
@@ -414,33 +418,61 @@ public class TambahListingActivity extends AppCompatActivity {
             LytTglInput.setVisibility(View.GONE);
         }
 
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
-        String fileListing1 = "Listing1_" + timeStamp + ".jpg";
-        String fileListing2 = "Listing2_" + timeStamp + ".jpg";
-        String fileListing3 = "Listing3_" + timeStamp + ".jpg";
-        String fileListing4 = "Listing4_" + timeStamp + ".jpg";
-        String fileListing5 = "Listing5_" + timeStamp + ".jpg";
-        String fileListing6 = "Listing6_" + timeStamp + ".jpg";
-        String fileListing7 = "Listing7_" + timeStamp + ".jpg";
-        String fileListing8 = "Listing8_" + timeStamp + ".jpg";
-        String fileSertifikatshm = "SHM_" + timeStamp + ".jpg";
-        String fileSertifikatshmpdf = "SHM_" + timeStamp + ".pdf";
-        String fileSertifikathgb = "HGB_" + timeStamp + ".jpg";
-        String fileSertifikathgbpdf = "HGB_" + timeStamp + ".pdf";
-        String fileSertifikathshp = "HSHP_" + timeStamp + ".jpg";
-        String fileSertifikathshppdf = "HSHP_" + timeStamp + ".pdf";
-        String fileSertifikatppjb = "PPJB_" + timeStamp + ".jpg";
-        String fileSertifikatppjbpdf = "PPJB_" + timeStamp + ".pdf";
-        String fileSertifikatstra = "Stratatitle_" + timeStamp + ".jpg";
-        String fileSertifikatstrapdf = "Stratatitle_" + timeStamp + ".pdf";
-        String fileSertifikatajb = "Ajb_" + timeStamp + ".jpg";
-        String fileSertifikatajbpdf = "Ajb_" + timeStamp + ".pdf";
-        String fileSertifikatpetokd = "PetokD_" + timeStamp + ".jpg";
-        String fileSertifikatpetokdpdf = "PetokD_" + timeStamp + ".pdf";
-        String filePjp1 = "PJP1_" + timeStamp + ".jpg";
-        String filePjp2 = "PJP2_" + timeStamp + ".jpg";
-        String fileSelfie = "Selfie_" + timeStamp + ".jpg";
-        String fileKTP = "KTP_" + timeStamp + ".jpg";
+        timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
+        fileListing1 = "Listing1_" + timeStamp + ".jpg";
+        fileListing2 = "Listing2_" + timeStamp + ".jpg";
+        fileListing3 = "Listing3_" + timeStamp + ".jpg";
+        fileListing4 = "Listing4_" + timeStamp + ".jpg";
+        fileListing5 = "Listing5_" + timeStamp + ".jpg";
+        fileListing6 = "Listing6_" + timeStamp + ".jpg";
+        fileListing7 = "Listing7_" + timeStamp + ".jpg";
+        fileListing8 = "Listing8_" + timeStamp + ".jpg";
+        fileSertifikatshm = "SHM_" + timeStamp + ".jpg";
+        fileSertifikatshmpdf = "SHM_" + timeStamp + ".pdf";
+        fileSertifikathgb = "HGB_" + timeStamp + ".jpg";
+        fileSertifikathgbpdf = "HGB_" + timeStamp + ".pdf";
+        fileSertifikathshp = "HSHP_" + timeStamp + ".jpg";
+        fileSertifikathshppdf = "HSHP_" + timeStamp + ".pdf";
+        fileSertifikatppjb = "PPJB_" + timeStamp + ".jpg";
+        fileSertifikatppjbpdf = "PPJB_" + timeStamp + ".pdf";
+        fileSertifikatstra = "Stratatitle_" + timeStamp + ".jpg";
+        fileSertifikatstrapdf = "Stratatitle_" + timeStamp + ".pdf";
+        fileSertifikatajb = "Ajb_" + timeStamp + ".jpg";
+        fileSertifikatajbpdf = "Ajb_" + timeStamp + ".pdf";
+        fileSertifikatpetokd = "PetokD_" + timeStamp + ".jpg";
+        fileSertifikatpetokdpdf = "PetokD_" + timeStamp + ".pdf";
+        filePjp1 = "PJP1_" + timeStamp + ".jpg";
+        filePjp2 = "PJP2_" + timeStamp + ".jpg";
+        fileSelfie = "Selfie_" + timeStamp + ".jpg";
+        fileKTP = "KTP_" + timeStamp + ".jpg";
+
+        storageRef = FirebaseStorage.getInstance().getReference();
+        ImgListing1 = storageRef.child("listing/" + fileListing1);
+        ImgListing2 = storageRef.child("listing/" + fileListing2);
+        ImgListing3 = storageRef.child("listing/" + fileListing3);
+        ImgListing4 = storageRef.child("listing/" + fileListing4);
+        ImgListing5 = storageRef.child("listing/" + fileListing5);
+        ImgListing6 = storageRef.child("listing/" + fileListing6);
+        ImgListing7 = storageRef.child("listing/" + fileListing7);
+        ImgListing8 = storageRef.child("listing/" + fileListing8);
+        ImgSertifikatshm = storageRef.child("sertifikat/" + fileSertifikatshm);
+        ImgSertifikathgb = storageRef.child("sertifikat/" + fileSertifikathgb);
+        ImgSertifikathshp = storageRef.child("sertifikat/" + fileSertifikathshp);
+        ImgSertifikatppjb = storageRef.child("sertifikat/" + fileSertifikatppjb);
+        ImgSertifikatstra = storageRef.child("sertifikat/" + fileSertifikatstra);
+        ImgSertifikatajb = storageRef.child("sertifikat/" + fileSertifikatajb);
+        ImgSertifikatpetokd = storageRef.child("sertifikat/" + fileSertifikatpetokd);
+        ImgSertifikatshmpdf = storageRef.child("sertifikat/" + fileSertifikatshmpdf);
+        ImgSertifikathgbpdf = storageRef.child("sertifikat/" + fileSertifikathgbpdf);
+        ImgSertifikathshppdf = storageRef.child("sertifikat/" + fileSertifikathshppdf);
+        ImgSertifikatppjbpdf = storageRef.child("sertifikat/" + fileSertifikatppjbpdf);
+        ImgSertifikatstrapdf = storageRef.child("sertifikat/" + fileSertifikatstrapdf);
+        ImgSertifikatajbpdf = storageRef.child("sertifikat/" + fileSertifikatajbpdf);
+        ImgSertifikatpetokdpdf = storageRef.child("sertifikat/" + fileSertifikatpetokdpdf);
+        ImgPjp = storageRef.child("pjp/" + filePjp1);
+        ImgPjp1 = storageRef.child("pjp/" + filePjp2);
+        ImageSelfie = storageRef.child("selfie/" + fileSelfie);
+        ImageKTP = storageRef.child("ktp/" + fileKTP);
 
         if (isAdmin.equals("2")) {
             submit.setOnClickListener(view -> {
@@ -507,497 +539,7 @@ public class TambahListingActivity extends AppCompatActivity {
 
                             customDialog.show();
                         } else {
-                            pDialog.setMessage("Menyimpan Data");
-                            pDialog.setCancelable(false);
-                            pDialog.show();
-
-                            StorageReference storageRef = FirebaseStorage.getInstance().getReference();
-                            StorageReference ImgListing1 = storageRef.child("listing/" + fileListing1);
-                            StorageReference ImgListing2 = storageRef.child("listing/" + fileListing2);
-                            StorageReference ImgListing3 = storageRef.child("listing/" + fileListing3);
-                            StorageReference ImgListing4 = storageRef.child("listing/" + fileListing4);
-                            StorageReference ImgListing5 = storageRef.child("listing/" + fileListing5);
-                            StorageReference ImgListing6 = storageRef.child("listing/" + fileListing6);
-                            StorageReference ImgListing7 = storageRef.child("listing/" + fileListing7);
-                            StorageReference ImgListing8 = storageRef.child("listing/" + fileListing8);
-                            StorageReference ImgSertifikatshm = storageRef.child("sertifikat/" + fileSertifikatshm);
-                            StorageReference ImgSertifikathgb = storageRef.child("sertifikat/" + fileSertifikathgb);
-                            StorageReference ImgSertifikathshp = storageRef.child("sertifikat/" + fileSertifikathshp);
-                            StorageReference ImgSertifikatppjb = storageRef.child("sertifikat/" + fileSertifikatppjb);
-                            StorageReference ImgSertifikatstra = storageRef.child("sertifikat/" + fileSertifikatstra);
-                            StorageReference ImgSertifikatajb = storageRef.child("sertifikat/" + fileSertifikatajb);
-                            StorageReference ImgSertifikatpetokd = storageRef.child("sertifikat/" + fileSertifikatpetokd);
-                            StorageReference ImgSertifikatshmpdf = storageRef.child("sertifikat/" + fileSertifikatshmpdf);
-                            StorageReference ImgSertifikathgbpdf = storageRef.child("sertifikat/" + fileSertifikathgbpdf);
-                            StorageReference ImgSertifikathshppdf = storageRef.child("sertifikat/" + fileSertifikathshppdf);
-                            StorageReference ImgSertifikatppjbpdf = storageRef.child("sertifikat/" + fileSertifikatppjbpdf);
-                            StorageReference ImgSertifikatstrapdf = storageRef.child("sertifikat/" + fileSertifikatstrapdf);
-                            StorageReference ImgSertifikatajbpdf = storageRef.child("sertifikat/" + fileSertifikatajbpdf);
-                            StorageReference ImgSertifikatpetokdpdf = storageRef.child("sertifikat/" + fileSertifikatpetokdpdf);
-                            StorageReference ImgPjp = storageRef.child("pjp/" + filePjp1);
-                            StorageReference ImgPjp1 = storageRef.child("pjp/" + filePjp2);
-                            StorageReference ImageSelfie = storageRef.child("selfie/" + fileSelfie);
-                            StorageReference ImageKTP = storageRef.child("ktp/" + fileKTP);
-
-                            List<StorageTask<UploadTask.TaskSnapshot>> uploadTasks = new ArrayList<>();
-
-                            if (Uri1 != null) {
-                                StorageTask<UploadTask.TaskSnapshot> task1 = ImgListing1.putFile(Uri1)
-                                        .addOnSuccessListener(taskSnapshot -> {
-                                            ImgListing1.getDownloadUrl()
-                                                    .addOnSuccessListener(uri -> {
-                                                        String imageUrl = uri.toString();
-                                                        image1 = imageUrl;
-                                                    })
-                                                    .addOnFailureListener(exception -> {
-                                                    });
-                                        })
-                                        .addOnFailureListener(exception -> {
-                                        });
-                                uploadTasks.add(task1);
-                            } else {
-                                image1 = "0";
-                            }
-                            if (Uri2 != null) {
-                                StorageTask<UploadTask.TaskSnapshot> task2 = ImgListing2.putFile(Uri2)
-                                        .addOnSuccessListener(taskSnapshot -> {
-                                            ImgListing2.getDownloadUrl()
-                                                    .addOnSuccessListener(uri -> {
-                                                        String imageUrl = uri.toString();
-                                                        image2 = imageUrl;
-                                                    })
-                                                    .addOnFailureListener(exception -> {
-                                                    });
-                                        })
-                                        .addOnFailureListener(exception -> {
-                                        });
-                                uploadTasks.add(task2);
-                            } else {
-                                image2 = "0";
-                            }
-                            if (Uri3 != null) {
-                                StorageTask<UploadTask.TaskSnapshot> task3 = ImgListing3.putFile(Uri3)
-                                        .addOnSuccessListener(taskSnapshot -> {
-                                            ImgListing3.getDownloadUrl()
-                                                    .addOnSuccessListener(uri -> {
-                                                        String imageUrl = uri.toString();
-                                                        image3 = imageUrl;
-                                                    })
-                                                    .addOnFailureListener(exception -> {
-                                                    });
-                                        })
-                                        .addOnFailureListener(exception -> {
-                                        });
-                                uploadTasks.add(task3);
-                            } else {
-                                image3 = "0";
-                            }
-                            if (Uri4 != null) {
-                                StorageTask<UploadTask.TaskSnapshot> task4 = ImgListing4.putFile(Uri4)
-                                        .addOnSuccessListener(taskSnapshot -> {
-                                            ImgListing4.getDownloadUrl()
-                                                    .addOnSuccessListener(uri -> {
-                                                        String imageUrl = uri.toString();
-                                                        image4 = imageUrl;
-                                                    })
-                                                    .addOnFailureListener(exception -> {
-                                                    });
-                                        })
-                                        .addOnFailureListener(exception -> {
-                                        });
-                                uploadTasks.add(task4);
-                            } else {
-                                image4 = "0";
-                            }
-                            if (Uri5 != null) {
-                                StorageTask<UploadTask.TaskSnapshot> task5 = ImgListing5.putFile(Uri5)
-                                        .addOnSuccessListener(taskSnapshot -> {
-                                            ImgListing5.getDownloadUrl()
-                                                    .addOnSuccessListener(uri -> {
-                                                        String imageUrl = uri.toString();
-                                                        image5 = imageUrl;
-                                                    })
-                                                    .addOnFailureListener(exception -> {
-                                                    });
-                                        })
-                                        .addOnFailureListener(exception -> {
-                                        });
-                                uploadTasks.add(task5);
-                            } else {
-                                image5 = "0";
-                            }
-                            if (Uri6 != null) {
-                                StorageTask<UploadTask.TaskSnapshot> task6 = ImgListing6.putFile(Uri6)
-                                        .addOnSuccessListener(taskSnapshot -> {
-                                            ImgListing6.getDownloadUrl()
-                                                    .addOnSuccessListener(uri -> {
-                                                        String imageUrl = uri.toString();
-                                                        image6 = imageUrl;
-                                                    })
-                                                    .addOnFailureListener(exception -> {
-                                                    });
-                                        })
-                                        .addOnFailureListener(exception -> {
-                                        });
-                                uploadTasks.add(task6);
-                            } else {
-                                image6 = "0";
-                            }
-                            if (Uri7 != null) {
-                                StorageTask<UploadTask.TaskSnapshot> task7 = ImgListing7.putFile(Uri7)
-                                        .addOnSuccessListener(taskSnapshot -> {
-                                            ImgListing7.getDownloadUrl()
-                                                    .addOnSuccessListener(uri -> {
-                                                        String imageUrl = uri.toString();
-                                                        image7 = imageUrl;
-                                                    })
-                                                    .addOnFailureListener(exception -> {
-                                                    });
-                                        })
-                                        .addOnFailureListener(exception -> {
-                                        });
-                                uploadTasks.add(task7);
-                            } else {
-                                image7 = "0";
-                            }
-                            if (Uri8 != null) {
-                                StorageTask<UploadTask.TaskSnapshot> task8 = ImgListing8.putFile(Uri8)
-                                        .addOnSuccessListener(taskSnapshot -> {
-                                            ImgListing8.getDownloadUrl()
-                                                    .addOnSuccessListener(uri -> {
-                                                        String imageUrl = uri.toString();
-                                                        image8 = imageUrl;
-                                                    })
-                                                    .addOnFailureListener(exception -> {
-                                                    });
-                                        })
-                                        .addOnFailureListener(exception -> {
-                                        });
-                                uploadTasks.add(task8);
-                            } else {
-                                image8 = "0";
-                            }
-                            if (UriSHM != null) {
-                                StorageTask<UploadTask.TaskSnapshot> taskSHM = ImgSertifikatshm.putFile(UriSHM)
-                                        .addOnSuccessListener(taskSnapshot -> {
-                                            ImgSertifikatshm.getDownloadUrl()
-                                                    .addOnSuccessListener(uri -> {
-                                                        String imageUrl = uri.toString();
-                                                        SHM = imageUrl;
-                                                    })
-                                                    .addOnFailureListener(exception -> {
-                                                    });
-                                        })
-                                        .addOnFailureListener(exception -> {
-                                        });
-                                uploadTasks.add(taskSHM);
-                            } else if (UriSHMPdf != null) {
-                                StorageTask<UploadTask.TaskSnapshot> taskSHM = ImgSertifikatshmpdf.putFile(UriSHMPdf)
-                                        .addOnSuccessListener(taskSnapshot -> {
-                                            ImgSertifikatshmpdf.getDownloadUrl()
-                                                    .addOnSuccessListener(uri -> {
-                                                        String imageUrl = uri.toString();
-                                                        SHM = imageUrl;
-                                                    })
-                                                    .addOnFailureListener(exception -> {
-                                                    });
-                                        })
-                                        .addOnFailureListener(exception -> {
-                                        });
-                                uploadTasks.add(taskSHM);
-                            } else {
-                                SHM = "0";
-                            }
-                            if (UriHGB != null) {
-                                StorageTask<UploadTask.TaskSnapshot> taskHGB = ImgSertifikathgb.putFile(UriHGB)
-                                        .addOnSuccessListener(taskSnapshot -> {
-                                            ImgSertifikathgb.getDownloadUrl()
-                                                    .addOnSuccessListener(uri -> {
-                                                        String imageUrl = uri.toString();
-                                                        HGB = imageUrl;
-                                                    })
-                                                    .addOnFailureListener(exception -> {
-                                                    });
-                                        })
-                                        .addOnFailureListener(exception -> {
-                                        });
-                                uploadTasks.add(taskHGB);
-                            } else if (UriHGBPdf != null) {
-                                StorageTask<UploadTask.TaskSnapshot> taskHGB = ImgSertifikathgbpdf.putFile(UriHGBPdf)
-                                        .addOnSuccessListener(taskSnapshot -> {
-                                            ImgSertifikathgbpdf.getDownloadUrl()
-                                                    .addOnSuccessListener(uri -> {
-                                                        String imageUrl = uri.toString();
-                                                        HGB = imageUrl;
-                                                    })
-                                                    .addOnFailureListener(exception -> {
-                                                    });
-                                        })
-                                        .addOnFailureListener(exception -> {
-                                        });
-                                uploadTasks.add(taskHGB);
-                            } else {
-                                HGB = "0";
-                            }
-                            if (UriHSHP != null) {
-                                StorageTask<UploadTask.TaskSnapshot> taskHSHP = ImgSertifikathshp.putFile(UriHSHP)
-                                        .addOnSuccessListener(taskSnapshot -> {
-                                            ImgSertifikathshp.getDownloadUrl()
-                                                    .addOnSuccessListener(uri -> {
-                                                        String imageUrl = uri.toString();
-                                                        HSHP = imageUrl;
-                                                    })
-                                                    .addOnFailureListener(exception -> {
-                                                    });
-                                        })
-                                        .addOnFailureListener(exception -> {
-                                        });
-                                uploadTasks.add(taskHSHP);
-                            } else if (UriHSHPPdf != null) {
-                                StorageTask<UploadTask.TaskSnapshot> taskHSHP = ImgSertifikathshppdf.putFile(UriHSHPPdf)
-                                        .addOnSuccessListener(taskSnapshot -> {
-                                            ImgSertifikathshppdf.getDownloadUrl()
-                                                    .addOnSuccessListener(uri -> {
-                                                        String imageUrl = uri.toString();
-                                                        HSHP = imageUrl;
-                                                    })
-                                                    .addOnFailureListener(exception -> {
-                                                    });
-                                        })
-                                        .addOnFailureListener(exception -> {
-                                        });
-                                uploadTasks.add(taskHSHP);
-                            } else {
-                                HSHP = "0";
-                            }
-                            if (UriPPJB != null) {
-                                StorageTask<UploadTask.TaskSnapshot> taskPPJB = ImgSertifikatppjb.putFile(UriPPJB)
-                                        .addOnSuccessListener(taskSnapshot -> {
-                                            ImgSertifikatppjb.getDownloadUrl()
-                                                    .addOnSuccessListener(uri -> {
-                                                        String imageUrl = uri.toString();
-                                                        PPJB = imageUrl;
-                                                    })
-                                                    .addOnFailureListener(exception -> {
-                                                    });
-                                        })
-                                        .addOnFailureListener(exception -> {
-                                        });
-                                uploadTasks.add(taskPPJB);
-                            } else if (UriPPJBPdf != null) {
-                                StorageTask<UploadTask.TaskSnapshot> taskPPJB = ImgSertifikatppjbpdf.putFile(UriPPJBPdf)
-                                        .addOnSuccessListener(taskSnapshot -> {
-                                            ImgSertifikatppjbpdf.getDownloadUrl()
-                                                    .addOnSuccessListener(uri -> {
-                                                        String imageUrl = uri.toString();
-                                                        PPJB = imageUrl;
-                                                    })
-                                                    .addOnFailureListener(exception -> {
-                                                    });
-                                        })
-                                        .addOnFailureListener(exception -> {
-                                        });
-                                uploadTasks.add(taskPPJB);
-                            } else {
-                                PPJB = "0";
-                            }
-                            if (UriSTRA != null) {
-                                StorageTask<UploadTask.TaskSnapshot> taskSTRA = ImgSertifikatstra.putFile(UriSTRA)
-                                        .addOnSuccessListener(taskSnapshot -> {
-                                            ImgSertifikatstra.getDownloadUrl()
-                                                    .addOnSuccessListener(uri -> {
-                                                        String imageUrl = uri.toString();
-                                                        STRA = imageUrl;
-                                                    })
-                                                    .addOnFailureListener(exception -> {
-                                                    });
-                                        })
-                                        .addOnFailureListener(exception -> {
-                                        });
-                                uploadTasks.add(taskSTRA);
-                            } else if (UriSTRAPdf != null) {
-                                StorageTask<UploadTask.TaskSnapshot> taskSTRA = ImgSertifikatstrapdf.putFile(UriSTRAPdf)
-                                        .addOnSuccessListener(taskSnapshot -> {
-                                            ImgSertifikatstrapdf.getDownloadUrl()
-                                                    .addOnSuccessListener(uri -> {
-                                                        String imageUrl = uri.toString();
-                                                        STRA = imageUrl;
-                                                    })
-                                                    .addOnFailureListener(exception -> {
-                                                    });
-                                        })
-                                        .addOnFailureListener(exception -> {
-                                        });
-                                uploadTasks.add(taskSTRA);
-                            } else {
-                                STRA = "0";
-                            }
-                            if (UriAJB != null) {
-                                StorageTask<UploadTask.TaskSnapshot> taskAJB = ImgSertifikatajb.putFile(UriAJB)
-                                        .addOnSuccessListener(taskSnapshot -> {
-                                            ImgSertifikatajb.getDownloadUrl()
-                                                    .addOnSuccessListener(uri -> {
-                                                        String imageUrl = uri.toString();
-                                                        AJB = imageUrl;
-                                                    })
-                                                    .addOnFailureListener(exception -> {
-                                                    });
-                                        })
-                                        .addOnFailureListener(exception -> {
-                                        });
-                                uploadTasks.add(taskAJB);
-                            } else if (UriAJBPdf != null) {
-                                StorageTask<UploadTask.TaskSnapshot> taskAJB = ImgSertifikatajbpdf.putFile(UriAJBPdf)
-                                        .addOnSuccessListener(taskSnapshot -> {
-                                            ImgSertifikatajbpdf.getDownloadUrl()
-                                                    .addOnSuccessListener(uri -> {
-                                                        String imageUrl = uri.toString();
-                                                        AJB = imageUrl;
-                                                    })
-                                                    .addOnFailureListener(exception -> {
-                                                    });
-                                        })
-                                        .addOnFailureListener(exception -> {
-                                        });
-                                uploadTasks.add(taskAJB);
-                            } else {
-                                AJB = "0";
-                            }
-                            if (UriPetokD != null) {
-                                StorageTask<UploadTask.TaskSnapshot> taskPetokD = ImgSertifikatpetokd.putFile(UriPetokD)
-                                        .addOnSuccessListener(taskSnapshot -> {
-                                            ImgSertifikatpetokd.getDownloadUrl()
-                                                    .addOnSuccessListener(uri -> {
-                                                        String imageUrl = uri.toString();
-                                                        PetokD = imageUrl;
-                                                    })
-                                                    .addOnFailureListener(exception -> {
-                                                    });
-                                        })
-                                        .addOnFailureListener(exception -> {
-                                        });
-                                uploadTasks.add(taskPetokD);
-                            } else if (UriPetokDPdf != null) {
-                                StorageTask<UploadTask.TaskSnapshot> taskPetokD = ImgSertifikatpetokdpdf.putFile(UriPetokDPdf)
-                                        .addOnSuccessListener(taskSnapshot -> {
-                                            ImgSertifikatpetokdpdf.getDownloadUrl()
-                                                    .addOnSuccessListener(uri -> {
-                                                        String imageUrl = uri.toString();
-                                                        PetokD = imageUrl;
-                                                    })
-                                                    .addOnFailureListener(exception -> {
-                                                    });
-                                        })
-                                        .addOnFailureListener(exception -> {
-                                        });
-                                uploadTasks.add(taskPetokD);
-                            } else {
-                                PetokD = "0";
-                            }
-                            if (UriPJP != null) {
-                                StorageTask<UploadTask.TaskSnapshot> taskPJP = ImgPjp.putFile(UriPJP)
-                                        .addOnSuccessListener(taskSnapshot -> {
-                                            ImgPjp.getDownloadUrl()
-                                                    .addOnSuccessListener(uri -> {
-                                                        String imageUrl = uri.toString();
-                                                        PJPHal1 = imageUrl;
-                                                    })
-                                                    .addOnFailureListener(exception -> {
-                                                    });
-                                        })
-                                        .addOnFailureListener(exception -> {
-                                        });
-                                uploadTasks.add(taskPJP);
-                            } else {
-                                PJPHal1 = "0";
-                            }
-                            if (UriPJP1 != null) {
-                                StorageTask<UploadTask.TaskSnapshot> taskPJP1 = ImgPjp1.putFile(UriPJP1)
-                                        .addOnSuccessListener(taskSnapshot -> {
-                                            ImgPjp1.getDownloadUrl()
-                                                    .addOnSuccessListener(uri -> {
-                                                        String imageUrl = uri.toString();
-                                                        PJPHal2 = imageUrl;
-                                                    })
-                                                    .addOnFailureListener(exception -> {
-                                                    });
-                                        })
-                                        .addOnFailureListener(exception -> {
-                                        });
-                                uploadTasks.add(taskPJP1);
-                            } else {
-                                PJPHal2 = "0";
-                            }
-                            if (UriSelfie != null) {
-                                StorageTask<UploadTask.TaskSnapshot> taskSelfie = ImageSelfie.putFile(UriSelfie)
-                                        .addOnSuccessListener(taskSnapshot -> {
-                                            ImageSelfie.getDownloadUrl()
-                                                    .addOnSuccessListener(uri -> {
-                                                        String imageUrl = uri.toString();
-                                                        ImgSelfie = imageUrl;
-                                                    })
-                                                    .addOnFailureListener(exception -> {
-                                                    });
-                                        })
-                                        .addOnFailureListener(exception -> {
-                                        });
-                                uploadTasks.add(taskSelfie);
-                            } else {
-                                ImgSelfie = "0";
-                            }
-                            if (UriKTP != null) {
-                                StorageTask<UploadTask.TaskSnapshot> taskKTP = ImageKTP.putFile(UriKTP)
-                                        .addOnSuccessListener(taskSnapshot -> {
-                                            ImageKTP.getDownloadUrl()
-                                                    .addOnSuccessListener(uri -> {
-                                                        String imageUrl = uri.toString();
-                                                        ImgKTP = imageUrl;
-                                                    })
-                                                    .addOnFailureListener(exception -> {
-                                                    });
-                                        })
-                                        .addOnFailureListener(exception -> {
-                                        });
-                                uploadTasks.add(taskKTP);
-                            } else {
-                                ImgKTP = "0";
-                            }
-
-                            Tasks.whenAllSuccess(uploadTasks)
-                                    .addOnSuccessListener(results -> {
-                                        pDialog.cancel();
-                                        simpanData();
-                                    })
-                                    .addOnFailureListener(exception -> {
-                                        Dialog customDialog = new Dialog(TambahListingActivity.this);
-                                        customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                                        customDialog.setContentView(R.layout.custom_dialog_eror_input);
-
-                                        if (customDialog.getWindow() != null) {
-                                            customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-                                        }
-
-                                        Button ok = customDialog.findViewById(R.id.BtnOkErorInput);
-                                        TextView tv = customDialog.findViewById(R.id.TVDialogErorInput);
-
-                                        tv.setText("Gagal Saat Unggah Gambar");
-
-                                        ok.setOnClickListener(new View.OnClickListener() {
-                                            @Override
-                                            public void onClick(View view) {
-                                                customDialog.dismiss();
-                                            }
-                                        });
-
-                                        ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
-
-                                        Glide.with(TambahListingActivity.this)
-                                                .load(R.drawable.alert) // You can also use a local resource like R.drawable.your_gif_resource
-                                                .transition(DrawableTransitionOptions.withCrossFade())
-                                                .into(gifImageView);
-
-                                        customDialog.show();
-                                    });
+                            handleImage1Success();
                         }
                     }
                 }
@@ -1068,497 +610,7 @@ public class TambahListingActivity extends AppCompatActivity {
 
                                 customDialog.show();
                             } else {
-                                pDialog.setMessage("Menyimpan Data");
-                                pDialog.setCancelable(false);
-                                pDialog.show();
-
-                                StorageReference storageRef = FirebaseStorage.getInstance().getReference();
-                                StorageReference ImgListing1 = storageRef.child("listing/" + fileListing1);
-                                StorageReference ImgListing2 = storageRef.child("listing/" + fileListing2);
-                                StorageReference ImgListing3 = storageRef.child("listing/" + fileListing3);
-                                StorageReference ImgListing4 = storageRef.child("listing/" + fileListing4);
-                                StorageReference ImgListing5 = storageRef.child("listing/" + fileListing5);
-                                StorageReference ImgListing6 = storageRef.child("listing/" + fileListing6);
-                                StorageReference ImgListing7 = storageRef.child("listing/" + fileListing7);
-                                StorageReference ImgListing8 = storageRef.child("listing/" + fileListing8);
-                                StorageReference ImgSertifikatshm = storageRef.child("sertifikat/" + fileSertifikatshm);
-                                StorageReference ImgSertifikathgb = storageRef.child("sertifikat/" + fileSertifikathgb);
-                                StorageReference ImgSertifikathshp = storageRef.child("sertifikat/" + fileSertifikathshp);
-                                StorageReference ImgSertifikatppjb = storageRef.child("sertifikat/" + fileSertifikatppjb);
-                                StorageReference ImgSertifikatstra = storageRef.child("sertifikat/" + fileSertifikatstra);
-                                StorageReference ImgSertifikatajb = storageRef.child("sertifikat/" + fileSertifikatajb);
-                                StorageReference ImgSertifikatpetokd = storageRef.child("sertifikat/" + fileSertifikatpetokd);
-                                StorageReference ImgSertifikatshmpdf = storageRef.child("sertifikat/" + fileSertifikatshmpdf);
-                                StorageReference ImgSertifikathgbpdf = storageRef.child("sertifikat/" + fileSertifikathgbpdf);
-                                StorageReference ImgSertifikathshppdf = storageRef.child("sertifikat/" + fileSertifikathshppdf);
-                                StorageReference ImgSertifikatppjbpdf = storageRef.child("sertifikat/" + fileSertifikatppjbpdf);
-                                StorageReference ImgSertifikatstrapdf = storageRef.child("sertifikat/" + fileSertifikatstrapdf);
-                                StorageReference ImgSertifikatajbpdf = storageRef.child("sertifikat/" + fileSertifikatajbpdf);
-                                StorageReference ImgSertifikatpetokdpdf = storageRef.child("sertifikat/" + fileSertifikatpetokdpdf);
-                                StorageReference ImgPjp = storageRef.child("pjp/" + filePjp1);
-                                StorageReference ImgPjp1 = storageRef.child("pjp/" + filePjp2);
-                                StorageReference ImageSelfie = storageRef.child("selfie/" + fileSelfie);
-                                StorageReference ImageKTP = storageRef.child("ktp/" + fileKTP);
-
-                                List<StorageTask<UploadTask.TaskSnapshot>> uploadTasks = new ArrayList<>();
-
-                                if (Uri1 != null) {
-                                    StorageTask<UploadTask.TaskSnapshot> task1 = ImgListing1.putFile(Uri1)
-                                            .addOnSuccessListener(taskSnapshot -> {
-                                                ImgListing1.getDownloadUrl()
-                                                        .addOnSuccessListener(uri -> {
-                                                            String imageUrl = uri.toString();
-                                                            image1 = imageUrl;
-                                                        })
-                                                        .addOnFailureListener(exception -> {
-                                                        });
-                                            })
-                                            .addOnFailureListener(exception -> {
-                                            });
-                                    uploadTasks.add(task1);
-                                } else {
-                                    image1 = "0";
-                                }
-                                if (Uri2 != null) {
-                                    StorageTask<UploadTask.TaskSnapshot> task2 = ImgListing2.putFile(Uri2)
-                                            .addOnSuccessListener(taskSnapshot -> {
-                                                ImgListing2.getDownloadUrl()
-                                                        .addOnSuccessListener(uri -> {
-                                                            String imageUrl = uri.toString();
-                                                            image2 = imageUrl;
-                                                        })
-                                                        .addOnFailureListener(exception -> {
-                                                        });
-                                            })
-                                            .addOnFailureListener(exception -> {
-                                            });
-                                    uploadTasks.add(task2);
-                                } else {
-                                    image2 = "0";
-                                }
-                                if (Uri3 != null) {
-                                    StorageTask<UploadTask.TaskSnapshot> task3 = ImgListing3.putFile(Uri3)
-                                            .addOnSuccessListener(taskSnapshot -> {
-                                                ImgListing3.getDownloadUrl()
-                                                        .addOnSuccessListener(uri -> {
-                                                            String imageUrl = uri.toString();
-                                                            image3 = imageUrl;
-                                                        })
-                                                        .addOnFailureListener(exception -> {
-                                                        });
-                                            })
-                                            .addOnFailureListener(exception -> {
-                                            });
-                                    uploadTasks.add(task3);
-                                } else {
-                                    image3 = "0";
-                                }
-                                if (Uri4 != null) {
-                                    StorageTask<UploadTask.TaskSnapshot> task4 = ImgListing4.putFile(Uri4)
-                                            .addOnSuccessListener(taskSnapshot -> {
-                                                ImgListing4.getDownloadUrl()
-                                                        .addOnSuccessListener(uri -> {
-                                                            String imageUrl = uri.toString();
-                                                            image4 = imageUrl;
-                                                        })
-                                                        .addOnFailureListener(exception -> {
-                                                        });
-                                            })
-                                            .addOnFailureListener(exception -> {
-                                            });
-                                    uploadTasks.add(task4);
-                                } else {
-                                    image4 = "0";
-                                }
-                                if (Uri5 != null) {
-                                    StorageTask<UploadTask.TaskSnapshot> task5 = ImgListing5.putFile(Uri5)
-                                            .addOnSuccessListener(taskSnapshot -> {
-                                                ImgListing5.getDownloadUrl()
-                                                        .addOnSuccessListener(uri -> {
-                                                            String imageUrl = uri.toString();
-                                                            image5 = imageUrl;
-                                                        })
-                                                        .addOnFailureListener(exception -> {
-                                                        });
-                                            })
-                                            .addOnFailureListener(exception -> {
-                                            });
-                                    uploadTasks.add(task5);
-                                } else {
-                                    image5 = "0";
-                                }
-                                if (Uri6 != null) {
-                                    StorageTask<UploadTask.TaskSnapshot> task6 = ImgListing6.putFile(Uri6)
-                                            .addOnSuccessListener(taskSnapshot -> {
-                                                ImgListing6.getDownloadUrl()
-                                                        .addOnSuccessListener(uri -> {
-                                                            String imageUrl = uri.toString();
-                                                            image6 = imageUrl;
-                                                        })
-                                                        .addOnFailureListener(exception -> {
-                                                        });
-                                            })
-                                            .addOnFailureListener(exception -> {
-                                            });
-                                    uploadTasks.add(task6);
-                                } else {
-                                    image6 = "0";
-                                }
-                                if (Uri7 != null) {
-                                    StorageTask<UploadTask.TaskSnapshot> task7 = ImgListing7.putFile(Uri7)
-                                            .addOnSuccessListener(taskSnapshot -> {
-                                                ImgListing7.getDownloadUrl()
-                                                        .addOnSuccessListener(uri -> {
-                                                            String imageUrl = uri.toString();
-                                                            image7 = imageUrl;
-                                                        })
-                                                        .addOnFailureListener(exception -> {
-                                                        });
-                                            })
-                                            .addOnFailureListener(exception -> {
-                                            });
-                                    uploadTasks.add(task7);
-                                } else {
-                                    image7 = "0";
-                                }
-                                if (Uri8 != null) {
-                                    StorageTask<UploadTask.TaskSnapshot> task8 = ImgListing8.putFile(Uri8)
-                                            .addOnSuccessListener(taskSnapshot -> {
-                                                ImgListing8.getDownloadUrl()
-                                                        .addOnSuccessListener(uri -> {
-                                                            String imageUrl = uri.toString();
-                                                            image8 = imageUrl;
-                                                        })
-                                                        .addOnFailureListener(exception -> {
-                                                        });
-                                            })
-                                            .addOnFailureListener(exception -> {
-                                            });
-                                    uploadTasks.add(task8);
-                                } else {
-                                    image8 = "0";
-                                }
-                                if (UriSHM != null) {
-                                    StorageTask<UploadTask.TaskSnapshot> taskSHM = ImgSertifikatshm.putFile(UriSHM)
-                                            .addOnSuccessListener(taskSnapshot -> {
-                                                ImgSertifikatshm.getDownloadUrl()
-                                                        .addOnSuccessListener(uri -> {
-                                                            String imageUrl = uri.toString();
-                                                            SHM = imageUrl;
-                                                        })
-                                                        .addOnFailureListener(exception -> {
-                                                        });
-                                            })
-                                            .addOnFailureListener(exception -> {
-                                            });
-                                    uploadTasks.add(taskSHM);
-                                } else if (UriSHMPdf != null) {
-                                    StorageTask<UploadTask.TaskSnapshot> taskSHM = ImgSertifikatshmpdf.putFile(UriSHMPdf)
-                                            .addOnSuccessListener(taskSnapshot -> {
-                                                ImgSertifikatshmpdf.getDownloadUrl()
-                                                        .addOnSuccessListener(uri -> {
-                                                            String imageUrl = uri.toString();
-                                                            SHM = imageUrl;
-                                                        })
-                                                        .addOnFailureListener(exception -> {
-                                                        });
-                                            })
-                                            .addOnFailureListener(exception -> {
-                                            });
-                                    uploadTasks.add(taskSHM);
-                                } else {
-                                    SHM = "0";
-                                }
-                                if (UriHGB != null) {
-                                    StorageTask<UploadTask.TaskSnapshot> taskHGB = ImgSertifikathgb.putFile(UriHGB)
-                                            .addOnSuccessListener(taskSnapshot -> {
-                                                ImgSertifikathgb.getDownloadUrl()
-                                                        .addOnSuccessListener(uri -> {
-                                                            String imageUrl = uri.toString();
-                                                            HGB = imageUrl;
-                                                        })
-                                                        .addOnFailureListener(exception -> {
-                                                        });
-                                            })
-                                            .addOnFailureListener(exception -> {
-                                            });
-                                    uploadTasks.add(taskHGB);
-                                } else if (UriHGBPdf != null) {
-                                    StorageTask<UploadTask.TaskSnapshot> taskHGB = ImgSertifikathgbpdf.putFile(UriHGBPdf)
-                                            .addOnSuccessListener(taskSnapshot -> {
-                                                ImgSertifikathgbpdf.getDownloadUrl()
-                                                        .addOnSuccessListener(uri -> {
-                                                            String imageUrl = uri.toString();
-                                                            HGB = imageUrl;
-                                                        })
-                                                        .addOnFailureListener(exception -> {
-                                                        });
-                                            })
-                                            .addOnFailureListener(exception -> {
-                                            });
-                                    uploadTasks.add(taskHGB);
-                                } else {
-                                    HGB = "0";
-                                }
-                                if (UriHSHP != null) {
-                                    StorageTask<UploadTask.TaskSnapshot> taskHSHP = ImgSertifikathshp.putFile(UriHSHP)
-                                            .addOnSuccessListener(taskSnapshot -> {
-                                                ImgSertifikathshp.getDownloadUrl()
-                                                        .addOnSuccessListener(uri -> {
-                                                            String imageUrl = uri.toString();
-                                                            HSHP = imageUrl;
-                                                        })
-                                                        .addOnFailureListener(exception -> {
-                                                        });
-                                            })
-                                            .addOnFailureListener(exception -> {
-                                            });
-                                    uploadTasks.add(taskHSHP);
-                                } else if (UriHSHPPdf != null) {
-                                    StorageTask<UploadTask.TaskSnapshot> taskHSHP = ImgSertifikathshppdf.putFile(UriHSHPPdf)
-                                            .addOnSuccessListener(taskSnapshot -> {
-                                                ImgSertifikathshppdf.getDownloadUrl()
-                                                        .addOnSuccessListener(uri -> {
-                                                            String imageUrl = uri.toString();
-                                                            HSHP = imageUrl;
-                                                        })
-                                                        .addOnFailureListener(exception -> {
-                                                        });
-                                            })
-                                            .addOnFailureListener(exception -> {
-                                            });
-                                    uploadTasks.add(taskHSHP);
-                                } else {
-                                    HSHP = "0";
-                                }
-                                if (UriPPJB != null) {
-                                    StorageTask<UploadTask.TaskSnapshot> taskPPJB = ImgSertifikatppjb.putFile(UriPPJB)
-                                            .addOnSuccessListener(taskSnapshot -> {
-                                                ImgSertifikatppjb.getDownloadUrl()
-                                                        .addOnSuccessListener(uri -> {
-                                                            String imageUrl = uri.toString();
-                                                            PPJB = imageUrl;
-                                                        })
-                                                        .addOnFailureListener(exception -> {
-                                                        });
-                                            })
-                                            .addOnFailureListener(exception -> {
-                                            });
-                                    uploadTasks.add(taskPPJB);
-                                } else if (UriPPJBPdf != null) {
-                                    StorageTask<UploadTask.TaskSnapshot> taskPPJB = ImgSertifikatppjbpdf.putFile(UriPPJBPdf)
-                                            .addOnSuccessListener(taskSnapshot -> {
-                                                ImgSertifikatppjbpdf.getDownloadUrl()
-                                                        .addOnSuccessListener(uri -> {
-                                                            String imageUrl = uri.toString();
-                                                            PPJB = imageUrl;
-                                                        })
-                                                        .addOnFailureListener(exception -> {
-                                                        });
-                                            })
-                                            .addOnFailureListener(exception -> {
-                                            });
-                                    uploadTasks.add(taskPPJB);
-                                } else {
-                                    PPJB = "0";
-                                }
-                                if (UriSTRA != null) {
-                                    StorageTask<UploadTask.TaskSnapshot> taskSTRA = ImgSertifikatstra.putFile(UriSTRA)
-                                            .addOnSuccessListener(taskSnapshot -> {
-                                                ImgSertifikatstra.getDownloadUrl()
-                                                        .addOnSuccessListener(uri -> {
-                                                            String imageUrl = uri.toString();
-                                                            STRA = imageUrl;
-                                                        })
-                                                        .addOnFailureListener(exception -> {
-                                                        });
-                                            })
-                                            .addOnFailureListener(exception -> {
-                                            });
-                                    uploadTasks.add(taskSTRA);
-                                } else if (UriSTRAPdf != null) {
-                                    StorageTask<UploadTask.TaskSnapshot> taskSTRA = ImgSertifikatstrapdf.putFile(UriSTRAPdf)
-                                            .addOnSuccessListener(taskSnapshot -> {
-                                                ImgSertifikatstrapdf.getDownloadUrl()
-                                                        .addOnSuccessListener(uri -> {
-                                                            String imageUrl = uri.toString();
-                                                            STRA = imageUrl;
-                                                        })
-                                                        .addOnFailureListener(exception -> {
-                                                        });
-                                            })
-                                            .addOnFailureListener(exception -> {
-                                            });
-                                    uploadTasks.add(taskSTRA);
-                                } else {
-                                    STRA = "0";
-                                }
-                                if (UriAJB != null) {
-                                    StorageTask<UploadTask.TaskSnapshot> taskAJB = ImgSertifikatajb.putFile(UriAJB)
-                                            .addOnSuccessListener(taskSnapshot -> {
-                                                ImgSertifikatajb.getDownloadUrl()
-                                                        .addOnSuccessListener(uri -> {
-                                                            String imageUrl = uri.toString();
-                                                            AJB = imageUrl;
-                                                        })
-                                                        .addOnFailureListener(exception -> {
-                                                        });
-                                            })
-                                            .addOnFailureListener(exception -> {
-                                            });
-                                    uploadTasks.add(taskAJB);
-                                } else if (UriAJBPdf != null) {
-                                    StorageTask<UploadTask.TaskSnapshot> taskAJB = ImgSertifikatajbpdf.putFile(UriAJBPdf)
-                                            .addOnSuccessListener(taskSnapshot -> {
-                                                ImgSertifikatajbpdf.getDownloadUrl()
-                                                        .addOnSuccessListener(uri -> {
-                                                            String imageUrl = uri.toString();
-                                                            AJB = imageUrl;
-                                                        })
-                                                        .addOnFailureListener(exception -> {
-                                                        });
-                                            })
-                                            .addOnFailureListener(exception -> {
-                                            });
-                                    uploadTasks.add(taskAJB);
-                                } else {
-                                    AJB = "0";
-                                }
-                                if (UriPetokD != null) {
-                                    StorageTask<UploadTask.TaskSnapshot> taskPetokD = ImgSertifikatpetokd.putFile(UriPetokD)
-                                            .addOnSuccessListener(taskSnapshot -> {
-                                                ImgSertifikatpetokd.getDownloadUrl()
-                                                        .addOnSuccessListener(uri -> {
-                                                            String imageUrl = uri.toString();
-                                                            PetokD = imageUrl;
-                                                        })
-                                                        .addOnFailureListener(exception -> {
-                                                        });
-                                            })
-                                            .addOnFailureListener(exception -> {
-                                            });
-                                    uploadTasks.add(taskPetokD);
-                                } else if (UriPetokDPdf != null) {
-                                    StorageTask<UploadTask.TaskSnapshot> taskPetokD = ImgSertifikatpetokdpdf.putFile(UriPetokDPdf)
-                                            .addOnSuccessListener(taskSnapshot -> {
-                                                ImgSertifikatpetokdpdf.getDownloadUrl()
-                                                        .addOnSuccessListener(uri -> {
-                                                            String imageUrl = uri.toString();
-                                                            PetokD = imageUrl;
-                                                        })
-                                                        .addOnFailureListener(exception -> {
-                                                        });
-                                            })
-                                            .addOnFailureListener(exception -> {
-                                            });
-                                    uploadTasks.add(taskPetokD);
-                                } else {
-                                    PetokD = "0";
-                                }
-                                if (UriPJP != null) {
-                                    StorageTask<UploadTask.TaskSnapshot> taskPJP = ImgPjp.putFile(UriPJP)
-                                            .addOnSuccessListener(taskSnapshot -> {
-                                                ImgPjp.getDownloadUrl()
-                                                        .addOnSuccessListener(uri -> {
-                                                            String imageUrl = uri.toString();
-                                                            PJPHal1 = imageUrl;
-                                                        })
-                                                        .addOnFailureListener(exception -> {
-                                                        });
-                                            })
-                                            .addOnFailureListener(exception -> {
-                                            });
-                                    uploadTasks.add(taskPJP);
-                                } else {
-                                    PJPHal1 = "0";
-                                }
-                                if (UriPJP1 != null) {
-                                    StorageTask<UploadTask.TaskSnapshot> taskPJP1 = ImgPjp1.putFile(UriPJP1)
-                                            .addOnSuccessListener(taskSnapshot -> {
-                                                ImgPjp1.getDownloadUrl()
-                                                        .addOnSuccessListener(uri -> {
-                                                            String imageUrl = uri.toString();
-                                                            PJPHal2 = imageUrl;
-                                                        })
-                                                        .addOnFailureListener(exception -> {
-                                                        });
-                                            })
-                                            .addOnFailureListener(exception -> {
-                                            });
-                                    uploadTasks.add(taskPJP1);
-                                } else {
-                                    PJPHal2 = "0";
-                                }
-                                if (UriSelfie != null) {
-                                    StorageTask<UploadTask.TaskSnapshot> taskSelfie = ImageSelfie.putFile(UriSelfie)
-                                            .addOnSuccessListener(taskSnapshot -> {
-                                                ImageSelfie.getDownloadUrl()
-                                                        .addOnSuccessListener(uri -> {
-                                                            String imageUrl = uri.toString();
-                                                            ImgSelfie = imageUrl;
-                                                        })
-                                                        .addOnFailureListener(exception -> {
-                                                        });
-                                            })
-                                            .addOnFailureListener(exception -> {
-                                            });
-                                    uploadTasks.add(taskSelfie);
-                                } else {
-                                    ImgSelfie = "0";
-                                }
-                                if (UriKTP != null) {
-                                    StorageTask<UploadTask.TaskSnapshot> taskKTP = ImageKTP.putFile(UriKTP)
-                                            .addOnSuccessListener(taskSnapshot -> {
-                                                ImageKTP.getDownloadUrl()
-                                                        .addOnSuccessListener(uri -> {
-                                                            String imageUrl = uri.toString();
-                                                            ImgKTP = imageUrl;
-                                                        })
-                                                        .addOnFailureListener(exception -> {
-                                                        });
-                                            })
-                                            .addOnFailureListener(exception -> {
-                                            });
-                                    uploadTasks.add(taskKTP);
-                                } else {
-                                    ImgKTP = "0";
-                                }
-
-                                Tasks.whenAllSuccess(uploadTasks)
-                                        .addOnSuccessListener(results -> {
-                                            pDialog.cancel();
-                                            simpanDataAgen();
-                                        })
-                                        .addOnFailureListener(exception -> {
-                                            Dialog customDialog = new Dialog(TambahListingActivity.this);
-                                            customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                                            customDialog.setContentView(R.layout.custom_dialog_eror_input);
-
-                                            if (customDialog.getWindow() != null) {
-                                                customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-                                            }
-
-                                            Button ok = customDialog.findViewById(R.id.BtnOkErorInput);
-                                            TextView tv = customDialog.findViewById(R.id.TVDialogErorInput);
-
-                                            tv.setText("Gagal Saat Unggah Gambar");
-
-                                            ok.setOnClickListener(new View.OnClickListener() {
-                                                @Override
-                                                public void onClick(View view) {
-                                                    customDialog.dismiss();
-                                                }
-                                            });
-
-                                            ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
-
-                                            Glide.with(TambahListingActivity.this)
-                                                    .load(R.drawable.alert) // You can also use a local resource like R.drawable.your_gif_resource
-                                                    .transition(DrawableTransitionOptions.withCrossFade())
-                                                    .into(gifImageView);
-
-                                            customDialog.show();
-                                        });
+                                handleImage1Success();
                             }
                         }
                     }
@@ -1628,497 +680,7 @@ public class TambahListingActivity extends AppCompatActivity {
 
                                 customDialog.show();
                             } else {
-                                pDialog.setMessage("Menyimpan Data");
-                                pDialog.setCancelable(false);
-                                pDialog.show();
-
-                                StorageReference storageRef = FirebaseStorage.getInstance().getReference();
-                                StorageReference ImgListing1 = storageRef.child("listing/" + fileListing1);
-                                StorageReference ImgListing2 = storageRef.child("listing/" + fileListing2);
-                                StorageReference ImgListing3 = storageRef.child("listing/" + fileListing3);
-                                StorageReference ImgListing4 = storageRef.child("listing/" + fileListing4);
-                                StorageReference ImgListing5 = storageRef.child("listing/" + fileListing5);
-                                StorageReference ImgListing6 = storageRef.child("listing/" + fileListing6);
-                                StorageReference ImgListing7 = storageRef.child("listing/" + fileListing7);
-                                StorageReference ImgListing8 = storageRef.child("listing/" + fileListing8);
-                                StorageReference ImgSertifikatshm = storageRef.child("sertifikat/" + fileSertifikatshm);
-                                StorageReference ImgSertifikathgb = storageRef.child("sertifikat/" + fileSertifikathgb);
-                                StorageReference ImgSertifikathshp = storageRef.child("sertifikat/" + fileSertifikathshp);
-                                StorageReference ImgSertifikatppjb = storageRef.child("sertifikat/" + fileSertifikatppjb);
-                                StorageReference ImgSertifikatstra = storageRef.child("sertifikat/" + fileSertifikatstra);
-                                StorageReference ImgSertifikatajb = storageRef.child("sertifikat/" + fileSertifikatajb);
-                                StorageReference ImgSertifikatpetokd = storageRef.child("sertifikat/" + fileSertifikatpetokd);
-                                StorageReference ImgSertifikatshmpdf = storageRef.child("sertifikat/" + fileSertifikatshmpdf);
-                                StorageReference ImgSertifikathgbpdf = storageRef.child("sertifikat/" + fileSertifikathgbpdf);
-                                StorageReference ImgSertifikathshppdf = storageRef.child("sertifikat/" + fileSertifikathshppdf);
-                                StorageReference ImgSertifikatppjbpdf = storageRef.child("sertifikat/" + fileSertifikatppjbpdf);
-                                StorageReference ImgSertifikatstrapdf = storageRef.child("sertifikat/" + fileSertifikatstrapdf);
-                                StorageReference ImgSertifikatajbpdf = storageRef.child("sertifikat/" + fileSertifikatajbpdf);
-                                StorageReference ImgSertifikatpetokdpdf = storageRef.child("sertifikat/" + fileSertifikatpetokdpdf);
-                                StorageReference ImgPjp = storageRef.child("pjp/" + filePjp1);
-                                StorageReference ImgPjp1 = storageRef.child("pjp/" + filePjp2);
-                                StorageReference ImageSelfie = storageRef.child("selfie/" + fileSelfie);
-                                StorageReference ImageKTP = storageRef.child("ktp/" + fileKTP);
-
-                                List<StorageTask<UploadTask.TaskSnapshot>> uploadTasks = new ArrayList<>();
-
-                                if (Uri1 != null) {
-                                    StorageTask<UploadTask.TaskSnapshot> task1 = ImgListing1.putFile(Uri1)
-                                            .addOnSuccessListener(taskSnapshot -> {
-                                                ImgListing1.getDownloadUrl()
-                                                        .addOnSuccessListener(uri -> {
-                                                            String imageUrl = uri.toString();
-                                                            image1 = imageUrl;
-                                                        })
-                                                        .addOnFailureListener(exception -> {
-                                                        });
-                                            })
-                                            .addOnFailureListener(exception -> {
-                                            });
-                                    uploadTasks.add(task1);
-                                } else {
-                                    image1 = "0";
-                                }
-                                if (Uri2 != null) {
-                                    StorageTask<UploadTask.TaskSnapshot> task2 = ImgListing2.putFile(Uri2)
-                                            .addOnSuccessListener(taskSnapshot -> {
-                                                ImgListing2.getDownloadUrl()
-                                                        .addOnSuccessListener(uri -> {
-                                                            String imageUrl = uri.toString();
-                                                            image2 = imageUrl;
-                                                        })
-                                                        .addOnFailureListener(exception -> {
-                                                        });
-                                            })
-                                            .addOnFailureListener(exception -> {
-                                            });
-                                    uploadTasks.add(task2);
-                                } else {
-                                    image2 = "0";
-                                }
-                                if (Uri3 != null) {
-                                    StorageTask<UploadTask.TaskSnapshot> task3 = ImgListing3.putFile(Uri3)
-                                            .addOnSuccessListener(taskSnapshot -> {
-                                                ImgListing3.getDownloadUrl()
-                                                        .addOnSuccessListener(uri -> {
-                                                            String imageUrl = uri.toString();
-                                                            image3 = imageUrl;
-                                                        })
-                                                        .addOnFailureListener(exception -> {
-                                                        });
-                                            })
-                                            .addOnFailureListener(exception -> {
-                                            });
-                                    uploadTasks.add(task3);
-                                } else {
-                                    image3 = "0";
-                                }
-                                if (Uri4 != null) {
-                                    StorageTask<UploadTask.TaskSnapshot> task4 = ImgListing4.putFile(Uri4)
-                                            .addOnSuccessListener(taskSnapshot -> {
-                                                ImgListing4.getDownloadUrl()
-                                                        .addOnSuccessListener(uri -> {
-                                                            String imageUrl = uri.toString();
-                                                            image4 = imageUrl;
-                                                        })
-                                                        .addOnFailureListener(exception -> {
-                                                        });
-                                            })
-                                            .addOnFailureListener(exception -> {
-                                            });
-                                    uploadTasks.add(task4);
-                                } else {
-                                    image4 = "0";
-                                }
-                                if (Uri5 != null) {
-                                    StorageTask<UploadTask.TaskSnapshot> task5 = ImgListing5.putFile(Uri5)
-                                            .addOnSuccessListener(taskSnapshot -> {
-                                                ImgListing5.getDownloadUrl()
-                                                        .addOnSuccessListener(uri -> {
-                                                            String imageUrl = uri.toString();
-                                                            image5 = imageUrl;
-                                                        })
-                                                        .addOnFailureListener(exception -> {
-                                                        });
-                                            })
-                                            .addOnFailureListener(exception -> {
-                                            });
-                                    uploadTasks.add(task5);
-                                } else {
-                                    image5 = "0";
-                                }
-                                if (Uri6 != null) {
-                                    StorageTask<UploadTask.TaskSnapshot> task6 = ImgListing6.putFile(Uri6)
-                                            .addOnSuccessListener(taskSnapshot -> {
-                                                ImgListing6.getDownloadUrl()
-                                                        .addOnSuccessListener(uri -> {
-                                                            String imageUrl = uri.toString();
-                                                            image6 = imageUrl;
-                                                        })
-                                                        .addOnFailureListener(exception -> {
-                                                        });
-                                            })
-                                            .addOnFailureListener(exception -> {
-                                            });
-                                    uploadTasks.add(task6);
-                                } else {
-                                    image6 = "0";
-                                }
-                                if (Uri7 != null) {
-                                    StorageTask<UploadTask.TaskSnapshot> task7 = ImgListing7.putFile(Uri7)
-                                            .addOnSuccessListener(taskSnapshot -> {
-                                                ImgListing7.getDownloadUrl()
-                                                        .addOnSuccessListener(uri -> {
-                                                            String imageUrl = uri.toString();
-                                                            image7 = imageUrl;
-                                                        })
-                                                        .addOnFailureListener(exception -> {
-                                                        });
-                                            })
-                                            .addOnFailureListener(exception -> {
-                                            });
-                                    uploadTasks.add(task7);
-                                } else {
-                                    image7 = "0";
-                                }
-                                if (Uri8 != null) {
-                                    StorageTask<UploadTask.TaskSnapshot> task8 = ImgListing8.putFile(Uri8)
-                                            .addOnSuccessListener(taskSnapshot -> {
-                                                ImgListing8.getDownloadUrl()
-                                                        .addOnSuccessListener(uri -> {
-                                                            String imageUrl = uri.toString();
-                                                            image8 = imageUrl;
-                                                        })
-                                                        .addOnFailureListener(exception -> {
-                                                        });
-                                            })
-                                            .addOnFailureListener(exception -> {
-                                            });
-                                    uploadTasks.add(task8);
-                                } else {
-                                    image8 = "0";
-                                }
-                                if (UriSHM != null) {
-                                    StorageTask<UploadTask.TaskSnapshot> taskSHM = ImgSertifikatshm.putFile(UriSHM)
-                                            .addOnSuccessListener(taskSnapshot -> {
-                                                ImgSertifikatshm.getDownloadUrl()
-                                                        .addOnSuccessListener(uri -> {
-                                                            String imageUrl = uri.toString();
-                                                            SHM = imageUrl;
-                                                        })
-                                                        .addOnFailureListener(exception -> {
-                                                        });
-                                            })
-                                            .addOnFailureListener(exception -> {
-                                            });
-                                    uploadTasks.add(taskSHM);
-                                } else if (UriSHMPdf != null) {
-                                    StorageTask<UploadTask.TaskSnapshot> taskSHM = ImgSertifikatshmpdf.putFile(UriSHMPdf)
-                                            .addOnSuccessListener(taskSnapshot -> {
-                                                ImgSertifikatshmpdf.getDownloadUrl()
-                                                        .addOnSuccessListener(uri -> {
-                                                            String imageUrl = uri.toString();
-                                                            SHM = imageUrl;
-                                                        })
-                                                        .addOnFailureListener(exception -> {
-                                                        });
-                                            })
-                                            .addOnFailureListener(exception -> {
-                                            });
-                                    uploadTasks.add(taskSHM);
-                                } else {
-                                    SHM = "0";
-                                }
-                                if (UriHGB != null) {
-                                    StorageTask<UploadTask.TaskSnapshot> taskHGB = ImgSertifikathgb.putFile(UriHGB)
-                                            .addOnSuccessListener(taskSnapshot -> {
-                                                ImgSertifikathgb.getDownloadUrl()
-                                                        .addOnSuccessListener(uri -> {
-                                                            String imageUrl = uri.toString();
-                                                            HGB = imageUrl;
-                                                        })
-                                                        .addOnFailureListener(exception -> {
-                                                        });
-                                            })
-                                            .addOnFailureListener(exception -> {
-                                            });
-                                    uploadTasks.add(taskHGB);
-                                } else if (UriHGBPdf != null) {
-                                    StorageTask<UploadTask.TaskSnapshot> taskHGB = ImgSertifikathgbpdf.putFile(UriHGBPdf)
-                                            .addOnSuccessListener(taskSnapshot -> {
-                                                ImgSertifikathgbpdf.getDownloadUrl()
-                                                        .addOnSuccessListener(uri -> {
-                                                            String imageUrl = uri.toString();
-                                                            HGB = imageUrl;
-                                                        })
-                                                        .addOnFailureListener(exception -> {
-                                                        });
-                                            })
-                                            .addOnFailureListener(exception -> {
-                                            });
-                                    uploadTasks.add(taskHGB);
-                                } else {
-                                    HGB = "0";
-                                }
-                                if (UriHSHP != null) {
-                                    StorageTask<UploadTask.TaskSnapshot> taskHSHP = ImgSertifikathshp.putFile(UriHSHP)
-                                            .addOnSuccessListener(taskSnapshot -> {
-                                                ImgSertifikathshp.getDownloadUrl()
-                                                        .addOnSuccessListener(uri -> {
-                                                            String imageUrl = uri.toString();
-                                                            HSHP = imageUrl;
-                                                        })
-                                                        .addOnFailureListener(exception -> {
-                                                        });
-                                            })
-                                            .addOnFailureListener(exception -> {
-                                            });
-                                    uploadTasks.add(taskHSHP);
-                                } else if (UriHSHPPdf != null) {
-                                    StorageTask<UploadTask.TaskSnapshot> taskHSHP = ImgSertifikathshppdf.putFile(UriHSHPPdf)
-                                            .addOnSuccessListener(taskSnapshot -> {
-                                                ImgSertifikathshppdf.getDownloadUrl()
-                                                        .addOnSuccessListener(uri -> {
-                                                            String imageUrl = uri.toString();
-                                                            HSHP = imageUrl;
-                                                        })
-                                                        .addOnFailureListener(exception -> {
-                                                        });
-                                            })
-                                            .addOnFailureListener(exception -> {
-                                            });
-                                    uploadTasks.add(taskHSHP);
-                                } else {
-                                    HSHP = "0";
-                                }
-                                if (UriPPJB != null) {
-                                    StorageTask<UploadTask.TaskSnapshot> taskPPJB = ImgSertifikatppjb.putFile(UriPPJB)
-                                            .addOnSuccessListener(taskSnapshot -> {
-                                                ImgSertifikatppjb.getDownloadUrl()
-                                                        .addOnSuccessListener(uri -> {
-                                                            String imageUrl = uri.toString();
-                                                            PPJB = imageUrl;
-                                                        })
-                                                        .addOnFailureListener(exception -> {
-                                                        });
-                                            })
-                                            .addOnFailureListener(exception -> {
-                                            });
-                                    uploadTasks.add(taskPPJB);
-                                } else if (UriPPJBPdf != null) {
-                                    StorageTask<UploadTask.TaskSnapshot> taskPPJB = ImgSertifikatppjbpdf.putFile(UriPPJBPdf)
-                                            .addOnSuccessListener(taskSnapshot -> {
-                                                ImgSertifikatppjbpdf.getDownloadUrl()
-                                                        .addOnSuccessListener(uri -> {
-                                                            String imageUrl = uri.toString();
-                                                            PPJB = imageUrl;
-                                                        })
-                                                        .addOnFailureListener(exception -> {
-                                                        });
-                                            })
-                                            .addOnFailureListener(exception -> {
-                                            });
-                                    uploadTasks.add(taskPPJB);
-                                } else {
-                                    PPJB = "0";
-                                }
-                                if (UriSTRA != null) {
-                                    StorageTask<UploadTask.TaskSnapshot> taskSTRA = ImgSertifikatstra.putFile(UriSTRA)
-                                            .addOnSuccessListener(taskSnapshot -> {
-                                                ImgSertifikatstra.getDownloadUrl()
-                                                        .addOnSuccessListener(uri -> {
-                                                            String imageUrl = uri.toString();
-                                                            STRA = imageUrl;
-                                                        })
-                                                        .addOnFailureListener(exception -> {
-                                                        });
-                                            })
-                                            .addOnFailureListener(exception -> {
-                                            });
-                                    uploadTasks.add(taskSTRA);
-                                } else if (UriSTRAPdf != null) {
-                                    StorageTask<UploadTask.TaskSnapshot> taskSTRA = ImgSertifikatstrapdf.putFile(UriSTRAPdf)
-                                            .addOnSuccessListener(taskSnapshot -> {
-                                                ImgSertifikatstrapdf.getDownloadUrl()
-                                                        .addOnSuccessListener(uri -> {
-                                                            String imageUrl = uri.toString();
-                                                            STRA = imageUrl;
-                                                        })
-                                                        .addOnFailureListener(exception -> {
-                                                        });
-                                            })
-                                            .addOnFailureListener(exception -> {
-                                            });
-                                    uploadTasks.add(taskSTRA);
-                                } else {
-                                    STRA = "0";
-                                }
-                                if (UriAJB != null) {
-                                    StorageTask<UploadTask.TaskSnapshot> taskAJB = ImgSertifikatajb.putFile(UriAJB)
-                                            .addOnSuccessListener(taskSnapshot -> {
-                                                ImgSertifikatajb.getDownloadUrl()
-                                                        .addOnSuccessListener(uri -> {
-                                                            String imageUrl = uri.toString();
-                                                            AJB = imageUrl;
-                                                        })
-                                                        .addOnFailureListener(exception -> {
-                                                        });
-                                            })
-                                            .addOnFailureListener(exception -> {
-                                            });
-                                    uploadTasks.add(taskAJB);
-                                } else if (UriAJBPdf != null) {
-                                    StorageTask<UploadTask.TaskSnapshot> taskAJB = ImgSertifikatajbpdf.putFile(UriAJBPdf)
-                                            .addOnSuccessListener(taskSnapshot -> {
-                                                ImgSertifikatajbpdf.getDownloadUrl()
-                                                        .addOnSuccessListener(uri -> {
-                                                            String imageUrl = uri.toString();
-                                                            AJB = imageUrl;
-                                                        })
-                                                        .addOnFailureListener(exception -> {
-                                                        });
-                                            })
-                                            .addOnFailureListener(exception -> {
-                                            });
-                                    uploadTasks.add(taskAJB);
-                                } else {
-                                    AJB = "0";
-                                }
-                                if (UriPetokD != null) {
-                                    StorageTask<UploadTask.TaskSnapshot> taskPetokD = ImgSertifikatpetokd.putFile(UriPetokD)
-                                            .addOnSuccessListener(taskSnapshot -> {
-                                                ImgSertifikatpetokd.getDownloadUrl()
-                                                        .addOnSuccessListener(uri -> {
-                                                            String imageUrl = uri.toString();
-                                                            PetokD = imageUrl;
-                                                        })
-                                                        .addOnFailureListener(exception -> {
-                                                        });
-                                            })
-                                            .addOnFailureListener(exception -> {
-                                            });
-                                    uploadTasks.add(taskPetokD);
-                                } else if (UriPetokDPdf != null) {
-                                    StorageTask<UploadTask.TaskSnapshot> taskPetokD = ImgSertifikatpetokdpdf.putFile(UriPetokDPdf)
-                                            .addOnSuccessListener(taskSnapshot -> {
-                                                ImgSertifikatpetokdpdf.getDownloadUrl()
-                                                        .addOnSuccessListener(uri -> {
-                                                            String imageUrl = uri.toString();
-                                                            PetokD = imageUrl;
-                                                        })
-                                                        .addOnFailureListener(exception -> {
-                                                        });
-                                            })
-                                            .addOnFailureListener(exception -> {
-                                            });
-                                    uploadTasks.add(taskPetokD);
-                                } else {
-                                    PetokD = "0";
-                                }
-                                if (UriPJP != null) {
-                                    StorageTask<UploadTask.TaskSnapshot> taskPJP = ImgPjp.putFile(UriPJP)
-                                            .addOnSuccessListener(taskSnapshot -> {
-                                                ImgPjp.getDownloadUrl()
-                                                        .addOnSuccessListener(uri -> {
-                                                            String imageUrl = uri.toString();
-                                                            PJPHal1 = imageUrl;
-                                                        })
-                                                        .addOnFailureListener(exception -> {
-                                                        });
-                                            })
-                                            .addOnFailureListener(exception -> {
-                                            });
-                                    uploadTasks.add(taskPJP);
-                                } else {
-                                    PJPHal1 = "0";
-                                }
-                                if (UriPJP1 != null) {
-                                    StorageTask<UploadTask.TaskSnapshot> taskPJP1 = ImgPjp1.putFile(UriPJP1)
-                                            .addOnSuccessListener(taskSnapshot -> {
-                                                ImgPjp1.getDownloadUrl()
-                                                        .addOnSuccessListener(uri -> {
-                                                            String imageUrl = uri.toString();
-                                                            PJPHal2 = imageUrl;
-                                                        })
-                                                        .addOnFailureListener(exception -> {
-                                                        });
-                                            })
-                                            .addOnFailureListener(exception -> {
-                                            });
-                                    uploadTasks.add(taskPJP1);
-                                } else {
-                                    PJPHal2 = "0";
-                                }
-                                if (UriSelfie != null) {
-                                    StorageTask<UploadTask.TaskSnapshot> taskSelfie = ImageSelfie.putFile(UriSelfie)
-                                            .addOnSuccessListener(taskSnapshot -> {
-                                                ImageSelfie.getDownloadUrl()
-                                                        .addOnSuccessListener(uri -> {
-                                                            String imageUrl = uri.toString();
-                                                            ImgSelfie = imageUrl;
-                                                        })
-                                                        .addOnFailureListener(exception -> {
-                                                        });
-                                            })
-                                            .addOnFailureListener(exception -> {
-                                            });
-                                    uploadTasks.add(taskSelfie);
-                                } else {
-                                    ImgSelfie = "0";
-                                }
-                                if (UriKTP != null) {
-                                    StorageTask<UploadTask.TaskSnapshot> taskKTP = ImageKTP.putFile(UriKTP)
-                                            .addOnSuccessListener(taskSnapshot -> {
-                                                ImageKTP.getDownloadUrl()
-                                                        .addOnSuccessListener(uri -> {
-                                                            String imageUrl = uri.toString();
-                                                            ImgKTP = imageUrl;
-                                                        })
-                                                        .addOnFailureListener(exception -> {
-                                                        });
-                                            })
-                                            .addOnFailureListener(exception -> {
-                                            });
-                                    uploadTasks.add(taskKTP);
-                                } else {
-                                    ImgKTP = "0";
-                                }
-
-                                Tasks.whenAllSuccess(uploadTasks)
-                                        .addOnSuccessListener(results -> {
-                                            pDialog.cancel();
-                                            simpanDataNonAgen();
-                                        })
-                                        .addOnFailureListener(exception -> {
-                                            Dialog customDialog = new Dialog(TambahListingActivity.this);
-                                            customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                                            customDialog.setContentView(R.layout.custom_dialog_eror_input);
-
-                                            if (customDialog.getWindow() != null) {
-                                                customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-                                            }
-
-                                            Button ok = customDialog.findViewById(R.id.BtnOkErorInput);
-                                            TextView tv = customDialog.findViewById(R.id.TVDialogErorInput);
-
-                                            tv.setText("Gagal Saat Unggah Gambar");
-
-                                            ok.setOnClickListener(new View.OnClickListener() {
-                                                @Override
-                                                public void onClick(View view) {
-                                                    customDialog.dismiss();
-                                                }
-                                            });
-
-                                            ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
-
-                                            Glide.with(TambahListingActivity.this)
-                                                    .load(R.drawable.alert) // You can also use a local resource like R.drawable.your_gif_resource
-                                                    .transition(DrawableTransitionOptions.withCrossFade())
-                                                    .into(gifImageView);
-
-                                            customDialog.show();
-                                        });
+                                handleImage1Success();
                             }
                         }
                     }
@@ -2188,497 +750,7 @@ public class TambahListingActivity extends AppCompatActivity {
 
                                 customDialog.show();
                             } else {
-                                pDialog.setMessage("Menyimpan Data");
-                                pDialog.setCancelable(false);
-                                pDialog.show();
-
-                                StorageReference storageRef = FirebaseStorage.getInstance().getReference();
-                                StorageReference ImgListing1 = storageRef.child("listing/" + fileListing1);
-                                StorageReference ImgListing2 = storageRef.child("listing/" + fileListing2);
-                                StorageReference ImgListing3 = storageRef.child("listing/" + fileListing3);
-                                StorageReference ImgListing4 = storageRef.child("listing/" + fileListing4);
-                                StorageReference ImgListing5 = storageRef.child("listing/" + fileListing5);
-                                StorageReference ImgListing6 = storageRef.child("listing/" + fileListing6);
-                                StorageReference ImgListing7 = storageRef.child("listing/" + fileListing7);
-                                StorageReference ImgListing8 = storageRef.child("listing/" + fileListing8);
-                                StorageReference ImgSertifikatshm = storageRef.child("sertifikat/" + fileSertifikatshm);
-                                StorageReference ImgSertifikathgb = storageRef.child("sertifikat/" + fileSertifikathgb);
-                                StorageReference ImgSertifikathshp = storageRef.child("sertifikat/" + fileSertifikathshp);
-                                StorageReference ImgSertifikatppjb = storageRef.child("sertifikat/" + fileSertifikatppjb);
-                                StorageReference ImgSertifikatstra = storageRef.child("sertifikat/" + fileSertifikatstra);
-                                StorageReference ImgSertifikatajb = storageRef.child("sertifikat/" + fileSertifikatajb);
-                                StorageReference ImgSertifikatpetokd = storageRef.child("sertifikat/" + fileSertifikatpetokd);
-                                StorageReference ImgSertifikatshmpdf = storageRef.child("sertifikat/" + fileSertifikatshmpdf);
-                                StorageReference ImgSertifikathgbpdf = storageRef.child("sertifikat/" + fileSertifikathgbpdf);
-                                StorageReference ImgSertifikathshppdf = storageRef.child("sertifikat/" + fileSertifikathshppdf);
-                                StorageReference ImgSertifikatppjbpdf = storageRef.child("sertifikat/" + fileSertifikatppjbpdf);
-                                StorageReference ImgSertifikatstrapdf = storageRef.child("sertifikat/" + fileSertifikatstrapdf);
-                                StorageReference ImgSertifikatajbpdf = storageRef.child("sertifikat/" + fileSertifikatajbpdf);
-                                StorageReference ImgSertifikatpetokdpdf = storageRef.child("sertifikat/" + fileSertifikatpetokdpdf);
-                                StorageReference ImgPjp = storageRef.child("pjp/" + filePjp1);
-                                StorageReference ImgPjp1 = storageRef.child("pjp/" + filePjp2);
-                                StorageReference ImageSelfie = storageRef.child("selfie/" + fileSelfie);
-                                StorageReference ImageKTP = storageRef.child("ktp/" + fileKTP);
-
-                                List<StorageTask<UploadTask.TaskSnapshot>> uploadTasks = new ArrayList<>();
-
-                                if (Uri1 != null) {
-                                    StorageTask<UploadTask.TaskSnapshot> task1 = ImgListing1.putFile(Uri1)
-                                            .addOnSuccessListener(taskSnapshot -> {
-                                                ImgListing1.getDownloadUrl()
-                                                        .addOnSuccessListener(uri -> {
-                                                            String imageUrl = uri.toString();
-                                                            image1 = imageUrl;
-                                                        })
-                                                        .addOnFailureListener(exception -> {
-                                                        });
-                                            })
-                                            .addOnFailureListener(exception -> {
-                                            });
-                                    uploadTasks.add(task1);
-                                } else {
-                                    image1 = "0";
-                                }
-                                if (Uri2 != null) {
-                                    StorageTask<UploadTask.TaskSnapshot> task2 = ImgListing2.putFile(Uri2)
-                                            .addOnSuccessListener(taskSnapshot -> {
-                                                ImgListing2.getDownloadUrl()
-                                                        .addOnSuccessListener(uri -> {
-                                                            String imageUrl = uri.toString();
-                                                            image2 = imageUrl;
-                                                        })
-                                                        .addOnFailureListener(exception -> {
-                                                        });
-                                            })
-                                            .addOnFailureListener(exception -> {
-                                            });
-                                    uploadTasks.add(task2);
-                                } else {
-                                    image2 = "0";
-                                }
-                                if (Uri3 != null) {
-                                    StorageTask<UploadTask.TaskSnapshot> task3 = ImgListing3.putFile(Uri3)
-                                            .addOnSuccessListener(taskSnapshot -> {
-                                                ImgListing3.getDownloadUrl()
-                                                        .addOnSuccessListener(uri -> {
-                                                            String imageUrl = uri.toString();
-                                                            image3 = imageUrl;
-                                                        })
-                                                        .addOnFailureListener(exception -> {
-                                                        });
-                                            })
-                                            .addOnFailureListener(exception -> {
-                                            });
-                                    uploadTasks.add(task3);
-                                } else {
-                                    image3 = "0";
-                                }
-                                if (Uri4 != null) {
-                                    StorageTask<UploadTask.TaskSnapshot> task4 = ImgListing4.putFile(Uri4)
-                                            .addOnSuccessListener(taskSnapshot -> {
-                                                ImgListing4.getDownloadUrl()
-                                                        .addOnSuccessListener(uri -> {
-                                                            String imageUrl = uri.toString();
-                                                            image4 = imageUrl;
-                                                        })
-                                                        .addOnFailureListener(exception -> {
-                                                        });
-                                            })
-                                            .addOnFailureListener(exception -> {
-                                            });
-                                    uploadTasks.add(task4);
-                                } else {
-                                    image4 = "0";
-                                }
-                                if (Uri5 != null) {
-                                    StorageTask<UploadTask.TaskSnapshot> task5 = ImgListing5.putFile(Uri5)
-                                            .addOnSuccessListener(taskSnapshot -> {
-                                                ImgListing5.getDownloadUrl()
-                                                        .addOnSuccessListener(uri -> {
-                                                            String imageUrl = uri.toString();
-                                                            image5 = imageUrl;
-                                                        })
-                                                        .addOnFailureListener(exception -> {
-                                                        });
-                                            })
-                                            .addOnFailureListener(exception -> {
-                                            });
-                                    uploadTasks.add(task5);
-                                } else {
-                                    image5 = "0";
-                                }
-                                if (Uri6 != null) {
-                                    StorageTask<UploadTask.TaskSnapshot> task6 = ImgListing6.putFile(Uri6)
-                                            .addOnSuccessListener(taskSnapshot -> {
-                                                ImgListing6.getDownloadUrl()
-                                                        .addOnSuccessListener(uri -> {
-                                                            String imageUrl = uri.toString();
-                                                            image6 = imageUrl;
-                                                        })
-                                                        .addOnFailureListener(exception -> {
-                                                        });
-                                            })
-                                            .addOnFailureListener(exception -> {
-                                            });
-                                    uploadTasks.add(task6);
-                                } else {
-                                    image6 = "0";
-                                }
-                                if (Uri7 != null) {
-                                    StorageTask<UploadTask.TaskSnapshot> task7 = ImgListing7.putFile(Uri7)
-                                            .addOnSuccessListener(taskSnapshot -> {
-                                                ImgListing7.getDownloadUrl()
-                                                        .addOnSuccessListener(uri -> {
-                                                            String imageUrl = uri.toString();
-                                                            image7 = imageUrl;
-                                                        })
-                                                        .addOnFailureListener(exception -> {
-                                                        });
-                                            })
-                                            .addOnFailureListener(exception -> {
-                                            });
-                                    uploadTasks.add(task7);
-                                } else {
-                                    image7 = "0";
-                                }
-                                if (Uri8 != null) {
-                                    StorageTask<UploadTask.TaskSnapshot> task8 = ImgListing8.putFile(Uri8)
-                                            .addOnSuccessListener(taskSnapshot -> {
-                                                ImgListing8.getDownloadUrl()
-                                                        .addOnSuccessListener(uri -> {
-                                                            String imageUrl = uri.toString();
-                                                            image8 = imageUrl;
-                                                        })
-                                                        .addOnFailureListener(exception -> {
-                                                        });
-                                            })
-                                            .addOnFailureListener(exception -> {
-                                            });
-                                    uploadTasks.add(task8);
-                                } else {
-                                    image8 = "0";
-                                }
-                                if (UriSHM != null) {
-                                    StorageTask<UploadTask.TaskSnapshot> taskSHM = ImgSertifikatshm.putFile(UriSHM)
-                                            .addOnSuccessListener(taskSnapshot -> {
-                                                ImgSertifikatshm.getDownloadUrl()
-                                                        .addOnSuccessListener(uri -> {
-                                                            String imageUrl = uri.toString();
-                                                            SHM = imageUrl;
-                                                        })
-                                                        .addOnFailureListener(exception -> {
-                                                        });
-                                            })
-                                            .addOnFailureListener(exception -> {
-                                            });
-                                    uploadTasks.add(taskSHM);
-                                } else if (UriSHMPdf != null) {
-                                    StorageTask<UploadTask.TaskSnapshot> taskSHM = ImgSertifikatshmpdf.putFile(UriSHMPdf)
-                                            .addOnSuccessListener(taskSnapshot -> {
-                                                ImgSertifikatshmpdf.getDownloadUrl()
-                                                        .addOnSuccessListener(uri -> {
-                                                            String imageUrl = uri.toString();
-                                                            SHM = imageUrl;
-                                                        })
-                                                        .addOnFailureListener(exception -> {
-                                                        });
-                                            })
-                                            .addOnFailureListener(exception -> {
-                                            });
-                                    uploadTasks.add(taskSHM);
-                                } else {
-                                    SHM = "0";
-                                }
-                                if (UriHGB != null) {
-                                    StorageTask<UploadTask.TaskSnapshot> taskHGB = ImgSertifikathgb.putFile(UriHGB)
-                                            .addOnSuccessListener(taskSnapshot -> {
-                                                ImgSertifikathgb.getDownloadUrl()
-                                                        .addOnSuccessListener(uri -> {
-                                                            String imageUrl = uri.toString();
-                                                            HGB = imageUrl;
-                                                        })
-                                                        .addOnFailureListener(exception -> {
-                                                        });
-                                            })
-                                            .addOnFailureListener(exception -> {
-                                            });
-                                    uploadTasks.add(taskHGB);
-                                } else if (UriHGBPdf != null) {
-                                    StorageTask<UploadTask.TaskSnapshot> taskHGB = ImgSertifikathgbpdf.putFile(UriHGBPdf)
-                                            .addOnSuccessListener(taskSnapshot -> {
-                                                ImgSertifikathgbpdf.getDownloadUrl()
-                                                        .addOnSuccessListener(uri -> {
-                                                            String imageUrl = uri.toString();
-                                                            HGB = imageUrl;
-                                                        })
-                                                        .addOnFailureListener(exception -> {
-                                                        });
-                                            })
-                                            .addOnFailureListener(exception -> {
-                                            });
-                                    uploadTasks.add(taskHGB);
-                                } else {
-                                    HGB = "0";
-                                }
-                                if (UriHSHP != null) {
-                                    StorageTask<UploadTask.TaskSnapshot> taskHSHP = ImgSertifikathshp.putFile(UriHSHP)
-                                            .addOnSuccessListener(taskSnapshot -> {
-                                                ImgSertifikathshp.getDownloadUrl()
-                                                        .addOnSuccessListener(uri -> {
-                                                            String imageUrl = uri.toString();
-                                                            HSHP = imageUrl;
-                                                        })
-                                                        .addOnFailureListener(exception -> {
-                                                        });
-                                            })
-                                            .addOnFailureListener(exception -> {
-                                            });
-                                    uploadTasks.add(taskHSHP);
-                                } else if (UriHSHPPdf != null) {
-                                    StorageTask<UploadTask.TaskSnapshot> taskHSHP = ImgSertifikathshppdf.putFile(UriHSHPPdf)
-                                            .addOnSuccessListener(taskSnapshot -> {
-                                                ImgSertifikathshppdf.getDownloadUrl()
-                                                        .addOnSuccessListener(uri -> {
-                                                            String imageUrl = uri.toString();
-                                                            HSHP = imageUrl;
-                                                        })
-                                                        .addOnFailureListener(exception -> {
-                                                        });
-                                            })
-                                            .addOnFailureListener(exception -> {
-                                            });
-                                    uploadTasks.add(taskHSHP);
-                                } else {
-                                    HSHP = "0";
-                                }
-                                if (UriPPJB != null) {
-                                    StorageTask<UploadTask.TaskSnapshot> taskPPJB = ImgSertifikatppjb.putFile(UriPPJB)
-                                            .addOnSuccessListener(taskSnapshot -> {
-                                                ImgSertifikatppjb.getDownloadUrl()
-                                                        .addOnSuccessListener(uri -> {
-                                                            String imageUrl = uri.toString();
-                                                            PPJB = imageUrl;
-                                                        })
-                                                        .addOnFailureListener(exception -> {
-                                                        });
-                                            })
-                                            .addOnFailureListener(exception -> {
-                                            });
-                                    uploadTasks.add(taskPPJB);
-                                } else if (UriPPJBPdf != null) {
-                                    StorageTask<UploadTask.TaskSnapshot> taskPPJB = ImgSertifikatppjbpdf.putFile(UriPPJBPdf)
-                                            .addOnSuccessListener(taskSnapshot -> {
-                                                ImgSertifikatppjbpdf.getDownloadUrl()
-                                                        .addOnSuccessListener(uri -> {
-                                                            String imageUrl = uri.toString();
-                                                            PPJB = imageUrl;
-                                                        })
-                                                        .addOnFailureListener(exception -> {
-                                                        });
-                                            })
-                                            .addOnFailureListener(exception -> {
-                                            });
-                                    uploadTasks.add(taskPPJB);
-                                } else {
-                                    PPJB = "0";
-                                }
-                                if (UriSTRA != null) {
-                                    StorageTask<UploadTask.TaskSnapshot> taskSTRA = ImgSertifikatstra.putFile(UriSTRA)
-                                            .addOnSuccessListener(taskSnapshot -> {
-                                                ImgSertifikatstra.getDownloadUrl()
-                                                        .addOnSuccessListener(uri -> {
-                                                            String imageUrl = uri.toString();
-                                                            STRA = imageUrl;
-                                                        })
-                                                        .addOnFailureListener(exception -> {
-                                                        });
-                                            })
-                                            .addOnFailureListener(exception -> {
-                                            });
-                                    uploadTasks.add(taskSTRA);
-                                } else if (UriSTRAPdf != null) {
-                                    StorageTask<UploadTask.TaskSnapshot> taskSTRA = ImgSertifikatstrapdf.putFile(UriSTRAPdf)
-                                            .addOnSuccessListener(taskSnapshot -> {
-                                                ImgSertifikatstrapdf.getDownloadUrl()
-                                                        .addOnSuccessListener(uri -> {
-                                                            String imageUrl = uri.toString();
-                                                            STRA = imageUrl;
-                                                        })
-                                                        .addOnFailureListener(exception -> {
-                                                        });
-                                            })
-                                            .addOnFailureListener(exception -> {
-                                            });
-                                    uploadTasks.add(taskSTRA);
-                                } else {
-                                    STRA = "0";
-                                }
-                                if (UriAJB != null) {
-                                    StorageTask<UploadTask.TaskSnapshot> taskAJB = ImgSertifikatajb.putFile(UriAJB)
-                                            .addOnSuccessListener(taskSnapshot -> {
-                                                ImgSertifikatajb.getDownloadUrl()
-                                                        .addOnSuccessListener(uri -> {
-                                                            String imageUrl = uri.toString();
-                                                            AJB = imageUrl;
-                                                        })
-                                                        .addOnFailureListener(exception -> {
-                                                        });
-                                            })
-                                            .addOnFailureListener(exception -> {
-                                            });
-                                    uploadTasks.add(taskAJB);
-                                } else if (UriAJBPdf != null) {
-                                    StorageTask<UploadTask.TaskSnapshot> taskAJB = ImgSertifikatajbpdf.putFile(UriAJBPdf)
-                                            .addOnSuccessListener(taskSnapshot -> {
-                                                ImgSertifikatajbpdf.getDownloadUrl()
-                                                        .addOnSuccessListener(uri -> {
-                                                            String imageUrl = uri.toString();
-                                                            AJB = imageUrl;
-                                                        })
-                                                        .addOnFailureListener(exception -> {
-                                                        });
-                                            })
-                                            .addOnFailureListener(exception -> {
-                                            });
-                                    uploadTasks.add(taskAJB);
-                                } else {
-                                    AJB = "0";
-                                }
-                                if (UriPetokD != null) {
-                                    StorageTask<UploadTask.TaskSnapshot> taskPetokD = ImgSertifikatpetokd.putFile(UriPetokD)
-                                            .addOnSuccessListener(taskSnapshot -> {
-                                                ImgSertifikatpetokd.getDownloadUrl()
-                                                        .addOnSuccessListener(uri -> {
-                                                            String imageUrl = uri.toString();
-                                                            PetokD = imageUrl;
-                                                        })
-                                                        .addOnFailureListener(exception -> {
-                                                        });
-                                            })
-                                            .addOnFailureListener(exception -> {
-                                            });
-                                    uploadTasks.add(taskPetokD);
-                                } else if (UriPetokDPdf != null) {
-                                    StorageTask<UploadTask.TaskSnapshot> taskPetokD = ImgSertifikatpetokdpdf.putFile(UriPetokDPdf)
-                                            .addOnSuccessListener(taskSnapshot -> {
-                                                ImgSertifikatpetokdpdf.getDownloadUrl()
-                                                        .addOnSuccessListener(uri -> {
-                                                            String imageUrl = uri.toString();
-                                                            PetokD = imageUrl;
-                                                        })
-                                                        .addOnFailureListener(exception -> {
-                                                        });
-                                            })
-                                            .addOnFailureListener(exception -> {
-                                            });
-                                    uploadTasks.add(taskPetokD);
-                                } else {
-                                    PetokD = "0";
-                                }
-                                if (UriPJP != null) {
-                                    StorageTask<UploadTask.TaskSnapshot> taskPJP = ImgPjp.putFile(UriPJP)
-                                            .addOnSuccessListener(taskSnapshot -> {
-                                                ImgPjp.getDownloadUrl()
-                                                        .addOnSuccessListener(uri -> {
-                                                            String imageUrl = uri.toString();
-                                                            PJPHal1 = imageUrl;
-                                                        })
-                                                        .addOnFailureListener(exception -> {
-                                                        });
-                                            })
-                                            .addOnFailureListener(exception -> {
-                                            });
-                                    uploadTasks.add(taskPJP);
-                                } else {
-                                    PJPHal1 = "0";
-                                }
-                                if (UriPJP1 != null) {
-                                    StorageTask<UploadTask.TaskSnapshot> taskPJP1 = ImgPjp1.putFile(UriPJP1)
-                                            .addOnSuccessListener(taskSnapshot -> {
-                                                ImgPjp1.getDownloadUrl()
-                                                        .addOnSuccessListener(uri -> {
-                                                            String imageUrl = uri.toString();
-                                                            PJPHal2 = imageUrl;
-                                                        })
-                                                        .addOnFailureListener(exception -> {
-                                                        });
-                                            })
-                                            .addOnFailureListener(exception -> {
-                                            });
-                                    uploadTasks.add(taskPJP1);
-                                } else {
-                                    PJPHal2 = "0";
-                                }
-                                if (UriSelfie != null) {
-                                    StorageTask<UploadTask.TaskSnapshot> taskSelfie = ImageSelfie.putFile(UriSelfie)
-                                            .addOnSuccessListener(taskSnapshot -> {
-                                                ImageSelfie.getDownloadUrl()
-                                                        .addOnSuccessListener(uri -> {
-                                                            String imageUrl = uri.toString();
-                                                            ImgSelfie = imageUrl;
-                                                        })
-                                                        .addOnFailureListener(exception -> {
-                                                        });
-                                            })
-                                            .addOnFailureListener(exception -> {
-                                            });
-                                    uploadTasks.add(taskSelfie);
-                                } else {
-                                    ImgSelfie = "0";
-                                }
-                                if (UriKTP != null) {
-                                    StorageTask<UploadTask.TaskSnapshot> taskKTP = ImageKTP.putFile(UriKTP)
-                                            .addOnSuccessListener(taskSnapshot -> {
-                                                ImageKTP.getDownloadUrl()
-                                                        .addOnSuccessListener(uri -> {
-                                                            String imageUrl = uri.toString();
-                                                            ImgKTP = imageUrl;
-                                                        })
-                                                        .addOnFailureListener(exception -> {
-                                                        });
-                                            })
-                                            .addOnFailureListener(exception -> {
-                                            });
-                                    uploadTasks.add(taskKTP);
-                                } else {
-                                    ImgKTP = "0";
-                                }
-
-                                Tasks.whenAllSuccess(uploadTasks)
-                                        .addOnSuccessListener(results -> {
-                                            pDialog.cancel();
-                                            simpanDataNonAgen();
-                                        })
-                                        .addOnFailureListener(exception -> {
-                                            Dialog customDialog = new Dialog(TambahListingActivity.this);
-                                            customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                                            customDialog.setContentView(R.layout.custom_dialog_eror_input);
-
-                                            if (customDialog.getWindow() != null) {
-                                                customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-                                            }
-
-                                            Button ok = customDialog.findViewById(R.id.BtnOkErorInput);
-                                            TextView tv = customDialog.findViewById(R.id.TVDialogErorInput);
-
-                                            tv.setText("Gagal Saat Unggah Gambar");
-
-                                            ok.setOnClickListener(new View.OnClickListener() {
-                                                @Override
-                                                public void onClick(View view) {
-                                                    customDialog.dismiss();
-                                                }
-                                            });
-
-                                            ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
-
-                                            Glide.with(TambahListingActivity.this)
-                                                    .load(R.drawable.alert) // You can also use a local resource like R.drawable.your_gif_resource
-                                                    .transition(DrawableTransitionOptions.withCrossFade())
-                                                    .into(gifImageView);
-
-                                            customDialog.show();
-                                        });
+                                handleImage1Success();
                             }
                         }
                     }
@@ -5789,62 +3861,777 @@ public class TambahListingActivity extends AppCompatActivity {
             BtnKTP.setVisibility(View.VISIBLE);
         }
     }
-    private void handleImage1Success(Uri uri) {
-        image1 = uri.toString();
+    private void showProgressDialog() {
+        pDialog.setMessage("Unggah Gambar");
+        pDialog.setCancelable(false);
+        pDialog.show();
     }
-    private void handleImage2Success(Uri uri) {
-        image2 = uri.toString();
+    private void HideProgressDialog() {
+        pDialog.dismiss();
+        pDialog.cancel();
     }
-    private void handleImage3Success(Uri uri) {
-        image3 = uri.toString();
+    private void handleImage1Success() {
+        if (Uri1 != null) {
+            showProgressDialog();
+            ImgListing1.putFile(Uri1)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            ImgListing1.getDownloadUrl()
+                                    .addOnSuccessListener(uri -> {
+                                        String imageUrl = uri.toString();
+                                        image1 = imageUrl;
+                                        handleImage2Success();
+                                    })
+                                    .addOnFailureListener(exception -> {
+                                        HideProgressDialog();
+                                        handleImage1Success();
+                                        Toast.makeText(TambahListingActivity.this, "Upload failed: " + exception.getMessage(), Toast.LENGTH_SHORT).show();
+                                    });
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            HideProgressDialog();
+                            handleImage1Success();
+                            Toast.makeText(TambahListingActivity.this, "Upload failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        } else {
+            image1 = "0";
+            handleImage2Success();
+        }
     }
-    private void handleImage4Success(Uri uri) {
-        image4 = uri.toString();
+    private void handleImage2Success() {
+        if (Uri2 != null) {
+            ImgListing2.putFile(Uri2)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            ImgListing2.getDownloadUrl()
+                                    .addOnSuccessListener(uri -> {
+                                        String imageUrl = uri.toString();
+                                        image2 = imageUrl;
+                                        handleImage3Success();
+                                    })
+                                    .addOnFailureListener(exception -> {
+                                        handleImage2Success();
+                                        Toast.makeText(TambahListingActivity.this, "Upload failed: " + exception.getMessage(), Toast.LENGTH_SHORT).show();
+                                    });
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            handleImage2Success();
+                            Toast.makeText(TambahListingActivity.this, "Upload failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        } else {
+            image2 = "0";
+            handleImage3Success();
+        }
     }
-    private void handleImage5Success(Uri uri) {
-        image5 = uri.toString();
+    private void handleImage3Success() {
+        if (Uri3 != null) {
+            ImgListing3.putFile(Uri3)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            ImgListing3.getDownloadUrl()
+                                    .addOnSuccessListener(uri -> {
+                                        String imageUrl = uri.toString();
+                                        image3 = imageUrl;
+                                        handleImage4Success();
+                                    })
+                                    .addOnFailureListener(exception -> {
+                                        handleImage3Success();
+                                        Toast.makeText(TambahListingActivity.this, "Upload failed: " + exception.getMessage(), Toast.LENGTH_SHORT).show();
+                                    });
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            handleImage3Success();
+                            Toast.makeText(TambahListingActivity.this, "Upload failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        } else {
+            image3 = "0";
+            handleImage4Success();
+        }
     }
-    private void handleImage6Success(Uri uri) {
-        image6 = uri.toString();
+    private void handleImage4Success() {
+        if (Uri4 != null) {
+            ImgListing4.putFile(Uri4)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            ImgListing4.getDownloadUrl()
+                                    .addOnSuccessListener(uri -> {
+                                        String imageUrl = uri.toString();
+                                        image4 = imageUrl;
+                                        handleImage5Success();
+                                    })
+                                    .addOnFailureListener(exception -> {
+                                        handleImage4Success();
+                                        Toast.makeText(TambahListingActivity.this, "Upload failed: " + exception.getMessage(), Toast.LENGTH_SHORT).show();
+                                    });
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            handleImage4Success();
+                            Toast.makeText(TambahListingActivity.this, "Upload failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        } else {
+            image4 = "0";
+            handleImage5Success();
+        }
     }
-    private void handleImage7Success(Uri uri) {
-        image7 = uri.toString();
+    private void handleImage5Success() {
+        if (Uri5 != null) {
+            ImgListing5.putFile(Uri5)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            ImgListing5.getDownloadUrl()
+                                    .addOnSuccessListener(uri -> {
+                                        String imageUrl = uri.toString();
+                                        image5 = imageUrl;
+                                        handleImage6Success();
+                                    })
+                                    .addOnFailureListener(exception -> {
+                                        handleImage5Success();
+                                        Toast.makeText(TambahListingActivity.this, "Upload failed: " + exception.getMessage(), Toast.LENGTH_SHORT).show();
+                                    });
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            handleImage5Success();
+                            Toast.makeText(TambahListingActivity.this, "Upload failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        } else {
+            image5 = "0";
+            handleImage6Success();
+        }
     }
-    private void handleImage8Success(Uri uri) {
-        image8 = uri.toString();
+    private void handleImage6Success() {
+        if (Uri6 != null) {
+            ImgListing6.putFile(Uri6)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            ImgListing6.getDownloadUrl()
+                                    .addOnSuccessListener(uri -> {
+                                        String imageUrl = uri.toString();
+                                        image6 = imageUrl;
+                                        handleImage7Success();
+                                    })
+                                    .addOnFailureListener(exception -> {
+                                        handleImage6Success();
+                                        Toast.makeText(TambahListingActivity.this, "Upload failed: " + exception.getMessage(), Toast.LENGTH_SHORT).show();
+                                    });
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            handleImage6Success();
+                            Toast.makeText(TambahListingActivity.this, "Upload failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        } else {
+            image6 = "0";
+            handleImage7Success();
+        }
     }
-    private void handleImageSHMSuccess(Uri uri) {
-        SHM = uri.toString();
+    private void handleImage7Success() {
+        if (Uri7 != null) {
+            ImgListing7.putFile(Uri7)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            ImgListing7.getDownloadUrl()
+                                    .addOnSuccessListener(uri -> {
+                                        String imageUrl = uri.toString();
+                                        image7 = imageUrl;
+                                        handleImage8Success();
+                                    })
+                                    .addOnFailureListener(exception -> {
+                                        handleImage7Success();
+                                        Toast.makeText(TambahListingActivity.this, "Upload failed: " + exception.getMessage(), Toast.LENGTH_SHORT).show();
+                                    });
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            handleImage7Success();
+                            Toast.makeText(TambahListingActivity.this, "Upload failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        } else {
+            image7 = "0";
+            handleImage8Success();
+        }
     }
-    private void handleImageHGBSuccess(Uri uri) {
-        HGB = uri.toString();
+    private void handleImage8Success() {
+        if (Uri8 != null) {
+            ImgListing8.putFile(Uri8)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            ImgListing8.getDownloadUrl()
+                                    .addOnSuccessListener(uri -> {
+                                        String imageUrl = uri.toString();
+                                        image8 = imageUrl;
+                                        handleImageSHMSuccess();
+                                    })
+                                    .addOnFailureListener(exception -> {
+                                        handleImage8Success();
+                                        Toast.makeText(TambahListingActivity.this, "Upload failed: " + exception.getMessage(), Toast.LENGTH_SHORT).show();
+                                    });
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            handleImage8Success();
+                            Toast.makeText(TambahListingActivity.this, "Upload failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        } else {
+            image8 = "0";
+            handleImageSHMSuccess();
+        }
     }
-    private void handleImageHSHPSuccess(Uri uri) {
-        HSHP = uri.toString();
+    private void handleImageSHMSuccess() {
+        if (UriSHM != null) {
+            ImgSertifikatshm.putFile(UriSHM)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            ImgSertifikatshm.getDownloadUrl()
+                                    .addOnSuccessListener(uri -> {
+                                        String imageUrl = uri.toString();
+                                        SHM = imageUrl;
+                                        handleImageHGBSuccess();
+                                    })
+                                    .addOnFailureListener(exception -> {
+                                        handleImageSHMSuccess();
+                                        Toast.makeText(TambahListingActivity.this, "Upload failed: " + exception.getMessage(), Toast.LENGTH_SHORT).show();
+                                    });
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            handleImageSHMSuccess();
+                            Toast.makeText(TambahListingActivity.this, "Upload failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        } else if (UriSHMPdf != null) {
+            ImgSertifikatshmpdf.putFile(UriSHMPdf)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            ImgSertifikatshmpdf.getDownloadUrl()
+                                    .addOnSuccessListener(uri -> {
+                                        String imageUrl = uri.toString();
+                                        SHM = imageUrl;
+                                        handleImageHGBSuccess();
+                                    })
+                                    .addOnFailureListener(exception -> {
+                                        handleImageSHMSuccess();
+                                        Toast.makeText(TambahListingActivity.this, "Upload failed: " + exception.getMessage(), Toast.LENGTH_SHORT).show();
+                                    });
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            handleImageSHMSuccess();
+                            Toast.makeText(TambahListingActivity.this, "Upload failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        } else {
+            SHM = "0";
+            handleImageHGBSuccess();
+        }
     }
-    private void handleImagePPJBSuccess(Uri uri) {
-        PPJB = uri.toString();
+    private void handleImageHGBSuccess() {
+        if (UriHGB != null) {
+            ImgSertifikathgb.putFile(UriHGB)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            ImgSertifikathgb.getDownloadUrl()
+                                    .addOnSuccessListener(uri -> {
+                                        String imageUrl = uri.toString();
+                                        HGB = imageUrl;
+                                        handleImageHSHPSuccess();
+                                    })
+                                    .addOnFailureListener(exception -> {
+                                        handleImageSHMSuccess();
+                                        Toast.makeText(TambahListingActivity.this, "Upload failed: " + exception.getMessage(), Toast.LENGTH_SHORT).show();
+                                    });
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            handleImageSHMSuccess();
+                            Toast.makeText(TambahListingActivity.this, "Upload failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        } else if (UriHGBPdf != null) {
+            ImgSertifikathgbpdf.putFile(UriHGBPdf)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            ImgSertifikathgbpdf.getDownloadUrl()
+                                    .addOnSuccessListener(uri -> {
+                                        String imageUrl = uri.toString();
+                                        HGB = imageUrl;
+                                        handleImageHSHPSuccess();
+                                    })
+                                    .addOnFailureListener(exception -> {
+                                        handleImageSHMSuccess();
+                                        Toast.makeText(TambahListingActivity.this, "Upload failed: " + exception.getMessage(), Toast.LENGTH_SHORT).show();
+                                    });
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            handleImageSHMSuccess();
+                            Toast.makeText(TambahListingActivity.this, "Upload failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        } else {
+            HGB = "0";
+            handleImageHSHPSuccess();
+        }
     }
-    private void handleImageSTRASuccess(Uri uri) {
-        STRA = uri.toString();
+    private void handleImageHSHPSuccess() {
+        if (UriHSHP != null) {
+            ImgSertifikathshp.putFile(UriHSHP)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            ImgSertifikathshp.getDownloadUrl()
+                                    .addOnSuccessListener(uri -> {
+                                        String imageUrl = uri.toString();
+                                        HSHP = imageUrl;
+                                        handleImagePPJBSuccess();
+                                    })
+                                    .addOnFailureListener(exception -> {
+                                        handleImageHSHPSuccess();
+                                        Toast.makeText(TambahListingActivity.this, "Upload failed: " + exception.getMessage(), Toast.LENGTH_SHORT).show();
+                                    });
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            handleImageHSHPSuccess();
+                            Toast.makeText(TambahListingActivity.this, "Upload failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        } else if (UriHSHPPdf != null) {
+            ImgSertifikathshppdf.putFile(UriHSHPPdf)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            ImgSertifikathshppdf.getDownloadUrl()
+                                    .addOnSuccessListener(uri -> {
+                                        String imageUrl = uri.toString();
+                                        HSHP = imageUrl;
+                                        handleImagePPJBSuccess();
+                                    })
+                                    .addOnFailureListener(exception -> {
+                                        handleImageHSHPSuccess();
+                                        Toast.makeText(TambahListingActivity.this, "Upload failed: " + exception.getMessage(), Toast.LENGTH_SHORT).show();
+                                    });
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            handleImageHSHPSuccess();
+                            Toast.makeText(TambahListingActivity.this, "Upload failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        } else {
+            HSHP = "0";
+            handleImagePPJBSuccess();
+        }
     }
-    private void handleImageAJBSuccess(Uri uri) {
-        AJB = uri.toString();
+    private void handleImagePPJBSuccess() {
+        if (UriPPJB != null) {
+            ImgSertifikatppjb.putFile(UriPPJB)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            ImgSertifikatppjb.getDownloadUrl()
+                                    .addOnSuccessListener(uri -> {
+                                        String imageUrl = uri.toString();
+                                        PPJB = imageUrl;
+                                        handleImageSTRASuccess();
+                                    })
+                                    .addOnFailureListener(exception -> {
+                                        handleImagePPJBSuccess();
+                                        Toast.makeText(TambahListingActivity.this, "Upload failed: " + exception.getMessage(), Toast.LENGTH_SHORT).show();
+                                    });
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            handleImagePPJBSuccess();
+                            Toast.makeText(TambahListingActivity.this, "Upload failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        } else if (UriPPJBPdf != null) {
+            ImgSertifikatppjbpdf.putFile(UriPPJBPdf)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            ImgSertifikatppjbpdf.getDownloadUrl()
+                                    .addOnSuccessListener(uri -> {
+                                        String imageUrl = uri.toString();
+                                        PPJB = imageUrl;
+                                        handleImageSTRASuccess();
+                                    })
+                                    .addOnFailureListener(exception -> {
+                                        handleImagePPJBSuccess();
+                                        Toast.makeText(TambahListingActivity.this, "Upload failed: " + exception.getMessage(), Toast.LENGTH_SHORT).show();
+                                    });
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            handleImagePPJBSuccess();
+                            Toast.makeText(TambahListingActivity.this, "Upload failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        } else {
+            PPJB = "0";
+            handleImageSTRASuccess();
+        }
     }
-    private void handleImagePetokDSuccess(Uri uri) {
-        PetokD = uri.toString();
+    private void handleImageSTRASuccess() {
+        if (UriSTRA != null) {
+            ImgSertifikatstra.putFile(UriSTRA)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            ImgSertifikatstra.getDownloadUrl()
+                                    .addOnSuccessListener(uri -> {
+                                        String imageUrl = uri.toString();
+                                        STRA = imageUrl;
+                                        handleImageAJBSuccess();
+                                    })
+                                    .addOnFailureListener(exception -> {
+                                        handleImageSTRASuccess();
+                                        Toast.makeText(TambahListingActivity.this, "Upload failed: " + exception.getMessage(), Toast.LENGTH_SHORT).show();
+                                    });
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            handleImageSTRASuccess();
+                            Toast.makeText(TambahListingActivity.this, "Upload failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        } else if (UriSTRAPdf != null) {
+            ImgSertifikatstrapdf.putFile(UriSTRAPdf)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            ImgSertifikatstrapdf.getDownloadUrl()
+                                    .addOnSuccessListener(uri -> {
+                                        String imageUrl = uri.toString();
+                                        STRA = imageUrl;
+                                        handleImageAJBSuccess();
+                                    })
+                                    .addOnFailureListener(exception -> {
+                                        handleImageSTRASuccess();
+                                        Toast.makeText(TambahListingActivity.this, "Upload failed: " + exception.getMessage(), Toast.LENGTH_SHORT).show();
+                                    });
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            handleImageSTRASuccess();
+                            Toast.makeText(TambahListingActivity.this, "Upload failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        } else {
+            STRA = "0";
+            handleImageAJBSuccess();
+        }
     }
-    private void handleImagePJP1Success(Uri uri) {
-        PJPHal1 = uri.toString();
+    private void handleImageAJBSuccess() {
+        if (UriAJB != null) {
+            ImgSertifikatajb.putFile(UriAJB)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            ImgSertifikatajb.getDownloadUrl()
+                                    .addOnSuccessListener(uri -> {
+                                        String imageUrl = uri.toString();
+                                        AJB = imageUrl;
+                                        handleImagePetokDSuccess();
+                                    })
+                                    .addOnFailureListener(exception -> {
+                                        handleImageAJBSuccess();
+                                        Toast.makeText(TambahListingActivity.this, "Upload failed: " + exception.getMessage(), Toast.LENGTH_SHORT).show();
+                                    });
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            handleImageAJBSuccess();
+                            Toast.makeText(TambahListingActivity.this, "Upload failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        } else if (UriAJBPdf != null) {
+            ImgSertifikatajbpdf.putFile(UriAJBPdf)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            ImgSertifikatajbpdf.getDownloadUrl()
+                                    .addOnSuccessListener(uri -> {
+                                        String imageUrl = uri.toString();
+                                        AJB = imageUrl;
+                                        handleImagePetokDSuccess();
+                                    })
+                                    .addOnFailureListener(exception -> {
+                                        handleImageAJBSuccess();
+                                        Toast.makeText(TambahListingActivity.this, "Upload failed: " + exception.getMessage(), Toast.LENGTH_SHORT).show();
+                                    });
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            handleImageAJBSuccess();
+                            Toast.makeText(TambahListingActivity.this, "Upload failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        } else {
+            AJB = "0";
+            handleImagePetokDSuccess();
+        }
     }
-    private void handleImagePJP2Success(Uri uri) {
-        PJPHal2 = uri.toString();
+    private void handleImagePetokDSuccess() {
+        if (UriPetokD != null) {
+            ImgSertifikatpetokd.putFile(UriPetokD)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            ImgSertifikatpetokd.getDownloadUrl()
+                                    .addOnSuccessListener(uri -> {
+                                        String imageUrl = uri.toString();
+                                        PetokD = imageUrl;
+                                        handleImagePJP1Success();
+                                    })
+                                    .addOnFailureListener(exception -> {
+                                        handleImagePetokDSuccess();
+                                        Toast.makeText(TambahListingActivity.this, "Upload failed: " + exception.getMessage(), Toast.LENGTH_SHORT).show();
+                                    });
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            handleImagePetokDSuccess();
+                            Toast.makeText(TambahListingActivity.this, "Upload failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        } else if (UriPetokDPdf != null) {
+            ImgSertifikatpetokdpdf.putFile(UriPetokDPdf)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            ImgSertifikatpetokdpdf.getDownloadUrl()
+                                    .addOnSuccessListener(uri -> {
+                                        String imageUrl = uri.toString();
+                                        PetokD = imageUrl;
+                                        handleImagePJP1Success();
+                                    })
+                                    .addOnFailureListener(exception -> {
+                                        handleImagePetokDSuccess();
+                                        Toast.makeText(TambahListingActivity.this, "Upload failed: " + exception.getMessage(), Toast.LENGTH_SHORT).show();
+                                    });
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            handleImagePetokDSuccess();
+                            Toast.makeText(TambahListingActivity.this, "Upload failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        } else {
+            PetokD = "0";
+            handleImagePJP1Success();
+        }
     }
-    private void handleImageKTPSuccess(Uri uri) {
-        ImgKTP = uri.toString();
+    private void handleImagePJP1Success() {
+        if (UriPJP != null) {
+            ImgPjp.putFile(UriPJP)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            ImgPjp.getDownloadUrl()
+                                    .addOnSuccessListener(uri -> {
+                                        String imageUrl = uri.toString();
+                                        PJPHal1 = imageUrl;
+                                        handleImagePJP2Success();
+                                    })
+                                    .addOnFailureListener(exception -> {
+                                        handleImagePJP1Success();
+                                        Toast.makeText(TambahListingActivity.this, "Upload failed: " + exception.getMessage(), Toast.LENGTH_SHORT).show();
+                                    });
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            handleImagePJP1Success();
+                            Toast.makeText(TambahListingActivity.this, "Upload failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        } else {
+            PJPHal1 = "0";
+            handleImagePJP2Success();
+        }
     }
-    private void handleImageSelfieSuccess(Uri uri) {
-        ImgSelfie = uri.toString();
+    private void handleImagePJP2Success() {
+        if (UriPJP1 != null) {
+            ImgPjp1.putFile(UriPJP1)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            ImgPjp1.getDownloadUrl()
+                                    .addOnSuccessListener(uri -> {
+                                        String imageUrl = uri.toString();
+                                        PJPHal2 = imageUrl;
+                                        handleImageKTPSuccess();
+                                    })
+                                    .addOnFailureListener(exception -> {
+                                        handleImagePJP2Success();
+                                        Toast.makeText(TambahListingActivity.this, "Upload failed: " + exception.getMessage(), Toast.LENGTH_SHORT).show();
+                                    });
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            handleImagePJP2Success();
+                            Toast.makeText(TambahListingActivity.this, "Upload failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        } else {
+            PJPHal2 = "0";
+            handleImageKTPSuccess();
+        }
+    }
+    private void handleImageKTPSuccess() {
+        if (UriKTP != null) {
+            ImageKTP.putFile(UriSelfie)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            ImageKTP.getDownloadUrl()
+                                    .addOnSuccessListener(uri -> {
+                                        String imageUrl = uri.toString();
+                                        ImgKTP = imageUrl;
+                                        handleImageSelfieSuccess();
+                                    })
+                                    .addOnFailureListener(exception -> {
+                                        handleImageKTPSuccess();
+                                        Toast.makeText(TambahListingActivity.this, "Upload failed: " + exception.getMessage(), Toast.LENGTH_SHORT).show();
+                                    });
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            handleImageKTPSuccess();
+                            Toast.makeText(TambahListingActivity.this, "Upload failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        } else {
+            ImgKTP = "0";
+            handleImageSelfieSuccess();
+        }
+    }
+    private void handleImageSelfieSuccess() {
+        if (UriSelfie != null) {
+            ImageSelfie.putFile(UriSelfie)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            ImageSelfie.getDownloadUrl()
+                                    .addOnSuccessListener(uri -> {
+                                        String imageUrl = uri.toString();
+                                        ImgSelfie = imageUrl;
+                                        HideProgressDialog();
+                                        if (isAdmin.equals("2")) {
+                                            simpanData();
+                                        } else if (isAdmin.equals("3")) {
+                                            if (sstatus.equals("1")) {
+                                                simpanDataAgen();
+                                            } else if (sstatus.equals("2")) {
+                                                simpanDataNonAgen();
+                                            } else if (sstatus.equals("3")) {
+                                                simpanDataNonAgen();
+                                            }
+                                        }
+                                    })
+                                    .addOnFailureListener(exception -> {
+                                        handleImageSelfieSuccess();
+                                        Toast.makeText(TambahListingActivity.this, "Upload failed: " + exception.getMessage(), Toast.LENGTH_SHORT).show();
+                                    });
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            handleImageSelfieSuccess();
+                            Toast.makeText(TambahListingActivity.this, "Upload failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        } else {
+            ImgSelfie = "0";
+            HideProgressDialog();
+            if (isAdmin.equals("2")) {
+                simpanData();
+            } else if (isAdmin.equals("3")) {
+                if (sstatus.equals("1")) {
+                    simpanDataAgen();
+                } else if (sstatus.equals("2")) {
+                    simpanDataNonAgen();
+                } else if (sstatus.equals("3")) {
+                    simpanDataNonAgen();
+                }
+            }
+        }
     }
     private void simpanData() {
         pDialog.setMessage("Menyimpan Data");

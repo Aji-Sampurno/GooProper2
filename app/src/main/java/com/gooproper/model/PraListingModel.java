@@ -1,12 +1,12 @@
 package com.gooproper.model;
 
 public class PraListingModel {
-    String IdPraListing, IdListing, IdAgen, IdInput, NamaListing, Alamat, Location, Wide, Level, Bed, Bath, BedArt, BathArt, Garage, Carpot, NoCertificate, Pbb, JenisProperti, JenisCertificate, SumberAir, Kondisi, Deskripsi, Prabot, KetPrabot, Priority, Ttd, Banner, Harga, TglInput, Img1, Img2, Img3, Img4, Img5, Img6, Img7, Img8, Video, LinkFacebook, LinkTiktok, LinkInstagram, LinkYoutube, IsAdmin, IsManager, Nama, NoTelp, Instagram;
+    String IdPraListing, IdListing, IdAgen, IdInput, NamaListing, Alamat, Location, Wide, Level, Bed, Bath, BedArt, BathArt, Garage, Carpot, NoCertificate, Pbb, JenisProperti, JenisCertificate, SumberAir, Kondisi, Deskripsi, Prabot, KetPrabot, Priority, Ttd, Banner, Harga, TglInput, Img1, Img2, Img3, Img4, Img5, Img6, Img7, Img8, Video, LinkFacebook, LinkTiktok, LinkInstagram, LinkYoutube, IsAdmin, IsManager, Nama, NoTelp, Instagram, RangeHarga;
 
     public PraListingModel() {
     }
 
-    public PraListingModel(String IdPraListing, String IdListing, String IdAgen, String IdInput, String NamaListing, String Alamat, String Location, String Wide, String Level, String Bed, String Bath, String BedArt, String BathArt, String Garage, String Carpot, String NoCertificate, String Pbb, String JenisProperti, String JenisCertificate, String SumberAir, String Kondisi, String Deskripsi, String Prabot, String KetPrabot, String Priority, String Ttd, String Banner, String Harga, String TglInput, String Img1, String Img2, String Img3, String Img4, String Img5, String Img6, String Img7, String Img8, String Video, String LinkFacebook, String LinkTiktok, String LinkInstagram, String LinkYoutube, String IsAdmin, String IsManager, String Nama, String NoTelp, String Instagram) {
+    public PraListingModel(String IdPraListing, String IdListing, String IdAgen, String IdInput, String NamaListing, String Alamat, String Location, String Wide, String Level, String Bed, String Bath, String BedArt, String BathArt, String Garage, String Carpot, String NoCertificate, String Pbb, String JenisProperti, String JenisCertificate, String SumberAir, String Kondisi, String Deskripsi, String Prabot, String KetPrabot, String Priority, String Ttd, String Banner, String Harga, String TglInput, String Img1, String Img2, String Img3, String Img4, String Img5, String Img6, String Img7, String Img8, String Video, String LinkFacebook, String LinkTiktok, String LinkInstagram, String LinkYoutube, String IsAdmin, String IsManager, String Nama, String NoTelp, String Instagram, String RangeHarga) {
         this.IdPraListing = IdPraListing;
         this.IdListing = IdListing;
         this.IdAgen = IdAgen;
@@ -54,6 +54,7 @@ public class PraListingModel {
         this.Nama = Nama;
         this.NoTelp = NoTelp;
         this.Instagram = Instagram;
+        this.RangeHarga = RangeHarga;
     }
 
     public String getIdPraListing() {
@@ -430,5 +431,13 @@ public class PraListingModel {
 
     public void setInstagram(String instagram) {
         Instagram = instagram;
+    }
+
+    public String getRangeHarga() {
+        return RangeHarga;
+    }
+
+    public void setRangeHarga(String rangeHarga) {
+        RangeHarga = rangeHarga;
     }
 }

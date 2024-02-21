@@ -92,7 +92,7 @@ import java.util.Map;
 public class DetailListingActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     ProgressDialog PDDetailListing;
-    TextView TVNamaDetailListing, TVAlamatDetailListing, TVHargaDetailListing, TVHargaSewaDetailListing, TVViewsDetailListing, TVLikeDetailListing, TVBedDetailListing, TVNamaAgen, TVNamaAgen2, TVBathDetailListing, TVWideDetailListing, TVLandDetailListing, TVDimensiDetailListing, TVTipeDetailListing, TVStatusDetailListing, TVSertifikatDetailListing, TVLuasDetailListing, TVKamarTidurDetailListing, TVKamarMandiDetailListing, TVLantaiDetailListing, TVGarasiDetailListing, TVCarpotDetailListing, TVListrikDetailListing, TVSumberAirDetailListing, TVPerabotDetailListing, TVSizeBanner, TVDeskripsiDetailListing, TVNoData, TVNoDataPdf, TVPriority, TVKondisi, TVNoPjp, TVNoDataPjp, TVFee, TVTglInput, TVNamaVendor, TVTelpVendor, TVPJP, TVSelfie, TVRejected, TVPoin, TVHadap;
+    TextView TVRangeHarga, TVNamaDetailListing, TVAlamatDetailListing, TVHargaDetailListing, TVHargaSewaDetailListing, TVViewsDetailListing, TVLikeDetailListing, TVBedDetailListing, TVNamaAgen, TVNamaAgen2, TVBathDetailListing, TVWideDetailListing, TVLandDetailListing, TVDimensiDetailListing, TVTipeDetailListing, TVStatusDetailListing, TVSertifikatDetailListing, TVLuasDetailListing, TVKamarTidurDetailListing, TVKamarMandiDetailListing, TVLantaiDetailListing, TVGarasiDetailListing, TVCarpotDetailListing, TVListrikDetailListing, TVSumberAirDetailListing, TVPerabotDetailListing, TVSizeBanner, TVDeskripsiDetailListing, TVNoData, TVNoDataPdf, TVPriority, TVKondisi, TVNoPjp, TVNoDataPjp, TVFee, TVTglInput, TVNamaVendor, TVTelpVendor, TVPJP, TVSelfie, TVRejected, TVPoin, TVHadap;
     ImageView IVFlowUp, IVWhatsapp, IVInstagram, IVFlowUp2, IVWhatsapp2, IVInstagram2, IVFavorite, IVFavoriteOn, IVShare, IVStar1, IVStar2, IVStar3, IVStar4, IVStar5, IVAlamat, IVNextImg, IVPrevImg, IVSelfie;
     Button BtnApproveAdmin, BtnApproveManager, BtnRejectedAdmin, BtnRejectedManager, BtnTambahMaps, BtnTambahSelfie, BtnAjukanUlang, BtnLihatTemplate, BtnLihatTemplateKosong;
     TextInputEditText tambahagen, tambahcoagen, tambahpjp;
@@ -174,6 +174,7 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
 
         TVNamaDetailListing = findViewById(R.id.TVNamaDetailListing);
         TVAlamatDetailListing = findViewById(R.id.TVAlamatDetailListing);
+        TVRangeHarga = findViewById(R.id.TVRangeHargaDetailListing);
         TVHargaDetailListing = findViewById(R.id.TVHargaDetailListing);
         TVHargaSewaDetailListing = findViewById(R.id.TVHargaSewaDetailListing);
         TVViewsDetailListing = findViewById(R.id.TVViewsDetailListing);
@@ -310,6 +311,7 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
         String intentSize = data.getStringExtra("Size");
         String intentHarga = data.getStringExtra("Harga");
         String intentHargaSewa = data.getStringExtra("HargaSewa");
+        String intentRangeHarga = data.getStringExtra("RangeHarga");
         String intentTglInput = data.getStringExtra("TglInput");
         String intentImg1 = data.getStringExtra("Img1");
         String intentImg2 = data.getStringExtra("Img2");
@@ -393,7 +395,6 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
             LytPJP.setVisibility(View.VISIBLE);
             LytNamaVendor.setVisibility(View.VISIBLE);
             LytTelpVendor.setVisibility(View.VISIBLE);
-            lytambahagen.setVisibility(View.GONE);
             IVWhatsapp.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -1733,7 +1734,47 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                 }
             }
         });
-        BtnApproveManager.setOnClickListener(v -> approvemanager());
+        BtnApproveManager.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (lytambahagen.getVisibility() == View.VISIBLE) {
+                    String input = tambahagen.getText().toString();
+                    if (input.isEmpty()) {
+                        Dialog customDialog = new Dialog(DetailListingActivity.this);
+                        customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                        customDialog.setContentView(R.layout.custom_dialog_eror_input);
+
+                        if (customDialog.getWindow() != null) {
+                            customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                        }
+
+                        Button ok = customDialog.findViewById(R.id.BtnOkErorInput);
+                        TextView message = customDialog.findViewById(R.id.TVDialogErorInput);
+                        ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
+
+                        message.setText("Harap tambahkan agen terlebih dahulu");
+
+                        ok.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                customDialog.dismiss();
+                            }
+                        });
+
+                        Glide.with(DetailListingActivity.this)
+                                .load(R.drawable.alert) // You can also use a local resource like R.drawable.your_gif_resource
+                                .transition(DrawableTransitionOptions.withCrossFade())
+                                .into(gifImageView);
+
+                        customDialog.show();
+                    } else {
+                        approvemanager();
+                    }
+                } else {
+                    approvemanager();
+                }
+            }
+        });
         BtnRejectedAdmin.setOnClickListener(v -> ShowRejected());
         BtnRejectedManager.setOnClickListener(v -> ShowRejected());
         BtnAjukanUlang.setOnClickListener(v -> ajukanulang());
@@ -2332,7 +2373,11 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                     TVHargaDetailListing.setVisibility(View.GONE);
                     TVHargaSewaDetailListing.setVisibility(View.GONE);
                 } else {
-                    if (status.equals("2")) {
+                    if (status.equals("1")) {
+                        agen.setVisibility(View.GONE);
+                        lytambahagen.setVisibility(View.VISIBLE);
+                        idagen = agenid;
+                    } else if (status.equals("2")) {
                         agen.setVisibility(View.GONE);
                         lytambahagen.setVisibility(View.VISIBLE);
                         idagen = agenid;
@@ -2382,6 +2427,11 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                 TVKondisi.setText("-");
             } else {
                 TVKondisi.setText(intentKondisi);
+            }
+            if (intentJenisProperti.equals("Rukost")) {
+                TVRangeHarga.setVisibility(View.GONE);
+            } else {
+                TVRangeHarga.setVisibility(View.GONE);
             }
             if (intentPriority.isEmpty() || intentPriority.equals("open")) {
                 TVPriority.setVisibility(View.INVISIBLE);
@@ -3620,6 +3670,7 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                 final String StringSelfie = CBSelfie.isChecked() ? "1" : "0";
                 final String StringLokasi = CBLokasi.isChecked() ? "1" : "0";
 
+                map.put("IdAgen", idagen);
                 map.put("IdPraListing", idpralisting);
                 map.put("Marketable", StringMarketable);
                 map.put("StatusHarga", StringHarga);

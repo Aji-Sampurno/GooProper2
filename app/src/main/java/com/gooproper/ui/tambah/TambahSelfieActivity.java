@@ -37,6 +37,8 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Tasks;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.storage.FirebaseStorage;
@@ -77,8 +79,10 @@ public class TambahSelfieActivity extends AppCompatActivity {
     ImageView back, IVselfie;
     LinearLayout LytSelfie;
     Uri bselfie;
-    String Selfie, StrIdPraListing;
-
+    String Selfie, StrIdPraListing, isSelfie;
+    String timeStamp,fileSelfie;
+    private StorageReference mStorageRef;
+    StorageReference storageRef,ImageSelfie;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -100,8 +104,11 @@ public class TambahSelfieActivity extends AppCompatActivity {
         final int update = data.getIntExtra("update", 0);
         String intentIdPraListing = data.getStringExtra("IdPraListing");
 
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
-        String selfie = "Selfie_" + timeStamp + ".jpg";
+        timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
+        fileSelfie = "Selfie_" + timeStamp + ".jpg";
+
+        storageRef = FirebaseStorage.getInstance().getReference();
+        ImageSelfie = storageRef.child("selfie/" + fileSelfie);
 
         StrIdPraListing = intentIdPraListing;
 
@@ -137,67 +144,7 @@ public class TambahSelfieActivity extends AppCompatActivity {
 
                     customDialog.show();
                 } else {
-                    pDialog.setMessage("Menyimpan Data");
-                    pDialog.setCancelable(false);
-                    pDialog.show();
-
-                    StorageReference storageRef = FirebaseStorage.getInstance().getReference();
-                    StorageReference ImgSelfie = storageRef.child("selfie/" + selfie);
-
-                    List<StorageTask<UploadTask.TaskSnapshot>> uploadTasks = new ArrayList<>();
-
-                    if ( bselfie != null) {
-                        StorageTask<UploadTask.TaskSnapshot> task1 = ImgSelfie.putFile(bselfie)
-                                .addOnSuccessListener(taskSnapshot -> {
-                                    ImgSelfie.getDownloadUrl()
-                                            .addOnSuccessListener(uri -> {
-                                                String imageUrl = uri.toString();
-                                                Selfie = imageUrl;
-                                            })
-                                            .addOnFailureListener(exception -> {
-                                            });
-                                })
-                                .addOnFailureListener(exception -> {
-                                });
-                        uploadTasks.add(task1);
-                    } else {
-                        Selfie = "0";
-                    }
-                    Tasks.whenAllSuccess(uploadTasks)
-                            .addOnSuccessListener(results -> {
-                                pDialog.cancel();
-                                simpanData();
-                            })
-                            .addOnFailureListener(exception -> {
-                                Dialog customDialog = new Dialog(TambahSelfieActivity.this);
-                                customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                                customDialog.setContentView(R.layout.custom_dialog_eror_input);
-
-                                if (customDialog.getWindow() != null) {
-                                    customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-                                }
-
-                                Button ok = customDialog.findViewById(R.id.BtnOkErorInput);
-                                TextView tv = customDialog.findViewById(R.id.TVDialogErorInput);
-
-                                tv.setText("Gagal Saat Unggah Gambar");
-
-                                ok.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View view) {
-                                        customDialog.dismiss();
-                                    }
-                                });
-
-                                ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
-
-                                Glide.with(TambahSelfieActivity.this)
-                                        .load(R.drawable.alert) // You can also use a local resource like R.drawable.your_gif_resource
-                                        .transition(DrawableTransitionOptions.withCrossFade())
-                                        .into(gifImageView);
-
-                                customDialog.show();
-                            });
+                    handleImageSelfieSuccess();
                 }
             }
         });
@@ -338,6 +285,49 @@ public class TambahSelfieActivity extends AppCompatActivity {
             selfiebtn.setText("Ganti Foto Selfie");
         }
         super.onActivityResult(requestCode, resultCode, data);
+    }
+    private void showProgressDialog() {
+        pDialog.setMessage("Unggah Gambar");
+        pDialog.setCancelable(false);
+        pDialog.show();
+    }
+    private void HideProgressDialog() {
+        pDialog.dismiss();
+        pDialog.cancel();
+    }
+    private void handleImageSelfieSuccess() {
+        if (bselfie != null) {
+            showProgressDialog();
+            ImageSelfie.putFile(bselfie)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            ImageSelfie.getDownloadUrl()
+                                    .addOnSuccessListener(uri -> {
+                                        String imageUrl = uri.toString();
+                                        Selfie = imageUrl;
+                                        HideProgressDialog();
+                                        simpanData();
+                                    })
+                                    .addOnFailureListener(exception -> {
+                                        handleImageSelfieSuccess();
+                                        Toast.makeText(TambahSelfieActivity.this, "Upload failed: " + exception.getMessage(), Toast.LENGTH_SHORT).show();
+                                    });
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            HideProgressDialog();
+                            handleImageSelfieSuccess();
+                            Toast.makeText(TambahSelfieActivity.this, "Upload failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        } else {
+            Selfie = "0";
+            HideProgressDialog();
+            simpanData();
+        }
     }
     private void simpanData() {
         pDialog.setMessage("Menyimpan Data");

@@ -113,6 +113,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center"
+                            android:clickable="false"
                             android:buttonTint="@color/black"
                             android:textColor="@color/black" />
 
@@ -135,6 +136,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center"
+                            android:clickable="false"
                             android:buttonTint="@color/black"
                             android:textColor="@color/black" />
 
@@ -470,6 +472,23 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Alamat Properti"
+                        android:inputType="none"
+                        android:textColor="@color/black" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/lytalamatpropertitemplate"
+                    style="@style/CustomOutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    app:boxBackgroundColor="#DBDDDF">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etalamatpropertitemplate"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Alamat Properti ( Template )"
                         android:inputType="none"
                         android:textColor="@color/black" />
                 </com.google.android.material.textfield.TextInputLayout>
@@ -1754,7 +1773,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:visibility="gone"
-                    app:boxBackgroundColor="@color/grey">
+                    app:boxBackgroundColor="#DBDDDF">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/etharga"
@@ -1772,13 +1791,31 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:visibility="gone"
-                    app:boxBackgroundColor="@color/grey">
+                    app:boxBackgroundColor="#DBDDDF">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/ethargasewa"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Harga Sewa"
+                        android:inputType="number"
+                        android:textColor="@color/black" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/lytrangeharga"
+                    style="@style/CustomOutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:visibility="gone"
+                    app:boxBackgroundColor="#DBDDDF">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etrangeharga"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Harga Sewa Perbulan"
                         android:inputType="number"
                         android:textColor="@color/black" />
                 </com.google.android.material.textfield.TextInputLayout>
