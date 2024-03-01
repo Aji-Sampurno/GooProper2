@@ -331,6 +331,8 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
         String intentIsRejected = data.getStringExtra("IsRejected");
         String intentSold = data.getStringExtra("Sold");
         String intentRented = data.getStringExtra("Rented");
+        String intentSoldAgen = data.getStringExtra("SoldAgen");
+        String intentRentedAgen = data.getStringExtra("RentedAgen");
         String intentView = data.getStringExtra("View");
         String intentMarketable = data.getStringExtra("Marketable");
         String intentStatusHarga = data.getStringExtra("StatusHarga");
@@ -2362,7 +2364,27 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                     lytambahagen.setVisibility(View.GONE);
                     TVHargaDetailListing.setVisibility(View.GONE);
                     TVHargaSewaDetailListing.setVisibility(View.GONE);
+                } else if (intentSoldAgen.equals("1")) {
+                    LytBadgeRented.setVisibility(View.GONE);
+                    LytBadgeSold.setVisibility(View.VISIBLE);
+                    LytBadge.setVisibility(View.GONE);
+                    CVSold.setVisibility(View.VISIBLE);
+                    CVRented.setVisibility(View.GONE);
+                    agen.setVisibility(View.GONE);
+                    lytambahagen.setVisibility(View.GONE);
+                    TVHargaDetailListing.setVisibility(View.GONE);
+                    TVHargaSewaDetailListing.setVisibility(View.GONE);
                 } else if (intentRented.equals("1")) {
+                    LytBadgeRented.setVisibility(View.VISIBLE);
+                    LytBadgeSold.setVisibility(View.GONE);
+                    LytBadge.setVisibility(View.GONE);
+                    CVSold.setVisibility(View.GONE);
+                    CVRented.setVisibility(View.VISIBLE);
+                    agen.setVisibility(View.GONE);
+                    lytambahagen.setVisibility(View.GONE);
+                    TVHargaDetailListing.setVisibility(View.GONE);
+                    TVHargaSewaDetailListing.setVisibility(View.GONE);
+                } else if (intentRentedAgen.equals("1")) {
                     LytBadgeRented.setVisibility(View.VISIBLE);
                     LytBadgeSold.setVisibility(View.GONE);
                     LytBadge.setVisibility(View.GONE);
@@ -2397,7 +2419,27 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                     lytambahagen.setVisibility(View.GONE);
                     TVHargaDetailListing.setVisibility(View.GONE);
                     TVHargaSewaDetailListing.setVisibility(View.GONE);
+                } else if (intentSoldAgen.equals("1")) {
+                    LytBadgeRented.setVisibility(View.GONE);
+                    LytBadgeSold.setVisibility(View.VISIBLE);
+                    LytBadge.setVisibility(View.GONE);
+                    CVSold.setVisibility(View.VISIBLE);
+                    CVRented.setVisibility(View.GONE);
+                    agen.setVisibility(View.GONE);
+                    lytambahagen.setVisibility(View.GONE);
+                    TVHargaDetailListing.setVisibility(View.GONE);
+                    TVHargaSewaDetailListing.setVisibility(View.GONE);
                 } else if (intentRented.equals("1")) {
+                    LytBadgeRented.setVisibility(View.VISIBLE);
+                    LytBadgeSold.setVisibility(View.GONE);
+                    LytBadge.setVisibility(View.GONE);
+                    CVSold.setVisibility(View.GONE);
+                    CVRented.setVisibility(View.VISIBLE);
+                    agen.setVisibility(View.GONE);
+                    lytambahagen.setVisibility(View.GONE);
+                    TVHargaDetailListing.setVisibility(View.GONE);
+                    TVHargaSewaDetailListing.setVisibility(View.GONE);
+                } else if (intentRentedAgen.equals("1")) {
                     LytBadgeRented.setVisibility(View.VISIBLE);
                     LytBadgeSold.setVisibility(View.GONE);
                     LytBadge.setVisibility(View.GONE);

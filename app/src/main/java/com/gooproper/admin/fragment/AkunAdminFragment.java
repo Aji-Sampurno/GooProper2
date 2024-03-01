@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -14,6 +15,12 @@ import android.view.Window;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.Volley;
 import com.gooproper.ui.CobaPesanActivity;
 import com.gooproper.ui.ReportAgenActivity;
 import com.gooproper.ui.edit.EditAkunActivity;
@@ -23,19 +30,30 @@ import com.gooproper.ui.TentangKamiActivity;
 import com.gooproper.ui.AgenActivity;
 import com.gooproper.ui.LaporanListingActivity;
 import com.gooproper.ui.PelamarAgenActivity;
+import com.gooproper.ui.listing.ListListingSementaraActivity;
 import com.gooproper.ui.listing.PraListingRejectedAdminActivity;
+import com.gooproper.ui.tambah.TambahInfoActivity;
 import com.gooproper.ui.tambah.TambahKaryawanActivity;
 import com.gooproper.ui.tambah.TambahListingActivity;
 import com.gooproper.ui.tambah.TambahListingPrimaryActivity;
+import com.gooproper.ui.tambah.TambahListingSementaraActivity;
 import com.gooproper.util.Preferences;
+import com.gooproper.util.ServerApi;
 import com.squareup.picasso.Picasso;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.time.LocalDate;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class AkunAdminFragment extends Fragment {
 
     private LinearLayout pelamar, agen, reportagen, tambahpenghargaan, listing, pralistingrejected, primary, listprimary, karyawan, laporan, pengaturan, hubungikami, tentangkami, kirimpesan;
-    TextView nama, edit;
+    TextView nama, edit, agenultah;
+    CardView CVUltah;
     CircleImageView cvadmin;
     View view, view1, view2, view3;
     String imgurl;
@@ -69,7 +87,9 @@ public class AkunAdminFragment extends Fragment {
         kirimpesan = root.findViewById(R.id.LytKirimPesan);
         nama = root.findViewById(R.id.TVNamaAkunAdmin);
         edit = root.findViewById(R.id.TVEditAkunAdmin);
+        agenultah = root.findViewById(R.id.TVNamaAgenUltah);
         cvadmin = root.findViewById(R.id.CIVAkunAdmin);
+        CVUltah = root.findViewById(R.id.CVUltah);
         view = root.findViewById(R.id.V1);
         view1 = root.findViewById(R.id.V2);
         view2 = root.findViewById(R.id.V3);
@@ -81,6 +101,34 @@ public class AkunAdminFragment extends Fragment {
         profile = Preferences.getKeyPhoto(getActivity());
         status = Preferences.getKeyStatus(getActivity());
 
+        RequestQueue queue = Volley.newRequestQueue(getContext());
+        JsonArrayRequest reqData = new JsonArrayRequest(Request.Method.GET, ServerApi.URL_GET_ULTAH_AGEN,null,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        StringBuilder sb = new StringBuilder();
+                        for(int i = 0 ; i < response.length(); i++) {
+                            try {
+                                JSONObject data = response.getJSONObject(i);
+                                String Nama = data.getString("Nama");
+                                sb.append(Nama).append("\n");
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                                sb.append("-").append("\n");
+                            }
+                        }
+                        agenultah.setText(sb.toString());
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        error.printStackTrace();
+                    }
+                });
+
+        queue.add(reqData);
+
         if (status.equals("1")) {
             listing.setVisibility(View.GONE);
             view.setVisibility(View.GONE);
@@ -90,6 +138,7 @@ public class AkunAdminFragment extends Fragment {
             view2.setVisibility(View.GONE);
             listprimary.setVisibility(View.GONE);
             view3.setVisibility(View.GONE);
+            CVUltah.setVisibility(View.GONE);
         } else {
             listing.setVisibility(View.VISIBLE);
         }

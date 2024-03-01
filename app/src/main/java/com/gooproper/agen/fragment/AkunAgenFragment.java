@@ -47,6 +47,7 @@ import com.gooproper.ui.tambah.TambahListingActivity;
 import com.gooproper.ui.listing.PraListingRejectedActivity;
 import com.gooproper.ui.tambah.TambahInfoActivity;
 import com.gooproper.ui.tambah.TambahListingSementaraActivity;
+import com.gooproper.ui.tbo.TboAgenActivity;
 import com.gooproper.util.Preferences;
 import com.gooproper.util.ServerApi;
 import com.squareup.picasso.Picasso;
@@ -62,7 +63,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class AkunAgenFragment extends Fragment {
 
-    private LinearLayout reward, listing, agengoo, listingsementara, daftarsementara, listingmitra, listingkl, agen, mitra, kl, listingku, favorite, favoritemitra, favoritekl, seen, seenmitra, seenkl, pengaturan, pengaturanmitra, pengaturankl, hubungikami, hubungikamimitra, hubungikamikl, tentangkami, tentangkamimitra, tentangkamikl, pralising, pralistingreject, info, infoku, prainfo;
+    private LinearLayout reward, listing, agengoo, tbo, listingsementara, daftarsementara, listingmitra, listingkl, agen, mitra, kl, listingku, favorite, favoritemitra, favoritekl, seen, seenmitra, seenkl, pengaturan, pengaturanmitra, pengaturankl, hubungikami, hubungikamimitra, hubungikamikl, tentangkami, tentangkamimitra, tentangkamikl, pralising, pralistingreject, info, infoku, prainfo;
     TextView nama, edit;
     CircleImageView cvagen;
     String imgurl, IsAktif;
@@ -93,6 +94,7 @@ public class AkunAgenFragment extends Fragment {
         seenmitra = root.findViewById(R.id.lytterakhirdilihatmitra);
         seenkl = root.findViewById(R.id.lytterakhirdilihatkl);
         listing = root.findViewById(R.id.lytlisting);
+        tbo = root.findViewById(R.id.lyttbo);
         listingsementara = root.findViewById(R.id.lytsementara);
         daftarsementara = root.findViewById(R.id.lytdaftarsementara);
         listingmitra = root.findViewById(R.id.lytlistingmitra);
@@ -145,7 +147,7 @@ public class AkunAgenFragment extends Fragment {
                                     listingmitra.setOnClickListener(view -> startActivity(new Intent(getContext(), TambahListingActivity.class)));
                                     listingkl.setOnClickListener(view -> startActivity(new Intent(getContext(), TambahListingActivity.class)));
                                     info.setOnClickListener(view -> startActivity(new Intent(getContext(), TambahInfoActivity.class)));
-
+                                    tbo.setOnClickListener(view -> startActivity(new Intent(getContext(), TboAgenActivity.class)));
                                 } else {
                                     listing.setOnClickListener(view -> showAktifAlertDialog(view));
                                     listingsementara.setOnClickListener(view -> showAktifAlertDialog(view));
@@ -153,7 +155,7 @@ public class AkunAgenFragment extends Fragment {
                                     listingmitra.setOnClickListener(view -> showAktifAlertDialog(view));
                                     listingkl.setOnClickListener(view -> showAktifAlertDialog(view));
                                     info.setOnClickListener(view -> showAktifAlertDialog(view));
-
+                                    tbo.setOnClickListener(view -> showAktifAlertDialog(view));
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();

@@ -268,6 +268,7 @@ public class EditDetailInfoActivity extends AppCompatActivity {
             ETStatusProperty.setText("Jual/Sewa");
         }
         ETNama.setText(IntentNarahubung);
+        ETTelp.setText(IntentNoTelp);
         if (!IntentImgSelfie.equals("0") || IntentImgSelfie.isEmpty()) {
             IntenSelfie = IntentImgSelfie;
             BtnSelfie.setVisibility(View.GONE);
@@ -1023,7 +1024,7 @@ public class EditDetailInfoActivity extends AppCompatActivity {
             customDialog.show();
             return false;
         }
-        if (UriSelfie == null || IntenSelfie.equals("0")) {
+        if (UriSelfie == null && IntenSelfie.equals("0")) {
             Dialog customDialog = new Dialog(EditDetailInfoActivity.this);
             customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
             customDialog.setContentView(R.layout.custom_dialog_eror_input);
@@ -1054,7 +1055,7 @@ public class EditDetailInfoActivity extends AppCompatActivity {
             customDialog.show();
             return false;
         }
-        if (UriProperty == null || IntenProperty.equals("0")) {
+        if (UriProperty == null && IntenProperty.equals("0")) {
             Dialog customDialog = new Dialog(EditDetailInfoActivity.this);
             customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
             customDialog.setContentView(R.layout.custom_dialog_eror_input);
@@ -1085,37 +1086,7 @@ public class EditDetailInfoActivity extends AppCompatActivity {
             customDialog.show();
             return false;
         }
-        if (IntenLat.equals("0") && IntenLng.equals("0")) {
-            Dialog customDialog = new Dialog(EditDetailInfoActivity.this);
-            customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-            customDialog.setContentView(R.layout.custom_dialog_eror_input);
-
-            if (customDialog.getWindow() != null) {
-                customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-            }
-
-            Button ok = customDialog.findViewById(R.id.BtnOkErorInput);
-            TextView tv = customDialog.findViewById(R.id.TVDialogErorInput);
-
-            tv.setText("Harap Tambahkan Lokasi Property");
-
-            ok.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    customDialog.dismiss();
-                }
-            });
-
-            ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
-
-            Glide.with(EditDetailInfoActivity.this)
-                    .load(R.drawable.alert) // You can also use a local resource like R.drawable.your_gif_resource
-                    .transition(DrawableTransitionOptions.withCrossFade())
-                    .into(gifImageView);
-
-            customDialog.show();
-            return false;
-        } else if (StringLatitude == null && StringLongitude == null) {
+        if ((IntenLat.equals("0") && IntenLng.equals("0")) && (StringLatitude == null && StringLongitude == null)) {
             Dialog customDialog = new Dialog(EditDetailInfoActivity.this);
             customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
             customDialog.setContentView(R.layout.custom_dialog_eror_input);

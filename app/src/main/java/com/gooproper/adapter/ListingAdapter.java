@@ -376,6 +376,8 @@ public class ListingAdapter extends RecyclerView.Adapter<ListingAdapter.HolderDa
                     update.putExtra("View",listingModel.getView());
                     update.putExtra("Sold",listingModel.getSold());
                     update.putExtra("Rented",listingModel.getRented());
+                    update.putExtra("SoldAgen",listingModel.getSoldAgen());
+                    update.putExtra("RentedAgen",listingModel.getRentedAgen());
                     update.putExtra("Marketable",listingModel.getMarketable());
                     update.putExtra("StatusHarga",listingModel.getStatusHarga());
                     update.putExtra("Nama",listingModel.getNama());

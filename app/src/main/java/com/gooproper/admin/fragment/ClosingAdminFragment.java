@@ -557,6 +557,7 @@ public class ClosingAdminFragment extends Fragment {
                                 md.setSize(data.getString("Size"));
                                 md.setHarga(data.getString("Harga"));
                                 md.setHargaSewa(data.getString("HargaSewa"));
+                                md.setRangeHarga(data.getString("RangeHarga"));
                                 md.setTglInput(data.getString("TglInput"));
                                 md.setImg1(data.getString("Img1"));
                                 md.setImg2(data.getString("Img2"));
@@ -576,6 +577,8 @@ public class ClosingAdminFragment extends Fragment {
                                 md.setIsRejected(data.getString("IsRejected"));
                                 md.setSold(data.getString("Sold"));
                                 md.setRented(data.getString("Rented"));
+                                md.setSoldAgen(data.getString("SoldAgen"));
+                                md.setRentedAgen(data.getString("RentedAgen"));
                                 md.setView(data.getString("View"));
                                 md.setMarketable(data.getString("Marketable"));
                                 md.setStatusHarga(data.getString("StatusHarga"));

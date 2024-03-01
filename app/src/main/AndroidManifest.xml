@@ -36,6 +36,9 @@
         android:theme="@style/Theme.GooProper"
         tools:targetApi="31">
         <activity
+            android:name=".ui.tbo.TboAgenActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.LihatTemplateActivity"
             android:exported="false" />
         <activity

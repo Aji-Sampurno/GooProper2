@@ -12,6 +12,7 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
@@ -50,6 +51,7 @@ public class NewActivity extends AppCompatActivity {
     ListingAdapter adapter;
     List<ListingModel> list;
     String StringKondisi;
+    private boolean iskondisisewa = false;
     private AlertDialog alertDialog;
     private EditText searchView;
     private boolean applyFilters = false;
@@ -67,8 +69,6 @@ public class NewActivity extends AppCompatActivity {
         searchView = findViewById(R.id.etsearchView);
         srnew = findViewById(R.id.SRNew);
         rvgrid = findViewById(R.id.RVListingGridNew);
-
-        StringKondisi = "None";
 
         searchView.addTextChangedListener(new TextWatcher() {
             @Override
@@ -88,75 +88,34 @@ public class NewActivity extends AppCompatActivity {
             }
         });
 
-        if (StringKondisi.equals("Jual")) {
-            IVSortAsc.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    adapter.sortAscending();
-                    IVSortDesc.setVisibility(View.VISIBLE);
-                    IVSortAsc.setVisibility(View.GONE);
-                }
-            });
-            IVSortDesc.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    adapter.sortDescending();
-                    IVSortDesc.setVisibility(View.GONE);
-                    IVSortAsc.setVisibility(View.VISIBLE);
-                }
-            });
-        } else if (StringKondisi.equals("Sewa")) {
-            IVSortAsc.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
+        IVSortAsc.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (iskondisisewa) {
                     adapter.sortAscendingSewa();
                     IVSortDesc.setVisibility(View.VISIBLE);
                     IVSortAsc.setVisibility(View.GONE);
+                } else {
+                    adapter.sortAscending();
+                    IVSortDesc.setVisibility(View.VISIBLE);
+                    IVSortAsc.setVisibility(View.GONE);
                 }
-            });
-            IVSortDesc.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
+            }
+        });
+        IVSortDesc.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (iskondisisewa) {
                     adapter.sortDescendingSewa();
                     IVSortDesc.setVisibility(View.GONE);
                     IVSortAsc.setVisibility(View.VISIBLE);
-                }
-            });
-        } else if (StringKondisi.equals("Jual/Sewa")) {
-            IVSortAsc.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    adapter.sortAscending();
-                    IVSortDesc.setVisibility(View.VISIBLE);
-                    IVSortAsc.setVisibility(View.GONE);
-                }
-            });
-            IVSortDesc.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
+                } else {
                     adapter.sortDescending();
                     IVSortDesc.setVisibility(View.GONE);
                     IVSortAsc.setVisibility(View.VISIBLE);
                 }
-            });
-        } else {
-            IVSortAsc.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    adapter.sortAscending();
-                    IVSortDesc.setVisibility(View.VISIBLE);
-                    IVSortAsc.setVisibility(View.GONE);
-                }
-            });
-            IVSortDesc.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    adapter.sortDescending();
-                    IVSortDesc.setVisibility(View.GONE);
-                    IVSortAsc.setVisibility(View.VISIBLE);
-                }
-            });
-        }
+            }
+        });
 
         IVFilter.setOnClickListener(view -> showFilterDialog());
         srnew.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -326,13 +285,16 @@ public class NewActivity extends AppCompatActivity {
 
                 if (selectedRadioButtonId == R.id.jual) {
                     selectedKondisi = "Jual";
-                    StringKondisi = "Jual";
+                    iskondisisewa = false;
+                    Log.d("Debug", "iskondisisewa: " + iskondisisewa);
                 } else if (selectedRadioButtonId == R.id.sewa) {
                     selectedKondisi = "Sewa";
-                    StringKondisi = "Sewa";
+                    iskondisisewa = true;
+                    Log.d("Debug", "iskondisisewa: " + iskondisisewa);
                 } else if (selectedRadioButtonId == R.id.jualsewa) {
                     selectedKondisi = "Jual/Sewa";
-                    StringKondisi = "Jual/Sewa";
+                    iskondisisewa = false;
+                    Log.d("Debug", "iskondisisewa: " + iskondisisewa);
                 }
 
                 long minPrice = 0;
@@ -512,7 +474,10 @@ public class NewActivity extends AppCompatActivity {
                 boolean isViewTypeMatched = true;
                 boolean isKondisiMatched = true;
 
+                Log.d("Debug", "iskondisisewa: " + iskondisisewa);
+
                 if (kondisi.equals("Jual")) {
+                    iskondisisewa = false;
                     if (minPrice > 0 && maxPrice > 0){
                         if (productPrice >= minPrice && productPrice <= maxPrice) {
                             isPriceMatched = true;
@@ -527,6 +492,7 @@ public class NewActivity extends AppCompatActivity {
                         }
                     }
                 } else if (kondisi.equals("Sewa")) {
+                    iskondisisewa = true;
                     if (minPrice > 0 && maxPrice > 0){
                         if (productPriceSewa >= minPrice && productPriceSewa <= maxPrice) {
                             isPriceMatched = true;
@@ -541,6 +507,7 @@ public class NewActivity extends AppCompatActivity {
                         }
                     }
                 } else if (kondisi.equals("Jual/Sewa")) {
+                    iskondisisewa = false;
                     if (minPrice > 0 && maxPrice > 0){
                         if (productPriceSewa >= minPrice && productPriceSewa <= maxPrice) {
                             isPriceMatched = true;
@@ -555,6 +522,7 @@ public class NewActivity extends AppCompatActivity {
                         }
                     }
                 } else {
+                    iskondisisewa = false;
                     if (minPrice > 0 && maxPrice > 0){
                         if (productPrice >= minPrice && productPrice <= maxPrice || productPriceSewa >= minPrice && productPriceSewa <= maxPrice) {
                             isPriceMatched = true;
@@ -767,6 +735,8 @@ public class NewActivity extends AppCompatActivity {
                                 md.setIsRejected(data.getString("IsRejected"));
                                 md.setSold(data.getString("Sold"));
                                 md.setRented(data.getString("Rented"));
+                                md.setSoldAgen(data.getString("SoldAgen"));
+                                md.setRentedAgen(data.getString("RentedAgen"));
                                 md.setView(data.getString("View"));
                                 md.setMarketable(data.getString("Marketable"));
                                 md.setStatusHarga(data.getString("StatusHarga"));

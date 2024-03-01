@@ -207,6 +207,8 @@ public class DetailAgenDeepActivity extends AppCompatActivity {
                                 md.setIsRejected(data.getString("IsRejected"));
                                 md.setSold(data.getString("Sold"));
                                 md.setRented(data.getString("Rented"));
+                                md.setSoldAgen(data.getString("SoldAgen"));
+                                md.setRentedAgen(data.getString("RentedAgen"));
                                 md.setView(data.getString("View"));
                                 md.setMarketable(data.getString("Marketable"));
                                 md.setStatusHarga(data.getString("StatusHarga"));

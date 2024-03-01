@@ -14,6 +14,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -57,6 +58,7 @@ public class ListingFragment extends Fragment {
     private AlertDialog alertDialog;
     //private SearchView searchView;
     private EditText searchView;
+    private boolean iskondisisewa = false;
     private boolean applyFilters = false;
 
     @Override
@@ -92,34 +94,32 @@ public class ListingFragment extends Fragment {
 
             }
         });
-        /*searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                filterList(newText);
-                return true;
-            }
-        });*/
-
         IVSortAsc.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                adapter.sortAscending();
-                IVSortDesc.setVisibility(View.VISIBLE);
-                IVSortAsc.setVisibility(View.GONE);
+                if (iskondisisewa) {
+                    adapter.sortAscendingSewa();
+                    IVSortDesc.setVisibility(View.VISIBLE);
+                    IVSortAsc.setVisibility(View.GONE);
+                } else {
+                    adapter.sortAscending();
+                    IVSortDesc.setVisibility(View.VISIBLE);
+                    IVSortAsc.setVisibility(View.GONE);
+                }
             }
         });
-
         IVSortDesc.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                adapter.sortDescending();
-                IVSortDesc.setVisibility(View.GONE);
-                IVSortAsc.setVisibility(View.VISIBLE);
+                if (iskondisisewa) {
+                    adapter.sortDescendingSewa();
+                    IVSortDesc.setVisibility(View.GONE);
+                    IVSortAsc.setVisibility(View.VISIBLE);
+                } else {
+                    adapter.sortDescending();
+                    IVSortDesc.setVisibility(View.GONE);
+                    IVSortAsc.setVisibility(View.VISIBLE);
+                }
             }
         });
         IVFilter.setOnClickListener(view -> showFilterDialog());
@@ -231,8 +231,16 @@ public class ListingFragment extends Fragment {
 
                 if (selectedRadioButtonId == R.id.jual) {
                     selectedKondisi = "Jual";
+                    iskondisisewa = false;
+                    Log.d("Debug", "iskondisisewa: " + iskondisisewa);
                 } else if (selectedRadioButtonId == R.id.sewa) {
                     selectedKondisi = "Sewa";
+                    iskondisisewa = true;
+                    Log.d("Debug", "iskondisisewa: " + iskondisisewa);
+                } else if (selectedRadioButtonId == R.id.jualsewa) {
+                    selectedKondisi = "Jual/Sewa";
+                    iskondisisewa = false;
+                    Log.d("Debug", "iskondisisewa: " + iskondisisewa);
                 }
 
                 long minPrice = 0;
@@ -584,6 +592,8 @@ public class ListingFragment extends Fragment {
                                 md.setIsRejected(data.getString("IsRejected"));
                                 md.setSold(data.getString("Sold"));
                                 md.setRented(data.getString("Rented"));
+                                md.setSoldAgen(data.getString("SoldAgen"));
+                                md.setRentedAgen(data.getString("RentedAgen"));
                                 md.setView(data.getString("View"));
                                 md.setMarketable(data.getString("Marketable"));
                                 md.setStatusHarga(data.getString("StatusHarga"));

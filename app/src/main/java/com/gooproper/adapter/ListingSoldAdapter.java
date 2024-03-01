@@ -141,7 +141,7 @@ public class ListingSoldAdapter extends RecyclerView.Adapter<ListingSoldAdapter.
         String truncatedaddres = truncateTextWithEllipsis(addresText);
         holder.addressTxt.setText(truncatedaddres);
 
-        if (listingModel.getSold().equals("1")) {
+        if (listingModel.getSold().equals("1") || listingModel.getSoldAgen().equals("1")) {
             holder.sold.setVisibility(View.VISIBLE);
             holder.rented.setVisibility(View.GONE);
         } else {
@@ -269,6 +269,8 @@ public class ListingSoldAdapter extends RecyclerView.Adapter<ListingSoldAdapter.
                     update.putExtra("View",listingModel.getView());
                     update.putExtra("Sold",listingModel.getSold());
                     update.putExtra("Rented",listingModel.getRented());
+                    update.putExtra("SoldAgen",listingModel.getSoldAgen());
+                    update.putExtra("RentedAgen",listingModel.getRentedAgen());
                     update.putExtra("Marketable",listingModel.getMarketable());
                     update.putExtra("StatusHarga",listingModel.getStatusHarga());
                     update.putExtra("Nama",listingModel.getNama());
