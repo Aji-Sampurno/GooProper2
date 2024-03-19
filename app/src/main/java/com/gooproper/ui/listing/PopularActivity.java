@@ -29,7 +29,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
 import com.gooproper.R;
-import com.gooproper.adapter.ListingPopulerAdapter;
+import com.gooproper.adapter.listing.ListingPopulerAdapter;
 import com.gooproper.model.ListingModel;
 import com.gooproper.util.ServerApi;
 

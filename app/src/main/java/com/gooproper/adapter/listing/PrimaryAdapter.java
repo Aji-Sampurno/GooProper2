@@ -1,4 +1,4 @@
-package com.gooproper.adapter;
+package com.gooproper.adapter.listing;
 
 import android.content.Context;
 import android.content.Intent;
@@ -13,9 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.gooproper.R;
-import com.gooproper.model.ListingModel;
 import com.gooproper.model.PrimaryModel;
-import com.gooproper.ui.detail.DetailListingActivity;
 import com.gooproper.ui.detail.DetailPrimaryActivity;
 import com.gooproper.util.FormatCurrency;
 

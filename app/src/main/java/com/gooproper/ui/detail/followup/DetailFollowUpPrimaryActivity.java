@@ -1,10 +1,12 @@
-package com.gooproper.ui.detail;
+package com.gooproper.ui.detail.followup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.FileProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
 import android.app.Dialog;
@@ -30,6 +32,7 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
@@ -40,9 +43,12 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
 import com.gooproper.R;
+import com.gooproper.adapter.followup.UpdateFlowUpPrimaryAdapter;
+import com.gooproper.model.UpdateFlowUpModel;
 import com.gooproper.util.ServerApi;
 import com.squareup.picasso.Picasso;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -67,6 +73,9 @@ public class DetailFollowUpPrimaryActivity extends AppCompatActivity {
     Drawable DrawableSelfie;
     String StringIdFollowUp, StringSelfie, Selfie;
     Uri UriSelfie;
+    RecyclerView RVUpdateFollowUpPrimary;
+    RecyclerView.Adapter adapter;
+    List<UpdateFlowUpModel> list;
     final int CODE_CAMERA_REQUEST = 101;
     final int KODE_REQUEST_KAMERA = 102;
 
@@ -86,6 +95,8 @@ public class DetailFollowUpPrimaryActivity extends AppCompatActivity {
         TVJam = findViewById(R.id.TVJamDetailFollowUp);
         TVStatus = findViewById(R.id.TVStatusDetailFollowUp);
 
+        RVUpdateFollowUpPrimary = findViewById(R.id.RVUpdateFlowUpPrimary);
+
         CBChat = findViewById(R.id.CBChat);
         CBSurvei = findViewById(R.id.CBSurvei);
         CBTawar = findViewById(R.id.CBTawar);
@@ -101,6 +112,12 @@ public class DetailFollowUpPrimaryActivity extends AppCompatActivity {
         BtnDelete = findViewById(R.id.BtnDelete);
 
         DrawableSelfie = IVSelfie.getDrawable();
+
+        list = new ArrayList<>();
+
+        RVUpdateFollowUpPrimary.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.VERTICAL, false));
+        adapter = new UpdateFlowUpPrimaryAdapter(DetailFollowUpPrimaryActivity.this, list);
+        RVUpdateFollowUpPrimary.setAdapter(adapter);
 
         Intent data = getIntent();
         final int update = data.getIntExtra("update",0);
@@ -130,6 +147,8 @@ public class DetailFollowUpPrimaryActivity extends AppCompatActivity {
 
         StringIdFollowUp = intentIdFlowup;
         StringSelfie = intentSelfie;
+
+        GetUpdateFlowup();
 
         if (!intentSelfie.equals("0") && !intentSelfie.isEmpty()){
             Picasso.get()
@@ -498,6 +517,97 @@ public class DetailFollowUpPrimaryActivity extends AppCompatActivity {
         };
 
         requestQueue.add(stringRequest);
+    }
+    private void GetUpdateFlowup() {
+        RequestQueue queue = Volley.newRequestQueue(this);
+        JsonArrayRequest reqData = new JsonArrayRequest(Request.Method.GET, ServerApi.URL_GET_UPDATE_FLOWUP_PRIMARY + StringIdFollowUp, null,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        list.clear();
+                        for (int i = 0; i < response.length(); i++) {
+                            try {
+                                JSONObject data = response.getJSONObject(i);
+                                UpdateFlowUpModel md = new UpdateFlowUpModel();
+                                md.setIdFlowup(data.getString("IdFlowup"));
+                                md.setTanggal(data.getString("Tanggal"));
+                                md.setJam(data.getString("Jam"));
+                                md.setChat(data.getString("Chat"));
+                                md.setSurvei(data.getString("Survei"));
+                                md.setTawar(data.getString("Tawar"));
+                                md.setLokasi(data.getString("Lokasi"));
+                                md.setDeal(data.getString("Deal"));
+                                list.add(md);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+
+                                Dialog customDialog = new Dialog(DetailFollowUpPrimaryActivity.this);
+                                customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                                customDialog.setContentView(R.layout.alert_eror);
+
+                                if (customDialog.getWindow() != null) {
+                                    customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                                }
+
+                                Button ok = customDialog.findViewById(R.id.BTNOkEror);
+                                Button batal = customDialog.findViewById(R.id.BTNCloseEror);
+
+                                ok.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        customDialog.dismiss();
+                                        GetUpdateFlowup();
+                                    }
+                                });
+
+                                batal.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        customDialog.dismiss();
+                                    }
+                                });
+
+                                customDialog.show();
+                            }
+                        }
+
+                        adapter.notifyDataSetChanged();
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        error.printStackTrace();
+
+                        Dialog customDialog = new Dialog(DetailFollowUpPrimaryActivity.this);
+                        customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                        customDialog.setContentView(R.layout.alert_eror);
+
+                        if (customDialog.getWindow() != null) {
+                            customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                        }
+
+                        Button ok = customDialog.findViewById(R.id.BTNOkEror);
+                        Button batal = customDialog.findViewById(R.id.BTNCloseEror);
+
+                        ok.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                customDialog.dismiss();
+                                GetUpdateFlowup();
+                            }
+                        });
+
+                        batal.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                customDialog.dismiss();
+                            }
+                        });
+                        customDialog.show();
+                    }
+                });
+        queue.add(reqData);
     }
     public boolean Validate() {
         if (CBSurvei.isChecked()) {

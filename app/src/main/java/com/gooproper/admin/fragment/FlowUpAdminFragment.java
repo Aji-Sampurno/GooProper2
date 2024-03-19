@@ -5,7 +5,6 @@ import android.app.ProgressDialog;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -15,7 +14,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
-import android.widget.ImageView;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -24,12 +22,10 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
 import com.gooproper.R;
-import com.gooproper.adapter.FlowUpAdapter;
-import com.gooproper.adapter.FlowUpPrimaryAdapter;
-import com.gooproper.adapter.PraListingAdapter;
+import com.gooproper.adapter.followup.FlowUpAdapter;
+import com.gooproper.adapter.followup.FlowUpPrimaryAdapter;
 import com.gooproper.model.FlowUpModel;
 import com.gooproper.model.FlowUpPrimaryModel;
-import com.gooproper.model.ListingModel;
 import com.gooproper.util.Preferences;
 import com.gooproper.util.ServerApi;
 

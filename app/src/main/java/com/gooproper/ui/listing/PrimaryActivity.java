@@ -25,7 +25,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
 import com.gooproper.R;
-import com.gooproper.adapter.PrimaryAdapter;
+import com.gooproper.adapter.listing.PrimaryAdapter;
 import com.gooproper.model.PrimaryModel;
 import com.gooproper.util.ServerApi;
 

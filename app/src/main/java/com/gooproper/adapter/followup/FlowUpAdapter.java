@@ -1,4 +1,4 @@
-package com.gooproper.adapter;
+package com.gooproper.adapter.followup;
 
 import android.content.Context;
 import android.content.Intent;
@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.gooproper.R;
 import com.gooproper.model.FlowUpModel;
-import com.gooproper.ui.detail.DetailFollowUpActivity;
+import com.gooproper.ui.detail.followup.DetailFollowUpActivity;
 
 import java.util.List;
 

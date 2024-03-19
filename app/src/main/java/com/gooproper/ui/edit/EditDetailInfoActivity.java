@@ -1136,7 +1136,7 @@ public class EditDetailInfoActivity extends AppCompatActivity {
     }
     private void sendNotificationToToken(String token, String notificationType) {
         String title = Preferences.getKeyNama(this);
-        String message = "Menambahkan Info Properti Baru";
+        String message = "Update Info Properti";
         String response = SendMessageToFCM.sendMessage(token, title, message, notificationType);
     }
 }

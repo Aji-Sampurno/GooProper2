@@ -1,4 +1,4 @@
-package com.gooproper.adapter;
+package com.gooproper.adapter.listing;
 
 import android.content.Context;
 import android.content.Intent;
@@ -15,25 +15,27 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.gooproper.R;
 import com.gooproper.model.ListingModel;
-import com.gooproper.ui.detail.DetailListingActivity;
+import com.gooproper.ui.detail.DetailClosingActivity;
+import com.gooproper.util.FormatCurrency;
 import com.gooproper.util.Preferences;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
-public class ListingSoldAdapter extends RecyclerView.Adapter<ListingSoldAdapter.HolderData> {
-
-    private List<ListingModel> models;
+public class ListingClosingAdapter extends RecyclerView.Adapter<ListingClosingAdapter.HolderData> {
+    List<ListingModel> models;
+    private List<ListingModel> originalList;
     private Context context;
     private static final int MAX_TEXT_LENGTH = 20;
     private static final int MAX_TEXT_LENGTH_PRICE = 10;
     private static final int MAX_TEXT_LENGTH_PRICE_JUTA = 19;
     private static final int MAX_TEXT_LENGTH_PRICE_RIBU = 15;
-
-    public ListingSoldAdapter(Context context, List<ListingModel> list) {
+    public ListingClosingAdapter(Context context, List<ListingModel> list){
         this.models = list;
+        this.originalList = list;
         this.context = context;
     }
-
     private String truncateTextWithEllipsis(String text) {
         if (text.length() > MAX_TEXT_LENGTH) {
             return text.substring(0, MAX_TEXT_LENGTH) + " ...";
@@ -116,17 +118,64 @@ public class ListingSoldAdapter extends RecyclerView.Adapter<ListingSoldAdapter.
         }
     }
 
+    //searchView
+    public void setFilteredlist (List<ListingModel> filteredlist){
+        this.models = filteredlist;
+        notifyDataSetChanged();
+    }
+
+    //reset filter
+    public void resetFilter() {
+        models.clear();
+        models.addAll(originalList);
+        notifyDataSetChanged();
+    }
+
+    //asc - desc
+    private long parsePrice(String priceString) {
+        return Long.parseLong(priceString.replaceAll(",", "").trim());
+    }
+
+    public void sortAscending() {
+        Collections.sort(models, new Comparator<ListingModel>() {
+            @Override
+            public int compare(ListingModel item1, ListingModel item2) {
+                long price1 = parsePrice(item1.getHarga());
+                long price2 = parsePrice(item2.getHarga());
+                return Long.compare(price1, price2);
+            }
+        });
+        notifyDataSetChanged();
+    }
+
+    public void sortDescending() {
+        Collections.sort(models, new Comparator<ListingModel>() {
+            @Override
+            public int compare(ListingModel item1, ListingModel item2) {
+                long price1 = parsePrice(item1.getHarga());
+                long price2 = parsePrice(item2.getHarga());
+                return Long.compare(price2, price1);
+            }
+        });
+        notifyDataSetChanged();
+    }
     @NonNull
     @Override
-    public ListingSoldAdapter.HolderData onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View layout = LayoutInflater.from(parent.getContext()).inflate(R.layout.listing_sold, parent, false);
-        ListingSoldAdapter.HolderData holderData = new ListingSoldAdapter.HolderData(layout);
+    public ListingClosingAdapter.HolderData onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View layout = LayoutInflater.from(parent.getContext()).inflate(R.layout.listing,parent,false);
+        HolderData holderData = new HolderData(layout);
         return holderData;
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ListingSoldAdapter.HolderData holder, int position) {
+    public void onBindViewHolder(@NonNull HolderData holder, int position) {
+        FormatCurrency currency = new FormatCurrency();
         ListingModel listingModel = models.get(position);
+        if (listingModel.getPriority().equals("open")){
+            holder.Lytpriority.setVisibility(View.INVISIBLE);
+        } else {
+            holder.Lytpriority.setVisibility(View.VISIBLE);
+        }
         holder.bedTxt.setText(listingModel.getBed());
         holder.bathTxt.setText(listingModel.getBath());
         holder.levelTxt.setText(listingModel.getLevel());
@@ -141,12 +190,20 @@ public class ListingSoldAdapter extends RecyclerView.Adapter<ListingSoldAdapter.
         String truncatedaddres = truncateTextWithEllipsis(addresText);
         holder.addressTxt.setText(truncatedaddres);
 
-        if (listingModel.getSold().equals("1") || listingModel.getSoldAgen().equals("1")) {
-            holder.sold.setVisibility(View.VISIBLE);
-            holder.rented.setVisibility(View.GONE);
+        if (listingModel.getKondisi().equals("Jual")){
+            String priceText = currency.formatRupiah(listingModel.getHarga());
+            String truncatedprice = truncateTextWithEllipsisPrice(priceText);
+            holder.priceTxt.setText(truncatedprice);
+        } else if (listingModel.getKondisi().equals("Sewa")) {
+            String priceSewaText = currency.formatRupiah(listingModel.getHargaSewa());
+            String truncatedpriceSewa = truncateTextWithEllipsisPrice(priceSewaText);
+            holder.priceTxt.setText(truncatedpriceSewa);
         } else {
-            holder.sold.setVisibility(View.GONE);
-            holder.rented.setVisibility(View.VISIBLE);
+            String priceText = currency.formatRupiah(listingModel.getHarga());
+            String priceSewaText = currency.formatRupiah(listingModel.getHargaSewa());
+            String truncatedprice = truncateTextWithEllipsisPrice(priceText);
+            String truncatedpriceSewa = truncateTextWithEllipsisPrice(priceSewaText);
+            holder.priceTxt.setText(truncatedprice + " / " + truncatedpriceSewa);
         }
 
         holder.listingModel = listingModel;
@@ -157,24 +214,25 @@ public class ListingSoldAdapter extends RecyclerView.Adapter<ListingSoldAdapter.
         return models.size();
     }
 
-    class HolderData extends RecyclerView.ViewHolder {
-        TextView titleTxt, addressTxt, bedTxt, bathTxt, levelTxt, garageTxt;
-        LinearLayout sold, rented;
+    class HolderData extends RecyclerView.ViewHolder{
+        TextView titleTxt, addressTxt, priceTxt, bedTxt, bathTxt, levelTxt, garageTxt, bathArtTxt, bedArtTxt, carpotTxt, wideTxt, priorityTxt;
         ImageView pic;
+        LinearLayout Lytpriority;
         String status;
         public ListingModel listingModel;
 
-        public HolderData(View view) {
+        public HolderData(View view){
             super(view);
-            titleTxt = view.findViewById(R.id.titleTxt);
-            addressTxt = view.findViewById(R.id.addressTxt);
-            bathTxt = view.findViewById(R.id.bathTxt);
-            bedTxt = view.findViewById(R.id.bedTxt);
-            levelTxt = view.findViewById(R.id.levelTxt);
-            garageTxt = view.findViewById(R.id.garageTxt);
-            pic = view.findViewById(R.id.pic);
-            sold = view.findViewById(R.id.badgesold);
-            rented = view.findViewById(R.id.badgerented);
+            titleTxt=view.findViewById(R.id.titleTxt);
+            addressTxt=view.findViewById(R.id.addressTxt);
+            bathTxt=view.findViewById(R.id.bathTxt);
+            bedTxt=view.findViewById(R.id.bedTxt);
+            priceTxt=view.findViewById(R.id.priceTxt);
+            levelTxt=view.findViewById(R.id.levelTxt);
+            garageTxt=view.findViewById(R.id.garageTxt);
+            priorityTxt=view.findViewById(R.id.TVPriority);
+            pic=view.findViewById(R.id.pic);
+            Lytpriority=view.findViewById(R.id.LytBadge);
 
             status = Preferences.getKeyStatus(context);
 
@@ -193,9 +251,9 @@ public class ListingSoldAdapter extends RecyclerView.Adapter<ListingSoldAdapter.
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent update = new Intent(context, DetailListingActivity.class);
-                    update.putExtra("update", 1);
-                    update.putExtra("IdListing", listingModel.getIdListing());
+                    Intent update = new Intent(context, DetailClosingActivity.class);
+                    update.putExtra("update",1);
+                    update.putExtra("IdListing",listingModel.getIdListing());
                     update.putExtra("IdAgen",listingModel.getIdAgen());
                     update.putExtra("IdAgenCo",listingModel.getIdAgenCo());
                     update.putExtra("IdInput",listingModel.getIdInput());
@@ -265,12 +323,9 @@ public class ListingSoldAdapter extends RecyclerView.Adapter<ListingSoldAdapter.
                     update.putExtra("LinkYoutube",listingModel.getLinkYoutube());
                     update.putExtra("IsAdmin",listingModel.getIsAdmin());
                     update.putExtra("IsManager",listingModel.getIsManager());
-                    update.putExtra("IsRejected",listingModel.getIsRejected());
                     update.putExtra("View",listingModel.getView());
                     update.putExtra("Sold",listingModel.getSold());
                     update.putExtra("Rented",listingModel.getRented());
-                    update.putExtra("SoldAgen",listingModel.getSoldAgen());
-                    update.putExtra("RentedAgen",listingModel.getRentedAgen());
                     update.putExtra("Marketable",listingModel.getMarketable());
                     update.putExtra("StatusHarga",listingModel.getStatusHarga());
                     update.putExtra("Nama",listingModel.getNama());

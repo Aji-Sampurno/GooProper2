@@ -29,9 +29,8 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
 import com.gooproper.R;
-import com.gooproper.adapter.RejectedAdapter;
+import com.gooproper.adapter.listing.RejectedAdapter;
 import com.gooproper.model.ListingModel;
-import com.gooproper.util.Preferences;
 import com.gooproper.util.ServerApi;
 
 import org.json.JSONArray;

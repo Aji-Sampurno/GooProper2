@@ -1,4 +1,4 @@
-package com.gooproper.adapter;
+package com.gooproper.adapter.listing;
 
 import android.content.Context;
 import android.content.Intent;

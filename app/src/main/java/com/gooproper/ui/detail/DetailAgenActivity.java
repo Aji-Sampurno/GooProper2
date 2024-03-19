@@ -3,7 +3,6 @@ package com.gooproper.ui.detail;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.widget.NestedScrollView;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
@@ -41,7 +40,7 @@ import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
 import com.gooproper.R;
-import com.gooproper.adapter.ListingAdapter;
+import com.gooproper.adapter.listing.ListingAdapter;
 import com.gooproper.model.ListingModel;
 import com.gooproper.util.Preferences;
 import com.gooproper.util.ServerApi;

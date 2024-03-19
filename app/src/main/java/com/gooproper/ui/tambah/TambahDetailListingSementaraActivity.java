@@ -5190,7 +5190,7 @@ public class TambahDetailListingSementaraActivity extends AppCompatActivity {
     }
     private void sendNotificationToToken(String token, String notificationType) {
         String title = Preferences.getKeyNama(this);
-        String message = "Menambahkan Listingan Baru";
+        String message = "Menambahkan PraListing Baru";
         String response = SendMessageToFCM.sendMessage(token, title, message, notificationType);
     }
 }

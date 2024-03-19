@@ -1,4 +1,4 @@
-package com.gooproper.adapter;
+package com.gooproper.adapter.image;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -28,20 +28,17 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 
-public class SertifikatAdapter extends PagerAdapter {
-
+public class PJPAdapter extends PagerAdapter {
     Context context;
-    ArrayList<String> sertif;
-    GestureDetector gestureDetector;
+    ArrayList<String> pjpimg;
 
-    public SertifikatAdapter(Context context, ArrayList<String> sertif){
+    public PJPAdapter(Context context, ArrayList<String> pjpimg){
         this.context = context;
-        this.sertif = sertif;
+        this.pjpimg = pjpimg;
     }
-
     @Override
     public int getCount() {
-        return sertif.size();
+        return pjpimg.size();
     }
 
     @Override
@@ -56,7 +53,7 @@ public class SertifikatAdapter extends PagerAdapter {
         View view = LayoutInflater.from(context).inflate(R.layout.adapter_viewpager, null);
         ImageView imageView = view.findViewById(R.id.ivlisting);
         Picasso.get()
-                .load(sertif.get(position))
+                .load(pjpimg.get(position))
                 .into(imageView);
         container.addView(view, 0);
         imageView.setOnLongClickListener(new View.OnLongClickListener() {
@@ -66,7 +63,7 @@ public class SertifikatAdapter extends PagerAdapter {
                 builder.setTitle("Konfirmasi Unduhan");
                 builder.setMessage("Apakah Anda ingin mengunduh gambar ini?");
                 builder.setPositiveButton("Ya", (dialog, which) -> {
-                    downloadImage(sertif.get(position));
+                    downloadImage(pjpimg.get(position));
                 });
                 builder.setNegativeButton("Batal", (dialog, which) -> {
                     dialog.dismiss();
@@ -80,7 +77,7 @@ public class SertifikatAdapter extends PagerAdapter {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(context, ImageViewActivity.class);
-                intent.putExtra("imageResources", sertif);
+                intent.putExtra("imageResources", pjpimg);
                 context.startActivity(intent);
             }
         });

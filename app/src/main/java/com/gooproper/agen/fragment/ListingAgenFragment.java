@@ -3,13 +3,10 @@ package com.gooproper.agen.fragment;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -35,11 +32,8 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
 import com.gooproper.R;
-import com.gooproper.adapter.ListingAdapter;
-import com.gooproper.adapter.PraListingAdapter;
+import com.gooproper.adapter.listing.ListingAdapter;
 import com.gooproper.model.ListingModel;
-import com.gooproper.ui.LoginConditionActivity;
-import com.gooproper.util.Preferences;
 import com.gooproper.util.ServerApi;
 
 import org.json.JSONArray;

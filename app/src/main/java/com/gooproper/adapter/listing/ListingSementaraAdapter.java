@@ -1,4 +1,4 @@
-package com.gooproper.adapter;
+package com.gooproper.adapter.listing;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -14,7 +14,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.gooproper.R;
 import com.gooproper.model.ListingSementaraModel;
-import com.gooproper.ui.detail.DetailListingActivity;
 import com.gooproper.ui.tambah.TambahDetailInfoSementaraActivity;
 import com.gooproper.ui.tambah.TambahDetailListingSementaraActivity;
 

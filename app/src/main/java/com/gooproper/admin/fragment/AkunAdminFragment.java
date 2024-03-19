@@ -30,6 +30,8 @@ import com.gooproper.ui.TentangKamiActivity;
 import com.gooproper.ui.AgenActivity;
 import com.gooproper.ui.LaporanListingActivity;
 import com.gooproper.ui.PelamarAgenActivity;
+import com.gooproper.ui.followup.FollowUpInfoListActivity;
+import com.gooproper.ui.listing.InfoPropertyActivity;
 import com.gooproper.ui.listing.ListListingSementaraActivity;
 import com.gooproper.ui.listing.PraListingRejectedAdminActivity;
 import com.gooproper.ui.tambah.TambahInfoActivity;
@@ -51,7 +53,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class AkunAdminFragment extends Fragment {
 
-    private LinearLayout pelamar, agen, reportagen, tambahpenghargaan, listing, pralistingrejected, primary, listprimary, karyawan, laporan, pengaturan, hubungikami, tentangkami, kirimpesan;
+    private LinearLayout pelamar, agen, reportagen, tambahpenghargaan, listing, info, followupinfo, pralistingrejected, primary, listprimary, karyawan, laporan, pengaturan, hubungikami, tentangkami, kirimpesan;
     TextView nama, edit, agenultah;
     CardView CVUltah;
     CircleImageView cvadmin;
@@ -72,6 +74,8 @@ public class AkunAdminFragment extends Fragment {
         View root = inflater.inflate(R.layout.fragment_akun_admin, container, false);
 
         listing = root.findViewById(R.id.LytListingAdmin);
+        info = root.findViewById(R.id.LytInfoAdmin);
+        followupinfo = root.findViewById(R.id.LytFollowUpAdmin);
         pralistingrejected = root.findViewById(R.id.LytPraListingRejectedAdmin);
         primary = root.findViewById(R.id.LytListingPrimaryAdmin);
         listprimary = root.findViewById(R.id.LytListinganPrimary);
@@ -151,6 +155,8 @@ public class AkunAdminFragment extends Fragment {
 
         edit.setOnClickListener(view -> startActivity(new Intent(getContext(), EditAkunActivity.class)));
         listing.setOnClickListener(view -> startActivity(new Intent(getContext(), TambahListingActivity.class)));
+        info.setOnClickListener(view -> startActivity(new Intent(getContext(), InfoPropertyActivity.class)));
+        followupinfo.setOnClickListener(view -> startActivity(new Intent(getContext(), FollowUpInfoListActivity.class)));
         pralistingrejected.setOnClickListener(view -> startActivity(new Intent(getContext(), PraListingRejectedAdminActivity.class)));
         primary.setOnClickListener(view -> startActivity(new Intent(getContext(), TambahListingPrimaryActivity.class)));
         pelamar.setOnClickListener(view -> startActivity(new Intent(getContext(), PelamarAgenActivity.class)));

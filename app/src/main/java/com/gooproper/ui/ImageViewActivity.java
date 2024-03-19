@@ -7,7 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ImageView;
 
-import com.gooproper.adapter.ImageViewAdapter;
+import com.gooproper.adapter.image.ImageViewAdapter;
 import com.gooproper.R;
 
 import java.util.ArrayList;

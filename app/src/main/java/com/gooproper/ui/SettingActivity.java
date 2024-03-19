@@ -38,7 +38,7 @@ import java.util.Map;
 
 public class SettingActivity extends AppCompatActivity {
 
-    String Token;
+    String Token, Status;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,13 +50,7 @@ public class SettingActivity extends AppCompatActivity {
         LinearLayout logout    = findViewById(R.id.lytkeluar);
         ImageView keluar       = findViewById(R.id.ivcancel);
 
-        FirebaseMessaging.getInstance().getToken()
-                .addOnCompleteListener(task -> {
-                    if (!task.isSuccessful()) {
-                        return;
-                    }
-                    Token = task.getResult();
-                });
+        Status = Preferences.getKeyStatus(this);
 
         editakun.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -75,7 +69,14 @@ public class SettingActivity extends AppCompatActivity {
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showCustomAlertDialog(view);
+                FirebaseMessaging.getInstance().getToken()
+                        .addOnCompleteListener(task -> {
+                            if (!task.isSuccessful()) {
+                                return;
+                            }
+                            Token = task.getResult();
+                            showCustomAlertDialog(Token);
+                        });
             }
         });
 
@@ -91,7 +92,7 @@ public class SettingActivity extends AppCompatActivity {
         }
     }
 
-    public void showCustomAlertDialog(View view) {
+    public void showCustomAlertDialog(String token) {
         Dialog customDialog = new Dialog(SettingActivity.this);
         customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         customDialog.setContentView(R.layout.custom_dialog_konfirmasi);
@@ -104,44 +105,133 @@ public class SettingActivity extends AppCompatActivity {
         Button ya = customDialog.findViewById(R.id.btnya);
         Button tidak = customDialog.findViewById(R.id.btntidak);
 
-        ya.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                StringRequest stringRequest = new StringRequest(Request.Method.POST, ServerApi.URL_DELETE_DEVICE_AGEN,
-                        new Response.Listener<String>() {
-                            @Override
-                            public void onResponse(String response) {
-                                try {
-                                    JSONObject res = new JSONObject(response);
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
+        if (Status.equals("3")) {
+            ya.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    StringRequest stringRequest = new StringRequest(Request.Method.POST, ServerApi.URL_DELETE_DEVICE_AGEN,
+                            new Response.Listener<String>() {
+                                @Override
+                                public void onResponse(String response) {
+                                    try {
+                                        JSONObject res = new JSONObject(response);
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
                                 }
-                            }
-                        },
-                        new Response.ErrorListener() {
-                            @Override
-                            public void onErrorResponse(VolleyError error) {
-                                Toast.makeText(getBaseContext(), "Gagal Hapus Data. Error: " + error.getMessage(), Toast.LENGTH_SHORT).show();
-                            }
-                        }){
-                    @Override
-                    protected Map<String, String> getParams() throws AuthFailureError {
-                        Map<String,String> map = new HashMap<>();
-                        map.put("Token",Token);
-                        System.out.println(map);
+                            },
+                            new Response.ErrorListener() {
+                                @Override
+                                public void onErrorResponse(VolleyError error) {
+                                    Toast.makeText(getBaseContext(), "Gagal Hapus Data. Error: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+                                }
+                            }){
+                        @Override
+                        protected Map<String, String> getParams() throws AuthFailureError {
+                            Map<String,String> map = new HashMap<>();
+                            map.put("Token",token);
+                            System.out.println(map);
 
-                        return map;
-                    }
-                };
+                            return map;
+                        }
+                    };
 
-                RequestQueue requestQueue = Volley.newRequestQueue(getBaseContext());
-                requestQueue.add(stringRequest);
+                    RequestQueue requestQueue = Volley.newRequestQueue(getBaseContext());
+                    requestQueue.add(stringRequest);
 
-                Preferences.clearLoggedInUser(SettingActivity.this);
-                startActivity(new Intent(SettingActivity.this, MainGuestActivity.class));
-                finish();
-            }
-        });
+                    Preferences.clearLoggedInUser(SettingActivity.this);
+                    startActivity(new Intent(SettingActivity.this, MainGuestActivity.class));
+                    finish();
+                }
+            });
+        } else if (Status.equals("2")) {
+            ya.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    StringRequest stringRequest = new StringRequest(Request.Method.POST, ServerApi.URL_DELETE_DEVICE,
+                            new Response.Listener<String>() {
+                                @Override
+                                public void onResponse(String response) {
+                                    try {
+                                        JSONObject res = new JSONObject(response);
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            },
+                            new Response.ErrorListener() {
+                                @Override
+                                public void onErrorResponse(VolleyError error) {
+                                    Toast.makeText(getBaseContext(), "Gagal Hapus Data. Error: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+                                }
+                            }){
+                        @Override
+                        protected Map<String, String> getParams() throws AuthFailureError {
+                            Map<String,String> map = new HashMap<>();
+                            map.put("Token",token);
+                            System.out.println(map);
+
+                            return map;
+                        }
+                    };
+
+                    RequestQueue requestQueue = Volley.newRequestQueue(getBaseContext());
+                    requestQueue.add(stringRequest);
+
+                    Preferences.clearLoggedInUser(SettingActivity.this);
+                    startActivity(new Intent(SettingActivity.this, MainGuestActivity.class));
+                    finish();
+                }
+            });
+        } else if (Status.equals("1")) {
+            ya.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    StringRequest stringRequest = new StringRequest(Request.Method.POST, ServerApi.URL_DELETE_DEVICE,
+                            new Response.Listener<String>() {
+                                @Override
+                                public void onResponse(String response) {
+                                    try {
+                                        JSONObject res = new JSONObject(response);
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            },
+                            new Response.ErrorListener() {
+                                @Override
+                                public void onErrorResponse(VolleyError error) {
+                                    Toast.makeText(getBaseContext(), "Gagal Hapus Data. Error: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+                                }
+                            }){
+                        @Override
+                        protected Map<String, String> getParams() throws AuthFailureError {
+                            Map<String,String> map = new HashMap<>();
+                            map.put("Token",token);
+                            System.out.println(map);
+
+                            return map;
+                        }
+                    };
+
+                    RequestQueue requestQueue = Volley.newRequestQueue(getBaseContext());
+                    requestQueue.add(stringRequest);
+
+                    Preferences.clearLoggedInUser(SettingActivity.this);
+                    startActivity(new Intent(SettingActivity.this, MainGuestActivity.class));
+                    finish();
+                }
+            });
+        } else {
+            ya.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Preferences.clearLoggedInUser(SettingActivity.this);
+                    startActivity(new Intent(SettingActivity.this, MainGuestActivity.class));
+                    finish();
+                }
+            });
+        }
 
         tidak.setOnClickListener(new View.OnClickListener() {
             @Override

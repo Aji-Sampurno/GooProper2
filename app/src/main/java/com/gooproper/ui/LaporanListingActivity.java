@@ -34,6 +34,7 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -44,6 +45,7 @@ import java.util.Map;
 
 import jxl.Workbook;
 import jxl.WorkbookSettings;
+import jxl.write.DateTime;
 import jxl.write.Label;
 import jxl.write.WritableSheet;
 import jxl.write.WritableWorkbook;
@@ -154,8 +156,7 @@ public class LaporanListingActivity extends AppCompatActivity {
 
                             long currentTimeMillis = System.currentTimeMillis();
                             long adjustedTimeMillis = currentTimeMillis - (currentTimeMillis % (24 * 60 * 60 * 1000)) + (9 * 60 * 60 * 1000);
-                            String filename = new SimpleDateFormat("yyyyMMddHHmmss", Locale.getDefault()).format(new Date(currentTimeMillis)) + ".xls";
-//                            String filename = String.format(Locale.getDefault(), "%d.xls", System.currentTimeMillis());
+                            String filename = "Listing_" +  new SimpleDateFormat("yyMMddHH", Locale.getDefault()).format(new Date(currentTimeMillis)) + ".xls";
                             File outFile = new File(directory, filename);
 
                             WorkbookSettings wbSettings = new WorkbookSettings();
@@ -465,6 +466,12 @@ public class LaporanListingActivity extends AppCompatActivity {
                                         }
                                     }
                                 }
+
+                                DateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd");
+                                DateFormat outputFormat = new SimpleDateFormat("dd/MM/yyyy");
+//                                Date date = dateFormat.parse(TglInput);
+                                Date date = inputFormat.parse(TglInput);
+                                String formattedDate = outputFormat.format(date);
 
                                 sheet.addCell(new Label(0, i + 1, No));
                                 sheet.addCell(new Label(1, i + 1, JenisProperti));
@@ -797,7 +804,7 @@ public class LaporanListingActivity extends AppCompatActivity {
 
                             long currentTimeMillis = System.currentTimeMillis();
                             long adjustedTimeMillis = currentTimeMillis - (currentTimeMillis % (24 * 60 * 60 * 1000)) + (9 * 60 * 60 * 1000);
-                            String filename = new SimpleDateFormat("yyyyMMddHHmmss", Locale.getDefault()).format(new Date(currentTimeMillis)) + "Info" + ".xls";
+                            String filename = "Info_" +  new SimpleDateFormat("yyMMddHH", Locale.getDefault()).format(new Date(currentTimeMillis)) + ".xls";
                             File outFile = new File(directory, filename);
 
                             WorkbookSettings wbSettings = new WorkbookSettings();

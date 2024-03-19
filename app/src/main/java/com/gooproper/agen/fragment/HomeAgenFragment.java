@@ -25,12 +25,12 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.LinearSmoothScroller;
 import androidx.recyclerview.widget.LinearSnapHelper;
-import androidx.recyclerview.widget.PagerSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -67,13 +67,17 @@ import com.google.android.play.core.install.model.AppUpdateType;
 import com.google.android.play.core.install.model.UpdateAvailability;
 import com.google.android.play.core.tasks.Task;
 import com.google.firebase.FirebaseApp;
-import com.google.firebase.analytics.FirebaseAnalytics;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.gooproper.R;
-import com.gooproper.adapter.ListingAdapter;
-import com.gooproper.adapter.ListingPopulerAdapter;
-import com.gooproper.adapter.ListingSoldAdapter;
-import com.gooproper.adapter.PrimaryAdapter;
+import com.gooproper.adapter.listing.ListingAdapter;
+import com.gooproper.adapter.listing.ListingPopulerAdapter;
+import com.gooproper.adapter.listing.ListingSoldAdapter;
+import com.gooproper.adapter.listing.PrimaryAdapter;
 import com.gooproper.model.ListingModel;
 import com.gooproper.model.PrimaryModel;
 import com.gooproper.ui.MapsActivity;
@@ -81,7 +85,6 @@ import com.gooproper.ui.listing.NewActivity;
 import com.gooproper.ui.listing.PopularActivity;
 import com.gooproper.ui.listing.PrimaryActivity;
 import com.gooproper.ui.listing.SoldActivity;
-import com.gooproper.ui.tambah.TambahListingActivity;
 import com.gooproper.util.Preferences;
 import com.gooproper.util.PreferencesDevice;
 import com.gooproper.util.ServerApi;
@@ -146,7 +149,8 @@ public class HomeAgenFragment extends Fragment implements OnMapReadyCallback{
                         return;
                     }
                     Token = task.getResult();
-                    simpanDevice();
+                    saveTokenToDatabase(Token);
+                    simpanDevice(Token);
                 });
 
 //        if (isFirstTime()) {
@@ -272,6 +276,30 @@ public class HomeAgenFragment extends Fragment implements OnMapReadyCallback{
         });
 
         return root;
+    }
+
+    private void saveTokenToDatabase(String token) {
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference tokensRef = database.getReference("tokens");
+
+        String userName = Preferences.getKeyUsername(getActivity());
+
+        // Pemeriksaan apakah token sudah ada di database
+        tokensRef.child(userName).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                String existingToken = dataSnapshot.getValue(String.class);
+                if (existingToken == null || !existingToken.equals(token)) {
+                    // Simpan token ke database Firebase
+                    tokensRef.child(userName).setValue(token);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.e("Firebase", "Error checking token existence", error.toException());
+            }
+        });
     }
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -448,7 +476,7 @@ public class HomeAgenFragment extends Fragment implements OnMapReadyCallback{
         RequestQueue requestQueue = Volley.newRequestQueue(getContext());
         requestQueue.add(stringRequest);
     }
-    private void simpanDevice() {
+    private void simpanDevice(String token) {
         RequestQueue requestQueue = Volley.newRequestQueue(getContext());
         StringRequest stringRequest = new StringRequest(Request.Method.POST, ServerApi.URL_ADD_DEVICE_AGEN,
                 new Response.Listener<String>() {
@@ -533,7 +561,7 @@ public class HomeAgenFragment extends Fragment implements OnMapReadyCallback{
                 Map<String, String> map = new HashMap<>();
                 map.put("IdAgen", IdAdmin);
                 map.put("Status", Status);
-                map.put("Token", Token);
+                map.put("Token", token);
                 System.out.println(map);
 
                 return map;

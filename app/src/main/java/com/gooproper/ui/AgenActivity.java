@@ -1,16 +1,12 @@
 package com.gooproper.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.SearchView;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -27,12 +23,8 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
 import com.gooproper.R;
-import com.gooproper.adapter.AgenAdapter;
 import com.gooproper.adapter.AgenAdminAdapter;
-import com.gooproper.adapter.ListingSoldAdapter;
-import com.gooproper.adapter.list.ListPelamarAgenAdapter;
 import com.gooproper.model.AgenModel;
-import com.gooproper.model.ListingModel;
 import com.gooproper.util.ServerApi;
 
 import org.json.JSONArray;

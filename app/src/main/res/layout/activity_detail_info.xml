@@ -477,6 +477,15 @@
                 android:textColor="@color/black" />
 
             <ImageView
+                android:id="@+id/IVFollowUpDetailInfo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="2"
+                android:src="@drawable/ic_flowup"
+                app:tint="@color/black" />
+
+            <ImageView
                 android:id="@+id/IVAddAgenDetailInfo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -500,6 +509,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_weight="2"
+                android:visibility="gone"
                 android:src="@drawable/ic_instagram"
                 app:tint="@color/black" />
 

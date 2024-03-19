@@ -1,4 +1,4 @@
-package com.gooproper.adapter;
+package com.gooproper.adapter.image;
 
 import android.app.Activity;
 import android.app.AlertDialog;

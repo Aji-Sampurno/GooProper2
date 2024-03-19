@@ -16,6 +16,9 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
+import android.text.style.StyleSpan;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -531,7 +534,18 @@ public class DetailListingDeepActivity extends AppCompatActivity implements OnMa
                                 if (intentDeskripsi.isEmpty()) {
                                     TVDeskripsiDetailListing.setText("-");
                                 } else {
-                                    TVDeskripsiDetailListing.setText(intentDeskripsi);
+                                    SpannableStringBuilder builder = new SpannableStringBuilder(intentDeskripsi);
+
+                                    int startIndex = intentDeskripsi.indexOf("*");
+                                    int endIndex = intentDeskripsi.lastIndexOf("*");
+
+                                    if (startIndex >= 0 && endIndex >= 0 && startIndex < endIndex) {
+                                        builder.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), startIndex, endIndex + 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                                        builder.delete(endIndex, endIndex + 1);
+                                        builder.delete(startIndex, startIndex + 1);
+                                    }
+
+                                    TVDeskripsiDetailListing.setText(builder);
                                 }
                                 TVNamaAgen.setText(intentNama);
                                 if (intentLatitude.equals("0") || intentLongitude.equals("0")){

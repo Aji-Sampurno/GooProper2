@@ -1,41 +1,62 @@
-package com.gooproper.adapter;
+package com.gooproper.adapter.listing;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.gooproper.R;
 import com.gooproper.model.ListingModel;
-import com.gooproper.ui.detail.DetailClosingActivity;
+import com.gooproper.ui.detail.DetailListingActivity;
 import com.gooproper.util.FormatCurrency;
-import com.gooproper.util.Preferences;
+import com.gooproper.util.ServerApi;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-public class ListingClosingAdapter extends RecyclerView.Adapter<ListingClosingAdapter.HolderData> {
-    List<ListingModel> models;
+public class PraListingAdapter extends RecyclerView.Adapter<PraListingAdapter.HolderData> {
+
+    private List<ListingModel> models;
     private List<ListingModel> originalList;
     private Context context;
     private static final int MAX_TEXT_LENGTH = 20;
     private static final int MAX_TEXT_LENGTH_PRICE = 10;
     private static final int MAX_TEXT_LENGTH_PRICE_JUTA = 19;
     private static final int MAX_TEXT_LENGTH_PRICE_RIBU = 15;
-    public ListingClosingAdapter(Context context, List<ListingModel> list){
+
+    public PraListingAdapter(Context context, List<ListingModel> list) {
         this.models = list;
         this.originalList = list;
         this.context = context;
     }
+
     private String truncateTextWithEllipsis(String text) {
         if (text.length() > MAX_TEXT_LENGTH) {
             return text.substring(0, MAX_TEXT_LENGTH) + " ...";
@@ -159,10 +180,11 @@ public class ListingClosingAdapter extends RecyclerView.Adapter<ListingClosingAd
         });
         notifyDataSetChanged();
     }
+
     @NonNull
     @Override
-    public ListingClosingAdapter.HolderData onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View layout = LayoutInflater.from(parent.getContext()).inflate(R.layout.listing,parent,false);
+    public PraListingAdapter.HolderData onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View layout = LayoutInflater.from(parent.getContext()).inflate(R.layout.pralisting, parent, false);
         HolderData holderData = new HolderData(layout);
         return holderData;
     }
@@ -171,7 +193,7 @@ public class ListingClosingAdapter extends RecyclerView.Adapter<ListingClosingAd
     public void onBindViewHolder(@NonNull HolderData holder, int position) {
         FormatCurrency currency = new FormatCurrency();
         ListingModel listingModel = models.get(position);
-        if (listingModel.getPriority().equals("open")){
+        if (listingModel.getPriority().equals("open")) {
             holder.Lytpriority.setVisibility(View.INVISIBLE);
         } else {
             holder.Lytpriority.setVisibility(View.VISIBLE);
@@ -214,46 +236,111 @@ public class ListingClosingAdapter extends RecyclerView.Adapter<ListingClosingAd
         return models.size();
     }
 
-    class HolderData extends RecyclerView.ViewHolder{
+    public void deleteItem(int position) {
+        if (position >= 0 && position < models.size()) {
+            String itemId = models.get(position).getIdPraListing();
+
+            StringRequest stringRequest = new StringRequest(Request.Method.POST, ServerApi.URL_DELETE_PRALISTING,
+                    new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            try {
+                                JSONObject res = new JSONObject(response);
+
+                                models.remove(position);
+                                notifyItemRemoved(position);
+                                Toast.makeText(context, "Berhasil Hapus Data ", Toast.LENGTH_SHORT).show();
+                                Dialog customDialog = new Dialog(context);
+                                customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                                customDialog.setContentView(R.layout.custom_dialog_sukses);
+
+                                if (customDialog.getWindow() != null) {
+                                    customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                                }
+
+                                TextView dialogTitle = customDialog.findViewById(R.id.dialog_title);
+                                Button ok = customDialog.findViewById(R.id.btnya);
+                                Button cobalagi = customDialog.findViewById(R.id.btntidak);
+                                ImageView gifimage = customDialog.findViewById(R.id.ivdialog);
+
+                                dialogTitle.setText("Berhasil Menambahkan Listingan");
+                                cobalagi.setVisibility(View.GONE);
+
+                                ok.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        models.remove(position);
+                                        notifyItemRemoved(position);
+                                        customDialog.dismiss();
+                                    }
+                                });
+
+                                Glide.with(context)
+                                        .load(R.mipmap.ic_yes) // You can also use a local resource like R.drawable.your_gif_resource
+                                        .transition(DrawableTransitionOptions.withCrossFade())
+                                        .into(gifimage);
+
+                                customDialog.show();
+
+//                                String status = res.getString("Status");
+//                                if (status.equals("Sukses")){
+//                                    models.remove(position);
+//                                    notifyItemRemoved(position);
+//                                    Toast.makeText(context, "Berhasil Hapus Data ", Toast.LENGTH_SHORT).show();
+//                                } else if (status.equals("Error")) {
+//                                    Toast.makeText(context, "Gagal Hapus Data.", Toast.LENGTH_SHORT).show();
+//                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            Toast.makeText(context, "Gagal Hapus Data. Error: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    }){
+                @Override
+                protected Map<String, String> getParams() throws AuthFailureError {
+                    Map<String,String> map = new HashMap<>();
+                    map.put("IdPraListing",itemId);
+                    System.out.println(map);
+
+                    return map;
+                }
+            };
+
+            RequestQueue requestQueue = Volley.newRequestQueue(context);
+            requestQueue.add(stringRequest);
+        }
+    }
+
+    class HolderData extends RecyclerView.ViewHolder {
         TextView titleTxt, addressTxt, priceTxt, bedTxt, bathTxt, levelTxt, garageTxt, bathArtTxt, bedArtTxt, carpotTxt, wideTxt, priorityTxt;
         ImageView pic;
         LinearLayout Lytpriority;
-        String status;
         public ListingModel listingModel;
 
-        public HolderData(View view){
+        public HolderData(View view) {
             super(view);
-            titleTxt=view.findViewById(R.id.titleTxt);
-            addressTxt=view.findViewById(R.id.addressTxt);
-            bathTxt=view.findViewById(R.id.bathTxt);
-            bedTxt=view.findViewById(R.id.bedTxt);
-            priceTxt=view.findViewById(R.id.priceTxt);
-            levelTxt=view.findViewById(R.id.levelTxt);
-            garageTxt=view.findViewById(R.id.garageTxt);
-            priorityTxt=view.findViewById(R.id.TVPriority);
-            pic=view.findViewById(R.id.pic);
-            Lytpriority=view.findViewById(R.id.LytBadge);
-
-            status = Preferences.getKeyStatus(context);
-
-            if (status.equals("1")){
-                addressTxt.setVisibility(View.VISIBLE);
-            } else if (status.equals("2")) {
-                addressTxt.setVisibility(View.VISIBLE);
-            } else if (status.equals("3")) {
-                addressTxt.setVisibility(View.GONE);
-            } else if (status.equals("4")) {
-                addressTxt.setVisibility(View.GONE);
-            } else {
-                addressTxt.setVisibility(View.GONE);
-            }
+            titleTxt = view.findViewById(R.id.titleTxt);
+            addressTxt = view.findViewById(R.id.addressTxt);
+            bathTxt = view.findViewById(R.id.bathTxt);
+            bedTxt = view.findViewById(R.id.bedTxt);
+            priceTxt = view.findViewById(R.id.priceTxt);
+            levelTxt = view.findViewById(R.id.levelTxt);
+            garageTxt = view.findViewById(R.id.garageTxt);
+            priorityTxt = view.findViewById(R.id.TVPriority);
+            pic = view.findViewById(R.id.pic);
+            Lytpriority = view.findViewById(R.id.LytBadge);
 
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent update = new Intent(context, DetailClosingActivity.class);
-                    update.putExtra("update",1);
-                    update.putExtra("IdListing",listingModel.getIdListing());
+                    Intent update = new Intent(context, DetailListingActivity.class);
+                    update.putExtra("update", 1);
+                    update.putExtra("IdPraListing", listingModel.getIdPraListing());
                     update.putExtra("IdAgen",listingModel.getIdAgen());
                     update.putExtra("IdAgenCo",listingModel.getIdAgenCo());
                     update.putExtra("IdInput",listingModel.getIdInput());
@@ -323,9 +410,12 @@ public class ListingClosingAdapter extends RecyclerView.Adapter<ListingClosingAd
                     update.putExtra("LinkYoutube",listingModel.getLinkYoutube());
                     update.putExtra("IsAdmin",listingModel.getIsAdmin());
                     update.putExtra("IsManager",listingModel.getIsManager());
+                    update.putExtra("IsRejected",listingModel.getIsRejected());
                     update.putExtra("View",listingModel.getView());
                     update.putExtra("Sold",listingModel.getSold());
                     update.putExtra("Rented",listingModel.getRented());
+                    update.putExtra("SoldAgen",listingModel.getSoldAgen());
+                    update.putExtra("RentedAgen",listingModel.getRentedAgen());
                     update.putExtra("Marketable",listingModel.getMarketable());
                     update.putExtra("StatusHarga",listingModel.getStatusHarga());
                     update.putExtra("Nama",listingModel.getNama());
@@ -337,6 +427,27 @@ public class ListingClosingAdapter extends RecyclerView.Adapter<ListingClosingAd
                     update.putExtra("IsSelfie",listingModel.getIsSelfie());
                     update.putExtra("IsLokasi",listingModel.getIsLokasi());
                     context.startActivity(update);
+                }
+            });
+
+            view.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+                    int position = getAdapterPosition();
+                    if (position != RecyclerView.NO_POSITION) {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext(), R.style.CustomAlertDialogStyle);
+                        builder.setTitle("Konfirmasi Hapus Pra Listing");
+                        builder.setMessage("Apakah Anda ingin menghapus ini?");
+                        builder.setPositiveButton("Ya", (dialog, which) -> {
+                            deleteItem(position);
+                        });
+                        builder.setNegativeButton("Batal", (dialog, which) -> {
+                            dialog.dismiss();
+                        });
+                        builder.create().show();
+                        return true;
+                    }
+                    return false;
                 }
             });
         }

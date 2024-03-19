@@ -14,7 +14,6 @@ import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.android.volley.Request;
@@ -28,9 +27,8 @@ import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
 import com.gooproper.R;
-import com.gooproper.adapter.ListingAdapter;
+import com.gooproper.adapter.listing.ListingAdapter;
 import com.gooproper.model.ListingModel;
-import com.gooproper.util.Preferences;
 import com.gooproper.util.ServerApi;
 import com.squareup.picasso.Picasso;
 

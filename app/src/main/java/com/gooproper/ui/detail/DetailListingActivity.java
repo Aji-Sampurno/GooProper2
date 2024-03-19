@@ -22,6 +22,9 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
+import android.text.style.StyleSpan;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -57,12 +60,11 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.gooproper.R;
-import com.gooproper.adapter.PJPAdapter;
-import com.gooproper.adapter.SertifikatAdapter;
+import com.gooproper.adapter.image.PJPAdapter;
+import com.gooproper.adapter.image.SertifikatAdapter;
 import com.gooproper.adapter.ViewPagerAdapter;
 import com.gooproper.model.ListingModel;
 import com.gooproper.pager.SertifikatPdfAdapter;
-import com.gooproper.ui.LihatTemplateActivity;
 import com.gooproper.ui.edit.EditListingActivity;
 import com.gooproper.ui.edit.EditListingAgenActivity;
 import com.gooproper.ui.edit.EditMapsListingActivity;
@@ -1783,17 +1785,30 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
         BtnLihatTemplate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String url = "https://app.gooproper.com/GooProper/template/" + idpralisting;
-                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-                startActivity(intent);
+                if (intentPriority.equals("open")){
+                    String url = "https://app.gooproper.com/GooProper/template/" + idpralisting;
+                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                    startActivity(intent);
+                } else {
+                    String url = "https://app.gooproper.com/GooProper/templateexclusive/" + idpralisting;
+                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                    startActivity(intent);
+                }
             }
         });
         BtnLihatTemplateKosong.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String url = "https://app.gooproper.com/GooProper/templateblank/" + idpralisting;
-                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-                startActivity(intent);
+                if (intentPriority.equals("open")){
+                    String url = "https://app.gooproper.com/GooProper/templateblank/" + idpralisting;
+                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                    startActivity(intent);
+                } else {
+                    String url = "https://app.gooproper.com/GooProper/templateblankexclusive/" + idpralisting;
+                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                    startActivity(intent);
+                }
+
             }
         });
 
@@ -2707,7 +2722,18 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
             if (intentDeskripsi.isEmpty()) {
                 TVDeskripsiDetailListing.setText("-");
             } else {
-                TVDeskripsiDetailListing.setText(intentDeskripsi);
+                SpannableStringBuilder builder = new SpannableStringBuilder(intentDeskripsi);
+
+                int startIndex = intentDeskripsi.indexOf("*");
+                int endIndex = intentDeskripsi.lastIndexOf("*");
+
+                if (startIndex >= 0 && endIndex >= 0 && startIndex < endIndex) {
+                    builder.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), startIndex, endIndex + 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    builder.delete(endIndex, endIndex + 1);
+                    builder.delete(startIndex, startIndex + 1);
+                }
+
+                TVDeskripsiDetailListing.setText(builder);
             }
             if (intentFee.isEmpty()) {
                 TVFee.setText(": -");

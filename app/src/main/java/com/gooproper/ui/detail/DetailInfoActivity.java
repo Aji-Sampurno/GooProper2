@@ -4,7 +4,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.viewpager.widget.ViewPager;
 
 import android.Manifest;
@@ -15,9 +14,11 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
+import android.text.style.StyleSpan;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
@@ -40,19 +41,13 @@ import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.material.textfield.TextInputEditText;
-import com.google.android.material.textfield.TextInputLayout;
 import com.gooproper.R;
-import com.gooproper.adapter.PJPAdapter;
-import com.gooproper.adapter.SertifikatAdapter;
 import com.gooproper.adapter.ViewPagerAdapter;
 import com.gooproper.model.InfoModel;
-import com.gooproper.model.ListingModel;
-import com.gooproper.pager.SertifikatPdfAdapter;
 import com.gooproper.ui.edit.EditDetailInfoActivity;
 import com.gooproper.ui.edit.EditInfoActivity;
+import com.gooproper.ui.followup.FollowUpInfoActivity;
 import com.gooproper.ui.tambah.TambahListingInfoActivity;
-import com.gooproper.util.AgenManager;
 import com.gooproper.util.FormatCurrency;
 import com.gooproper.util.Preferences;
 import com.gooproper.util.ServerApi;
@@ -68,7 +63,7 @@ public class DetailInfoActivity extends AppCompatActivity implements OnMapReadyC
     ProgressDialog pDialog;
     TextView TVJudul, TVLokasi, TVHarga, TVHargaSewa, TVNamaAgen, TVLuas, TVLTanah, TVLBangunan, TVJenis, TVStatus, TVDeskripsi, TVTglInput, TVNarahubung, TVTelpNarahubung, TVNoSelfie, TVPoin;
     LinearLayout LytNarahubung, LytTelpNarahubung, LytTglInput, LytEdit;
-    ImageView IVAddListing, IVWhatsapp, IVInstagram, IVSelfie;
+    ImageView IVAddListing, IVWhatsapp, IVInstagram, IVSelfie, IVFollowUp;
     Button BtnTambah, BtnTambahSpek;
     LinearLayout LytSelfie;
     ScrollView scrollView;
@@ -100,6 +95,7 @@ public class DetailInfoActivity extends AppCompatActivity implements OnMapReadyC
         IVInstagram = findViewById(R.id.IVInstagramAgenDetailInfo);
         IVWhatsapp = findViewById(R.id.IVNoTelpAgenDetailInfo);
         IVAddListing = findViewById(R.id.IVAddAgenDetailInfo);
+        IVFollowUp = findViewById(R.id.IVFollowUpDetailInfo);
 
         BtnTambah = findViewById(R.id.BtnAddListing);
         BtnTambahSpek = findViewById(R.id.BtnAddSpek);
@@ -239,6 +235,14 @@ public class DetailInfoActivity extends AppCompatActivity implements OnMapReadyC
                 startActivity(update);
             }
         });
+        IVFollowUp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent update = new Intent(DetailInfoActivity.this, FollowUpInfoActivity.class);
+                update.putExtra("IdInfo",IntentIdInfo);
+                startActivity(update);
+            }
+        });
 
         if (StringStatus.equals("1")) {
             LytSelfie.setVisibility(View.VISIBLE);
@@ -361,7 +365,18 @@ public class DetailInfoActivity extends AppCompatActivity implements OnMapReadyC
             if (IntentKeterangan.isEmpty()) {
                 TVDeskripsi.setText("-");
             } else {
-                TVDeskripsi.setText(IntentKeterangan);
+                SpannableStringBuilder builder = new SpannableStringBuilder(IntentKeterangan);
+
+                int startIndex = IntentKeterangan.indexOf("*");
+                int endIndex = IntentKeterangan.lastIndexOf("*");
+
+                if (startIndex >= 0 && endIndex >= 0 && startIndex < endIndex) {
+                    builder.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), startIndex, endIndex + 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    builder.delete(endIndex, endIndex + 1);
+                    builder.delete(startIndex, startIndex + 1);
+                }
+
+                TVDeskripsi.setText(builder);
             }
             if (IntentImgSelfie.equals("0")) {
                 LytSelfie.setVisibility(View.GONE);
