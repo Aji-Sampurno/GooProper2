@@ -137,7 +137,6 @@ public class ListingAgenFragment extends Fragment {
         return root;
     }
 
-    //searchView
     private void filterList(String text) {
         List<ListingModel> filteredList = new ArrayList<>();
         for (ListingModel item : list) {
@@ -153,7 +152,6 @@ public class ListingAgenFragment extends Fragment {
         adapter.setFilteredlist(filteredList);
     }
 
-    //filter
     public void showFilterDialog () {
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = getLayoutInflater();
@@ -677,6 +675,9 @@ public class ListingAgenFragment extends Fragment {
                                 md.setNoTelpVendor(data.getString("NoTelpVendor"));
                                 md.setIsSelfie(data.getString("IsSelfie"));
                                 md.setIsLokasi(data.getString("IsLokasi"));
+                                md.setIdTemplate(data.getString("IdTemplate"));
+                                md.setTemplate(data.getString("Template"));
+                                md.setTemplateBlank(data.getString("TemplateBlank"));
                                 list.add(md);
                                 PDListingAgen.dismiss();
                             } catch (JSONException e) {

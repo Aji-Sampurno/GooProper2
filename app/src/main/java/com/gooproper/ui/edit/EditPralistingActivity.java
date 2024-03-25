@@ -80,7 +80,7 @@ public class EditPralistingActivity extends AppCompatActivity {
     ImageView back, IVselfie;
     TextInputEditText longitude, latitude;
     Uri UriSelfie;
-    String latitudeStr, longitudeStr, addressStr,lokasiStr, Selfie, StrIdPraListing, isSelfie;
+    String latitudeStr, longitudeStr, addressStr,lokasiStr, Selfie, StrIdPraListing, isSelfie, Keterangan;
     String timeStamp,fileSelfie;
     private StorageReference mStorageRef;
     StorageReference storageRef,ImageSelfie;
@@ -117,6 +117,8 @@ public class EditPralistingActivity extends AppCompatActivity {
 
         StrIdPraListing = intentIdPraListing;
         isSelfie = intentSelfie;
+
+        Keterangan = "Tambah Susulan Maps dan Selfie";
 
         submit.setOnClickListener(view -> {
             if (Validate()) {
@@ -523,7 +525,7 @@ public class EditPralistingActivity extends AppCompatActivity {
     }
     private void sendNotificationToToken(String token, String notificationType) {
         String title = Preferences.getKeyNama(this);
-        String message = "Melakukan Update Lokasi dan Selfie PraListing";
+        String message = "Update Lokasi dan Selfie PraListing";
         String response = SendMessageToFCM.sendMessage(token, title, message, notificationType);
     }
 }

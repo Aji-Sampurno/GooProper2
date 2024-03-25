@@ -142,20 +142,17 @@ public class ListingAdapter extends RecyclerView.Adapter<ListingAdapter.HolderDa
         }
     }
 
-    //searchView
     public void setFilteredlist (List<ListingModel> filteredlist){
         this.models = filteredlist;
         notifyDataSetChanged();
     }
 
-    //reset filter
     public void resetFilter() {
         models.clear();
         models.addAll(originalList);
         notifyDataSetChanged();
     }
 
-    //asc - desc
     private long parsePrice(String priceString) {
         return Long.parseLong(priceString.replaceAll(",", "").trim());
     }
@@ -229,7 +226,11 @@ public class ListingAdapter extends RecyclerView.Adapter<ListingAdapter.HolderDa
         holder.bathTxt.setText(listingModel.getBath());
         holder.levelTxt.setText(listingModel.getLevel());
         holder.garageTxt.setText(listingModel.getGarage());
-        Glide.with(context).load(models.get(position).getImg1()).into(holder.pic);
+        if (!listingModel.getTemplate().equals("null")) {
+            Glide.with(context).load(models.get(position).getTemplate()).into(holder.pic);
+        } else {
+            Glide.with(context).load(models.get(position).getImg1()).into(holder.pic);
+        }
 
         String titleText = listingModel.getNamaListing();
         String truncatedtitle = truncateTextWithEllipsis(titleText);
@@ -388,6 +389,9 @@ public class ListingAdapter extends RecyclerView.Adapter<ListingAdapter.HolderDa
                     update.putExtra("NoTelpVendor",listingModel.getNoTelpVendor());
                     update.putExtra("IsSelfie",listingModel.getIsSelfie());
                     update.putExtra("IsLokasi",listingModel.getIsLokasi());
+                    update.putExtra("IdTemplate",listingModel.getIdTemplate());
+                    update.putExtra("Template",listingModel.getTemplate());
+                    update.putExtra("TemplateBlank",listingModel.getTemplateBlank());
                     context.startActivity(update);
                 }
             });

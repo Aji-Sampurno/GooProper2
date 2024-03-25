@@ -31,6 +31,7 @@ import com.android.volley.toolbox.Volley;
 import com.gooproper.R;
 import com.gooproper.adapter.listing.PraListingAdapter;
 import com.gooproper.model.ListingModel;
+import com.gooproper.model.PraListingModel;
 import com.gooproper.util.Preferences;
 import com.gooproper.util.ServerApi;
 
@@ -49,7 +50,7 @@ public class PraListingAgenActivity extends AppCompatActivity {
     SwipeRefreshLayout srlistingku;
     RecyclerView rvlist;
     PraListingAdapter adapter;
-    List<ListingModel> list;
+    List<PraListingModel> list;
     private AlertDialog alertDialog;
     private EditText searchView;
     private boolean applyFilters = false;
@@ -125,8 +126,8 @@ public class PraListingAgenActivity extends AppCompatActivity {
 
     //searchView
     private void filterList(String text) {
-        List<ListingModel> filteredList = new ArrayList<>();
-        for (ListingModel item : list) {
+        List<PraListingModel> filteredList = new ArrayList<>();
+        for (PraListingModel item : list) {
             if (item.getAlamat().toLowerCase().contains(text.toLowerCase())
                     || item.getJenisProperti().toLowerCase().contains(text.toLowerCase())) {
                 filteredList.add(item);
@@ -459,9 +460,9 @@ public class PraListingAgenActivity extends AppCompatActivity {
     }
 
     public void applyCustomFilter(View view, long minPrice, long maxPrice, boolean isAbove, String bedSearch, String bathSearch, String landWideSearch, String buildingWideSearch, String garageSearch, String carpotSearch, String levelSearch, String viewSpec, String viewType, String kondisi) {
-        ArrayList<ListingModel> filteredList = new ArrayList<>();
+        ArrayList<PraListingModel> filteredList = new ArrayList<>();
         if (minPrice > 0 || maxPrice > 0) {
-            for (ListingModel product : list) {
+            for (PraListingModel product : list) {
                 long productPrice = Long.parseLong(product.getHarga().replace(".", "").trim());
                 long productPriceSewa = Long.parseLong(product.getHargaSewa().replace(".", "").trim());
                 boolean isPriceMatched = false;
@@ -569,7 +570,7 @@ public class PraListingAgenActivity extends AppCompatActivity {
                 }
             }
         } else {
-            for (ListingModel product : list) {
+            for (PraListingModel product : list) {
                 long productPrice = Long.parseLong(product.getHarga().replace(".", "").trim());
                 long productPriceSewa = Long.parseLong(product.getHargaSewa().replace(".", "").trim());
                 boolean isPriceMatched = false;
@@ -654,7 +655,7 @@ public class PraListingAgenActivity extends AppCompatActivity {
                         for (int i = 0; i < response.length(); i++) {
                             try {
                                 JSONObject data = response.getJSONObject(i);
-                                ListingModel md = new ListingModel();
+                                PraListingModel md = new PraListingModel();
                                 md.setIdPraListing(data.getString("IdPraListing"));
                                 md.setIdAgen(data.getString("IdAgen"));
                                 md.setIdAgenCo(data.getString("IdAgenCo"));

@@ -232,7 +232,6 @@ public class HomeAdminFragment extends Fragment implements OnMapReadyCallback {
 
         String userName = Preferences.getKeyUsername(getActivity());
 
-        // Pemeriksaan apakah token sudah ada di database
         tokensRef.child(userName).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -569,6 +568,9 @@ public class HomeAdminFragment extends Fragment implements OnMapReadyCallback {
                                 md.setNoTelpVendor(data.getString("NoTelpVendor"));
                                 md.setIsSelfie(data.getString("IsSelfie"));
                                 md.setIsLokasi(data.getString("IsLokasi"));
+                                md.setIdTemplate(data.getString("IdTemplate"));
+                                md.setTemplate(data.getString("Template"));
+                                md.setTemplateBlank(data.getString("TemplateBlank"));
                                 mItemsSold.add(md);
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -685,6 +687,9 @@ public class HomeAdminFragment extends Fragment implements OnMapReadyCallback {
                                 md.setNoTelpVendor(data.getString("NoTelpVendor"));
                                 md.setIsSelfie(data.getString("IsSelfie"));
                                 md.setIsLokasi(data.getString("IsLokasi"));
+                                md.setIdTemplate(data.getString("IdTemplate"));
+                                md.setTemplate(data.getString("Template"));
+                                md.setTemplateBlank(data.getString("TemplateBlank"));
                                 mItemsHot.add(md);
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -801,6 +806,9 @@ public class HomeAdminFragment extends Fragment implements OnMapReadyCallback {
                                 md.setNoTelpVendor(data.getString("NoTelpVendor"));
                                 md.setIsSelfie(data.getString("IsSelfie"));
                                 md.setIsLokasi(data.getString("IsLokasi"));
+                                md.setIdTemplate(data.getString("IdTemplate"));
+                                md.setTemplate(data.getString("Template"));
+                                md.setTemplateBlank(data.getString("TemplateBlank"));
                                 mItemsNew.add(md);
                             } catch (JSONException e) {
                                 e.printStackTrace();

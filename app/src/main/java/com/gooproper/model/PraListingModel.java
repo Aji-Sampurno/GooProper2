@@ -1,20 +1,23 @@
 package com.gooproper.model;
 
 public class PraListingModel {
-    String IdPraListing, IdListing, IdAgen, IdInput, NamaListing, Alamat, Location, Wide, Level, Bed, Bath, BedArt, BathArt, Garage, Carpot, NoCertificate, Pbb, JenisProperti, JenisCertificate, SumberAir, Kondisi, Deskripsi, Prabot, KetPrabot, Priority, Ttd, Banner, Harga, TglInput, Img1, Img2, Img3, Img4, Img5, Img6, Img7, Img8, Video, LinkFacebook, LinkTiktok, LinkInstagram, LinkYoutube, IsAdmin, IsManager, Nama, NoTelp, Instagram, RangeHarga;
+    String IdPraListing, IdAgen, IdInput, IdVendor, NamaListing, Alamat, Location, Wide, Land, Dimensi, Listrik, Level, Bed, Bath, BedArt, BathArt, Garage, Carpot, NoCertificate, Pbb, JenisProperti, JenisCertificate, SumberAir, Kondisi, Deskripsi, Prabot, KetPrabot, Priority, Ttd, Banner, Harga, TglInput, Img1, Img2, Img3, Img4, Img5, Img6, Img7, Img8, Video, LinkFacebook, LinkTiktok, LinkInstagram, LinkYoutube, IsAdmin, IsManager, View, Sold, Rented, SoldAgen, RentedAgen, Nama, NoTelp, Instagram, Latitude, Longitude, Hadap, SHM, HGB, HSHP, PPJB, Stratatitle, ImgSHM, ImgHGB, ImgHSHP, ImgPPJB, ImgStratatitle, Size, Marketable, StatusHarga, IdAgenCo, Selfie, Pjp, ImgPjp, ImgPjp1, HargaSewa, Fee, AJB, PetokD, ImgAJB, ImgPetokD, NamaVendor, NoTelpVendor, IsSelfie, IsLokasi, IsRejected, Keterangan, RangeHarga;
 
     public PraListingModel() {
     }
 
-    public PraListingModel(String IdPraListing, String IdListing, String IdAgen, String IdInput, String NamaListing, String Alamat, String Location, String Wide, String Level, String Bed, String Bath, String BedArt, String BathArt, String Garage, String Carpot, String NoCertificate, String Pbb, String JenisProperti, String JenisCertificate, String SumberAir, String Kondisi, String Deskripsi, String Prabot, String KetPrabot, String Priority, String Ttd, String Banner, String Harga, String TglInput, String Img1, String Img2, String Img3, String Img4, String Img5, String Img6, String Img7, String Img8, String Video, String LinkFacebook, String LinkTiktok, String LinkInstagram, String LinkYoutube, String IsAdmin, String IsManager, String Nama, String NoTelp, String Instagram, String RangeHarga) {
+    public PraListingModel(String IdPraListing, String IdAgen, String IdInput, String IdVendor, String NamaListing, String Alamat, String Location, String Wide, String Land, String Dimensi, String Listrik, String Level, String Bed, String Bath, String BedArt, String BathArt, String Garage, String Carpot, String NoCertificate, String Pbb, String JenisProperti, String JenisCertificate, String SumberAir, String Kondisi, String Deskripsi, String Prabot, String KetPrabot, String Priority, String Ttd, String Banner, String Harga, String TglInput, String Img1, String Img2, String Img3, String Img4, String Img5, String Img6, String Img7, String Img8, String Video, String LinkFacebook, String LinkTiktok, String LinkInstagram, String LinkYoutube, String IsAdmin, String IsManager, String View, String Sold, String Rented, String SoldAgen, String RentedAgen, String Nama, String NoTelp, String Instagram, String Latitude, String Longitude, String Hadap, String SHM, String HGB, String HSHP, String PPJB, String Stratatitle, String ImgSHM, String ImgHGB, String ImgHSHP, String ImgPPJB, String ImgStratatitle, String Size, String Marketable, String StatusHarga, String IdAgenCo, String Selfie, String Pjp, String ImgPjp, String ImgPjp1, String HargaSewa, String Fee, String AJB, String PetokD, String ImgAJB, String ImgPetokD, String NamaVendor, String NoTelpVendor, String IsSelfie, String IsLokasi, String IsRejected, String Keterangan, String RangeHarga) {
         this.IdPraListing = IdPraListing;
-        this.IdListing = IdListing;
         this.IdAgen = IdAgen;
         this.IdInput = IdInput;
+        this.IdVendor = IdVendor;
         this.NamaListing = NamaListing;
         this.Alamat = Alamat;
         this.Location = Location;
         this.Wide = Wide;
+        this.Land = Land;
+        this.Dimensi = Dimensi;
+        this.Listrik = Listrik;
         this.Level = Level;
         this.Bed = Bed;
         this.BedArt = BedArt;
@@ -22,6 +25,17 @@ public class PraListingModel {
         this.BathArt = BathArt;
         this.Garage = Garage;
         this.Carpot = Carpot;
+        this.Hadap = Hadap;
+        this.SHM = SHM;
+        this.HGB = HGB;
+        this.HSHP = HSHP;
+        this.PPJB = PPJB;
+        this.Stratatitle = Stratatitle;
+        this.ImgSHM = ImgSHM;
+        this.ImgHGB = ImgHGB;
+        this.ImgHSHP = ImgHSHP;
+        this.ImgPPJB = ImgPPJB;
+        this.ImgStratatitle = ImgStratatitle;
         this.NoCertificate = NoCertificate;
         this.Pbb = Pbb;
         this.JenisProperti = JenisProperti;
@@ -51,9 +65,36 @@ public class PraListingModel {
         this.LinkYoutube = LinkYoutube;
         this.IsAdmin = IsAdmin;
         this.IsManager = IsManager;
+        this.View = View;
+        this.Sold = Sold;
+        this.Rented = Rented;
+        this.SoldAgen = SoldAgen;
+        this.RentedAgen = RentedAgen;
         this.Nama = Nama;
         this.NoTelp = NoTelp;
         this.Instagram = Instagram;
+        this.Latitude = Latitude;
+        this.Longitude = Longitude;
+        this.Size = Size;
+        this.Marketable = Marketable;
+        this.StatusHarga = StatusHarga;
+        this.IdAgenCo = IdAgenCo;
+        this.Selfie = Selfie;
+        this.Pjp = Pjp;
+        this.ImgPjp = ImgPjp;
+        this.ImgPjp1 = ImgPjp1;
+        this.HargaSewa = HargaSewa;
+        this.Fee = Fee;
+        this.AJB = AJB;
+        this.PetokD = PetokD;
+        this.ImgAJB = ImgAJB;
+        this.ImgPetokD = ImgPetokD;
+        this.NamaVendor = NamaVendor;
+        this.NoTelpVendor = NoTelpVendor;
+        this.IsSelfie = IsSelfie;
+        this.IsLokasi = IsLokasi;
+        this.IsRejected = IsRejected;
+        this.Keterangan = Keterangan;
         this.RangeHarga = RangeHarga;
     }
 
@@ -63,14 +104,6 @@ public class PraListingModel {
 
     public void setIdPraListing(String idPraListing) {
         IdPraListing = idPraListing;
-    }
-
-    public String getIdListing() {
-        return IdListing;
-    }
-
-    public void setIdListing(String idListing) {
-        IdListing = idListing;
     }
 
     public String getIdAgen() {
@@ -87,6 +120,14 @@ public class PraListingModel {
 
     public void setIdInput(String idInput) {
         IdInput = idInput;
+    }
+
+    public String getIdVendor() {
+        return IdVendor;
+    }
+
+    public void setIdVendor(String idVendor) {
+        IdVendor = idVendor;
     }
 
     public String getNamaListing() {
@@ -119,6 +160,30 @@ public class PraListingModel {
 
     public void setWide(String wide) {
         Wide = wide;
+    }
+
+    public String getLand() {
+        return Land;
+    }
+
+    public void setLand(String land) {
+        Land = land;
+    }
+
+    public String getDimensi() {
+        return Dimensi;
+    }
+
+    public void setDimensi(String dimensi) {
+        Dimensi = dimensi;
+    }
+
+    public String getListrik() {
+        return Listrik;
+    }
+
+    public void setListrik(String listrik) {
+        Listrik = listrik;
     }
 
     public String getLevel() {
@@ -409,6 +474,46 @@ public class PraListingModel {
         IsManager = isManager;
     }
 
+    public String getView() {
+        return View;
+    }
+
+    public void setView(String view) {
+        View = view;
+    }
+
+    public String getSold() {
+        return Sold;
+    }
+
+    public void setSold(String sold) {
+        Sold = sold;
+    }
+
+    public String getRented() {
+        return Rented;
+    }
+
+    public void setRented(String rented) {
+        Rented = rented;
+    }
+
+    public String getSoldAgen() {
+        return SoldAgen;
+    }
+
+    public void setSoldAgen(String soldAgen) {
+        SoldAgen = soldAgen;
+    }
+
+    public String getRentedAgen() {
+        return RentedAgen;
+    }
+
+    public void setRentedAgen(String rentedAgen) {
+        RentedAgen = rentedAgen;
+    }
+
     public String getNama() {
         return Nama;
     }
@@ -431,6 +536,270 @@ public class PraListingModel {
 
     public void setInstagram(String instagram) {
         Instagram = instagram;
+    }
+
+    public String getLatitude() {
+        return Latitude;
+    }
+
+    public void setLatitude(String latitude) {
+        Latitude = latitude;
+    }
+
+    public String getLongitude() {
+        return Longitude;
+    }
+
+    public void setLongitude(String longitude) {
+        Longitude = longitude;
+    }
+
+    public String getHadap() {
+        return Hadap;
+    }
+
+    public void setHadap(String hadap) {
+        Hadap = hadap;
+    }
+
+    public String getSHM() {
+        return SHM;
+    }
+
+    public void setSHM(String SHM) {
+        this.SHM = SHM;
+    }
+
+    public String getHGB() {
+        return HGB;
+    }
+
+    public void setHGB(String HGB) {
+        this.HGB = HGB;
+    }
+
+    public String getHSHP() {
+        return HSHP;
+    }
+
+    public void setHSHP(String HSHP) {
+        this.HSHP = HSHP;
+    }
+
+    public String getPPJB() {
+        return PPJB;
+    }
+
+    public void setPPJB(String PPJB) {
+        this.PPJB = PPJB;
+    }
+
+    public String getStratatitle() {
+        return Stratatitle;
+    }
+
+    public void setStratatitle(String stratatitle) {
+        Stratatitle = stratatitle;
+    }
+
+    public String getImgSHM() {
+        return ImgSHM;
+    }
+
+    public void setImgSHM(String imgSHM) {
+        ImgSHM = imgSHM;
+    }
+
+    public String getImgHGB() {
+        return ImgHGB;
+    }
+
+    public void setImgHGB(String imgHGB) {
+        ImgHGB = imgHGB;
+    }
+
+    public String getImgHSHP() {
+        return ImgHSHP;
+    }
+
+    public void setImgHSHP(String imgHSHP) {
+        ImgHSHP = imgHSHP;
+    }
+
+    public String getImgPPJB() {
+        return ImgPPJB;
+    }
+
+    public void setImgPPJB(String imgPPJB) {
+        ImgPPJB = imgPPJB;
+    }
+
+    public String getImgStratatitle() {
+        return ImgStratatitle;
+    }
+
+    public void setImgStratatitle(String imgStratatitle) {
+        ImgStratatitle = imgStratatitle;
+    }
+
+    public String getSize() {
+        return Size;
+    }
+
+    public void setSize(String size) {
+        Size = size;
+    }
+
+    public String getMarketable() {
+        return Marketable;
+    }
+
+    public void setMarketable(String marketable) {
+        Marketable = marketable;
+    }
+
+    public String getStatusHarga() {
+        return StatusHarga;
+    }
+
+    public void setStatusHarga(String statusHarga) {
+        StatusHarga = statusHarga;
+    }
+
+    public String getIdAgenCo() {
+        return IdAgenCo;
+    }
+
+    public void setIdAgenCo(String idAgenCo) {
+        IdAgenCo = idAgenCo;
+    }
+
+    public String getSelfie() {
+        return Selfie;
+    }
+
+    public void setSelfie(String selfie) {
+        Selfie = selfie;
+    }
+
+    public String getPjp() {
+        return Pjp;
+    }
+
+    public void setPjp(String pjp) {
+        Pjp = pjp;
+    }
+
+    public String getImgPjp() {
+        return ImgPjp;
+    }
+
+    public void setImgPjp(String imgPjp) {
+        ImgPjp = imgPjp;
+    }
+
+    public String getImgPjp1() {
+        return ImgPjp1;
+    }
+
+    public void setImgPjp1(String imgPjp1) {
+        ImgPjp1 = imgPjp1;
+    }
+
+    public String getHargaSewa() {
+        return HargaSewa;
+    }
+
+    public void setHargaSewa(String hargaSewa) {
+        HargaSewa = hargaSewa;
+    }
+
+    public String getFee() {
+        return Fee;
+    }
+
+    public void setFee(String fee) {
+        Fee = fee;
+    }
+
+    public String getAJB() {
+        return AJB;
+    }
+
+    public void setAJB(String AJB) {
+        this.AJB = AJB;
+    }
+
+    public String getPetokD() {
+        return PetokD;
+    }
+
+    public void setPetokD(String petokD) {
+        PetokD = petokD;
+    }
+
+    public String getImgAJB() {
+        return ImgAJB;
+    }
+
+    public void setImgAJB(String imgAJB) {
+        ImgAJB = imgAJB;
+    }
+
+    public String getImgPetokD() {
+        return ImgPetokD;
+    }
+
+    public void setImgPetokD(String imgPetokD) {
+        ImgPetokD = imgPetokD;
+    }
+
+    public String getNamaVendor() {
+        return NamaVendor;
+    }
+
+    public void setNamaVendor(String namaVendor) {
+        NamaVendor = namaVendor;
+    }
+
+    public String getNoTelpVendor() {
+        return NoTelpVendor;
+    }
+
+    public void setNoTelpVendor(String noTelpVendor) {
+        NoTelpVendor = noTelpVendor;
+    }
+
+    public String getIsSelfie() {
+        return IsSelfie;
+    }
+
+    public void setIsSelfie(String isSelfie) {
+        IsSelfie = isSelfie;
+    }
+
+    public String getIsLokasi() {
+        return IsLokasi;
+    }
+
+    public void setIsLokasi(String isLokasi) {
+        IsLokasi = isLokasi;
+    }
+
+    public String getIsRejected() {
+        return IsRejected;
+    }
+
+    public void setIsRejected(String isRejected) {
+        IsRejected = isRejected;
+    }
+
+    public String getKeterangan() {
+        return Keterangan;
+    }
+
+    public void setKeterangan(String keterangan) {
+        Keterangan = keterangan;
     }
 
     public String getRangeHarga() {

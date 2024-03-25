@@ -748,6 +748,9 @@ public class NewActivity extends AppCompatActivity {
                                 md.setNoTelpVendor(data.getString("NoTelpVendor"));
                                 md.setIsSelfie(data.getString("IsSelfie"));
                                 md.setIsLokasi(data.getString("IsLokasi"));
+                                md.setIdTemplate(data.getString("IdTemplate"));
+                                md.setTemplate(data.getString("Template"));
+                                md.setTemplateBlank(data.getString("TemplateBlank"));
                                 list.add(md);
                                 PDNew.dismiss();
                             } catch (JSONException e) {

@@ -25,6 +25,7 @@ import com.android.volley.toolbox.Volley;
 import com.gooproper.R;
 import com.gooproper.adapter.listing.PraListingAdapter;
 import com.gooproper.model.ListingModel;
+import com.gooproper.model.PraListingModel;
 import com.gooproper.util.Preferences;
 import com.gooproper.util.ServerApi;
 
@@ -43,7 +44,7 @@ public class ListingAdminFragment extends Fragment {
     SwipeRefreshLayout srlistingadmin;
     RecyclerView rvgrid, rvlist;
     RecyclerView.Adapter adapter;
-    List<ListingModel> list;
+    List<PraListingModel> list;
     String IsAdmin;
 
     @Override
@@ -100,7 +101,7 @@ public class ListingAdminFragment extends Fragment {
                         for (int i = 0; i < response.length(); i++) {
                             try {
                                 JSONObject data = response.getJSONObject(i);
-                                ListingModel md = new ListingModel();
+                                PraListingModel md = new PraListingModel();
                                 md.setIdPraListing(data.getString("IdPraListing"));
                                 md.setIdAgen(data.getString("IdAgen"));
                                 md.setIdAgenCo(data.getString("IdAgenCo"));
@@ -279,7 +280,7 @@ public class ListingAdminFragment extends Fragment {
                         for (int i = 0; i < response.length(); i++) {
                             try {
                                 JSONObject data = response.getJSONObject(i);
-                                ListingModel md = new ListingModel();
+                                PraListingModel md = new PraListingModel();
                                 md.setIdPraListing(data.getString("IdPraListing"));
                                 md.setIdAgen(data.getString("IdAgen"));
                                 md.setIdAgenCo(data.getString("IdAgenCo"));

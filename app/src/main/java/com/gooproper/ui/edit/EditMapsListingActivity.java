@@ -82,7 +82,7 @@ public class EditMapsListingActivity extends AppCompatActivity {
     TextInputEditText longitude, latitude;
     LinearLayout LytSelfie;
     Uri bselfie;
-    String latitudeStr, longitudeStr, lokasiStr, addressStr, Selfie, StrIdPraListing, isSelfie;
+    String latitudeStr, longitudeStr, lokasiStr, addressStr, Selfie, StrIdPraListing, isSelfie, Keterangan;
     String timeStamp,fileSelfie;
     private StorageReference mStorageRef;
     StorageReference storageRef,ImageSelfie;
@@ -121,6 +121,8 @@ public class EditMapsListingActivity extends AppCompatActivity {
 
         StrIdPraListing = intentIdPraListing;
         isSelfie = intentSelfie;
+
+        Keterangan = "Tambah Susulan Maps dan Selfie";
 
         if (!isSelfie.equals("0")) {
             selfiebtn.setText("Ganti Selfie");
@@ -507,6 +509,7 @@ public class EditMapsListingActivity extends AppCompatActivity {
                 map.put("Latitude", latitudeStr);
                 map.put("Longitude", longitudeStr);
                 map.put("Selfie", Selfie);
+                map.put("Keterangan", Keterangan);
                 return map;
             }
         };
@@ -539,7 +542,7 @@ public class EditMapsListingActivity extends AppCompatActivity {
     }
     private void sendNotificationToToken(String token, String notificationType) {
         String title = Preferences.getKeyNama(this);
-        String message = "Melakukan Update Maps Listing";
+        String message = "Update Lokasi dan Selfie Listing";
         String response = SendMessageToFCM.sendMessage(token, title, message, notificationType);
     }
 }

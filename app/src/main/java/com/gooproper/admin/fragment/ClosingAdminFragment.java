@@ -91,18 +91,6 @@ public class ClosingAdminFragment extends Fragment {
 
             }
         });
-        /*searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                filterList(newText);
-                return true;
-            }
-        });*/
 
         IVSortAsc.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -143,7 +131,6 @@ public class ClosingAdminFragment extends Fragment {
         return root;
     }
 
-    //searchView
     private void filterList(String text) {
         List<ListingModel> filteredList = new ArrayList<>();
         for (ListingModel item : list) {
@@ -158,7 +145,6 @@ public class ClosingAdminFragment extends Fragment {
         adapter.setFilteredlist(filteredList);
     }
 
-    //filter
     public void showFilterDialog () {
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = getLayoutInflater();
@@ -402,7 +388,6 @@ public class ClosingAdminFragment extends Fragment {
                                   String viewSpec,
                                   String viewType,
                                   String kondisi) {
-        //applyFilters = true; // Set the boolean to true before applying filters
         ArrayList<ListingModel> filteredList = new ArrayList<>();
         for (ListingModel product : list) {
             long productPrice = Long.parseLong(product.getHarga().replace(".", "").trim());
@@ -590,6 +575,9 @@ public class ClosingAdminFragment extends Fragment {
                                 md.setNoTelpVendor(data.getString("NoTelpVendor"));
                                 md.setIsSelfie(data.getString("IsSelfie"));
                                 md.setIsLokasi(data.getString("IsLokasi"));
+                                md.setIdTemplate(data.getString("IdTemplate"));
+                                md.setTemplate(data.getString("Template"));
+                                md.setTemplateBlank(data.getString("TemplateBlank"));
                                 list.add(md);
                                 PDListingAdmin.dismiss();
                             } catch (JSONException e) {

@@ -153,24 +153,6 @@ public class HomeAgenFragment extends Fragment implements OnMapReadyCallback{
                     simpanDevice(Token);
                 });
 
-//        if (isFirstTime()) {
-//            FirebaseMessaging.getInstance().getToken()
-//                    .addOnCompleteListener(task -> {
-//                        if (!task.isSuccessful()) {
-//                            return;
-//                        }
-//                        Token = task.getResult();
-//                        Toast.makeText(getContext(), "Selamat Datang" + Token, Toast.LENGTH_LONG).show();
-//                        FirebaseAnalytics firebaseAnalytics = FirebaseAnalytics.getInstance(getContext());
-//                        Bundle bundle = new Bundle();
-//                        bundle.putString("token_received", Token);
-//                        firebaseAnalytics.logEvent("token_received", bundle);
-//                        simpanDevice();
-//                    });
-//
-//            setFirstTime(false);
-//        }
-
         recycleListingPrimary = root.findViewById(R.id.ListingPrimary);
         recycleListingSold = root.findViewById(R.id.ListingSold);
         recycleListingNew = root.findViewById(R.id.ListingNew);
@@ -251,7 +233,6 @@ public class HomeAgenFragment extends Fragment implements OnMapReadyCallback{
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.POST_NOTIFICATIONS}, RC_NOTIFICATION);
-//            requestPermissions(new String[]{Manifest.permission.POST_NOTIFICATIONS}, RC_NOTIFICATION);
         }
 
         if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.VIBRATE) != PackageManager.PERMISSION_GRANTED) {
@@ -284,7 +265,6 @@ public class HomeAgenFragment extends Fragment implements OnMapReadyCallback{
 
         String userName = Preferences.getKeyUsername(getActivity());
 
-        // Pemeriksaan apakah token sudah ada di database
         tokensRef.child(userName).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -344,7 +324,7 @@ public class HomeAgenFragment extends Fragment implements OnMapReadyCallback{
         RecyclerView.SmoothScroller smoothScroller = new LinearSmoothScroller(recycleListingPrimary.getContext()) {
             @Override
             protected int getHorizontalSnapPreference() {
-                return SNAP_TO_START; // atau SNAP_TO_END
+                return SNAP_TO_START;
             }
 
             @Override
@@ -366,7 +346,6 @@ public class HomeAgenFragment extends Fragment implements OnMapReadyCallback{
             public void onSuccess(AppUpdateInfo appUpdateInfo) {
                 if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE
                         && appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.FLEXIBLE)) {
-                    // Ada pembaruan tersedia, tampilkan dialog pembaruan
                     requestUpdate(appUpdateManager, appUpdateInfo);
                 }
             }
@@ -742,6 +721,9 @@ public class HomeAgenFragment extends Fragment implements OnMapReadyCallback{
                                 md.setNoTelpVendor(data.getString("NoTelpVendor"));
                                 md.setIsSelfie(data.getString("IsSelfie"));
                                 md.setIsLokasi(data.getString("IsLokasi"));
+                                md.setIdTemplate(data.getString("IdTemplate"));
+                                md.setTemplate(data.getString("Template"));
+                                md.setTemplateBlank(data.getString("TemplateBlank"));
                                 mItemsSold.add(md);
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -858,6 +840,9 @@ public class HomeAgenFragment extends Fragment implements OnMapReadyCallback{
                                 md.setNoTelpVendor(data.getString("NoTelpVendor"));
                                 md.setIsSelfie(data.getString("IsSelfie"));
                                 md.setIsLokasi(data.getString("IsLokasi"));
+                                md.setIdTemplate(data.getString("IdTemplate"));
+                                md.setTemplate(data.getString("Template"));
+                                md.setTemplateBlank(data.getString("TemplateBlank"));
                                 mItemsHot.add(md);
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -974,6 +959,9 @@ public class HomeAgenFragment extends Fragment implements OnMapReadyCallback{
                                 md.setNoTelpVendor(data.getString("NoTelpVendor"));
                                 md.setIsSelfie(data.getString("IsSelfie"));
                                 md.setIsLokasi(data.getString("IsLokasi"));
+                                md.setIdTemplate(data.getString("IdTemplate"));
+                                md.setTemplate(data.getString("Template"));
+                                md.setTemplateBlank(data.getString("TemplateBlank"));
                                 mItemsNew.add(md);
                             } catch (JSONException e) {
                                 e.printStackTrace();

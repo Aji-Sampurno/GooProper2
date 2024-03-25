@@ -47,6 +47,7 @@ import com.gooproper.model.InfoModel;
 import com.gooproper.ui.edit.EditDetailInfoActivity;
 import com.gooproper.ui.edit.EditInfoActivity;
 import com.gooproper.ui.followup.FollowUpInfoActivity;
+import com.gooproper.ui.tambah.TambahDetailListingSementaraActivity;
 import com.gooproper.ui.tambah.TambahListingInfoActivity;
 import com.gooproper.util.FormatCurrency;
 import com.gooproper.util.Preferences;
@@ -173,12 +174,6 @@ public class DetailInfoActivity extends AppCompatActivity implements OnMapReadyC
                 update.putExtra("IdInfo",IntentIdInfo);
                 update.putExtra("Status",IntentStatusProperty);
                 startActivity(update);
-            }
-        });
-        IVAddListing.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent update = new Intent(DetailInfoActivity.this, TambahListingInfoActivity.class);
             }
         });
         LytEdit.setOnClickListener(new View.OnClickListener() {

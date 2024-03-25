@@ -77,7 +77,7 @@ public class TambahSelfieListingActivity extends AppCompatActivity {
     ImageView back, IVselfie;
     LinearLayout LytSelfie;
     Uri bselfie;
-    String Selfie, StrIdPraListing;
+    String Selfie, StrIdPraListing, Keterangan;
     String timeStamp,fileSelfie;
     private StorageReference mStorageRef;
     StorageReference storageRef,ImageSelfie;
@@ -109,6 +109,8 @@ public class TambahSelfieListingActivity extends AppCompatActivity {
         ImageSelfie = storageRef.child("selfie/" + fileSelfie);
 
         StrIdPraListing = intentIdPraListing;
+
+        Keterangan = "Tambah Susulan Selfie";
 
         submit.setOnClickListener(view -> {
             if (Validate()) {
@@ -437,6 +439,7 @@ public class TambahSelfieListingActivity extends AppCompatActivity {
                 Map<String, String> map = new HashMap<>();
                 map.put("IdListing", StrIdPraListing);
                 map.put("Selfie", Selfie);
+                map.put("Keterangan", Keterangan);
                 return map;
             }
         };
@@ -496,7 +499,7 @@ public class TambahSelfieListingActivity extends AppCompatActivity {
     }
     private void sendNotificationToToken(String token, String notificationType) {
         String title = Preferences.getKeyNama(this);
-        String message = "Melakukan Update Selfie Listing";
+        String message = "Update Selfie Listing";
         String response = SendMessageToFCM.sendMessage(token, title, message, notificationType);
     }
 }

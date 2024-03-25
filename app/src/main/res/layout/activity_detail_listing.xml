@@ -332,6 +332,13 @@
                 android:orientation="vertical">
 
                 <Button
+                    android:id="@+id/BtnUploadTemplate"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:text="Upload Template"/>
+
+                <Button
                     android:id="@+id/BtnLihatTemplate"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

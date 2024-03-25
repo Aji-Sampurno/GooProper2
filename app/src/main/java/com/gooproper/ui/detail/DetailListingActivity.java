@@ -96,7 +96,7 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
     ProgressDialog PDDetailListing;
     TextView TVRangeHarga, TVNamaDetailListing, TVAlamatDetailListing, TVHargaDetailListing, TVHargaSewaDetailListing, TVViewsDetailListing, TVLikeDetailListing, TVBedDetailListing, TVNamaAgen, TVNamaAgen2, TVBathDetailListing, TVWideDetailListing, TVLandDetailListing, TVDimensiDetailListing, TVTipeDetailListing, TVStatusDetailListing, TVSertifikatDetailListing, TVLuasDetailListing, TVKamarTidurDetailListing, TVKamarMandiDetailListing, TVLantaiDetailListing, TVGarasiDetailListing, TVCarpotDetailListing, TVListrikDetailListing, TVSumberAirDetailListing, TVPerabotDetailListing, TVSizeBanner, TVDeskripsiDetailListing, TVNoData, TVNoDataPdf, TVPriority, TVKondisi, TVNoPjp, TVNoDataPjp, TVFee, TVTglInput, TVNamaVendor, TVTelpVendor, TVPJP, TVSelfie, TVRejected, TVPoin, TVHadap;
     ImageView IVFlowUp, IVWhatsapp, IVInstagram, IVFlowUp2, IVWhatsapp2, IVInstagram2, IVFavorite, IVFavoriteOn, IVShare, IVStar1, IVStar2, IVStar3, IVStar4, IVStar5, IVAlamat, IVNextImg, IVPrevImg, IVSelfie;
-    Button BtnApproveAdmin, BtnApproveManager, BtnRejectedAdmin, BtnRejectedManager, BtnTambahMaps, BtnTambahSelfie, BtnAjukanUlang, BtnLihatTemplate, BtnLihatTemplateKosong;
+    Button BtnApproveAdmin, BtnApproveManager, BtnRejectedAdmin, BtnRejectedManager, BtnTambahMaps, BtnTambahSelfie, BtnAjukanUlang, BtnLihatTemplate, BtnLihatTemplateKosong, BtnUploadTemplate;
     TextInputEditText tambahagen, tambahcoagen, tambahpjp;
     TextInputLayout lytambahagen, lyttambahcoagen, lyttambahpjp;
     CheckBox CBMarketable, CBHarga, CBSelfie, CBLokasi;
@@ -173,6 +173,7 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
         BtnAjukanUlang = findViewById(R.id.BtnAjukanUlangDetailListing);
         BtnLihatTemplate = findViewById(R.id.BtnLihatTemplate);
         BtnLihatTemplateKosong = findViewById(R.id.BtnLihatTemplateKosong);
+        BtnUploadTemplate = findViewById(R.id.BtnUploadTemplate);
 
         TVNamaDetailListing = findViewById(R.id.TVNamaDetailListing);
         TVAlamatDetailListing = findViewById(R.id.TVAlamatDetailListing);
@@ -347,6 +348,9 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
         String intentIsSelfie = data.getStringExtra("IsSelfie");
         String intentIsLokasi = data.getStringExtra("IsLokasi");
         String intentKeterangan = data.getStringExtra("Keterangan");
+        String intentIdTemplate = data.getStringExtra("IdTemplate");
+        String intentTemplate = data.getStringExtra("Template");
+        String intentTemplateBlank = data.getStringExtra("TemplateBlank");
 
         status = Preferences.getKeyStatus(this);
         StrIdAgen = Preferences.getKeyIdAgen(this);
@@ -478,6 +482,7 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                 BtnRejectedManager.setVisibility(View.VISIBLE);
                 BtnLihatTemplate.setVisibility(View.GONE);
                 BtnLihatTemplateKosong.setVisibility(View.GONE);
+                BtnUploadTemplate.setVisibility(View.GONE);
                 IVFlowUp.setVisibility(View.INVISIBLE);
                 IVFlowUp2.setVisibility(View.INVISIBLE);
                 IVEdit.setVisibility(View.VISIBLE);
@@ -490,6 +495,9 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                 BtnApproveManager.setVisibility(View.VISIBLE);
                 BtnRejectedAdmin.setVisibility(View.GONE);
                 BtnRejectedManager.setVisibility(View.VISIBLE);
+                BtnLihatTemplate.setVisibility(View.GONE);
+                BtnLihatTemplateKosong.setVisibility(View.GONE);
+                BtnUploadTemplate.setVisibility(View.GONE);
                 IVFlowUp.setVisibility(View.INVISIBLE);
                 IVFlowUp2.setVisibility(View.INVISIBLE);
                 IVEdit.setVisibility(View.VISIBLE);
@@ -504,6 +512,7 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                 BtnRejectedManager.setVisibility(View.GONE);
                 BtnLihatTemplate.setVisibility(View.GONE);
                 BtnLihatTemplateKosong.setVisibility(View.GONE);
+                BtnUploadTemplate.setVisibility(View.GONE);
                 IVFlowUp.setVisibility(View.VISIBLE);
                 IVFlowUp2.setVisibility(View.VISIBLE);
                 IVEdit.setVisibility(View.VISIBLE);
@@ -520,6 +529,7 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                 BtnRejectedManager.setVisibility(View.GONE);
                 BtnLihatTemplate.setVisibility(View.GONE);
                 BtnLihatTemplateKosong.setVisibility(View.GONE);
+                BtnUploadTemplate.setVisibility(View.GONE);
                 IVFlowUp.setVisibility(View.INVISIBLE);
                 IVFlowUp2.setVisibility(View.INVISIBLE);
                 IVEdit.setVisibility(View.VISIBLE);
@@ -715,6 +725,7 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                 BtnRejectedManager.setVisibility(View.GONE);
                 BtnLihatTemplate.setVisibility(View.GONE);
                 BtnLihatTemplateKosong.setVisibility(View.GONE);
+                BtnUploadTemplate.setVisibility(View.GONE);
                 IVFlowUp.setVisibility(View.VISIBLE);
                 IVFlowUp2.setVisibility(View.VISIBLE);
                 IVEdit.setVisibility(View.VISIBLE);
@@ -818,6 +829,7 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                     BtnRejectedManager.setVisibility(View.GONE);
                     BtnLihatTemplate.setVisibility(View.GONE);
                     BtnLihatTemplateKosong.setVisibility(View.GONE);
+                    BtnUploadTemplate.setVisibility(View.GONE);
                     IVFlowUp.setVisibility(View.VISIBLE);
                     IVFlowUp2.setVisibility(View.VISIBLE);
                     idpengguna = "0";
@@ -939,6 +951,9 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                     BtnApproveManager.setVisibility(View.GONE);
                     BtnRejectedAdmin.setVisibility(View.GONE);
                     BtnRejectedManager.setVisibility(View.GONE);
+                    BtnLihatTemplate.setVisibility(View.GONE);
+                    BtnLihatTemplateKosong.setVisibility(View.GONE);
+                    BtnUploadTemplate.setVisibility(View.GONE);
                     IVFlowUp.setVisibility(View.VISIBLE);
                     IVFlowUp2.setVisibility(View.VISIBLE);
                     idpengguna = "0";
@@ -1062,6 +1077,7 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                     BtnRejectedManager.setVisibility(View.GONE);
                     BtnLihatTemplate.setVisibility(View.GONE);
                     BtnLihatTemplateKosong.setVisibility(View.GONE);
+                    BtnUploadTemplate.setVisibility(View.GONE);
                     IVFlowUp.setVisibility(View.VISIBLE);
                     IVFlowUp2.setVisibility(View.VISIBLE);
                     idpengguna = "0";
@@ -1095,6 +1111,7 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                     BtnRejectedManager.setVisibility(View.GONE);
                     BtnLihatTemplate.setVisibility(View.GONE);
                     BtnLihatTemplateKosong.setVisibility(View.GONE);
+                    BtnUploadTemplate.setVisibility(View.GONE);
                     IVFlowUp.setVisibility(View.VISIBLE);
                     IVFlowUp2.setVisibility(View.VISIBLE);
                     idpengguna = "0";
@@ -1215,6 +1232,9 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                     BtnApproveManager.setVisibility(View.GONE);
                     BtnRejectedAdmin.setVisibility(View.GONE);
                     BtnRejectedManager.setVisibility(View.GONE);
+                    BtnLihatTemplate.setVisibility(View.GONE);
+                    BtnLihatTemplateKosong.setVisibility(View.GONE);
+                    BtnUploadTemplate.setVisibility(View.GONE);
                     IVFlowUp.setVisibility(View.VISIBLE);
                     IVFlowUp2.setVisibility(View.VISIBLE);
                     idpengguna = "0";
@@ -1337,6 +1357,7 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                     BtnRejectedManager.setVisibility(View.GONE);
                     BtnLihatTemplate.setVisibility(View.GONE);
                     BtnLihatTemplateKosong.setVisibility(View.GONE);
+                    BtnUploadTemplate.setVisibility(View.GONE);
                     IVFlowUp.setVisibility(View.VISIBLE);
                     IVFlowUp2.setVisibility(View.VISIBLE);
                     idpengguna = "0";
@@ -1371,6 +1392,7 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                     BtnRejectedManager.setVisibility(View.GONE);
                     BtnLihatTemplate.setVisibility(View.GONE);
                     BtnLihatTemplateKosong.setVisibility(View.GONE);
+                    BtnUploadTemplate.setVisibility(View.GONE);
                     IVFlowUp.setVisibility(View.VISIBLE);
                     IVFlowUp2.setVisibility(View.VISIBLE);
                     idpengguna = "0";
@@ -1484,6 +1506,9 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                     BtnApproveManager.setVisibility(View.GONE);
                     BtnRejectedAdmin.setVisibility(View.GONE);
                     BtnRejectedManager.setVisibility(View.GONE);
+                    BtnLihatTemplate.setVisibility(View.GONE);
+                    BtnLihatTemplateKosong.setVisibility(View.GONE);
+                    BtnUploadTemplate.setVisibility(View.GONE);
                     IVFlowUp.setVisibility(View.VISIBLE);
                     IVFlowUp2.setVisibility(View.VISIBLE);
                     idpengguna = "0";
@@ -1601,6 +1626,7 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                     BtnTambahSelfie.setVisibility(View.GONE);
                     BtnLihatTemplate.setVisibility(View.GONE);
                     BtnLihatTemplateKosong.setVisibility(View.GONE);
+                    BtnUploadTemplate.setVisibility(View.GONE);
                     IVFlowUp.setVisibility(View.VISIBLE);
                     IVFlowUp2.setVisibility(View.VISIBLE);
                     idpengguna = "0";
@@ -1619,6 +1645,7 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
             BtnRejectedManager.setVisibility(View.GONE);
             BtnLihatTemplate.setVisibility(View.GONE);
             BtnLihatTemplateKosong.setVisibility(View.GONE);
+            BtnUploadTemplate.setVisibility(View.GONE);
             IVFlowUp.setVisibility(View.INVISIBLE);
             IVFlowUp2.setVisibility(View.INVISIBLE);
             TVAlamatDetailListing.setVisibility(View.GONE);
@@ -1633,6 +1660,7 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
             TVAlamatDetailListing.setVisibility(View.GONE);
             BtnLihatTemplate.setVisibility(View.GONE);
             BtnLihatTemplateKosong.setVisibility(View.GONE);
+            BtnUploadTemplate.setVisibility(View.GONE);
             IVAlamat.setVisibility(View.GONE);
             IVFlowUp.setVisibility(View.INVISIBLE);
             IVFlowUp2.setVisibility(View.INVISIBLE);
@@ -2798,6 +2826,12 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
             UrlAJB = intentImgAJB;
             UrlPetokD = intentImgPetokD;
 
+            if (!intentTemplate.equals("null")) {
+                images.add(intentTemplate);
+            }
+            if (!intentTemplateBlank.equals("null")) {
+                images.add(intentTemplateBlank);
+            }
             if (!intentImg1.equals("0")) {
                 images.add(intentImg1);
             }

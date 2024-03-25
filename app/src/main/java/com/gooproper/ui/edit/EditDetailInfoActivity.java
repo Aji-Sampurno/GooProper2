@@ -41,6 +41,8 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Tasks;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
@@ -50,6 +52,7 @@ import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
 import com.gooproper.R;
 import com.gooproper.ui.LocationActivity;
+import com.gooproper.ui.tambah.TambahListingInfoActivity;
 import com.gooproper.util.Preferences;
 import com.gooproper.util.SendMessageToFCM;
 import com.gooproper.util.ServerApi;
@@ -93,7 +96,11 @@ public class EditDetailInfoActivity extends AppCompatActivity {
     ImageView IVDeleteSelfie, IVDeleteProperty;
     String IdAgen, IdNull, IdInput;
     String ImageSelfie, ImageProperty, IsSpek, StrHJual, StrHSewa, StrHargaJual, StrHargaSewa;
-    String Lat, Lng, token,StringLatitude, StringLongitude, StringAlamat, StringLokasi, IntenLat, IntenLng, IntenLok, IntenAlamat, IntenSelfie, IntenProperty;
+    String Lat, Lng, token,StringLatitude, StringLongitude, StringAlamat, StringLokasi, IntenLat, IntenLng, IntenLok, IntenAlamat, IntenSelfie, IntenProperty, StrAlamat, StrLokasi;
+    String timeStamp,fileSelfie,fileProperty, IsSelfie, IsProperty, IdInfo;
+    private StorageReference mStorageRef;
+    StorageReference storageRef, ImgSelfie,ImgProperty;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -155,92 +162,21 @@ public class EditDetailInfoActivity extends AppCompatActivity {
         String IntentKeterangan = data.getStringExtra("Keterangan");
         String IntentIsSpek = data.getStringExtra("IsSpek");
 
+        IdInfo = IntentIdInfo;
+        IsSelfie = IntentImgSelfie;
+        IsProperty = IntentImgProperty;
+
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
         String fileListing = "Property_" + timeStamp + ".jpg";
         String fileSelfie = "Selfie_" + timeStamp + ".jpg";
 
+        storageRef = FirebaseStorage.getInstance().getReference();
+        ImgProperty = storageRef.child("listing/" + fileListing);
+        ImgSelfie = storageRef.child("selfie/" + fileSelfie);
+
         Submit.setOnClickListener(view -> {
             if (Validate()) {
-                pDialog.setMessage("Menyimpan Data");
-                pDialog.setCancelable(false);
-                pDialog.show();
-
-                StorageReference storageRef = FirebaseStorage.getInstance().getReference();
-                StorageReference ImgListing = storageRef.child("listing/" + fileListing);
-                StorageReference ImgSelfie = storageRef.child("selfie/" + fileSelfie);
-
-                List<StorageTask<UploadTask.TaskSnapshot>> uploadTasks = new ArrayList<>();
-
-                if (UriProperty != null) {
-                    StorageTask<UploadTask.TaskSnapshot> task1 = ImgListing.putFile(UriProperty)
-                            .addOnSuccessListener(taskSnapshot -> {
-                                ImgListing.getDownloadUrl()
-                                        .addOnSuccessListener(uri -> {
-                                            String imageUrl = uri.toString();
-                                            ImageProperty = imageUrl;
-                                        })
-                                        .addOnFailureListener(exception -> {
-                                        });
-                            })
-                            .addOnFailureListener(exception -> {
-                            });
-                    uploadTasks.add(task1);
-                } else {
-                    ImageProperty = IntentImgProperty;
-                }
-                if (UriSelfie != null) {
-                    StorageTask<UploadTask.TaskSnapshot> task2 = ImgSelfie.putFile(UriSelfie)
-                            .addOnSuccessListener(taskSnapshot -> {
-                                ImgSelfie.getDownloadUrl()
-                                        .addOnSuccessListener(uri -> {
-                                            String imageUrl = uri.toString();
-                                            ImageSelfie = imageUrl;
-                                        })
-                                        .addOnFailureListener(exception -> {
-                                        });
-                            })
-                            .addOnFailureListener(exception -> {
-                            });
-                    uploadTasks.add(task2);
-                } else {
-                    ImageSelfie = IntentImgSelfie;
-                }
-
-                Tasks.whenAllSuccess(uploadTasks)
-                        .addOnSuccessListener(results -> {
-                            pDialog.cancel();
-                            simpanData();
-                        })
-                        .addOnFailureListener(exception -> {
-                            Dialog customDialog = new Dialog(EditDetailInfoActivity.this);
-                            customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                            customDialog.setContentView(R.layout.custom_dialog_eror_input);
-
-                            if (customDialog.getWindow() != null) {
-                                customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-                            }
-
-                            Button ok = customDialog.findViewById(R.id.BtnOkErorInput);
-                            TextView tv = customDialog.findViewById(R.id.TVDialogErorInput);
-
-                            tv.setText("Gagal Saat Unggah Gambar");
-
-                            ok.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    customDialog.dismiss();
-                                }
-                            });
-
-                            ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
-
-                            Glide.with(EditDetailInfoActivity.this)
-                                    .load(R.drawable.alert) // You can also use a local resource like R.drawable.your_gif_resource
-                                    .transition(DrawableTransitionOptions.withCrossFade())
-                                    .into(gifImageView);
-
-                            customDialog.show();
-                        });
+                handleImagePropertySuccess();
             }
         });
         BtnMap.setOnClickListener(view -> startMapsActivityForResult());
@@ -270,7 +206,6 @@ public class EditDetailInfoActivity extends AppCompatActivity {
         ETNama.setText(IntentNarahubung);
         ETTelp.setText(IntentNoTelp);
         if (!IntentImgSelfie.equals("0") || IntentImgSelfie.isEmpty()) {
-            IntenSelfie = IntentImgSelfie;
             BtnSelfie.setVisibility(View.GONE);
             LytSelfie.setVisibility(View.VISIBLE);
             Picasso.get()
@@ -278,7 +213,6 @@ public class EditDetailInfoActivity extends AppCompatActivity {
                     .into(IVSelfie);
         }
         if (!IntentImgProperty.equals("0") || IntentImgProperty.isEmpty()) {
-            IntenProperty = IntentImgProperty;
             BtnProperty.setVisibility(View.GONE);
             LytProperty.setVisibility(View.VISIBLE);
             Picasso.get()
@@ -300,10 +234,15 @@ public class EditDetailInfoActivity extends AppCompatActivity {
         if (!IntentKeterangan.isEmpty()) {
             ETKeterangan.setText(IntentKeterangan);
         }
+        if (!IntentLatitude.equals("0") && !IntentLongitude.equals("0")) {
+            BtnMap.setVisibility(View.GONE);
+        }
         IntenLat = IntentLatitude;
         IntenLng = IntentLongitude;
         IntenLok = IntentLokasi;
         IntenAlamat = IntentAlamat;
+        IntenSelfie = IntentImgSelfie;
+        IntenProperty = IntentImgProperty;
 
         ETHJual.addTextChangedListener(new TextWatcher() {
             private String current = "";
@@ -522,7 +461,17 @@ public class EditDetailInfoActivity extends AppCompatActivity {
                 Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 startActivityForResult(intent, CODE_GALLERY_REQUEST1);
             }
+        } else if (requestCode == PERMISSION_REQUEST_CODE_MEDIA_IMAGES_1) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(intent, CODE_GALLERY_REQUEST1);
+            }
         } else if (requestCode == PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE_2) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(intent, CODE_GALLERY_REQUEST2);
+            }
+        } else if (requestCode == PERMISSION_REQUEST_CODE_MEDIA_IMAGES_2) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 startActivityForResult(intent, CODE_GALLERY_REQUEST2);
@@ -601,6 +550,79 @@ public class EditDetailInfoActivity extends AppCompatActivity {
         UriProperty = null;
         LytProperty.setVisibility(View.GONE);
         BtnProperty.setVisibility(View.VISIBLE);
+    }
+    private void showProgressDialog() {
+        pDialog.setMessage("Unggah Gambar");
+        pDialog.setCancelable(false);
+        pDialog.show();
+    }
+    private void HideProgressDialog() {
+        pDialog.dismiss();
+        pDialog.cancel();
+    }
+    private void handleImagePropertySuccess() {
+        if (UriProperty != null) {
+            showProgressDialog();
+            ImgProperty.putFile(UriProperty)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            ImgProperty.getDownloadUrl()
+                                    .addOnSuccessListener(uri -> {
+                                        String imageUrl = uri.toString();
+                                        ImageProperty = imageUrl;
+                                        handleImagePropertySuccess();
+                                    })
+                                    .addOnFailureListener(exception -> {
+                                        handleImageSelfieSuccess();
+                                        Toast.makeText(EditDetailInfoActivity.this, "Upload failed: " + exception.getMessage(), Toast.LENGTH_SHORT).show();
+                                    });
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            handleImageSelfieSuccess();
+                            Toast.makeText(EditDetailInfoActivity.this, "Upload failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        } else {
+            showProgressDialog();
+            ImageProperty = IsProperty;
+            handleImageSelfieSuccess();
+        }
+    }
+    private void handleImageSelfieSuccess() {
+        if (UriSelfie != null) {
+            ImgSelfie.putFile(UriSelfie)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            ImgSelfie.getDownloadUrl()
+                                    .addOnSuccessListener(uri -> {
+                                        String imageUrl = uri.toString();
+                                        ImageSelfie = imageUrl;
+                                        HideProgressDialog();
+                                        simpanData();
+                                    })
+                                    .addOnFailureListener(exception -> {
+                                        handleImageSelfieSuccess();
+                                        Toast.makeText(EditDetailInfoActivity.this, "Upload failed: " + exception.getMessage(), Toast.LENGTH_SHORT).show();
+                                    });
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            handleImageSelfieSuccess();
+                            Toast.makeText(EditDetailInfoActivity.this, "Upload failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        } else {
+            ImageSelfie = IsSelfie;
+            HideProgressDialog();
+            simpanData();
+        }
     }
     private void simpanData() {
         pDialog.setMessage("Menyimpan Data");
@@ -746,14 +768,24 @@ public class EditDetailInfoActivity extends AppCompatActivity {
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> map = new HashMap<>();
                 if (StringLatitude == null) {
-                    Lat = "0";
+                    Lat = IntenLat;
                 } else {
                     Lat = StringLatitude;
                 }
                 if (StringLongitude == null) {
-                    Lng = "0";
+                    Lng = IntenLng;
                 } else {
                     Lng = StringLongitude;
+                }
+                if (StringAlamat == null) {
+                    StrAlamat = IntenAlamat;
+                } else {
+                    StrAlamat = StringAlamat;
+                }
+                if (StringLokasi == null) {
+                    StrLokasi = IntenLok;
+                } else {
+                    StrLokasi = StringLokasi;
                 }
                 if (StrHJual == null){
                     StrHargaJual = "0";
@@ -769,6 +801,7 @@ public class EditDetailInfoActivity extends AppCompatActivity {
                 String tanah = ETLTanah.getText().toString() + " " + ETSLTanah.getText().toString();
                 String bangunan = ETLBangunan.getText().toString() + " " + ETSLBangunan.getText().toString();
 
+                map.put("IdInfo", IdInfo);
                 map.put("JenisProperty", ETJenisProperty.getText().toString());
                 map.put("StatusProperty", ETStatusProperty.getText().toString());
                 map.put("Narahubung", ETNama.getText().toString());
@@ -778,8 +811,8 @@ public class EditDetailInfoActivity extends AppCompatActivity {
                 map.put("Keterangan", ETKeterangan.getText().toString());
                 map.put("HargaJual", StrHargaJual);
                 map.put("HargaSewa", StrHargaSewa);
-                map.put("Lokasi", StringLokasi);
-                map.put("Alamat", StringAlamat);
+                map.put("Lokasi", StrLokasi);
+                map.put("Alamat", StrAlamat);
                 map.put("Latitude", Lat);
                 map.put("Longitude", Lng);
                 map.put("ImgSelfie", ImageSelfie);
@@ -1006,99 +1039,6 @@ public class EditDetailInfoActivity extends AppCompatActivity {
             TextView tv = customDialog.findViewById(R.id.TVDialogErorInput);
 
             tv.setText("Harap Masukkan Nama");
-
-            ok.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    customDialog.dismiss();
-                }
-            });
-
-            ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
-
-            Glide.with(EditDetailInfoActivity.this)
-                    .load(R.drawable.alert) // You can also use a local resource like R.drawable.your_gif_resource
-                    .transition(DrawableTransitionOptions.withCrossFade())
-                    .into(gifImageView);
-
-            customDialog.show();
-            return false;
-        }
-        if (UriSelfie == null && IntenSelfie.equals("0")) {
-            Dialog customDialog = new Dialog(EditDetailInfoActivity.this);
-            customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-            customDialog.setContentView(R.layout.custom_dialog_eror_input);
-
-            if (customDialog.getWindow() != null) {
-                customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-            }
-
-            Button ok = customDialog.findViewById(R.id.BtnOkErorInput);
-            TextView tv = customDialog.findViewById(R.id.TVDialogErorInput);
-
-            tv.setText("Harap Foto Selfie");
-
-            ok.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    customDialog.dismiss();
-                }
-            });
-
-            ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
-
-            Glide.with(EditDetailInfoActivity.this)
-                    .load(R.drawable.alert) // You can also use a local resource like R.drawable.your_gif_resource
-                    .transition(DrawableTransitionOptions.withCrossFade())
-                    .into(gifImageView);
-
-            customDialog.show();
-            return false;
-        }
-        if (UriProperty == null && IntenProperty.equals("0")) {
-            Dialog customDialog = new Dialog(EditDetailInfoActivity.this);
-            customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-            customDialog.setContentView(R.layout.custom_dialog_eror_input);
-
-            if (customDialog.getWindow() != null) {
-                customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-            }
-
-            Button ok = customDialog.findViewById(R.id.BtnOkErorInput);
-            TextView tv = customDialog.findViewById(R.id.TVDialogErorInput);
-
-            tv.setText("Harap Foto Property");
-
-            ok.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    customDialog.dismiss();
-                }
-            });
-
-            ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
-
-            Glide.with(EditDetailInfoActivity.this)
-                    .load(R.drawable.alert) // You can also use a local resource like R.drawable.your_gif_resource
-                    .transition(DrawableTransitionOptions.withCrossFade())
-                    .into(gifImageView);
-
-            customDialog.show();
-            return false;
-        }
-        if ((IntenLat.equals("0") && IntenLng.equals("0")) && (StringLatitude == null && StringLongitude == null)) {
-            Dialog customDialog = new Dialog(EditDetailInfoActivity.this);
-            customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-            customDialog.setContentView(R.layout.custom_dialog_eror_input);
-
-            if (customDialog.getWindow() != null) {
-                customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-            }
-
-            Button ok = customDialog.findViewById(R.id.BtnOkErorInput);
-            TextView tv = customDialog.findViewById(R.id.TVDialogErorInput);
-
-            tv.setText("Harap Tambahkan Lokasi Property");
 
             ok.setOnClickListener(new View.OnClickListener() {
                 @Override

@@ -28,7 +28,9 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.gooproper.R;
 import com.gooproper.model.ListingModel;
+import com.gooproper.model.PraListingModel;
 import com.gooproper.ui.detail.DetailListingActivity;
+import com.gooproper.ui.detail.DetailPraListingActivity;
 import com.gooproper.util.FormatCurrency;
 import com.gooproper.util.ServerApi;
 
@@ -43,15 +45,16 @@ import java.util.Map;
 
 public class PraListingAdapter extends RecyclerView.Adapter<PraListingAdapter.HolderData> {
 
-    private List<ListingModel> models;
-    private List<ListingModel> originalList;
+    List<PraListingModel> models;
+    private List<PraListingModel> originalList;
     private Context context;
     private static final int MAX_TEXT_LENGTH = 20;
     private static final int MAX_TEXT_LENGTH_PRICE = 10;
+    private static final int MAX_TEXT_LENGTH_PRICE_MILIAR = 23;
     private static final int MAX_TEXT_LENGTH_PRICE_JUTA = 19;
     private static final int MAX_TEXT_LENGTH_PRICE_RIBU = 15;
 
-    public PraListingAdapter(Context context, List<ListingModel> list) {
+    public PraListingAdapter(Context context, List<PraListingModel> list) {
         this.models = list;
         this.originalList = list;
         this.context = context;
@@ -68,18 +71,38 @@ public class PraListingAdapter extends RecyclerView.Adapter<PraListingAdapter.Ho
     private String truncateTextWithEllipsisPrice(String text) {
         if (text.length() > MAX_TEXT_LENGTH_PRICE) {
             if (text.length() < MAX_TEXT_LENGTH_PRICE_RIBU) {
-                //return text.substring(0, MAX_TEXT_LENGTH_PRICE) + " Rb";
                 String truncatedText = removeTrailingZeroK(text.substring(0, MAX_TEXT_LENGTH_PRICE)) + " Rb";
                 return truncatedText;
             } else if (text.length() < MAX_TEXT_LENGTH_PRICE_JUTA) {
-                //return text.substring(0, MAX_TEXT_LENGTH_PRICE) + " Jt";
                 String truncatedText = removeTrailingZeroJ(text.substring(0, MAX_TEXT_LENGTH_PRICE)) + " Jt";
                 return truncatedText;
-            } else {
-                //return text.substring(0, MAX_TEXT_LENGTH_PRICE) + " M";
+            } else if (text.length() < MAX_TEXT_LENGTH_PRICE_MILIAR) {
                 String truncatedText = removeTrailingZeroM(text.substring(0, MAX_TEXT_LENGTH_PRICE)) + " M";
                 return truncatedText;
+            } else {
+                String truncatedText = removeTrailingZeroT(text.substring(0, MAX_TEXT_LENGTH_PRICE)) + " T";
+                return truncatedText;
             }
+        } else {
+            return text;
+        }
+    }
+
+    private String removeTrailingZeroT(String text) {
+        if (text.endsWith(".000")) {
+            return text.substring(0, text.length() - 4);
+        } else if (text.endsWith(".00")) {
+            return text.substring(0, text.length() - 3);
+        } else if (text.endsWith(".0")) {
+            return text.substring(0, text.length() - 2);
+        } else if (text.endsWith(".000.")) {
+            return text.substring(0, text.length() - 5);
+        } else if (text.endsWith("000.")) {
+            return text.substring(0, text.length() - 4);
+        } else if (text.endsWith("00.")) {
+            return text.substring(0, text.length() - 3);
+        } else if (text.endsWith("0.")) {
+            return text.substring(0, text.length() - 2);
         } else {
             return text;
         }
@@ -139,28 +162,25 @@ public class PraListingAdapter extends RecyclerView.Adapter<PraListingAdapter.Ho
         }
     }
 
-    //searchView
-    public void setFilteredlist (List<ListingModel> filteredlist){
+    public void setFilteredlist (List<PraListingModel> filteredlist){
         this.models = filteredlist;
         notifyDataSetChanged();
     }
 
-    //reset filter
     public void resetFilter() {
         models.clear();
         models.addAll(originalList);
         notifyDataSetChanged();
     }
 
-    //asc - desc
     private long parsePrice(String priceString) {
         return Long.parseLong(priceString.replaceAll(",", "").trim());
     }
 
     public void sortAscending() {
-        Collections.sort(models, new Comparator<ListingModel>() {
+        Collections.sort(models, new Comparator<PraListingModel>() {
             @Override
-            public int compare(ListingModel item1, ListingModel item2) {
+            public int compare(PraListingModel item1, PraListingModel item2) {
                 long price1 = parsePrice(item1.getHarga());
                 long price2 = parsePrice(item2.getHarga());
                 return Long.compare(price1, price2);
@@ -170,11 +190,35 @@ public class PraListingAdapter extends RecyclerView.Adapter<PraListingAdapter.Ho
     }
 
     public void sortDescending() {
-        Collections.sort(models, new Comparator<ListingModel>() {
+        Collections.sort(models, new Comparator<PraListingModel>() {
             @Override
-            public int compare(ListingModel item1, ListingModel item2) {
+            public int compare(PraListingModel item1, PraListingModel item2) {
                 long price1 = parsePrice(item1.getHarga());
                 long price2 = parsePrice(item2.getHarga());
+                return Long.compare(price2, price1);
+            }
+        });
+        notifyDataSetChanged();
+    }
+
+    public void sortAscendingSewa() {
+        Collections.sort(models, new Comparator<PraListingModel>() {
+            @Override
+            public int compare(PraListingModel item1, PraListingModel item2) {
+                long price1 = parsePrice(item1.getHargaSewa());
+                long price2 = parsePrice(item2.getHargaSewa());
+                return Long.compare(price1, price2);
+            }
+        });
+        notifyDataSetChanged();
+    }
+
+    public void sortDescendingSewa() {
+        Collections.sort(models, new Comparator<PraListingModel>() {
+            @Override
+            public int compare(PraListingModel item1, PraListingModel item2) {
+                long price1 = parsePrice(item1.getHargaSewa());
+                long price2 = parsePrice(item2.getHargaSewa());
                 return Long.compare(price2, price1);
             }
         });
@@ -192,8 +236,8 @@ public class PraListingAdapter extends RecyclerView.Adapter<PraListingAdapter.Ho
     @Override
     public void onBindViewHolder(@NonNull HolderData holder, int position) {
         FormatCurrency currency = new FormatCurrency();
-        ListingModel listingModel = models.get(position);
-        if (listingModel.getPriority().equals("open")) {
+        PraListingModel listingModel = models.get(position);
+        if (listingModel.getPriority().equals("open")){
             holder.Lytpriority.setVisibility(View.INVISIBLE);
         } else {
             holder.Lytpriority.setVisibility(View.VISIBLE);
@@ -320,7 +364,7 @@ public class PraListingAdapter extends RecyclerView.Adapter<PraListingAdapter.Ho
         TextView titleTxt, addressTxt, priceTxt, bedTxt, bathTxt, levelTxt, garageTxt, bathArtTxt, bedArtTxt, carpotTxt, wideTxt, priorityTxt;
         ImageView pic;
         LinearLayout Lytpriority;
-        public ListingModel listingModel;
+        public PraListingModel listingModel;
 
         public HolderData(View view) {
             super(view);
@@ -338,7 +382,7 @@ public class PraListingAdapter extends RecyclerView.Adapter<PraListingAdapter.Ho
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent update = new Intent(context, DetailListingActivity.class);
+                    Intent update = new Intent(context, DetailPraListingActivity.class);
                     update.putExtra("update", 1);
                     update.putExtra("IdPraListing", listingModel.getIdPraListing());
                     update.putExtra("IdAgen",listingModel.getIdAgen());

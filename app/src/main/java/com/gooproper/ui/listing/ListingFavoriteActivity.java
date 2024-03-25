@@ -183,6 +183,9 @@ public class ListingFavoriteActivity extends AppCompatActivity {
                                 md.setNoTelpVendor(data.getString("NoTelpVendor"));
                                 md.setIsSelfie(data.getString("IsSelfie"));
                                 md.setIsLokasi(data.getString("IsLokasi"));
+                                md.setIdTemplate(data.getString("IdTemplate"));
+                                md.setTemplate(data.getString("Template"));
+                                md.setTemplateBlank(data.getString("TemplateBlank"));
                                 list.add(md);
                                 PDFavorite.dismiss();
                             } catch (JSONException e) {
@@ -363,6 +366,9 @@ public class ListingFavoriteActivity extends AppCompatActivity {
                                 md.setNoTelpVendor(data.getString("NoTelpVendor"));
                                 md.setIsSelfie(data.getString("IsSelfie"));
                                 md.setIsLokasi(data.getString("IsLokasi"));
+                                md.setIdTemplate(data.getString("IdTemplate"));
+                                md.setTemplate(data.getString("Template"));
+                                md.setTemplateBlank(data.getString("TemplateBlank"));
                                 list.add(md);
                                 PDFavorite.dismiss();
                             } catch (JSONException e) {

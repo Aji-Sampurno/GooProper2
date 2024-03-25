@@ -189,11 +189,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
                     }
                 }
 
-//                if (currentPosition < (adapterPrimary.getItemCount() - 1)) {
-//                    smoothScrollToPosition(currentPosition + 1);
-//                } else if (currentPosition == (adapterPrimary.getItemCount() - 1)) {
-//                    smoothScrollToPosition(currentPosition - 1);
-//                }
             }
         }, 0, 3000);
 
@@ -468,6 +463,9 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
                                 md.setNoTelpVendor(data.getString("NoTelpVendor"));
                                 md.setIsSelfie(data.getString("IsSelfie"));
                                 md.setIsLokasi(data.getString("IsLokasi"));
+                                md.setIdTemplate(data.getString("IdTemplate"));
+                                md.setTemplate(data.getString("Template"));
+                                md.setTemplateBlank(data.getString("TemplateBlank"));
                                 mItemsSold.add(md);
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -584,6 +582,9 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
                                 md.setNoTelpVendor(data.getString("NoTelpVendor"));
                                 md.setIsSelfie(data.getString("IsSelfie"));
                                 md.setIsLokasi(data.getString("IsLokasi"));
+                                md.setIdTemplate(data.getString("IdTemplate"));
+                                md.setTemplate(data.getString("Template"));
+                                md.setTemplateBlank(data.getString("TemplateBlank"));
                                 mItemsHot.add(md);
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -700,6 +701,9 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
                                 md.setNoTelpVendor(data.getString("NoTelpVendor"));
                                 md.setIsSelfie(data.getString("IsSelfie"));
                                 md.setIsLokasi(data.getString("IsLokasi"));
+                                md.setIdTemplate(data.getString("IdTemplate"));
+                                md.setTemplate(data.getString("Template"));
+                                md.setTemplateBlank(data.getString("TemplateBlank"));
                                 mItemsNew.add(md);
                             } catch (JSONException e) {
                                 e.printStackTrace();

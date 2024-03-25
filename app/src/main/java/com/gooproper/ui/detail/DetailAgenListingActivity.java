@@ -134,6 +134,7 @@ public class DetailAgenListingActivity extends AppCompatActivity {
                             try {
                                 JSONObject data = response.getJSONObject(i);
                                 ListingModel md = new ListingModel();
+
                                 md.setIdListing(data.getString("IdListing"));
                                 md.setIdAgen(data.getString("IdAgen"));
                                 md.setIdAgenCo(data.getString("IdAgenCo"));
@@ -221,6 +222,9 @@ public class DetailAgenListingActivity extends AppCompatActivity {
                                 md.setNoTelpVendor(data.getString("NoTelpVendor"));
                                 md.setIsSelfie(data.getString("IsSelfie"));
                                 md.setIsLokasi(data.getString("IsLokasi"));
+                                md.setIdTemplate(data.getString("IdTemplate"));
+                                md.setTemplate(data.getString("Template"));
+                                md.setTemplateBlank(data.getString("TemplateBlank"));
                                 list.add(md);
                                 PDAgen.dismiss();
                             } catch (JSONException e) {

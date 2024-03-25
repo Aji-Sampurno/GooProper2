@@ -16,6 +16,7 @@ import com.bumptech.glide.Glide;
 import com.gooproper.R;
 import com.gooproper.model.ListingModel;
 import com.gooproper.ui.detail.DetailListingActivity;
+import com.gooproper.ui.detail.DetailPraListingActivity;
 import com.gooproper.util.FormatCurrency;
 import com.gooproper.util.Preferences;
 
@@ -255,7 +256,7 @@ public class RejectedAdapter extends RecyclerView.Adapter<RejectedAdapter.Holder
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent update = new Intent(context, DetailListingActivity.class);
+                    Intent update = new Intent(context, DetailPraListingActivity.class);
                     update.putExtra("update",1);
                     update.putExtra("IdPraListing",listingModel.getIdPraListing());
                     update.putExtra("IdAgen",listingModel.getIdAgen());
@@ -331,6 +332,8 @@ public class RejectedAdapter extends RecyclerView.Adapter<RejectedAdapter.Holder
                     update.putExtra("View",listingModel.getView());
                     update.putExtra("Sold",listingModel.getSold());
                     update.putExtra("Rented",listingModel.getRented());
+                    update.putExtra("SoldAgen",listingModel.getSoldAgen());
+                    update.putExtra("RentedAgen",listingModel.getRentedAgen());
                     update.putExtra("Marketable",listingModel.getMarketable());
                     update.putExtra("StatusHarga",listingModel.getStatusHarga());
                     update.putExtra("Nama",listingModel.getNama());

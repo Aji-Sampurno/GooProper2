@@ -147,7 +147,6 @@ public class ListingFragment extends Fragment {
         return root;
     }
 
-    //searchView
     private void filterList(String text) {
         List<ListingModel> filteredList = new ArrayList<>();
         for (ListingModel item : list) {
@@ -163,7 +162,6 @@ public class ListingFragment extends Fragment {
         adapter.setFilteredlist(filteredList);
     }
 
-    //filter
     public void showFilterDialog () {
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = getLayoutInflater();
@@ -415,7 +413,6 @@ public class ListingFragment extends Fragment {
                                   String viewSpec,
                                   String viewType,
                                   String kondisi) {
-        //applyFilters = true; // Set the boolean to true before applying filters
         ArrayList<ListingModel> filteredList = new ArrayList<>();
         for (ListingModel product : list) {
             long productPrice = Long.parseLong(product.getHarga().replace(".", "").trim());
@@ -605,6 +602,9 @@ public class ListingFragment extends Fragment {
                                 md.setNoTelpVendor(data.getString("NoTelpVendor"));
                                 md.setIsSelfie(data.getString("IsSelfie"));
                                 md.setIsLokasi(data.getString("IsLokasi"));
+                                md.setIdTemplate(data.getString("IdTemplate"));
+                                md.setTemplate(data.getString("Template"));
+                                md.setTemplateBlank(data.getString("TemplateBlank"));
                                 list.add(md);
                                 PDListingCustomer.dismiss();
                             } catch (JSONException e) {

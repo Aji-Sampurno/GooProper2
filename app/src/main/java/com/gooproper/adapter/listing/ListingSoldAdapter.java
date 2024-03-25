@@ -131,7 +131,11 @@ public class ListingSoldAdapter extends RecyclerView.Adapter<ListingSoldAdapter.
         holder.bathTxt.setText(listingModel.getBath());
         holder.levelTxt.setText(listingModel.getLevel());
         holder.garageTxt.setText(listingModel.getGarage());
-        Glide.with(context).load(models.get(position).getImg1()).into(holder.pic);
+        if (!listingModel.getTemplate().equals("null")) {
+            Glide.with(context).load(models.get(position).getTemplate()).into(holder.pic);
+        } else {
+            Glide.with(context).load(models.get(position).getImg1()).into(holder.pic);
+        }
 
         String titleText = listingModel.getNamaListing();
         String truncatedtitle = truncateTextWithEllipsis(titleText);
@@ -281,6 +285,9 @@ public class ListingSoldAdapter extends RecyclerView.Adapter<ListingSoldAdapter.
                     update.putExtra("NoTelpVendor",listingModel.getNoTelpVendor());
                     update.putExtra("IsSelfie",listingModel.getIsSelfie());
                     update.putExtra("IsLokasi",listingModel.getIsLokasi());
+                    update.putExtra("IdTemplate",listingModel.getIdTemplate());
+                    update.putExtra("Template",listingModel.getTemplate());
+                    update.putExtra("TemplateBlank",listingModel.getTemplateBlank());
                     context.startActivity(update);
                 }
             });
