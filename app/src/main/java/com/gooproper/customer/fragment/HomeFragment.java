@@ -112,7 +112,17 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
 
         FirebaseApp.initializeApp(getContext());
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            NotificationManager notificationManager = requireActivity().getSystemService(NotificationManager.class);
+            if (notificationManager != null) {
+                boolean areNotificationsEnabled = notificationManager.areNotificationsEnabled();
+                if (!areNotificationsEnabled) {
+                    Intent intent = new Intent();
+                    intent.setAction(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS);
+                    startActivity(intent);
+                }
+            }
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
             NotificationChannel channel = new NotificationChannel("1","notification", NotificationManager.IMPORTANCE_HIGH);
             NotificationManager notificationManager = requireContext().getSystemService(NotificationManager.class);
             notificationManager.createNotificationChannel(channel);

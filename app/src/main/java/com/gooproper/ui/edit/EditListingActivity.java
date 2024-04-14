@@ -182,7 +182,7 @@ public class EditListingActivity extends AppCompatActivity {
     ImageView back, iv1, iv2, iv3, iv4, iv5, iv6, iv7, iv8, IVShm, IVHgb, IVHshp, IVPpjb, IVStratatitle, IVAJB, IVPetokD, IVPjp, IVPjp1;
     Button batal, submit, select, select1, select2, select3, select4, select5, select6, select7, maps, BtnSHM, BtnHGB, BtnHSHP, BtnPPJB, BtnSTRA, BtnAJB, BtnPetokD, BtnSHMPdf, BtnHGBPdf, BtnHSHPPdf, BtnPPJBPdf, BtnSTRAPdf, BtnAJBPdf, BtnPetokDPdf, BtnPjp, BtnPjp1;
     ImageView hps1, hps2, hps3, hps4, hps5, hps6, hps7, hps8, HpsSHM, HpsHGB, HpsHSHP, HpsPPJB, HpsStratatitle, HpsAJB, HpsPetokD, HpsPjp, HpsPjp1;
-    TextInputEditText jenisproperti, namaproperti, alamatproperti, sertifikat, nosertif, luas, land, dimensi, lantai, bed, bath, bedart, bathart, garasi, carpot, listrik, air, pjp, perabot, ketperabot, banner, status, harga, hargasewa, keterangan, hadap, size, EtTglInput, EtFee, ETNoPJP;
+    TextInputEditText jenisproperti, namaproperti, alamatproperti, alamattemplateproperti, sertifikat, nosertif, luas, land, dimensi, lantai, bed, bath, bedart, bathart, garasi, carpot, listrik, air, pjp, perabot, ketperabot, banner, status, harga, hargasewa, keterangan, hadap, size, EtTglInput, EtFee, ETNoPJP;
     TextInputLayout LytSize, LytTglInput, LytHargaJual, LytHargaSewa, LytNoPJP;
     RadioButton open, exclusive;
     RadioGroup rgpriority;
@@ -290,6 +290,7 @@ public class EditListingActivity extends AppCompatActivity {
         jenisproperti = findViewById(R.id.etjenisproperti);
         namaproperti = findViewById(R.id.etnamaproperti);
         alamatproperti = findViewById(R.id.etalamatproperti);
+        alamattemplateproperti = findViewById(R.id.etalamattemplateproperti);
         sertifikat = findViewById(R.id.ettipesertifikat);
         pjp = findViewById(R.id.etkonfirmasipjp);
         nosertif = findViewById(R.id.etnomorsertifikat);
@@ -4530,6 +4531,7 @@ public class EditListingActivity extends AppCompatActivity {
                 map.put("IdPraListing", idpralisting);
                 map.put("NamaListing", namaproperti.getText().toString());
                 map.put("Alamat", alamatproperti.getText().toString());
+                map.put("AlamatTemplate", alamattemplateproperti.getText().toString());
                 map.put("Latitude", Lat);
                 map.put("Longitude", Lng);
                 map.put("Location", addressStr);

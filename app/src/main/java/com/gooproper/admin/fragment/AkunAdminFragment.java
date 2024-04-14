@@ -33,6 +33,7 @@ import com.gooproper.ui.PelamarAgenActivity;
 import com.gooproper.ui.followup.FollowUpInfoListActivity;
 import com.gooproper.ui.listing.InfoPropertyActivity;
 import com.gooproper.ui.listing.ListListingSementaraActivity;
+import com.gooproper.ui.listing.ListingPendingActivity;
 import com.gooproper.ui.listing.PraListingRejectedAdminActivity;
 import com.gooproper.ui.tambah.TambahInfoActivity;
 import com.gooproper.ui.tambah.TambahKaryawanActivity;
@@ -53,11 +54,11 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class AkunAdminFragment extends Fragment {
 
-    private LinearLayout pelamar, agen, reportagen, tambahpenghargaan, listing, info, followupinfo, pralistingrejected, primary, listprimary, karyawan, laporan, pengaturan, hubungikami, tentangkami, kirimpesan;
+    private LinearLayout pelamar, agen, reportagen, tambahpenghargaan, listing, listingpending, info, followupinfo, pralistingrejected, primary, listprimary, karyawan, laporan, pengaturan, hubungikami, tentangkami, kirimpesan;
     TextView nama, edit, agenultah;
     CardView CVUltah;
     CircleImageView cvadmin;
-    View view, view1, view2, view3;
+    View view, view1, view2, view3, view4;
     String imgurl;
     String profile;
     String status;
@@ -74,6 +75,7 @@ public class AkunAdminFragment extends Fragment {
         View root = inflater.inflate(R.layout.fragment_akun_admin, container, false);
 
         listing = root.findViewById(R.id.LytListingAdmin);
+        listingpending = root.findViewById(R.id.LytListingPendingAdmin);
         info = root.findViewById(R.id.LytInfoAdmin);
         followupinfo = root.findViewById(R.id.LytFollowUpAdmin);
         pralistingrejected = root.findViewById(R.id.LytPraListingRejectedAdmin);
@@ -98,6 +100,7 @@ public class AkunAdminFragment extends Fragment {
         view1 = root.findViewById(R.id.V2);
         view2 = root.findViewById(R.id.V3);
         view3 = root.findViewById(R.id.V4);
+        view4 = root.findViewById(R.id.V5);
 
         nama.setText(Preferences.getKeyUsername(getActivity()));
         edit.setOnClickListener(view -> startActivity(new Intent(getActivity(), EditAkunActivity.class)));
@@ -143,6 +146,8 @@ public class AkunAdminFragment extends Fragment {
             listprimary.setVisibility(View.GONE);
             view3.setVisibility(View.GONE);
             CVUltah.setVisibility(View.GONE);
+            view4.setVisibility(View.GONE);
+            listingpending.setVisibility(View.GONE);
         } else {
             listing.setVisibility(View.VISIBLE);
         }
@@ -155,6 +160,7 @@ public class AkunAdminFragment extends Fragment {
 
         edit.setOnClickListener(view -> startActivity(new Intent(getContext(), EditAkunActivity.class)));
         listing.setOnClickListener(view -> startActivity(new Intent(getContext(), TambahListingActivity.class)));
+        listingpending.setOnClickListener(view -> startActivity(new Intent(getContext(), ListingPendingActivity.class)));
         info.setOnClickListener(view -> startActivity(new Intent(getContext(), InfoPropertyActivity.class)));
         followupinfo.setOnClickListener(view -> startActivity(new Intent(getContext(), FollowUpInfoListActivity.class)));
         pralistingrejected.setOnClickListener(view -> startActivity(new Intent(getContext(), PraListingRejectedAdminActivity.class)));

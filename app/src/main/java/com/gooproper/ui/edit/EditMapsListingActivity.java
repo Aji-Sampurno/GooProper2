@@ -82,7 +82,7 @@ public class EditMapsListingActivity extends AppCompatActivity {
     TextInputEditText longitude, latitude;
     LinearLayout LytSelfie;
     Uri bselfie;
-    String latitudeStr, longitudeStr, lokasiStr, addressStr, Selfie, StrIdPraListing, isSelfie, Keterangan;
+    String latitudeStr, longitudeStr, lokasiStr, addressStr, Selfie, StrIdPraListing, isSelfie, Keterangan, StrPoinTambah;
     String timeStamp,fileSelfie;
     private StorageReference mStorageRef;
     StorageReference storageRef,ImageSelfie;
@@ -112,6 +112,7 @@ public class EditMapsListingActivity extends AppCompatActivity {
         final int update = data.getIntExtra("update", 0);
         String intentIdPraListing = data.getStringExtra("IdListing");
         String intentSelfie = data.getStringExtra("Selfie");
+        String intentPoinTambah = data.getStringExtra("PoinTambah");
 
         timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
         fileSelfie = "Selfie_" + timeStamp + ".jpg";
@@ -121,6 +122,7 @@ public class EditMapsListingActivity extends AppCompatActivity {
 
         StrIdPraListing = intentIdPraListing;
         isSelfie = intentSelfie;
+        StrPoinTambah = intentPoinTambah;
 
         Keterangan = "Tambah Susulan Maps dan Selfie";
 
@@ -131,8 +133,6 @@ public class EditMapsListingActivity extends AppCompatActivity {
                     .load(intentSelfie)
                     .into(IVselfie);
         }
-
-        latitude.setText(StrIdPraListing);
 
         submit.setOnClickListener(view -> {
             if (Validate()) {
@@ -510,6 +510,8 @@ public class EditMapsListingActivity extends AppCompatActivity {
                 map.put("Longitude", longitudeStr);
                 map.put("Selfie", Selfie);
                 map.put("Keterangan", Keterangan);
+                map.put("PoinTambahan", StrPoinTambah);
+                map.put("PoinBerkurang", "0");
                 return map;
             }
         };

@@ -864,10 +864,10 @@ public class TambahListingActivity extends AppCompatActivity {
                 } else if (editable.toString().equalsIgnoreCase("Jual/Sewa")) {
                     if (jenisproperti.getText().toString().equals("Tanah")){
                         LytTipeHarga.setVisibility(View.VISIBLE);
-                        LytHargaSewa.setVisibility(View.VISIBLE);
+                        LytHargaSewa.setVisibility(View.GONE);
                     } else if (jenisproperti.getText().toString().equals("Rumah")) {
                         LytTipeHarga.setVisibility(View.VISIBLE);
-                        LytHargaSewa.setVisibility(View.VISIBLE);
+                        LytHargaSewa.setVisibility(View.GONE);
                     } else {
                         LytHargaJual.setVisibility(View.VISIBLE);
                         LytHargaSewa.setVisibility(View.VISIBLE);

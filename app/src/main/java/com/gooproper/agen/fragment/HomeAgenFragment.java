@@ -135,7 +135,17 @@ public class HomeAgenFragment extends Fragment implements OnMapReadyCallback{
         IdAdmin = Preferences.getKeyIdAgen(getContext());
         Status = Preferences.getKeyStatus(getContext());
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            NotificationManager notificationManager = requireActivity().getSystemService(NotificationManager.class);
+            if (notificationManager != null) {
+                boolean areNotificationsEnabled = notificationManager.areNotificationsEnabled();
+                if (!areNotificationsEnabled) {
+                    Intent intent = new Intent();
+                    intent.setAction(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS);
+                    startActivity(intent);
+                }
+            }
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
             NotificationChannel channel = new NotificationChannel("1","notification", NotificationManager.IMPORTANCE_HIGH);
             NotificationManager notificationManager = requireContext().getSystemService(NotificationManager.class);
             notificationManager.createNotificationChannel(channel);
@@ -149,7 +159,6 @@ public class HomeAgenFragment extends Fragment implements OnMapReadyCallback{
                         return;
                     }
                     Token = task.getResult();
-                    saveTokenToDatabase(Token);
                     simpanDevice(Token);
                 });
 

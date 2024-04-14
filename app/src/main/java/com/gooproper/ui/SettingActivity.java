@@ -1,10 +1,14 @@
 package com.gooproper.ui;
 
+import static com.android.volley.VolleyLog.TAG;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -22,6 +26,9 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.FirebaseApp;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.gooproper.R;
 import com.gooproper.customer.MainCustomerActivity;
@@ -44,6 +51,8 @@ public class SettingActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting);
+
+        FirebaseApp.initializeApp(SettingActivity.this);
 
         LinearLayout editakun  = findViewById(R.id.lyteditakun);
         LinearLayout ubahsandi = findViewById(R.id.lytubahsandi);
@@ -69,14 +78,8 @@ public class SettingActivity extends AppCompatActivity {
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FirebaseMessaging.getInstance().getToken()
-                        .addOnCompleteListener(task -> {
-                            if (!task.isSuccessful()) {
-                                return;
-                            }
-                            Token = task.getResult();
-                            showCustomAlertDialog(Token);
-                        });
+                showLogoutAlertDialog();
+
             }
         });
 
@@ -232,6 +235,47 @@ public class SettingActivity extends AppCompatActivity {
                 }
             });
         }
+
+        tidak.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                customDialog.dismiss();
+            }
+        });
+
+        dialogTitle.setText("Apakah Anda Yakin Untuk Keluar");
+
+        ImageView gifImageView = customDialog.findViewById(R.id.ivdialog);
+
+        Glide.with(this)
+                .load(R.drawable.alert) // You can also use a local resource like R.drawable.your_gif_resource
+                .transition(DrawableTransitionOptions.withCrossFade())
+                .into(gifImageView);
+
+        customDialog.show();
+    }
+
+    public void showLogoutAlertDialog() {
+        Dialog customDialog = new Dialog(SettingActivity.this);
+        customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        customDialog.setContentView(R.layout.custom_dialog_konfirmasi);
+
+        if (customDialog.getWindow() != null) {
+            customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        }
+
+        TextView dialogTitle = customDialog.findViewById(R.id.dialog_title);
+        Button ya = customDialog.findViewById(R.id.btnya);
+        Button tidak = customDialog.findViewById(R.id.btntidak);
+
+        ya.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Preferences.clearLoggedInUser(SettingActivity.this);
+                startActivity(new Intent(SettingActivity.this, MainGuestActivity.class));
+                finish();
+            }
+        });
 
         tidak.setOnClickListener(new View.OnClickListener() {
             @Override

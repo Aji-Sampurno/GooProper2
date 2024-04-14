@@ -336,21 +336,21 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
-                    android:text="Upload Template"/>
+                    android:text="Upload Template" />
 
                 <Button
                     android:id="@+id/BtnLihatTemplate"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
-                    android:text="Template lengkap"/>
+                    android:text="Template lengkap" />
 
                 <Button
                     android:id="@+id/BtnLihatTemplateKosong"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
-                    android:text="template tanpa foto"/>
+                    android:text="template tanpa foto" />
 
             </LinearLayout>
 
@@ -366,13 +366,13 @@
                     android:layout_marginStart="5dp"
                     android:layout_marginTop="10dp"
                     android:textColor="@color/second"
-                    android:textSize="24sp"/>
+                    android:textSize="24sp" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
                     android:layout_marginTop="10dp"
+                    android:orientation="horizontal"
                     android:weightSum="4">
 
                     <LinearLayout
@@ -386,8 +386,8 @@
                             android:id="@+id/CBSelfie"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:gravity="center"
                             android:buttonTint="@color/white"
+                            android:gravity="center"
                             android:textColor="@color/white" />
 
                         <TextView
@@ -409,8 +409,8 @@
                             android:id="@+id/CBLokasi"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:gravity="center"
                             android:buttonTint="@color/white"
+                            android:gravity="center"
                             android:textColor="@color/white" />
 
                         <TextView
@@ -432,8 +432,8 @@
                             android:id="@+id/CBMarketable"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:gravity="center"
                             android:buttonTint="@color/white"
+                            android:gravity="center"
                             android:textColor="@color/white" />
 
                         <TextView
@@ -455,8 +455,8 @@
                             android:id="@+id/CBHarga"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:gravity="center"
                             android:buttonTint="@color/white"
+                            android:gravity="center"
                             android:textColor="@color/white" />
 
                         <TextView
@@ -495,6 +495,149 @@
                     android:textColor="@color/white" />
 
             </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal"
+                android:weightSum="2">
+
+                <Button
+                    android:id="@+id/BtnAddBannerDetailListing"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_weight="1"
+                    android:text="Tambah Banner"
+                    android:textColor="@color/black"
+                    android:visibility="gone" />
+
+                <Button
+                    android:id="@+id/BtnAddPjpDetailListing"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_weight="1"
+                    android:text="Tambah Pjp"
+                    android:textColor="@color/black"
+                    android:visibility="gone" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal"
+                android:weightSum="2">
+
+                <Button
+                    android:id="@+id/BtnAddMapsDetailListing"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_weight="1"
+                    android:text="Tambah Lokasi Maps"
+                    android:textColor="@color/black"
+                    android:visibility="gone" />
+
+                <Button
+                    android:id="@+id/BtnAddSelfieDetailListing"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_weight="1"
+                    android:text="Tambah Selfie"
+                    android:textColor="@color/black"
+                    android:visibility="gone" />
+
+                <Button
+                    android:id="@+id/BtnColistDetailListing"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_weight="1"
+                    android:text="Tambah CoList"
+                    android:textColor="@color/black"
+                    android:visibility="gone" />
+
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/BtnUpgradeDetailListing"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginBottom="10dp"
+                android:text="Upgrade Listing"
+                android:textColor="@color/black"
+                android:visibility="gone" />
+
+            <Button
+                android:id="@+id/BtnAjukanUlangDetailListing"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginBottom="10dp"
+                android:text="Ajukan Ulang"
+                android:textColor="@color/black"
+                android:visibility="gone" />
+
+            <Button
+                android:id="@+id/BtnKonfirmasiBannerDetailListing"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginBottom="10dp"
+                android:text="Tidak Pasang Banner"
+                android:textColor="@color/black"
+                android:visibility="gone" />
+
+            <Button
+                android:id="@+id/BtnPasangBannerDetailListing"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginBottom="10dp"
+                android:text="Pasang Banner"
+                android:textColor="@color/black"
+                android:visibility="gone" />
+
+            <Button
+                android:id="@+id/BtnApproveUpgradeDetailListing"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginBottom="10dp"
+                android:text="Approve Upgrade"
+                android:textColor="@color/black"
+                android:visibility="gone" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -1192,7 +1335,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="350dp"
                     android:adjustViewBounds="true"
-                    android:visibility="gone"/>
+                    android:visibility="gone" />
 
             </LinearLayout>
 
@@ -1218,7 +1361,6 @@
 
             <LinearLayout
                 android:id="@+id/LytRejectedDetailListing"
-                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
@@ -1228,22 +1370,23 @@
                 android:background="@drawable/background_reject"
                 android:elevation="3dp"
                 android:orientation="vertical"
-                android:padding="10dp">
+                android:padding="10dp"
+                android:visibility="gone">
 
                 <TextView
+                    style="@style/TextAppearance.AppCompat.Title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:text="Keterangan Ditolak"
-                    style="@style/TextAppearance.AppCompat.Title"
                     android:textColor="@color/white" />
 
                 <TextView
                     android:id="@+id/TVKeteranganDetailListing"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
                     android:layout_gravity="center"
+                    android:layout_marginTop="10dp"
                     android:text="Keterangan"
                     android:textColor="@color/white" />
 
@@ -1334,9 +1477,9 @@
                     android:layout_marginTop="10dp"
                     android:layout_marginRight="5dp"
                     android:layout_marginBottom="10dp"
+                    android:layout_weight="1"
                     android:backgroundTint="@color/red_color"
                     android:backgroundTintMode="add"
-                    android:layout_weight="1"
                     android:text="Reject"
                     android:textColor="@color/white"
                     android:visibility="gone" />
@@ -1370,74 +1513,14 @@
                     android:layout_marginTop="10dp"
                     android:layout_marginRight="5dp"
                     android:layout_marginBottom="10dp"
+                    android:layout_weight="1"
                     android:backgroundTint="@color/red_color"
                     android:backgroundTintMode="add"
-                    android:layout_weight="1"
                     android:text="Reject"
                     android:textColor="@color/white"
                     android:visibility="gone" />
 
             </LinearLayout>
-
-            <Button
-                android:id="@+id/BtnAddMapsDetailListing"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginRight="5dp"
-                android:layout_marginBottom="10dp"
-                android:text="Tambah Lokasi Maps"
-                android:textColor="@color/black"
-                android:visibility="gone" />
-
-            <Button
-                android:id="@+id/BtnAddSelfieDetailListing"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginRight="5dp"
-                android:layout_marginBottom="10dp"
-                android:text="Tambah Selfie"
-                android:textColor="@color/black"
-                android:visibility="gone" />
-
-            <Button
-                android:id="@+id/BtnAjukanUlangDetailListing"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginRight="5dp"
-                android:layout_marginBottom="10dp"
-                android:text="Ajukan Ulang"
-                android:textColor="@color/black"
-                android:visibility="gone" />
-
-            <Button
-                android:id="@+id/BtnKonfirmasiBannerDetailListing"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginRight="5dp"
-                android:layout_marginBottom="10dp"
-                android:text="Tidak Pasang Banner"
-                android:textColor="@color/black"
-                android:visibility="gone" />
-
-            <Button
-                android:id="@+id/BtnPasangBannerDetailListing"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginRight="5dp"
-                android:layout_marginBottom="10dp"
-                android:text="Pasang Banner"
-                android:textColor="@color/black"
-                android:visibility="gone" />
 
         </LinearLayout>
 

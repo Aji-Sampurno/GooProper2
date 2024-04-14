@@ -25,6 +25,7 @@ import android.provider.MediaStore;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.style.StyleSpan;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -47,6 +48,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
+import com.github.chrisbanes.photoview.PhotoView;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -57,14 +59,21 @@ import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.gooproper.R;
 import com.gooproper.adapter.image.PJPAdapter;
 import com.gooproper.adapter.image.SertifikatAdapter;
 import com.gooproper.adapter.ViewPagerAdapter;
+import com.gooproper.guest.MainGuestActivity;
 import com.gooproper.model.ListingModel;
 import com.gooproper.pager.SertifikatPdfAdapter;
+import com.gooproper.ui.SettingActivity;
 import com.gooproper.ui.edit.EditListingActivity;
 import com.gooproper.ui.edit.EditListingAgenActivity;
 import com.gooproper.ui.edit.EditMapsListingActivity;
@@ -72,8 +81,10 @@ import com.gooproper.ui.edit.EditPraListingAgenActivity;
 import com.gooproper.ui.edit.EditPralistingActivity;
 import com.gooproper.ui.followup.FollowUpActivity;
 import com.gooproper.ui.ImageViewActivity;
+import com.gooproper.ui.tambah.TambahListingActivity;
 import com.gooproper.ui.tambah.TambahSelfieActivity;
 import com.gooproper.ui.tambah.TambahSelfieListingActivity;
+import com.gooproper.ui.tambah.TambahTemplateActivity;
 import com.gooproper.util.AgenManager;
 import com.gooproper.util.FormatCurrency;
 import com.gooproper.util.Preferences;
@@ -86,9 +97,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 public class DetailListingActivity extends AppCompatActivity implements OnMapReadyCallback {
@@ -96,7 +110,8 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
     ProgressDialog PDDetailListing;
     TextView TVRangeHarga, TVNamaDetailListing, TVAlamatDetailListing, TVHargaDetailListing, TVHargaSewaDetailListing, TVViewsDetailListing, TVLikeDetailListing, TVBedDetailListing, TVNamaAgen, TVNamaAgen2, TVBathDetailListing, TVWideDetailListing, TVLandDetailListing, TVDimensiDetailListing, TVTipeDetailListing, TVStatusDetailListing, TVSertifikatDetailListing, TVLuasDetailListing, TVKamarTidurDetailListing, TVKamarMandiDetailListing, TVLantaiDetailListing, TVGarasiDetailListing, TVCarpotDetailListing, TVListrikDetailListing, TVSumberAirDetailListing, TVPerabotDetailListing, TVSizeBanner, TVDeskripsiDetailListing, TVNoData, TVNoDataPdf, TVPriority, TVKondisi, TVNoPjp, TVNoDataPjp, TVFee, TVTglInput, TVNamaVendor, TVTelpVendor, TVPJP, TVSelfie, TVRejected, TVPoin, TVHadap;
     ImageView IVFlowUp, IVWhatsapp, IVInstagram, IVFlowUp2, IVWhatsapp2, IVInstagram2, IVFavorite, IVFavoriteOn, IVShare, IVStar1, IVStar2, IVStar3, IVStar4, IVStar5, IVAlamat, IVNextImg, IVPrevImg, IVSelfie;
-    Button BtnApproveAdmin, BtnApproveManager, BtnRejectedAdmin, BtnRejectedManager, BtnTambahMaps, BtnTambahSelfie, BtnAjukanUlang, BtnLihatTemplate, BtnLihatTemplateKosong, BtnUploadTemplate;
+    Button BtnApproveAdmin, BtnApproveManager, BtnRejectedAdmin, BtnRejectedManager, BtnAjukanUlang, BtnLihatTemplate, BtnLihatTemplateKosong, BtnUploadTemplate;
+    Button BtnTambahPjp, BtnTambahBanner, BtnTambahCoList, BtnUpgrade, BtnTambahMaps, BtnTambahSelfie, BtnApproveUpgrade;
     TextInputEditText tambahagen, tambahcoagen, tambahpjp;
     TextInputLayout lytambahagen, lyttambahcoagen, lyttambahpjp;
     CheckBox CBMarketable, CBHarga, CBSelfie, CBLokasi;
@@ -106,8 +121,10 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
     String status, idpralisting, idagen, idlisting, agenid, agencoid, idpengguna, StringNamaListing, StringLuasTanah, StringLuasBangunan, StringKamarTidur, StringKamarTidurArt, StringKamarMandiArt, StringKamarMandi, StringListrik, StringHarga, StringHargaSewa, StringSertifikat, StringAlamat;
     String BuyerNama, BuyerTelp, BuyerKeterangan, BuyerTanggal, BuyerIdAgen, BuyerIdListing, BuyerIdInput, BuyerJam, StringNamaBuyer, AgenId, StringKeteranganReject;
     String NamaMaps;
+    int PoinSekarang, PoinTambah, PoinKurang;
     String imageUrl, namaAgen, telpAgen, IdCo, UrlSHM, UrlHGB, UrlHSHP, UrlPPJB, UrlStratatitle, UrlAJB, UrlPetokD;
     String productId, StrIdAgen, StrIntentIdAgenCo, StrIntentIdAgen;
+    String PJPHal1, PJPHal2;
     int Poin, FinalPoin, CoPoin;
     ProgressDialog pDialog;
     ListingModel lm;
@@ -128,6 +145,10 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
     private GoogleMap googleMap;
     double lat, lng;
     private static final int REQUEST_WRITE_STORAGE = 112;
+    private static final int RESULT_LOAD_PJP1 = 1;
+    private static final int RESULT_LOAD_PJP2 = 2;
+    Uri UriPjp1, UriPjp2;
+    private Dialog CustomDialogPjp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -168,9 +189,16 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
         BtnApproveManager = findViewById(R.id.BtnApproveManagerDetailListing);
         BtnRejectedAdmin = findViewById(R.id.BtnRejectedAdminDetailListing);
         BtnRejectedManager = findViewById(R.id.BtnRejectedManagerDetailListing);
+        BtnAjukanUlang = findViewById(R.id.BtnAjukanUlangDetailListing);
+
         BtnTambahMaps = findViewById(R.id.BtnAddMapsDetailListing);
         BtnTambahSelfie = findViewById(R.id.BtnAddSelfieDetailListing);
-        BtnAjukanUlang = findViewById(R.id.BtnAjukanUlangDetailListing);
+        BtnTambahPjp = findViewById(R.id.BtnAddPjpDetailListing);
+        BtnTambahBanner = findViewById(R.id.BtnAddBannerDetailListing);
+        BtnTambahCoList = findViewById(R.id.BtnColistDetailListing);
+        BtnUpgrade = findViewById(R.id.BtnUpgradeDetailListing);
+        BtnApproveUpgrade = findViewById(R.id.BtnApproveUpgradeDetailListing);
+
         BtnLihatTemplate = findViewById(R.id.BtnLihatTemplate);
         BtnLihatTemplateKosong = findViewById(R.id.BtnLihatTemplateKosong);
         BtnUploadTemplate = findViewById(R.id.BtnUploadTemplate);
@@ -1087,13 +1115,145 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                     LytCBSelfie.setVisibility(View.GONE);
                     LytCBLokasi.setVisibility(View.GONE);
                     if (StrIdAgen.equals(intentIdAgen)) {
+                        if (intentPjp.isEmpty()) {
+                            BtnTambahPjp.setVisibility(View.VISIBLE);
+                        } else {
+                            BtnTambahPjp.setVisibility(View.GONE);
+                        }
+                        if (intentBanner.equals("Tidak")) {
+                            BtnTambahBanner.setVisibility(View.VISIBLE);
+                        } else {
+                            BtnTambahBanner.setVisibility(View.GONE);
+                        }
+                        if (intentIdAgenCo.equals(StrIdAgen) || intentIdAgenCo.equals("0")) {
+                            BtnTambahCoList.setVisibility(View.VISIBLE);
+                        } else {
+                            BtnTambahCoList.setVisibility(View.GONE);
+                        }
+                        if (intentPriority.equals("open")) {
+                            BtnUpgrade.setVisibility(View.VISIBLE);
+                        } else {
+                            BtnUpgrade.setVisibility(View.GONE);
+                        }
                         BtnTambahMaps.setVisibility(View.VISIBLE);
+
+                        if (intentPriority.equals("exclusive") && !intentPjp.isEmpty() && intentBanner.equals("Ya")) {
+                            if (intentMarketable.equals("1") && intentStatusHarga.equals("1")) {
+                                if (intentIdAgenCo.equals("0")) {
+                                    PoinTambah = 70;
+                                } else if (intentIdAgenCo.equals(intentIdAgen)) {
+                                    PoinTambah = 70;
+                                } else {
+                                    PoinTambah = 70 / 2;
+                                }
+                            } else {
+                                if (intentIdAgenCo.equals("0")) {
+                                    PoinTambah = 50;
+                                } else if (intentIdAgenCo.equals(intentIdAgen)) {
+                                    PoinTambah = 50;
+                                } else {
+                                    PoinTambah = 50 / 2;
+                                }
+                            }
+                        } else if (intentPriority.equals("exclusive") && !intentPjp.isEmpty() && intentBanner.equals("Tidak")) {
+                            if (intentMarketable.equals("1") && intentStatusHarga.equals("1")) {
+                                if (intentIdAgenCo.equals("0")) {
+                                    PoinTambah = 60;
+                                } else if (intentIdAgenCo.equals(intentIdAgen)) {
+                                    PoinTambah = 60;
+                                } else {
+                                    PoinTambah = 60 / 2;
+                                }
+                            } else {
+                                if (intentIdAgenCo.equals("0")) {
+                                    PoinTambah = 40;
+                                } else if (intentIdAgenCo.equals(intentIdAgen)) {
+                                    PoinTambah = 40;
+                                } else {
+                                    PoinTambah = 40 / 2;
+                                }
+                            }
+                        } else if (intentPriority.equals("open") && !intentPjp.isEmpty() && intentBanner.equals("Ya")) {
+                            if (intentMarketable.equals("1") && intentStatusHarga.equals("1")) {
+                                if (intentIdAgenCo.equals("0")) {
+                                    PoinTambah = 40;
+                                } else if (intentIdAgenCo.equals(intentIdAgen)) {
+                                    PoinTambah = 40;
+                                } else {
+                                    PoinTambah = 40 / 2;
+                                }
+                            } else {
+                                if (intentIdAgenCo.equals("0")) {
+                                    PoinTambah = 30;
+                                } else if (intentIdAgenCo.equals(intentIdAgen)) {
+                                    PoinTambah = 30;
+                                } else {
+                                    PoinTambah = 30 / 2;
+                                }
+                            }
+                        } else if (intentPriority.equals("open") && !intentPjp.isEmpty() && intentBanner.equals("Tidak")) {
+                            if (intentMarketable.equals("1") && intentStatusHarga.equals("1")) {
+                                if (intentIdAgenCo.equals("0")) {
+                                    PoinTambah = 40;
+                                } else if (intentIdAgenCo.equals(intentIdAgen)) {
+                                    PoinTambah = 40;
+                                } else {
+                                    PoinTambah = 40 / 2;
+                                }
+                            } else {
+                                if (intentIdAgenCo.equals("0")) {
+                                    PoinTambah = 20;
+                                } else if (intentIdAgenCo.equals(intentIdAgen)) {
+                                    PoinTambah = 20;
+                                } else {
+                                    PoinTambah = 20 / 2;
+                                }
+                            }
+                        } else if (intentPriority.equals("open") && intentPjp.isEmpty() && intentBanner.equals("Ya")) {
+                            if (intentMarketable.equals("1") && intentStatusHarga.equals("1")) {
+                                if (intentIdAgenCo.equals("0")) {
+                                    PoinTambah = 40;
+                                } else if (intentIdAgenCo.equals(intentIdAgen)) {
+                                    PoinTambah = 40;
+                                } else {
+                                    PoinTambah = 40 / 2;
+                                }
+                            } else {
+                                if (intentIdAgenCo.equals("0")) {
+                                    PoinTambah = 10;
+                                } else if (intentIdAgenCo.equals(intentIdAgen)) {
+                                    PoinTambah = 10;
+                                } else {
+                                    PoinTambah = 10 / 2;
+                                }
+                            }
+                        } else if (intentPriority.equals("open") && intentPjp.isEmpty() && intentBanner.equals("Tidak")) {
+                            if (intentMarketable.equals("1") && intentStatusHarga.equals("1")) {
+                                if (intentIdAgenCo.equals("0")) {
+                                    PoinTambah = 20;
+                                } else if (intentIdAgenCo.equals(intentIdAgen)) {
+                                    PoinTambah = 20;
+                                } else {
+                                    PoinTambah = 20 / 2;
+                                }
+                            } else {
+                                if (intentIdAgenCo.equals("0")) {
+                                    PoinTambah = 10;
+                                } else if (intentIdAgenCo.equals(intentIdAgen)) {
+                                    PoinTambah = 10;
+                                } else {
+                                    PoinTambah = 10 / 2;
+                                }
+                            }
+                        }
+
                         BtnTambahMaps.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
                                 Intent update = new Intent(DetailListingActivity.this, EditMapsListingActivity.class);
                                 update.putExtra("IdListing", idlisting);
                                 update.putExtra("Selfie", intentSelfie);
+                                update.putExtra("PoinTambah", String.valueOf(PoinTambah));
                                 startActivity(update);
                             }
                         });
@@ -1367,13 +1527,145 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                     LytCBSelfie.setVisibility(View.GONE);
                     LytCBLokasi.setVisibility(View.GONE);
                     if (StrIdAgen.equals(intentIdAgen)) {
+                        if (intentPjp.isEmpty()) {
+                            BtnTambahPjp.setVisibility(View.VISIBLE);
+                        } else {
+                            BtnTambahPjp.setVisibility(View.GONE);
+                        }
+                        if (intentBanner.equals("Tidak")) {
+                            BtnTambahBanner.setVisibility(View.VISIBLE);
+                        } else {
+                            BtnTambahBanner.setVisibility(View.GONE);
+                        }
+                        if (intentIdAgenCo.equals(StrIdAgen) || intentIdAgenCo.equals("0")) {
+                            BtnTambahCoList.setVisibility(View.VISIBLE);
+                        } else {
+                            BtnTambahCoList.setVisibility(View.GONE);
+                        }
+                        if (intentPriority.equals("open")) {
+                            BtnUpgrade.setVisibility(View.VISIBLE);
+                        } else {
+                            BtnUpgrade.setVisibility(View.GONE);
+                        }
                         BtnTambahSelfie.setVisibility(View.VISIBLE);
                         BtnTambahMaps.setVisibility(View.GONE);
+
+                        if (intentPriority.equals("exclusive") && !intentPjp.isEmpty() && intentBanner.equals("Ya")) {
+                            if (intentMarketable.equals("1") && intentStatusHarga.equals("1")) {
+                                if (intentIdAgenCo.equals("0")) {
+                                    PoinTambah = 70;
+                                } else if (intentIdAgenCo.equals(intentIdAgen)) {
+                                    PoinTambah = 70;
+                                } else {
+                                    PoinTambah = 70 / 2;
+                                }
+                            } else {
+                                if (intentIdAgenCo.equals("0")) {
+                                    PoinTambah = 50;
+                                } else if (intentIdAgenCo.equals(intentIdAgen)) {
+                                    PoinTambah = 50;
+                                } else {
+                                    PoinTambah = 50 / 2;
+                                }
+                            }
+                        } else if (intentPriority.equals("exclusive") && !intentPjp.isEmpty() && intentBanner.equals("Tidak")) {
+                            if (intentMarketable.equals("1") && intentStatusHarga.equals("1")) {
+                                if (intentIdAgenCo.equals("0")) {
+                                    PoinTambah = 60;
+                                } else if (intentIdAgenCo.equals(intentIdAgen)) {
+                                    PoinTambah = 60;
+                                } else {
+                                    PoinTambah = 60 / 2;
+                                }
+                            } else {
+                                if (intentIdAgenCo.equals("0")) {
+                                    PoinTambah = 40;
+                                } else if (intentIdAgenCo.equals(intentIdAgen)) {
+                                    PoinTambah = 40;
+                                } else {
+                                    PoinTambah = 40 / 2;
+                                }
+                            }
+                        } else if (intentPriority.equals("open") && !intentPjp.isEmpty() && intentBanner.equals("Ya")) {
+                            if (intentMarketable.equals("1") && intentStatusHarga.equals("1")) {
+                                if (intentIdAgenCo.equals("0")) {
+                                    PoinTambah = 40;
+                                } else if (intentIdAgenCo.equals(intentIdAgen)) {
+                                    PoinTambah = 40;
+                                } else {
+                                    PoinTambah = 40 / 2;
+                                }
+                            } else {
+                                if (intentIdAgenCo.equals("0")) {
+                                    PoinTambah = 30;
+                                } else if (intentIdAgenCo.equals(intentIdAgen)) {
+                                    PoinTambah = 30;
+                                } else {
+                                    PoinTambah = 30 / 2;
+                                }
+                            }
+                        } else if (intentPriority.equals("open") && !intentPjp.isEmpty() && intentBanner.equals("Tidak")) {
+                            if (intentMarketable.equals("1") && intentStatusHarga.equals("1")) {
+                                if (intentIdAgenCo.equals("0")) {
+                                    PoinTambah = 40;
+                                } else if (intentIdAgenCo.equals(intentIdAgen)) {
+                                    PoinTambah = 40;
+                                } else {
+                                    PoinTambah = 40 / 2;
+                                }
+                            } else {
+                                if (intentIdAgenCo.equals("0")) {
+                                    PoinTambah = 20;
+                                } else if (intentIdAgenCo.equals(intentIdAgen)) {
+                                    PoinTambah = 20;
+                                } else {
+                                    PoinTambah = 20 / 2;
+                                }
+                            }
+                        } else if (intentPriority.equals("open") && intentPjp.isEmpty() && intentBanner.equals("Ya")) {
+                            if (intentMarketable.equals("1") && intentStatusHarga.equals("1")) {
+                                if (intentIdAgenCo.equals("0")) {
+                                    PoinTambah = 40;
+                                } else if (intentIdAgenCo.equals(intentIdAgen)) {
+                                    PoinTambah = 40;
+                                } else {
+                                    PoinTambah = 40 / 2;
+                                }
+                            } else {
+                                if (intentIdAgenCo.equals("0")) {
+                                    PoinTambah = 10;
+                                } else if (intentIdAgenCo.equals(intentIdAgen)) {
+                                    PoinTambah = 10;
+                                } else {
+                                    PoinTambah = 10 / 2;
+                                }
+                            }
+                        } else if (intentPriority.equals("open") && intentPjp.isEmpty() && intentBanner.equals("Tidak")) {
+                            if (intentMarketable.equals("1") && intentStatusHarga.equals("1")) {
+                                if (intentIdAgenCo.equals("0")) {
+                                    PoinTambah = 20;
+                                } else if (intentIdAgenCo.equals(intentIdAgen)) {
+                                    PoinTambah = 20;
+                                } else {
+                                    PoinTambah = 20 / 2;
+                                }
+                            } else {
+                                if (intentIdAgenCo.equals("0")) {
+                                    PoinTambah = 10;
+                                } else if (intentIdAgenCo.equals(intentIdAgen)) {
+                                    PoinTambah = 10;
+                                } else {
+                                    PoinTambah = 10 / 2;
+                                }
+                            }
+                        }
+
                         BtnTambahSelfie.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
                                 Intent update = new Intent(DetailListingActivity.this, TambahSelfieListingActivity.class);
                                 update.putExtra("IdListing", idlisting);
+                                update.putExtra("PoinTambah", String.valueOf(PoinTambah));
                                 startActivity(update);
                             }
                         });
@@ -1635,6 +1927,26 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                     LytCBHarga.setVisibility(View.GONE);
                     LytCBSelfie.setVisibility(View.GONE);
                     LytCBLokasi.setVisibility(View.GONE);
+                    if (intentPjp.isEmpty()) {
+                        BtnTambahPjp.setVisibility(View.VISIBLE);
+                    } else {
+                        BtnTambahPjp.setVisibility(View.GONE);
+                    }
+                    if (intentBanner.equals("Tidak")) {
+                        BtnTambahBanner.setVisibility(View.VISIBLE);
+                    } else {
+                        BtnTambahBanner.setVisibility(View.GONE);
+                    }
+                    if (intentIdAgenCo.equals(StrIdAgen) || intentIdAgenCo.equals("0")) {
+                        BtnTambahCoList.setVisibility(View.VISIBLE);
+                    } else {
+                        BtnTambahCoList.setVisibility(View.GONE);
+                    }
+                    if (intentPriority.equals("open")) {
+                        BtnUpgrade.setVisibility(View.VISIBLE);
+                    } else {
+                        BtnUpgrade.setVisibility(View.GONE);
+                    }
                 }
             }
         } else if (status.equals("4")) {
@@ -1837,6 +2149,230 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                     startActivity(intent);
                 }
 
+            }
+        });
+        BtnTambahPjp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (intentPriority.equals("open") && intentPjp.isEmpty() && intentBanner.equals("Ya")) {
+                    if (intentIsSelfie.equals("1") && intentIsLokasi.equals("1")) {
+                        if (intentMarketable.equals("1") && intentStatusHarga.equals("1")) {
+                            if (intentIdAgenCo.equals("0")) {
+                                PoinTambah = 20;
+                            } else if (intentIdAgenCo.equals(intentIdAgen)) {
+                                PoinTambah = 20;
+                            } else {
+                                PoinTambah = 20 / 2;
+                            }
+                        } else {
+                            if (intentIdAgenCo.equals("0")) {
+                                PoinTambah = 40;
+                            } else if (intentIdAgenCo.equals(intentIdAgen)) {
+                                PoinTambah = 40;
+                            } else {
+                                PoinTambah = 40 / 2;
+                            }
+                        }
+                    } else {
+                        if (intentIdAgenCo.equals("0")) {
+                            PoinTambah = 20;
+                        } else if (intentIdAgenCo.equals(intentIdAgen)) {
+                            PoinTambah = 20;
+                        } else {
+                            PoinTambah = 20 / 2;
+                        }
+                    }
+                } else if (intentPriority.equals("open") && intentPjp.isEmpty() && intentBanner.equals("Tidak")) {
+                    if (intentIsSelfie.equals("1") && intentIsLokasi.equals("1")) {
+                        if (intentMarketable.equals("1") && intentStatusHarga.equals("1")) {
+                            if (intentIdAgenCo.equals("0")) {
+                                PoinTambah = 30;
+                            } else if (intentIdAgenCo.equals(intentIdAgen)) {
+                                PoinTambah = 30;
+                            } else {
+                                PoinTambah = 30 / 2;
+                            }
+                        } else {
+                            if (intentIdAgenCo.equals("0")) {
+                                PoinTambah = 20;
+                            } else if (intentIdAgenCo.equals(intentIdAgen)) {
+                                PoinTambah = 20;
+                            } else {
+                                PoinTambah = 20 / 2;
+                            }
+                        }
+                    } else {
+                        if (intentIdAgenCo.equals("0")) {
+                            PoinTambah = 10;
+                        } else if (intentIdAgenCo.equals(intentIdAgen)) {
+                            PoinTambah = 10;
+                        } else {
+                            PoinTambah = 10 / 2;
+                        }
+                    }
+                }
+
+                ShowTambahPjp(PoinTambah, intentIdListing);
+            }
+        });
+        BtnTambahBanner.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (intentPriority.equals("exclusive") && !intentPjp.isEmpty() && intentBanner.equals("Tidak")) {
+                    if (intentIsSelfie.equals("1") && intentIsLokasi.equals("1")) {
+                        if (intentMarketable.equals("1") && intentStatusHarga.equals("1")) {
+                            if (intentIdAgenCo.equals("0")) {
+                                PoinTambah = 20;
+                            } else if (intentIdAgenCo.equals(intentIdAgen)) {
+                                PoinTambah = 20;
+                            } else {
+                                PoinTambah = 20 / 2;
+                            }
+                        } else {
+                            if (intentIdAgenCo.equals("0")) {
+                                PoinTambah = 20;
+                            } else if (intentIdAgenCo.equals(intentIdAgen)) {
+                                PoinTambah = 20;
+                            } else {
+                                PoinTambah = 20 / 2;
+                            }
+                        }
+                    } else {
+                        if (intentIdAgenCo.equals("0")) {
+                            PoinTambah = 10;
+                        } else if (intentIdAgenCo.equals(intentIdAgen)) {
+                            PoinTambah = 10;
+                        } else {
+                            PoinTambah = 10 / 2;
+                        }
+                    }
+                } else if (intentPriority.equals("open") && !intentPjp.isEmpty() && intentBanner.equals("Tidak")) {
+                    if (intentIsSelfie.equals("1") && intentIsLokasi.equals("1")) {
+                        if (intentMarketable.equals("1") && intentStatusHarga.equals("1")) {
+                            if (intentIdAgenCo.equals("0")) {
+                                PoinTambah = 10;
+                            } else if (intentIdAgenCo.equals(intentIdAgen)) {
+                                PoinTambah = 10;
+                            } else {
+                                PoinTambah = 10 / 2;
+                            }
+                        } else {
+                            if (intentIdAgenCo.equals("0")) {
+                                PoinTambah = 20;
+                            } else if (intentIdAgenCo.equals(intentIdAgen)) {
+                                PoinTambah = 20;
+                            } else {
+                                PoinTambah = 20 / 2;
+                            }
+                        }
+                    } else {
+                        if (intentIdAgenCo.equals("0")) {
+                            PoinTambah = 10;
+                        } else if (intentIdAgenCo.equals(intentIdAgen)) {
+                            PoinTambah = 10;
+                        } else {
+                            PoinTambah = 10 / 2;
+                        }
+                    }
+                } else if (intentPriority.equals("open") && intentPjp.isEmpty() && intentBanner.equals("Tidak")) {
+                    if (intentIsSelfie.equals("1") && intentIsLokasi.equals("1")) {
+                        if (intentMarketable.equals("1") && intentStatusHarga.equals("1")) {
+                            if (intentIdAgenCo.equals("0")) {
+                                PoinTambah = 20;
+                            } else if (intentIdAgenCo.equals(intentIdAgen)) {
+                                PoinTambah = 20;
+                            } else {
+                                PoinTambah = 20 / 2;
+                            }
+                        } else {
+                            if (intentIdAgenCo.equals("0")) {
+                                PoinTambah = 0;
+                            } else if (intentIdAgenCo.equals(intentIdAgen)) {
+                                PoinTambah = 0;
+                            } else {
+                                PoinTambah = 0 / 2;
+                            }
+                        }
+                    } else {
+                        if (intentIdAgenCo.equals("0")) {
+                            PoinTambah = 0;
+                        } else if (intentIdAgenCo.equals(intentIdAgen)) {
+                            PoinTambah = 0;
+                        } else {
+                            PoinTambah = 0 / 2;
+                        }
+                    }
+                }
+
+                ShowTambahBanner(PoinTambah, intentIdListing);
+            }
+        });
+        BtnTambahCoList.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (intentPriority.equals("exclusive") && !intentPjp.isEmpty() && intentBanner.equals("Ya")) {
+                    if (intentIsSelfie.equals("1") && intentIsLokasi.equals("1")) {
+                        if (intentMarketable.equals("1") && intentStatusHarga.equals("1")) {
+                            PoinKurang = 120 / 2;
+                        } else {
+                            PoinKurang = 100 / 2;
+                        }
+                    } else {
+                        PoinKurang = 50 / 2;
+                    }
+                } else if (intentPriority.equals("exclusive") && !intentPjp.isEmpty() && intentBanner.equals("Tidak")) {
+                    if (intentIsSelfie.equals("1") && intentIsLokasi.equals("1")) {
+                        if (intentMarketable.equals("1") && intentStatusHarga.equals("1")) {
+                            PoinKurang = 100 / 2;
+                        } else {
+                            PoinKurang = 80 / 2;
+                        }
+                    } else {
+                        PoinKurang = 40 / 2;
+                    }
+                } else if (intentPriority.equals("open") && !intentPjp.isEmpty() && intentBanner.equals("Ya")) {
+                    if (intentIsSelfie.equals("1") && intentIsLokasi.equals("1")) {
+                        if (intentMarketable.equals("1") && intentStatusHarga.equals("1")) {
+                            PoinKurang = 70 / 2;
+                        } else {
+                            PoinKurang = 60 / 2;
+                        }
+                    } else {
+                        PoinKurang = 30 / 2;
+                    }
+                } else if (intentPriority.equals("open") && !intentPjp.isEmpty() && intentBanner.equals("Tidak")) {
+                    if (intentIsSelfie.equals("1") && intentIsLokasi.equals("1")) {
+                        if (intentMarketable.equals("1") && intentStatusHarga.equals("1")) {
+                            PoinKurang = 60 / 2;
+                        } else {
+                            PoinKurang = 40 / 2;
+                        }
+                    } else {
+                        PoinKurang = 20 / 2;
+                    }
+                } else if (intentPriority.equals("open") && intentPjp.isEmpty() && intentBanner.equals("Ya")) {
+                    if (intentIsSelfie.equals("1") && intentIsLokasi.equals("1")) {
+                        if (intentMarketable.equals("1") && intentStatusHarga.equals("1")) {
+                            PoinKurang = 50 / 2;
+                        } else {
+                            PoinKurang = 20 / 2;
+                        }
+                    } else {
+                        PoinKurang = 10 / 2;
+                    }
+                } else if (intentPriority.equals("open") && intentPjp.isEmpty() && intentBanner.equals("Tidak")) {
+                    if (intentIsSelfie.equals("1") && intentIsLokasi.equals("1")) {
+                        if (intentMarketable.equals("1") && intentStatusHarga.equals("1")) {
+                            PoinKurang = 30 / 2;
+                        } else {
+                            PoinKurang = 20 / 2;
+                        }
+                    } else {
+                        PoinKurang = 10 / 2;
+                    }
+                }
+
+                ShowTambahCoList(PoinKurang, intentIdListing);
             }
         });
 
@@ -2933,7 +3469,6 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
             super.onBackPressed();
         }
     }
-
     private void updatepoin() {
         boolean isCBLokasiChecked = CBLokasi.isChecked();
         boolean isCBSelfieChecked = CBSelfie.isChecked();
@@ -2953,7 +3488,6 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
             TVPoin.setText(String.valueOf(FinalPoin));
         }
     }
-
     private void updatepoin1() {
         boolean isCBLokasiChecked = CBLokasi.isChecked();
         boolean isCBSelfieChecked = CBSelfie.isChecked();
@@ -2973,7 +3507,6 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
             TVPoin.setText(String.valueOf(FinalPoin));
         }
     }
-
     private void updatepoin2() {
         boolean isCBLokasiChecked = CBLokasi.isChecked();
         boolean isCBSelfieChecked = CBSelfie.isChecked();
@@ -2993,7 +3526,6 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
             TVPoin.setText(String.valueOf(FinalPoin));
         }
     }
-
     private void updatepoin3() {
         boolean isCBLokasiChecked = CBLokasi.isChecked();
         boolean isCBSelfieChecked = CBSelfie.isChecked();
@@ -3013,7 +3545,6 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
             TVPoin.setText(String.valueOf(FinalPoin));
         }
     }
-
     private void updatepoin4() {
         boolean isCBLokasiChecked = CBLokasi.isChecked();
         boolean isCBSelfieChecked = CBSelfie.isChecked();
@@ -3033,7 +3564,6 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
             TVPoin.setText(String.valueOf(FinalPoin));
         }
     }
-
     private void updatepoin5() {
         boolean isCBLokasiChecked = CBLokasi.isChecked();
         boolean isCBSelfieChecked = CBSelfie.isChecked();
@@ -3054,7 +3584,6 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
             TVPoin.setText(String.valueOf(FinalPoin));
         }
     }
-
     private void updatepoin6() {
         boolean isCBLokasiChecked = CBLokasi.isChecked();
         boolean isCBSelfieChecked = CBSelfie.isChecked();
@@ -3074,7 +3603,6 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
             TVPoin.setText(String.valueOf(FinalPoin));
         }
     }
-
     private void updatepoint1() {
         boolean isCBLokasiChecked = CBLokasi.isChecked();
         boolean isCBSelfieChecked = CBSelfie.isChecked();
@@ -3107,7 +3635,6 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
             TVPoin.setText(String.valueOf(FinalPoin));
         }
     }
-
     private void updatepoint2() {
         boolean isCBLokasiChecked = CBLokasi.isChecked();
         boolean isCBSelfieChecked = CBSelfie.isChecked();
@@ -3140,7 +3667,6 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
             TVPoin.setText(String.valueOf(FinalPoin));
         }
     }
-
     private void updatepoint3() {
         boolean isCBLokasiChecked = CBLokasi.isChecked();
         boolean isCBSelfieChecked = CBSelfie.isChecked();
@@ -3173,7 +3699,6 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
             TVPoin.setText(String.valueOf(FinalPoin));
         }
     }
-
     private void updatepoint4() {
         boolean isCBLokasiChecked = CBLokasi.isChecked();
         boolean isCBSelfieChecked = CBSelfie.isChecked();
@@ -3206,7 +3731,6 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
             TVPoin.setText(String.valueOf(FinalPoin));
         }
     }
-
     private void updatepoint5() {
         boolean isCBLokasiChecked = CBLokasi.isChecked();
         boolean isCBSelfieChecked = CBSelfie.isChecked();
@@ -3239,7 +3763,6 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
             TVPoin.setText(String.valueOf(FinalPoin));
         }
     }
-
     private void updatepoint6() {
         boolean isCBLokasiChecked = CBLokasi.isChecked();
         boolean isCBSelfieChecked = CBSelfie.isChecked();
@@ -3272,7 +3795,6 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
             TVPoin.setText(String.valueOf(FinalPoin));
         }
     }
-
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -3283,11 +3805,28 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
             }
         }
     }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
 
+        if (requestCode == RESULT_LOAD_PJP1 && resultCode == RESULT_OK && null != data) {
+            UriPjp1 = data.getData();
+            ImageView imageView1 = CustomDialogPjp.findViewById(R.id.IVPjp1);
+            imageView1.setImageURI(UriPjp1);
+            imageView1.setTag(UriPjp1);
+            imageView1.setVisibility(View.VISIBLE);
+        } else if (requestCode == RESULT_LOAD_PJP2 && resultCode == RESULT_OK && data != null) {
+            UriPjp2 = data.getData();
+            ImageView imageView2 = CustomDialogPjp.findViewById(R.id.IVPjp2);
+            imageView2.setImageURI(UriPjp2);
+            imageView2.setTag(UriPjp2);
+            imageView2.setVisibility(View.VISIBLE);
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
     private void showToast(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
-
     private void ShowRejected() {
         AlertDialog.Builder customBuilder = new AlertDialog.Builder(this, R.style.CustomAlertDialogStyle);
         customBuilder.setTitle("Keterangan Reject");
@@ -3322,7 +3861,6 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
         AlertDialog customDialog = customBuilder.create();
         customDialog.show();
     }
-
     private void LoadCo() {
         RequestQueue queue = Volley.newRequestQueue(this);
         JsonArrayRequest reqData = new JsonArrayRequest(Request.Method.GET, ServerApi.URL_GET_CO_LISTING + IdCo, null,
@@ -3411,7 +3949,6 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
 
         queue.add(reqData);
     }
-
     private void AddViews() {
         StringRequest stringRequest = new StringRequest(Request.Method.POST, ServerApi.URL_ADD_VIEWS, new Response.Listener<String>() {
             @Override
@@ -3435,7 +3972,6 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(stringRequest);
     }
-
     private void AddFavorite() {
         StringRequest stringRequest = new StringRequest(Request.Method.POST, ServerApi.URL_ADD_FAVORITE, new Response.Listener<String>() {
             @Override
@@ -3463,7 +3999,6 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(stringRequest);
     }
-
     private void AddSeen() {
         StringRequest stringRequest = new StringRequest(Request.Method.POST, ServerApi.URL_ADD_SEEN, new Response.Listener<String>() {
             @Override
@@ -3489,7 +4024,6 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(stringRequest);
     }
-
     private void CountLike(String listingId) {
         RequestQueue queue = Volley.newRequestQueue(this);
         JsonArrayRequest reqData = new JsonArrayRequest(Request.Method.GET, ServerApi.URL_COUNT_LIKE + listingId, null,
@@ -3524,7 +4058,6 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
 
         queue.add(reqData);
     }
-
     private void fetchDataFromApiCo() {
         agenCoManager.fetchDataFromApi(this, new AgenManager.ApiCallback() {
             @Override
@@ -3537,7 +4070,6 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
             }
         });
     }
-
     private void showAlertDialogCo(List<AgenManager.DataItem> dataList) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.CustomAlertDialogStyle);
         builder.setTitle("Daftar Agen");
@@ -3560,7 +4092,6 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
         builder.setPositiveButton("OK", null);
         builder.show();
     }
-
     private void handleSelectedDataCo(AgenManager.DataItem selectedData) {
         String selectedText = "ID Agen Co Listing: " + selectedData.getId();
         Toast.makeText(this, selectedText, Toast.LENGTH_SHORT).show();
@@ -3568,7 +4099,6 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
         tambahcoagen.setText(selectedData.getName());
         agencoid = selectedData.getId();
     }
-
     private void approveadmin() {
         pDialog.setMessage("Sedang Diproses...");
         pDialog.setCancelable(false);
@@ -3670,7 +4200,6 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(stringRequest);
     }
-
     private void approvemanager() {
         pDialog.setMessage("Sedang Diproses...");
         pDialog.setCancelable(false);
@@ -3787,7 +4316,6 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(stringRequest);
     }
-
     private void ajukanulang() {
         pDialog.setMessage("Sedang Diproses...");
         pDialog.setCancelable(false);
@@ -3892,7 +4420,6 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(stringRequest);
     }
-
     private void reject() {
         pDialog.setMessage("Sedang Diproses...");
         pDialog.setCancelable(false);
@@ -3998,7 +4525,6 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(stringRequest);
     }
-
     private void fetchDataFromApi() {
         agenManager.fetchDataFromApi(this, new AgenManager.ApiCallback() {
             @Override
@@ -4011,7 +4537,6 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
             }
         });
     }
-
     private void showAlertDialog(List<AgenManager.DataItem> dataList) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.CustomAlertDialogStyle);
         builder.setTitle("Daftar Agen");
@@ -4034,7 +4559,6 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
         builder.setPositiveButton("OK", null);
         builder.show();
     }
-
     private void handleSelectedData(AgenManager.DataItem selectedData) {
         String selectedText = "Selected ID: " + selectedData.getId();
         Toast.makeText(this, selectedText, Toast.LENGTH_SHORT).show();
@@ -4042,7 +4566,6 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
         tambahagen.setText(selectedData.getName());
         agenid = selectedData.getId();
     }
-
     private void shareDeepLink(String productId) {
         String deepLinkUrl = "https://gooproper.com/listing/" + productId;
         String shareMessage = "Lihat listingan kami\n" + StringNamaListing + "\nLT " + StringLuasTanah + " LB " + StringLuasBangunan + " \nKT " + StringKamarTidur + " + " + StringKamarTidurArt + "\nKM " + StringKamarMandi + " + " + StringKamarMandiArt + "\nListrik " + StringListrik + " Watt\n" + StringSertifikat + "\nHarga " + StringHarga + "\n\n" + deepLinkUrl;
@@ -4072,7 +4595,6 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
             }
         });
     }
-
     private void shareDeepLinkSewa(String productId) {
         String deepLinkUrl = "https://gooproper.com/listing/" + productId;
         String shareMessage = "Lihat listingan kami\n" + StringNamaListing + "\nLT " + StringLuasTanah + " LB " + StringLuasBangunan + " \nKT " + StringKamarTidur + " + " + StringKamarTidurArt + "\nKM " + StringKamarMandi + " + " + StringKamarMandiArt + "\nListrik " + StringListrik + " Watt\n" + StringSertifikat + "\nHarga " + StringHargaSewa + "\n\n" + deepLinkUrl;
@@ -4102,7 +4624,6 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
             }
         });
     }
-
     private void shareDeepLinkJualSewa(String productId) {
         String deepLinkUrl = "https://gooproper.com/listing/" + productId;
         String shareMessage = "Lihat listingan kami\n" + StringNamaListing + "\nLT " + StringLuasTanah + " LB " + StringLuasBangunan + " \nKT " + StringKamarTidur + " + " + StringKamarTidurArt + "\nKM " + StringKamarMandi + " + " + StringKamarMandiArt + "\nListrik " + StringListrik + " Watt\n" + StringSertifikat + "\nHarga " + StringHarga + "\nHarga Sewa " + StringHargaSewa + "\n\n" + deepLinkUrl;
@@ -4132,31 +4653,912 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
             }
         });
     }
+    public void ShowTambahBanner(int Poin, String IdListing) {
+        Dialog customDialog = new Dialog(DetailListingActivity.this);
+        customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        customDialog.setContentView(R.layout.dialog_tambah_banner);
 
+        if (customDialog.getWindow() != null) {
+            customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        }
+
+        TextInputEditText Ukuran = customDialog.findViewById(R.id.ETUkuranBanner);
+        TextInputEditText UkuranCustom = customDialog.findViewById(R.id.ETUkuranBannerCustom);
+
+        TextInputLayout LytUkuran = customDialog.findViewById(R.id.lytUkuranBanner);
+        TextInputLayout LytUkuranCustom = customDialog.findViewById(R.id.lytUkuranBannerCustom);
+
+        Ukuran.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(DetailListingActivity.this, R.style.CustomAlertDialogStyle);
+                builder.setTitle("Ukuran Banner");
+
+                final CharSequence[] Banner = {"80 X 90", "100 X 125", "180 X 80", "Lainnya"};
+                final int[] SelectedBanner = {0};
+
+                builder.setSingleChoiceItems(Banner, SelectedBanner[0], new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (which == Banner.length - 1) {
+                            LytUkuran.setVisibility(View.GONE);
+                            LytUkuranCustom.setVisibility(View.VISIBLE);
+                        } else {
+                            Ukuran.setText(Banner[which]);
+                        }
+                        dialog.dismiss();
+                    }
+                });
+
+                builder.setNegativeButton("Batal", null);
+
+                AlertDialog dialog = builder.create();
+                dialog.show();
+            }
+        });
+
+        Button Batal = customDialog.findViewById(R.id.BtnBatal);
+        Button Simpan = customDialog.findViewById(R.id.BtnSimpan);
+
+        Batal.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                customDialog.dismiss();
+            }
+        });
+
+        Simpan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (Ukuran.getText().toString().isEmpty() && UkuranCustom.getText().toString().isEmpty()) {
+                    Dialog customDialog = new Dialog(DetailListingActivity.this);
+                    customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                    customDialog.setContentView(R.layout.custom_dialog_sukses);
+
+                    if (customDialog.getWindow() != null) {
+                        customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                    }
+
+                    TextView dialogTitle = customDialog.findViewById(R.id.dialog_title);
+                    Button ok = customDialog.findViewById(R.id.btnya);
+                    Button cobalagi = customDialog.findViewById(R.id.btntidak);
+                    ImageView gifimage = customDialog.findViewById(R.id.ivdialog);
+
+                    dialogTitle.setText("Harap Pilih Agen Terlebih Dahulu");
+                    cobalagi.setVisibility(View.GONE);
+
+                    ok.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            customDialog.dismiss();
+                        }
+                    });
+
+                    Glide.with(DetailListingActivity.this)
+                            .load(R.drawable.alert)
+                            .transition(DrawableTransitionOptions.withCrossFade())
+                            .into(gifimage);
+
+                    customDialog.show();
+                } else {
+                    if (!Ukuran.getText().toString().isEmpty()) {
+                        pDialog.setMessage("Menyimpan Data");
+                        pDialog.setCancelable(false);
+                        pDialog.show();
+
+                        RequestQueue requestQueue = Volley.newRequestQueue(DetailListingActivity.this);
+
+                        StringRequest stringRequest = new StringRequest(Request.Method.POST, ServerApi.URL_TAMBAH_BANNER,
+                                new Response.Listener<String>() {
+                                    @Override
+                                    public void onResponse(String response) {
+                                        pDialog.cancel();
+                                        try {
+                                            JSONObject res = new JSONObject(response);
+                                            String status = res.getString("Status");
+                                            if (status.equals("Sukses")) {
+                                                Dialog customDialog = new Dialog(DetailListingActivity.this);
+                                                customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                                                customDialog.setContentView(R.layout.custom_dialog_sukses);
+
+                                                if (customDialog.getWindow() != null) {
+                                                    customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                                                }
+
+                                                TextView dialogTitle = customDialog.findViewById(R.id.dialog_title);
+                                                Button ok = customDialog.findViewById(R.id.btnya);
+                                                Button cobalagi = customDialog.findViewById(R.id.btntidak);
+                                                ImageView gifimage = customDialog.findViewById(R.id.ivdialog);
+
+                                                dialogTitle.setText("Berhasil Menambahkan Banner Listingan");
+                                                cobalagi.setVisibility(View.GONE);
+
+                                                ok.setOnClickListener(new View.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(View view) {
+                                                        customDialog.dismiss();
+                                                    }
+                                                });
+
+                                                Glide.with(DetailListingActivity.this)
+                                                        .load(R.mipmap.ic_yes)
+                                                        .transition(DrawableTransitionOptions.withCrossFade())
+                                                        .into(gifimage);
+
+                                                customDialog.show();
+                                            } else if (status.equals("Error")) {
+                                                Dialog customDialog = new Dialog(DetailListingActivity.this);
+                                                customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                                                customDialog.setContentView(R.layout.custom_dialog_sukses);
+
+                                                if (customDialog.getWindow() != null) {
+                                                    customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                                                }
+
+                                                TextView dialogTitle = customDialog.findViewById(R.id.dialog_title);
+                                                Button ok = customDialog.findViewById(R.id.btnya);
+                                                Button cobalagi = customDialog.findViewById(R.id.btntidak);
+                                                ImageView gifimage = customDialog.findViewById(R.id.ivdialog);
+
+                                                dialogTitle.setText("Gagal Menambahkan Banner Listingan");
+                                                ok.setVisibility(View.GONE);
+
+                                                cobalagi.setOnClickListener(new View.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(View view) {
+                                                        customDialog.dismiss();
+                                                    }
+                                                });
+
+                                                Glide.with(DetailListingActivity.this)
+                                                        .load(R.mipmap.ic_no)
+                                                        .transition(DrawableTransitionOptions.withCrossFade())
+                                                        .into(gifimage);
+
+                                                customDialog.show();
+                                            }
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+                                },
+                                new Response.ErrorListener() {
+                                    @Override
+                                    public void onErrorResponse(VolleyError error) {
+                                        pDialog.cancel();
+                                        Dialog customDialog = new Dialog(DetailListingActivity.this);
+                                        customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                                        customDialog.setContentView(R.layout.custom_dialog_sukses);
+
+                                        if (customDialog.getWindow() != null) {
+                                            customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                                        }
+
+                                        TextView dialogTitle = customDialog.findViewById(R.id.dialog_title);
+                                        Button ok = customDialog.findViewById(R.id.btnya);
+                                        Button cobalagi = customDialog.findViewById(R.id.btntidak);
+                                        ImageView gifimage = customDialog.findViewById(R.id.ivdialog);
+
+                                        dialogTitle.setText("Terdapat Masalah Jaringan");
+                                        ok.setVisibility(View.GONE);
+
+                                        cobalagi.setOnClickListener(new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View view) {
+                                                customDialog.dismiss();
+                                            }
+                                        });
+
+                                        Glide.with(DetailListingActivity.this)
+                                                .load(R.mipmap.ic_eror_network_foreground)
+                                                .transition(DrawableTransitionOptions.withCrossFade())
+                                                .into(gifimage);
+
+                                        customDialog.show();
+                                    }
+                                }) {
+                            @Override
+                            protected Map<String, String> getParams() throws AuthFailureError {
+                                Map<String, String> map = new HashMap<>();
+
+                                String Keterangan = "Tambah Banner Ukuran " + Ukuran.getText().toString();
+
+                                map.put("IdListing", IdListing);
+                                map.put("Keterangan", Keterangan);
+                                map.put("PoinTambahan", String.valueOf(Poin));
+                                map.put("Banner", "Ya");
+                                map.put("Size", Ukuran.getText().toString());
+                                map.put("PoinBerkurang", "0");
+                                System.out.println(map);
+
+                                return map;
+                            }
+                        };
+
+                        requestQueue.add(stringRequest);
+                    } else {
+                        pDialog.setMessage("Menyimpan Data");
+                        pDialog.setCancelable(false);
+                        pDialog.show();
+
+                        RequestQueue requestQueue = Volley.newRequestQueue(DetailListingActivity.this);
+
+                        StringRequest stringRequest = new StringRequest(Request.Method.POST, ServerApi.URL_TAMBAH_BANNER,
+                                new Response.Listener<String>() {
+                                    @Override
+                                    public void onResponse(String response) {
+                                        pDialog.cancel();
+                                        try {
+                                            JSONObject res = new JSONObject(response);
+                                            String status = res.getString("Status");
+                                            if (status.equals("Sukses")) {
+                                                Dialog customDialog = new Dialog(DetailListingActivity.this);
+                                                customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                                                customDialog.setContentView(R.layout.custom_dialog_sukses);
+
+                                                if (customDialog.getWindow() != null) {
+                                                    customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                                                }
+
+                                                TextView dialogTitle = customDialog.findViewById(R.id.dialog_title);
+                                                Button ok = customDialog.findViewById(R.id.btnya);
+                                                Button cobalagi = customDialog.findViewById(R.id.btntidak);
+                                                ImageView gifimage = customDialog.findViewById(R.id.ivdialog);
+
+                                                dialogTitle.setText("Berhasil Menambahkan Banner Listingan");
+                                                cobalagi.setVisibility(View.GONE);
+
+                                                ok.setOnClickListener(new View.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(View view) {
+                                                        customDialog.dismiss();
+                                                    }
+                                                });
+
+                                                Glide.with(DetailListingActivity.this)
+                                                        .load(R.mipmap.ic_yes)
+                                                        .transition(DrawableTransitionOptions.withCrossFade())
+                                                        .into(gifimage);
+
+                                                customDialog.show();
+                                            } else if (status.equals("Error")) {
+                                                Dialog customDialog = new Dialog(DetailListingActivity.this);
+                                                customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                                                customDialog.setContentView(R.layout.custom_dialog_sukses);
+
+                                                if (customDialog.getWindow() != null) {
+                                                    customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                                                }
+
+                                                TextView dialogTitle = customDialog.findViewById(R.id.dialog_title);
+                                                Button ok = customDialog.findViewById(R.id.btnya);
+                                                Button cobalagi = customDialog.findViewById(R.id.btntidak);
+                                                ImageView gifimage = customDialog.findViewById(R.id.ivdialog);
+
+                                                dialogTitle.setText("Gagal Menambahkan Banner Listingan");
+                                                ok.setVisibility(View.GONE);
+
+                                                cobalagi.setOnClickListener(new View.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(View view) {
+                                                        customDialog.dismiss();
+                                                    }
+                                                });
+
+                                                Glide.with(DetailListingActivity.this)
+                                                        .load(R.mipmap.ic_no)
+                                                        .transition(DrawableTransitionOptions.withCrossFade())
+                                                        .into(gifimage);
+
+                                                customDialog.show();
+                                            }
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+                                },
+                                new Response.ErrorListener() {
+                                    @Override
+                                    public void onErrorResponse(VolleyError error) {
+                                        pDialog.cancel();
+                                        Dialog customDialog = new Dialog(DetailListingActivity.this);
+                                        customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                                        customDialog.setContentView(R.layout.custom_dialog_sukses);
+
+                                        if (customDialog.getWindow() != null) {
+                                            customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                                        }
+
+                                        TextView dialogTitle = customDialog.findViewById(R.id.dialog_title);
+                                        Button ok = customDialog.findViewById(R.id.btnya);
+                                        Button cobalagi = customDialog.findViewById(R.id.btntidak);
+                                        ImageView gifimage = customDialog.findViewById(R.id.ivdialog);
+
+                                        dialogTitle.setText("Terdapat Masalah Jaringan");
+                                        ok.setVisibility(View.GONE);
+
+                                        cobalagi.setOnClickListener(new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View view) {
+                                                customDialog.dismiss();
+                                            }
+                                        });
+
+                                        Glide.with(DetailListingActivity.this)
+                                                .load(R.mipmap.ic_eror_network_foreground)
+                                                .transition(DrawableTransitionOptions.withCrossFade())
+                                                .into(gifimage);
+
+                                        customDialog.show();
+                                    }
+                                }) {
+                            @Override
+                            protected Map<String, String> getParams() throws AuthFailureError {
+                                Map<String, String> map = new HashMap<>();
+
+                                String Keterangan = "Tambah Banner Ukuran " + UkuranCustom.getText().toString();
+
+                                map.put("IdListing", IdListing);
+                                map.put("Keterangan", Keterangan);
+                                map.put("PoinTambahan", String.valueOf(Poin));
+                                map.put("Banner", "Ya");
+                                map.put("Size", UkuranCustom.getText().toString());
+                                map.put("PoinBerkurang", "0");
+                                System.out.println(map);
+
+                                return map;
+                            }
+                        };
+
+                        requestQueue.add(stringRequest);
+                    }
+                }
+            }
+        });
+
+        customDialog.show();
+    }
+    public void ShowTambahCoList(int Poin, String IdListing) {
+        Dialog customDialog = new Dialog(DetailListingActivity.this);
+        customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        customDialog.setContentView(R.layout.dialog_tambah_colist);
+
+        if (customDialog.getWindow() != null) {
+            customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        }
+
+        TextInputEditText ETNamaAgen = customDialog.findViewById(R.id.ETNamaAgen);
+        TextInputEditText ETIdAgen = customDialog.findViewById(R.id.ETIdAgen);
+
+        TextInputLayout LytDaftarAgen = customDialog.findViewById(R.id.lytDaftarAgen);
+
+        ETNamaAgen.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                agenManager.fetchDataFromApi(DetailListingActivity.this, new AgenManager.ApiCallback() {
+                    @Override
+                    public void onSuccess(List<AgenManager.DataItem> dataList) {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(DetailListingActivity.this, R.style.CustomAlertDialogStyle);
+                        builder.setTitle("Daftar Agen");
+
+                        final String[] dataItems = new String[dataList.size()];
+                        for (int i = 0; i < dataList.size(); i++) {
+                            AgenManager.DataItem item = dataList.get(i);
+                            dataItems[i] = item.getName();
+                        }
+
+                        builder.setItems(dataItems, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                AgenManager.DataItem selectedData = dataList.get(which);
+                                ETIdAgen.setText(selectedData.getId());
+                                ETNamaAgen.setText(selectedData.getName());
+                                ETIdAgen.setVisibility(View.GONE);
+                            }
+                        });
+
+                        builder.setPositiveButton("OK", null);
+                        builder.show();
+                        showAlertDialog(dataList);
+                    }
+
+                    @Override
+                    public void onError(String errorMessage) {
+                    }
+                });
+            }
+        });
+
+        Button Batal = customDialog.findViewById(R.id.BtnBatal);
+        Button Simpan = customDialog.findViewById(R.id.BtnSimpan);
+
+        Batal.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                customDialog.dismiss();
+            }
+        });
+
+        Simpan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (ETIdAgen.getText().toString().isEmpty()) {
+                    Dialog customDialog = new Dialog(DetailListingActivity.this);
+                    customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                    customDialog.setContentView(R.layout.custom_dialog_sukses);
+
+                    if (customDialog.getWindow() != null) {
+                        customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                    }
+
+                    TextView dialogTitle = customDialog.findViewById(R.id.dialog_title);
+                    Button ok = customDialog.findViewById(R.id.btnya);
+                    Button cobalagi = customDialog.findViewById(R.id.btntidak);
+                    ImageView gifimage = customDialog.findViewById(R.id.ivdialog);
+
+                    dialogTitle.setText("Harap Pilih Agen Terlebih Dahulu");
+                    cobalagi.setVisibility(View.GONE);
+
+                    ok.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            customDialog.dismiss();
+                        }
+                    });
+
+                    Glide.with(DetailListingActivity.this)
+                            .load(R.drawable.alert)
+                            .transition(DrawableTransitionOptions.withCrossFade())
+                            .into(gifimage);
+
+                    customDialog.show();
+                } else {
+                    pDialog.setMessage("Menyimpan Data");
+                    pDialog.setCancelable(false);
+                    pDialog.show();
+
+                    RequestQueue requestQueue = Volley.newRequestQueue(DetailListingActivity.this);
+
+                    StringRequest stringRequest = new StringRequest(Request.Method.POST, ServerApi.URL_TAMBAH_COLIST,
+                            new Response.Listener<String>() {
+                                @Override
+                                public void onResponse(String response) {
+                                    pDialog.cancel();
+                                    try {
+                                        JSONObject res = new JSONObject(response);
+                                        String status = res.getString("Status");
+                                        if (status.equals("Sukses")) {
+                                            Dialog customDialog = new Dialog(DetailListingActivity.this);
+                                            customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                                            customDialog.setContentView(R.layout.custom_dialog_sukses);
+
+                                            if (customDialog.getWindow() != null) {
+                                                customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                                            }
+
+                                            TextView dialogTitle = customDialog.findViewById(R.id.dialog_title);
+                                            Button ok = customDialog.findViewById(R.id.btnya);
+                                            Button cobalagi = customDialog.findViewById(R.id.btntidak);
+                                            ImageView gifimage = customDialog.findViewById(R.id.ivdialog);
+
+                                            dialogTitle.setText("Berhasil Menambahkan Agen CoList");
+                                            cobalagi.setVisibility(View.GONE);
+
+                                            ok.setOnClickListener(new View.OnClickListener() {
+                                                @Override
+                                                public void onClick(View view) {
+                                                    customDialog.dismiss();
+                                                }
+                                            });
+
+                                            Glide.with(DetailListingActivity.this)
+                                                    .load(R.mipmap.ic_yes)
+                                                    .transition(DrawableTransitionOptions.withCrossFade())
+                                                    .into(gifimage);
+
+                                            customDialog.show();
+                                        } else if (status.equals("Error")) {
+                                            Dialog customDialog = new Dialog(DetailListingActivity.this);
+                                            customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                                            customDialog.setContentView(R.layout.custom_dialog_sukses);
+
+                                            if (customDialog.getWindow() != null) {
+                                                customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                                            }
+
+                                            TextView dialogTitle = customDialog.findViewById(R.id.dialog_title);
+                                            Button ok = customDialog.findViewById(R.id.btnya);
+                                            Button cobalagi = customDialog.findViewById(R.id.btntidak);
+                                            ImageView gifimage = customDialog.findViewById(R.id.ivdialog);
+
+                                            dialogTitle.setText("Gagal Menambahkan Agen CoList");
+                                            ok.setVisibility(View.GONE);
+
+                                            cobalagi.setOnClickListener(new View.OnClickListener() {
+                                                @Override
+                                                public void onClick(View view) {
+                                                    customDialog.dismiss();
+                                                }
+                                            });
+
+                                            Glide.with(DetailListingActivity.this)
+                                                    .load(R.mipmap.ic_no)
+                                                    .transition(DrawableTransitionOptions.withCrossFade())
+                                                    .into(gifimage);
+
+                                            customDialog.show();
+                                        }
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            },
+                            new Response.ErrorListener() {
+                                @Override
+                                public void onErrorResponse(VolleyError error) {
+                                    pDialog.cancel();
+                                    Dialog customDialog = new Dialog(DetailListingActivity.this);
+                                    customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                                    customDialog.setContentView(R.layout.custom_dialog_sukses);
+
+                                    if (customDialog.getWindow() != null) {
+                                        customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                                    }
+
+                                    TextView dialogTitle = customDialog.findViewById(R.id.dialog_title);
+                                    Button ok = customDialog.findViewById(R.id.btnya);
+                                    Button cobalagi = customDialog.findViewById(R.id.btntidak);
+                                    ImageView gifimage = customDialog.findViewById(R.id.ivdialog);
+
+                                    dialogTitle.setText("Terdapat Masalah Jaringan");
+                                    ok.setVisibility(View.GONE);
+
+                                    cobalagi.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View view) {
+                                            customDialog.dismiss();
+                                        }
+                                    });
+
+                                    Glide.with(DetailListingActivity.this)
+                                            .load(R.mipmap.ic_eror_network_foreground)
+                                            .transition(DrawableTransitionOptions.withCrossFade())
+                                            .into(gifimage);
+
+                                    customDialog.show();
+                                }
+                            }) {
+                        @Override
+                        protected Map<String, String> getParams() throws AuthFailureError {
+                            Map<String, String> map = new HashMap<>();
+
+                            String Keterangan = "Tambah Agen CoList dengan " + ETNamaAgen.getText().toString();
+
+                            map.put("IdListing", IdListing);
+                            map.put("Keterangan", Keterangan);
+                            map.put("PoinTambahan", "0");
+                            map.put("IdAgenCo", ETIdAgen.getText().toString());
+                            map.put("PoinBerkurang", String.valueOf(Poin));
+                            System.out.println(map);
+
+                            return map;
+                        }
+                    };
+
+                    requestQueue.add(stringRequest);
+                }
+            }
+        });
+
+        customDialog.show();
+    }
+    public void ShowTambahPjp(int Poin, String IdListing) {
+        CustomDialogPjp = new Dialog(DetailListingActivity.this);
+        CustomDialogPjp.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        CustomDialogPjp.setContentView(R.layout.dialog_tambah_pjp);
+
+        if (CustomDialogPjp.getWindow() != null) {
+            CustomDialogPjp.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        }
+
+        Button BtnPjp1 = CustomDialogPjp.findViewById(R.id.BtnUploadPjpHal1);
+        Button BtnPjp2 = CustomDialogPjp.findViewById(R.id.BtnUploadPjpHal2);
+        Button Batal = CustomDialogPjp.findViewById(R.id.BtnBatal);
+        Button Simpan = CustomDialogPjp.findViewById(R.id.BtnSimpan);
+
+        ImageView IVPjpHal1 = CustomDialogPjp.findViewById(R.id.IVPjp1);
+        ImageView IVPjpHal2 = CustomDialogPjp.findViewById(R.id.IVPjp2);
+
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
+        String filePjp1 = "PJP1_" + timeStamp + ".jpg";
+        String filePjp2 = "PJP2_" + timeStamp + ".jpg";
+
+        StorageReference storageRef = FirebaseStorage.getInstance().getReference();
+        StorageReference ImgPjp = storageRef.child("pjp/" + filePjp1);
+        StorageReference ImgPjp1 = storageRef.child("pjp/" + filePjp2);
+
+        BtnPjp1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent galleryIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(galleryIntent, RESULT_LOAD_PJP1);
+            }
+        });
+
+        BtnPjp2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent galleryIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(galleryIntent, RESULT_LOAD_PJP2);
+            }
+        });
+
+        Batal.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CustomDialogPjp.dismiss();
+            }
+        });
+
+        Simpan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (UriPjp1 == null || UriPjp2 == null) {
+                    Dialog customDialog = new Dialog(DetailListingActivity.this);
+                    customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                    customDialog.setContentView(R.layout.custom_dialog_sukses);
+
+                    if (customDialog.getWindow() != null) {
+                        customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                    }
+
+                    TextView dialogTitle = customDialog.findViewById(R.id.dialog_title);
+                    Button ok = customDialog.findViewById(R.id.btnya);
+                    Button cobalagi = customDialog.findViewById(R.id.btntidak);
+                    ImageView gifimage = customDialog.findViewById(R.id.ivdialog);
+
+                    dialogTitle.setText("Harap Upload PJP");
+                    cobalagi.setVisibility(View.GONE);
+
+                    ok.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            customDialog.dismiss();
+                        }
+                    });
+
+                    Glide.with(DetailListingActivity.this)
+                            .load(R.drawable.alert)
+                            .transition(DrawableTransitionOptions.withCrossFade())
+                            .into(gifimage);
+
+                    customDialog.show();
+                } else {
+                    pDialog.setMessage("Menyimpan Data");
+                    pDialog.setCancelable(false);
+                    pDialog.show();
+
+                    ImgPjp.putFile(UriPjp1)
+                            .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                                @Override
+                                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                    ImgPjp.getDownloadUrl()
+                                            .addOnSuccessListener(uri -> {
+                                                String imageUrl = uri.toString();
+                                                PJPHal1 = imageUrl;
+
+                                                ImgPjp1.putFile(UriPjp2)
+                                                        .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                                                            @Override
+                                                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                                                ImgPjp1.getDownloadUrl()
+                                                                        .addOnSuccessListener(uri -> {
+                                                                            String imageUrl = uri.toString();
+                                                                            PJPHal2 = imageUrl;
+
+                                                                            RequestQueue requestQueue = Volley.newRequestQueue(DetailListingActivity.this);
+
+                                                                            StringRequest stringRequest = new StringRequest(Request.Method.POST, ServerApi.URL_TAMBAH_PJP,
+                                                                                    new Response.Listener<String>() {
+                                                                                        @Override
+                                                                                        public void onResponse(String response) {
+                                                                                            pDialog.cancel();
+                                                                                            try {
+                                                                                                JSONObject res = new JSONObject(response);
+                                                                                                String status = res.getString("Status");
+                                                                                                if (status.equals("Sukses")) {
+                                                                                                    Dialog customDialog = new Dialog(DetailListingActivity.this);
+                                                                                                    customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                                                                                                    customDialog.setContentView(R.layout.custom_dialog_sukses);
+
+                                                                                                    if (customDialog.getWindow() != null) {
+                                                                                                        customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                                                                                                    }
+
+                                                                                                    TextView dialogTitle = customDialog.findViewById(R.id.dialog_title);
+                                                                                                    Button ok = customDialog.findViewById(R.id.btnya);
+                                                                                                    Button cobalagi = customDialog.findViewById(R.id.btntidak);
+                                                                                                    ImageView gifimage = customDialog.findViewById(R.id.ivdialog);
+
+                                                                                                    dialogTitle.setText("Berhasil Menambahkan PJP");
+                                                                                                    cobalagi.setVisibility(View.GONE);
+
+                                                                                                    ok.setOnClickListener(new View.OnClickListener() {
+                                                                                                        @Override
+                                                                                                        public void onClick(View view) {
+                                                                                                            customDialog.dismiss();
+                                                                                                        }
+                                                                                                    });
+
+                                                                                                    Glide.with(DetailListingActivity.this)
+                                                                                                            .load(R.mipmap.ic_yes)
+                                                                                                            .transition(DrawableTransitionOptions.withCrossFade())
+                                                                                                            .into(gifimage);
+
+                                                                                                    customDialog.show();
+                                                                                                } else if (status.equals("Error")) {
+                                                                                                    Dialog customDialog = new Dialog(DetailListingActivity.this);
+                                                                                                    customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                                                                                                    customDialog.setContentView(R.layout.custom_dialog_sukses);
+
+                                                                                                    if (customDialog.getWindow() != null) {
+                                                                                                        customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                                                                                                    }
+
+                                                                                                    TextView dialogTitle = customDialog.findViewById(R.id.dialog_title);
+                                                                                                    Button ok = customDialog.findViewById(R.id.btnya);
+                                                                                                    Button cobalagi = customDialog.findViewById(R.id.btntidak);
+                                                                                                    ImageView gifimage = customDialog.findViewById(R.id.ivdialog);
+
+                                                                                                    dialogTitle.setText("Gagal Menambahkan PJP");
+                                                                                                    ok.setVisibility(View.GONE);
+
+                                                                                                    cobalagi.setOnClickListener(new View.OnClickListener() {
+                                                                                                        @Override
+                                                                                                        public void onClick(View view) {
+                                                                                                            customDialog.dismiss();
+                                                                                                        }
+                                                                                                    });
+
+                                                                                                    Glide.with(DetailListingActivity.this)
+                                                                                                            .load(R.mipmap.ic_no)
+                                                                                                            .transition(DrawableTransitionOptions.withCrossFade())
+                                                                                                            .into(gifimage);
+
+                                                                                                    customDialog.show();
+                                                                                                }
+                                                                                            } catch (JSONException e) {
+                                                                                                e.printStackTrace();
+                                                                                            }
+                                                                                        }
+                                                                                    },
+                                                                                    new Response.ErrorListener() {
+                                                                                        @Override
+                                                                                        public void onErrorResponse(VolleyError error) {
+                                                                                            pDialog.cancel();
+                                                                                            Dialog customDialog = new Dialog(DetailListingActivity.this);
+                                                                                            customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                                                                                            customDialog.setContentView(R.layout.custom_dialog_sukses);
+
+                                                                                            if (customDialog.getWindow() != null) {
+                                                                                                customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                                                                                            }
+
+                                                                                            TextView dialogTitle = customDialog.findViewById(R.id.dialog_title);
+                                                                                            Button ok = customDialog.findViewById(R.id.btnya);
+                                                                                            Button cobalagi = customDialog.findViewById(R.id.btntidak);
+                                                                                            ImageView gifimage = customDialog.findViewById(R.id.ivdialog);
+
+                                                                                            dialogTitle.setText("Terdapat Masalah Jaringan");
+                                                                                            ok.setVisibility(View.GONE);
+
+                                                                                            cobalagi.setOnClickListener(new View.OnClickListener() {
+                                                                                                @Override
+                                                                                                public void onClick(View view) {
+                                                                                                    customDialog.dismiss();
+                                                                                                }
+                                                                                            });
+
+                                                                                            Glide.with(DetailListingActivity.this)
+                                                                                                    .load(R.mipmap.ic_eror_network_foreground)
+                                                                                                    .transition(DrawableTransitionOptions.withCrossFade())
+                                                                                                    .into(gifimage);
+
+                                                                                            customDialog.show();
+                                                                                        }
+                                                                                    }) {
+                                                                                @Override
+                                                                                protected Map<String, String> getParams() throws AuthFailureError {
+                                                                                    Map<String, String> map = new HashMap<>();
+
+                                                                                    String Keterangan = "Tambah PJP";
+
+                                                                                    map.put("IdListing", IdListing);
+                                                                                    map.put("Keterangan", Keterangan);
+                                                                                    map.put("PoinTambahan", String.valueOf(Poin));
+                                                                                    map.put("ImgPjp", PJPHal1);
+                                                                                    map.put("ImgPjp1", PJPHal2);
+                                                                                    map.put("PoinBerkurang", "0");
+                                                                                    System.out.println(map);
+
+                                                                                    return map;
+                                                                                }
+                                                                            };
+
+                                                                            requestQueue.add(stringRequest);
+
+                                                                        })
+                                                                        .addOnFailureListener(exception -> {
+                                                                            pDialog.cancel();
+                                                                            Toast.makeText(DetailListingActivity.this, "Upload failed: " + exception.getMessage(), Toast.LENGTH_SHORT).show();
+                                                                        });
+                                                            }
+                                                        })
+                                                        .addOnFailureListener(new OnFailureListener() {
+                                                            @Override
+                                                            public void onFailure(@NonNull Exception e) {
+                                                                pDialog.cancel();
+                                                                Toast.makeText(DetailListingActivity.this, "Upload failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                                            }
+                                                        });
+
+                                            })
+                                            .addOnFailureListener(exception -> {
+                                                pDialog.cancel();
+                                                Toast.makeText(DetailListingActivity.this, "Upload failed: " + exception.getMessage(), Toast.LENGTH_SHORT).show();
+                                            });
+                                }
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Toast.makeText(DetailListingActivity.this, "Upload failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                }
+            }
+        });
+
+        CustomDialogPjp.show();
+    }
+    public void tampilkanPreview(View view) {
+        Uri imageUri = getImageUriFromImageView((ImageView) view);
+        tampilkanDialogGambarBesar(imageUri);
+    }
+    private Uri getImageUriFromImageView(ImageView imageView) {
+        return (Uri) imageView.getTag();
+    }
+    private void tampilkanDialogGambarBesar(Uri imageUri) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        LayoutInflater inflater = getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.preview_gambar, null);
+        PhotoView imageView = dialogView.findViewById(R.id.imageViewPreview);
+        imageView.setImageURI(imageUri);
+        builder.setView(dialogView);
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
     @Override
     public void onResume() {
         super.onResume();
         mapView.onResume();
     }
-
     @Override
     public void onPause() {
         super.onPause();
         mapView.onPause();
     }
-
     @Override
     public void onDestroy() {
         super.onDestroy();
         mapView.onDestroy();
     }
-
     @Override
     public void onLowMemory() {
         super.onLowMemory();
         mapView.onLowMemory();
     }
-
     @Override
     public void onMapReady(@NonNull GoogleMap map) {
         googleMap = map;
@@ -4204,7 +5606,6 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
 //            });
         }
     }
-
     private class SendMessageTask extends AsyncTask<String, Void, String> {
         @Override
         protected String doInBackground(String... params) {
@@ -4221,13 +5622,11 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
             }
         }
     }
-
     private void sendNotificationToToken(String token, String notificationType) {
         String title = "Admin Goo Proper";
         String message = "Listing Anda Sudah di Approve";
         String response = SendMessageToFCM.sendMessage(token, title, message, notificationType);
     }
-
     private class SendMessageTaskReject extends AsyncTask<String, Void, String> {
         @Override
         protected String doInBackground(String... params) {
@@ -4244,13 +5643,11 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
             }
         }
     }
-
     private void sendNotificationToTokenReject(String token, String notificationType) {
         String title = "Admin Goo Proper";
         String message = "Listing Anda Ditolak";
         String response = SendMessageToFCM.sendMessage(token, title, message, notificationType);
     }
-
     private class SendMessageTaskAjukanUlang extends AsyncTask<String, Void, String> {
         @Override
         protected String doInBackground(String... params) {
@@ -4267,7 +5664,6 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
             }
         }
     }
-
     private void sendNotificationToTokenAjukanUlang(String token, String notificationType) {
         String title = Preferences.getKeyNama(this);
         String message = "Pengajuan Ulang Listing";

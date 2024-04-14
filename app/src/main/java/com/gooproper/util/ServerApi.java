@@ -33,9 +33,9 @@ public class ServerApi {
     public static final String URL_TAMBAH_PRALISTING = BASE_URL + "/Api/PraListingBaru";
     public static final String URL_UPLOAD_TEMPLATE = BASE_URL + "/Api/UploadTemplate";
     public static final String URL_AJUKAN_ULANG = BASE_URL + "/Api/AjukanUlang";
-    public static final String URL_TAMBAH_PRALISTING_LOKASI = BASE_URL + "/Api/PraListingFinalLokasi";
-    public static final String URL_TAMBAH_PRALISTING_INFO = BASE_URL + "/Api/PraListingInfo";
-    public static final String URL_UPDATE_PRALISTING = BASE_URL + "/Api/UpdatePraListing";
+    public static final String URL_TAMBAH_PRALISTING_LOKASI = BASE_URL + "/Api/PraListingFinalLokasiBaru";
+    public static final String URL_TAMBAH_PRALISTING_INFO = BASE_URL + "/Api/PraListingInfoBaru";
+    public static final String URL_UPDATE_PRALISTING = BASE_URL + "/Api/UpdatePraListingFinal";
     public static final String URL_UPDATE_PRALISTING_AGEN = BASE_URL + "/Api/UpdatePraListingAgenFinall";
     public static final String URL_UPDATE_PRALISTING_MAPS = BASE_URL + "/Api/UpdateMapsPraListing";
     public static final String URL_DELETE_PRALISTING = BASE_URL + "/Api/DeletePraListing";
@@ -48,15 +48,15 @@ public class ServerApi {
     public static final String URL_GET_REJECTED_AGEN = BASE_URL + "/Api/GetRejectedAgen?id=";
     public static final String URL_GET_REJECTED = BASE_URL + "/Api/GetRejectedAdmin";
     public static final String URL_GET_KETERANGAN_REJECTED = BASE_URL + "/Api/GetKeteranganRejected?id=";
-    // Listing -------------------------------------------------------------------------------------
-    public static final String URL_UPDATE_LISTING_MAPS = BASE_URL + "/Api/UpdateMapsListingFinal";
+    // Tambah Listing ------------------------------------------------------------------------------
     public static final String URL_TAMBAH_LISTING_PRIMARY = BASE_URL + "/Api/ListingPrimary";
     public static final String URL_TAMBAH_LISTING_SEMENTARA = BASE_URL + "/Api/Sharelokasi";
+    // Get Listing ---------------------------------------------------------------------------------
+    public static final String URL_GET_LISTING_PENDING = BASE_URL + "/Api/GetListingPending";
     public static final String URL_GET_LISTING_SEMENTARA = BASE_URL + "/Api/GetSharelokasi?idagen=";
     public static final String URL_GET_LISTING_PRIMARY = BASE_URL + "/Api/GetListingPrimary";
     public static final String URL_GET_LISTING_LAPORAN = BASE_URL + "/Api/GetLaporanListing";
     public static final String URL_GET_LISTING = BASE_URL + "/Api/GetListingFinal";
-    public static final String URL_UPDATE_LISTING = BASE_URL + "/Api/UpdateListing";
     public static final String URL_GET_LISTING_AGEN = BASE_URL + "/Api/GetListingAgenFinal?idagen=";
     public static final String URL_GET_LISTING_DEEP = BASE_URL + "/Api/GetListingDeepFinal?idlisting=";
     public static final String URL_GET_LISTING_SOLD = BASE_URL + "/Api/GetListingSoldFinal";
@@ -66,6 +66,10 @@ public class ServerApi {
     public static final String URL_GET_LISTING_SEEN= BASE_URL + "/Api/GetSeen?idcustomer=";
     public static final String URL_GET_LISTING_SEEN_AGEN= BASE_URL + "/Api/GetSeenAgen?idagen=";
     public static final String URL_GET_CO_LISTING = BASE_URL + "/Api/GetCoListing?idco=";
+    public static final String URL_GET_SUSULAN = BASE_URL + "/Api/GetSusulan?id=";
+    // Update Listing ------------------------------------------------------------------------------
+    public static final String URL_UPDATE_LISTING_MAPS = BASE_URL + "/Api/TambahMaps";
+    public static final String URL_UPDATE_LISTING = BASE_URL + "/Api/UpdateListing";
     public static final String URL_ADD_VIEWS = BASE_URL + "/Api/AddViews";
     public static final String URL_ADD_SEEN = BASE_URL + "/Api/AddSeen";
     public static final String URL_ADD_FAVORITE = BASE_URL + "/Api/AddFavorite";
@@ -73,6 +77,10 @@ public class ServerApi {
     public static final String URL_COUNT_SEWA = BASE_URL + "/Api/CountSewa?idagen=";
     public static final String URL_COUNT_JUAL = BASE_URL + "/Api/CountJual?idagen=";
     public static final String URL_COUNT_LISTING = BASE_URL + "/Api/CountListing?idagen=";
+    public static final String URL_TAMBAH_BANNER = BASE_URL + "/Api/TambahBanner";
+    public static final String URL_TAMBAH_COLIST = BASE_URL + "/Api/TambahCoList";
+    public static final String URL_TAMBAH_PJP = BASE_URL + "/Api/TambahPjp";
+    public static final String URL_APPROVE_PENDING = BASE_URL + "/Api/ApprovePending";
     // Follow Up -----------------------------------------------------------------------------------
     public static final String URL_ADD_FLOWUP = BASE_URL + "/Api/AddFlowup";
     public static final String URL_ADD_FLOWUP_PRIMARY = BASE_URL + "/Api/AddFlowupPrimary";
@@ -85,7 +93,6 @@ public class ServerApi {
     public static final String URL_GET_FLOWUP_PRIMARY_AGEN = BASE_URL + "/Api/GetFlowUpPrimaryAgen";
     public static final String URL_GET_FLOWUP_PRIMARY = BASE_URL + "/Api/GetFlowUpPrimary?idagen=";
     public static final String URL_GET_UPDATE_FLOWUP_PRIMARY = BASE_URL + "/Api/GetUpdateFlowUpPrimary?id=";
-
     public static final String URL_GET_FLOWUP_INFO = BASE_URL + "/Api/GetFlowUpInfoAgen";
     // Closing -------------------------------------------------------------------------------------
     public static final String URL_CLOSING = BASE_URL + "/Api/Closing";
@@ -140,7 +147,7 @@ public class ServerApi {
     public static final String URL_GET_AGEN_AKTIF = BASE_URL + "/Api/LastSeenAgenAktif";
     public static final String URL_GET_AGEN_TIDAK_AKTIF = BASE_URL + "/Api/LastSeenAgenTidakAktif";
     public static final String URL_UPDATE_PRALISTING_SELFIE = BASE_URL + "/Api/UpdateSelfiePraListing";
-    public static final String URL_UPDATE_LISTING_SELFIE = BASE_URL + "/Api/UpdateSelfieListingFinal";
+    public static final String URL_UPDATE_LISTING_SELFIE = BASE_URL + "/Api/TambahSelfie";
     // TBO ----------------------------------------------------------------------------------------
     public static final String URL_GET_TBO = BASE_URL + "/Api/GetTbo?id=";
     public static final String URL_GET_COUNT_LISTING_AGEN_BULAN_LALU = BASE_URL + "/Api/GetCountListingAgenBulanLalu?id=";

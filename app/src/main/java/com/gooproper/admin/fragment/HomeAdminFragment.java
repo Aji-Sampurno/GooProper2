@@ -2,6 +2,10 @@ package com.gooproper.admin.fragment;
 
 import static android.app.Activity.RESULT_OK;
 
+import static androidx.core.content.ContextCompat.getSystemService;
+
+import static com.android.volley.VolleyLog.TAG;
+
 import android.Manifest;
 import android.app.Dialog;
 import android.app.NotificationChannel;
@@ -55,6 +59,8 @@ import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.play.core.appupdate.AppUpdateInfo;
 import com.google.android.play.core.appupdate.AppUpdateManager;
 import com.google.android.play.core.appupdate.AppUpdateManagerFactory;
@@ -129,7 +135,17 @@ public class HomeAdminFragment extends Fragment implements OnMapReadyCallback {
         IdAdmin = Preferences.getKeyIdAdmin(getContext());
         Status = Preferences.getKeyStatus(getContext());
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            NotificationManager notificationManager = requireActivity().getSystemService(NotificationManager.class);
+            if (notificationManager != null) {
+                boolean areNotificationsEnabled = notificationManager.areNotificationsEnabled();
+                if (!areNotificationsEnabled) {
+                    Intent intent = new Intent();
+                    intent.setAction(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS);
+                    startActivity(intent);
+                }
+            }
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
             NotificationChannel channel = new NotificationChannel("1","notification", NotificationManager.IMPORTANCE_HIGH);
             NotificationManager notificationManager = requireContext().getSystemService(NotificationManager.class);
             notificationManager.createNotificationChannel(channel);
@@ -138,13 +154,18 @@ public class HomeAdminFragment extends Fragment implements OnMapReadyCallback {
         }
 
         FirebaseMessaging.getInstance().getToken()
-                .addOnCompleteListener(task -> {
-                    if (!task.isSuccessful()) {
-                        return;
+                .addOnSuccessListener(new OnSuccessListener<String>() {
+                    @Override
+                    public void onSuccess(String token) {
+                        Log.d(TAG, "Token: " + token);
+                        simpanDevice(token);
                     }
-                    Token = task.getResult();
-                    saveTokenToDatabase(Token);
-                    simpanDevice(Token);
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@android.support.annotation.NonNull Exception e) {
+                        Log.e(TAG, "Error getting FCM token", e);
+                    }
                 });
 
         recycleListingPrimary = root.findViewById(R.id.ListingPrimary);

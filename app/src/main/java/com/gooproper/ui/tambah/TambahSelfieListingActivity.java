@@ -77,7 +77,7 @@ public class TambahSelfieListingActivity extends AppCompatActivity {
     ImageView back, IVselfie;
     LinearLayout LytSelfie;
     Uri bselfie;
-    String Selfie, StrIdPraListing, Keterangan;
+    String Selfie, StrIdPraListing, Keterangan, StrPoinTambah;
     String timeStamp,fileSelfie;
     private StorageReference mStorageRef;
     StorageReference storageRef,ImageSelfie;
@@ -101,6 +101,7 @@ public class TambahSelfieListingActivity extends AppCompatActivity {
         Intent data = getIntent();
         final int update = data.getIntExtra("update", 0);
         String intentIdPraListing = data.getStringExtra("IdListing");
+        String intentPoinTambah = data.getStringExtra("PoinTambah");
 
         timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
         fileSelfie = "Selfie_" + timeStamp + ".jpg";
@@ -109,6 +110,7 @@ public class TambahSelfieListingActivity extends AppCompatActivity {
         ImageSelfie = storageRef.child("selfie/" + fileSelfie);
 
         StrIdPraListing = intentIdPraListing;
+        StrPoinTambah = intentPoinTambah;
 
         Keterangan = "Tambah Susulan Selfie";
 
@@ -440,6 +442,8 @@ public class TambahSelfieListingActivity extends AppCompatActivity {
                 map.put("IdListing", StrIdPraListing);
                 map.put("Selfie", Selfie);
                 map.put("Keterangan", Keterangan);
+                map.put("PoinTambahan", StrPoinTambah);
+                map.put("PoinBerkurang", "0");
                 return map;
             }
         };

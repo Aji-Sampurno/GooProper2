@@ -193,14 +193,14 @@ public class TambahDetailListingSementaraActivity extends AppCompatActivity {
     ImageView back, iv1, iv2, iv3, iv4, iv5, iv6, iv7, iv8, IVShm, IVHgb, IVHshp, IVPpjb, IVStratatitle, IVAJB, IVPetokD, IVPjp, IVPjp1, IVSelfie, IVKTP;
     Button batal, submit, select, select1, select2, select3, select4, select5, select6, select7, maps, BtnSHM, BtnHGB, BtnHSHP, BtnPPJB, BtnSTRA, BtnAJB, BtnPetokD, BtnSHMPdf, BtnHGBPdf, BtnHSHPPdf, BtnPPJBPdf, BtnSTRAPdf, BtnAJBPdf, BtnPetokDPdf, BtnPjp, BtnPjp1, BtnSelfie, BtnKTP;
     ImageView hps1, hps2, hps3, hps4, hps5, hps6, hps7, hps8, HpsSHM, HpsHGB, HpsHSHP, HpsPPJB, HpsStratatitle, HpsAJB, HpsPetokD, HpsPjp, HpsPjp1, HpsSelfie, HpsKTP;
-    TextInputEditText namalengkap, nohp, nik, alamat, tgllhir, rekening, bank, atasnama, jenisproperti, namaproperti, alamatproperti, alamatpropertitemplate, sertifikat, nosertif, luas, satuanluas, land, satuanland, dimensi, lantai, bed, bath, bedart, bathart, garasi, carpot, listrik, air, pjp, perabot, ketperabot, banner, status, harga, hargasewa, rangeharga, keterangan, hadap, size, EtTglInput, EtFee, CoListing, ktp;
-    TextInputLayout LytSize, LytTglInput, LytHargaJual, LytHargaSewa, LytRangeHarga;
+    TextInputEditText namalengkap, nohp, nik, alamat, tgllhir, rekening, bank, atasnama, jenisproperti, namaproperti, alamatproperti, alamatpropertitemplate, sertifikat, nosertif, luas, satuanluas, land, satuanland, dimensi, lantai, bed, bath, bedart, bathart, garasi, carpot, listrik, air, pjp, perabot, ketperabot, banner, status, tipeharga, harga, hargasewa, rangeharga, keterangan, hadap, size, EtTglInput, EtFee, CoListing, ktp;
+    TextInputLayout LytSize, LytTglInput, LytHargaJual, LytHargaSewa, LytRangeHarga, LytTipeHarga;
     RadioButton open, exclusive;
     RadioGroup rgpriority;
     CheckBox CBSHM, CBHGB, CBHSHP, CBPPJB, CBSTRA, CBAJB, CBPetokD, CBMarketable, CBHarga, CBSelfie, CBLokasi;
     String idagen, idnull, sstatus, priority, namalisting, isAdmin, idadmin, idinput, HargaString, HargaSewaString, SHarga, SHargaSewa, agenid, agencoid, SRangeHarga, SRange, RangeHargaString;
     String image1, image2, image3, image4, image5, image6, image7, image8, SHM, HGB, HSHP, PPJB, STRA, AJB, PetokD, PJPHal1, PJPHal2, ImgSelfie, ImgKTP;
-    String latitudeStr, longitudeStr, addressStr, lokasiStr, Lat, Lng, token, IdAgenStr, IdShareLokasiStr, IsSelfie;
+    String latitudeStr, longitudeStr, addressStr, lokasiStr, Lat, Lng, token, IdAgenStr, IdShareLokasiStr, IsSelfie, StrTipeHarga;
     Drawable DrawableSHM, DrawableHGB, DrawableHSHP, DrawablePPJB, DrawableSTRA;
     TextView TVSHM, TVHGB, TVHSHP, TVPPJB, TVSTRA, TVAJB, TVPetokD;
     private AgenManager agenManager;
@@ -249,6 +249,7 @@ public class TambahDetailListingSementaraActivity extends AppCompatActivity {
         lyt8 = findViewById(R.id.lyts8);
         LytSize = findViewById(R.id.lytUkuranBanner);
         LytTglInput = findViewById(R.id.lyttglinputproperti);
+        LytTipeHarga = findViewById(R.id.lytstatusharga);
         LytHargaJual = findViewById(R.id.lytharga);
         LytHargaSewa = findViewById(R.id.lythargasewa);
         LytRangeHarga = findViewById(R.id.lytrangeharga);
@@ -337,6 +338,7 @@ public class TambahDetailListingSementaraActivity extends AppCompatActivity {
         ketperabot = findViewById(R.id.etketperabot);
         banner = findViewById(R.id.etbanner);
         status = findViewById(R.id.etstatusproperti);
+        tipeharga = findViewById(R.id.etstatusharga);
         harga = findViewById(R.id.etharga);
         hargasewa = findViewById(R.id.ethargasewa);
         rangeharga = findViewById(R.id.etrangeharga);
@@ -576,6 +578,7 @@ public class TambahDetailListingSementaraActivity extends AppCompatActivity {
         banner.setOnClickListener(view -> ShowBanner(view));
         size.setOnClickListener(view -> ShowSize(view));
         status.setOnClickListener(view -> ShowStatus(view));
+        tipeharga.setOnClickListener(view -> ShowTipeHarga(view));
         satuanluas.setOnClickListener(view -> ShowSatuanBangunan(view));
         satuanland.setOnClickListener(view -> ShowSatuanTanah(view));
         hps1.setOnClickListener(view -> clearBitmap1());
@@ -651,17 +654,57 @@ public class TambahDetailListingSementaraActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable editable) {
                 if (editable.toString().equalsIgnoreCase("Jual")) {
-                    LytHargaJual.setVisibility(View.VISIBLE);
-                    LytHargaSewa.setVisibility(View.GONE);
+                    if (jenisproperti.getText().toString().equals("Tanah")){
+                        LytTipeHarga.setVisibility(View.VISIBLE);
+                        LytHargaSewa.setVisibility(View.GONE);
+                    } else if (jenisproperti.getText().toString().equals("Rumah")) {
+                        LytTipeHarga.setVisibility(View.VISIBLE);
+                        LytHargaSewa.setVisibility(View.GONE);
+                    } else {
+                        LytHargaJual.setVisibility(View.VISIBLE);
+                        LytHargaSewa.setVisibility(View.GONE);
+                    }
                 } else if (editable.toString().equalsIgnoreCase("Sewa")) {
                     LytHargaSewa.setVisibility(View.VISIBLE);
                     LytHargaJual.setVisibility(View.GONE);
                 } else if (editable.toString().equalsIgnoreCase("Jual/Sewa")) {
-                    LytHargaJual.setVisibility(View.VISIBLE);
-                    LytHargaSewa.setVisibility(View.VISIBLE);
+                    if (jenisproperti.getText().toString().equals("Tanah")){
+                        LytTipeHarga.setVisibility(View.VISIBLE);
+                        LytHargaSewa.setVisibility(View.GONE);
+                    } else if (jenisproperti.getText().toString().equals("Rumah")) {
+                        LytTipeHarga.setVisibility(View.VISIBLE);
+                        LytHargaSewa.setVisibility(View.GONE);
+                    } else {
+                        LytHargaJual.setVisibility(View.VISIBLE);
+                        LytHargaSewa.setVisibility(View.VISIBLE);
+                    }
                 } else {
                     LytHargaJual.setVisibility(View.GONE);
                     LytHargaSewa.setVisibility(View.GONE);
+                }
+            }
+        });
+        tipeharga.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if (editable.toString().equalsIgnoreCase("Permeter")) {
+                    LytHargaJual.setVisibility(View.VISIBLE);
+                    StrTipeHarga = "Permeter";
+                } else if (editable.toString().equalsIgnoreCase("Borongan")) {
+                    LytHargaJual.setVisibility(View.VISIBLE);
+                    StrTipeHarga = "Borongan";
+                } else {
+                    LytHargaJual.setVisibility(View.VISIBLE);
                 }
             }
         });
@@ -4329,7 +4372,8 @@ public class TambahDetailListingSementaraActivity extends AppCompatActivity {
                                     .addOnSuccessListener(uri -> {
                                         String imageUrl = uri.toString();
                                         ImgSelfie = imageUrl;
-                                        HideProgressDialog();simpanDataAgen();
+                                        HideProgressDialog();
+                                        simpanDataAgen();
                                     })
                                     .addOnFailureListener(exception -> {
                                         handleImageSelfieSuccess();
@@ -4345,8 +4389,9 @@ public class TambahDetailListingSementaraActivity extends AppCompatActivity {
                         }
                     });
         } else {
-            ImgSelfie = "0";
-            HideProgressDialog();simpanDataAgen();
+            ImgSelfie = IsSelfie;
+            HideProgressDialog();
+            simpanDataAgen();
         }
     }
     private void simpanDataAgen() {
@@ -4547,7 +4592,7 @@ public class TambahDetailListingSementaraActivity extends AppCompatActivity {
                 map.put("IdShareLokasi", IdShareLokasiStr);
                 map.put("NamaLengkap", namalengkap.getText().toString());
                 map.put("NoTelp", nohp.getText().toString());
-                map.put("Alamat", alamat.getText().toString());
+                map.put("AlamatVendor", alamat.getText().toString());
                 map.put("TglLahir", tgllhir.getText().toString());
                 map.put("Nik", nik.getText().toString());
                 map.put("NoRekening", rekening.getText().toString());
@@ -4561,7 +4606,7 @@ public class TambahDetailListingSementaraActivity extends AppCompatActivity {
                 map.put("AlamatTemplate", alamatpropertitemplate.getText().toString());
                 map.put("Latitude", Lat);
                 map.put("Longitude", Lng);
-                map.put("Location", alamatproperti.getText().toString());
+                map.put("Location", lokasiStr);
                 map.put("Wide", tanah);
                 map.put("Land", bangunan);
                 map.put("Dimensi", dimensi.getText().toString());
@@ -4599,6 +4644,7 @@ public class TambahDetailListingSementaraActivity extends AppCompatActivity {
                 map.put("Priority", priority);
                 map.put("Banner", banner.getText().toString());
                 map.put("Size", size.getText().toString());
+                map.put("TipeHarga", tipeharga.getText().toString());
                 map.put("Harga", SHarga);
                 map.put("HargaSewa", SHargaSewa);
                 map.put("RangeHarga", SRangeHarga);
@@ -4622,6 +4668,8 @@ public class TambahDetailListingSementaraActivity extends AppCompatActivity {
                 map.put("IsSelfie", StringSelfie);
                 map.put("IsLokasi", StringLokasi);
                 map.put("Selfie", ImgSelfie);
+                map.put("NoKtp", nik.getText().toString());
+                map.put("ImgKtp", ImgKTP);
                 System.out.println(map);
 
                 return map;
@@ -4951,6 +4999,33 @@ public class TambahDetailListingSementaraActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 status.setText(Status[SelectedStatus[0]]);
+            }
+        });
+
+        builder.setNegativeButton("Batal", null);
+
+        AlertDialog dialog = builder.create();
+
+        dialog.show();
+    }
+    public void ShowTipeHarga(View view) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.CustomAlertDialogStyle);
+        builder.setTitle("Silahkan Pilih Status Harga Jual");
+
+        final CharSequence[] Status = {"Permeter", "Borongan"};
+        final int[] SelectedStatus = {0};
+
+        builder.setSingleChoiceItems(Status, SelectedStatus[0], new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                SelectedStatus[0] = which;
+            }
+        });
+
+        builder.setPositiveButton("Pilih", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                tipeharga.setText(Status[SelectedStatus[0]]);
             }
         });
 
