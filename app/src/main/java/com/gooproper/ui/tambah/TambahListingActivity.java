@@ -200,7 +200,7 @@ public class TambahListingActivity extends AppCompatActivity {
     ImageView back, iv1, iv2, iv3, iv4, iv5, iv6, iv7, iv8, IVShm, IVHgb, IVHshp, IVPpjb, IVStratatitle, IVAJB, IVPetokD, IVPjp, IVPjp1, IVSelfie, IVKTP;
     Button batal, submit, select, select1, select2, select3, select4, select5, select6, select7, maps, BtnSHM, BtnHGB, BtnHSHP, BtnPPJB, BtnSTRA, BtnAJB, BtnPetokD, BtnSHMPdf, BtnHGBPdf, BtnHSHPPdf, BtnPPJBPdf, BtnSTRAPdf, BtnAJBPdf, BtnPetokDPdf, BtnPjp, BtnPjp1, BtnSelfie, BtnKTP;
     ImageView hps1, hps2, hps3, hps4, hps5, hps6, hps7, hps8, HpsSHM, HpsHGB, HpsHSHP, HpsPPJB, HpsStratatitle, HpsAJB, HpsPetokD, HpsPjp, HpsPjp1, HpsSelfie, HpsKTP;
-    TextInputEditText namalengkap, nohp, nik, alamat, tgllhir, rekening, bank, atasnama, jenisproperti, namaproperti, alamatproperti, alamatpropertitemplate, sertifikat, nosertif, luas, satuanluas, land, satuanland, dimensi, lantai, bed, bath, bedart, bathart, garasi, carpot, listrik, air, pjp, perabot, ketperabot, banner, status, tipeharga, harga, hargasewa, rangeharga, keterangan, hadap, size, EtTglInput, EtFee, CoListing, ktp;
+    TextInputEditText namalengkap, nohp, nik, alamat, tgllhir, rekening, bank, atasnama, jenisproperti, namaproperti, alamatproperti, alamatpropertitemplate, wilayahproperti, sertifikat, nosertif, luas, satuanluas, land, satuanland, dimensi, lantai, bed, bath, bedart, bathart, garasi, carpot, listrik, air, pjp, perabot, ketperabot, banner, status, tipeharga, harga, hargasewa, rangeharga, keterangan, hadap, size, EtTglInput, EtFee, CoListing, ktp;
     TextInputLayout LytSize, LytTglInput, LytHargaJual, LytHargaSewa, LytRangeHarga, LytTipeHarga;
     RadioButton open, exclusive;
     RadioGroup rgpriority;
@@ -326,6 +326,7 @@ public class TambahListingActivity extends AppCompatActivity {
         namaproperti = findViewById(R.id.etnamaproperti);
         alamatproperti = findViewById(R.id.etalamatproperti);
         alamatpropertitemplate = findViewById(R.id.etalamatpropertitemplate);
+        wilayahproperti = findViewById(R.id.etwilayahlisting);
         sertifikat = findViewById(R.id.ettipesertifikat);
         pjp = findViewById(R.id.etkonfirmasipjp);
         nosertif = findViewById(R.id.etnomorsertifikat);
@@ -4889,6 +4890,7 @@ public class TambahListingActivity extends AppCompatActivity {
                 map.put("NamaListing", namaproperti.getText().toString());
                 map.put("Alamat", alamatproperti.getText().toString());
                 map.put("AlamatTemplate", alamatpropertitemplate.getText().toString());
+                map.put("Wilayah", wilayahproperti.getText().toString());
                 map.put("Latitude", Lat);
                 map.put("Longitude", Lng);
                 map.put("Location", StrLokasi);
@@ -5178,6 +5180,7 @@ public class TambahListingActivity extends AppCompatActivity {
                 map.put("NamaListing", namaproperti.getText().toString());
                 map.put("Alamat", alamatproperti.getText().toString());
                 map.put("AlamatTemplate", alamatpropertitemplate.getText().toString());
+                map.put("Wilayah", wilayahproperti.getText().toString());
                 map.put("Latitude", Lat);
                 map.put("Longitude", Lng);
                 map.put("Location", StrLokasi);
@@ -5460,6 +5463,7 @@ public class TambahListingActivity extends AppCompatActivity {
                 map.put("NamaListing", namaproperti.getText().toString());
                 map.put("Alamat", alamatproperti.getText().toString());
                 map.put("AlamatTemplate", alamatpropertitemplate.getText().toString());
+                map.put("Wilayah", wilayahproperti.getText().toString());
                 map.put("Latitude", Lat);
                 map.put("Longitude", Lng);
                 map.put("Location", StringLokasi);
@@ -5986,6 +5990,16 @@ public class TambahListingActivity extends AppCompatActivity {
         if (alamatproperti.getText().toString().equals("")) {
             alamatproperti.setError("Harap Isi Alamat Properti");
             alamatproperti.requestFocus();
+            return false;
+        }
+        if (alamatpropertitemplate.getText().toString().equals("")) {
+            alamatpropertitemplate.setError("Harap Isi Alamat Properti ( Template ");
+            alamatpropertitemplate.requestFocus();
+            return false;
+        }
+        if (wilayahproperti.getText().toString().equals("")) {
+            wilayahproperti.setError("Harap Isi Wilayah Properti");
+            wilayahproperti.requestFocus();
             return false;
         }
         if (!luas.getText().toString().equals("")) {

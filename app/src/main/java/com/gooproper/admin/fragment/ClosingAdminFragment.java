@@ -497,6 +497,7 @@ public class ClosingAdminFragment extends Fragment {
                                 md.setLatitude(data.getString("Latitude"));
                                 md.setLongitude(data.getString("Longitude"));
                                 md.setLocation(data.getString("Location"));
+                                md.setWilayah(data.getString("Wilayah"));
                                 md.setSelfie(data.getString("Selfie"));
                                 md.setWide(data.getString("Wide"));
                                 md.setLand(data.getString("Land"));

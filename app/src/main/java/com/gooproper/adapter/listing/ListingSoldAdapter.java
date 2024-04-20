@@ -208,6 +208,7 @@ public class ListingSoldAdapter extends RecyclerView.Adapter<ListingSoldAdapter.
                     update.putExtra("Latitude",listingModel.getLatitude());
                     update.putExtra("Longitude",listingModel.getLongitude());
                     update.putExtra("Location",listingModel.getLocation());
+                    update.putExtra("Wilayah",listingModel.getWilayah());
                     update.putExtra("Selfie",listingModel.getSelfie());
                     update.putExtra("Wide",listingModel.getWide());
                     update.putExtra("Land",listingModel.getLand());

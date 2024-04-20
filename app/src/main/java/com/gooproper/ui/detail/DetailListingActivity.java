@@ -111,7 +111,7 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
     TextView TVRangeHarga, TVNamaDetailListing, TVAlamatDetailListing, TVHargaDetailListing, TVHargaSewaDetailListing, TVViewsDetailListing, TVLikeDetailListing, TVBedDetailListing, TVNamaAgen, TVNamaAgen2, TVBathDetailListing, TVWideDetailListing, TVLandDetailListing, TVDimensiDetailListing, TVTipeDetailListing, TVStatusDetailListing, TVSertifikatDetailListing, TVLuasDetailListing, TVKamarTidurDetailListing, TVKamarMandiDetailListing, TVLantaiDetailListing, TVGarasiDetailListing, TVCarpotDetailListing, TVListrikDetailListing, TVSumberAirDetailListing, TVPerabotDetailListing, TVSizeBanner, TVDeskripsiDetailListing, TVNoData, TVNoDataPdf, TVPriority, TVKondisi, TVNoPjp, TVNoDataPjp, TVFee, TVTglInput, TVNamaVendor, TVTelpVendor, TVPJP, TVSelfie, TVRejected, TVPoin, TVHadap;
     ImageView IVFlowUp, IVWhatsapp, IVInstagram, IVFlowUp2, IVWhatsapp2, IVInstagram2, IVFavorite, IVFavoriteOn, IVShare, IVStar1, IVStar2, IVStar3, IVStar4, IVStar5, IVAlamat, IVNextImg, IVPrevImg, IVSelfie;
     Button BtnApproveAdmin, BtnApproveManager, BtnRejectedAdmin, BtnRejectedManager, BtnAjukanUlang, BtnLihatTemplate, BtnLihatTemplateKosong, BtnUploadTemplate;
-    Button BtnTambahPjp, BtnTambahBanner, BtnTambahCoList, BtnUpgrade, BtnTambahMaps, BtnTambahSelfie, BtnApproveUpgrade;
+    Button BtnTambahPjp, BtnTambahBanner, BtnTambahCoList, BtnUpgrade, BtnTambahMaps, BtnTambahSelfie, BtnApproveUpgrade, BtnTambahWilayah;
     TextInputEditText tambahagen, tambahcoagen, tambahpjp;
     TextInputLayout lytambahagen, lyttambahcoagen, lyttambahpjp;
     CheckBox CBMarketable, CBHarga, CBSelfie, CBLokasi;
@@ -196,6 +196,7 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
         BtnTambahPjp = findViewById(R.id.BtnAddPjpDetailListing);
         BtnTambahBanner = findViewById(R.id.BtnAddBannerDetailListing);
         BtnTambahCoList = findViewById(R.id.BtnColistDetailListing);
+        BtnTambahWilayah = findViewById(R.id.BtnTambahWilayahDetailListing);
         BtnUpgrade = findViewById(R.id.BtnUpgradeDetailListing);
         BtnApproveUpgrade = findViewById(R.id.BtnApproveUpgradeDetailListing);
 
@@ -297,6 +298,7 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
         String intentLatitude = data.getStringExtra("Latitude");
         String intentLongitude = data.getStringExtra("Longitude");
         String intentLocation = data.getStringExtra("Location");
+        String intentWilayah = data.getStringExtra("Wilayah");
         String intentSelfie = data.getStringExtra("Selfie");
         String intentWide = data.getStringExtra("Wide");
         String intentLand = data.getStringExtra("Land");
@@ -751,9 +753,11 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                 BtnApproveManager.setVisibility(View.GONE);
                 BtnRejectedAdmin.setVisibility(View.GONE);
                 BtnRejectedManager.setVisibility(View.GONE);
-                BtnLihatTemplate.setVisibility(View.GONE);
-                BtnLihatTemplateKosong.setVisibility(View.GONE);
-                BtnUploadTemplate.setVisibility(View.GONE);
+                BtnLihatTemplate.setVisibility(View.VISIBLE);
+                BtnLihatTemplateKosong.setVisibility(View.VISIBLE);
+                BtnUploadTemplate.setVisibility(View.VISIBLE);
+                BtnTambahWilayah.setVisibility(View.VISIBLE);
+                BtnUploadTemplate.setText("Ganti Template");
                 IVFlowUp.setVisibility(View.VISIBLE);
                 IVFlowUp2.setVisibility(View.VISIBLE);
                 IVEdit.setVisibility(View.VISIBLE);
@@ -2375,6 +2379,12 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                 ShowTambahCoList(PoinKurang, intentIdListing);
             }
         });
+        BtnTambahWilayah.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ShowTambahWilayah(intentIdListing);
+            }
+        });
 
         if (update == 1) {
             if (intentPriority.equals("exclusive") && !intentPjp.isEmpty() && intentBanner.equals("Ya")) {
@@ -3072,7 +3082,11 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
             if (intentAlamat.isEmpty()) {
                 TVAlamatDetailListing.setText("-");
             } else {
-                TVAlamatDetailListing.setText(intentAlamat);
+                if (intentWilayah.isEmpty()) {
+                    TVAlamatDetailListing.setText(intentAlamat);
+                } else {
+                    TVAlamatDetailListing.setText(intentAlamat+" ( "+intentWilayah+" )");
+                }
             }
             if (intentKondisi.equals("Jual")) {
                 if (intentHarga.isEmpty()) {
@@ -5240,6 +5254,195 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                             map.put("PoinTambahan", "0");
                             map.put("IdAgenCo", ETIdAgen.getText().toString());
                             map.put("PoinBerkurang", String.valueOf(Poin));
+                            System.out.println(map);
+
+                            return map;
+                        }
+                    };
+
+                    requestQueue.add(stringRequest);
+                }
+            }
+        });
+
+        customDialog.show();
+    }
+    public void ShowTambahWilayah(String IdListing) {
+        Dialog customDialog = new Dialog(DetailListingActivity.this);
+        customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        customDialog.setContentView(R.layout.dialog_tambah_wilayah);
+
+        if (customDialog.getWindow() != null) {
+            customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        }
+
+        TextInputEditText ETWilayah = customDialog.findViewById(R.id.ETWilayah);
+
+        Button Batal = customDialog.findViewById(R.id.BtnBatal);
+        Button Simpan = customDialog.findViewById(R.id.BtnSimpan);
+
+        Batal.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                customDialog.dismiss();
+            }
+        });
+
+        Simpan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (ETWilayah.getText().toString().isEmpty()) {
+                    Dialog customDialog = new Dialog(DetailListingActivity.this);
+                    customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                    customDialog.setContentView(R.layout.custom_dialog_sukses);
+
+                    if (customDialog.getWindow() != null) {
+                        customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                    }
+
+                    TextView dialogTitle = customDialog.findViewById(R.id.dialog_title);
+                    Button ok = customDialog.findViewById(R.id.btnya);
+                    Button cobalagi = customDialog.findViewById(R.id.btntidak);
+                    ImageView gifimage = customDialog.findViewById(R.id.ivdialog);
+
+                    dialogTitle.setText("Harap Masukkan Wilayah");
+                    cobalagi.setVisibility(View.GONE);
+
+                    ok.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            customDialog.dismiss();
+                        }
+                    });
+
+                    Glide.with(DetailListingActivity.this)
+                            .load(R.drawable.alert)
+                            .transition(DrawableTransitionOptions.withCrossFade())
+                            .into(gifimage);
+
+                    customDialog.show();
+                } else {
+                    pDialog.setMessage("Menyimpan Data");
+                    pDialog.setCancelable(false);
+                    pDialog.show();
+
+                    RequestQueue requestQueue = Volley.newRequestQueue(DetailListingActivity.this);
+
+                    StringRequest stringRequest = new StringRequest(Request.Method.POST, ServerApi.URL_TAMBAH_WILAYAH,
+                            new Response.Listener<String>() {
+                                @Override
+                                public void onResponse(String response) {
+                                    pDialog.cancel();
+                                    try {
+                                        JSONObject res = new JSONObject(response);
+                                        String status = res.getString("Status");
+                                        if (status.equals("Sukses")) {
+                                            Dialog customDialog = new Dialog(DetailListingActivity.this);
+                                            customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                                            customDialog.setContentView(R.layout.custom_dialog_sukses);
+
+                                            if (customDialog.getWindow() != null) {
+                                                customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                                            }
+
+                                            TextView dialogTitle = customDialog.findViewById(R.id.dialog_title);
+                                            Button ok = customDialog.findViewById(R.id.btnya);
+                                            Button cobalagi = customDialog.findViewById(R.id.btntidak);
+                                            ImageView gifimage = customDialog.findViewById(R.id.ivdialog);
+
+                                            dialogTitle.setText("Berhasil Menambahkan Wilayah");
+                                            cobalagi.setVisibility(View.GONE);
+
+                                            ok.setOnClickListener(new View.OnClickListener() {
+                                                @Override
+                                                public void onClick(View view) {
+                                                    customDialog.dismiss();
+                                                }
+                                            });
+
+                                            Glide.with(DetailListingActivity.this)
+                                                    .load(R.mipmap.ic_yes)
+                                                    .transition(DrawableTransitionOptions.withCrossFade())
+                                                    .into(gifimage);
+
+                                            customDialog.show();
+                                        } else if (status.equals("Error")) {
+                                            Dialog customDialog = new Dialog(DetailListingActivity.this);
+                                            customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                                            customDialog.setContentView(R.layout.custom_dialog_sukses);
+
+                                            if (customDialog.getWindow() != null) {
+                                                customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                                            }
+
+                                            TextView dialogTitle = customDialog.findViewById(R.id.dialog_title);
+                                            Button ok = customDialog.findViewById(R.id.btnya);
+                                            Button cobalagi = customDialog.findViewById(R.id.btntidak);
+                                            ImageView gifimage = customDialog.findViewById(R.id.ivdialog);
+
+                                            dialogTitle.setText("Gagal Menambahkan Wilayah");
+                                            ok.setVisibility(View.GONE);
+
+                                            cobalagi.setOnClickListener(new View.OnClickListener() {
+                                                @Override
+                                                public void onClick(View view) {
+                                                    customDialog.dismiss();
+                                                }
+                                            });
+
+                                            Glide.with(DetailListingActivity.this)
+                                                    .load(R.mipmap.ic_no)
+                                                    .transition(DrawableTransitionOptions.withCrossFade())
+                                                    .into(gifimage);
+
+                                            customDialog.show();
+                                        }
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            },
+                            new Response.ErrorListener() {
+                                @Override
+                                public void onErrorResponse(VolleyError error) {
+                                    pDialog.cancel();
+                                    Dialog customDialog = new Dialog(DetailListingActivity.this);
+                                    customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                                    customDialog.setContentView(R.layout.custom_dialog_sukses);
+
+                                    if (customDialog.getWindow() != null) {
+                                        customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                                    }
+
+                                    TextView dialogTitle = customDialog.findViewById(R.id.dialog_title);
+                                    Button ok = customDialog.findViewById(R.id.btnya);
+                                    Button cobalagi = customDialog.findViewById(R.id.btntidak);
+                                    ImageView gifimage = customDialog.findViewById(R.id.ivdialog);
+
+                                    dialogTitle.setText("Terdapat Masalah Jaringan");
+                                    ok.setVisibility(View.GONE);
+
+                                    cobalagi.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View view) {
+                                            customDialog.dismiss();
+                                        }
+                                    });
+
+                                    Glide.with(DetailListingActivity.this)
+                                            .load(R.mipmap.ic_eror_network_foreground)
+                                            .transition(DrawableTransitionOptions.withCrossFade())
+                                            .into(gifimage);
+
+                                    customDialog.show();
+                                }
+                            }) {
+                        @Override
+                        protected Map<String, String> getParams() throws AuthFailureError {
+                            Map<String, String> map = new HashMap<>();
+
+                            map.put("IdListing", IdListing);
+                            map.put("Wilayah", ETWilayah.getText().toString());
                             System.out.println(map);
 
                             return map;

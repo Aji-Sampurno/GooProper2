@@ -143,7 +143,8 @@ public class NewActivity extends AppCompatActivity {
         for (ListingModel item : list) {
             if (item.getNamaListing().toLowerCase().contains(text.toLowerCase())
                     || item.getAlamat().toLowerCase().contains(text.toLowerCase())
-                    || item.getJenisProperti().toLowerCase().contains(text.toLowerCase())) {
+                    || item.getJenisProperti().toLowerCase().contains(text.toLowerCase())
+                    || item.getWilayah().toLowerCase().contains(text.toLowerCase())) {
                 filteredList.add(item);
             }
         }
@@ -670,6 +671,7 @@ public class NewActivity extends AppCompatActivity {
                                 md.setLatitude(data.getString("Latitude"));
                                 md.setLongitude(data.getString("Longitude"));
                                 md.setLocation(data.getString("Location"));
+                                md.setWilayah(data.getString("Wilayah"));
                                 md.setSelfie(data.getString("Selfie"));
                                 md.setWide(data.getString("Wide"));
                                 md.setLand(data.getString("Land"));

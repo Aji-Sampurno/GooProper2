@@ -18,6 +18,7 @@ public class ServerApi {
     public static final String URL_UPDATE_KL = BASE_URL + "/Api/UpdateKl";
     public static final String URL_UPDATE_ADMIN = BASE_URL + "/Api/UpdateAdmin";
     public static final String URL_CEK_AKTIF = BASE_URL + "/Api/CekAktif?idagen=";
+    public static final String URL_CEK_OFFICER = BASE_URL + "/Api/CekOfficer?idagen=";
     // Laporan -------------------------------------------------------------------------------------
     public static final String URL_COUNT_LISTING_JUAL = BASE_URL + "/Api/CountListingSold";
     public static final String URL_COUNT_LISTING_SEWA = BASE_URL + "/Api/CountListingRent";
@@ -30,11 +31,11 @@ public class ServerApi {
     public static final String URL_COUNT_LISTING_BULAN = BASE_URL + "/Api/CountListingBulan";
     public static final String URL_GET_INFO_LAPORAN = BASE_URL + "/Api/GetLaporanInfo";
     // Pra Listing ---------------------------------------------------------------------------------
-    public static final String URL_TAMBAH_PRALISTING = BASE_URL + "/Api/PraListingBaru";
+    public static final String URL_TAMBAH_PRALISTING = BASE_URL + "/Api/PraListing";
     public static final String URL_UPLOAD_TEMPLATE = BASE_URL + "/Api/UploadTemplate";
     public static final String URL_AJUKAN_ULANG = BASE_URL + "/Api/AjukanUlang";
-    public static final String URL_TAMBAH_PRALISTING_LOKASI = BASE_URL + "/Api/PraListingFinalLokasiBaru";
-    public static final String URL_TAMBAH_PRALISTING_INFO = BASE_URL + "/Api/PraListingInfoBaru";
+    public static final String URL_TAMBAH_PRALISTING_LOKASI = BASE_URL + "/Api/PraListingLokasi";
+    public static final String URL_TAMBAH_PRALISTING_INFO = BASE_URL + "/Api/PraListingInfo";
     public static final String URL_UPDATE_PRALISTING = BASE_URL + "/Api/UpdatePraListingFinal";
     public static final String URL_UPDATE_PRALISTING_AGEN = BASE_URL + "/Api/UpdatePraListingAgenFinall";
     public static final String URL_UPDATE_PRALISTING_MAPS = BASE_URL + "/Api/UpdateMapsPraListing";
@@ -80,6 +81,7 @@ public class ServerApi {
     public static final String URL_TAMBAH_BANNER = BASE_URL + "/Api/TambahBanner";
     public static final String URL_TAMBAH_COLIST = BASE_URL + "/Api/TambahCoList";
     public static final String URL_TAMBAH_PJP = BASE_URL + "/Api/TambahPjp";
+    public static final String URL_TAMBAH_WILAYAH = BASE_URL + "/Api/TambahWilayah";
     public static final String URL_APPROVE_PENDING = BASE_URL + "/Api/ApprovePending";
     // Follow Up -----------------------------------------------------------------------------------
     public static final String URL_ADD_FLOWUP = BASE_URL + "/Api/AddFlowup";
@@ -111,6 +113,7 @@ public class ServerApi {
     public static final String URL_GET_PELAMAR_KANTORLAIN = BASE_URL + "/Api/GetPelamarKantorLain";
     public static final String URL_LAST_SEEN = BASE_URL + "/Api/LastSeen";
     public static final String URL_GET_ULTAH_AGEN = BASE_URL + "/Api/GetUltahAgen";
+    public static final String URL_TAMBAH_REPORT = BASE_URL + "/Api/GetUltahAgen";
     // Device --------------------------------------------------------------------------------------
     public static final String URL_ADD_DEVICE = BASE_URL + "/Api/AddDevice";
     public static final String URL_GET_DEVICE = BASE_URL + "/Api/GetDevice";

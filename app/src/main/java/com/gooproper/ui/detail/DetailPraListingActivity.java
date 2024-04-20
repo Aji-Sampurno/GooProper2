@@ -271,6 +271,7 @@ public class DetailPraListingActivity extends AppCompatActivity implements OnMap
         String intentLatitude = data.getStringExtra("Latitude");
         String intentLongitude = data.getStringExtra("Longitude");
         String intentLocation = data.getStringExtra("Location");
+        String intentWilayah = data.getStringExtra("Wilayah");
         String intentSelfie = data.getStringExtra("Selfie");
         String intentWide = data.getStringExtra("Wide");
         String intentLand = data.getStringExtra("Land");
@@ -2540,7 +2541,11 @@ public class DetailPraListingActivity extends AppCompatActivity implements OnMap
             if (intentAlamat.isEmpty()) {
                 TVAlamatDetailListing.setText("-");
             } else {
-                TVAlamatDetailListing.setText(intentAlamat);
+                if (intentWilayah.isEmpty()) {
+                    TVAlamatDetailListing.setText(intentAlamat);
+                } else {
+                    TVAlamatDetailListing.setText(intentAlamat+" ( "+intentWilayah+" )");
+                }
             }
             if (intentKondisi.equals("Jual")) {
                 if (intentHarga.isEmpty()) {

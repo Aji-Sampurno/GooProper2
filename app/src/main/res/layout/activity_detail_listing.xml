@@ -592,6 +592,18 @@
                 android:visibility="gone" />
 
             <Button
+                android:id="@+id/BtnTambahWilayahDetailListing"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginBottom="10dp"
+                android:text="Tambah Wilayah Listing"
+                android:textColor="@color/black"
+                android:visibility="gone" />
+
+            <Button
                 android:id="@+id/BtnAjukanUlangDetailListing"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

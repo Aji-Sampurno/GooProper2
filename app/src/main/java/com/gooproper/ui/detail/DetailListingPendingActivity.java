@@ -133,6 +133,7 @@ public class DetailListingPendingActivity extends AppCompatActivity {
         String intentLatitude = data.getStringExtra("Latitude");
         String intentLongitude = data.getStringExtra("Longitude");
         String intentLocation = data.getStringExtra("Location");
+        String intentWilayah = data.getStringExtra("Wilayah");
         String intentSelfie = data.getStringExtra("Selfie");
         String intentWide = data.getStringExtra("Wide");
         String intentLand = data.getStringExtra("Land");
@@ -510,7 +511,11 @@ public class DetailListingPendingActivity extends AppCompatActivity {
             if (intentAlamat.isEmpty()) {
                 TVAlamatListing.setText("-");
             } else {
-                TVAlamatListing.setText(intentAlamat);
+                if (intentWilayah.isEmpty()) {
+                    TVAlamatListing.setText(intentAlamat);
+                } else {
+                    TVAlamatListing.setText(intentAlamat+" ( "+intentWilayah+" )");
+                }
             }
             if (intentKondisi.equals("Jual")) {
                 if (intentHarga.isEmpty()) {

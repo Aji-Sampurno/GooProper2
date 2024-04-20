@@ -141,7 +141,8 @@ public class PopularActivity extends AppCompatActivity {
         for (ListingModel item : list) {
             if (item.getNamaListing().toLowerCase().contains(text.toLowerCase())
                     || item.getAlamat().toLowerCase().contains(text.toLowerCase())
-                    || item.getJenisProperti().toLowerCase().contains(text.toLowerCase())) {
+                    || item.getJenisProperti().toLowerCase().contains(text.toLowerCase())
+                    || item.getWilayah().toLowerCase().contains(text.toLowerCase())) {
                 filteredList.add(item);
             }
         }

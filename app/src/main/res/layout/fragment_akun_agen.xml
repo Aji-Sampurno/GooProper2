@@ -252,6 +252,42 @@
                         android:padding="10dp">
 
                         <LinearLayout
+                            android:id="@+id/lytreport"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:layout_marginBottom="5dp"
+                            android:orientation="horizontal"
+                            android:visibility="gone">
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_marginEnd="10dp"
+                                android:src="@drawable/ic_report"
+                                app:tint="@color/second" />
+
+                            <TextView
+                                style="@style/TextAppearance.Material3.TitleMedium"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:text="Report Officer"
+                                android:textColor="@color/second" />
+
+                        </LinearLayout>
+
+                        <View
+                            android:id="@+id/VReport"
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginBottom="10dp"
+                            android:background="#717171"
+                            android:visibility="gone" />
+
+                        <LinearLayout
                             android:id="@+id/lyttbo"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"

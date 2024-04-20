@@ -43,6 +43,7 @@ import com.gooproper.ui.listing.ListingTerakhirDilihatActivity;
 import com.gooproper.ui.listing.ListingkuActivity;
 import com.gooproper.ui.listing.PraListingAgenActivity;
 import com.gooproper.ui.RewardActivity;
+import com.gooproper.ui.officer.ReportOfficerActivity;
 import com.gooproper.ui.tambah.TambahListingActivity;
 import com.gooproper.ui.listing.PraListingRejectedActivity;
 import com.gooproper.ui.tambah.TambahInfoActivity;
@@ -63,10 +64,11 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class AkunAgenFragment extends Fragment {
 
-    private LinearLayout reward, listing, agengoo, tbo, listingsementara, daftarsementara, listingmitra, listingkl, agen, mitra, kl, listingku, favorite, favoritemitra, favoritekl, seen, seenmitra, seenkl, pengaturan, pengaturanmitra, pengaturankl, hubungikami, hubungikamimitra, hubungikamikl, tentangkami, tentangkamimitra, tentangkamikl, pralising, pralistingreject, info, infoku, prainfo;
+    private LinearLayout reward, listing, reportofficer, agengoo, tbo, listingsementara, daftarsementara, listingmitra, listingkl, agen, mitra, kl, listingku, favorite, favoritemitra, favoritekl, seen, seenmitra, seenkl, pengaturan, pengaturanmitra, pengaturankl, hubungikami, hubungikamimitra, hubungikamikl, tentangkami, tentangkamimitra, tentangkamikl, pralising, pralistingreject, info, infoku, prainfo;
     TextView nama, edit;
     CircleImageView cvagen;
-    String imgurl, IsAktif;
+    String imgurl, IsAktif, IsOfficer;
+    View VReportAgen;
     String profile;
     String status;
     String wa = "811 333 8838";
@@ -85,6 +87,7 @@ public class AkunAgenFragment extends Fragment {
         mitra = root.findViewById(R.id.lytkl);
         kl = root.findViewById(R.id.lytmitra);
         reward = root.findViewById(R.id.lytreward);
+        reportofficer = root.findViewById(R.id.lytreport);
         agengoo = root.findViewById(R.id.lytagengoo);
         listingku = root.findViewById(R.id.lytlistingku);
         favorite = root.findViewById(R.id.lytfavorite);
@@ -116,6 +119,7 @@ public class AkunAgenFragment extends Fragment {
         nama = root.findViewById(R.id.tvnamaakunagen);
         edit = root.findViewById(R.id.tveditakunagen);
         cvagen = root.findViewById(R.id.cvprofileagen);
+        VReportAgen = root.findViewById(R.id.VReport);
 
         nama.setText(Preferences.getKeyUsername(getActivity()));
         edit.setOnClickListener(view -> startActivity(new Intent(getActivity(), EditAkunActivity.class)));
@@ -171,6 +175,40 @@ public class AkunAgenFragment extends Fragment {
                 });
 
         queue.add(reqData);
+
+        RequestQueue queuereport = Volley.newRequestQueue(getContext());
+        JsonArrayRequest reqDatareport = new JsonArrayRequest(Request.Method.GET, ServerApi.URL_CEK_OFFICER+ Preferences.getKeyIdAgen(getContext()),null,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        for(int i = 0 ; i < response.length(); i++)
+                        {
+                            try {
+                                JSONObject data = response.getJSONObject(i);
+
+                                IsOfficer = data.getString("Officer");
+                                if (IsOfficer.equals("1")) {
+                                    reportofficer.setVisibility(View.VISIBLE);
+                                    VReportAgen.setVisibility(View.VISIBLE);
+                                    reportofficer.setOnClickListener(v -> startActivity(new Intent(getContext(), ReportOfficerActivity.class)));
+                                } else {
+                                    reportofficer.setVisibility(View.GONE);
+                                    VReportAgen.setVisibility(View.GONE);
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        error.printStackTrace();
+                    }
+                });
+
+        queuereport.add(reqDatareport);
 
         Picasso.get()
                 .load(imgurl)
