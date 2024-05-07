@@ -67,7 +67,8 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class DetailAgenActivity extends AppCompatActivity {
 
     ProgressDialog PDAgen;
-    TextView nama, telp, instagram, listing, jual, sewa, NamaPelamar, WaPelamar, EmailPelamar, KotaPelamar, LahirPelamar, PendidikanPelamar, SekolahPelamar, PengalamanPelamar, PosisiPelamar, KonfirmasiPelamar, DomisisliPelamar, FacebookPelamar, InstgramPelamar;
+    TextView nama, telp, instagram, TVEmail, TVNpwp, listing, jual, sewa, NamaPelamar, WaPelamar, EmailPelamar, KotaPelamar, LahirPelamar, PendidikanPelamar, SekolahPelamar, PengalamanPelamar, PosisiPelamar, KonfirmasiPelamar, DomisisliPelamar, FacebookPelamar, InstgramPelamar;
+    ImageView IVKtp;
     Button HubungiPelamar, TerimaPelamar;
     NestedScrollView SV1;
     ScrollView SV2;
@@ -88,6 +89,8 @@ public class DetailAgenActivity extends AppCompatActivity {
         nama = findViewById(R.id.tvnamaagen);
         telp = findViewById(R.id.tvtelpagen);
         instagram = findViewById(R.id.tvinstagramagen);
+        TVEmail = findViewById(R.id.TVEmail);
+        TVNpwp = findViewById(R.id.TVNpwp);
         listing = findViewById(R.id.tvlisting);
         jual = findViewById(R.id.tvjual);
         sewa = findViewById(R.id.tvsewa);
@@ -115,6 +118,7 @@ public class DetailAgenActivity extends AppCompatActivity {
         HubungiPelamar = findViewById(R.id.BtnHubungiPelamar);
         TerimaPelamar = findViewById(R.id.BtnTerimaPelamar);
         cvpelamar = findViewById(R.id.cvpelamar);
+        IVKtp = findViewById(R.id.IVFotoKtp);
 
         Intent data = getIntent();
         final int update = data.getIntExtra("update", 0);
@@ -168,6 +172,8 @@ public class DetailAgenActivity extends AppCompatActivity {
         rvgrid.setAdapter(adapter);
 
         if (StringStatus.equals("1")){
+            TVEmail.setVisibility(View.VISIBLE);
+            TVNpwp.setVisibility(View.VISIBLE);
             cvagen.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View view) {
@@ -212,6 +218,8 @@ public class DetailAgenActivity extends AppCompatActivity {
                 }
             });
         } else if (StringStatus.equals("2")) {
+            TVEmail.setVisibility(View.VISIBLE);
+            TVNpwp.setVisibility(View.VISIBLE);
             cvagen.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View view) {
@@ -255,7 +263,12 @@ public class DetailAgenActivity extends AppCompatActivity {
                     return true;
                 }
             });
-        } else {}
+        } else {
+            TVEmail.setVisibility(View.GONE);
+            TVNpwp.setVisibility(View.GONE);
+            IVKtp.setVisibility(View.GONE);
+        }
+
 
         LoadListing(true);
         CountSewa(agen);
@@ -270,6 +283,8 @@ public class DetailAgenActivity extends AppCompatActivity {
                 nama.setText(intentNama);
                 telp.setText(intentNoTelp);
                 instagram.setText(intentInstagram);
+                TVEmail.setText(intentEmail);
+                TVNpwp.setText(intentNpwp);
                 Picasso.get()
                         .load(imgurl)
                         .into(cvagen);
@@ -308,6 +323,7 @@ public class DetailAgenActivity extends AppCompatActivity {
                         Terima();
                     }
                 });
+                Glide.with(DetailAgenActivity.this).load(intentImgKtp).into(IVKtp);
                 Picasso.get()
                         .load(imgurl)
                         .into(cvpelamar);

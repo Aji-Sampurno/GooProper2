@@ -30,9 +30,11 @@ public class ServerApi {
     public static final String URL_COUNT_LISTING_TAHUN = BASE_URL + "/Api/CountListingTahun";
     public static final String URL_COUNT_LISTING_BULAN = BASE_URL + "/Api/CountListingBulan";
     public static final String URL_GET_INFO_LAPORAN = BASE_URL + "/Api/GetLaporanInfo";
+    public static final String URL_GET_LAPORAN_SUSULAN = BASE_URL + "/Api/GetLaporanSusulan";
     // Pra Listing ---------------------------------------------------------------------------------
     public static final String URL_TAMBAH_PRALISTING = BASE_URL + "/Api/PraListing";
     public static final String URL_UPLOAD_TEMPLATE = BASE_URL + "/Api/UploadTemplate";
+    public static final String URL_UPLOAD_UPDATE_TEMPLATE = BASE_URL + "/Api/UploadUpdateTemplate";
     public static final String URL_AJUKAN_ULANG = BASE_URL + "/Api/AjukanUlang";
     public static final String URL_TAMBAH_PRALISTING_LOKASI = BASE_URL + "/Api/PraListingLokasi";
     public static final String URL_TAMBAH_PRALISTING_INFO = BASE_URL + "/Api/PraListingInfo";
@@ -68,6 +70,7 @@ public class ServerApi {
     public static final String URL_GET_LISTING_SEEN_AGEN= BASE_URL + "/Api/GetSeenAgen?idagen=";
     public static final String URL_GET_CO_LISTING = BASE_URL + "/Api/GetCoListing?idco=";
     public static final String URL_GET_SUSULAN = BASE_URL + "/Api/GetSusulan?id=";
+    public static final String URL_CEK_ISLOKASI = BASE_URL + "/Api/GetIsCekLokasi?id=";
     // Update Listing ------------------------------------------------------------------------------
     public static final String URL_UPDATE_LISTING_MAPS = BASE_URL + "/Api/TambahMaps";
     public static final String URL_UPDATE_LISTING = BASE_URL + "/Api/UpdateListing";
@@ -113,7 +116,10 @@ public class ServerApi {
     public static final String URL_GET_PELAMAR_KANTORLAIN = BASE_URL + "/Api/GetPelamarKantorLain";
     public static final String URL_LAST_SEEN = BASE_URL + "/Api/LastSeen";
     public static final String URL_GET_ULTAH_AGEN = BASE_URL + "/Api/GetUltahAgen";
-    public static final String URL_TAMBAH_REPORT = BASE_URL + "/Api/GetUltahAgen";
+    public static final String URL_TAMBAH_REPORT = BASE_URL + "/Api/TambahReport";
+    public static final String URL_TAMBAH_CEK_LOKASI = BASE_URL + "/Api/TambahCekLokasi";
+    public static final String URL_GET_WILAYAH = BASE_URL + "/Api/GetWilayah?id=";
+    public static final String URL_GET_DAERAH = BASE_URL + "/Api/GetDaerah";
     // Device --------------------------------------------------------------------------------------
     public static final String URL_ADD_DEVICE = BASE_URL + "/Api/AddDevice";
     public static final String URL_GET_DEVICE = BASE_URL + "/Api/GetDevice";
@@ -151,7 +157,7 @@ public class ServerApi {
     public static final String URL_GET_AGEN_TIDAK_AKTIF = BASE_URL + "/Api/LastSeenAgenTidakAktif";
     public static final String URL_UPDATE_PRALISTING_SELFIE = BASE_URL + "/Api/UpdateSelfiePraListing";
     public static final String URL_UPDATE_LISTING_SELFIE = BASE_URL + "/Api/TambahSelfie";
-    // TBO ----------------------------------------------------------------------------------------
+    // TBO -----------------------------------------------------------------------------------------
     public static final String URL_GET_TBO = BASE_URL + "/Api/GetTbo?id=";
     public static final String URL_GET_COUNT_LISTING_AGEN_BULAN_LALU = BASE_URL + "/Api/GetCountListingAgenBulanLalu?id=";
     public static final String URL_GET_COUNT_INFO_AGEN_BULAN_LALU = BASE_URL + "/Api/GetCountInfoAgenBulanLalu?id=";
@@ -169,5 +175,13 @@ public class ServerApi {
     public static final String URL_GET_SUM_POIN_INFO_AGEN_BULAN_INI = BASE_URL + "/Api/GetSumPoinInfoBulanIni?id=";
     public static final String URL_GET_SUM_TOTAL_POIN_AGEN_BULAN_LALU = BASE_URL + "/Api/GetSumTotalPoinBulanLalu?id=";
     public static final String URL_GET_SUM_TOTAL_POIN_AGEN_BULAN_INI = BASE_URL + "/Api/GetSumTotalPoinBulanIni?id=";
+    // OFFICER -------------------------------------------------------------------------------------
+    public static final String URL_GET_REPORT_KINERJA_OFFICER = BASE_URL + "/Api/GetReportKinerjaOfficer?id=";
+    public static final String URL_GET_URAIAN_KERJA_OFFICER = BASE_URL + "/Api/GetUraianKerjaOfficer?id=";
+    public static final String URL_GET_CALL_OFFICER = BASE_URL + "/Api/GetCallOfficerOfficer?id=";
+    public static final String URL_GET_FOLLOW_UP_INFO_OFFICER = BASE_URL + "/Api/GetFollowUpInfoOfficer?id=";
+    public static final String URL_GET_FOLLOW_UP_VENDOR_OFFICER = BASE_URL + "/Api/GetFollowUpVendorOfficer?id=";
+    public static final String URL_GET_FOLLOW_UP_BUYER_OFFICER = BASE_URL + "/Api/GetFollowUpBuyerOfficer?id=";
+    public static final String URL_GET_TINJAU_LOKASI_OFFICER = BASE_URL + "/Api/GetTinjauLokasiOfficer?id=";
 }
 

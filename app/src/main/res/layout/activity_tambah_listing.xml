@@ -466,13 +466,33 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    app:boxBackgroundColor="#DBDDDF">
+                    app:boxBackgroundColor="#DBDDDF"
+                    app:helperText="Alamat Lengkap Properti">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/etalamatproperti"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Alamat Lengkap Properti"
+                        android:inputType="none"
+                        android:textColor="@color/black" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/lytnoalamatproperti"
+                    style="@style/CustomOutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:visibility="gone"
+                    app:boxBackgroundColor="#DBDDDF"
+                    app:helperText="No. Blok / No. Rumah">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etnoalamatproperti"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Blok / Unit / No. Rumah"
                         android:inputType="none"
                         android:textColor="@color/black" />
                 </com.google.android.material.textfield.TextInputLayout>
@@ -508,6 +528,7 @@
                         android:layout_height="wrap_content"
                         android:hint="Wilayah"
                         android:inputType="none"
+                        android:focusable="false"
                         android:textColor="@color/black" />
                 </com.google.android.material.textfield.TextInputLayout>
 

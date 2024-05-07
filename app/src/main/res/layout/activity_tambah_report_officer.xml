@@ -73,39 +73,6 @@
                 android:paddingEnd="11dp">
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/LytTglReport"
-                    style="@style/CustomOutlinedBox"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Tanggal">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/ETTglReport"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:focusable="false"
-                        android:inputType="none"
-                        android:textColor="@color/black" />
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/LytJamReport"
-                    style="@style/CustomOutlinedBox"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:hint="Jam">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/ETJamReport"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:focusable="false"
-                        android:inputType="none"
-                        android:textColor="@color/black" />
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/LytStatusKinerja"
                     style="@style/CustomOutlinedBox"
                     android:layout_width="match_parent"
@@ -134,7 +101,7 @@
                         android:id="@+id/ETKetReport"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="number"
+                        android:inputType="textMultiLine"
                         android:textColor="@color/black" />
                 </com.google.android.material.textfield.TextInputLayout>
 

@@ -507,6 +507,7 @@
                         android:layout_height="wrap_content"
                         android:hint="Wilayah"
                         android:inputType="none"
+                        android:focusable="false"
                         android:textColor="@color/black" />
                 </com.google.android.material.textfield.TextInputLayout>
 

@@ -5,7 +5,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingTop="50dp"
     android:background="@color/main"
     tools:context=".ui.LoginConditionActivity">
 
@@ -19,95 +18,104 @@
     <LinearLayout
         android:id="@+id/lytlogin"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:orientation="vertical"
         android:layout_alignParentBottom="true"
-        android:background="@drawable/background_login"
         android:paddingStart="30dp"
         android:paddingEnd="40dp"
-        android:gravity="center"
-        android:layout_marginEnd="30dp"
-        android:layout_marginBottom="50dp"
+        android:layout_marginTop="20dp"
         android:layout_below="@id/logo">
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/lytusername"
-            style="@style/CustomOutlinedBox"
+        <ScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-            <EditText
-                android:id="@+id/etusername"
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textPersonName"
-                android:textColor="@color/black"
-                android:hint="Username" />
-        </com.google.android.material.textfield.TextInputLayout>
+                android:orientation="vertical">
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/lytpassword"
-            style="@style/CustomOutlinedBox"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            app:passwordToggleEnabled="true"
-            app:passwordToggleTint="@color/black">
-            <EditText
-                android:id="@+id/etpassword"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@color/black"
-                android:inputType="textPassword"
-                android:hint="Password" />
-        </com.google.android.material.textfield.TextInputLayout>
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/lytusername"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <EditText
+                        android:id="@+id/etusername"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textPersonName"
+                        android:textColor="@color/black"
+                        android:hint="Username" />
+                </com.google.android.material.textfield.TextInputLayout>
 
-        <Button
-            android:id="@+id/btnlogin"
-            android:layout_width="match_parent"
-            android:layout_height="55dp"
-            android:backgroundTint="@color/main"
-            android:layout_marginTop="20dp"
-            android:textColor="@color/white"
-            android:text="Login"/>
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/lytpassword"
+                    style="@style/CustomOutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    app:passwordToggleEnabled="true"
+                    app:passwordToggleTint="@color/black">
+                    <EditText
+                        android:id="@+id/etpassword"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/black"
+                        android:inputType="textPassword"
+                        android:hint="Password" />
+                </com.google.android.material.textfield.TextInputLayout>
 
-        <TextView
-            android:id="@+id/tvregis"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/btnlogin"
-            android:layout_marginTop="10dp"
-            android:gravity="center"
-            android:textColor="@color/black"
-            android:text="Belum Mempunyai Akun ?"/>
+                <Button
+                    android:id="@+id/btnlogin"
+                    android:layout_width="match_parent"
+                    android:layout_height="55dp"
+                    android:backgroundTint="@color/second"
+                    android:layout_marginTop="20dp"
+                    android:textColor="@color/main"
+                    android:text="Login"/>
 
-        <Button
-            android:id="@+id/btnregisuser"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:backgroundTint="@color/main"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
-            android:text="Daftar Sekarang"
-            android:textColor="@color/white"/>
+                <TextView
+                    android:id="@+id/tvregis"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/btnlogin"
+                    android:layout_marginTop="10dp"
+                    android:gravity="center"
+                    android:textColor="@color/second"
+                    android:text="Belum Mempunyai Akun"/>
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_above="@id/btnregisagent"
-            android:layout_marginTop="10dp"
-            android:gravity="center"
-            android:textColor="@color/black"
-            android:text="Anda tertarik menjadi agen properti GooProper"/>
+                <Button
+                    android:id="@+id/btnregisuser"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/second"
+                    android:layout_marginTop="10dp"
+                    android:text="Daftar Sekarang"
+                    android:textColor="@color/main"/>
 
-        <Button
-            android:id="@+id/btnregisagent"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:backgroundTint="@color/main"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
-            android:text="Daftar Agen"
-            android:textColor="@color/white"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_above="@id/btnregisagent"
+                    android:layout_marginTop="10dp"
+                    android:gravity="center"
+                    android:textColor="@color/second"
+                    android:text="Anda tertarik menjadi agen properti GooProper"/>
+
+                <Button
+                    android:id="@+id/btnregisagent"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/second"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:text="Daftar Agen"
+                    android:textColor="@color/main"/>
+
+            </LinearLayout>
+
+        </ScrollView>
 
     </LinearLayout>
 

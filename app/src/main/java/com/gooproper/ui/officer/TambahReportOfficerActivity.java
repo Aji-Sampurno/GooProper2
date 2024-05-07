@@ -86,11 +86,11 @@ public class TambahReportOfficerActivity extends AppCompatActivity {
     private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES_2 = 10;
     private static final int MAPS_ACTIVITY_REQUEST_CODE = 11;
     private static final int STORAGE_PERMISSION_CODE = 12;
-    TextInputEditText ETTanggal, ETJam, ETKinerja, ETKeterangan;
+    TextInputEditText ETKinerja, ETKeterangan;
     Button BtnLokasi, BtnSelfie, BtnProperty, BtnBatal, BtnSubmit;
     LinearLayout LytSelfie, LytProperty;
     ImageView IVBack, IVSelfie, IVProperty, IVDeleteSelfie, IVDeleteProperty;
-    String StrIdAgen, StrNamaAgen, StrIdInput, StrLatitude, StrLongitude, StrLokasi, StrAlamat, StrLat, StrLng, StrKinerja, StrImageSelfie, StrImageProperty;
+    String StrIdAgen, StrNamaAgen, StrIdInput, StrLatitude, StrLongitude, StrLokasi, StrAlamat, StrLat, StrLng, StrAl, StrLok, StrKinerja, StrImageSelfie, StrImageProperty, StrSelfieImg, StrPropertyImg;
     Uri UriSelfie, UriProperty;
     String StrTimeStamp,StrFileSelfie,StrFileProperty;
     private StorageReference mStorageRef;
@@ -101,8 +101,8 @@ public class TambahReportOfficerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tambah_report_officer);
 
-        ETTanggal = findViewById(R.id.ETTglReport);
-        ETJam = findViewById(R.id.ETJamReport);
+        PDialog = new ProgressDialog(TambahReportOfficerActivity.this);
+
         ETKinerja = findViewById(R.id.ETStatusKinerja);
         ETKeterangan = findViewById(R.id.ETKetReport);
 
@@ -143,193 +143,59 @@ public class TambahReportOfficerActivity extends AppCompatActivity {
         BtnBatal.setOnClickListener(view -> finish());
         BtnSubmit.setOnClickListener(view -> {
             if (ETKinerja.getText().toString().equals("")) {
+                Dialog customDialog = new Dialog(TambahReportOfficerActivity.this);
+                customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                customDialog.setContentView(R.layout.custom_dialog_eror_input);
+
+                if (customDialog.getWindow() != null) {
+                    customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                }
+
+                Button ok = customDialog.findViewById(R.id.BtnOkErorInput);
+                TextView tv = customDialog.findViewById(R.id.TVDialogErorInput);
+
+                tv.setText("Harap Pilih Kinerja");
+
+                ok.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        customDialog.dismiss();
+                    }
+                });
+
+                ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
+
+                Glide.with(TambahReportOfficerActivity.this)
+                        .load(R.drawable.alert)
+                        .transition(DrawableTransitionOptions.withCrossFade())
+                        .into(gifImageView);
+
+                customDialog.show();
+            } else {
                 if (StrKinerja.equals("Kerja Harian")) {
                     if (Validate()) {
-                        Dialog customDialog = new Dialog(TambahReportOfficerActivity.this);
-                        customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                        customDialog.setContentView(R.layout.custom_dialog_eror_input);
-
-                        if (customDialog.getWindow() != null) {
-                            customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-                        }
-
-                        Button ok = customDialog.findViewById(R.id.BtnOkErorInput);
-                        TextView tv = customDialog.findViewById(R.id.TVDialogErorInput);
-
-                        tv.setText("Kinerja anda"+StrKinerja);
-
-                        ok.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                customDialog.dismiss();
-                            }
-                        });
-
-                        ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
-
-                        Glide.with(TambahReportOfficerActivity.this)
-                                .load(R.drawable.alert)
-                                .transition(DrawableTransitionOptions.withCrossFade())
-                                .into(gifImageView);
-
-                        customDialog.show();
+                        simpanData();
                     }
                 } else if (StrKinerja.equals("Call")) {
                     if (Validate()) {
-                        Dialog customDialog = new Dialog(TambahReportOfficerActivity.this);
-                        customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                        customDialog.setContentView(R.layout.custom_dialog_eror_input);
-
-                        if (customDialog.getWindow() != null) {
-                            customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-                        }
-
-                        Button ok = customDialog.findViewById(R.id.BtnOkErorInput);
-                        TextView tv = customDialog.findViewById(R.id.TVDialogErorInput);
-
-                        tv.setText("Kinerja anda"+StrKinerja);
-
-                        ok.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                customDialog.dismiss();
-                            }
-                        });
-
-                        ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
-
-                        Glide.with(TambahReportOfficerActivity.this)
-                                .load(R.drawable.alert)
-                                .transition(DrawableTransitionOptions.withCrossFade())
-                                .into(gifImageView);
-
-                        customDialog.show();
+                        simpanData();
                     }
                 } else if (StrKinerja.equals("Follow Up Info")) {
                     if (Validate()) {
-                        Dialog customDialog = new Dialog(TambahReportOfficerActivity.this);
-                        customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                        customDialog.setContentView(R.layout.custom_dialog_eror_input);
-
-                        if (customDialog.getWindow() != null) {
-                            customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-                        }
-
-                        Button ok = customDialog.findViewById(R.id.BtnOkErorInput);
-                        TextView tv = customDialog.findViewById(R.id.TVDialogErorInput);
-
-                        tv.setText("Kinerja anda"+StrKinerja);
-
-                        ok.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                customDialog.dismiss();
-                            }
-                        });
-
-                        ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
-
-                        Glide.with(TambahReportOfficerActivity.this)
-                                .load(R.drawable.alert)
-                                .transition(DrawableTransitionOptions.withCrossFade())
-                                .into(gifImageView);
-
-                        customDialog.show();
+                        simpanData();
                     }
                 } else if (StrKinerja.equals("Follow Up Vendor")) {
                     if (Validate()) {
-                        Dialog customDialog = new Dialog(TambahReportOfficerActivity.this);
-                        customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                        customDialog.setContentView(R.layout.custom_dialog_eror_input);
-
-                        if (customDialog.getWindow() != null) {
-                            customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-                        }
-
-                        Button ok = customDialog.findViewById(R.id.BtnOkErorInput);
-                        TextView tv = customDialog.findViewById(R.id.TVDialogErorInput);
-
-                        tv.setText("Kinerja anda"+StrKinerja);
-
-                        ok.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                customDialog.dismiss();
-                            }
-                        });
-
-                        ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
-
-                        Glide.with(TambahReportOfficerActivity.this)
-                                .load(R.drawable.alert)
-                                .transition(DrawableTransitionOptions.withCrossFade())
-                                .into(gifImageView);
-
-                        customDialog.show();
+                        simpanData();
                     }
                 } else if (StrKinerja.equals("Follow Up Buyer")) {
                     if (Validate()) {
-                        Dialog customDialog = new Dialog(TambahReportOfficerActivity.this);
-                        customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                        customDialog.setContentView(R.layout.custom_dialog_eror_input);
-
-                        if (customDialog.getWindow() != null) {
-                            customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-                        }
-
-                        Button ok = customDialog.findViewById(R.id.BtnOkErorInput);
-                        TextView tv = customDialog.findViewById(R.id.TVDialogErorInput);
-
-                        tv.setText("Kinerja anda"+StrKinerja);
-
-                        ok.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                customDialog.dismiss();
-                            }
-                        });
-
-                        ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
-
-                        Glide.with(TambahReportOfficerActivity.this)
-                                .load(R.drawable.alert)
-                                .transition(DrawableTransitionOptions.withCrossFade())
-                                .into(gifImageView);
-
-                        customDialog.show();
+                        simpanData();
                     }
                 } else if (StrKinerja.equals("Recheck")) {
                     if (ValidateLokasi()) {
-                        Dialog customDialog = new Dialog(TambahReportOfficerActivity.this);
-                        customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                        customDialog.setContentView(R.layout.custom_dialog_eror_input);
-
-                        if (customDialog.getWindow() != null) {
-                            customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-                        }
-
-                        Button ok = customDialog.findViewById(R.id.BtnOkErorInput);
-                        TextView tv = customDialog.findViewById(R.id.TVDialogErorInput);
-
-                        tv.setText("Kinerja anda"+StrKinerja);
-
-                        ok.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                customDialog.dismiss();
-                            }
-                        });
-
-                        ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
-
-                        Glide.with(TambahReportOfficerActivity.this)
-                                .load(R.drawable.alert)
-                                .transition(DrawableTransitionOptions.withCrossFade())
-                                .into(gifImageView);
-
-                        customDialog.show();
+                        handleImage1Success();
                     }
-//                    handleImage1Success();
                 } else {
                     Dialog customDialog = new Dialog(TambahReportOfficerActivity.this);
                     customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -846,16 +712,36 @@ public class TambahReportOfficerActivity extends AppCompatActivity {
                 } else {
                     StrLng = StrLongitude;
                 }
+                if (StrAlamat == null) {
+                    StrAl = "0";
+                } else {
+                    StrAl = StrAlamat;
+                }
+                if (StrLokasi == null) {
+                    StrLok = "0";
+                } else {
+                    StrLok = StrLokasi;
+                }
+                if (StrImageSelfie == null) {
+                    StrSelfieImg = "0";
+                } else {
+                    StrSelfieImg = StrImageSelfie;
+                }
+                if (StrImageProperty == null) {
+                    StrPropertyImg = "0";
+                } else {
+                    StrPropertyImg = StrImageProperty;
+                }
 
                 map.put("IdAgen", StrIdInput);
                 map.put("Kinerja", ETKinerja.getText().toString());
                 map.put("Keterangan", ETKeterangan.getText().toString());
-                map.put("Lokasi", StrLokasi);
-                map.put("Alamat", StrAlamat);
+                map.put("Lokasi", StrLok);
+                map.put("Alamat", StrAl);
                 map.put("Latitude", StrLat);
                 map.put("Longitude", StrLng);
-                map.put("ImgSelfie", StrImageSelfie);
-                map.put("ImgProperty", StrImageProperty);
+                map.put("ImgSelfie", StrSelfieImg);
+                map.put("ImgProperty", StrPropertyImg);
                 System.out.println(map);
 
                 return map;

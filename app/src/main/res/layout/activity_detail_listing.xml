@@ -71,7 +71,16 @@
                     android:layout_margin="2dp"
                     android:layout_weight="1"
                     android:background="@color/main"
-                    android:weightSum="2">
+                    android:weightSum="3">
+
+                    <ImageView
+                        android:id="@+id/IVVerified"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:visibility="visible"
+                        android:src="@drawable/baseline_verified_24"/>
 
                     <TextView
                         android:id="@+id/TVPriority"
@@ -353,6 +362,14 @@
                     android:text="template tanpa foto" />
 
             </LinearLayout>
+
+            <Button
+                android:id="@+id/BtnCekLokasi"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:visibility="gone"
+                android:text="Cek Lokasi" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -650,6 +667,30 @@
                 android:text="Approve Upgrade"
                 android:textColor="@color/black"
                 android:visibility="gone" />
+
+            <LinearLayout
+                android:id="@+id/LytBtnHapusListing"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:weightSum="2"
+                android:orientation="horizontal"
+                android:visibility="gone">
+
+                <Button
+                    android:id="@+id/BtnDataDouble"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Data Double"/>
+
+                <Button
+                    android:id="@+id/BtnHapusListing"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Hapus Listing"/>
+
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"

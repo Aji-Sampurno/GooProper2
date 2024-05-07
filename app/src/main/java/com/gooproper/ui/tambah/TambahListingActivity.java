@@ -64,6 +64,8 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
 import com.gooproper.R;
+import com.gooproper.adapter.DaerahManager;
+import com.gooproper.adapter.WilayahManager;
 import com.gooproper.ui.LocationActivity;
 import com.gooproper.util.AgenManager;
 import com.gooproper.util.Preferences;
@@ -200,7 +202,7 @@ public class TambahListingActivity extends AppCompatActivity {
     ImageView back, iv1, iv2, iv3, iv4, iv5, iv6, iv7, iv8, IVShm, IVHgb, IVHshp, IVPpjb, IVStratatitle, IVAJB, IVPetokD, IVPjp, IVPjp1, IVSelfie, IVKTP;
     Button batal, submit, select, select1, select2, select3, select4, select5, select6, select7, maps, BtnSHM, BtnHGB, BtnHSHP, BtnPPJB, BtnSTRA, BtnAJB, BtnPetokD, BtnSHMPdf, BtnHGBPdf, BtnHSHPPdf, BtnPPJBPdf, BtnSTRAPdf, BtnAJBPdf, BtnPetokDPdf, BtnPjp, BtnPjp1, BtnSelfie, BtnKTP;
     ImageView hps1, hps2, hps3, hps4, hps5, hps6, hps7, hps8, HpsSHM, HpsHGB, HpsHSHP, HpsPPJB, HpsStratatitle, HpsAJB, HpsPetokD, HpsPjp, HpsPjp1, HpsSelfie, HpsKTP;
-    TextInputEditText namalengkap, nohp, nik, alamat, tgllhir, rekening, bank, atasnama, jenisproperti, namaproperti, alamatproperti, alamatpropertitemplate, wilayahproperti, sertifikat, nosertif, luas, satuanluas, land, satuanland, dimensi, lantai, bed, bath, bedart, bathart, garasi, carpot, listrik, air, pjp, perabot, ketperabot, banner, status, tipeharga, harga, hargasewa, rangeharga, keterangan, hadap, size, EtTglInput, EtFee, CoListing, ktp;
+    TextInputEditText namalengkap, nohp, nik, alamat, tgllhir, rekening, bank, atasnama, jenisproperti, namaproperti, alamatproperti, noalamatproperti, alamatpropertitemplate, wilayahproperti, sertifikat, nosertif, luas, satuanluas, land, satuanland, dimensi, lantai, bed, bath, bedart, bathart, garasi, carpot, listrik, air, pjp, perabot, ketperabot, banner, status, tipeharga, harga, hargasewa, rangeharga, keterangan, hadap, size, EtTglInput, EtFee, CoListing, ktp;
     TextInputLayout LytSize, LytTglInput, LytHargaJual, LytHargaSewa, LytRangeHarga, LytTipeHarga;
     RadioButton open, exclusive;
     RadioGroup rgpriority;
@@ -214,6 +216,8 @@ public class TambahListingActivity extends AppCompatActivity {
     private StorageReference mStorageRef;
     StorageReference storageRef,ImgListing1,ImgListing2,ImgListing3,ImgListing4,ImgListing5,ImgListing6,ImgListing7,ImgListing8,ImgSertifikatshm,ImgSertifikathgb,ImgSertifikathshp,ImgSertifikatppjb,ImgSertifikatstra,ImgSertifikatajb,ImgSertifikatpetokd,ImgSertifikatshmpdf,ImgSertifikathgbpdf,ImgSertifikathshppdf,ImgSertifikatppjbpdf,ImgSertifikatstrapdf,ImgSertifikatajbpdf,ImgSertifikatpetokdpdf,ImgPjp,ImgPjp1,ImageSelfie,ImageKTP;
     private AgenManager agenManager;
+    private WilayahManager wilayahManager;
+    private DaerahManager daerahManager;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -325,6 +329,7 @@ public class TambahListingActivity extends AppCompatActivity {
         jenisproperti = findViewById(R.id.etjenisproperti);
         namaproperti = findViewById(R.id.etnamaproperti);
         alamatproperti = findViewById(R.id.etalamatproperti);
+        noalamatproperti = findViewById(R.id.etnoalamatproperti);
         alamatpropertitemplate = findViewById(R.id.etalamatpropertitemplate);
         wilayahproperti = findViewById(R.id.etwilayahlisting);
         sertifikat = findViewById(R.id.ettipesertifikat);
@@ -414,6 +419,8 @@ public class TambahListingActivity extends AppCompatActivity {
         DrawableSTRA = IVStratatitle.getDrawable();
 
         agenManager = new AgenManager();
+        wilayahManager = new WilayahManager();
+        daerahManager = new DaerahManager();
 
         if (isAdmin.equals("2")) {
             LytTglInput.setVisibility(View.VISIBLE);
@@ -1144,6 +1151,7 @@ public class TambahListingActivity extends AppCompatActivity {
             }
         });
         CoListing.setOnClickListener(v -> fetchDataFromApi());
+        wilayahproperti.setOnClickListener(v -> fetchDataDaerah());
         harga.addTextChangedListener(new TextWatcher() {
             private String current = "";
 
@@ -1251,6 +1259,141 @@ public class TambahListingActivity extends AppCompatActivity {
         if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
         }
+    }
+    private void fetchDataDaerah() {
+        daerahManager.fetchDataFromApi(this, new DaerahManager.ApiCallback() {
+            @Override
+            public void onSuccess(List<DaerahManager.DataItem> dataList) {
+                showAlertDaerah(dataList);
+            }
+
+            @Override
+            public void onError(String errorMessage) {
+            }
+        });
+    }
+    private void showAlertDaerah(List<DaerahManager.DataItem> dataList) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.CustomAlertDialogStyle);
+        builder.setTitle("Daftar Kota");
+
+        final String[] dataItems = new String[dataList.size()];
+        for (int i = 0; i < dataList.size(); i++) {
+            DaerahManager.DataItem item = dataList.get(i);
+            dataItems[i] = item.getNamaDaerah();
+        }
+
+        builder.setItems(dataItems, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                DaerahManager.DataItem selectedData = dataList.get(which);
+                String iddaerah = selectedData.getIdDaerah();
+                fetchDataWilayah(iddaerah);
+            }
+        });
+
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        builder.setNeutralButton("Hapus", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                wilayahproperti.setText("");
+                dialog.dismiss();
+            }
+        });
+        builder.setNegativeButton("Batal", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        builder.show();
+    }
+    private void fetchDataWilayah(String Id) {
+        wilayahManager.fetchDataFromApi(this, Id, new WilayahManager.ApiCallback() {
+            @Override
+            public void onSuccess(List<WilayahManager.DataItem> dataList) {
+                showAlertWilayah(dataList);
+            }
+
+            @Override
+            public void onError(String errorMessage) {
+            }
+        });
+    }
+    private void showAlertWilayah(List<WilayahManager.DataItem> dataList) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.CustomAlertDialogStyle);
+        builder.setTitle("Daftar Wilayah");
+
+        final String[] dataItems = new String[dataList.size()];
+        for (int i = 0; i < dataList.size(); i++) {
+            WilayahManager.DataItem item = dataList.get(i);
+            dataItems[i] = item.getNamaWilayah();
+        }
+
+        builder.setItems(dataItems, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                WilayahManager.DataItem selectedData = dataList.get(which);
+                wilayahproperti.setText(selectedData.getNamaWilayah());
+//                handleSelectedWilayah(selectedData);
+            }
+        });
+
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        builder.setNeutralButton("Tambah Wilayah", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                showTambahWilayah();
+            }
+        });
+        builder.setNegativeButton("Batal", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                fetchDataDaerah();
+            }
+        });
+        builder.show();
+    }
+    private void showTambahWilayah() {
+        AlertDialog.Builder customBuilder = new AlertDialog.Builder(this, R.style.CustomAlertDialogStyle);
+        customBuilder.setTitle("Wilayah Lainnya");
+
+        LinearLayout containerLayout = new LinearLayout(this);
+        containerLayout.setOrientation(LinearLayout.VERTICAL);
+        containerLayout.setPadding(50, 20, 50, 0);
+
+        final EditText customNamaWilayah = new EditText(this);
+        customNamaWilayah.setHint("Masukkan Nama Wilayah");
+        customNamaWilayah.setTextColor(getResources().getColor(android.R.color.black));
+        customNamaWilayah.setHintTextColor(getResources().getColor(android.R.color.black));
+
+        containerLayout.addView(customNamaWilayah);
+
+        customBuilder.setView(containerLayout);
+
+        customBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                String customWilayah = customNamaWilayah.getText().toString();
+                wilayahproperti.setText(customWilayah);
+            }
+        });
+
+        customBuilder.setNegativeButton("Batal", null);
+
+        AlertDialog customDialog = customBuilder.create();
+        customDialog.show();
     }
     private void fetchDataFromApi() {
         agenManager.fetchDataFromApi(this, new AgenManager.ApiCallback() {
@@ -5940,6 +6083,101 @@ public class TambahListingActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 satuanluas.setText(Status[SelectedStatus[0]]);
+            }
+        });
+
+        builder.setNegativeButton("Batal", null);
+
+        AlertDialog dialog = builder.create();
+
+        dialog.show();
+    }
+    public void ShowWilayah(View view) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.CustomAlertDialogStyle);
+        builder.setTitle("Silahkan Pilih Wilayah Listing");
+
+        final CharSequence[] Status = {
+                "Pakis",
+                "Pakisaji / Kepanjen",
+                "Pandaan",
+                "Pasar Besar",
+                "Pasuruan",
+                "PBI / Araya / Arjosari",
+                "Ponorogo",
+                "Poros 2",
+                "Probolinggo",
+                "Pujon",
+                "Rampal",
+                "Sawojajar",
+                "Semarang",
+                "Sengkaling / Batu",
+                "Sidoarjo",
+                "Singosari",
+                "Suhat",
+                "Sukun / Bandulan / Kasin / Pulau",
+                "Sulfat / Pandanwangi",
+                "Bali",
+                "Balikpapan",
+                "Banyuwangi",
+                "Bekasi",
+                "Bendungan Gajahyana",
+                "Blitar",
+                "Buah Buah",
+                "Bululawang / Turen / Dampit",
+                "Bunga Bunga / Sarangan",
+                "Bunul",
+                "Candi / Borobudur / Ikan Ikan",
+                "Dieng / Tidar",
+                "Dinoyo",
+                "Gadang",
+                "Gondanglegi",
+                "Gresik",
+                "Gunung Gunung",
+                "Jakarta Selatan",
+                "Jawa Tengah",
+                "Jombang",
+                "Karanglo",
+                "Karangploso",
+                "Kediri",
+                "Kedungkandang Buring",
+                "Kota Kota",
+                "Lamongan",
+                "Lawang",
+                "Lumajang",
+                "Madiun",
+                "Makasar",
+                "Malang Poros",
+                "Mojokerto",
+                "Nganjuk",
+                "NTT",
+                "Sungai Sungai",
+                "Surabaya Citraland",
+                "Surabaya Pusat",
+                "Surabaya Barat",
+                "Surabaya Timur",
+                "Surabaya Utara",
+                "Surabaya Selatan",
+                "Tajinan",
+                "Tasikmadu",
+                "Tlogomas",
+                "Tuban",
+                "Tulungagung",
+                "Tumpang",
+                "Tunggulwulung",
+                "Wagir" };
+        final int[] SelectedWilayah = {0};
+
+        builder.setSingleChoiceItems(Status, SelectedWilayah[0], new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                SelectedWilayah[0] = which;
+            }
+        });
+
+        builder.setPositiveButton("Pilih", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                wilayahproperti.setText(Status[SelectedWilayah[0]]);
             }
         });
 

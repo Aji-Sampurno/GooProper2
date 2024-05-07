@@ -81,6 +81,9 @@ import com.gooproper.ui.edit.EditPraListingAgenActivity;
 import com.gooproper.ui.edit.EditPralistingActivity;
 import com.gooproper.ui.followup.FollowUpActivity;
 import com.gooproper.ui.ImageViewActivity;
+import com.gooproper.ui.officer.ReportOfficerActivity;
+import com.gooproper.ui.officer.TambahCekLokasiActivity;
+import com.gooproper.ui.tambah.GantiTemplateActivity;
 import com.gooproper.ui.tambah.TambahListingActivity;
 import com.gooproper.ui.tambah.TambahSelfieActivity;
 import com.gooproper.ui.tambah.TambahSelfieListingActivity;
@@ -109,9 +112,9 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
 
     ProgressDialog PDDetailListing;
     TextView TVRangeHarga, TVNamaDetailListing, TVAlamatDetailListing, TVHargaDetailListing, TVHargaSewaDetailListing, TVViewsDetailListing, TVLikeDetailListing, TVBedDetailListing, TVNamaAgen, TVNamaAgen2, TVBathDetailListing, TVWideDetailListing, TVLandDetailListing, TVDimensiDetailListing, TVTipeDetailListing, TVStatusDetailListing, TVSertifikatDetailListing, TVLuasDetailListing, TVKamarTidurDetailListing, TVKamarMandiDetailListing, TVLantaiDetailListing, TVGarasiDetailListing, TVCarpotDetailListing, TVListrikDetailListing, TVSumberAirDetailListing, TVPerabotDetailListing, TVSizeBanner, TVDeskripsiDetailListing, TVNoData, TVNoDataPdf, TVPriority, TVKondisi, TVNoPjp, TVNoDataPjp, TVFee, TVTglInput, TVNamaVendor, TVTelpVendor, TVPJP, TVSelfie, TVRejected, TVPoin, TVHadap;
-    ImageView IVFlowUp, IVWhatsapp, IVInstagram, IVFlowUp2, IVWhatsapp2, IVInstagram2, IVFavorite, IVFavoriteOn, IVShare, IVStar1, IVStar2, IVStar3, IVStar4, IVStar5, IVAlamat, IVNextImg, IVPrevImg, IVSelfie;
-    Button BtnApproveAdmin, BtnApproveManager, BtnRejectedAdmin, BtnRejectedManager, BtnAjukanUlang, BtnLihatTemplate, BtnLihatTemplateKosong, BtnUploadTemplate;
-    Button BtnTambahPjp, BtnTambahBanner, BtnTambahCoList, BtnUpgrade, BtnTambahMaps, BtnTambahSelfie, BtnApproveUpgrade, BtnTambahWilayah;
+    ImageView IVVerified, IVFlowUp, IVWhatsapp, IVInstagram, IVFlowUp2, IVWhatsapp2, IVInstagram2, IVFavorite, IVFavoriteOn, IVShare, IVStar1, IVStar2, IVStar3, IVStar4, IVStar5, IVAlamat, IVNextImg, IVPrevImg, IVSelfie;
+    Button BtnApproveAdmin, BtnApproveManager, BtnRejectedAdmin, BtnRejectedManager, BtnAjukanUlang, BtnLihatTemplate, BtnLihatTemplateKosong, BtnUploadTemplate, BtnDataDouble, BtnHapusListing;
+    Button BtnTambahPjp, BtnTambahBanner, BtnTambahCoList, BtnUpgrade, BtnTambahMaps, BtnTambahSelfie, BtnApproveUpgrade, BtnTambahWilayah, BtnCekLokasi;
     TextInputEditText tambahagen, tambahcoagen, tambahpjp;
     TextInputLayout lytambahagen, lyttambahcoagen, lyttambahpjp;
     CheckBox CBMarketable, CBHarga, CBSelfie, CBLokasi;
@@ -120,7 +123,7 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
     CardView agen, agen2, CVSold, CVRented;
     String status, idpralisting, idagen, idlisting, agenid, agencoid, idpengguna, StringNamaListing, StringLuasTanah, StringLuasBangunan, StringKamarTidur, StringKamarTidurArt, StringKamarMandiArt, StringKamarMandi, StringListrik, StringHarga, StringHargaSewa, StringSertifikat, StringAlamat;
     String BuyerNama, BuyerTelp, BuyerKeterangan, BuyerTanggal, BuyerIdAgen, BuyerIdListing, BuyerIdInput, BuyerJam, StringNamaBuyer, AgenId, StringKeteranganReject;
-    String NamaMaps;
+    String NamaMaps, IsOfficer, IsCekLokasi;
     int PoinSekarang, PoinTambah, PoinKurang;
     String imageUrl, namaAgen, telpAgen, IdCo, UrlSHM, UrlHGB, UrlHSHP, UrlPPJB, UrlStratatitle, UrlAJB, UrlPetokD;
     String productId, StrIdAgen, StrIntentIdAgenCo, StrIntentIdAgen;
@@ -128,7 +131,7 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
     int Poin, FinalPoin, CoPoin;
     ProgressDialog pDialog;
     ListingModel lm;
-    LinearLayout LytSertifikat, LytPJP, LytSize, LytFee, LytTglInput, LytBadge, LytBadgeSold, LytBadgeRented, IVEdit, LytNamaVendor, LytTelpVendor, LytRejected, LytSelfie;
+    LinearLayout LytSertifikat, LytPJP, LytSize, LytFee, LytTglInput, LytBadge, LytBadgeSold, LytBadgeRented, IVEdit, LytNamaVendor, LytTelpVendor, LytRejected, LytSelfie, LytBtnHapus;
     ViewPager viewPager, viewPagerSertifikat, viewPagerPJP;
     ViewPagerAdapter adapter;
     SertifikatAdapter sertifikatAdapter;
@@ -190,7 +193,10 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
         BtnRejectedAdmin = findViewById(R.id.BtnRejectedAdminDetailListing);
         BtnRejectedManager = findViewById(R.id.BtnRejectedManagerDetailListing);
         BtnAjukanUlang = findViewById(R.id.BtnAjukanUlangDetailListing);
+        BtnDataDouble = findViewById(R.id.BtnDataDouble);
+        BtnHapusListing = findViewById(R.id.BtnHapusListing);
 
+        BtnCekLokasi = findViewById(R.id.BtnCekLokasi);
         BtnTambahMaps = findViewById(R.id.BtnAddMapsDetailListing);
         BtnTambahSelfie = findViewById(R.id.BtnAddSelfieDetailListing);
         BtnTambahPjp = findViewById(R.id.BtnAddPjpDetailListing);
@@ -247,6 +253,7 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
         TVRejected = findViewById(R.id.TVKeteranganDetailListing);
         TVPoin = findViewById(R.id.TVPoinListing);
 
+        IVVerified = findViewById(R.id.IVVerified);
         IVAlamat = findViewById(R.id.IVAlamatDetailListing);
         IVFlowUp = findViewById(R.id.IVFlowUpAgenDetailListing);
         IVWhatsapp = findViewById(R.id.IVNoTelpAgenDetailListing);
@@ -270,6 +277,7 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
         LytCBHarga = findViewById(R.id.LytCBHarga);
         LytCBSelfie = findViewById(R.id.LytCBSelfie);
         LytCBLokasi = findViewById(R.id.LytCBLokasi);
+        LytBtnHapus = findViewById(R.id.LytBtnHapusListing);
 
         mapView = findViewById(R.id.MVDetailListing);
         mapView.onCreate(savedInstanceState);
@@ -288,7 +296,7 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
 
         Intent data = getIntent();
         final int update = data.getIntExtra("update", 0);
-        String intentIdPraListing = data.getStringExtra("IdPraListing");
+//        String intentIdPraListing = data.getStringExtra("IdPraListing");
         String intentIdListing = data.getStringExtra("IdListing");
         String intentIdAgen = data.getStringExtra("IdAgen");
         String intentIdAgenCo = data.getStringExtra("IdAgenCo");
@@ -387,7 +395,7 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
 
         StrIntentIdAgen = intentIdAgen;
         StrIntentIdAgenCo = intentIdAgenCo;
-        idpralisting = intentIdPraListing;
+//        idpralisting = intentIdPraListing;
         idlisting = intentIdListing;
         idagen = intentIdAgen;
         IdCo = intentIdAgenCo;
@@ -408,6 +416,68 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
         StringKamarMandiArt = intentBathArt;
         StringListrik = intentListrik;
         StringSertifikat = intentJenisCertificate;
+
+        RequestQueue queuereport = Volley.newRequestQueue(DetailListingActivity.this);
+        JsonArrayRequest reqDatareport = new JsonArrayRequest(Request.Method.GET, ServerApi.URL_CEK_OFFICER+ Preferences.getKeyIdAgen(DetailListingActivity.this),null,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        for(int i = 0 ; i < response.length(); i++)
+                        {
+                            try {
+                                JSONObject data = response.getJSONObject(i);
+
+                                IsOfficer = data.getString("Officer");
+                                if (IsOfficer.equals("1")) {
+                                    BtnCekLokasi.setVisibility(View.VISIBLE);
+                                } else {
+                                    BtnCekLokasi.setVisibility(View.GONE);
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        error.printStackTrace();
+                    }
+                });
+
+        queuereport.add(reqDatareport);
+
+        RequestQueue queuelokasi = Volley.newRequestQueue(DetailListingActivity.this);
+        JsonArrayRequest reqDatalokasi = new JsonArrayRequest(Request.Method.GET, ServerApi.URL_CEK_ISLOKASI+ intentIdListing,null,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        for(int i = 0 ; i < response.length(); i++)
+                        {
+                            try {
+                                JSONObject data = response.getJSONObject(i);
+
+                                IsCekLokasi = data.getString("IsCekLokasi");
+                                if (IsCekLokasi.equals("1")) {
+                                    IVVerified.setVisibility(View.VISIBLE);
+                                } else {
+                                    IVVerified.setVisibility(View.INVISIBLE);
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        error.printStackTrace();
+                    }
+                });
+
+        queuelokasi.add(reqDatalokasi);
 
         if (intentIsRejected.equals("1")) {
             BtnAjukanUlang.setVisibility(View.VISIBLE);
@@ -753,11 +823,7 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                 BtnApproveManager.setVisibility(View.GONE);
                 BtnRejectedAdmin.setVisibility(View.GONE);
                 BtnRejectedManager.setVisibility(View.GONE);
-                BtnLihatTemplate.setVisibility(View.VISIBLE);
-                BtnLihatTemplateKosong.setVisibility(View.VISIBLE);
-                BtnUploadTemplate.setVisibility(View.VISIBLE);
                 BtnTambahWilayah.setVisibility(View.VISIBLE);
-                BtnUploadTemplate.setText("Ganti Template");
                 IVFlowUp.setVisibility(View.VISIBLE);
                 IVFlowUp2.setVisibility(View.VISIBLE);
                 IVEdit.setVisibility(View.VISIBLE);
@@ -849,6 +915,17 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                 IVFavorite.setVisibility(View.GONE);
                 AgenId = "0";
                 idpengguna = Preferences.getKeyIdAdmin(this);
+                LytBtnHapus.setVisibility(View.VISIBLE);
+                if (!intentIdTemplate.equals("null")) {
+                    BtnUploadTemplate.setText("Ganti Template");
+                    BtnLihatTemplate.setVisibility(View.VISIBLE);
+                    BtnLihatTemplateKosong.setVisibility(View.VISIBLE);
+                    BtnUploadTemplate.setVisibility(View.VISIBLE);
+                } else {
+                    BtnUploadTemplate.setVisibility(View.GONE);
+                    BtnLihatTemplate.setVisibility(View.GONE);
+                    BtnLihatTemplateKosong.setVisibility(View.GONE);
+                }
             }
         } else if (status.equals("3")) {
             if (intentLatitude.equals("0") && intentLongitude.equals("0")) {
@@ -2130,11 +2207,11 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
             @Override
             public void onClick(View view) {
                 if (intentPriority.equals("open")){
-                    String url = "https://app.gooproper.com/GooProper/template/" + idpralisting;
+                    String url = "https://app.gooproper.com/GooProper/newtemplate/" + idlisting;
                     Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
                     startActivity(intent);
                 } else {
-                    String url = "https://app.gooproper.com/GooProper/templateexclusive/" + idpralisting;
+                    String url = "https://app.gooproper.com/GooProper/newtemplateexclusive/" + idlisting;
                     Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
                     startActivity(intent);
                 }
@@ -2144,14 +2221,24 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
             @Override
             public void onClick(View view) {
                 if (intentPriority.equals("open")){
-                    String url = "https://app.gooproper.com/GooProper/templateblank/" + idpralisting;
+                    String url = "https://app.gooproper.com/GooProper/newtemplateblank/" + idlisting;
                     Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
                     startActivity(intent);
                 } else {
-                    String url = "https://app.gooproper.com/GooProper/templateblankexclusive/" + idpralisting;
+                    String url = "https://app.gooproper.com/GooProper/newtemplateblankexclusive/" + idlisting;
                     Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
                     startActivity(intent);
                 }
+
+            }
+        });
+        BtnUploadTemplate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent update = new Intent(DetailListingActivity.this, GantiTemplateActivity.class);
+                update.putExtra("update",1);
+                update.putExtra("IdTemplate",intentIdTemplate);
+                startActivity(update);
 
             }
         });
@@ -2383,6 +2470,20 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
             @Override
             public void onClick(View view) {
                 ShowTambahWilayah(intentIdListing);
+            }
+        });
+        BtnTambahWilayah.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ShowTambahWilayah(intentIdListing);
+            }
+        });
+        BtnCekLokasi.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent update = new Intent(DetailListingActivity.this, TambahCekLokasiActivity.class);
+                update.putExtra("IdListing", intentIdListing);
+                startActivity(update);
             }
         });
 
