@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/main"
     android:orientation="vertical"
-    tools:context=".ui.detail.DetailPrimaryActivity">
+    tools:context=".ui.detail.listing.DetailPrimaryActivity">
 
     <ScrollView
         android:id="@+id/SVDetailPrimary"
@@ -106,6 +106,13 @@
                     android:textColor="@color/white" />
 
             </LinearLayout>
+
+            <Button
+                android:id="@+id/BtnEditPrimary"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Edit Primary"
+                android:layout_margin="10dp"/>
 
             <TextView
                 android:id="@+id/TVHargaDetailPrimary"

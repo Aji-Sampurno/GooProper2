@@ -21,25 +21,23 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
-import com.gooproper.ui.CobaPesanActivity;
+import com.gooproper.ui.followup.HistoryFollowUpActivity;
+import com.gooproper.ui.unuse.CobaPesanActivity;
 import com.gooproper.ui.ReportAgenActivity;
 import com.gooproper.ui.edit.EditAkunActivity;
 import com.gooproper.R;
-import com.gooproper.ui.SettingActivity;
-import com.gooproper.ui.TentangKamiActivity;
+import com.gooproper.ui.user.SettingActivity;
+import com.gooproper.ui.user.TentangKamiActivity;
 import com.gooproper.ui.AgenActivity;
 import com.gooproper.ui.LaporanListingActivity;
 import com.gooproper.ui.PelamarAgenActivity;
 import com.gooproper.ui.followup.FollowUpInfoListActivity;
 import com.gooproper.ui.listing.InfoPropertyActivity;
-import com.gooproper.ui.listing.ListListingSementaraActivity;
 import com.gooproper.ui.listing.ListingPendingActivity;
 import com.gooproper.ui.listing.PraListingRejectedAdminActivity;
-import com.gooproper.ui.tambah.TambahInfoActivity;
 import com.gooproper.ui.tambah.TambahKaryawanActivity;
-import com.gooproper.ui.tambah.TambahListingActivity;
-import com.gooproper.ui.tambah.TambahListingPrimaryActivity;
-import com.gooproper.ui.tambah.TambahListingSementaraActivity;
+import com.gooproper.ui.tambah.listing.TambahListingActivity;
+import com.gooproper.ui.tambah.primary.TambahListingPrimaryActivity;
 import com.gooproper.util.Preferences;
 import com.gooproper.util.ServerApi;
 import com.squareup.picasso.Picasso;
@@ -48,14 +46,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.time.LocalDate;
-
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class AkunAdminFragment extends Fragment {
 
-    private LinearLayout pelamar, agen, reportagen, tambahpenghargaan, listing, listingpending, info, followupinfo, pralistingrejected, primary, listprimary, karyawan, laporan, pengaturan, hubungikami, tentangkami, kirimpesan;
-    TextView nama, edit, agenultah;
+    private LinearLayout pelamar, agen, reportagen, tambahpenghargaan, historyfollowup, listing, listingpending, info, followupinfo, pralistingrejected, primary, listprimary, karyawan, laporan, pengaturan, hubungikami, tentangkami, kirimpesan;
+    TextView nama, edit, agenultah, TVBadgePending, TVBadgeRejected, TVBadgePelamar;
     CardView CVUltah;
     CircleImageView cvadmin;
     View view, view1, view2, view3, view4;
@@ -79,6 +75,7 @@ public class AkunAdminFragment extends Fragment {
         info = root.findViewById(R.id.LytInfoAdmin);
         followupinfo = root.findViewById(R.id.LytFollowUpAdmin);
         pralistingrejected = root.findViewById(R.id.LytPraListingRejectedAdmin);
+        historyfollowup = root.findViewById(R.id.LytHistoryFollowUp);
         primary = root.findViewById(R.id.LytListingPrimaryAdmin);
         listprimary = root.findViewById(R.id.LytListinganPrimary);
         karyawan = root.findViewById(R.id.LytTambahKaryawan);
@@ -101,6 +98,9 @@ public class AkunAdminFragment extends Fragment {
         view2 = root.findViewById(R.id.V3);
         view3 = root.findViewById(R.id.V4);
         view4 = root.findViewById(R.id.V5);
+        TVBadgePending = root.findViewById(R.id.TVBadgePending);
+        TVBadgeRejected = root.findViewById(R.id.TVBadgePralistingRejected);
+        TVBadgePelamar = root.findViewById(R.id.TVBadgePelamar);
 
         nama.setText(Preferences.getKeyUsername(getActivity()));
         edit.setOnClickListener(view -> startActivity(new Intent(getActivity(), EditAkunActivity.class)));
@@ -170,6 +170,7 @@ public class AkunAdminFragment extends Fragment {
         reportagen.setOnClickListener(view -> startActivity(new Intent(getContext(), ReportAgenActivity.class)));
         tambahpenghargaan.setOnClickListener(view -> startActivity(new Intent(getContext(), TambahListingActivity.class)));
         laporan.setOnClickListener(view -> startActivity(new Intent(getContext(), LaporanListingActivity.class)));
+        historyfollowup.setOnClickListener(view -> startActivity(new Intent(getContext(), HistoryFollowUpActivity.class)));
         kirimpesan.setOnClickListener(view -> startActivity(new Intent(getContext(), CobaPesanActivity.class)));
         karyawan.setOnClickListener(view -> startActivity(new Intent(getContext(), TambahKaryawanActivity.class)));
         pengaturan.setOnClickListener(view -> startActivity(new Intent(getContext(), SettingActivity.class)));
@@ -179,6 +180,10 @@ public class AkunAdminFragment extends Fragment {
         Picasso.get()
                 .load(imgurl)
                 .into(cvadmin);
+
+        CountPelamar();
+        CountPending();
+        CountRejected();
 
         return root;
     }
@@ -268,5 +273,107 @@ public class AkunAdminFragment extends Fragment {
         });
 
         customDialog.show();
+    }
+    private void CountPelamar() {
+        RequestQueue queue = Volley.newRequestQueue(getContext());
+        JsonArrayRequest reqData = new JsonArrayRequest(Request.Method.GET, ServerApi.URL_COUNT_PELAMAR,null,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        for(int i = 0 ; i < response.length(); i++)
+                        {
+                            try {
+                                JSONObject data = response.getJSONObject(i);
+                                String count = data.getString("Total");
+
+                                if (count.isEmpty() || count == null || count.equals("null") || count.equals("0")) {
+                                    TVBadgePelamar.setVisibility(View.GONE);
+                                } else {
+                                    TVBadgePelamar.setVisibility(View.VISIBLE);
+                                    TVBadgePelamar.setText(count);
+                                }
+
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        error.printStackTrace();
+                    }
+                });
+
+        queue.add(reqData);
+    }
+    private void CountPending() {
+        RequestQueue queue = Volley.newRequestQueue(getContext());
+        JsonArrayRequest reqData = new JsonArrayRequest(Request.Method.GET, ServerApi.URL_COUNT_LISTING_PENDING,null,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        for(int i = 0 ; i < response.length(); i++)
+                        {
+                            try {
+                                JSONObject data = response.getJSONObject(i);
+                                String count = data.getString("Total");
+
+                                if (count.isEmpty() || count == null || count.equals("null") || count.equals("0")) {
+                                    TVBadgePending.setVisibility(View.GONE);
+                                } else {
+                                    TVBadgePending.setVisibility(View.VISIBLE);
+                                    TVBadgePending.setText(count);
+                                }
+
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        error.printStackTrace();
+                    }
+                });
+
+        queue.add(reqData);
+    }
+    private void CountRejected() {
+        RequestQueue queue = Volley.newRequestQueue(getContext());
+        JsonArrayRequest reqData = new JsonArrayRequest(Request.Method.GET, ServerApi.URL_COUNT_PRALISTING_REJECTED,null,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        for(int i = 0 ; i < response.length(); i++)
+                        {
+                            try {
+                                JSONObject data = response.getJSONObject(i);
+                                String count = data.getString("Total");
+
+                                if (count.isEmpty() || count == null || count.equals("null") || count.equals("0")) {
+                                    TVBadgeRejected.setVisibility(View.GONE);
+                                } else {
+                                    TVBadgeRejected.setVisibility(View.VISIBLE);
+                                    TVBadgeRejected.setText(count);
+                                }
+
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        error.printStackTrace();
+                    }
+                });
+
+        queue.add(reqData);
     }
 }

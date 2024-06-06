@@ -532,10 +532,10 @@ public class PopularActivity extends AppCompatActivity {
                 if (!bathSearch.isEmpty() && !bathSearch.equals(product.getBath())) {
                     isBathMatched = false;
                 }
-                if (!landWideSearch.isEmpty() && !landWideSearch.equalsIgnoreCase(product.getWide())) {
+                if (!landWideSearch.isEmpty() && !landWideSearch.equals(product.getWide())) {
                     isLandWideMatched = false;
                 }
-                if (!buildingWideSearch.isEmpty() && !buildingWideSearch.equalsIgnoreCase(product.getLand())) {
+                if (!buildingWideSearch.isEmpty() && !buildingWideSearch.equals(product.getLand())) {
                     isBuildingWideMatched = false;
                 }
                 if (!garageSearch.isEmpty() && !garageSearch.equals(product.getGarage())) {
@@ -592,10 +592,10 @@ public class PopularActivity extends AppCompatActivity {
                 if (!bathSearch.isEmpty() && !bathSearch.equals(product.getBath())) {
                     isBathMatched = false;
                 }
-                if (!landWideSearch.isEmpty() && !landWideSearch.equalsIgnoreCase(product.getWide())) {
+                if (!landWideSearch.isEmpty() && !landWideSearch.equals(product.getWide())) {
                     isLandWideMatched = false;
                 }
-                if (!buildingWideSearch.isEmpty() && !buildingWideSearch.equalsIgnoreCase(product.getLand())) {
+                if (!buildingWideSearch.isEmpty() && !buildingWideSearch.equals(product.getLand())) {
                     isBuildingWideMatched = false;
                 }
                 if (!garageSearch.isEmpty() && !garageSearch.equals(product.getGarage())) {
@@ -654,11 +654,14 @@ public class PopularActivity extends AppCompatActivity {
                                 md.setIdAgen(data.getString("IdAgen"));
                                 md.setIdAgenCo(data.getString("IdAgenCo"));
                                 md.setIdInput(data.getString("IdInput"));
+                                md.setNoArsip(data.getString("NoArsip"));
                                 md.setNamaListing(data.getString("NamaListing"));
                                 md.setAlamat(data.getString("Alamat"));
+                                md.setAlamatTemplate(data.getString("AlamatTemplate"));
                                 md.setLatitude(data.getString("Latitude"));
                                 md.setLongitude(data.getString("Longitude"));
                                 md.setLocation(data.getString("Location"));
+                                md.setWilayah(data.getString("Wilayah"));
                                 md.setSelfie(data.getString("Selfie"));
                                 md.setWide(data.getString("Wide"));
                                 md.setLand(data.getString("Land"));
@@ -702,8 +705,18 @@ public class PopularActivity extends AppCompatActivity {
                                 md.setTtd(data.getString("Ttd"));
                                 md.setBanner(data.getString("Banner"));
                                 md.setSize(data.getString("Size"));
-                                md.setHarga(data.getString("Harga"));
-                                md.setHargaSewa(data.getString("HargaSewa"));
+                                String HargaJualData = (data.getString("Harga"));
+                                if (HargaJualData.isEmpty()) {
+                                    md.setHarga("0");
+                                } else {
+                                    md.setHarga(HargaJualData);
+                                }
+                                String HargaSewaData = (data.getString("HargaSewa"));
+                                if (HargaSewaData.isEmpty()) {
+                                    md.setHargaSewa("0");
+                                } else {
+                                    md.setHargaSewa(HargaSewaData);
+                                }
                                 md.setRangeHarga(data.getString("RangeHarga"));
                                 md.setTglInput(data.getString("TglInput"));
                                 md.setImg1(data.getString("Img1"));
@@ -714,6 +727,10 @@ public class PopularActivity extends AppCompatActivity {
                                 md.setImg6(data.getString("Img6"));
                                 md.setImg7(data.getString("Img7"));
                                 md.setImg8(data.getString("Img8"));
+                                md.setImg9(data.getString("Img9"));
+                                md.setImg10(data.getString("Img10"));
+                                md.setImg11(data.getString("Img11"));
+                                md.setImg12(data.getString("Img12"));
                                 md.setVideo(data.getString("Video"));
                                 md.setLinkFacebook(data.getString("LinkFacebook"));
                                 md.setLinkTiktok(data.getString("LinkTiktok"));

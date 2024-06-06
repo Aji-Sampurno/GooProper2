@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/main"
-    tools:context=".ui.SettingActivity">
+    tools:context=".ui.user.SettingActivity">
 
     <LinearLayout
         android:id="@+id/lyt1"

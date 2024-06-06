@@ -1,9 +1,11 @@
 package com.gooproper.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -11,15 +13,12 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.google.android.material.transition.Hold;
 import com.gooproper.R;
-import com.gooproper.model.ListingModel;
-import com.gooproper.model.PrimaryModel;
 import com.gooproper.model.TipeModel;
+import com.gooproper.ui.edit.primary.EditTipePrimaryActivity;
 import com.gooproper.util.FormatCurrency;
+import com.gooproper.util.Preferences;
 
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 public class TipeAdapter extends RecyclerView.Adapter<TipeAdapter.HolderData> {
@@ -143,14 +142,46 @@ public class TipeAdapter extends RecyclerView.Adapter<TipeAdapter.HolderData> {
 
     public class HolderData extends RecyclerView.ViewHolder {
         TextView TVJudul, TVHarga, TVDeskripsi;
+        Button BtnEdit;
         ImageView IVGambar;
+        String status;
         public TipeModel tipeModel;
         public HolderData(@NonNull View itemView) {
             super(itemView);
             TVJudul = itemView.findViewById(R.id.TVNamaTipe);
             TVHarga = itemView.findViewById(R.id.TVHargaTipe);
             TVDeskripsi = itemView.findViewById(R.id.TVDeskripsiTipe);
+            BtnEdit = itemView.findViewById(R.id.BtnEditTipe);
             IVGambar = itemView.findViewById(R.id.IVGambarTipe);
+
+            status = Preferences.getKeyStatus(context);
+
+            if (status.equals("1")){
+                BtnEdit.setVisibility(View.VISIBLE);
+            } else if (status.equals("2")) {
+                BtnEdit.setVisibility(View.VISIBLE);
+            } else if (status.equals("3")) {
+                BtnEdit.setVisibility(View.GONE);
+            } else if (status.equals("4")) {
+                BtnEdit.setVisibility(View.GONE);
+            } else {
+                BtnEdit.setVisibility(View.GONE);
+            }
+
+            BtnEdit.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent update = new Intent(context, EditTipePrimaryActivity.class);
+                    update.putExtra("update",1);
+                    update.putExtra("IdTipePrimary",tipeModel.getIdTipePrimary());
+                    update.putExtra("IdListingPrimary",tipeModel.getIdListingPrimary());
+                    update.putExtra("NamaTipe",tipeModel.getNamaTipe());
+                    update.putExtra("DeskripsiTipe",tipeModel.getDeskripsiTipe());
+                    update.putExtra("HargaTipe",tipeModel.getHargaTipe());
+                    update.putExtra("GambarTipe",tipeModel.getGambarTipe());
+                    context.startActivity(update);
+                }
+            });
         }
     }
 }

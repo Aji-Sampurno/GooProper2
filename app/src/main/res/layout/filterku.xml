@@ -254,7 +254,7 @@
             android:background="@drawable/input_bg_2"
             android:gravity="center"
             android:hint="Luas Tanah"
-            android:inputType="number"
+            android:inputType="none"
             android:textColor="@color/black"
             android:textColorHint="@color/black" />
 
@@ -267,7 +267,7 @@
             android:background="@drawable/input_bg_2"
             android:gravity="center"
             android:hint="Luas Bangunan"
-            android:inputType="number"
+            android:inputType="none"
             android:textColor="@color/black"
             android:textColorHint="@color/black" />
     </LinearLayout>

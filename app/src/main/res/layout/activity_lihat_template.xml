@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/main"
-    tools:context=".ui.LihatTemplateActivity">
+    tools:context=".ui.unuse.LihatTemplateActivity">
 
     <FrameLayout
         android:id="@+id/customViewContainer"

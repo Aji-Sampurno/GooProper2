@@ -1,7 +1,6 @@
 package com.gooproper.adapter.officer;
 
 import android.content.Context;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,14 +13,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.gooproper.R;
-import com.gooproper.model.ListingModel;
 import com.gooproper.model.ReportKinerjaModel;
-import com.gooproper.ui.detail.DetailListingActivity;
 import com.gooproper.util.FormatCurrency;
-import com.gooproper.util.Preferences;
 
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 public class ReportKinerjaAdapter extends RecyclerView.Adapter<ReportKinerjaAdapter.HolderData> {

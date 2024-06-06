@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/main"
     android:orientation="vertical"
-    tools:context=".ui.detail.DetailAgenActivity">
+    tools:context=".ui.detail.agen.DetailAgenActivity">
 
     <LinearLayout
         android:id="@+id/lyt1"
@@ -283,8 +283,8 @@
                     android:layout_weight="1"
                     android:gravity="end"
                     android:text="Lihat Semua"
-                    android:visibility="invisible"
-                    android:textColor="@color/white" />
+                    android:textColor="@color/white"
+                    android:visibility="invisible" />
             </LinearLayout>
 
             <androidx.recyclerview.widget.RecyclerView
@@ -658,20 +658,21 @@
             </LinearLayout>
 
             <TextView
-                android:layout_marginTop="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
                 android:text="Foto KTP"
-                android:textStyle="bold"/>
+                android:textColor="@color/white"
+                android:textStyle="bold" />
 
             <ImageView
-                android:layout_marginTop="10dp"
                 android:id="@+id/IVFotoKtp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:adjustViewBounds="true"
+                android:layout_marginTop="10dp"
                 android:layout_weight="1"
-                android:scaleType="centerCrop"/>
+                android:adjustViewBounds="true"
+                android:scaleType="centerCrop" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -687,8 +688,8 @@
                     android:layout_marginTop="20dp"
                     android:layout_marginEnd="5dp"
                     android:layout_weight="1"
-                    android:text="Hubungi"
                     android:backgroundTint="#43A047"
+                    android:text="Hubungi"
                     android:textColor="@color/white" />
 
                 <Button
@@ -702,6 +703,15 @@
                     android:textColor="@color/black" />
 
             </LinearLayout>
+
+            <Button
+                android:id="@+id/BtnTolakPelamar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:backgroundTint="@color/red"
+                android:text="Tolak"
+                android:textColor="@color/white" />
 
         </LinearLayout>
 

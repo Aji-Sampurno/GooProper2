@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/main"
     android:orientation="vertical"
-    tools:context=".ui.detail.DetailListingActivity">
+    tools:context=".ui.detail.listing.DetailListingActivity">
 
     <ScrollView
         android:id="@+id/SVDetailListing"
@@ -79,8 +79,8 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_weight="1"
-                        android:visibility="visible"
-                        android:src="@drawable/baseline_verified_24"/>
+                        android:src="@drawable/baseline_verified_24"
+                        android:visibility="visible" />
 
                     <TextView
                         android:id="@+id/TVPriority"
@@ -335,6 +335,34 @@
                 android:textColor="@color/white"
                 android:textSize="18sp" />
 
+            <Button
+                android:id="@+id/BtnTambahNoArsipListing"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginBottom="10dp"
+                android:text="Tambah No Arsip"
+                android:textColor="@color/black"
+                android:visibility="gone" />
+
+            <Button
+                android:id="@+id/BtnSimpanPDF"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:text="Simpan PDF"
+                android:visibility="gone" />
+
+            <Button
+                android:id="@+id/BtnCekLokasi"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:text="Cek Lokasi"
+                android:visibility="gone" />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -363,27 +391,37 @@
 
             </LinearLayout>
 
-            <Button
-                android:id="@+id/BtnCekLokasi"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:visibility="gone"
-                android:text="Cek Lokasi" />
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/TVPoinListing"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="5dp"
                     android:layout_marginTop="10dp"
-                    android:textColor="@color/second"
-                    android:textSize="24sp" />
+                    android:orientation="horizontal"
+                    android:weightSum="2">
+
+                    <TextView
+                        android:id="@+id/TVPoinListing"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="5dp"
+                        android:layout_weight="1"
+                        android:textColor="@color/second"
+                        android:textSize="24sp" />
+
+                    <TextView
+                        android:id="@+id/TVJumlahFotoListing"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="5dp"
+                        android:layout_weight="1"
+                        android:textColor="@color/second"
+                        android:textSize="24sp" />
+
+                </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -597,6 +635,18 @@
             </LinearLayout>
 
             <Button
+                android:id="@+id/BtnTambahGambarDetailListing"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginBottom="10dp"
+                android:text="Tambah Gambar"
+                android:textColor="@color/black"
+                android:visibility="gone" />
+
+            <Button
                 android:id="@+id/BtnUpgradeDetailListing"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -672,23 +722,25 @@
                 android:id="@+id/LytBtnHapusListing"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:weightSum="2"
                 android:orientation="horizontal"
-                android:visibility="gone">
+                android:visibility="gone"
+                android:weightSum="2">
 
                 <Button
                     android:id="@+id/BtnDataDouble"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
                     android:layout_weight="1"
-                    android:text="Data Double"/>
+                    android:text="Data Double" />
 
                 <Button
                     android:id="@+id/BtnHapusListing"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
                     android:layout_weight="1"
-                    android:text="Hapus Listing"/>
+                    android:text="Hapus Listing" />
 
             </LinearLayout>
 
@@ -1610,7 +1662,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_weight="2"
-                android:src="@drawable/ic_flowup"
+                android:src="@drawable/ic_follow_up"
                 app:tint="@color/black" />
 
             <ImageView
@@ -1668,7 +1720,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_weight="2"
-                android:src="@drawable/ic_flowup"
+                android:src="@drawable/ic_follow_up"
                 app:tint="@color/black" />
 
             <ImageView

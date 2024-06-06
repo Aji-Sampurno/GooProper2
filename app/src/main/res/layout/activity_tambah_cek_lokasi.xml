@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    tools:context=".ui.officer.TambahCekLokasiActivity">
+    tools:context=".ui.officer.report.TambahCekLokasiActivity">
 
     <ScrollView
         android:layout_width="match_parent"

@@ -156,7 +156,7 @@ public class ListingkuActivity extends AppCompatActivity {
         RadioGroup kondisiRadioGroup = dialogView.findViewById(R.id.kondisi);
         int selectedRadioButtonId = kondisiRadioGroup.getCheckedRadioButtonId();
 
-        String selectedKondisi = ""; // Initialize the selected kondisi
+        String selectedKondisi = "";
 
         if (selectedRadioButtonId == R.id.jual) {
             selectedKondisi = "Jual";
@@ -272,7 +272,7 @@ public class ListingkuActivity extends AppCompatActivity {
                 RadioGroup kondisiRadioGroup = alertDialog.findViewById(R.id.kondisi);
                 int selectedRadioButtonId = kondisiRadioGroup.getCheckedRadioButtonId();
 
-                String selectedKondisi = ""; // Initialize the selected kondisi
+                String selectedKondisi = "";
 
                 if (selectedRadioButtonId == R.id.jual) {
                     selectedKondisi = "Jual";
@@ -402,26 +402,24 @@ public class ListingkuActivity extends AppCompatActivity {
         builder.setTitle("Jenis Properti");
 
         final CharSequence[] spec = {"Rumah", "Ruko", "Tanah", "Gudang", "Ruang Usaha", "Villa", "Apartemen", "Pabrik", "Kantor", "Hotel", "Rukost"};
-        final int[] selectedSpecIndex = {0}; // to store the index of the selected property type
+        final int[] selectedSpecIndex = {0};
 
         builder.setSingleChoiceItems(spec, selectedSpecIndex[0], new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                selectedSpecIndex[0] = which; // update the selected property type index
+                selectedSpecIndex[0] = which;
             }
         });
 
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                // Update the TextView with the selected property type
                 TextView textViewSpec = alertDialog.findViewById(R.id.textViewSpec);
                 if (textViewSpec != null) {
                     textViewSpec.setText(spec[selectedSpecIndex[0]]);
                 }
             }
         });
-        // Create and show the AlertDialog
         builder.create().show();
     }
     public void showPropertyTypePopup(View view) {
@@ -434,7 +432,7 @@ public class ListingkuActivity extends AppCompatActivity {
         builder.setSingleChoiceItems(options, selectedOptionIndex[0], new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                selectedOptionIndex[0] = which; // Assign the selected index to the array
+                selectedOptionIndex[0] = which;
             }
         });
 
@@ -533,10 +531,10 @@ public class ListingkuActivity extends AppCompatActivity {
                 if (!bathSearch.isEmpty() && !bathSearch.equals(product.getBath())) {
                     isBathMatched = false;
                 }
-                if (!landWideSearch.isEmpty() && !landWideSearch.equalsIgnoreCase(product.getWide())) {
+                if (!landWideSearch.isEmpty() && !landWideSearch.equals(product.getWide())) {
                     isLandWideMatched = false;
                 }
-                if (!buildingWideSearch.isEmpty() && !buildingWideSearch.equalsIgnoreCase(product.getLand())) {
+                if (!buildingWideSearch.isEmpty() && !buildingWideSearch.equals(product.getLand())) {
                     isBuildingWideMatched = false;
                 }
                 if (!garageSearch.isEmpty() && !garageSearch.equals(product.getGarage())) {
@@ -593,10 +591,10 @@ public class ListingkuActivity extends AppCompatActivity {
                 if (!bathSearch.isEmpty() && !bathSearch.equals(product.getBath())) {
                     isBathMatched = false;
                 }
-                if (!landWideSearch.isEmpty() && !landWideSearch.equalsIgnoreCase(product.getWide())) {
+                if (!landWideSearch.isEmpty() && !landWideSearch.equals(product.getWide())) {
                     isLandWideMatched = false;
                 }
-                if (!buildingWideSearch.isEmpty() && !buildingWideSearch.equalsIgnoreCase(product.getLand())) {
+                if (!buildingWideSearch.isEmpty() && !buildingWideSearch.equals(product.getLand())) {
                     isBuildingWideMatched = false;
                 }
                 if (!garageSearch.isEmpty() && !garageSearch.equals(product.getGarage())) {
@@ -652,8 +650,10 @@ public class ListingkuActivity extends AppCompatActivity {
                                 md.setIdAgen(data.getString("IdAgen"));
                                 md.setIdAgenCo(data.getString("IdAgenCo"));
                                 md.setIdInput(data.getString("IdInput"));
+                                md.setNoArsip(data.getString("NoArsip"));
                                 md.setNamaListing(data.getString("NamaListing"));
                                 md.setAlamat(data.getString("Alamat"));
+                                md.setAlamatTemplate(data.getString("AlamatTemplate"));
                                 md.setLatitude(data.getString("Latitude"));
                                 md.setLongitude(data.getString("Longitude"));
                                 md.setLocation(data.getString("Location"));
@@ -701,8 +701,18 @@ public class ListingkuActivity extends AppCompatActivity {
                                 md.setTtd(data.getString("Ttd"));
                                 md.setBanner(data.getString("Banner"));
                                 md.setSize(data.getString("Size"));
-                                md.setHarga(data.getString("Harga"));
-                                md.setHargaSewa(data.getString("HargaSewa"));
+                                String HargaJualData = (data.getString("Harga"));
+                                if (HargaJualData.isEmpty()) {
+                                    md.setHarga("0");
+                                } else {
+                                    md.setHarga(HargaJualData);
+                                }
+                                String HargaSewaData = (data.getString("HargaSewa"));
+                                if (HargaSewaData.isEmpty()) {
+                                    md.setHargaSewa("0");
+                                } else {
+                                    md.setHargaSewa(HargaSewaData);
+                                }
                                 md.setRangeHarga(data.getString("RangeHarga"));
                                 md.setTglInput(data.getString("TglInput"));
                                 md.setImg1(data.getString("Img1"));
@@ -713,6 +723,10 @@ public class ListingkuActivity extends AppCompatActivity {
                                 md.setImg6(data.getString("Img6"));
                                 md.setImg7(data.getString("Img7"));
                                 md.setImg8(data.getString("Img8"));
+                                md.setImg9(data.getString("Img9"));
+                                md.setImg10(data.getString("Img10"));
+                                md.setImg11(data.getString("Img11"));
+                                md.setImg12(data.getString("Img12"));
                                 md.setVideo(data.getString("Video"));
                                 md.setLinkFacebook(data.getString("LinkFacebook"));
                                 md.setLinkTiktok(data.getString("LinkTiktok"));

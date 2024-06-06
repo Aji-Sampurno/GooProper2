@@ -2,14 +2,13 @@ package com.gooproper.admin.fragment;
 
 import static android.app.Activity.RESULT_OK;
 
-import static androidx.core.content.ContextCompat.getSystemService;
-
 import static com.android.volley.VolleyLog.TAG;
 
 import android.Manifest;
 import android.app.Dialog;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -68,7 +67,6 @@ import com.google.android.play.core.install.model.AppUpdateType;
 import com.google.android.play.core.install.model.UpdateAvailability;
 import com.google.android.play.core.tasks.Task;
 import com.google.firebase.FirebaseApp;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -258,7 +256,6 @@ public class HomeAdminFragment extends Fragment implements OnMapReadyCallback {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 String existingToken = dataSnapshot.getValue(String.class);
                 if (existingToken == null || !existingToken.equals(token)) {
-                    // Simpan token ke database Firebase
                     tokensRef.child(userName).setValue(token);
                 }
             }
@@ -273,7 +270,7 @@ public class HomeAdminFragment extends Fragment implements OnMapReadyCallback {
         RecyclerView.SmoothScroller smoothScroller = new LinearSmoothScroller(recycleListingPrimary.getContext()) {
             @Override
             protected int getHorizontalSnapPreference() {
-                return SNAP_TO_START; // atau SNAP_TO_END
+                return SNAP_TO_START;
             }
 
             @Override
@@ -295,7 +292,6 @@ public class HomeAdminFragment extends Fragment implements OnMapReadyCallback {
             public void onSuccess(AppUpdateInfo appUpdateInfo) {
                 if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE
                         && appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.FLEXIBLE)) {
-                    // Ada pembaruan tersedia, tampilkan dialog pembaruan
                     requestUpdate(appUpdateManager, appUpdateInfo);
                 }
             }
@@ -314,6 +310,48 @@ public class HomeAdminFragment extends Fragment implements OnMapReadyCallback {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+    public void showUpdateDialog() {
+        Dialog customDialog = new Dialog(getContext());
+        customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        customDialog.setContentView(R.layout.custom_dialog_konfirmasi);
+
+        if (customDialog.getWindow() != null) {
+            customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        }
+
+        TextView dialogTitle = customDialog.findViewById(R.id.dialog_title);
+        Button ya = customDialog.findViewById(R.id.btnya);
+        Button tidak = customDialog.findViewById(R.id.btntidak);
+
+        ya.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                try {
+                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + getActivity().getPackageName())));
+                } catch (ActivityNotFoundException e) {
+                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + getActivity().getPackageName())));
+                }
+            }
+        });
+
+        tidak.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                customDialog.dismiss();
+            }
+        });
+
+        dialogTitle.setText("Apakah Anda Yakin Untuk Keluar");
+
+        ImageView gifImageView = customDialog.findViewById(R.id.ivdialog);
+
+        Glide.with(this)
+                .load(R.drawable.home)
+                .transition(DrawableTransitionOptions.withCrossFade())
+                .into(gifImageView);
+
+        customDialog.show();
     }
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -506,8 +544,10 @@ public class HomeAdminFragment extends Fragment implements OnMapReadyCallback {
                                 md.setIdAgen(data.getString("IdAgen"));
                                 md.setIdAgenCo(data.getString("IdAgenCo"));
                                 md.setIdInput(data.getString("IdInput"));
+                                md.setNoArsip(data.getString("NoArsip"));
                                 md.setNamaListing(data.getString("NamaListing"));
                                 md.setAlamat(data.getString("Alamat"));
+                                md.setAlamatTemplate(data.getString("AlamatTemplate"));
                                 md.setLatitude(data.getString("Latitude"));
                                 md.setLongitude(data.getString("Longitude"));
                                 md.setLocation(data.getString("Location"));
@@ -567,6 +607,10 @@ public class HomeAdminFragment extends Fragment implements OnMapReadyCallback {
                                 md.setImg6(data.getString("Img6"));
                                 md.setImg7(data.getString("Img7"));
                                 md.setImg8(data.getString("Img8"));
+                                md.setImg9(data.getString("Img9"));
+                                md.setImg10(data.getString("Img10"));
+                                md.setImg11(data.getString("Img11"));
+                                md.setImg12(data.getString("Img12"));
                                 md.setVideo(data.getString("Video"));
                                 md.setLinkFacebook(data.getString("LinkFacebook"));
                                 md.setLinkTiktok(data.getString("LinkTiktok"));
@@ -626,8 +670,10 @@ public class HomeAdminFragment extends Fragment implements OnMapReadyCallback {
                                 md.setIdAgen(data.getString("IdAgen"));
                                 md.setIdAgenCo(data.getString("IdAgenCo"));
                                 md.setIdInput(data.getString("IdInput"));
+                                md.setNoArsip(data.getString("NoArsip"));
                                 md.setNamaListing(data.getString("NamaListing"));
                                 md.setAlamat(data.getString("Alamat"));
+                                md.setAlamatTemplate(data.getString("AlamatTemplate"));
                                 md.setLatitude(data.getString("Latitude"));
                                 md.setLongitude(data.getString("Longitude"));
                                 md.setLocation(data.getString("Location"));
@@ -687,6 +733,10 @@ public class HomeAdminFragment extends Fragment implements OnMapReadyCallback {
                                 md.setImg6(data.getString("Img6"));
                                 md.setImg7(data.getString("Img7"));
                                 md.setImg8(data.getString("Img8"));
+                                md.setImg9(data.getString("Img9"));
+                                md.setImg10(data.getString("Img10"));
+                                md.setImg11(data.getString("Img11"));
+                                md.setImg12(data.getString("Img12"));
                                 md.setVideo(data.getString("Video"));
                                 md.setLinkFacebook(data.getString("LinkFacebook"));
                                 md.setLinkTiktok(data.getString("LinkTiktok"));
@@ -746,8 +796,10 @@ public class HomeAdminFragment extends Fragment implements OnMapReadyCallback {
                                 md.setIdAgen(data.getString("IdAgen"));
                                 md.setIdAgenCo(data.getString("IdAgenCo"));
                                 md.setIdInput(data.getString("IdInput"));
+                                md.setNoArsip(data.getString("NoArsip"));
                                 md.setNamaListing(data.getString("NamaListing"));
                                 md.setAlamat(data.getString("Alamat"));
+                                md.setAlamatTemplate(data.getString("AlamatTemplate"));
                                 md.setLatitude(data.getString("Latitude"));
                                 md.setLongitude(data.getString("Longitude"));
                                 md.setLocation(data.getString("Location"));
@@ -807,6 +859,10 @@ public class HomeAdminFragment extends Fragment implements OnMapReadyCallback {
                                 md.setImg6(data.getString("Img6"));
                                 md.setImg7(data.getString("Img7"));
                                 md.setImg8(data.getString("Img8"));
+                                md.setImg9(data.getString("Img9"));
+                                md.setImg10(data.getString("Img10"));
+                                md.setImg11(data.getString("Img11"));
+                                md.setImg12(data.getString("Img12"));
                                 md.setVideo(data.getString("Video"));
                                 md.setLinkFacebook(data.getString("LinkFacebook"));
                                 md.setLinkTiktok(data.getString("LinkTiktok"));

@@ -130,20 +130,47 @@
                         android:layout_marginBottom="5dp"
                         android:orientation="horizontal">
 
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginEnd="10dp"
-                            android:src="@drawable/ic_add_agent"
-                            app:tint="@color/second" />
-
-                        <TextView
-                            style="@style/TextAppearance.Material3.TitleMedium"
+                        <FrameLayout
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:text="Pelamar"
-                            android:textColor="@color/second" />
+                            android:layout_height="wrap_content">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="5dp"
+                                android:layout_marginBottom="5dp"
+                                android:orientation="horizontal">
+
+                                <ImageView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginEnd="10dp"
+                                    android:src="@drawable/ic_add_agent"
+                                    app:tint="@color/second" />
+
+                                <TextView
+                                    style="@style/TextAppearance.Material3.TitleMedium"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:text="Pelamar"
+                                    android:textColor="@color/second" />
+
+                            </LinearLayout>
+
+                            <TextView
+                                android:id="@+id/TVBadgePelamar"
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:background="@drawable/badge"
+                                android:layout_gravity="top|end"
+                                android:gravity="center"
+                                android:textAlignment="center"
+                                android:textColor="@color/white"
+                                android:visibility="gone"
+                                style="@style/TextAppearance.AppCompat.Caption"/>
+
+                        </FrameLayout>
 
                     </LinearLayout>
 
@@ -228,20 +255,47 @@
                         android:layout_marginBottom="5dp"
                         android:orientation="horizontal">
 
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginEnd="10dp"
-                            android:src="@drawable/ic_listing"
-                            app:tint="@color/second" />
-
-                        <TextView
-                            style="@style/TextAppearance.Material3.TitleMedium"
+                        <FrameLayout
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:text="Listing Pending"
-                            android:textColor="@color/second" />
+                            android:layout_height="wrap_content">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="5dp"
+                                android:layout_marginBottom="5dp"
+                                android:orientation="horizontal">
+
+                                <ImageView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginEnd="10dp"
+                                    android:src="@drawable/ic_listing_pending"
+                                    app:tint="@color/second" />
+
+                                <TextView
+                                    style="@style/TextAppearance.Material3.TitleMedium"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:text="Listing Pending"
+                                    android:textColor="@color/second" />
+
+                            </LinearLayout>
+
+                            <TextView
+                                android:id="@+id/TVBadgePending"
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:background="@drawable/badge"
+                                android:layout_gravity="top|end"
+                                android:gravity="center"
+                                android:textAlignment="center"
+                                android:textColor="@color/white"
+                                android:visibility="gone"
+                                style="@style/TextAppearance.AppCompat.Caption"/>
+
+                        </FrameLayout>
 
                     </LinearLayout>
 
@@ -296,7 +350,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginEnd="10dp"
-                            android:src="@drawable/ic_flowup"
+                            android:src="@drawable/ic_follow_up"
                             app:tint="@color/second" />
 
                         <TextView
@@ -324,20 +378,47 @@
                         android:layout_marginBottom="5dp"
                         android:orientation="horizontal">
 
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginEnd="10dp"
-                            android:src="@drawable/ic_listing"
-                            app:tint="@color/second" />
-
-                        <TextView
-                            style="@style/TextAppearance.Material3.TitleMedium"
+                        <FrameLayout
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:text="PraListing Rejected"
-                            android:textColor="@color/second" />
+                            android:layout_height="wrap_content">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="5dp"
+                                android:layout_marginBottom="5dp"
+                                android:orientation="horizontal">
+
+                                <ImageView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginEnd="10dp"
+                                    android:src="@drawable/ic_listing_reject"
+                                    app:tint="@color/second" />
+
+                                <TextView
+                                    style="@style/TextAppearance.Material3.TitleMedium"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:text="PraListing Rejected"
+                                    android:textColor="@color/second" />
+
+                            </LinearLayout>
+
+                            <TextView
+                                android:id="@+id/TVBadgePralistingRejected"
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:background="@drawable/badge"
+                                android:layout_gravity="top|end"
+                                android:gravity="center"
+                                android:textAlignment="center"
+                                android:textColor="@color/white"
+                                android:visibility="gone"
+                                style="@style/TextAppearance.AppCompat.Caption"/>
+
+                        </FrameLayout>
 
                     </LinearLayout>
 
@@ -361,7 +442,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginEnd="10dp"
-                            android:src="@drawable/ic_listing"
+                            android:src="@drawable/ic_listing_primary"
                             app:tint="@color/second" />
 
                         <TextView
@@ -484,6 +565,38 @@
                         android:background="#717171" />
 
                     <LinearLayout
+                        android:id="@+id/LytHistoryFollowUp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="5dp"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="10dp"
+                            android:src="@drawable/ic_history_follow_up"
+                            app:tint="@color/second" />
+
+                        <TextView
+                            style="@style/TextAppearance.Material3.TitleMedium"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:text="History Follow Up"
+                            android:textColor="@color/second" />
+
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="5dp"
+                        android:background="#717171" />
+
+                    <LinearLayout
                         android:id="@+id/LytreportAgen"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -495,7 +608,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginEnd="10dp"
-                            android:src="@drawable/ic_agent"
+                            android:src="@drawable/ic_report_agen"
                             app:tint="@color/second" />
 
                         <TextView
@@ -527,7 +640,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginEnd="10dp"
-                            android:src="@drawable/ic_agent"
+                            android:src="@drawable/ic_reward_agen"
                             app:tint="@color/second" />
 
                         <TextView

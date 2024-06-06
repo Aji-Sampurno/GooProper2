@@ -37,25 +37,46 @@
         android:theme="@style/Theme.GooProper"
         tools:targetApi="31">
         <activity
-            android:name=".ui.officer.TambahCekLokasiActivity"
+            android:name=".ui.edit.listing.TambahGambarActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.tambah.GantiTemplateActivity"
+            android:name=".ui.edit.primary.EditPrimaryActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.officer.TambahReportOfficerActivity"
+            android:name=".ui.edit.primary.EditTipePrimaryActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.officer.ReportOfficerActivity"
+            android:name=".ui.followup.HistoryFollowUpActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.detail.DetailListingPendingActivity"
+            android:name=".ui.detail.listing.DetailPralistingTerdekatActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.officer.survey.SurveyLokasiActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.officer.survey.TambahSurveyPralistingActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.officer.report.TambahCekLokasiActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.tambah.template.GantiTemplateActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.officer.report.TambahReportOfficerActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.officer.report.ReportOfficerActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.detail.listing.DetailListingPendingActivity"
             android:exported="false" />
         <activity
             android:name=".ui.listing.ListingPendingActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.tambah.TambahTemplateActivity"
+            android:name=".ui.tambah.template.TambahTemplateActivity"
             android:exported="false" />
         <activity
             android:name=".ui.detail.followup.DetailFollowUpInfoActivity"
@@ -70,7 +91,7 @@
             android:name=".ui.tbo.TboAgenActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.LihatTemplateActivity"
+            android:name=".ui.unuse.LihatTemplateActivity"
             android:exported="false" />
         <activity
             android:name=".ui.tambah.TambahSelfieListingActivity"
@@ -79,10 +100,10 @@
             android:name=".ui.edit.EditDetailInfoActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.TambahPenghargaanActivity"
+            android:name=".ui.tbo.TambahPenghargaanActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.tambah.TambahDetailInfoSementaraActivity"
+            android:name=".ui.tambah.info.TambahDetailInfoSementaraActivity"
             android:exported="false" />
         <activity
             android:name=".ui.tambah.TambahSelfieActivity"
@@ -94,13 +115,13 @@
             android:name=".ui.edit.EditMapsListingActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.tambah.TambahDetailListingSementaraActivity"
+            android:name=".ui.tambah.listing.TambahDetailListingSementaraActivity"
             android:exported="false" />
         <activity
             android:name=".ui.listing.ListListingSementaraActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.tambah.TambahListingSementaraActivity"
+            android:name=".ui.tambah.listing.TambahListingSementaraActivity"
             android:exported="false" />
         <activity
             android:name=".ui.listing.InfoPropertySpekActivity"
@@ -112,19 +133,19 @@
             android:name=".ui.edit.EditInfoActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.tambah.TambahListingInfoActivity"
+            android:name=".ui.tambah.listing.TambahListingInfoActivity"
             android:exported="false" />
         <activity
             android:name=".ui.listing.PraListingRejectedAdminActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.detail.DetailInfoActivity"
+            android:name=".ui.detail.info.DetailInfoActivity"
             android:exported="false" />
         <activity
             android:name=".ui.listing.InfoPropertyActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.tambah.TambahInfoActivity"
+            android:name=".ui.tambah.info.TambahInfoActivity"
             android:exported="false" />
         <activity
             android:name=".ui.listing.PraListingRejectedActivity"
@@ -136,19 +157,19 @@
             android:name=".ui.detail.followup.DetailFollowUpPrimaryActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.detail.DetailPrimaryActivity"
+            android:name=".ui.detail.listing.DetailPrimaryActivity"
             android:exported="false" />
         <activity
             android:name=".ui.listing.PrimaryActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.tambah.TambahTipeListingPrimaryActivity"
+            android:name=".ui.tambah.primary.TambahTipeListingPrimaryActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.tambah.TambahListingPrimaryActivity"
+            android:name=".ui.tambah.primary.TambahListingPrimaryActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.tambah.TambahListingLocationActivity"
+            android:name=".ui.unuse.TambahListingLocationActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -163,31 +184,36 @@
             android:name=".ui.edit.EditListingAgenActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.detail.DetailAgenListingActivity"
+            android:name=".ui.detail.agen.DetailAgenListingActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.ListingUpdateActivity"
+            android:name=".ui.unuse.ListingUpdateActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.CobaPesanActivity"
-            android:exported="false" />
-
+            android:name=".ui.unuse.CobaPesanActivity"
+            android:exported="false" /> <!-- <service -->
+        <!-- android:name=".util.MyFirebaseMessagingService" -->
+        <!-- android:exported="false"> -->
+        <!-- <intent-filter> -->
+        <!-- <action android:name="com.google.firebase.MESSAGING_EVENT" /> -->
+        <!-- </intent-filter> -->
+        <!-- </service> -->
         <service
             android:name=".util.MyFirebaseMessagingService"
-            android:exported="false">
+            android:exported="true">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
 
         <activity
-            android:name=".ui.detail.DetailListingGuestActivity"
+            android:name=".ui.detail.listing.DetailListingGuestActivity"
             android:exported="false" />
         <activity
             android:name=".guest.MainGuestActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.detail.DetailClosingActivity"
+            android:name=".ui.detail.closing.DetailClosingActivity"
             android:exported="false" />
         <activity
             android:name=".ui.edit.EditPraListingAgenActivity"
@@ -204,10 +230,10 @@
         </provider>
 
         <activity
-            android:name=".ui.tambah.TambahListingGambarActivity"
+            android:name=".ui.unuse.TambahListingGambarActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.tambah.TambahListingSertifikatActivity"
+            android:name=".ui.unuse.TambahListingSertifikatActivity"
             android:exported="false" />
         <activity
             android:name=".ui.LaporanListingActivity"
@@ -222,7 +248,7 @@
             android:name=".ui.listing.PraListingAgenActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.AddListingActivity"
+            android:name=".ui.unuse.AddListingActivity"
             android:exported="false" />
         <activity
             android:name=".ui.listing.PralistingActivity"
@@ -249,7 +275,7 @@
             android:name=".ui.followup.FollowUpActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.detail.DetailAgenDeepActivity"
+            android:name=".ui.detail.agen.DetailAgenDeepActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -264,7 +290,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.detail.DetailListingDeepActivity"
+            android:name=".ui.detail.listing.DetailListingDeepActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -315,7 +341,7 @@
             android:name=".ui.LamarActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.detail.DetailAgenActivity"
+            android:name=".ui.detail.agen.DetailAgenActivity"
             android:exported="false" />
         <activity
             android:name=".ui.LoginConditionActivity"
@@ -324,16 +350,16 @@
             android:name=".ui.AgenActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.detail.DetailPraListingActivity"
+            android:name=".ui.detail.listing.DetailPraListingActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.detail.DetailListingActivity"
+            android:name=".ui.detail.listing.DetailListingActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.RewardActivity"
+            android:name=".ui.tbo.RewardActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.tambah.TambahListingActivity"
+            android:name=".ui.tambah.listing.TambahListingActivity"
             android:exported="false" />
         <activity
             android:name=".ui.listing.PopularActivity"
@@ -369,19 +395,19 @@
             android:name=".ui.listing.ListingFavoriteActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.UbahSandiActivity"
+            android:name=".ui.user.UbahSandiActivity"
             android:exported="false" />
         <activity
             android:name=".ui.edit.EditAkunActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.TentangKamiActivity"
+            android:name=".ui.user.TentangKamiActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.SettingActivity"
+            android:name=".ui.user.SettingActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.OTPActivity"
+            android:name=".ui.unuse.OTPActivity"
             android:exported="false" />
         <activity
             android:name=".customer.MainCustomerActivity"

@@ -277,8 +277,8 @@ public class LoginConditionActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onBackPressed()
-    {
+    public void onBackPressed() {
+        super.onBackPressed();
         Preferences.clearLoggedInUser(this);
         startActivity(new Intent(this, MainGuestActivity.class));
         finish();

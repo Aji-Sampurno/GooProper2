@@ -54,7 +54,6 @@ public class ClosingAdminFragment extends Fragment {
     List<ListingModel> list;
     String IsAdmin;
     private AlertDialog alertDialog;
-    //private SearchView searchView;
     private EditText searchView;
     private boolean applyFilters = false;
 
@@ -166,7 +165,7 @@ public class ClosingAdminFragment extends Fragment {
         RadioGroup kondisiRadioGroup = dialogView.findViewById(R.id.kondisi);
         int selectedRadioButtonId = kondisiRadioGroup.getCheckedRadioButtonId();
 
-        String selectedKondisi = ""; // Initialize the selected kondisi
+        String selectedKondisi = "";
 
         if (selectedRadioButtonId == R.id.jual) {
             selectedKondisi = "Jual";
@@ -208,7 +207,7 @@ public class ClosingAdminFragment extends Fragment {
                 RadioGroup kondisiRadioGroup = alertDialog.findViewById(R.id.kondisi);
                 int selectedRadioButtonId = kondisiRadioGroup.getCheckedRadioButtonId();
 
-                String selectedKondisi = ""; // Initialize the selected kondisi
+                String selectedKondisi = "";
 
                 if (selectedRadioButtonId == R.id.jual) {
                     selectedKondisi = "Jual";
@@ -275,7 +274,6 @@ public class ClosingAdminFragment extends Fragment {
                     if (minPrice <= maxPrice) {
                         applyCustomFilter(v, minPrice, maxPrice, true, bedSearchStr, bathSearchStr, landWideSearchStr, buildingWideSearchStr, garageSearchStr, carpotSearchStr, levelSearchStr, specStr, typeStr, selectedKondisi);
                     } else {
-                        // Handle invalid input, show a message or toast if needed
                         Toast.makeText(getActivity(), "Invalid price range", Toast.LENGTH_SHORT).show();
                     }
                 } else if (!minPriceStr.isEmpty()) {
@@ -295,7 +293,7 @@ public class ClosingAdminFragment extends Fragment {
                 } else if (!typeStr.isEmpty()) {
                     applyCustomFilter(v, 0, 0, true, bedSearchStr, bathSearchStr, landWideSearchStr, buildingWideSearchStr, garageSearchStr, carpotSearchStr, levelSearchStr, specStr, typeStr, selectedKondisi);
                 } else {
-                    applyFilters = true; // Apply filters
+                    applyFilters = true;
                     adapter.setFilteredlist(list);
                 }
             }
@@ -323,26 +321,24 @@ public class ClosingAdminFragment extends Fragment {
         builder.setTitle("Jenis Properti");
 
         final CharSequence[] spec = {"Rumah", "Ruko", "Tanah", "Gudang", "Ruang Usaha", "Villa", "Apartemen", "Pabrik", "Kantor", "Hotel", "Kondotel"};
-        final int[] selectedSpecIndex = {0}; // to store the index of the selected property type
+        final int[] selectedSpecIndex = {0};
 
         builder.setSingleChoiceItems(spec, selectedSpecIndex[0], new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                selectedSpecIndex[0] = which; // update the selected property type index
+                selectedSpecIndex[0] = which;
             }
         });
 
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                // Update the TextView with the selected property type
                 TextView textViewSpec = alertDialog.findViewById(R.id.textViewSpec);
                 if (textViewSpec != null) {
                     textViewSpec.setText(spec[selectedSpecIndex[0]]);
                 }
             }
         });
-        // Create and show the AlertDialog
         builder.create().show();
     }
 
@@ -356,7 +352,7 @@ public class ClosingAdminFragment extends Fragment {
         builder.setSingleChoiceItems(options, selectedOptionIndex[0], new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                selectedOptionIndex[0] = which; // Assign the selected index to the array
+                selectedOptionIndex[0] = which;
             }
         });
 
@@ -392,16 +388,16 @@ public class ClosingAdminFragment extends Fragment {
         for (ListingModel product : list) {
             long productPrice = Long.parseLong(product.getHarga().replace(".", "").trim());
             boolean isPriceMatched          = false;
-            boolean isBedMatched            = true; // Assume bed is matched unless bedSearch is not empty and not equal to the listing's bed value
-            boolean isBathMatched           = true; // Assume bath is matched unless bathSearch is not empty and not equal to the listing's bath value
-            boolean isLandWideMatched       = true; // Assume landwide is matched unless landWideSearch is not empty and not equal to the listing's landwide value
-            boolean isBuildingWideMatched   = true; // Assume buildingwide is matched unless buildingWideSearch is not empty and not equal to the listing's buildingwide value
+            boolean isBedMatched            = true;
+            boolean isBathMatched           = true;
+            boolean isLandWideMatched       = true;
+            boolean isBuildingWideMatched   = true;
             boolean isGarageMatched         = true;
             boolean isCarpotMatched         = true;
             boolean isLevelMatched          = true;
-            boolean isViewSpecMatched       = true; //tipe hunian
+            boolean isViewSpecMatched       = true;
             boolean isViewTypeMatched       = true;
-            boolean isKondisiMatched        = true; //kondisi
+            boolean isKondisiMatched        = true;
 
             if (isAbove) {
                 if (productPrice >= minPrice) {
@@ -413,22 +409,18 @@ public class ClosingAdminFragment extends Fragment {
                 }
             }
 
-            // Check if bedSearch is not empty and does not match the listing's bed value
             if (!bedSearch.isEmpty() && !bedSearch.equals(product.getBed())) {
                 isBedMatched = false;
             }
 
-            // Check if bathSearch is not empty and does not match the listing's bath value
             if (!bathSearch.isEmpty() && !bathSearch.equals(product.getBath())) {
                 isBathMatched = false;
             }
 
-            // Check if landWideSearch is not empty and does not match the listing's landwide value
             if (!landWideSearch.isEmpty() && !landWideSearch.equalsIgnoreCase(product.getWide())) {
                 isLandWideMatched = false;
             }
 
-            // Check if buildingWideSearch is not empty and does not match the listing's buildingwide value
             if (!buildingWideSearch.isEmpty() && !buildingWideSearch.equalsIgnoreCase(product.getLand())) {
                 isBuildingWideMatched = false;
             }
@@ -457,7 +449,6 @@ public class ClosingAdminFragment extends Fragment {
                 isKondisiMatched = false;
             }
 
-            // Check other filter criteria and include the listing if all conditions are met
             if (isPriceMatched && isBedMatched && isBathMatched && isLandWideMatched && isBuildingWideMatched && isGarageMatched && isCarpotMatched && isLevelMatched && isViewSpecMatched && isViewTypeMatched && isKondisiMatched) {
                 filteredList.add(product);
             }
@@ -492,8 +483,10 @@ public class ClosingAdminFragment extends Fragment {
                                 md.setIdAgen(data.getString("IdAgen"));
                                 md.setIdAgenCo(data.getString("IdAgenCo"));
                                 md.setIdInput(data.getString("IdInput"));
+                                md.setNoArsip(data.getString("NoArsip"));
                                 md.setNamaListing(data.getString("NamaListing"));
                                 md.setAlamat(data.getString("Alamat"));
+                                md.setAlamatTemplate(data.getString("AlamatTemplate"));
                                 md.setLatitude(data.getString("Latitude"));
                                 md.setLongitude(data.getString("Longitude"));
                                 md.setLocation(data.getString("Location"));
@@ -553,6 +546,10 @@ public class ClosingAdminFragment extends Fragment {
                                 md.setImg6(data.getString("Img6"));
                                 md.setImg7(data.getString("Img7"));
                                 md.setImg8(data.getString("Img8"));
+                                md.setImg9(data.getString("Img9"));
+                                md.setImg10(data.getString("Img10"));
+                                md.setImg11(data.getString("Img11"));
+                                md.setImg12(data.getString("Img12"));
                                 md.setVideo(data.getString("Video"));
                                 md.setLinkFacebook(data.getString("LinkFacebook"));
                                 md.setLinkTiktok(data.getString("LinkTiktok"));
@@ -578,7 +575,7 @@ public class ClosingAdminFragment extends Fragment {
                                 md.setIsLokasi(data.getString("IsLokasi"));
                                 md.setIdTemplate(data.getString("IdTemplate"));
                                 md.setTemplate(data.getString("Template"));
-                                md.setTemplateBlank(data.getString("TemplateBlank"));
+                                md.setTemplateBlank(data.getString("TemplateBlank"));;
                                 list.add(md);
                                 PDListingAdmin.dismiss();
                             } catch (JSONException e) {

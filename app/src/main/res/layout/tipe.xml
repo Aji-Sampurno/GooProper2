@@ -20,6 +20,13 @@
             android:textColor="@color/white"
             style="@style/TextAppearance.Material3.TitleLarge"/>
 
+        <Button
+            android:id="@+id/BtnEditTipe"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Edit Tipe"
+            android:layout_margin="10dp"/>
+
         <TextView
             android:id="@+id/TVHargaTipe"
             android:layout_width="match_parent"

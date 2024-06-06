@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    tools:context=".ui.officer.TambahReportOfficerActivity">
+    tools:context=".ui.officer.report.TambahReportOfficerActivity">
 
     <ScrollView
         android:layout_width="match_parent"

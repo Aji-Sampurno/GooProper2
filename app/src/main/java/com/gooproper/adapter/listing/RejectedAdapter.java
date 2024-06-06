@@ -15,8 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.gooproper.R;
 import com.gooproper.model.ListingModel;
-import com.gooproper.ui.detail.DetailListingActivity;
-import com.gooproper.ui.detail.DetailPraListingActivity;
+import com.gooproper.ui.detail.listing.DetailPraListingActivity;
 import com.gooproper.util.FormatCurrency;
 import com.gooproper.util.Preferences;
 
@@ -264,6 +263,7 @@ public class RejectedAdapter extends RecyclerView.Adapter<RejectedAdapter.Holder
                     update.putExtra("IdInput",listingModel.getIdInput());
                     update.putExtra("NamaListing",listingModel.getNamaListing());
                     update.putExtra("Alamat",listingModel.getAlamat());
+                    update.putExtra("AlamatTemplate",listingModel.getAlamatTemplate());
                     update.putExtra("Latitude",listingModel.getLatitude());
                     update.putExtra("Longitude",listingModel.getLongitude());
                     update.putExtra("Location",listingModel.getLocation());
@@ -322,6 +322,10 @@ public class RejectedAdapter extends RecyclerView.Adapter<RejectedAdapter.Holder
                     update.putExtra("Img6",listingModel.getImg6());
                     update.putExtra("Img7",listingModel.getImg7());
                     update.putExtra("Img8",listingModel.getImg8());
+                    update.putExtra("Img9",listingModel.getImg9());
+                    update.putExtra("Img10",listingModel.getImg10());
+                    update.putExtra("Img11",listingModel.getImg11());
+                    update.putExtra("Img12",listingModel.getImg12());
                     update.putExtra("Video",listingModel.getVideo());
                     update.putExtra("LinkFacebook",listingModel.getLinkFacebook());
                     update.putExtra("LinkTiktok",listingModel.getLinkTiktok());

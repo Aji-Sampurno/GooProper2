@@ -98,8 +98,10 @@ public class ListingTerakhirDilihatActivity extends AppCompatActivity {
                                 md.setIdAgen(data.getString("IdAgen"));
                                 md.setIdAgenCo(data.getString("IdAgenCo"));
                                 md.setIdInput(data.getString("IdInput"));
+                                md.setNoArsip(data.getString("NoArsip"));
                                 md.setNamaListing(data.getString("NamaListing"));
                                 md.setAlamat(data.getString("Alamat"));
+                                md.setAlamatTemplate(data.getString("AlamatTemplate"));
                                 md.setLatitude(data.getString("Latitude"));
                                 md.setLongitude(data.getString("Longitude"));
                                 md.setLocation(data.getString("Location"));
@@ -147,8 +149,18 @@ public class ListingTerakhirDilihatActivity extends AppCompatActivity {
                                 md.setTtd(data.getString("Ttd"));
                                 md.setBanner(data.getString("Banner"));
                                 md.setSize(data.getString("Size"));
-                                md.setHarga(data.getString("Harga"));
-                                md.setHargaSewa(data.getString("HargaSewa"));
+                                String HargaJualData = (data.getString("Harga"));
+                                if (HargaJualData.isEmpty()) {
+                                    md.setHarga("0");
+                                } else {
+                                    md.setHarga(HargaJualData);
+                                }
+                                String HargaSewaData = (data.getString("HargaSewa"));
+                                if (HargaSewaData.isEmpty()) {
+                                    md.setHargaSewa("0");
+                                } else {
+                                    md.setHargaSewa(HargaSewaData);
+                                }
                                 md.setRangeHarga(data.getString("RangeHarga"));
                                 md.setTglInput(data.getString("TglInput"));
                                 md.setImg1(data.getString("Img1"));
@@ -159,6 +171,10 @@ public class ListingTerakhirDilihatActivity extends AppCompatActivity {
                                 md.setImg6(data.getString("Img6"));
                                 md.setImg7(data.getString("Img7"));
                                 md.setImg8(data.getString("Img8"));
+                                md.setImg9(data.getString("Img9"));
+                                md.setImg10(data.getString("Img10"));
+                                md.setImg11(data.getString("Img11"));
+                                md.setImg12(data.getString("Img12"));
                                 md.setVideo(data.getString("Video"));
                                 md.setLinkFacebook(data.getString("LinkFacebook"));
                                 md.setLinkTiktok(data.getString("LinkTiktok"));
@@ -282,8 +298,10 @@ public class ListingTerakhirDilihatActivity extends AppCompatActivity {
                                 md.setIdAgen(data.getString("IdAgen"));
                                 md.setIdAgenCo(data.getString("IdAgenCo"));
                                 md.setIdInput(data.getString("IdInput"));
+                                md.setNoArsip(data.getString("NoArsip"));
                                 md.setNamaListing(data.getString("NamaListing"));
                                 md.setAlamat(data.getString("Alamat"));
+                                md.setAlamatTemplate(data.getString("AlamatTemplate"));
                                 md.setLatitude(data.getString("Latitude"));
                                 md.setLongitude(data.getString("Longitude"));
                                 md.setLocation(data.getString("Location"));
@@ -331,8 +349,18 @@ public class ListingTerakhirDilihatActivity extends AppCompatActivity {
                                 md.setTtd(data.getString("Ttd"));
                                 md.setBanner(data.getString("Banner"));
                                 md.setSize(data.getString("Size"));
-                                md.setHarga(data.getString("Harga"));
-                                md.setHargaSewa(data.getString("HargaSewa"));
+                                String HargaJualData = (data.getString("Harga"));
+                                if (HargaJualData.isEmpty()) {
+                                    md.setHarga("0");
+                                } else {
+                                    md.setHarga(HargaJualData);
+                                }
+                                String HargaSewaData = (data.getString("HargaSewa"));
+                                if (HargaSewaData.isEmpty()) {
+                                    md.setHargaSewa("0");
+                                } else {
+                                    md.setHargaSewa(HargaSewaData);
+                                }
                                 md.setRangeHarga(data.getString("RangeHarga"));
                                 md.setTglInput(data.getString("TglInput"));
                                 md.setImg1(data.getString("Img1"));
@@ -343,6 +371,10 @@ public class ListingTerakhirDilihatActivity extends AppCompatActivity {
                                 md.setImg6(data.getString("Img6"));
                                 md.setImg7(data.getString("Img7"));
                                 md.setImg8(data.getString("Img8"));
+                                md.setImg9(data.getString("Img9"));
+                                md.setImg10(data.getString("Img10"));
+                                md.setImg11(data.getString("Img11"));
+                                md.setImg12(data.getString("Img12"));
                                 md.setVideo(data.getString("Video"));
                                 md.setLinkFacebook(data.getString("LinkFacebook"));
                                 md.setLinkTiktok(data.getString("LinkTiktok"));

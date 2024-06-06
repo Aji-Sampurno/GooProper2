@@ -300,7 +300,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
             });
 
             Glide.with(getActivity())
-                    .load(R.drawable.alert) // You can also use a local resource like R.drawable.your_gif_resource
+                    .load(R.drawable.alert)
                     .transition(DrawableTransitionOptions.withCrossFade())
                     .into(gifimage);
 
@@ -392,9 +392,11 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
                                 md.setIdInput(data.getString("IdInput"));
                                 md.setNamaListing(data.getString("NamaListing"));
                                 md.setAlamat(data.getString("Alamat"));
+                                md.setAlamatTemplate(data.getString("AlamatTemplate"));
                                 md.setLatitude(data.getString("Latitude"));
                                 md.setLongitude(data.getString("Longitude"));
                                 md.setLocation(data.getString("Location"));
+                                md.setWilayah(data.getString("Wilayah"));
                                 md.setSelfie(data.getString("Selfie"));
                                 md.setWide(data.getString("Wide"));
                                 md.setLand(data.getString("Land"));
@@ -450,6 +452,10 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
                                 md.setImg6(data.getString("Img6"));
                                 md.setImg7(data.getString("Img7"));
                                 md.setImg8(data.getString("Img8"));
+                                md.setImg9(data.getString("Img9"));
+                                md.setImg10(data.getString("Img10"));
+                                md.setImg11(data.getString("Img11"));
+                                md.setImg12(data.getString("Img12"));
                                 md.setVideo(data.getString("Video"));
                                 md.setLinkFacebook(data.getString("LinkFacebook"));
                                 md.setLinkTiktok(data.getString("LinkTiktok"));
@@ -511,9 +517,11 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
                                 md.setIdInput(data.getString("IdInput"));
                                 md.setNamaListing(data.getString("NamaListing"));
                                 md.setAlamat(data.getString("Alamat"));
+                                md.setAlamatTemplate(data.getString("AlamatTemplate"));
                                 md.setLatitude(data.getString("Latitude"));
                                 md.setLongitude(data.getString("Longitude"));
                                 md.setLocation(data.getString("Location"));
+                                md.setWilayah(data.getString("Wilayah"));
                                 md.setSelfie(data.getString("Selfie"));
                                 md.setWide(data.getString("Wide"));
                                 md.setLand(data.getString("Land"));
@@ -569,6 +577,10 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
                                 md.setImg6(data.getString("Img6"));
                                 md.setImg7(data.getString("Img7"));
                                 md.setImg8(data.getString("Img8"));
+                                md.setImg9(data.getString("Img9"));
+                                md.setImg10(data.getString("Img10"));
+                                md.setImg11(data.getString("Img11"));
+                                md.setImg12(data.getString("Img12"));
                                 md.setVideo(data.getString("Video"));
                                 md.setLinkFacebook(data.getString("LinkFacebook"));
                                 md.setLinkTiktok(data.getString("LinkTiktok"));
@@ -630,9 +642,11 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
                                 md.setIdInput(data.getString("IdInput"));
                                 md.setNamaListing(data.getString("NamaListing"));
                                 md.setAlamat(data.getString("Alamat"));
+                                md.setAlamatTemplate(data.getString("AlamatTemplate"));
                                 md.setLatitude(data.getString("Latitude"));
                                 md.setLongitude(data.getString("Longitude"));
                                 md.setLocation(data.getString("Location"));
+                                md.setWilayah(data.getString("Wilayah"));
                                 md.setSelfie(data.getString("Selfie"));
                                 md.setWide(data.getString("Wide"));
                                 md.setLand(data.getString("Land"));
@@ -688,6 +702,10 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
                                 md.setImg6(data.getString("Img6"));
                                 md.setImg7(data.getString("Img7"));
                                 md.setImg8(data.getString("Img8"));
+                                md.setImg9(data.getString("Img9"));
+                                md.setImg10(data.getString("Img10"));
+                                md.setImg11(data.getString("Img11"));
+                                md.setImg12(data.getString("Img12"));
                                 md.setVideo(data.getString("Video"));
                                 md.setLinkFacebook(data.getString("LinkFacebook"));
                                 md.setLinkTiktok(data.getString("LinkTiktok"));
@@ -839,7 +857,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
                     new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
-                            // Tangani kesalahan Volley
                         }
                     }
             );

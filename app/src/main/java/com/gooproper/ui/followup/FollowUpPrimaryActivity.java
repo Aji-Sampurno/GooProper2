@@ -4,9 +4,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
@@ -69,8 +71,12 @@ public class FollowUpPrimaryActivity extends AppCompatActivity {
     String BuyerNama, BuyerTelp, BuyerKeterangan, BuyerTanggal, BuyerIdAgen, BuyerIdListing, BuyerIdInput, BuyerJam, StringNamaBuyer, PenggunaId, PenggunaStatus, StringSelfie;
     Bitmap BitmapSelfie;
     Uri UriSelfie;
-    final int CODE_CAMERA_REQUEST = 101;
-    final int KODE_REQUEST_KAMERA = 102;
+    final int CODE_GALLERY_REQUEST_Selfie = 46;
+    final int CODE_CAMERA_REQUEST_Selfie = 47;
+    final int KODE_REQUEST_KAMERA_Selfie = 48;
+    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE_SELFIE = 92;
+    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES_SELFIE = 93;
+    private static final int STORAGE_PERMISSION_CODE = 97;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -173,7 +179,7 @@ public class FollowUpPrimaryActivity extends AppCompatActivity {
                 }
             }
         });
-        Selfie.setOnClickListener(view -> ActivityCompat.requestPermissions(FollowUpPrimaryActivity.this, new String[]{Manifest.permission.CAMERA}, CODE_CAMERA_REQUEST));
+        Selfie.setOnClickListener(view -> requestPermissionsSelfie());
         Batal.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -287,6 +293,15 @@ public class FollowUpPrimaryActivity extends AppCompatActivity {
             getSupportActionBar().hide();
         }
     }
+    private void requestPermissionsSelfie() {
+        boolean externalStoragePermissionGranted = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
+
+        if (externalStoragePermissionGranted) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE_SELFIE);
+        } else {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_MEDIA_IMAGES}, PERMISSION_REQUEST_CODE_MEDIA_IMAGES_SELFIE);
+        }
+    }
     private void bukaKamera() {
         Intent intentKamera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (intentKamera.resolveActivity(getPackageManager()) != null) {
@@ -294,7 +309,7 @@ public class FollowUpPrimaryActivity extends AppCompatActivity {
             if (photoFile != null) {
                 UriSelfie = FileProvider.getUriForFile(this, "com.gooproper", photoFile);
                 intentKamera.putExtra(MediaStore.EXTRA_OUTPUT, UriSelfie);
-                startActivityForResult(intentKamera, KODE_REQUEST_KAMERA);
+                startActivityForResult(intentKamera, KODE_REQUEST_KAMERA_Selfie);
             }
         }
     }
@@ -313,9 +328,22 @@ public class FollowUpPrimaryActivity extends AppCompatActivity {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
-        if (requestCode == CODE_CAMERA_REQUEST) {
+        if (requestCode == PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE_SELFIE) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                bukaKamera();
+                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(intent, CODE_GALLERY_REQUEST_Selfie);
+            }
+        } else if (requestCode == PERMISSION_REQUEST_CODE_MEDIA_IMAGES_SELFIE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(intent, CODE_GALLERY_REQUEST_Selfie);
+            }
+        } else if (requestCode == STORAGE_PERMISSION_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {} else {}
+        } else if (requestCode == CODE_GALLERY_REQUEST_Selfie) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(intent, CODE_GALLERY_REQUEST_Selfie);
             } else {
                 Dialog customDialog = new Dialog(FollowUpPrimaryActivity.this);
                 customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -328,7 +356,7 @@ public class FollowUpPrimaryActivity extends AppCompatActivity {
                 Button ok = customDialog.findViewById(R.id.BtnOkErorInput);
                 TextView tv = customDialog.findViewById(R.id.TVDialogErorInput);
 
-                tv.setText("Akses Kamera Ditolak");
+                tv.setText("Akses Galeri Ditolak");
 
                 ok.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -340,13 +368,25 @@ public class FollowUpPrimaryActivity extends AppCompatActivity {
                 ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
 
                 Glide.with(FollowUpPrimaryActivity.this)
-                        .load(R.drawable.alert) // You can also use a local resource like R.drawable.your_gif_resource
+                        .load(R.drawable.alert)
                         .transition(DrawableTransitionOptions.withCrossFade())
                         .into(gifImageView);
 
                 customDialog.show();
             }
-
+            return;
+        } else if (requestCode == CODE_CAMERA_REQUEST_Selfie) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                bukaKamera();
+            } else {
+                AlertDialog.Builder builder = new AlertDialog.Builder(FollowUpPrimaryActivity.this);
+                builder.setTitle("Izin Kamera Ditolak").
+                        setMessage("Aplikasi memerlukan izin kamera untuk mengambil gambar.");
+                builder.setPositiveButton("OK",
+                        (dialog, id) -> dialog.cancel());
+                AlertDialog alert = builder.create();
+                alert.show();
+            }
             return;
         }
 
@@ -355,11 +395,17 @@ public class FollowUpPrimaryActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == KODE_REQUEST_KAMERA && resultCode == RESULT_OK) {
+        if (requestCode == CODE_GALLERY_REQUEST_Selfie && resultCode == RESULT_OK && data != null) {
+            UriSelfie = data.getData();
             IVSurvei.setImageURI(UriSelfie);
             IVSurvei.setVisibility(View.VISIBLE);
             Delete.setVisibility(View.VISIBLE);
-            Selfie.setVisibility(View.GONE);
+            Selfie.setText("Ganti Foto Selfie");
+        } else if (requestCode == KODE_REQUEST_KAMERA_Selfie && resultCode == RESULT_OK) {
+            IVSurvei.setImageURI(UriSelfie);
+            IVSurvei.setVisibility(View.VISIBLE);
+            Delete.setVisibility(View.VISIBLE);
+            Selfie.setText("Ganti Foto Selfie");
         }
         super.onActivityResult(requestCode, resultCode, data);
     }

@@ -49,16 +49,13 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Tasks;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
 import com.gooproper.R;
 import com.gooproper.ui.LocationActivity;
-import com.gooproper.ui.tambah.TambahListingActivity;
 import com.gooproper.util.Preferences;
 import com.gooproper.util.SendMessageToFCM;
 import com.gooproper.util.ServerApi;
@@ -74,7 +71,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -88,114 +84,173 @@ public class EditListingAgenActivity extends AppCompatActivity {
     final int CODE_GALLERY_REQUEST6 = 6;
     final int CODE_GALLERY_REQUEST7 = 7;
     final int CODE_GALLERY_REQUEST8 = 8;
-    final int CODE_CAMERA_REQUEST1 = 9;
-    final int KODE_REQUEST_KAMERA1 = 10;
-    final int CODE_CAMERA_REQUEST2 = 11;
-    final int KODE_REQUEST_KAMERA2 = 12;
-    final int CODE_CAMERA_REQUEST3 = 13;
-    final int KODE_REQUEST_KAMERA3 = 14;
-    final int CODE_CAMERA_REQUEST4 = 15;
-    final int KODE_REQUEST_KAMERA4 = 16;
+    final int CODE_GALLERY_REQUEST9 = 9;
+    final int CODE_GALLERY_REQUEST10 = 10;
+    final int CODE_GALLERY_REQUEST11 = 11;
+    final int CODE_GALLERY_REQUEST12 = 12;
+    final int CODE_CAMERA_REQUEST1 = 13;
+    final int CODE_CAMERA_REQUEST2 = 14;
+    final int CODE_CAMERA_REQUEST3 = 15;
+    final int CODE_CAMERA_REQUEST4 = 16;
     final int CODE_CAMERA_REQUEST5 = 17;
-    final int KODE_REQUEST_KAMERA5 = 18;
-    final int CODE_CAMERA_REQUEST6 = 19;
-    final int KODE_REQUEST_KAMERA6 = 20;
-    final int CODE_CAMERA_REQUEST7 = 21;
-    final int KODE_REQUEST_KAMERA7 = 22;
-    final int CODE_CAMERA_REQUEST8 = 23;
-    final int KODE_REQUEST_KAMERA8 = 24;
-    final int CODE_GALLERY_REQUEST_SHM = 25;
-    final int CODE_CAMERA_REQUEST_SHM = 26;
-    final int KODE_REQUEST_KAMERA_SHM = 27;
-    final int CODE_GALLERY_REQUEST_HGB = 28;
-    final int CODE_CAMERA_REQUEST_HGB = 29;
-    final int KODE_REQUEST_KAMERA_HGB = 30;
-    final int CODE_GALLERY_REQUEST_HSHP = 31;
-    final int CODE_CAMERA_REQUEST_HSHP = 32;
-    final int KODE_REQUEST_KAMERA_HSHP = 33;
-    final int CODE_GALLERY_REQUEST_PPJB = 34;
-    final int CODE_CAMERA_REQUEST_PPJB = 35;
-    final int KODE_REQUEST_KAMERA_PPJB = 36;
-    final int CODE_GALLERY_REQUEST_STRA = 37;
-    final int CODE_CAMERA_REQUEST_STRA = 38;
-    final int KODE_REQUEST_KAMERA_STRA = 39;
-    final int CODE_GALLERY_REQUEST_AJB = 40;
-    final int CODE_CAMERA_REQUEST_AJB = 41;
-    final int KODE_REQUEST_KAMERA_AJB = 42;
-    final int CODE_GALLERY_REQUEST_PetokD = 43;
-    final int CODE_CAMERA_REQUEST_PetokD = 44;
-    final int KODE_REQUEST_KAMERA_PetokD = 45;
-    final int CODE_GALLERY_REQUEST_PJP = 46;
-    final int CODE_CAMERA_REQUEST_PJP = 47;
-    final int KODE_REQUEST_KAMERA_PJP = 48;
-    final int CODE_GALLERY_REQUEST_PJP1 = 49;
-    final int CODE_CAMERA_REQUEST_PJP1 = 50;
-    final int KODE_REQUEST_KAMERA_PJP1 = 51;
-    final int CODE_GALLERY_REQUEST_Bukti = 52;
-    final int CODE_CAMERA_REQUEST_Bukti = 53;
-    final int KODE_REQUEST_KAMERA_Bukti = 54;
-    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE1 = 55;
-    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES1 = 56;
-    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE2 = 57;
-    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES2 = 58;
-    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE3 = 59;
-    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES3 = 60;
-    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE4 = 61;
-    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES4 = 62;
-    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE5 = 63;
-    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES5 = 64;
-    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE6 = 65;
-    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES6 = 66;
-    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE7 = 67;
-    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES7 = 68;
-    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE8 = 69;
-    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES8 = 70;
-    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE_SHM = 71;
-    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES_SHM = 72;
-    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE_HGB = 73;
-    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES_HGB = 74;
-    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE_HSHP = 75;
-    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES_HSHP = 76;
-    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE_PPJB = 77;
-    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES_PPJB = 78;
-    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE_STRA = 79;
-    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES_STRA = 80;
-    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE_AJB = 81;
-    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES_AJB = 82;
-    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE_PetokD = 83;
-    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES_PetokD = 84;
-    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE_PJP = 85;
-    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES_PJP = 86;
-    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE_PJP1 = 87;
-    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES_PJP1 = 88;
-    private static final int MAPS_ACTIVITY_REQUEST_CODE = 89;
-    private static final int STORAGE_PERMISSION_CODE = 90;
-    private static final int PICK_PDF_SHM = 91;
-    private static final int PICK_PDF_HGB = 92;
-    private static final int PICK_PDF_HSHP = 93;
-    private static final int PICK_PDF_PPJB = 94;
-    private static final int PICK_PDF_Stratatitle = 95;
-    private static final int PICK_PDF_AJB = 96;
-    private static final int PICK_PDF_PetokD = 97;
-    Uri Uri1, Uri2, Uri3, Uri4, Uri5, Uri6, Uri7, Uri8, UriSHM, UriHGB, UriHSHP, UriPPJB, UriSTRA, UriAJB, UriPetokD, UriSHMPdf, UriHGBPdf, UriHSHPPdf, UriPPJBPdf, UriSTRAPdf, UriAJBPdf, UriPetokDPdf, UriPJP, UriPJP1;
-    LinearLayout lyt1, lyt2, lyt3, lyt4, lyt5, lyt6, lyt7, lyt8, LytSHM, LytHGB, LytHSHP, LytPPJB, LytStratatitle, LytAJB, LytPetokD, LytPjp, LytPjp1, LytBtnShm, LytBtnHGB, LytBtnHSHP, LytBtnPPJB, LytBtnStra, LytBtnAJB, LytBtnPetokD;
-    ImageView back, iv1, iv2, iv3, iv4, iv5, iv6, iv7, iv8, IVShm, IVHgb, IVHshp, IVPpjb, IVStratatitle, IVAJB, IVPetokD, IVPjp, IVPjp1;
-    Button batal, submit, select, select1, select2, select3, select4, select5, select6, select7, maps, BtnSHM, BtnHGB, BtnHSHP, BtnPPJB, BtnSTRA, BtnAJB, BtnPetokD, BtnSHMPdf, BtnHGBPdf, BtnHSHPPdf, BtnPPJBPdf, BtnSTRAPdf, BtnAJBPdf, BtnPetokDPdf, BtnPjp, BtnPjp1;
-    ImageView hps1, hps2, hps3, hps4, hps5, hps6, hps7, hps8, HpsSHM, HpsHGB, HpsHSHP, HpsPPJB, HpsStratatitle, HpsAJB, HpsPetokD, HpsPjp, HpsPjp1;
+    final int CODE_CAMERA_REQUEST6 = 18;
+    final int CODE_CAMERA_REQUEST7 = 19;
+    final int CODE_CAMERA_REQUEST8 = 20;
+    final int CODE_CAMERA_REQUEST9 = 21;
+    final int CODE_CAMERA_REQUEST10 = 22;
+    final int CODE_CAMERA_REQUEST11 = 23;
+    final int CODE_CAMERA_REQUEST12 = 24;
+    final int KODE_REQUEST_KAMERA1 = 25;
+    final int KODE_REQUEST_KAMERA2 = 26;
+    final int KODE_REQUEST_KAMERA3 = 27;
+    final int KODE_REQUEST_KAMERA4 = 28;
+    final int KODE_REQUEST_KAMERA5 = 29;
+    final int KODE_REQUEST_KAMERA6 = 30;
+    final int KODE_REQUEST_KAMERA7 = 31;
+    final int KODE_REQUEST_KAMERA8 = 32;
+    final int KODE_REQUEST_KAMERA9 = 33;
+    final int KODE_REQUEST_KAMERA10 = 34;
+    final int KODE_REQUEST_KAMERA11 = 35;
+    final int KODE_REQUEST_KAMERA12 = 36;
+    final int CODE_GALLERY_REQUEST_SHM = 37;
+    final int CODE_CAMERA_REQUEST_SHM = 38;
+    final int KODE_REQUEST_KAMERA_SHM = 39;
+    final int CODE_GALLERY_REQUEST_HGB = 40;
+    final int CODE_CAMERA_REQUEST_HGB = 41;
+    final int KODE_REQUEST_KAMERA_HGB = 42;
+    final int CODE_GALLERY_REQUEST_HSHP = 43;
+    final int CODE_CAMERA_REQUEST_HSHP = 44;
+    final int KODE_REQUEST_KAMERA_HSHP = 45;
+    final int CODE_GALLERY_REQUEST_PPJB = 46;
+    final int CODE_CAMERA_REQUEST_PPJB = 47;
+    final int KODE_REQUEST_KAMERA_PPJB = 48;
+    final int CODE_GALLERY_REQUEST_STRA = 49;
+    final int CODE_CAMERA_REQUEST_STRA = 50;
+    final int KODE_REQUEST_KAMERA_STRA = 51;
+    final int CODE_GALLERY_REQUEST_AJB = 52;
+    final int CODE_CAMERA_REQUEST_AJB = 53;
+    final int KODE_REQUEST_KAMERA_AJB = 54;
+    final int CODE_GALLERY_REQUEST_PetokD = 55;
+    final int CODE_CAMERA_REQUEST_PetokD = 56;
+    final int KODE_REQUEST_KAMERA_PetokD = 57;
+    final int CODE_GALLERY_REQUEST_Selfie = 58;
+    final int CODE_CAMERA_REQUEST_Selfie = 59;
+    final int KODE_REQUEST_KAMERA_Selfie = 60;
+    final int CODE_GALLERY_REQUEST_KTP = 61;
+    final int CODE_CAMERA_REQUEST_KTP = 62;
+    final int KODE_REQUEST_KAMERA_KTP = 63;
+    final int CODE_GALLERY_REQUEST_PJP = 64;
+    final int CODE_CAMERA_REQUEST_PJP = 65;
+    final int KODE_REQUEST_KAMERA_PJP = 66;
+    final int CODE_GALLERY_REQUEST_PJP1 = 67;
+    final int CODE_CAMERA_REQUEST_PJP1 = 68;
+    final int KODE_REQUEST_KAMERA_PJP1 = 69;
+    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE1 = 70;
+    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES1 = 71;
+    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE2 = 72;
+    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES2 = 73;
+    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE3 = 74;
+    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES3 = 75;
+    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE4 = 76;
+    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES4 = 77;
+    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE5 = 78;
+    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES5 = 79;
+    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE6 = 80;
+    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES6 = 81;
+    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE7 = 82;
+    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES7 = 83;
+    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE8 = 84;
+    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES8 = 85;
+    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE9 = 86;
+    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES9 = 87;
+    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE10 = 88;
+    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES10 = 89;
+    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE11 = 90;
+    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES11 = 91;
+    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE12 = 92;
+    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES12 = 93;
+    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE_SHM = 94;
+    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES_SHM = 95;
+    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE_HGB = 96;
+    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES_HGB = 97;
+    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE_HSHP = 98;
+    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES_HSHP = 99;
+    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE_PPJB = 100;
+    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES_PPJB = 101;
+    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE_STRA = 102;
+    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES_STRA = 103;
+    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE_AJB = 104;
+    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES_AJB = 105;
+    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE_PetokD = 106;
+    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES_PetokD = 107;
+    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE_PJP = 108;
+    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES_PJP = 109;
+    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE_PJP1 = 110;
+    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES_PJP1 = 111;
+    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE_SELFIE = 112;
+    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES_SELFIE = 113;
+    private static final int PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE_KTP = 114;
+    private static final int PERMISSION_REQUEST_CODE_MEDIA_IMAGES_KTP = 115;
+    private static final int MAPS_ACTIVITY_REQUEST_CODE = 116;
+    private static final int STORAGE_PERMISSION_CODE = 117;
+    private static final int PICK_PDF_SHM = 118;
+    private static final int PICK_PDF_HGB = 119;
+    private static final int PICK_PDF_HSHP = 120;
+    private static final int PICK_PDF_PPJB = 121;
+    private static final int PICK_PDF_Stratatitle = 122;
+    private static final int PICK_PDF_AJB = 123;
+    private static final int PICK_PDF_PetokD = 124;
+    private static final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 125;
+    Uri Uri1, Uri2, Uri3, Uri4, Uri5, Uri6, Uri7, Uri8, Uri9, Uri10, Uri11, Uri12;
+    Uri UriSHM, UriHGB, UriHSHP, UriPPJB, UriSTRA, UriAJB, UriPetokD;
+    Uri UriSHMPdf, UriHGBPdf, UriHSHPPdf, UriPPJBPdf, UriSTRAPdf, UriAJBPdf, UriPetokDPdf;
+    Uri UriPJP, UriPJP1;
+    LinearLayout lyt1, lyt2, lyt3, lyt4, lyt5, lyt6, lyt7, lyt8, lyt9, lyt10, lyt11, lyt12;
+    LinearLayout LytSHM, LytHGB, LytHSHP, LytPPJB, LytStratatitle, LytAJB, LytPetokD;
+    LinearLayout LytPjp, LytPjp1;
+    LinearLayout LytBtnShm, LytBtnHGB, LytBtnHSHP, LytBtnPPJB, LytBtnStra, LytBtnAJB, LytBtnPetokD;
+    ImageView back;
+    ImageView iv1, iv2, iv3, iv4, iv5, iv6, iv7, iv8, iv9, iv10, iv11, iv12;
+    ImageView IVShm, IVHgb, IVHshp, IVPpjb, IVStratatitle, IVAJB, IVPetokD;
+    ImageView IVPjp, IVPjp1;
+    Button batal, submit;
+    Button select, select1, select2, select3, select4, select5, select6, select7, select9, select10, select11, select12;
+    Button maps;
+    Button BtnSHM, BtnHGB, BtnHSHP, BtnPPJB, BtnSTRA, BtnAJB, BtnPetokD;
+    Button BtnSHMPdf, BtnHGBPdf, BtnHSHPPdf, BtnPPJBPdf, BtnSTRAPdf, BtnAJBPdf, BtnPetokDPdf;
+    Button BtnPjp, BtnPjp1;
+    ImageView hps1, hps2, hps3, hps4, hps5, hps6, hps7, hps8, hps9, hps10, hps11, hps12;
+    ImageView HpsSHM, HpsHGB, HpsHSHP, HpsPPJB, HpsStratatitle, HpsAJB, HpsPetokD;
+    ImageView HpsPjp, HpsPjp1;
     TextInputEditText jenisproperti, namaproperti, alamatproperti, sertifikat, nosertif, luas, land, dimensi, lantai, bed, bath, bedart, bathart, garasi, carpot, listrik, air, pjp, perabot, ketperabot, banner, status, harga, hargasewa, keterangan, hadap, size, EtTglInput, EtFee, ETNoPJP;
     TextInputLayout LytSize, LytTglInput, LytHargaJual, LytHargaSewa, LytNoPJP;
     RadioButton open, exclusive;
     RadioGroup rgpriority;
     CheckBox CBSHM, CBHGB, CBHSHP, CBPPJB, CBSTRA, CBAJB, CBPetokD;
     String idnull, priority, HargaString, HargaSewaString, SHarga, SHargaSewa, idpralisting;
-    String image1, image2, image3, image4, image5, image6, image7, image8, SHM, HGB, HSHP, PPJB, STRA, AJB, PetokD, PJPHal1, PJPHal2;
-    String isimage1, isimage2, isimage3, isimage4, isimage5, isimage6, isimage7, isimage8, isSHM, isHGB, isHSHP, isPPJB, isSTRA, isAJB, isPetokD, isPJP1, isPJP2;
+    String image1, image2, image3, image4, image5, image6, image7, image8, image9, image10, image11, image12;
+    String SHM, HGB, HSHP, PPJB, STRA, AJB, PetokD;
+    String PJPHal1, PJPHal2;
+    String isimage1, isimage2, isimage3, isimage4, isimage5, isimage6, isimage7, isimage8, isimage9, isimage10, isimage11, isimage12;
+    String isSHM, isHGB, isHSHP, isPPJB, isSTRA, isAJB, isPetokD;
+    String isPJP1, isPJP2;
     String latitudeStr, longitudeStr, addressStr, Lat, Lng;
-    Drawable DrawableSHM, DrawableHGB, DrawableHSHP, DrawablePPJB, DrawableSTRA, Drawable1, Drawable2, Drawable3, Drawable4, Drawable5, Drawable6, Drawable7, Drawable8;
+    Drawable DrawableSHM, DrawableHGB, DrawableHSHP, DrawablePPJB, DrawableSTRA;
+    Drawable Drawable1, Drawable2, Drawable3, Drawable4, Drawable5, Drawable6, Drawable7, Drawable8, Drawable9, Drawable10, Drawable11, Drawable12;
     TextView TVSHM, TVHGB, TVHSHP, TVPPJB, TVSTRA, TVAJB, TVPetokD;
-    String timeStamp,fileListing1,fileListing2,fileListing3,fileListing4,fileListing5,fileListing6,fileListing7,fileListing8,fileSertifikatshm,fileSertifikatshmpdf,fileSertifikathgb,fileSertifikathgbpdf,fileSertifikathshp,fileSertifikathshppdf,fileSertifikatppjb,fileSertifikatppjbpdf,fileSertifikatstra,fileSertifikatstrapdf,fileSertifikatajb,fileSertifikatajbpdf,fileSertifikatpetokd,fileSertifikatpetokdpdf,filePjp1,filePjp2,fileSelfie,fileKTP;
+    String timeStamp;
+    String fileListing1,fileListing2,fileListing3,fileListing4,fileListing5,fileListing6,fileListing7,fileListing8,fileListing9,fileListing10,fileListing11,fileListing12;
+    String fileSertifikatshm,fileSertifikathgb,fileSertifikathshp,fileSertifikatppjb,fileSertifikatstra,fileSertifikatajb,fileSertifikatpetokd;
+    String fileSertifikatshmpdf,fileSertifikathgbpdf,fileSertifikathshppdf,fileSertifikatppjbpdf,fileSertifikatstrapdf,fileSertifikatajbpdf,fileSertifikatpetokdpdf;
+    String filePjp1,filePjp2;
+    String fileSelfie,fileKTP;
     private StorageReference mStorageRef;
-    StorageReference storageRef,ImgListing1,ImgListing2,ImgListing3,ImgListing4,ImgListing5,ImgListing6,ImgListing7,ImgListing8,ImgSertifikatshm,ImgSertifikathgb,ImgSertifikathshp,ImgSertifikatppjb,ImgSertifikatstra,ImgSertifikatajb,ImgSertifikatpetokd,ImgSertifikatshmpdf,ImgSertifikathgbpdf,ImgSertifikathshppdf,ImgSertifikatppjbpdf,ImgSertifikatstrapdf,ImgSertifikatajbpdf,ImgSertifikatpetokdpdf,ImgPjp,ImgPjp1,ImageSelfie,ImageKTP;
+    StorageReference storageRef;
+    StorageReference ImgListing1,ImgListing2,ImgListing3,ImgListing4,ImgListing5,ImgListing6,ImgListing7,ImgListing8,ImgListing9,ImgListing10,ImgListing11,ImgListing12;
+    StorageReference ImgSertifikatshm,ImgSertifikathgb,ImgSertifikathshp,ImgSertifikatppjb,ImgSertifikatstra,ImgSertifikatajb,ImgSertifikatpetokd;
+    StorageReference ImgSertifikatshmpdf,ImgSertifikathgbpdf,ImgSertifikathshppdf,ImgSertifikatppjbpdf,ImgSertifikatstrapdf,ImgSertifikatajbpdf,ImgSertifikatpetokdpdf;
+    StorageReference ImgPjp,ImgPjp1;
+    StorageReference ImageSelfie,ImageKTP;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -216,6 +271,10 @@ public class EditListingAgenActivity extends AppCompatActivity {
         iv6 = findViewById(R.id.ivs6);
         iv7 = findViewById(R.id.ivs7);
         iv8 = findViewById(R.id.ivs8);
+        iv9 = findViewById(R.id.ivs9);
+        iv10 = findViewById(R.id.ivs10);
+        iv11 = findViewById(R.id.ivs11);
+        iv12 = findViewById(R.id.ivs12);
         IVShm = findViewById(R.id.IVSHM);
         IVHgb = findViewById(R.id.IVHGB);
         IVHshp = findViewById(R.id.IVHSHP);
@@ -234,6 +293,10 @@ public class EditListingAgenActivity extends AppCompatActivity {
         lyt6 = findViewById(R.id.lyts6);
         lyt7 = findViewById(R.id.lyts7);
         lyt8 = findViewById(R.id.lyts8);
+        lyt9 = findViewById(R.id.lyts9);
+        lyt10 = findViewById(R.id.lyts10);
+        lyt11 = findViewById(R.id.lyts11);
+        lyt12 = findViewById(R.id.lyts12);
         LytSize = findViewById(R.id.lytUkuranBanner);
         LytTglInput = findViewById(R.id.lyttglinputproperti);
         LytHargaJual = findViewById(R.id.lytharga);
@@ -268,6 +331,10 @@ public class EditListingAgenActivity extends AppCompatActivity {
         select5 = findViewById(R.id.btnSelectImage5);
         select6 = findViewById(R.id.btnSelectImage6);
         select7 = findViewById(R.id.btnSelectImage7);
+        select9 = findViewById(R.id.btnSelectImage9);
+        select10 = findViewById(R.id.btnSelectImage10);
+        select11 = findViewById(R.id.btnSelectImage11);
+        select12 = findViewById(R.id.btnSelectImage12);
 
         hps1 = findViewById(R.id.IVDelete1);
         hps2 = findViewById(R.id.IVDelete2);
@@ -277,6 +344,10 @@ public class EditListingAgenActivity extends AppCompatActivity {
         hps6 = findViewById(R.id.IVDelete6);
         hps7 = findViewById(R.id.IVDelete7);
         hps8 = findViewById(R.id.IVDelete8);
+        hps9 = findViewById(R.id.IVDelete9);
+        hps10 = findViewById(R.id.IVDelete10);
+        hps11 = findViewById(R.id.IVDelete11);
+        hps12 = findViewById(R.id.IVDelete12);
         HpsSHM = findViewById(R.id.IVDeleteSHM);
         HpsHGB = findViewById(R.id.IVDeleteHGB);
         HpsHSHP = findViewById(R.id.IVDeleteHSHP);
@@ -362,6 +433,10 @@ public class EditListingAgenActivity extends AppCompatActivity {
         fileListing6 = "Listing6_" + timeStamp + ".jpg";
         fileListing7 = "Listing7_" + timeStamp + ".jpg";
         fileListing8 = "Listing8_" + timeStamp + ".jpg";
+        fileListing9 = "Listing9_" + timeStamp + ".jpg";
+        fileListing10 = "Listing10_" + timeStamp + ".jpg";
+        fileListing11 = "Listing11_" + timeStamp + ".jpg";
+        fileListing12 = "Listing12_" + timeStamp + ".jpg";
         fileSertifikatshm = "SHM_" + timeStamp + ".jpg";
         fileSertifikatshmpdf = "SHM_" + timeStamp + ".pdf";
         fileSertifikathgb = "HGB_" + timeStamp + ".jpg";
@@ -390,6 +465,10 @@ public class EditListingAgenActivity extends AppCompatActivity {
         ImgListing6 = storageRef.child("listing/" + fileListing6);
         ImgListing7 = storageRef.child("listing/" + fileListing7);
         ImgListing8 = storageRef.child("listing/" + fileListing8);
+        ImgListing9 = storageRef.child("listing/" + fileListing9);
+        ImgListing10 = storageRef.child("listing/" + fileListing10);
+        ImgListing11 = storageRef.child("listing/" + fileListing11);
+        ImgListing12 = storageRef.child("listing/" + fileListing12);
         ImgSertifikatshm = storageRef.child("sertifikat/" + fileSertifikatshm);
         ImgSertifikathgb = storageRef.child("sertifikat/" + fileSertifikathgb);
         ImgSertifikathshp = storageRef.child("sertifikat/" + fileSertifikathshp);
@@ -417,6 +496,7 @@ public class EditListingAgenActivity extends AppCompatActivity {
         String intentIdInput = data.getStringExtra("IdInput");
         String intentNamaListing = data.getStringExtra("NamaListing");
         String intentAlamat = data.getStringExtra("Alamat");
+        String intentAlamatTemplate = data.getStringExtra("AlamatTemplate");
         String intentLatitude = data.getStringExtra("Latitude");
         String intentLongitude = data.getStringExtra("Longitude");
         String intentLocation = data.getStringExtra("Location");
@@ -474,6 +554,10 @@ public class EditListingAgenActivity extends AppCompatActivity {
         String intentImg6 = data.getStringExtra("Img6");
         String intentImg7 = data.getStringExtra("Img7");
         String intentImg8 = data.getStringExtra("Img8");
+        String intentImg9 = data.getStringExtra("Img9");
+        String intentImg10 = data.getStringExtra("Img10");
+        String intentImg11 = data.getStringExtra("Img11");
+        String intentImg12 = data.getStringExtra("Img12");
         String intentVideo = data.getStringExtra("Video");
         String intentLinkFacebook = data.getStringExtra("LinkFacebook");
         String intentLinkTiktok = data.getStringExtra("LinkTiktok");
@@ -499,6 +583,10 @@ public class EditListingAgenActivity extends AppCompatActivity {
         isimage6 = intentImg6;
         isimage7 = intentImg7;
         isimage8 = intentImg8;
+        isimage9 = intentImg9;
+        isimage10 = intentImg10;
+        isimage11 = intentImg11;
+        isimage12 = intentImg12;
         isSHM = intentImgSHM;
         isHGB = intentImgHGB;
         isPPJB = intentImgPPJB;
@@ -529,6 +617,9 @@ public class EditListingAgenActivity extends AppCompatActivity {
         if (intentAlamat != null && !intentAlamat.isEmpty()) {
             alamatproperti.setText(intentAlamat);
         }
+//        if (intentAlamatTemplate != null && !intentAlamatTemplate.isEmpty()) {
+//            alamattemplateproperti.setText(intentAlamatTemplate);
+//        }
         if (intentLocation != null && !intentLocation.isEmpty()) {
             addressStr = intentLocation;
         }
@@ -731,6 +822,9 @@ public class EditListingAgenActivity extends AppCompatActivity {
         }
         if (!intentImg1.equals("0")){
             lyt1.setVisibility(View.VISIBLE);
+            select1.setVisibility(View.VISIBLE);
+            select1.setText("Ganti Gambar");
+            select2.setVisibility(View.VISIBLE);
             Picasso.get()
                     .load(intentImg1)
                     .into(iv1);
@@ -738,45 +832,100 @@ public class EditListingAgenActivity extends AppCompatActivity {
         if (!intentImg2.equals("0")){
             lyt2.setVisibility(View.VISIBLE);
             select2.setVisibility(View.VISIBLE);
+            select2.setText("Ganti Gambar");
+            select3.setVisibility(View.VISIBLE);
             Picasso.get()
                     .load(intentImg2)
                     .into(iv2);
         }
         if (!intentImg3.equals("0")){
             lyt3.setVisibility(View.VISIBLE);
+            select3.setVisibility(View.VISIBLE);
+            select3.setText("Ganti Gambar");
+            select4.setVisibility(View.VISIBLE);
             Picasso.get()
                     .load(intentImg3)
                     .into(iv3);
         }
         if (!intentImg4.equals("0")){
             lyt4.setVisibility(View.VISIBLE);
+            select4.setVisibility(View.VISIBLE);
+            select4.setText("Ganti Gambar");
+            select5.setVisibility(View.VISIBLE);
             Picasso.get()
                     .load(intentImg4)
                     .into(iv4);
         }
         if (!intentImg5.equals("0")){
             lyt5.setVisibility(View.VISIBLE);
+            select5.setVisibility(View.VISIBLE);
+            select5.setText("Ganti Gambar");
+            select6.setVisibility(View.VISIBLE);
             Picasso.get()
                     .load(intentImg5)
                     .into(iv5);
         }
         if (!intentImg6.equals("0")){
             lyt6.setVisibility(View.VISIBLE);
+            select6.setVisibility(View.VISIBLE);
+            select6.setText("Ganti Gambar");
+            select7.setVisibility(View.VISIBLE);
             Picasso.get()
                     .load(intentImg6)
                     .into(iv6);
         }
         if (!intentImg7.equals("0")){
             lyt7.setVisibility(View.VISIBLE);
+            select7.setVisibility(View.VISIBLE);
+            select7.setText("Ganti Gambar");
+            select.setVisibility(View.VISIBLE);
             Picasso.get()
                     .load(intentImg7)
                     .into(iv7);
         }
         if (!intentImg8.equals("0")){
             lyt8.setVisibility(View.VISIBLE);
+            select.setVisibility(View.VISIBLE);
+            select.setText("Ganti Gambar");
+            select9.setVisibility(View.VISIBLE);
             Picasso.get()
                     .load(intentImg8)
                     .into(iv8);
+        }
+        if (!intentImg9.equals("0")){
+            lyt9.setVisibility(View.VISIBLE);
+            select9.setVisibility(View.VISIBLE);
+            select9.setText("Ganti Gambar");
+            select10.setVisibility(View.VISIBLE);
+            Picasso.get()
+                    .load(intentImg9)
+                    .into(iv9);
+        }
+        if (!intentImg10.equals("0")){
+            lyt10.setVisibility(View.VISIBLE);
+            select10.setVisibility(View.VISIBLE);
+            select10.setText("Ganti Gambar");
+            select11.setVisibility(View.VISIBLE);
+            Picasso.get()
+                    .load(intentImg10)
+                    .into(iv10);
+        }
+        if (!intentImg11.equals("0")){
+            lyt11.setVisibility(View.VISIBLE);
+            select11.setVisibility(View.VISIBLE);
+            select11.setText("Ganti Gambar");
+            select12.setVisibility(View.VISIBLE);
+            Picasso.get()
+                    .load(intentImg11)
+                    .into(iv11);
+        }
+        if (!intentImg12.equals("0")){
+            lyt12.setVisibility(View.VISIBLE);
+            select12.setVisibility(View.VISIBLE);
+            select12.setText("Ganti Gambar");
+            Picasso.get()
+                    .load(intentImg12)
+                    .into(iv12);
         }
 
         Drawable1 = iv1.getDrawable();
@@ -787,6 +936,10 @@ public class EditListingAgenActivity extends AppCompatActivity {
         Drawable6 = iv6.getDrawable();
         Drawable7 = iv7.getDrawable();
         Drawable8 = iv8.getDrawable();
+        Drawable9 = iv9.getDrawable();
+        Drawable10 = iv10.getDrawable();
+        Drawable11 = iv11.getDrawable();
+        Drawable12 = iv12.getDrawable();
         idnull = "0";
         idpralisting = intentIdListing;
 
@@ -809,6 +962,10 @@ public class EditListingAgenActivity extends AppCompatActivity {
         hps6.setOnClickListener(view -> clearBitmap6());
         hps7.setOnClickListener(view -> clearBitmap7());
         hps8.setOnClickListener(view -> clearBitmap8());
+        hps9.setOnClickListener(view -> clearBitmap9());
+        hps10.setOnClickListener(view -> clearBitmap10());
+        hps11.setOnClickListener(view -> clearBitmap11());
+        hps12.setOnClickListener(view -> clearBitmap12());
         HpsSHM.setOnClickListener(view -> clearBitmapSHM());
         HpsHGB.setOnClickListener(view -> clearBitmapHGB());
         HpsHSHP.setOnClickListener(view -> clearBitmapHSHP());
@@ -878,6 +1035,30 @@ public class EditListingAgenActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 showPhotoSelectionDialog7();
+            }
+        });
+        select9.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showPhotoSelectionDialog9();
+            }
+        });
+        select10.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showPhotoSelectionDialog10();
+            }
+        });
+        select11.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showPhotoSelectionDialog11();
+            }
+        });
+        select12.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showPhotoSelectionDialog12();
             }
         });
         rgpriority.setOnCheckedChangeListener((group, checkedId) -> {
@@ -1360,6 +1541,82 @@ public class EditListingAgenActivity extends AppCompatActivity {
 
         builder.show();
     }
+    private void showPhotoSelectionDialog9() {
+        androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this);
+        builder.setTitle("Unggah Gambar")
+                .setItems(new CharSequence[]{"Ambil Foto", "Pilih Dari Galeri"}, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which) {
+                            case 0:
+                                ActivityCompat.requestPermissions(EditListingAgenActivity.this, new String[]{Manifest.permission.CAMERA}, CODE_CAMERA_REQUEST9);
+                                break;
+                            case 1:
+                                requestPermissions9();
+                                break;
+                        }
+                    }
+                });
+
+        builder.show();
+    }
+    private void showPhotoSelectionDialog10() {
+        androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this);
+        builder.setTitle("Unggah Gambar")
+                .setItems(new CharSequence[]{"Ambil Foto", "Pilih Dari Galeri"}, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which) {
+                            case 0:
+                                ActivityCompat.requestPermissions(EditListingAgenActivity.this, new String[]{Manifest.permission.CAMERA}, CODE_CAMERA_REQUEST10);
+                                break;
+                            case 1:
+                                requestPermissions10();
+                                break;
+                        }
+                    }
+                });
+
+        builder.show();
+    }
+    private void showPhotoSelectionDialog11() {
+        androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this);
+        builder.setTitle("Unggah Gambar")
+                .setItems(new CharSequence[]{"Ambil Foto", "Pilih Dari Galeri"}, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which) {
+                            case 0:
+                                ActivityCompat.requestPermissions(EditListingAgenActivity.this, new String[]{Manifest.permission.CAMERA}, CODE_CAMERA_REQUEST11);
+                                break;
+                            case 1:
+                                requestPermissions11();
+                                break;
+                        }
+                    }
+                });
+
+        builder.show();
+    }
+    private void showPhotoSelectionDialog12() {
+        androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this);
+        builder.setTitle("Unggah Gambar")
+                .setItems(new CharSequence[]{"Ambil Foto", "Pilih Dari Galeri"}, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which) {
+                            case 0:
+                                ActivityCompat.requestPermissions(EditListingAgenActivity.this, new String[]{Manifest.permission.CAMERA}, CODE_CAMERA_REQUEST12);
+                                break;
+                            case 1:
+                                requestPermissions12();
+                                break;
+                        }
+                    }
+                });
+
+        builder.show();
+    }
     private void showPhotoSHM() {
         androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this);
         builder.setTitle("Unggah Gambar")
@@ -1603,6 +1860,42 @@ public class EditListingAgenActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_MEDIA_IMAGES}, PERMISSION_REQUEST_CODE_MEDIA_IMAGES8);
         }
     }
+    private void requestPermissions9() {
+        boolean externalStoragePermissionGranted = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
+
+        if (externalStoragePermissionGranted) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE9);
+        } else {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_MEDIA_IMAGES}, PERMISSION_REQUEST_CODE_MEDIA_IMAGES9);
+        }
+    }
+    private void requestPermissions10() {
+        boolean externalStoragePermissionGranted = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
+
+        if (externalStoragePermissionGranted) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE10);
+        } else {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_MEDIA_IMAGES}, PERMISSION_REQUEST_CODE_MEDIA_IMAGES10);
+        }
+    }
+    private void requestPermissions11() {
+        boolean externalStoragePermissionGranted = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
+
+        if (externalStoragePermissionGranted) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE11);
+        } else {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_MEDIA_IMAGES}, PERMISSION_REQUEST_CODE_MEDIA_IMAGES11);
+        }
+    }
+    private void requestPermissions12() {
+        boolean externalStoragePermissionGranted = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
+
+        if (externalStoragePermissionGranted) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE12);
+        } else {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_MEDIA_IMAGES}, PERMISSION_REQUEST_CODE_MEDIA_IMAGES12);
+        }
+    }
     private void requestPermissionsSHM() {
         boolean externalStoragePermissionGranted = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
 
@@ -1769,6 +2062,50 @@ public class EditListingAgenActivity extends AppCompatActivity {
                 Uri8 = FileProvider.getUriForFile(this, "com.gooproper", photoFile);
                 intentKamera.putExtra(MediaStore.EXTRA_OUTPUT, Uri8);
                 startActivityForResult(intentKamera, KODE_REQUEST_KAMERA8);
+            }
+        }
+    }
+    private void bukaKamera9() {
+        Intent intentKamera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (intentKamera.resolveActivity(getPackageManager()) != null) {
+            File photoFile = createImageFile();
+            if (photoFile != null) {
+                Uri9 = FileProvider.getUriForFile(this, "com.gooproper", photoFile);
+                intentKamera.putExtra(MediaStore.EXTRA_OUTPUT, Uri9);
+                startActivityForResult(intentKamera, KODE_REQUEST_KAMERA9);
+            }
+        }
+    }
+    private void bukaKamera10() {
+        Intent intentKamera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (intentKamera.resolveActivity(getPackageManager()) != null) {
+            File photoFile = createImageFile();
+            if (photoFile != null) {
+                Uri10 = FileProvider.getUriForFile(this, "com.gooproper", photoFile);
+                intentKamera.putExtra(MediaStore.EXTRA_OUTPUT, Uri10);
+                startActivityForResult(intentKamera, KODE_REQUEST_KAMERA10);
+            }
+        }
+    }
+    private void bukaKamera11() {
+        Intent intentKamera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (intentKamera.resolveActivity(getPackageManager()) != null) {
+            File photoFile = createImageFile();
+            if (photoFile != null) {
+                Uri11 = FileProvider.getUriForFile(this, "com.gooproper", photoFile);
+                intentKamera.putExtra(MediaStore.EXTRA_OUTPUT, Uri11);
+                startActivityForResult(intentKamera, KODE_REQUEST_KAMERA11);
+            }
+        }
+    }
+    private void bukaKamera12() {
+        Intent intentKamera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (intentKamera.resolveActivity(getPackageManager()) != null) {
+            File photoFile = createImageFile();
+            if (photoFile != null) {
+                Uri12 = FileProvider.getUriForFile(this, "com.gooproper", photoFile);
+                intentKamera.putExtra(MediaStore.EXTRA_OUTPUT, Uri12);
+                startActivityForResult(intentKamera, KODE_REQUEST_KAMERA12);
             }
         }
     }
@@ -2010,6 +2347,26 @@ public class EditListingAgenActivity extends AppCompatActivity {
                 Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 startActivityForResult(intent, CODE_GALLERY_REQUEST8);
             }
+        } else if (requestCode == PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE9) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(intent, CODE_GALLERY_REQUEST9);
+            }
+        } else if (requestCode == PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE10) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(intent, CODE_GALLERY_REQUEST10);
+            }
+        } else if (requestCode == PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE11) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(intent, CODE_GALLERY_REQUEST11);
+            }
+        } else if (requestCode == PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE12) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(intent, CODE_GALLERY_REQUEST12);
+            }
         } else if (requestCode == PERMISSION_REQUEST_CODE_EXTERNAL_STORAGE_SHM) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
@@ -2095,6 +2452,26 @@ public class EditListingAgenActivity extends AppCompatActivity {
                 Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 startActivityForResult(intent, CODE_GALLERY_REQUEST8);
             }
+        } else if (requestCode == PERMISSION_REQUEST_CODE_MEDIA_IMAGES9) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(intent, CODE_GALLERY_REQUEST9);
+            }
+        } else if (requestCode == PERMISSION_REQUEST_CODE_MEDIA_IMAGES10) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(intent, CODE_GALLERY_REQUEST10);
+            }
+        } else if (requestCode == PERMISSION_REQUEST_CODE_MEDIA_IMAGES11) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(intent, CODE_GALLERY_REQUEST11);
+            }
+        } else if (requestCode == PERMISSION_REQUEST_CODE_MEDIA_IMAGES12) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(intent, CODE_GALLERY_REQUEST12);
+            }
         } else if (requestCode == PERMISSION_REQUEST_CODE_MEDIA_IMAGES_SHM) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
@@ -2167,7 +2544,7 @@ public class EditListingAgenActivity extends AppCompatActivity {
                 ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
 
                 Glide.with(EditListingAgenActivity.this)
-                        .load(R.drawable.alert) // You can also use a local resource like R.drawable.your_gif_resource
+                        .load(R.drawable.alert)
                         .transition(DrawableTransitionOptions.withCrossFade())
                         .into(gifImageView);
 
@@ -2201,7 +2578,7 @@ public class EditListingAgenActivity extends AppCompatActivity {
                 ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
 
                 Glide.with(EditListingAgenActivity.this)
-                        .load(R.drawable.alert) // You can also use a local resource like R.drawable.your_gif_resource
+                        .load(R.drawable.alert)
                         .transition(DrawableTransitionOptions.withCrossFade())
                         .into(gifImageView);
 
@@ -2236,7 +2613,7 @@ public class EditListingAgenActivity extends AppCompatActivity {
                 ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
 
                 Glide.with(EditListingAgenActivity.this)
-                        .load(R.drawable.alert) // You can also use a local resource like R.drawable.your_gif_resource
+                        .load(R.drawable.alert)
                         .transition(DrawableTransitionOptions.withCrossFade())
                         .into(gifImageView);
 
@@ -2272,7 +2649,7 @@ public class EditListingAgenActivity extends AppCompatActivity {
                 ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
 
                 Glide.with(EditListingAgenActivity.this)
-                        .load(R.drawable.alert) // You can also use a local resource like R.drawable.your_gif_resource
+                        .load(R.drawable.alert)
                         .transition(DrawableTransitionOptions.withCrossFade())
                         .into(gifImageView);
 
@@ -2308,7 +2685,7 @@ public class EditListingAgenActivity extends AppCompatActivity {
                 ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
 
                 Glide.with(EditListingAgenActivity.this)
-                        .load(R.drawable.alert) // You can also use a local resource like R.drawable.your_gif_resource
+                        .load(R.drawable.alert)
                         .transition(DrawableTransitionOptions.withCrossFade())
                         .into(gifImageView);
 
@@ -2344,7 +2721,7 @@ public class EditListingAgenActivity extends AppCompatActivity {
                 ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
 
                 Glide.with(EditListingAgenActivity.this)
-                        .load(R.drawable.alert) // You can also use a local resource like R.drawable.your_gif_resource
+                        .load(R.drawable.alert)
                         .transition(DrawableTransitionOptions.withCrossFade())
                         .into(gifImageView);
 
@@ -2380,7 +2757,7 @@ public class EditListingAgenActivity extends AppCompatActivity {
                 ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
 
                 Glide.with(EditListingAgenActivity.this)
-                        .load(R.drawable.alert) // You can also use a local resource like R.drawable.your_gif_resource
+                        .load(R.drawable.alert)
                         .transition(DrawableTransitionOptions.withCrossFade())
                         .into(gifImageView);
 
@@ -2416,7 +2793,7 @@ public class EditListingAgenActivity extends AppCompatActivity {
                 ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
 
                 Glide.with(EditListingAgenActivity.this)
-                        .load(R.drawable.alert) // You can also use a local resource like R.drawable.your_gif_resource
+                        .load(R.drawable.alert)
                         .transition(DrawableTransitionOptions.withCrossFade())
                         .into(gifImageView);
 
@@ -2452,7 +2829,151 @@ public class EditListingAgenActivity extends AppCompatActivity {
                 ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
 
                 Glide.with(EditListingAgenActivity.this)
-                        .load(R.drawable.alert) // You can also use a local resource like R.drawable.your_gif_resource
+                        .load(R.drawable.alert)
+                        .transition(DrawableTransitionOptions.withCrossFade())
+                        .into(gifImageView);
+
+                customDialog.show();
+            }
+
+            return;
+        } else if (requestCode == CODE_GALLERY_REQUEST9) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(intent, CODE_GALLERY_REQUEST9);
+            } else {
+                Dialog customDialog = new Dialog(EditListingAgenActivity.this);
+                customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                customDialog.setContentView(R.layout.custom_dialog_eror_input);
+
+                if (customDialog.getWindow() != null) {
+                    customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                }
+
+                Button ok = customDialog.findViewById(R.id.BtnOkErorInput);
+                TextView tv = customDialog.findViewById(R.id.TVDialogErorInput);
+
+                tv.setText("Akses Galeri Ditolak");
+
+                ok.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        customDialog.dismiss();
+                    }
+                });
+
+                ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
+
+                Glide.with(EditListingAgenActivity.this)
+                        .load(R.drawable.alert)
+                        .transition(DrawableTransitionOptions.withCrossFade())
+                        .into(gifImageView);
+
+                customDialog.show();
+            }
+
+            return;
+        } else if (requestCode == CODE_GALLERY_REQUEST10) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(intent, CODE_GALLERY_REQUEST10);
+            } else {
+                Dialog customDialog = new Dialog(EditListingAgenActivity.this);
+                customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                customDialog.setContentView(R.layout.custom_dialog_eror_input);
+
+                if (customDialog.getWindow() != null) {
+                    customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                }
+
+                Button ok = customDialog.findViewById(R.id.BtnOkErorInput);
+                TextView tv = customDialog.findViewById(R.id.TVDialogErorInput);
+
+                tv.setText("Akses Galeri Ditolak");
+
+                ok.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        customDialog.dismiss();
+                    }
+                });
+
+                ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
+
+                Glide.with(EditListingAgenActivity.this)
+                        .load(R.drawable.alert)
+                        .transition(DrawableTransitionOptions.withCrossFade())
+                        .into(gifImageView);
+
+                customDialog.show();
+            }
+
+            return;
+        } else if (requestCode == CODE_GALLERY_REQUEST11) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(intent, CODE_GALLERY_REQUEST11);
+            } else {
+                Dialog customDialog = new Dialog(EditListingAgenActivity.this);
+                customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                customDialog.setContentView(R.layout.custom_dialog_eror_input);
+
+                if (customDialog.getWindow() != null) {
+                    customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                }
+
+                Button ok = customDialog.findViewById(R.id.BtnOkErorInput);
+                TextView tv = customDialog.findViewById(R.id.TVDialogErorInput);
+
+                tv.setText("Akses Galeri Ditolak");
+
+                ok.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        customDialog.dismiss();
+                    }
+                });
+
+                ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
+
+                Glide.with(EditListingAgenActivity.this)
+                        .load(R.drawable.alert)
+                        .transition(DrawableTransitionOptions.withCrossFade())
+                        .into(gifImageView);
+
+                customDialog.show();
+            }
+
+            return;
+        } else if (requestCode == CODE_GALLERY_REQUEST12) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(intent, CODE_GALLERY_REQUEST12);
+            } else {
+                Dialog customDialog = new Dialog(EditListingAgenActivity.this);
+                customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                customDialog.setContentView(R.layout.custom_dialog_eror_input);
+
+                if (customDialog.getWindow() != null) {
+                    customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                }
+
+                Button ok = customDialog.findViewById(R.id.BtnOkErorInput);
+                TextView tv = customDialog.findViewById(R.id.TVDialogErorInput);
+
+                tv.setText("Akses Galeri Ditolak");
+
+                ok.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        customDialog.dismiss();
+                    }
+                });
+
+                ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
+
+                Glide.with(EditListingAgenActivity.this)
+                        .load(R.drawable.alert)
                         .transition(DrawableTransitionOptions.withCrossFade())
                         .into(gifImageView);
 
@@ -2488,7 +3009,7 @@ public class EditListingAgenActivity extends AppCompatActivity {
                 ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
 
                 Glide.with(EditListingAgenActivity.this)
-                        .load(R.drawable.alert) // You can also use a local resource like R.drawable.your_gif_resource
+                        .load(R.drawable.alert)
                         .transition(DrawableTransitionOptions.withCrossFade())
                         .into(gifImageView);
 
@@ -2524,7 +3045,7 @@ public class EditListingAgenActivity extends AppCompatActivity {
                 ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
 
                 Glide.with(EditListingAgenActivity.this)
-                        .load(R.drawable.alert) // You can also use a local resource like R.drawable.your_gif_resource
+                        .load(R.drawable.alert)
                         .transition(DrawableTransitionOptions.withCrossFade())
                         .into(gifImageView);
 
@@ -2560,7 +3081,7 @@ public class EditListingAgenActivity extends AppCompatActivity {
                 ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
 
                 Glide.with(EditListingAgenActivity.this)
-                        .load(R.drawable.alert) // You can also use a local resource like R.drawable.your_gif_resource
+                        .load(R.drawable.alert)
                         .transition(DrawableTransitionOptions.withCrossFade())
                         .into(gifImageView);
 
@@ -2596,7 +3117,7 @@ public class EditListingAgenActivity extends AppCompatActivity {
                 ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
 
                 Glide.with(EditListingAgenActivity.this)
-                        .load(R.drawable.alert) // You can also use a local resource like R.drawable.your_gif_resource
+                        .load(R.drawable.alert)
                         .transition(DrawableTransitionOptions.withCrossFade())
                         .into(gifImageView);
 
@@ -2632,7 +3153,7 @@ public class EditListingAgenActivity extends AppCompatActivity {
                 ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
 
                 Glide.with(EditListingAgenActivity.this)
-                        .load(R.drawable.alert) // You can also use a local resource like R.drawable.your_gif_resource
+                        .load(R.drawable.alert)
                         .transition(DrawableTransitionOptions.withCrossFade())
                         .into(gifImageView);
 
@@ -2668,7 +3189,7 @@ public class EditListingAgenActivity extends AppCompatActivity {
                 ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
 
                 Glide.with(EditListingAgenActivity.this)
-                        .load(R.drawable.alert) // You can also use a local resource like R.drawable.your_gif_resource
+                        .load(R.drawable.alert)
                         .transition(DrawableTransitionOptions.withCrossFade())
                         .into(gifImageView);
 
@@ -2704,7 +3225,7 @@ public class EditListingAgenActivity extends AppCompatActivity {
                 ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
 
                 Glide.with(EditListingAgenActivity.this)
-                        .load(R.drawable.alert) // You can also use a local resource like R.drawable.your_gif_resource
+                        .load(R.drawable.alert)
                         .transition(DrawableTransitionOptions.withCrossFade())
                         .into(gifImageView);
 
@@ -2740,7 +3261,7 @@ public class EditListingAgenActivity extends AppCompatActivity {
                 ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
 
                 Glide.with(EditListingAgenActivity.this)
-                        .load(R.drawable.alert) // You can also use a local resource like R.drawable.your_gif_resource
+                        .load(R.drawable.alert)
                         .transition(DrawableTransitionOptions.withCrossFade())
                         .into(gifImageView);
 
@@ -2776,7 +3297,7 @@ public class EditListingAgenActivity extends AppCompatActivity {
                 ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
 
                 Glide.with(EditListingAgenActivity.this)
-                        .load(R.drawable.alert) // You can also use a local resource like R.drawable.your_gif_resource
+                        .load(R.drawable.alert)
                         .transition(DrawableTransitionOptions.withCrossFade())
                         .into(gifImageView);
 
@@ -2885,6 +3406,62 @@ public class EditListingAgenActivity extends AppCompatActivity {
         } else if (requestCode == CODE_CAMERA_REQUEST8) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 bukaKamera8();
+            } else {
+                AlertDialog.Builder builder = new AlertDialog.Builder(EditListingAgenActivity.this);
+                builder.setTitle("Izin Kamera Ditolak").
+                        setMessage("Aplikasi memerlukan izin kamera untuk mengambil gambar.");
+                builder.setPositiveButton("OK",
+                        (dialog, id) -> dialog.cancel());
+                AlertDialog alert = builder.create();
+                alert.show();
+            }
+
+            return;
+        } else if (requestCode == CODE_CAMERA_REQUEST9) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                bukaKamera9();
+            } else {
+                AlertDialog.Builder builder = new AlertDialog.Builder(EditListingAgenActivity.this);
+                builder.setTitle("Izin Kamera Ditolak").
+                        setMessage("Aplikasi memerlukan izin kamera untuk mengambil gambar.");
+                builder.setPositiveButton("OK",
+                        (dialog, id) -> dialog.cancel());
+                AlertDialog alert = builder.create();
+                alert.show();
+            }
+
+            return;
+        } else if (requestCode == CODE_CAMERA_REQUEST10) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                bukaKamera10();
+            } else {
+                AlertDialog.Builder builder = new AlertDialog.Builder(EditListingAgenActivity.this);
+                builder.setTitle("Izin Kamera Ditolak").
+                        setMessage("Aplikasi memerlukan izin kamera untuk mengambil gambar.");
+                builder.setPositiveButton("OK",
+                        (dialog, id) -> dialog.cancel());
+                AlertDialog alert = builder.create();
+                alert.show();
+            }
+
+            return;
+        } else if (requestCode == CODE_CAMERA_REQUEST11) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                bukaKamera11();
+            } else {
+                AlertDialog.Builder builder = new AlertDialog.Builder(EditListingAgenActivity.this);
+                builder.setTitle("Izin Kamera Ditolak").
+                        setMessage("Aplikasi memerlukan izin kamera untuk mengambil gambar.");
+                builder.setPositiveButton("OK",
+                        (dialog, id) -> dialog.cancel());
+                AlertDialog alert = builder.create();
+                alert.show();
+            }
+
+            return;
+        } else if (requestCode == CODE_CAMERA_REQUEST12) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                bukaKamera12();
             } else {
                 AlertDialog.Builder builder = new AlertDialog.Builder(EditListingAgenActivity.this);
                 builder.setTitle("Izin Kamera Ditolak").
@@ -3183,6 +3760,26 @@ public class EditListingAgenActivity extends AppCompatActivity {
             iv8.setImageURI(Uri8);
             lyt8.setVisibility(View.VISIBLE);
             select.setVisibility(View.GONE);
+            select9.setVisibility(View.VISIBLE);
+        } else if (requestCode == KODE_REQUEST_KAMERA9 && resultCode == RESULT_OK) {
+            iv9.setImageURI(Uri9);
+            lyt9.setVisibility(View.VISIBLE);
+            select9.setVisibility(View.GONE);
+            select10.setVisibility(View.VISIBLE);
+        } else if (requestCode == KODE_REQUEST_KAMERA10 && resultCode == RESULT_OK) {
+            iv10.setImageURI(Uri10);
+            lyt10.setVisibility(View.VISIBLE);
+            select10.setVisibility(View.GONE);
+            select11.setVisibility(View.VISIBLE);
+        } else if (requestCode == KODE_REQUEST_KAMERA11 && resultCode == RESULT_OK) {
+            iv11.setImageURI(Uri11);
+            lyt11.setVisibility(View.VISIBLE);
+            select11.setVisibility(View.GONE);
+            select12.setVisibility(View.VISIBLE);
+        } else if (requestCode == KODE_REQUEST_KAMERA12 && resultCode == RESULT_OK) {
+            iv12.setImageURI(Uri12);
+            lyt12.setVisibility(View.VISIBLE);
+            select12.setVisibility(View.GONE);
         } else if (requestCode == KODE_REQUEST_KAMERA_SHM && resultCode == RESULT_OK) {
             IVShm.setImageURI(UriSHM);
             TVSHM.setVisibility(View.GONE);
@@ -3297,11 +3894,17 @@ public class EditListingAgenActivity extends AppCompatActivity {
             Uri1 = null;
             lyt1.setVisibility(View.GONE);
             select1.setVisibility(View.VISIBLE);
+        } else {
+            lyt1.setVisibility(View.GONE);
+            select1.setVisibility(View.VISIBLE);
         }
     }
     private void clearBitmap2() {
         if (Uri2 != null) {
             Uri2 = null;
+            lyt2.setVisibility(View.GONE);
+            select2.setVisibility(View.VISIBLE);
+        } else {
             lyt2.setVisibility(View.GONE);
             select2.setVisibility(View.VISIBLE);
         }
@@ -3311,11 +3914,17 @@ public class EditListingAgenActivity extends AppCompatActivity {
             Uri3 = null;
             lyt3.setVisibility(View.GONE);
             select3.setVisibility(View.VISIBLE);
+        } else {
+            lyt3.setVisibility(View.GONE);
+            select3.setVisibility(View.VISIBLE);
         }
     }
     private void clearBitmap4() {
         if (Uri4 != null) {
             Uri4 = null;
+            lyt4.setVisibility(View.GONE);
+            select4.setVisibility(View.VISIBLE);
+        } else {
             lyt4.setVisibility(View.GONE);
             select4.setVisibility(View.VISIBLE);
         }
@@ -3325,11 +3934,17 @@ public class EditListingAgenActivity extends AppCompatActivity {
             Uri5 = null;
             lyt5.setVisibility(View.GONE);
             select5.setVisibility(View.VISIBLE);
+        } else {
+            lyt5.setVisibility(View.GONE);
+            select5.setVisibility(View.VISIBLE);
         }
     }
     private void clearBitmap6() {
         if (Uri6 != null) {
             Uri6 = null;
+            lyt6.setVisibility(View.GONE);
+            select6.setVisibility(View.VISIBLE);
+        } else {
             lyt6.setVisibility(View.GONE);
             select6.setVisibility(View.VISIBLE);
         }
@@ -3339,6 +3954,9 @@ public class EditListingAgenActivity extends AppCompatActivity {
             Uri7 = null;
             lyt7.setVisibility(View.GONE);
             select7.setVisibility(View.VISIBLE);
+        } else {
+            lyt7.setVisibility(View.GONE);
+            select7.setVisibility(View.VISIBLE);
         }
     }
     private void clearBitmap8() {
@@ -3346,6 +3964,49 @@ public class EditListingAgenActivity extends AppCompatActivity {
             Uri8 = null;
             lyt8.setVisibility(View.GONE);
             select.setVisibility(View.VISIBLE);
+        } else {
+            lyt8.setVisibility(View.GONE);
+            select.setVisibility(View.VISIBLE);
+        }
+    }
+    private void clearBitmap9() {
+        if (Uri9 != null) {
+            Uri9 = null;
+            lyt9.setVisibility(View.GONE);
+            select9.setVisibility(View.VISIBLE);
+        } else {
+            lyt9.setVisibility(View.GONE);
+            select9.setVisibility(View.VISIBLE);
+        }
+    }
+    private void clearBitmap10() {
+        if (Uri10 != null) {
+            Uri10 = null;
+            lyt10.setVisibility(View.GONE);
+            select10.setVisibility(View.VISIBLE);
+        } else {
+            lyt10.setVisibility(View.GONE);
+            select10.setVisibility(View.VISIBLE);
+        }
+    }
+    private void clearBitmap11() {
+        if (Uri11 != null) {
+            Uri11 = null;
+            lyt11.setVisibility(View.GONE);
+            select11.setVisibility(View.VISIBLE);
+        } else {
+            lyt11.setVisibility(View.GONE);
+            select11.setVisibility(View.VISIBLE);
+        }
+    }
+    private void clearBitmap12() {
+        if (Uri12 != null) {
+            Uri12 = null;
+            lyt12.setVisibility(View.GONE);
+            select12.setVisibility(View.VISIBLE);
+        } else {
+            lyt12.setVisibility(View.GONE);
+            select12.setVisibility(View.VISIBLE);
         }
     }
     private void clearBitmapSHM() {
@@ -3644,7 +4305,7 @@ public class EditListingAgenActivity extends AppCompatActivity {
                                     .addOnSuccessListener(uri -> {
                                         String imageUrl = uri.toString();
                                         image8 = imageUrl;
-                                        handleImageSHMSuccess();
+                                        handleImage9Success();
                                     })
                                     .addOnFailureListener(exception -> {
                                         handleImage8Success();
@@ -3661,6 +4322,126 @@ public class EditListingAgenActivity extends AppCompatActivity {
                     });
         } else {
             image8 = isimage8;
+            handleImage9Success();
+        }
+    }
+    private void handleImage9Success() {
+        if (Uri9 != null) {
+            ImgListing9.putFile(Uri9)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            ImgListing9.getDownloadUrl()
+                                    .addOnSuccessListener(uri -> {
+                                        String imageUrl = uri.toString();
+                                        image9 = imageUrl;
+                                        handleImage10Success();
+                                    })
+                                    .addOnFailureListener(exception -> {
+                                        handleImage9Success();
+                                        Toast.makeText(EditListingAgenActivity.this, "Upload failed: " + exception.getMessage(), Toast.LENGTH_SHORT).show();
+                                    });
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            handleImage9Success();
+                            Toast.makeText(EditListingAgenActivity.this, "Upload failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        } else {
+            image9 = isimage9;
+            handleImage10Success();
+        }
+    }
+    private void handleImage10Success() {
+        if (Uri10 != null) {
+            ImgListing10.putFile(Uri10)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            ImgListing10.getDownloadUrl()
+                                    .addOnSuccessListener(uri -> {
+                                        String imageUrl = uri.toString();
+                                        image10 = imageUrl;
+                                        handleImage11Success();
+                                    })
+                                    .addOnFailureListener(exception -> {
+                                        handleImage10Success();
+                                        Toast.makeText(EditListingAgenActivity.this, "Upload failed: " + exception.getMessage(), Toast.LENGTH_SHORT).show();
+                                    });
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            handleImage10Success();
+                            Toast.makeText(EditListingAgenActivity.this, "Upload failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        } else {
+            image10 = isimage10;
+            handleImage11Success();
+        }
+    }
+    private void handleImage11Success() {
+        if (Uri11 != null) {
+            ImgListing11.putFile(Uri11)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            ImgListing11.getDownloadUrl()
+                                    .addOnSuccessListener(uri -> {
+                                        String imageUrl = uri.toString();
+                                        image11 = imageUrl;
+                                        handleImage12Success();
+                                    })
+                                    .addOnFailureListener(exception -> {
+                                        handleImage11Success();
+                                        Toast.makeText(EditListingAgenActivity.this, "Upload failed: " + exception.getMessage(), Toast.LENGTH_SHORT).show();
+                                    });
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            handleImage11Success();
+                            Toast.makeText(EditListingAgenActivity.this, "Upload failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        } else {
+            image11 = isimage11;
+            handleImage12Success();
+        }
+    }
+    private void handleImage12Success() {
+        if (Uri12 != null) {
+            ImgListing12.putFile(Uri12)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            ImgListing12.getDownloadUrl()
+                                    .addOnSuccessListener(uri -> {
+                                        String imageUrl = uri.toString();
+                                        image12 = imageUrl;
+                                        handleImageSHMSuccess();
+                                    })
+                                    .addOnFailureListener(exception -> {
+                                        handleImage12Success();
+                                        Toast.makeText(EditListingAgenActivity.this, "Upload failed: " + exception.getMessage(), Toast.LENGTH_SHORT).show();
+                                    });
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            handleImage12Success();
+                            Toast.makeText(EditListingAgenActivity.this, "Upload failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        } else {
+            image12 = isimage12;
             handleImageSHMSuccess();
         }
     }
@@ -4211,7 +4992,7 @@ public class EditListingAgenActivity extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.CustomAlertDialogStyle);
         builder.setTitle("Silahkan Pilih Sumber Air");
 
-        final CharSequence[] SumberAir = {"PAM atau PDAM", "Sumur Pompa", "Sumur Bor", "Sumur Resapan", "Sumur Galian"};
+        final CharSequence[] SumberAir = {"PAM atau PDAM", "Sumur Pompa", "Sumur Bor", "Sumur Resapan", "Sumur Galian", "Artesis"};
         final int[] SelectedSumberAir = {0};
 
         builder.setSingleChoiceItems(SumberAir, SelectedSumberAir[0], new DialogInterface.OnClickListener() {
@@ -4727,6 +5508,10 @@ public class EditListingAgenActivity extends AppCompatActivity {
                 map.put("Img6", image6);
                 map.put("Img7", image7);
                 map.put("Img8", image8);
+                map.put("Img9", image9);
+                map.put("Img10", image10);
+                map.put("Img11", image11);
+                map.put("Img12", image12);
                 map.put("Video", idnull);
                 map.put("LinkFacebook", idnull);
                 map.put("LinkTiktok", idnull);

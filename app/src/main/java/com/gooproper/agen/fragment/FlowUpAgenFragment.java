@@ -39,7 +39,6 @@ import java.util.List;
 public class FlowUpAgenFragment extends Fragment {
 
     ProgressDialog PDFlowUpAgen;
-    SwipeRefreshLayout srflowup;
     RecyclerView rvlist, rvprimary;
     RecyclerView.Adapter adapter;
     FlowUpPrimaryAdapter primaryAdapter;
@@ -54,7 +53,6 @@ public class FlowUpAgenFragment extends Fragment {
         PDFlowUpAgen = new ProgressDialog(getActivity());
         rvlist = root.findViewById(R.id.RVFlowUpListAgen);
         rvprimary = root.findViewById(R.id.RVFlowUpPrimaryListAgen);
-//        srflowup = root.findViewById(R.id.SRFlowUpAgen);
 
         list = new ArrayList<>();
         primaryModelList = new ArrayList<>();
@@ -71,13 +69,6 @@ public class FlowUpAgenFragment extends Fragment {
         primaryAdapter = new FlowUpPrimaryAdapter(getActivity(), primaryModelList);
         rvprimary.setAdapter(primaryAdapter);
 
-//        srflowup.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-//            @Override
-//            public void onRefresh() {
-//                LoadFlowup(true);
-//            }
-//        });
-
         return root;
     }
 
@@ -91,7 +82,6 @@ public class FlowUpAgenFragment extends Fragment {
                     @Override
                     public void onResponse(JSONArray response) {
                         PDFlowUpAgen.cancel();
-//                        srflowup.setRefreshing(false);
                         list.clear();
                         for (int i = 0; i < response.length(); i++) {
                             try {
@@ -122,7 +112,6 @@ public class FlowUpAgenFragment extends Fragment {
                                 PDFlowUpAgen.dismiss();
                             } catch (JSONException e) {
                                 e.printStackTrace();
-//                                srflowup.setRefreshing(false);
                                 PDFlowUpAgen.dismiss();
 
                                 Dialog customDialog = new Dialog(getActivity());
@@ -161,7 +150,6 @@ public class FlowUpAgenFragment extends Fragment {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-//                        srflowup.setRefreshing(false);
                         PDFlowUpAgen.dismiss();
                         error.printStackTrace();
 
@@ -206,7 +194,6 @@ public class FlowUpAgenFragment extends Fragment {
                     @Override
                     public void onResponse(JSONArray response) {
                         PDFlowUpAgen.cancel();
-//                        srflowup.setRefreshing(false);
                         primaryModelList.clear();
                         for (int i = 0; i < response.length(); i++) {
                             try {
@@ -236,7 +223,6 @@ public class FlowUpAgenFragment extends Fragment {
                             } catch (JSONException e) {
                                 e.printStackTrace();
                                 PDFlowUpAgen.dismiss();
-//                                srflowup.setRefreshing(false);
 
                                 Dialog customDialog = new Dialog(getActivity());
                                 customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -273,7 +259,6 @@ public class FlowUpAgenFragment extends Fragment {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-//                        srflowup.setRefreshing(false);
                         PDFlowUpAgen.dismiss();
                         error.printStackTrace();
 

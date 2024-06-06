@@ -152,7 +152,6 @@ public class ListingAgenFragment extends Fragment {
         }
         adapter.setFilteredlist(filteredList);
     }
-
     public void showFilterDialog () {
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = getLayoutInflater();
@@ -174,7 +173,7 @@ public class ListingAgenFragment extends Fragment {
         RadioGroup kondisiRadioGroup = dialogView.findViewById(R.id.kondisi);
         int selectedRadioButtonId = kondisiRadioGroup.getCheckedRadioButtonId();
 
-        String selectedKondisi = ""; // Initialize the selected kondisi
+        String selectedKondisi = "";
 
         if (selectedRadioButtonId == R.id.jual) {
             selectedKondisi = "Jual";
@@ -216,7 +215,7 @@ public class ListingAgenFragment extends Fragment {
                 RadioGroup kondisiRadioGroup = alertDialog.findViewById(R.id.kondisi);
                 int selectedRadioButtonId = kondisiRadioGroup.getCheckedRadioButtonId();
 
-                String selectedKondisi = ""; // Initialize the selected kondisi
+                String selectedKondisi = "";
 
                 if (selectedRadioButtonId == R.id.jual) {
                     selectedKondisi = "Jual";
@@ -291,7 +290,6 @@ public class ListingAgenFragment extends Fragment {
                     if (minPrice <= maxPrice) {
                         applyCustomFilter(v, minPrice, maxPrice, true, bedSearchStr, bathSearchStr, landWideSearchStr, buildingWideSearchStr, garageSearchStr, carpotSearchStr, levelSearchStr, specStr, typeStr, selectedKondisi);
                     } else {
-                        // Handle invalid input, show a message or toast if needed
                         Toast.makeText(getActivity(), "Batas Harga Salah", Toast.LENGTH_SHORT).show();
                     }
                 } else if (!minPriceStr.isEmpty()) {
@@ -335,35 +333,31 @@ public class ListingAgenFragment extends Fragment {
         alertDialog = dialogBuilder.create();
         alertDialog.show();
     }
-
     public void showSpecPopUp(View view) {
         androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(getActivity());
         builder.setTitle("Jenis Properti");
 
         final CharSequence[] spec = {"Rumah", "Ruko", "Tanah", "Gudang", "Ruang Usaha", "Villa", "Apartemen", "Pabrik", "Kantor", "Hotel", "Kondotel"};
-        final int[] selectedSpecIndex = {0}; // to store the index of the selected property type
+        final int[] selectedSpecIndex = {0};
 
         builder.setSingleChoiceItems(spec, selectedSpecIndex[0], new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                selectedSpecIndex[0] = which; // update the selected property type index
+                selectedSpecIndex[0] = which;
             }
         });
 
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                // Update the TextView with the selected property type
                 TextView textViewSpec = alertDialog.findViewById(R.id.textViewSpec);
                 if (textViewSpec != null) {
                     textViewSpec.setText(spec[selectedSpecIndex[0]]);
                 }
             }
         });
-        // Create and show the AlertDialog
         builder.create().show();
     }
-
     public void showPropertyTypePopup(View view) {
         androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(getActivity());
         builder.setTitle("Select Property Type");
@@ -374,7 +368,7 @@ public class ListingAgenFragment extends Fragment {
         builder.setSingleChoiceItems(options, selectedOptionIndex[0], new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                selectedOptionIndex[0] = which; // Assign the selected index to the array
+                selectedOptionIndex[0] = which;
             }
         });
 
@@ -391,7 +385,6 @@ public class ListingAgenFragment extends Fragment {
         androidx.appcompat.app.AlertDialog dialog = builder.create();
         dialog.show();
     }
-
     public void applyCustomFilter(View view, long minPrice, long maxPrice, boolean isAbove, String bedSearch, String bathSearch, String landWideSearch, String buildingWideSearch, String garageSearch, String carpotSearch, String levelSearch, String viewSpec, String viewType, String kondisi) {
         ArrayList<ListingModel> filteredList = new ArrayList<>();
         if (minPrice > 0 || maxPrice > 0) {
@@ -474,10 +467,10 @@ public class ListingAgenFragment extends Fragment {
                 if (!bathSearch.isEmpty() && !bathSearch.equals(product.getBath())) {
                     isBathMatched = false;
                 }
-                if (!landWideSearch.isEmpty() && !landWideSearch.equalsIgnoreCase(product.getWide())) {
+                if (!landWideSearch.isEmpty() && !landWideSearch.equals(product.getWide())) {
                     isLandWideMatched = false;
                 }
-                if (!buildingWideSearch.isEmpty() && !buildingWideSearch.equalsIgnoreCase(product.getLand())) {
+                if (!buildingWideSearch.isEmpty() && !buildingWideSearch.equals(product.getLand())) {
                     isBuildingWideMatched = false;
                 }
                 if (!garageSearch.isEmpty() && !garageSearch.equals(product.getGarage())) {
@@ -534,10 +527,10 @@ public class ListingAgenFragment extends Fragment {
                 if (!bathSearch.isEmpty() && !bathSearch.equals(product.getBath())) {
                     isBathMatched = false;
                 }
-                if (!landWideSearch.isEmpty() && !landWideSearch.equalsIgnoreCase(product.getWide())) {
+                if (!landWideSearch.isEmpty() && !landWideSearch.equals(product.getWide())) {
                     isLandWideMatched = false;
                 }
-                if (!buildingWideSearch.isEmpty() && !buildingWideSearch.equalsIgnoreCase(product.getLand())) {
+                if (!buildingWideSearch.isEmpty() && !buildingWideSearch.equals(product.getLand())) {
                     isBuildingWideMatched = false;
                 }
                 if (!garageSearch.isEmpty() && !garageSearch.equals(product.getGarage())) {
@@ -572,7 +565,6 @@ public class ListingAgenFragment extends Fragment {
 
         applyFilters = false;
     }
-
     private void LoadListing(boolean showProgressDialog) {
         PDListingAgen.setMessage("Memuat Listingan...");
         PDListingAgen.show();
@@ -595,6 +587,7 @@ public class ListingAgenFragment extends Fragment {
                                 md.setIdInput(data.getString("IdInput"));
                                 md.setNamaListing(data.getString("NamaListing"));
                                 md.setAlamat(data.getString("Alamat"));
+                                md.setAlamatTemplate(data.getString("AlamatTemplate"));
                                 md.setLatitude(data.getString("Latitude"));
                                 md.setLongitude(data.getString("Longitude"));
                                 md.setLocation(data.getString("Location"));
@@ -642,8 +635,18 @@ public class ListingAgenFragment extends Fragment {
                                 md.setTtd(data.getString("Ttd"));
                                 md.setBanner(data.getString("Banner"));
                                 md.setSize(data.getString("Size"));
-                                md.setHarga(data.getString("Harga"));
-                                md.setHargaSewa(data.getString("HargaSewa"));
+                                String HargaJualData = (data.getString("Harga"));
+                                if (HargaJualData.isEmpty()) {
+                                    md.setHarga("0");
+                                } else {
+                                    md.setHarga(HargaJualData);
+                                }
+                                String HargaSewaData = (data.getString("HargaSewa"));
+                                if (HargaSewaData.isEmpty()) {
+                                    md.setHargaSewa("0");
+                                } else {
+                                    md.setHargaSewa(HargaSewaData);
+                                }
                                 md.setRangeHarga(data.getString("RangeHarga"));
                                 md.setTglInput(data.getString("TglInput"));
                                 md.setImg1(data.getString("Img1"));
@@ -654,6 +657,10 @@ public class ListingAgenFragment extends Fragment {
                                 md.setImg6(data.getString("Img6"));
                                 md.setImg7(data.getString("Img7"));
                                 md.setImg8(data.getString("Img8"));
+                                md.setImg9(data.getString("Img9"));
+                                md.setImg10(data.getString("Img10"));
+                                md.setImg11(data.getString("Img11"));
+                                md.setImg12(data.getString("Img12"));
                                 md.setVideo(data.getString("Video"));
                                 md.setLinkFacebook(data.getString("LinkFacebook"));
                                 md.setLinkTiktok(data.getString("LinkTiktok"));

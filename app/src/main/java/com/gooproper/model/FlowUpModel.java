@@ -1,12 +1,12 @@
 package com.gooproper.model;
 
 public class FlowUpModel {
-    String IdFlowup, IdAgen, IdInput, IdListing, NamaBuyer, TelpBuyer, SumberBuyer, Tanggal, Jam, Keterangan, Chat, Survei, Tawar, Lokasi, Deal, Selfie, NamaListing, Alamat, Latitude, Longitude, Harga, NamaInput, TelpInput, NamaAgen, TelpAgen, Img1, Img2, Img3, Img4, Img5, Img6, Img7, Img8;
+    String IdFlowup, IdAgen, IdInput, IdListing, NamaBuyer, TelpBuyer, SumberBuyer, Tanggal, Jam, Keterangan, Chat, Survei, Tawar, Lokasi, Deal, Selfie, NamaListing, Alamat, Latitude, Longitude, Harga, NamaInput, TelpInput, NamaAgen, TelpAgen, Img1, Img2, Img3, Img4, Img5, Img6, Img7, Img8, Img9, Img10, Img11, Img12;
 
     public FlowUpModel() {
     }
 
-    public FlowUpModel(String IdFlowup, String IdAgen, String IdInput, String IdListing, String NamaBuyer, String TelpBuyer, String SumberBuyer, String Tanggal, String Jam, String Keterangan, String Chat, String Survei, String Tawar, String Lokasi, String Deal, String Selfie, String NamaListing, String Alamat, String Latitude, String Longitude, String Harga, String NamaInput, String TelpInput, String NamaAgen, String TelpAgen, String Img1, String Img2, String Img3, String Img4, String Img5, String Img6, String Img7, String Img8) {
+    public FlowUpModel(String IdFlowup, String IdAgen, String IdInput, String IdListing, String NamaBuyer, String TelpBuyer, String SumberBuyer, String Tanggal, String Jam, String Keterangan, String Chat, String Survei, String Tawar, String Lokasi, String Deal, String Selfie, String NamaListing, String Alamat, String Latitude, String Longitude, String Harga, String NamaInput, String TelpInput, String NamaAgen, String TelpAgen, String Img1, String Img2, String Img3, String Img4, String Img5, String Img6, String Img7, String Img8, String Img9, String Img10, String Img11, String Img12) {
         this.IdFlowup = IdFlowup;
         this.IdAgen = IdAgen;
         this.IdInput = IdInput;
@@ -40,6 +40,10 @@ public class FlowUpModel {
         this.Img6 = Img6;
         this.Img7 = Img7;
         this.Img8 = Img8;
+        this.Img9 = Img9;
+        this.Img10 = Img10;
+        this.Img11 = Img11;
+        this.Img12 = Img12;
     }
 
     public String getIdFlowup() {
@@ -304,5 +308,37 @@ public class FlowUpModel {
 
     public void setImg8(String img8) {
         Img8 = img8;
+    }
+
+    public String getImg9() {
+        return Img9;
+    }
+
+    public void setImg9(String img9) {
+        Img9 = img9;
+    }
+
+    public String getImg10() {
+        return Img10;
+    }
+
+    public void setImg10(String img10) {
+        Img10 = img10;
+    }
+
+    public String getImg11() {
+        return Img11;
+    }
+
+    public void setImg11(String img11) {
+        Img11 = img11;
+    }
+
+    public String getImg12() {
+        return Img12;
+    }
+
+    public void setImg12(String img12) {
+        Img12 = img12;
     }
 }

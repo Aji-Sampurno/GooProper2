@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.gooproper.R;
 import com.gooproper.model.ListingModel;
-import com.gooproper.ui.detail.DetailListingActivity;
+import com.gooproper.ui.detail.listing.DetailListingActivity;
 import com.gooproper.util.FormatCurrency;
 
 import java.util.List;

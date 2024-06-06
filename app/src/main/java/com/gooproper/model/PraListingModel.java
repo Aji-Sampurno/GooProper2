@@ -1,18 +1,19 @@
 package com.gooproper.model;
 
 public class PraListingModel {
-    String IdPraListing, IdAgen, IdInput, IdVendor, NamaListing, Alamat, Location, Wilayah, Wide, Land, Dimensi, Listrik, Level, Bed, Bath, BedArt, BathArt, Garage, Carpot, NoCertificate, Pbb, JenisProperti, JenisCertificate, SumberAir, Kondisi, Deskripsi, Prabot, KetPrabot, Priority, Ttd, Banner, Harga, TglInput, Img1, Img2, Img3, Img4, Img5, Img6, Img7, Img8, Video, LinkFacebook, LinkTiktok, LinkInstagram, LinkYoutube, IsAdmin, IsManager, View, Sold, Rented, SoldAgen, RentedAgen, Nama, NoTelp, Instagram, Latitude, Longitude, Hadap, SHM, HGB, HSHP, PPJB, Stratatitle, ImgSHM, ImgHGB, ImgHSHP, ImgPPJB, ImgStratatitle, Size, Marketable, StatusHarga, IdAgenCo, Selfie, Pjp, ImgPjp, ImgPjp1, HargaSewa, Fee, AJB, PetokD, ImgAJB, ImgPetokD, NamaVendor, NoTelpVendor, IsSelfie, IsLokasi, IsRejected, Keterangan, RangeHarga;
+    String IdPraListing, IdAgen, IdInput, IdVendor, NamaListing, Alamat, AlamatTemplate, Location, Wilayah, Wide, Land, Dimensi, Listrik, Level, Bed, Bath, BedArt, BathArt, Garage, Carpot, NoCertificate, Pbb, JenisProperti, JenisCertificate, SumberAir, Kondisi, Deskripsi, Prabot, KetPrabot, Priority, Ttd, Banner, Harga, TglInput, Img1, Img2, Img3, Img4, Img5, Img6, Img7, Img8, Img9, Img10, Img11, Img12, Video, LinkFacebook, LinkTiktok, LinkInstagram, LinkYoutube, IsAdmin, IsManager, View, Sold, Rented, SoldAgen, RentedAgen, Nama, NoTelp, Instagram, Latitude, Longitude, Hadap, SHM, HGB, HSHP, PPJB, Stratatitle, ImgSHM, ImgHGB, ImgHSHP, ImgPPJB, ImgStratatitle, Size, Marketable, StatusHarga, IdAgenCo, Selfie, Pjp, ImgPjp, ImgPjp1, HargaSewa, Fee, AJB, PetokD, ImgAJB, ImgPetokD, NamaVendor, NoTelpVendor, IsSelfie, IsLokasi, IsRejected, Keterangan, RangeHarga;
 
     public PraListingModel() {
     }
 
-    public PraListingModel(String IdPraListing, String IdAgen, String IdInput, String IdVendor, String NamaListing, String Alamat, String Location, String Wilayah, String Wide, String Land, String Dimensi, String Listrik, String Level, String Bed, String Bath, String BedArt, String BathArt, String Garage, String Carpot, String NoCertificate, String Pbb, String JenisProperti, String JenisCertificate, String SumberAir, String Kondisi, String Deskripsi, String Prabot, String KetPrabot, String Priority, String Ttd, String Banner, String Harga, String TglInput, String Img1, String Img2, String Img3, String Img4, String Img5, String Img6, String Img7, String Img8, String Video, String LinkFacebook, String LinkTiktok, String LinkInstagram, String LinkYoutube, String IsAdmin, String IsManager, String View, String Sold, String Rented, String SoldAgen, String RentedAgen, String Nama, String NoTelp, String Instagram, String Latitude, String Longitude, String Hadap, String SHM, String HGB, String HSHP, String PPJB, String Stratatitle, String ImgSHM, String ImgHGB, String ImgHSHP, String ImgPPJB, String ImgStratatitle, String Size, String Marketable, String StatusHarga, String IdAgenCo, String Selfie, String Pjp, String ImgPjp, String ImgPjp1, String HargaSewa, String Fee, String AJB, String PetokD, String ImgAJB, String ImgPetokD, String NamaVendor, String NoTelpVendor, String IsSelfie, String IsLokasi, String IsRejected, String Keterangan, String RangeHarga) {
+    public PraListingModel(String IdPraListing, String IdAgen, String IdInput, String IdVendor, String NamaListing, String Alamat, String AlamatTemplate, String Location, String Wilayah, String Wide, String Land, String Dimensi, String Listrik, String Level, String Bed, String Bath, String BedArt, String BathArt, String Garage, String Carpot, String NoCertificate, String Pbb, String JenisProperti, String JenisCertificate, String SumberAir, String Kondisi, String Deskripsi, String Prabot, String KetPrabot, String Priority, String Ttd, String Banner, String Harga, String TglInput, String Img1, String Img2, String Img3, String Img4, String Img5, String Img6, String Img7, String Img8, String Img9, String Img10, String Img11, String Img12, String Video, String LinkFacebook, String LinkTiktok, String LinkInstagram, String LinkYoutube, String IsAdmin, String IsManager, String View, String Sold, String Rented, String SoldAgen, String RentedAgen, String Nama, String NoTelp, String Instagram, String Latitude, String Longitude, String Hadap, String SHM, String HGB, String HSHP, String PPJB, String Stratatitle, String ImgSHM, String ImgHGB, String ImgHSHP, String ImgPPJB, String ImgStratatitle, String Size, String Marketable, String StatusHarga, String IdAgenCo, String Selfie, String Pjp, String ImgPjp, String ImgPjp1, String HargaSewa, String Fee, String AJB, String PetokD, String ImgAJB, String ImgPetokD, String NamaVendor, String NoTelpVendor, String IsSelfie, String IsLokasi, String IsRejected, String Keterangan, String RangeHarga) {
         this.IdPraListing = IdPraListing;
         this.IdAgen = IdAgen;
         this.IdInput = IdInput;
         this.IdVendor = IdVendor;
         this.NamaListing = NamaListing;
         this.Alamat = Alamat;
+        this.AlamatTemplate = AlamatTemplate;
         this.Location = Location;
         this.Wilayah = Wilayah;
         this.Wide = Wide;
@@ -59,6 +60,10 @@ public class PraListingModel {
         this.Img6 = Img6;
         this.Img7 = Img7;
         this.Img8 = Img8;
+        this.Img9 = Img9;
+        this.Img10 = Img10;
+        this.Img11 = Img11;
+        this.Img12 = Img12;
         this.Video = Video;
         this.LinkFacebook = LinkFacebook;
         this.LinkTiktok = LinkTiktok;
@@ -145,6 +150,14 @@ public class PraListingModel {
 
     public void setAlamat(String alamat) {
         Alamat = alamat;
+    }
+
+    public String getAlamatTemplate() {
+        return AlamatTemplate;
+    }
+
+    public void setAlamatTemplate(String alamatTemplate) {
+        AlamatTemplate = alamatTemplate;
     }
 
     public String getLocation() {
@@ -425,6 +438,38 @@ public class PraListingModel {
 
     public void setImg8(String img8) {
         Img8 = img8;
+    }
+
+    public String getImg9() {
+        return Img9;
+    }
+
+    public void setImg9(String img9) {
+        Img9 = img9;
+    }
+
+    public String getImg10() {
+        return Img10;
+    }
+
+    public void setImg10(String img10) {
+        Img10 = img10;
+    }
+
+    public String getImg11() {
+        return Img11;
+    }
+
+    public void setImg11(String img11) {
+        Img11 = img11;
+    }
+
+    public String getImg12() {
+        return Img12;
+    }
+
+    public void setImg12(String img12) {
+        Img12 = img12;
     }
 
     public String getVideo() {

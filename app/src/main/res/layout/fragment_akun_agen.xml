@@ -252,6 +252,67 @@
                         android:padding="10dp">
 
                         <LinearLayout
+                            android:id="@+id/lytsurveylokasi"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:layout_marginBottom="5dp"
+                            android:orientation="horizontal">
+
+                            <FrameLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="5dp"
+                                    android:layout_marginBottom="5dp"
+                                    android:orientation="horizontal">
+
+                                    <ImageView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center"
+                                        android:layout_marginEnd="10dp"
+                                        android:src="@drawable/ic_report"
+                                        app:tint="@color/second" />
+
+                                    <TextView
+                                        style="@style/TextAppearance.Material3.TitleMedium"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center"
+                                        android:text="Survey Lokasi"
+                                        android:textColor="@color/second" />
+
+                                </LinearLayout>
+
+                                <TextView
+                                    android:id="@+id/TVBadgeSurvey"
+                                    android:layout_width="20dp"
+                                    android:layout_height="20dp"
+                                    android:background="@drawable/badge"
+                                    android:layout_gravity="top|end"
+                                    android:gravity="center"
+                                    android:textAlignment="center"
+                                    android:textColor="@color/white"
+                                    android:visibility="gone"
+                                    style="@style/TextAppearance.AppCompat.Caption"/>
+
+                            </FrameLayout>
+
+                        </LinearLayout>
+
+                        <View
+                            android:id="@+id/VSurveyLokasi"
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginBottom="10dp"
+                            android:background="#717171" />
+
+                        <LinearLayout
                             android:id="@+id/lytreport"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -493,20 +554,47 @@
                             android:layout_marginBottom="5dp"
                             android:orientation="horizontal">
 
-                            <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:src="@drawable/ic_listing"
-                                android:layout_marginEnd="10dp"
-                                app:tint="@color/second" />
-
-                            <TextView
+                            <FrameLayout
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="Pra-Listing"
-                                android:textColor="@color/second"
-                                style="@style/TextAppearance.Material3.TitleMedium"/>
+                                android:layout_height="wrap_content">
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="5dp"
+                                    android:layout_marginBottom="5dp"
+                                    android:orientation="horizontal">
+
+                                    <ImageView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center"
+                                        android:src="@drawable/ic_listing"
+                                        android:layout_marginEnd="10dp"
+                                        app:tint="@color/second" />
+
+                                    <TextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:text="Pra-Listing"
+                                        android:textColor="@color/second"
+                                        style="@style/TextAppearance.Material3.TitleMedium"/>
+
+                                </LinearLayout>
+
+                                <TextView
+                                    android:id="@+id/TVBadgePralisting"
+                                    android:layout_width="20dp"
+                                    android:layout_height="20dp"
+                                    android:background="@drawable/badge"
+                                    android:layout_gravity="top|end"
+                                    android:gravity="center"
+                                    android:textAlignment="center"
+                                    android:textColor="@color/white"
+                                    android:visibility="gone"
+                                    style="@style/TextAppearance.AppCompat.Caption"/>
+
+                            </FrameLayout>
 
                         </LinearLayout>
 
@@ -525,20 +613,47 @@
                             android:layout_marginBottom="5dp"
                             android:orientation="horizontal">
 
-                            <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:src="@drawable/ic_listing"
-                                android:layout_marginEnd="10dp"
-                                app:tint="@color/second" />
-
-                            <TextView
+                            <FrameLayout
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="Pra-Listing Ditolak"
-                                android:textColor="@color/second"
-                                style="@style/TextAppearance.Material3.TitleMedium"/>
+                                android:layout_height="wrap_content">
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="5dp"
+                                    android:layout_marginBottom="5dp"
+                                    android:orientation="horizontal">
+
+                                    <ImageView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center"
+                                        android:src="@drawable/ic_listing"
+                                        android:layout_marginEnd="10dp"
+                                        app:tint="@color/second" />
+
+                                    <TextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:text="Pra-Listing Ditolak"
+                                        android:textColor="@color/second"
+                                        style="@style/TextAppearance.Material3.TitleMedium"/>
+
+                                </LinearLayout>
+
+                                <TextView
+                                    android:id="@+id/TVBadgePralistingRejected"
+                                    android:layout_width="20dp"
+                                    android:layout_height="20dp"
+                                    android:background="@drawable/badge"
+                                    android:layout_gravity="top|end"
+                                    android:gravity="center"
+                                    android:textAlignment="center"
+                                    android:textColor="@color/white"
+                                    android:visibility="gone"
+                                    style="@style/TextAppearance.AppCompat.Caption"/>
+
+                            </FrameLayout>
 
                         </LinearLayout>
 

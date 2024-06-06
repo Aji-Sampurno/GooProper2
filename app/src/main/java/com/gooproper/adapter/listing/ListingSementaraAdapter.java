@@ -14,8 +14,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.gooproper.R;
 import com.gooproper.model.ListingSementaraModel;
-import com.gooproper.ui.tambah.TambahDetailInfoSementaraActivity;
-import com.gooproper.ui.tambah.TambahDetailListingSementaraActivity;
+import com.gooproper.ui.tambah.info.TambahDetailInfoSementaraActivity;
+import com.gooproper.ui.tambah.listing.TambahDetailListingSementaraActivity;
 
 import java.util.List;
 

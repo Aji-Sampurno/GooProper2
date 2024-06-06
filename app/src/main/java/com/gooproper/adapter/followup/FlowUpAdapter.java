@@ -147,6 +147,10 @@ public class FlowUpAdapter extends RecyclerView.Adapter<FlowUpAdapter.HolderData
                     update.putExtra("Img6",flowUpModel.getImg6());
                     update.putExtra("Img7",flowUpModel.getImg7());
                     update.putExtra("Img8",flowUpModel.getImg8());
+                    update.putExtra("Img9",flowUpModel.getImg9());
+                    update.putExtra("Img10",flowUpModel.getImg10());
+                    update.putExtra("Img11",flowUpModel.getImg11());
+                    update.putExtra("Img12",flowUpModel.getImg12());
                     context.startActivity(update);
                 }
             });

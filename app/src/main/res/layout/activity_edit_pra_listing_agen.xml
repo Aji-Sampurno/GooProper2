@@ -112,7 +112,8 @@
                             android:layout_height="wrap_content"
                             android:gravity="center"
                             android:buttonTint="@color/black"
-                            android:textColor="@color/black" />
+                            android:textColor="@color/black"
+                            android:clickable="false" />
 
                         <TextView
                             android:layout_width="match_parent"
@@ -134,7 +135,8 @@
                             android:layout_height="wrap_content"
                             android:gravity="center"
                             android:buttonTint="@color/black"
-                            android:textColor="@color/black" />
+                            android:textColor="@color/black"
+                            android:clickable="false" />
 
                         <TextView
                             android:layout_width="match_parent"
@@ -1758,6 +1760,146 @@
 
                 <Button
                     android:id="@+id/btnSelectImage"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:backgroundTint="@color/main"
+                    android:text="Tambah Gambar"
+                    android:textColor="@color/white"
+                    android:visibility="gone" />
+
+                <LinearLayout
+                    android:id="@+id/lyts9"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal"
+                    android:visibility="gone">
+
+                    <ImageView
+                        android:id="@+id/ivs9"
+                        android:layout_width="250dp"
+                        android:layout_height="250dp" />
+
+                    <ImageView
+                        android:id="@+id/IVDelete9"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_margin="5dp"
+                        android:gravity="center"
+                        android:src="@drawable/ic_delete"
+                        app:tint="@color/red_color" />
+
+                </LinearLayout>
+
+                <Button
+                    android:id="@+id/btnSelectImage9"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:backgroundTint="@color/main"
+                    android:text="Tambah Gambar"
+                    android:textColor="@color/white"
+                    android:visibility="gone" />
+
+                <LinearLayout
+                    android:id="@+id/lyts10"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal"
+                    android:visibility="gone">
+
+                    <ImageView
+                        android:id="@+id/ivs10"
+                        android:layout_width="250dp"
+                        android:layout_height="250dp" />
+
+                    <ImageView
+                        android:id="@+id/IVDelete10"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_margin="5dp"
+                        android:gravity="center"
+                        android:src="@drawable/ic_delete"
+                        app:tint="@color/red_color" />
+
+                </LinearLayout>
+
+                <Button
+                    android:id="@+id/btnSelectImage10"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:backgroundTint="@color/main"
+                    android:text="Tambah Gambar"
+                    android:textColor="@color/white"
+                    android:visibility="gone" />
+
+                <LinearLayout
+                    android:id="@+id/lyts11"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal"
+                    android:visibility="gone">
+
+                    <ImageView
+                        android:id="@+id/ivs11"
+                        android:layout_width="250dp"
+                        android:layout_height="250dp" />
+
+                    <ImageView
+                        android:id="@+id/IVDelete11"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_margin="5dp"
+                        android:gravity="center"
+                        android:src="@drawable/ic_delete"
+                        app:tint="@color/red_color" />
+
+                </LinearLayout>
+
+                <Button
+                    android:id="@+id/btnSelectImage11"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:backgroundTint="@color/main"
+                    android:text="Tambah Gambar"
+                    android:textColor="@color/white"
+                    android:visibility="gone" />
+
+                <LinearLayout
+                    android:id="@+id/lyts12"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal"
+                    android:visibility="gone">
+
+                    <ImageView
+                        android:id="@+id/ivs12"
+                        android:layout_width="250dp"
+                        android:layout_height="250dp" />
+
+                    <ImageView
+                        android:id="@+id/IVDelete12"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_margin="5dp"
+                        android:gravity="center"
+                        android:src="@drawable/ic_delete"
+                        app:tint="@color/red_color" />
+
+                </LinearLayout>
+
+                <Button
+                    android:id="@+id/btnSelectImage12"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"

@@ -54,7 +54,6 @@ public class FlowUpAdminFragment extends Fragment {
         PDFlowUpAdmin = new ProgressDialog(getActivity());
         rvlist = root.findViewById(R.id.RVFlowUpListAdmin);
         rvprimary = root.findViewById(R.id.RVFlowUpPrimaryListAdmin);
-//        srflowup = root.findViewById(R.id.SRFlowUpAdmin);
 
         list = new ArrayList<>();
         primaryModelList = new ArrayList<>();
@@ -74,13 +73,6 @@ public class FlowUpAdminFragment extends Fragment {
         primaryAdapter = new FlowUpPrimaryAdapter(getActivity(), primaryModelList);
         rvprimary.setAdapter(primaryAdapter);
 
-//        srflowup.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-//            @Override
-//            public void onRefresh() {
-//                LoadFlowupAdmin(true);
-//            }
-//        });
-
         return root;
     }
 
@@ -94,7 +86,6 @@ public class FlowUpAdminFragment extends Fragment {
                     @Override
                     public void onResponse(JSONArray response) {
                         PDFlowUpAdmin.cancel();
-//                        srflowup.setRefreshing(false);
                         list.clear();
                         for (int i = 0; i < response.length(); i++) {
                             try {
@@ -126,7 +117,6 @@ public class FlowUpAdminFragment extends Fragment {
                             } catch (JSONException e) {
                                 e.printStackTrace();
                                 PDFlowUpAdmin.dismiss();
-//                                srflowup.setRefreshing(false);
 
                                 Dialog customDialog = new Dialog(getActivity());
                                 customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -163,7 +153,6 @@ public class FlowUpAdminFragment extends Fragment {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-//                        srflowup.setRefreshing(false);
                         PDFlowUpAdmin.dismiss();
                         error.printStackTrace();
 
@@ -207,7 +196,6 @@ public class FlowUpAdminFragment extends Fragment {
                     @Override
                     public void onResponse(JSONArray response) {
                         PDFlowUpAdmin.cancel();
-//                        srflowup.setRefreshing(false);
                         primaryModelList.clear();
                         for (int i = 0; i < response.length(); i++) {
                             try {
@@ -237,7 +225,6 @@ public class FlowUpAdminFragment extends Fragment {
                             } catch (JSONException e) {
                                 e.printStackTrace();
                                 PDFlowUpAdmin.dismiss();
-//                                srflowup.setRefreshing(false);
 
                                 Dialog customDialog = new Dialog(getActivity());
                                 customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -274,7 +261,6 @@ public class FlowUpAdminFragment extends Fragment {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-//                        srflowup.setRefreshing(false);
                         PDFlowUpAdmin.dismiss();
                         error.printStackTrace();
 

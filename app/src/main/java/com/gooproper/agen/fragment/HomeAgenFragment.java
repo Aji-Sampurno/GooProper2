@@ -279,7 +279,6 @@ public class HomeAgenFragment extends Fragment implements OnMapReadyCallback{
             public void onDataChange(DataSnapshot dataSnapshot) {
                 String existingToken = dataSnapshot.getValue(String.class);
                 if (existingToken == null || !existingToken.equals(token)) {
-                    // Simpan token ke database Firebase
                     tokensRef.child(userName).setValue(token);
                 }
             }
@@ -498,7 +497,7 @@ public class HomeAgenFragment extends Fragment implements OnMapReadyCallback{
                                 });
 
                                 Glide.with(getActivity())
-                                        .load(R.mipmap.ic_yes) // You can also use a local resource like R.drawable.your_gif_resource
+                                        .load(R.mipmap.ic_yes)
                                         .transition(DrawableTransitionOptions.withCrossFade())
                                         .into(gifimage);
 
@@ -528,7 +527,7 @@ public class HomeAgenFragment extends Fragment implements OnMapReadyCallback{
                                 });
 
                                 Glide.with(getActivity())
-                                        .load(R.mipmap.ic_no) // You can also use a local resource like R.drawable.your_gif_resource
+                                        .load(R.mipmap.ic_no)
                                         .transition(DrawableTransitionOptions.withCrossFade())
                                         .into(gifimage);
 
@@ -649,6 +648,7 @@ public class HomeAgenFragment extends Fragment implements OnMapReadyCallback{
                                 md.setIdInput(data.getString("IdInput"));
                                 md.setNamaListing(data.getString("NamaListing"));
                                 md.setAlamat(data.getString("Alamat"));
+                                md.setAlamatTemplate(data.getString("AlamatTemplate"));
                                 md.setLatitude(data.getString("Latitude"));
                                 md.setLongitude(data.getString("Longitude"));
                                 md.setLocation(data.getString("Location"));
@@ -708,6 +708,10 @@ public class HomeAgenFragment extends Fragment implements OnMapReadyCallback{
                                 md.setImg6(data.getString("Img6"));
                                 md.setImg7(data.getString("Img7"));
                                 md.setImg8(data.getString("Img8"));
+                                md.setImg9(data.getString("Img9"));
+                                md.setImg10(data.getString("Img10"));
+                                md.setImg11(data.getString("Img11"));
+                                md.setImg12(data.getString("Img12"));
                                 md.setVideo(data.getString("Video"));
                                 md.setLinkFacebook(data.getString("LinkFacebook"));
                                 md.setLinkTiktok(data.getString("LinkTiktok"));
@@ -769,6 +773,7 @@ public class HomeAgenFragment extends Fragment implements OnMapReadyCallback{
                                 md.setIdInput(data.getString("IdInput"));
                                 md.setNamaListing(data.getString("NamaListing"));
                                 md.setAlamat(data.getString("Alamat"));
+                                md.setAlamatTemplate(data.getString("AlamatTemplate"));
                                 md.setLatitude(data.getString("Latitude"));
                                 md.setLongitude(data.getString("Longitude"));
                                 md.setLocation(data.getString("Location"));
@@ -828,6 +833,10 @@ public class HomeAgenFragment extends Fragment implements OnMapReadyCallback{
                                 md.setImg6(data.getString("Img6"));
                                 md.setImg7(data.getString("Img7"));
                                 md.setImg8(data.getString("Img8"));
+                                md.setImg9(data.getString("Img9"));
+                                md.setImg10(data.getString("Img10"));
+                                md.setImg11(data.getString("Img11"));
+                                md.setImg12(data.getString("Img12"));
                                 md.setVideo(data.getString("Video"));
                                 md.setLinkFacebook(data.getString("LinkFacebook"));
                                 md.setLinkTiktok(data.getString("LinkTiktok"));
@@ -889,6 +898,7 @@ public class HomeAgenFragment extends Fragment implements OnMapReadyCallback{
                                 md.setIdInput(data.getString("IdInput"));
                                 md.setNamaListing(data.getString("NamaListing"));
                                 md.setAlamat(data.getString("Alamat"));
+                                md.setAlamatTemplate(data.getString("AlamatTemplate"));
                                 md.setLatitude(data.getString("Latitude"));
                                 md.setLongitude(data.getString("Longitude"));
                                 md.setLocation(data.getString("Location"));
@@ -948,6 +958,10 @@ public class HomeAgenFragment extends Fragment implements OnMapReadyCallback{
                                 md.setImg6(data.getString("Img6"));
                                 md.setImg7(data.getString("Img7"));
                                 md.setImg8(data.getString("Img8"));
+                                md.setImg9(data.getString("Img9"));
+                                md.setImg10(data.getString("Img10"));
+                                md.setImg11(data.getString("Img11"));
+                                md.setImg12(data.getString("Img12"));
                                 md.setVideo(data.getString("Video"));
                                 md.setLinkFacebook(data.getString("LinkFacebook"));
                                 md.setLinkTiktok(data.getString("LinkTiktok"));
@@ -1078,7 +1092,6 @@ public class HomeAgenFragment extends Fragment implements OnMapReadyCallback{
                     new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
-                            // Tangani kesalahan Volley
                         }
                     }
             );

@@ -222,6 +222,27 @@
 
                 </LinearLayout>
 
+                <LinearLayout
+                    android:id="@+id/LytArsip"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:layout_marginBottom="40dp"
+                    android:orientation="vertical"
+                    android:visibility="visible"
+                    android:background="@color/second">
+
+                    <TextView
+                        android:id="@+id/TVArsip"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="3dp"
+                        android:textSize="5pt"
+                        android:text="0000000"
+                        android:textColor="@color/main"/>
+
+                </LinearLayout>
+
             </FrameLayout>
 
         </androidx.cardview.widget.CardView>

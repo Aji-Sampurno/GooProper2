@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    tools:context=".ui.TentangKamiActivity">
+    tools:context=".ui.user.TentangKamiActivity">
 
     <LinearLayout
         android:id="@+id/topbar"

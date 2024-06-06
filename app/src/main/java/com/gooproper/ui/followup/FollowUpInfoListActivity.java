@@ -78,7 +78,6 @@ public class FollowUpInfoListActivity extends AppCompatActivity {
             getSupportActionBar().hide();
         }
     }
-
     private void LoadFollowUp(boolean showProgressDialog) {
         PDialog.setMessage("Memuat Data...");
         PDialog.show();

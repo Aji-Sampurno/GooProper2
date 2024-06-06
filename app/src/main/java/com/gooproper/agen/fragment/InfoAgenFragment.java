@@ -97,7 +97,6 @@ public class InfoAgenFragment extends Fragment {
         return root;
     }
 
-    //searchView
     private void filterList(String text) {
         List<InfoModel> filteredList = new ArrayList<>();
         for (InfoModel item : list) {

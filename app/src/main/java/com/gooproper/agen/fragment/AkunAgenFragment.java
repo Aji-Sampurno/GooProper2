@@ -1,6 +1,5 @@
 package com.gooproper.agen.fragment;
 
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Intent;
 import android.net.Uri;
@@ -16,25 +15,21 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
-import com.gooproper.guest.MainGuestActivity;
-import com.gooproper.model.ListingModel;
 import com.gooproper.ui.AgenActivity;
 import com.gooproper.ui.edit.EditAkunActivity;
 import com.gooproper.R;
-import com.gooproper.ui.SettingActivity;
-import com.gooproper.ui.TentangKamiActivity;
+import com.gooproper.ui.officer.survey.SurveyLokasiActivity;
+import com.gooproper.ui.user.SettingActivity;
+import com.gooproper.ui.user.TentangKamiActivity;
 import com.gooproper.ui.listing.InfoPropertyKuActivity;
 import com.gooproper.ui.listing.InfoPropertySpekActivity;
 import com.gooproper.ui.listing.ListListingSementaraActivity;
@@ -42,12 +37,12 @@ import com.gooproper.ui.listing.ListingFavoriteActivity;
 import com.gooproper.ui.listing.ListingTerakhirDilihatActivity;
 import com.gooproper.ui.listing.ListingkuActivity;
 import com.gooproper.ui.listing.PraListingAgenActivity;
-import com.gooproper.ui.RewardActivity;
-import com.gooproper.ui.officer.ReportOfficerActivity;
-import com.gooproper.ui.tambah.TambahListingActivity;
+import com.gooproper.ui.tbo.RewardActivity;
+import com.gooproper.ui.officer.report.ReportOfficerActivity;
+import com.gooproper.ui.tambah.listing.TambahListingActivity;
 import com.gooproper.ui.listing.PraListingRejectedActivity;
-import com.gooproper.ui.tambah.TambahInfoActivity;
-import com.gooproper.ui.tambah.TambahListingSementaraActivity;
+import com.gooproper.ui.tambah.info.TambahInfoActivity;
+import com.gooproper.ui.tambah.listing.TambahListingSementaraActivity;
 import com.gooproper.ui.tbo.TboAgenActivity;
 import com.gooproper.util.Preferences;
 import com.gooproper.util.ServerApi;
@@ -57,18 +52,15 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class AkunAgenFragment extends Fragment {
 
-    private LinearLayout reward, listing, reportofficer, agengoo, tbo, listingsementara, daftarsementara, listingmitra, listingkl, agen, mitra, kl, listingku, favorite, favoritemitra, favoritekl, seen, seenmitra, seenkl, pengaturan, pengaturanmitra, pengaturankl, hubungikami, hubungikamimitra, hubungikamikl, tentangkami, tentangkamimitra, tentangkamikl, pralising, pralistingreject, info, infoku, prainfo;
-    TextView nama, edit;
+    private LinearLayout reward, listing, surveylokasi, reportofficer, agengoo, tbo, listingsementara, daftarsementara, listingmitra, listingkl, agen, mitra, kl, listingku, favorite, favoritemitra, favoritekl, seen, seenmitra, seenkl, pengaturan, pengaturanmitra, pengaturankl, hubungikami, hubungikamimitra, hubungikamikl, tentangkami, tentangkamimitra, tentangkamikl, pralising, pralistingreject, info, infoku, prainfo;
+    TextView nama, edit, TVBadgeSurvey, TVBadgePralisting, TVBadgePralistingRejected;
     CircleImageView cvagen;
     String imgurl, IsAktif, IsOfficer;
-    View VReportAgen;
+    View VReportAgen, VSurveyLokasi;
     String profile;
     String status;
     String wa = "811 333 8838";
@@ -87,6 +79,7 @@ public class AkunAgenFragment extends Fragment {
         mitra = root.findViewById(R.id.lytkl);
         kl = root.findViewById(R.id.lytmitra);
         reward = root.findViewById(R.id.lytreward);
+        surveylokasi = root.findViewById(R.id.lytsurveylokasi);
         reportofficer = root.findViewById(R.id.lytreport);
         agengoo = root.findViewById(R.id.lytagengoo);
         listingku = root.findViewById(R.id.lytlistingku);
@@ -118,8 +111,12 @@ public class AkunAgenFragment extends Fragment {
         pralistingreject = root.findViewById(R.id.lytpralistingrejected);
         nama = root.findViewById(R.id.tvnamaakunagen);
         edit = root.findViewById(R.id.tveditakunagen);
+        TVBadgeSurvey = root.findViewById(R.id.TVBadgeSurvey);
+        TVBadgePralisting = root.findViewById(R.id.TVBadgePralisting);
+        TVBadgePralistingRejected = root.findViewById(R.id.TVBadgePralistingRejected);
         cvagen = root.findViewById(R.id.cvprofileagen);
         VReportAgen = root.findViewById(R.id.VReport);
+        VSurveyLokasi = root.findViewById(R.id.VSurveyLokasi);
 
         nama.setText(Preferences.getKeyUsername(getActivity()));
         edit.setOnClickListener(view -> startActivity(new Intent(getActivity(), EditAkunActivity.class)));
@@ -191,9 +188,19 @@ public class AkunAgenFragment extends Fragment {
                                     reportofficer.setVisibility(View.VISIBLE);
                                     VReportAgen.setVisibility(View.VISIBLE);
                                     reportofficer.setOnClickListener(v -> startActivity(new Intent(getContext(), ReportOfficerActivity.class)));
+                                    surveylokasi.setVisibility(View.VISIBLE);
+                                    VSurveyLokasi.setVisibility(View.VISIBLE);
+                                    surveylokasi.setOnClickListener(v -> startActivity(new Intent(getContext(), SurveyLokasiActivity.class)));
+                                    CountPralistingSurvey();
+                                    CountPralisting();
+                                    CountPralistingRejected();
                                 } else {
                                     reportofficer.setVisibility(View.GONE);
                                     VReportAgen.setVisibility(View.GONE);
+                                    surveylokasi.setVisibility(View.GONE);
+                                    VSurveyLokasi.setVisibility(View.GONE);
+                                    CountPralisting();
+                                    CountPralistingRejected();
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -392,6 +399,111 @@ public class AkunAgenFragment extends Fragment {
                                 JSONObject data = response.getJSONObject(i);
 
                                 IsAktif = data.getString("IsAktif");
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        error.printStackTrace();
+                    }
+                });
+
+        queue.add(reqData);
+    }
+
+    private void CountPralistingSurvey() {
+        RequestQueue queue = Volley.newRequestQueue(getContext());
+        JsonArrayRequest reqData = new JsonArrayRequest(Request.Method.GET, ServerApi.URL_COUNT_PRALISTING_TERDEKAT,null,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        for(int i = 0 ; i < response.length(); i++)
+                        {
+                            try {
+                                JSONObject data = response.getJSONObject(i);
+                                String count = data.getString("Total");
+
+                                if (count.isEmpty() || count == null || count.equals("null") || count.equals("0")) {
+                                    TVBadgeSurvey.setVisibility(View.GONE);
+                                } else {
+                                    TVBadgeSurvey.setVisibility(View.VISIBLE);
+                                    TVBadgeSurvey.setText(count);
+                                }
+
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        error.printStackTrace();
+                    }
+                });
+
+        queue.add(reqData);
+    }
+
+    private void CountPralisting() {
+        RequestQueue queue = Volley.newRequestQueue(getContext());
+        JsonArrayRequest reqData = new JsonArrayRequest(Request.Method.GET, ServerApi.URL_COUNT_PRALISTING_AGEN + Preferences.getKeyIdAgen(getContext()),null,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        for(int i = 0 ; i < response.length(); i++)
+                        {
+                            try {
+                                JSONObject data = response.getJSONObject(i);
+                                String count = data.getString("Total");
+
+                                if (count.isEmpty() || count == null || count.equals("null") || count.equals("0")) {
+                                    TVBadgePralisting.setVisibility(View.GONE);
+                                } else {
+                                    TVBadgePralisting.setVisibility(View.VISIBLE);
+                                    TVBadgePralisting.setText(count);
+                                }
+
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        error.printStackTrace();
+                    }
+                });
+
+        queue.add(reqData);
+    }
+
+    private void CountPralistingRejected() {
+        RequestQueue queue = Volley.newRequestQueue(getContext());
+        JsonArrayRequest reqData = new JsonArrayRequest(Request.Method.GET, ServerApi.URL_COUNT_PRALISTING_AGEN_REJECTED + Preferences.getKeyIdAgen(getContext()),null,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        for(int i = 0 ; i < response.length(); i++)
+                        {
+                            try {
+                                JSONObject data = response.getJSONObject(i);
+                                String count = data.getString("Total");
+
+                                if (count.isEmpty() || count == null || count.equals("null") || count.equals("0")) {
+                                    TVBadgePralistingRejected.setVisibility(View.GONE);
+                                } else {
+                                    TVBadgePralistingRejected.setVisibility(View.VISIBLE);
+                                    TVBadgePralistingRejected.setText(count);
+                                }
+
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }

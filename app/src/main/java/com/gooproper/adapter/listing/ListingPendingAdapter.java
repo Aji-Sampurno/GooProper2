@@ -28,8 +28,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.gooproper.R;
 import com.gooproper.model.ListingModel;
-import com.gooproper.ui.detail.DetailListingActivity;
-import com.gooproper.ui.detail.DetailListingPendingActivity;
+import com.gooproper.ui.detail.listing.DetailListingPendingActivity;
 import com.gooproper.util.FormatCurrency;
 import com.gooproper.util.Preferences;
 import com.gooproper.util.ServerApi;
@@ -242,6 +241,28 @@ public class ListingPendingAdapter extends RecyclerView.Adapter<ListingPendingAd
         } else {
             holder.Lytpriority.setVisibility(View.VISIBLE);
         }
+        String status = Preferences.getKeyStatus(context);
+
+        if (status.equals("1")){
+            holder.addressTxt.setVisibility(View.VISIBLE);
+        } else if (status.equals("2")) {
+            if (listingModel.getNoArsip().equals("0") || listingModel.getNoArsip().isEmpty()) {
+                holder.addressTxt.setVisibility(View.VISIBLE);
+                holder.LytArsip.setVisibility(View.GONE);
+            } else {
+                holder.addressTxt.setVisibility(View.VISIBLE);
+                holder.arsipTxt.setText(listingModel.getNoArsip());
+            }
+        } else if (status.equals("3")) {
+            holder.addressTxt.setVisibility(View.GONE);
+            holder.LytArsip.setVisibility(View.GONE);
+        } else if (status.equals("4")) {
+            holder.addressTxt.setVisibility(View.GONE);
+            holder.LytArsip.setVisibility(View.GONE);
+        } else {
+            holder.addressTxt.setVisibility(View.GONE);
+            holder.LytArsip.setVisibility(View.GONE);
+        }
         holder.bedTxt.setText(listingModel.getBed());
         holder.bathTxt.setText(listingModel.getBath());
         holder.levelTxt.setText(listingModel.getLevel());
@@ -354,9 +375,9 @@ public class ListingPendingAdapter extends RecyclerView.Adapter<ListingPendingAd
     }
     
     class HolderData extends RecyclerView.ViewHolder{
-        TextView titleTxt, addressTxt, priceTxt, bedTxt, bathTxt, levelTxt, garageTxt, bathArtTxt, bedArtTxt, carpotTxt, wideTxt, priorityTxt;
+        TextView titleTxt, addressTxt, priceTxt, bedTxt, bathTxt, levelTxt, garageTxt, bathArtTxt, bedArtTxt, carpotTxt, wideTxt, priorityTxt, arsipTxt;
         ImageView pic;
-        LinearLayout Lytpriority;
+        LinearLayout Lytpriority, LytArsip;
         String status;
         public ListingModel listingModel;
 
@@ -370,8 +391,10 @@ public class ListingPendingAdapter extends RecyclerView.Adapter<ListingPendingAd
             levelTxt=view.findViewById(R.id.levelTxt);
             garageTxt=view.findViewById(R.id.garageTxt);
             priorityTxt=view.findViewById(R.id.TVPriority);
+            arsipTxt=view.findViewById(R.id.TVArsip);
             pic=view.findViewById(R.id.pic);
             Lytpriority=view.findViewById(R.id.LytBadge);
+            LytArsip=view.findViewById(R.id.LytArsip);
 
             status = Preferences.getKeyStatus(context);
 
@@ -381,10 +404,13 @@ public class ListingPendingAdapter extends RecyclerView.Adapter<ListingPendingAd
                 addressTxt.setVisibility(View.VISIBLE);
             } else if (status.equals("3")) {
                 addressTxt.setVisibility(View.GONE);
+                LytArsip.setVisibility(View.GONE);
             } else if (status.equals("4")) {
                 addressTxt.setVisibility(View.GONE);
+                LytArsip.setVisibility(View.GONE);
             } else {
                 addressTxt.setVisibility(View.GONE);
+                LytArsip.setVisibility(View.GONE);
             }
 
             view.setOnClickListener(new View.OnClickListener() {
@@ -398,6 +424,7 @@ public class ListingPendingAdapter extends RecyclerView.Adapter<ListingPendingAd
                     update.putExtra("IdInput",listingModel.getIdInput());
                     update.putExtra("NamaListing",listingModel.getNamaListing());
                     update.putExtra("Alamat",listingModel.getAlamat());
+                    update.putExtra("AlamatTemplate",listingModel.getAlamatTemplate());
                     update.putExtra("Latitude",listingModel.getLatitude());
                     update.putExtra("Longitude",listingModel.getLongitude());
                     update.putExtra("Location",listingModel.getLocation());
@@ -456,6 +483,10 @@ public class ListingPendingAdapter extends RecyclerView.Adapter<ListingPendingAd
                     update.putExtra("Img6",listingModel.getImg6());
                     update.putExtra("Img7",listingModel.getImg7());
                     update.putExtra("Img8",listingModel.getImg8());
+                    update.putExtra("Img9",listingModel.getImg9());
+                    update.putExtra("Img10",listingModel.getImg10());
+                    update.putExtra("Img11",listingModel.getImg11());
+                    update.putExtra("Img12",listingModel.getImg12());
                     update.putExtra("Video",listingModel.getVideo());
                     update.putExtra("LinkFacebook",listingModel.getLinkFacebook());
                     update.putExtra("LinkTiktok",listingModel.getLinkTiktok());

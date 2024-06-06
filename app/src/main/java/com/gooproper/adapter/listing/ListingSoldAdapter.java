@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.gooproper.R;
 import com.gooproper.model.ListingModel;
-import com.gooproper.ui.detail.DetailListingActivity;
+import com.gooproper.ui.detail.listing.DetailListingActivity;
 import com.gooproper.util.Preferences;
 
 import java.util.List;
@@ -127,6 +127,28 @@ public class ListingSoldAdapter extends RecyclerView.Adapter<ListingSoldAdapter.
     @Override
     public void onBindViewHolder(@NonNull ListingSoldAdapter.HolderData holder, int position) {
         ListingModel listingModel = models.get(position);
+        String status = Preferences.getKeyStatus(context);
+
+        if (status.equals("1")){
+            holder.addressTxt.setVisibility(View.VISIBLE);
+        } else if (status.equals("2")) {
+            if (listingModel.getNoArsip().equals("0")) {
+                holder.addressTxt.setVisibility(View.VISIBLE);
+                holder.LytArsip.setVisibility(View.GONE);
+            } else {
+                holder.addressTxt.setVisibility(View.VISIBLE);
+                holder.arsipTxt.setText(listingModel.getNoArsip());
+            }
+        } else if (status.equals("3")) {
+            holder.addressTxt.setVisibility(View.GONE);
+            holder.LytArsip.setVisibility(View.GONE);
+        } else if (status.equals("4")) {
+            holder.addressTxt.setVisibility(View.GONE);
+            holder.LytArsip.setVisibility(View.GONE);
+        } else {
+            holder.addressTxt.setVisibility(View.GONE);
+            holder.LytArsip.setVisibility(View.GONE);
+        }
         holder.bedTxt.setText(listingModel.getBed());
         holder.bathTxt.setText(listingModel.getBath());
         holder.levelTxt.setText(listingModel.getLevel());
@@ -162,8 +184,8 @@ public class ListingSoldAdapter extends RecyclerView.Adapter<ListingSoldAdapter.
     }
 
     class HolderData extends RecyclerView.ViewHolder {
-        TextView titleTxt, addressTxt, bedTxt, bathTxt, levelTxt, garageTxt;
-        LinearLayout sold, rented;
+        TextView titleTxt, addressTxt, bedTxt, bathTxt, levelTxt, garageTxt, arsipTxt;
+        LinearLayout sold, rented, LytArsip;
         ImageView pic;
         String status;
         public ListingModel listingModel;
@@ -176,7 +198,9 @@ public class ListingSoldAdapter extends RecyclerView.Adapter<ListingSoldAdapter.
             bedTxt = view.findViewById(R.id.bedTxt);
             levelTxt = view.findViewById(R.id.levelTxt);
             garageTxt = view.findViewById(R.id.garageTxt);
-            pic = view.findViewById(R.id.pic);
+            arsipTxt=view.findViewById(R.id.TVArsip);
+            pic=view.findViewById(R.id.pic);
+            LytArsip=view.findViewById(R.id.LytArsip);
             sold = view.findViewById(R.id.badgesold);
             rented = view.findViewById(R.id.badgerented);
 
@@ -188,10 +212,13 @@ public class ListingSoldAdapter extends RecyclerView.Adapter<ListingSoldAdapter.
                 addressTxt.setVisibility(View.VISIBLE);
             } else if (status.equals("3")) {
                 addressTxt.setVisibility(View.GONE);
+                LytArsip.setVisibility(View.GONE);
             } else if (status.equals("4")) {
                 addressTxt.setVisibility(View.GONE);
+                LytArsip.setVisibility(View.GONE);
             } else {
                 addressTxt.setVisibility(View.GONE);
+                LytArsip.setVisibility(View.GONE);
             }
 
             view.setOnClickListener(new View.OnClickListener() {
@@ -199,12 +226,13 @@ public class ListingSoldAdapter extends RecyclerView.Adapter<ListingSoldAdapter.
                 public void onClick(View view) {
                     Intent update = new Intent(context, DetailListingActivity.class);
                     update.putExtra("update", 1);
-                    update.putExtra("IdListing", listingModel.getIdListing());
+                    update.putExtra("IdListing",listingModel.getIdListing());
                     update.putExtra("IdAgen",listingModel.getIdAgen());
                     update.putExtra("IdAgenCo",listingModel.getIdAgenCo());
                     update.putExtra("IdInput",listingModel.getIdInput());
                     update.putExtra("NamaListing",listingModel.getNamaListing());
                     update.putExtra("Alamat",listingModel.getAlamat());
+                    update.putExtra("AlamatTemplate",listingModel.getAlamatTemplate());
                     update.putExtra("Latitude",listingModel.getLatitude());
                     update.putExtra("Longitude",listingModel.getLongitude());
                     update.putExtra("Location",listingModel.getLocation());
@@ -263,6 +291,10 @@ public class ListingSoldAdapter extends RecyclerView.Adapter<ListingSoldAdapter.
                     update.putExtra("Img6",listingModel.getImg6());
                     update.putExtra("Img7",listingModel.getImg7());
                     update.putExtra("Img8",listingModel.getImg8());
+                    update.putExtra("Img9",listingModel.getImg9());
+                    update.putExtra("Img10",listingModel.getImg10());
+                    update.putExtra("Img11",listingModel.getImg11());
+                    update.putExtra("Img12",listingModel.getImg12());
                     update.putExtra("Video",listingModel.getVideo());
                     update.putExtra("LinkFacebook",listingModel.getLinkFacebook());
                     update.putExtra("LinkTiktok",listingModel.getLinkTiktok());

@@ -44,17 +44,14 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Tasks;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
 import com.gooproper.ui.LoginActivity;
 import com.gooproper.R;
-import com.gooproper.ui.tambah.TambahListingActivity;
 import com.gooproper.util.Preferences;
 import com.gooproper.util.SendMessageToFCM;
 import com.gooproper.util.ServerApi;
@@ -67,10 +64,8 @@ import java.io.IOException;
 import java.security.SecureRandom;
 import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -205,7 +200,7 @@ public class RegistrasiAgenActivity extends AppCompatActivity {
                     ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
 
                     Glide.with(RegistrasiAgenActivity.this)
-                            .load(R.drawable.alert) // You can also use a local resource like R.drawable.your_gif_resource
+                            .load(R.drawable.alert)
                             .transition(DrawableTransitionOptions.withCrossFade())
                             .into(gifImageView);
 

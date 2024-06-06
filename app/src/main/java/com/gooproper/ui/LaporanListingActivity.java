@@ -205,6 +205,7 @@ public class LaporanListingActivity extends AppCompatActivity {
                             sheet.addCell(new Label(30, 0, "POIN"));
                             sheet.addCell(new Label(31, 0, "Status Property"));
                             sheet.addCell(new Label(32, 0, "UPLOAD"));
+                            sheet.addCell(new Label(33, 0, "JUMLAH FOTO"));
 
                             for (int i = 0; i < response.length(); i++) {
                                 JSONObject jsonObject = response.getJSONObject(i);
@@ -213,6 +214,7 @@ public class LaporanListingActivity extends AppCompatActivity {
                                 String IdAgen = jsonObject.getString("IdAgen");
                                 String IdAgenCo = jsonObject.getString("IdAgenCo");
                                 String IdInput = jsonObject.getString("IdInput");
+                                String NoArsip = jsonObject.getString("NoArsip");
                                 String NamaListing = jsonObject.getString("NamaListing");
                                 String Alamat = jsonObject.getString("Alamat");
                                 String Latitude = jsonObject.getString("Latitude");
@@ -273,6 +275,10 @@ public class LaporanListingActivity extends AppCompatActivity {
                                 String Img6 = jsonObject.getString("Img6");
                                 String Img7 = jsonObject.getString("Img7");
                                 String Img8 = jsonObject.getString("Img8");
+                                String Img9 = jsonObject.getString("Img9");
+                                String Img10 = jsonObject.getString("Img10");
+                                String Img11 = jsonObject.getString("Img11");
+                                String Img12 = jsonObject.getString("Img12");
                                 String Video = jsonObject.getString("Video");
                                 String LinkFacebook = jsonObject.getString("LinkFacebook");
                                 String LinkTiktok = jsonObject.getString("LinkTiktok");
@@ -299,24 +305,72 @@ public class LaporanListingActivity extends AppCompatActivity {
                                 String IsLokasi = jsonObject.getString("IsLokasi");
                                 String No = String.valueOf(i + 1);
 
+                                int CountImage = 0;
+
+                                String[] intentImages = {
+                                        jsonObject.getString("Img1"),
+                                        jsonObject.getString("Img2"),
+                                        jsonObject.getString("Img3"),
+                                        jsonObject.getString("Img4"),
+                                        jsonObject.getString("Img5"),
+                                        jsonObject.getString("Img6"),
+                                        jsonObject.getString("Img7"),
+                                        jsonObject.getString("Img8"),
+                                        jsonObject.getString("Img9"),
+                                        jsonObject.getString("Img10"),
+                                        jsonObject.getString("Img11"),
+                                        jsonObject.getString("Img12")
+                                };
+
+                                for (String img : intentImages) {
+                                    if (!img.equals("0")) {
+                                        CountImage++;
+                                        sheet.addCell(new Label(33, i + 1, String.valueOf(CountImage)));
+                                    }
+                                }
+
                                 if (Priority.equals("exclusive") && !Pjp.isEmpty() && Banner.equals("Ya")){
                                     Poin = 50;
                                     if (IsSelfie.equals("1") && IsLokasi.equals("1")) {
                                         if (Marketable.equals("1") && StatusHarga.equals("1")) {
                                             if (IdAgenCo.equals("0")){
-                                                UpdatePoin = ( Poin * 2 ) + 20;
+                                                if (CountImage >= 8) {
+                                                    UpdatePoin = ( Poin * 2 ) + 20;
+                                                } else {
+                                                    UpdatePoin = 50;
+                                                }
                                             } else if (IdAgenCo.equals(IdAgen)) {
-                                                UpdatePoin = ( Poin * 2 ) + 20;
+                                                if (CountImage >= 8) {
+                                                    UpdatePoin = ( Poin * 2 ) + 20;
+                                                } else {
+                                                    UpdatePoin = 50;
+                                                }
                                             } else {
-                                                UpdatePoin = (( Poin * 2 ) + 20) / 2;
+                                                if (CountImage >= 8) {
+                                                    UpdatePoin = (( Poin * 2 ) + 20) / 2;
+                                                } else {
+                                                    UpdatePoin = 50 / 2;
+                                                }
                                             }
                                         } else {
                                             if (IdAgenCo.equals("0")){
-                                                UpdatePoin = Poin * 2;
+                                                if (CountImage >= 8) {
+                                                    UpdatePoin = Poin * 2;
+                                                } else {
+                                                    UpdatePoin = 50;
+                                                }
                                             } else if (IdAgenCo.equals(IdAgen)) {
-                                                UpdatePoin = Poin * 2;
+                                                if (CountImage >= 8) {
+                                                    UpdatePoin = Poin * 2;
+                                                } else {
+                                                    UpdatePoin = 50;
+                                                }
                                             } else {
-                                                UpdatePoin = (Poin * 2) / 2;
+                                                if (CountImage >= 8) {
+                                                    UpdatePoin = (Poin * 2) / 2;
+                                                } else {
+                                                    UpdatePoin = 50 / 2;
+                                                }
                                             }
                                         }
                                     } else {
@@ -333,19 +387,43 @@ public class LaporanListingActivity extends AppCompatActivity {
                                     if (IsSelfie.equals("1") && IsLokasi.equals("1")) {
                                         if (Marketable.equals("1") && StatusHarga.equals("1")) {
                                             if (IdAgenCo.equals("0")){
-                                                UpdatePoin = ( Poin * 2 ) + 20;
+                                                if (CountImage >= 8) {
+                                                    UpdatePoin = ( Poin * 2 ) + 20;
+                                                } else {
+                                                    UpdatePoin = 40;
+                                                }
                                             } else if (IdAgenCo.equals(IdAgen)) {
-                                                UpdatePoin = ( Poin * 2 ) + 20;
+                                                if (CountImage >= 8) {
+                                                    UpdatePoin = ( Poin * 2 ) + 20;
+                                                } else {
+                                                    UpdatePoin = 40;
+                                                }
                                             } else {
-                                                UpdatePoin = (( Poin * 2 ) + 20) / 2;
+                                                if (CountImage >= 8) {
+                                                    UpdatePoin = (( Poin * 2 ) + 20) / 2;
+                                                } else {
+                                                    UpdatePoin = 40 / 2;
+                                                }
                                             }
                                         } else {
                                             if (IdAgenCo.equals("0")){
-                                                UpdatePoin = Poin * 2;
+                                                if (CountImage >= 8) {
+                                                    UpdatePoin = Poin * 2;
+                                                } else {
+                                                    UpdatePoin = 40;
+                                                }
                                             } else if (IdAgenCo.equals(IdAgen)) {
-                                                UpdatePoin = Poin * 2;
+                                                if (CountImage >= 8) {
+                                                    UpdatePoin = Poin * 2;
+                                                } else {
+                                                    UpdatePoin = 40;
+                                                }
                                             } else {
-                                                UpdatePoin = (Poin * 2) / 2;
+                                                if (CountImage >= 8) {
+                                                    UpdatePoin = (Poin * 2) / 2;
+                                                } else {
+                                                    UpdatePoin = 40 / 2;
+                                                }
                                             }
                                         }
                                     } else {
@@ -362,19 +440,43 @@ public class LaporanListingActivity extends AppCompatActivity {
                                     if (IsSelfie.equals("1") && IsLokasi.equals("1")) {
                                         if (Marketable.equals("1") && StatusHarga.equals("1")) {
                                             if (IdAgenCo.equals("0")){
-                                                UpdatePoin = ( Poin * 2 ) + 10;
+                                                if (CountImage >= 8) {
+                                                    UpdatePoin = ( Poin * 2 ) + 10;
+                                                } else {
+                                                    UpdatePoin = 30;
+                                                }
                                             } else if (IdAgenCo.equals(IdAgen)) {
-                                                UpdatePoin = ( Poin * 2 ) + 10;
+                                                if (CountImage >= 8) {
+                                                    UpdatePoin = ( Poin * 2 ) + 10;
+                                                } else {
+                                                    UpdatePoin = 30;
+                                                }
                                             } else {
-                                                UpdatePoin = (( Poin * 2 ) + 10) / 2;
+                                                if (CountImage >= 8) {
+                                                    UpdatePoin = (( Poin * 2 ) + 10) / 2;
+                                                } else {
+                                                    UpdatePoin = 30 / 2;
+                                                }
                                             }
                                         } else {
                                             if (IdAgenCo.equals("0")){
-                                                UpdatePoin = Poin * 2;
+                                                if (CountImage >= 8) {
+                                                    UpdatePoin = Poin * 2;
+                                                } else {
+                                                    UpdatePoin = 30;
+                                                }
                                             } else if (IdAgenCo.equals(IdAgen)) {
-                                                UpdatePoin = Poin * 2;
+                                                if (CountImage >= 8) {
+                                                    UpdatePoin = Poin * 2;
+                                                } else {
+                                                    UpdatePoin = 30;
+                                                }
                                             } else {
-                                                UpdatePoin = (Poin * 2) / 2;
+                                                if (CountImage >= 8) {
+                                                    UpdatePoin = (Poin * 2) / 2;
+                                                } else {
+                                                    UpdatePoin = 30 / 2;
+                                                }
                                             }
                                         }
                                     } else {
@@ -391,19 +493,43 @@ public class LaporanListingActivity extends AppCompatActivity {
                                     if (IsSelfie.equals("1") && IsLokasi.equals("1")) {
                                         if (Marketable.equals("1") && StatusHarga.equals("1")) {
                                             if (IdAgenCo.equals("0")){
-                                                UpdatePoin = ( Poin * 2 ) + 20;
+                                                if (CountImage >= 8) {
+                                                    UpdatePoin = ( Poin * 2 ) + 20;
+                                                } else {
+                                                    UpdatePoin = 20;
+                                                }
                                             } else if (IdAgenCo.equals(IdAgen)) {
-                                                UpdatePoin = ( Poin * 2 ) + 20;
+                                                if (CountImage >= 8) {
+                                                    UpdatePoin = ( Poin * 2 ) + 20;
+                                                } else {
+                                                    UpdatePoin = 20;
+                                                }
                                             } else {
-                                                UpdatePoin = (( Poin * 2 ) + 20) / 2;
+                                                if (CountImage >= 8) {
+                                                    UpdatePoin = (( Poin * 2 ) + 20) / 2;
+                                                } else {
+                                                    UpdatePoin = 20 / 2;
+                                                }
                                             }
                                         } else {
                                             if (IdAgenCo.equals("0")){
-                                                UpdatePoin = Poin * 2;
+                                                if (CountImage >= 8) {
+                                                    UpdatePoin = Poin * 2;
+                                                } else {
+                                                    UpdatePoin = 20;
+                                                }
                                             } else if (IdAgenCo.equals(IdAgen)) {
-                                                UpdatePoin = Poin * 2;
+                                                if (CountImage >= 8) {
+                                                    UpdatePoin = Poin * 2;
+                                                } else {
+                                                    UpdatePoin = 20;
+                                                }
                                             } else {
-                                                UpdatePoin = (Poin * 2) / 2;
+                                                if (CountImage >= 8) {
+                                                    UpdatePoin = (Poin * 2) / 2;
+                                                } else {
+                                                    UpdatePoin = 20 / 2;
+                                                }
                                             }
                                         }
                                     } else {
@@ -420,19 +546,43 @@ public class LaporanListingActivity extends AppCompatActivity {
                                     if (IsSelfie.equals("1") && IsLokasi.equals("1")) {
                                         if (Marketable.equals("1") && StatusHarga.equals("1")) {
                                             if (IdAgenCo.equals("0")){
-                                                UpdatePoin = ( Poin * 2 ) + 30;
+                                                if (CountImage >= 8) {
+                                                    UpdatePoin = ( Poin * 2 ) + 20;
+                                                } else {
+                                                    UpdatePoin = 10;
+                                                }
                                             } else if (IdAgenCo.equals(IdAgen)) {
-                                                UpdatePoin = ( Poin * 2 ) + 30;
+                                                if (CountImage >= 8) {
+                                                    UpdatePoin = ( Poin * 2 ) + 20;
+                                                } else {
+                                                    UpdatePoin = 10;
+                                                }
                                             } else {
-                                                UpdatePoin = (( Poin * 2 ) + 30) / 2;
+                                                if (CountImage >= 8) {
+                                                    UpdatePoin = (( Poin * 2 ) + 20) / 2;
+                                                } else {
+                                                    UpdatePoin = 10 / 2;
+                                                }
                                             }
                                         } else {
                                             if (IdAgenCo.equals("0")){
-                                                UpdatePoin = Poin * 2;
+                                                if (CountImage >= 8) {
+                                                    UpdatePoin = Poin * 2;
+                                                } else {
+                                                    UpdatePoin = 10;
+                                                }
                                             } else if (IdAgenCo.equals(IdAgen)) {
-                                                UpdatePoin = Poin * 2;
+                                                if (CountImage >= 8) {
+                                                    UpdatePoin = Poin * 2;
+                                                } else {
+                                                    UpdatePoin = 10;
+                                                }
                                             } else {
-                                                UpdatePoin = (Poin * 2) / 2;
+                                                if (CountImage >= 8) {
+                                                    UpdatePoin = (Poin * 2) / 2;
+                                                } else {
+                                                    UpdatePoin = 10 / 2;
+                                                }
                                             }
                                         }
                                     } else {
@@ -449,19 +599,43 @@ public class LaporanListingActivity extends AppCompatActivity {
                                     if (IsSelfie.equals("1") && IsLokasi.equals("1")) {
                                         if (Marketable.equals("1") && StatusHarga.equals("1")) {
                                             if (IdAgenCo.equals("0")){
-                                                UpdatePoin = ( Poin * 2 ) + 10;
+                                                if (CountImage >= 8) {
+                                                    UpdatePoin = ( Poin * 2 ) + 10;
+                                                } else {
+                                                    UpdatePoin = 10;
+                                                }
                                             } else if (IdAgenCo.equals(IdAgen)) {
-                                                UpdatePoin = ( Poin * 2 ) + 10;
+                                                if (CountImage >= 8) {
+                                                    UpdatePoin = ( Poin * 2 ) + 10;
+                                                } else {
+                                                    UpdatePoin = 10;
+                                                }
                                             } else {
-                                                UpdatePoin = (( Poin * 2 ) + 10) / 2;
+                                                if (CountImage >= 8) {
+                                                    UpdatePoin = (( Poin * 2 ) + 10) / 2;
+                                                } else {
+                                                    UpdatePoin = 10 / 2;
+                                                }
                                             }
                                         } else {
                                             if (IdAgenCo.equals("0")){
-                                                UpdatePoin = Poin * 2;
+                                                if (CountImage >= 8) {
+                                                    UpdatePoin = Poin * 2;
+                                                } else {
+                                                    UpdatePoin = 10;
+                                                }
                                             } else if (IdAgenCo.equals(IdAgen)) {
-                                                UpdatePoin = Poin * 2;
+                                                if (CountImage >= 8) {
+                                                    UpdatePoin = Poin * 2;
+                                                } else {
+                                                    UpdatePoin = 10;
+                                                }
                                             } else {
-                                                UpdatePoin = (Poin * 2) / 2;
+                                                if (CountImage >= 8) {
+                                                    UpdatePoin = (Poin * 2) / 2;
+                                                } else {
+                                                    UpdatePoin = 10 / 2;
+                                                }
                                             }
                                         }
                                     } else {
@@ -483,7 +657,7 @@ public class LaporanListingActivity extends AppCompatActivity {
 
                                 sheet.addCell(new Label(0, i + 1, No));
                                 sheet.addCell(new Label(1, i + 1, JenisProperti));
-                                sheet.addCell(new Label(2, i + 1, ""));
+                                sheet.addCell(new Label(2, i + 1, NoArsip));
                                 sheet.addCell(new Label(3, i + 1, Pjp));
                                 sheet.addCell(new Label(4, i + 1, Alamat));
                                 sheet.addCell(new Label(5, i + 1, Wilayah));

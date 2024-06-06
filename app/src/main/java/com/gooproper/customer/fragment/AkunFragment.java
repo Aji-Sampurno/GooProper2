@@ -17,8 +17,8 @@ import android.widget.TextView;
 
 import com.gooproper.ui.edit.EditAkunActivity;
 import com.gooproper.R;
-import com.gooproper.ui.SettingActivity;
-import com.gooproper.ui.TentangKamiActivity;
+import com.gooproper.ui.user.SettingActivity;
+import com.gooproper.ui.user.TentangKamiActivity;
 import com.gooproper.ui.listing.ListingFavoriteActivity;
 import com.gooproper.ui.listing.ListingTerakhirDilihatActivity;
 import com.gooproper.ui.LoginConditionActivity;
