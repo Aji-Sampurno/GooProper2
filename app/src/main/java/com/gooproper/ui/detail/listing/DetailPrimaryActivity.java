@@ -151,6 +151,7 @@ public class DetailPrimaryActivity extends AppCompatActivity implements OnMapRea
         if (status.equals("1")) {
             IVFlowUp.setVisibility(View.INVISIBLE);
             IVFlowup2.setVisibility(View.INVISIBLE);
+            BtnEdit.setVisibility(View.GONE);
             IVWhatsapp.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -172,6 +173,7 @@ public class DetailPrimaryActivity extends AppCompatActivity implements OnMapRea
         } else if (status.equals("2")) {
             IVFlowUp.setVisibility(View.VISIBLE);
             IVFlowup2.setVisibility(View.VISIBLE);
+            BtnEdit.setVisibility(View.VISIBLE);
             IVWhatsapp.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -193,6 +195,7 @@ public class DetailPrimaryActivity extends AppCompatActivity implements OnMapRea
         } else if (status.equals("3")) {
             IVFlowUp.setVisibility(View.VISIBLE);
             IVFlowup2.setVisibility(View.VISIBLE);
+            BtnEdit.setVisibility(View.GONE);
             IVWhatsapp.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -214,6 +217,7 @@ public class DetailPrimaryActivity extends AppCompatActivity implements OnMapRea
         } else {
             IVFlowUp.setVisibility(View.INVISIBLE);
             IVFlowup2.setVisibility(View.INVISIBLE);
+            BtnEdit.setVisibility(View.GONE);
             IVWhatsapp.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
