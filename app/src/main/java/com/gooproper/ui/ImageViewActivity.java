@@ -6,6 +6,7 @@ import androidx.viewpager.widget.ViewPager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.gooproper.adapter.image.ImageViewAdapter;
 import com.gooproper.R;
@@ -14,6 +15,7 @@ import java.util.ArrayList;
 
 public class ImageViewActivity extends AppCompatActivity {
 
+    TextView TVJumlahGambar;
     ImageView IVBack;
     ArrayList<String> images = new ArrayList<>();
     private ViewPager viewPager;
@@ -26,6 +28,7 @@ public class ImageViewActivity extends AppCompatActivity {
 
         viewPager = findViewById(R.id.VPImageView);
         IVBack = findViewById(R.id.IVBackImageView);
+        TVJumlahGambar = findViewById(R.id.TVJumlahGambar);
 
         IVBack.setOnClickListener(v -> finish());
 
@@ -35,15 +38,34 @@ public class ImageViewActivity extends AppCompatActivity {
         imageViewAdapter = new ImageViewAdapter(this, images);
         viewPager.setAdapter(imageViewAdapter);
 
-        viewPager.setCurrentItem(0);
+        int position = getIntent().getIntExtra("position", 0);
+        viewPager.setCurrentItem(position);
+
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {}
+
+            @Override
+            public void onPageSelected(int position) {
+                updatePageInfo(position);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {}
+        });
+
+        updatePageInfo(position);
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
         }
     }
+    private void updatePageInfo(int currentPage) {
+        String info = (currentPage + 1) + "/" + images.size();
+        TVJumlahGambar.setText(info);
+    }
     @Override
     public void onBackPressed() {
-        // Hentikan pemutaran video jika sedang berlangsung
         if (imageViewAdapter != null && imageViewAdapter.getCurrentExoPlayer() != null && imageViewAdapter.getCurrentExoPlayer().isPlaying()) {
             imageViewAdapter.getCurrentExoPlayer().stop();
             super.onBackPressed();

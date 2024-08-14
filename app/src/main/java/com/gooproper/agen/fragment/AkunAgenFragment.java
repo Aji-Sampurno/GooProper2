@@ -24,10 +24,14 @@ import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
+import com.gooproper.NewUi.Listing.Tambah.TambahVendorListingActivity;
 import com.gooproper.ui.AgenActivity;
-import com.gooproper.ui.edit.EditAkunActivity;
+import com.gooproper.ui.edit.user.EditAkunActivity;
 import com.gooproper.R;
+import com.gooproper.ui.followup.FollowUpActivity;
+import com.gooproper.ui.officer.banner.ListBannerActivity;
 import com.gooproper.ui.officer.survey.SurveyLokasiActivity;
+import com.gooproper.ui.tambah.buyer.ReportBuyerActivity;
 import com.gooproper.ui.user.SettingActivity;
 import com.gooproper.ui.user.TentangKamiActivity;
 import com.gooproper.ui.listing.InfoPropertyKuActivity;
@@ -56,11 +60,11 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class AkunAgenFragment extends Fragment {
 
-    private LinearLayout reward, listing, surveylokasi, reportofficer, agengoo, tbo, listingsementara, daftarsementara, listingmitra, listingkl, agen, mitra, kl, listingku, favorite, favoritemitra, favoritekl, seen, seenmitra, seenkl, pengaturan, pengaturanmitra, pengaturankl, hubungikami, hubungikamimitra, hubungikamikl, tentangkami, tentangkamimitra, tentangkamikl, pralising, pralistingreject, info, infoku, prainfo;
-    TextView nama, edit, TVBadgeSurvey, TVBadgePralisting, TVBadgePralistingRejected;
+    LinearLayout reward, listing, pasangbanner, surveylokasi, reportofficer, agengoo, reportbuyer, tbo, listingsementara, daftarsementara, listingmitra, listingkl, agen, mitra, kl, listingku, favorite, favoritemitra, favoritekl, seen, seenmitra, seenkl, pengaturan, pengaturanmitra, pengaturankl, hubungikami, hubungikamimitra, hubungikamikl, tentangkami, tentangkamimitra, tentangkamikl, pralising, pralistingreject, info, infoku, prainfo;
+    TextView nama, edit, TVBadgePasangBanner, TVBadgeSurvey, TVBadgePralisting, TVBadgePralistingRejected;
     CircleImageView cvagen;
     String imgurl, IsAktif, IsOfficer;
-    View VReportAgen, VSurveyLokasi;
+    View VReportAgen, VSurveyLokasi, VPasangBanner;
     String profile;
     String status;
     String wa = "811 333 8838";
@@ -69,6 +73,8 @@ public class AkunAgenFragment extends Fragment {
     String tt = "@gooproper";
     String yt = "@gooproperofficial";
     String em = "goopropermalang09@gmail.com";
+    private static final String REQUEST_TAG = "AkunAgenFragmentRequest";
+    RequestQueue queue, queuereport, queuereject, queuepralisting, queuesurvey, queuepasangbanner;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -79,6 +85,7 @@ public class AkunAgenFragment extends Fragment {
         mitra = root.findViewById(R.id.lytkl);
         kl = root.findViewById(R.id.lytmitra);
         reward = root.findViewById(R.id.lytreward);
+        pasangbanner = root.findViewById(R.id.lytpasangbanner);
         surveylokasi = root.findViewById(R.id.lytsurveylokasi);
         reportofficer = root.findViewById(R.id.lytreport);
         agengoo = root.findViewById(R.id.lytagengoo);
@@ -90,6 +97,7 @@ public class AkunAgenFragment extends Fragment {
         seenmitra = root.findViewById(R.id.lytterakhirdilihatmitra);
         seenkl = root.findViewById(R.id.lytterakhirdilihatkl);
         listing = root.findViewById(R.id.lytlisting);
+        reportbuyer = root.findViewById(R.id.lytbuyer);
         tbo = root.findViewById(R.id.lyttbo);
         listingsementara = root.findViewById(R.id.lytsementara);
         daftarsementara = root.findViewById(R.id.lytdaftarsementara);
@@ -111,10 +119,12 @@ public class AkunAgenFragment extends Fragment {
         pralistingreject = root.findViewById(R.id.lytpralistingrejected);
         nama = root.findViewById(R.id.tvnamaakunagen);
         edit = root.findViewById(R.id.tveditakunagen);
+        TVBadgePasangBanner = root.findViewById(R.id.TVPasangBanner);
         TVBadgeSurvey = root.findViewById(R.id.TVBadgeSurvey);
         TVBadgePralisting = root.findViewById(R.id.TVBadgePralisting);
         TVBadgePralistingRejected = root.findViewById(R.id.TVBadgePralistingRejected);
         cvagen = root.findViewById(R.id.cvprofileagen);
+        VPasangBanner = root.findViewById(R.id.VPasangBanner);
         VReportAgen = root.findViewById(R.id.VReport);
         VSurveyLokasi = root.findViewById(R.id.VSurveyLokasi);
 
@@ -130,7 +140,7 @@ public class AkunAgenFragment extends Fragment {
             imgurl = profile;
         }
 
-        RequestQueue queue = Volley.newRequestQueue(getContext());
+        queue = Volley.newRequestQueue(getContext());
         JsonArrayRequest reqData = new JsonArrayRequest(Request.Method.GET, ServerApi.URL_CEK_AKTIF+ Preferences.getKeyIdAgen(getContext()),null,
                 new Response.Listener<JSONArray>() {
                     @Override
@@ -149,6 +159,7 @@ public class AkunAgenFragment extends Fragment {
                                     listingkl.setOnClickListener(view -> startActivity(new Intent(getContext(), TambahListingActivity.class)));
                                     info.setOnClickListener(view -> startActivity(new Intent(getContext(), TambahInfoActivity.class)));
                                     tbo.setOnClickListener(view -> startActivity(new Intent(getContext(), TboAgenActivity.class)));
+                                    reportbuyer.setOnClickListener(view -> startActivity(new Intent(getContext(), ReportBuyerActivity.class)));
                                 } else {
                                     listing.setOnClickListener(view -> showAktifAlertDialog(view));
                                     listingsementara.setOnClickListener(view -> showAktifAlertDialog(view));
@@ -170,10 +181,10 @@ public class AkunAgenFragment extends Fragment {
                         error.printStackTrace();
                     }
                 });
-
+        reqData.setTag(REQUEST_TAG);
         queue.add(reqData);
 
-        RequestQueue queuereport = Volley.newRequestQueue(getContext());
+        queuereport = Volley.newRequestQueue(getContext());
         JsonArrayRequest reqDatareport = new JsonArrayRequest(Request.Method.GET, ServerApi.URL_CEK_OFFICER+ Preferences.getKeyIdAgen(getContext()),null,
                 new Response.Listener<JSONArray>() {
                     @Override
@@ -191,6 +202,10 @@ public class AkunAgenFragment extends Fragment {
                                     surveylokasi.setVisibility(View.VISIBLE);
                                     VSurveyLokasi.setVisibility(View.VISIBLE);
                                     surveylokasi.setOnClickListener(v -> startActivity(new Intent(getContext(), SurveyLokasiActivity.class)));
+                                    pasangbanner.setVisibility(View.VISIBLE);
+                                    VPasangBanner.setVisibility(View.VISIBLE);
+                                    pasangbanner.setOnClickListener(v -> startActivity(new Intent(getContext(), ListBannerActivity.class)));
+                                    CountPasangBanner();
                                     CountPralistingSurvey();
                                     CountPralisting();
                                     CountPralistingRejected();
@@ -199,6 +214,8 @@ public class AkunAgenFragment extends Fragment {
                                     VReportAgen.setVisibility(View.GONE);
                                     surveylokasi.setVisibility(View.GONE);
                                     VSurveyLokasi.setVisibility(View.GONE);
+                                    pasangbanner.setVisibility(View.GONE);
+                                    VPasangBanner.setVisibility(View.GONE);
                                     CountPralisting();
                                     CountPralistingRejected();
                                 }
@@ -215,6 +232,7 @@ public class AkunAgenFragment extends Fragment {
                     }
                 });
 
+        reqDatareport.setTag(REQUEST_TAG);
         queuereport.add(reqDatareport);
 
         Picasso.get()
@@ -265,7 +283,6 @@ public class AkunAgenFragment extends Fragment {
 
         return root;
     }
-
     public void showCustomAlertDialog(View view) {
         Dialog customDialog = new Dialog(getActivity());
         customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -352,7 +369,6 @@ public class AkunAgenFragment extends Fragment {
 
         customDialog.show();
     }
-
     public void showAktifAlertDialog(View view) {
         Dialog customDialog = new Dialog(getContext());
         customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -385,7 +401,6 @@ public class AkunAgenFragment extends Fragment {
 
         customDialog.show();
     }
-
     private void CekAktif() {
 
         RequestQueue queue = Volley.newRequestQueue(getContext());
@@ -414,9 +429,8 @@ public class AkunAgenFragment extends Fragment {
 
         queue.add(reqData);
     }
-
     private void CountPralistingSurvey() {
-        RequestQueue queue = Volley.newRequestQueue(getContext());
+        queuesurvey = Volley.newRequestQueue(getContext());
         JsonArrayRequest reqData = new JsonArrayRequest(Request.Method.GET, ServerApi.URL_COUNT_PRALISTING_TERDEKAT,null,
                 new Response.Listener<JSONArray>() {
                     @Override
@@ -426,12 +440,18 @@ public class AkunAgenFragment extends Fragment {
                             try {
                                 JSONObject data = response.getJSONObject(i);
                                 String count = data.getString("Total");
+                                int countInt = Integer.parseInt(count);
 
                                 if (count.isEmpty() || count == null || count.equals("null") || count.equals("0")) {
                                     TVBadgeSurvey.setVisibility(View.GONE);
                                 } else {
-                                    TVBadgeSurvey.setVisibility(View.VISIBLE);
-                                    TVBadgeSurvey.setText(count);
+                                    if (countInt > 99) {
+                                        TVBadgeSurvey.setVisibility(View.VISIBLE);
+                                        TVBadgeSurvey.setText(99+"+");
+                                    } else {
+                                        TVBadgeSurvey.setVisibility(View.VISIBLE);
+                                        TVBadgeSurvey.setText(count);
+                                    }
                                 }
 
                             } catch (JSONException e) {
@@ -447,11 +467,11 @@ public class AkunAgenFragment extends Fragment {
                     }
                 });
 
-        queue.add(reqData);
+        reqData.setTag(REQUEST_TAG);
+        queuesurvey.add(reqData);
     }
-
     private void CountPralisting() {
-        RequestQueue queue = Volley.newRequestQueue(getContext());
+        queuepralisting = Volley.newRequestQueue(getContext());
         JsonArrayRequest reqData = new JsonArrayRequest(Request.Method.GET, ServerApi.URL_COUNT_PRALISTING_AGEN + Preferences.getKeyIdAgen(getContext()),null,
                 new Response.Listener<JSONArray>() {
                     @Override
@@ -461,12 +481,18 @@ public class AkunAgenFragment extends Fragment {
                             try {
                                 JSONObject data = response.getJSONObject(i);
                                 String count = data.getString("Total");
+                                int countInt = Integer.parseInt(count);
 
                                 if (count.isEmpty() || count == null || count.equals("null") || count.equals("0")) {
                                     TVBadgePralisting.setVisibility(View.GONE);
                                 } else {
-                                    TVBadgePralisting.setVisibility(View.VISIBLE);
-                                    TVBadgePralisting.setText(count);
+                                    if (countInt > 99){
+                                        TVBadgePralisting.setVisibility(View.VISIBLE);
+                                        TVBadgePralisting.setText(99+"+");
+                                    } else {
+                                        TVBadgePralisting.setVisibility(View.VISIBLE);
+                                        TVBadgePralisting.setText(count);
+                                    }
                                 }
 
                             } catch (JSONException e) {
@@ -482,11 +508,11 @@ public class AkunAgenFragment extends Fragment {
                     }
                 });
 
-        queue.add(reqData);
+        reqData.setTag(REQUEST_TAG);
+        queuepralisting.add(reqData);
     }
-
     private void CountPralistingRejected() {
-        RequestQueue queue = Volley.newRequestQueue(getContext());
+        queuereject = Volley.newRequestQueue(getContext());
         JsonArrayRequest reqData = new JsonArrayRequest(Request.Method.GET, ServerApi.URL_COUNT_PRALISTING_AGEN_REJECTED + Preferences.getKeyIdAgen(getContext()),null,
                 new Response.Listener<JSONArray>() {
                     @Override
@@ -496,12 +522,18 @@ public class AkunAgenFragment extends Fragment {
                             try {
                                 JSONObject data = response.getJSONObject(i);
                                 String count = data.getString("Total");
+                                int countInt = Integer.parseInt(count);
 
                                 if (count.isEmpty() || count == null || count.equals("null") || count.equals("0")) {
                                     TVBadgePralistingRejected.setVisibility(View.GONE);
                                 } else {
-                                    TVBadgePralistingRejected.setVisibility(View.VISIBLE);
-                                    TVBadgePralistingRejected.setText(count);
+                                    if (countInt > 99){
+                                        TVBadgePralistingRejected.setVisibility(View.VISIBLE);
+                                        TVBadgePralistingRejected.setText(99+"+");
+                                    } else {
+                                        TVBadgePralistingRejected.setVisibility(View.VISIBLE);
+                                        TVBadgePralistingRejected.setText(count);
+                                    }
                                 }
 
                             } catch (JSONException e) {
@@ -517,6 +549,70 @@ public class AkunAgenFragment extends Fragment {
                     }
                 });
 
-        queue.add(reqData);
+        reqData.setTag(REQUEST_TAG);
+        queuereject.add(reqData);
+    }
+    private void CountPasangBanner() {
+        queuepasangbanner = Volley.newRequestQueue(getContext());
+        JsonArrayRequest reqData = new JsonArrayRequest(Request.Method.GET, ServerApi.URL_COUNT_PASANG_BANNER,null,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        for(int i = 0 ; i < response.length(); i++)
+                        {
+                            try {
+                                JSONObject data = response.getJSONObject(i);
+                                String count = data.getString("Total");
+                                int countInt = Integer.parseInt(count);
+
+                                if (count.isEmpty() || count == null || count.equals("null") || count.equals("0")) {
+                                    TVBadgePasangBanner.setVisibility(View.GONE);
+                                } else {
+                                    if (countInt > 99){
+                                        TVBadgePasangBanner.setVisibility(View.VISIBLE);
+                                        TVBadgePasangBanner.setText(99+"+");
+                                    } else {
+                                        TVBadgePasangBanner.setVisibility(View.VISIBLE);
+                                        TVBadgePasangBanner.setText(count);
+                                    }
+                                }
+
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        error.printStackTrace();
+                    }
+                });
+
+        reqData.setTag(REQUEST_TAG);
+        queuepasangbanner.add(reqData);
+    }
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (queue != null) {
+            queue.cancelAll(REQUEST_TAG);
+        }
+        if (queuereport != null) {
+            queue.cancelAll(REQUEST_TAG);
+        }
+        if (queuesurvey != null) {
+            queuesurvey.cancelAll(REQUEST_TAG);
+        }
+        if (queuepasangbanner != null) {
+            queuesurvey.cancelAll(REQUEST_TAG);
+        }
+        if (queuepralisting != null) {
+            queuesurvey.cancelAll(REQUEST_TAG);
+        }
+        if (queuereject != null) {
+            queuesurvey.cancelAll(REQUEST_TAG);
+        }
     }
 }

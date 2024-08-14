@@ -10,6 +10,7 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -38,6 +39,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -49,12 +52,16 @@ public class NewActivity extends AppCompatActivity {
     SwipeRefreshLayout srnew;
     RecyclerView rvgrid;
     ListingAdapter adapter;
-    List<ListingModel> list;
+    List<ListingModel> list = new ArrayList<>();
+    List<ListingModel> newListings = new ArrayList<>();
     String StringKondisi;
     private boolean iskondisisewa = false;
     private AlertDialog alertDialog;
     private EditText searchView;
     private boolean applyFilters = false;
+    private int currentPage = 1;
+    private int pageSize = 500;
+    private boolean isLoading = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +76,10 @@ public class NewActivity extends AppCompatActivity {
         searchView = findViewById(R.id.etsearchView);
         srnew = findViewById(R.id.SRNew);
         rvgrid = findViewById(R.id.RVListingGridNew);
+
+        rvgrid.setLayoutManager(new LinearLayoutManager(NewActivity.this, LinearLayoutManager.VERTICAL, false));
+        adapter = new ListingAdapter(this, list);
+        rvgrid.setAdapter(adapter);
 
         searchView.addTextChangedListener(new TextWatcher() {
             @Override
@@ -102,6 +113,7 @@ public class NewActivity extends AppCompatActivity {
                 }
             }
         });
+
         IVSortDesc.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -118,6 +130,7 @@ public class NewActivity extends AppCompatActivity {
         });
 
         IVFilter.setOnClickListener(view -> showFilterDialog());
+
         srnew.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -125,13 +138,20 @@ public class NewActivity extends AppCompatActivity {
             }
         });
 
+//        rvgrid.addOnScrollListener(new RecyclerView.OnScrollListener() {
+//            @Override
+//            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+//                super.onScrolled(recyclerView, dx, dy);
+//
+//                LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+//
+//                if (!isLoading && linearLayoutManager != null && linearLayoutManager.findLastCompletelyVisibleItemPosition() == list.size() - 1) {
+//                    LoadListing(true);
+//                }
+//            }
+//        });
+
         LoadListing(true);
-
-        list = new ArrayList<>();
-
-        rvgrid.setLayoutManager(new LinearLayoutManager(NewActivity.this, LinearLayoutManager.VERTICAL, false));
-        adapter = new ListingAdapter(this, list);
-        rvgrid.setAdapter(adapter);
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
@@ -649,15 +669,16 @@ public class NewActivity extends AppCompatActivity {
         PDNew.show();
         if (showProgressDialog) PDNew.show();
         else PDNew.cancel();
+        isLoading = true;
 
         RequestQueue queue = Volley.newRequestQueue(this);
-        JsonArrayRequest reqData = new JsonArrayRequest(Request.Method.GET, ServerApi.URL_GET_LISTING, null,
+        JsonArrayRequest reqData = new JsonArrayRequest(Request.Method.GET, String.format(ServerApi.URL_GET_DATA_LISTING_BARU,currentPage,pageSize), null,
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
                         if (showProgressDialog) PDNew.cancel();
                         else srnew.setRefreshing(false);
-                        list.clear();
+//                        list.clear();
                         for (int i = 0; i < response.length(); i++) {
                             try {
                                 JSONObject data = response.getJSONObject(i);
@@ -769,7 +790,8 @@ public class NewActivity extends AppCompatActivity {
                                 md.setIdTemplate(data.getString("IdTemplate"));
                                 md.setTemplate(data.getString("Template"));
                                 md.setTemplateBlank(data.getString("TemplateBlank"));
-                                list.add(md);
+                                newListings.add(md);
+//                                list.add(md);
                                 PDNew.dismiss();
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -803,14 +825,30 @@ public class NewActivity extends AppCompatActivity {
                                 customDialog.show();
                             }
                         }
-
+                        for (ListingModel newListing : newListings) {
+                            boolean exists = false;
+                            for (ListingModel existingListing : list) {
+                                if (existingListing.getIdListing().equals(newListing.getIdListing())) {
+                                    exists = true;
+                                    break;
+                                }
+                            }
+                            if (!exists) {
+                                list.add(newListing);
+                            }
+                        }
+//                        list.addAll(newListings);
                         adapter.notifyDataSetChanged();
+                        isLoading = false;
+                        currentPage++;
+                        LoadListing(false);
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         PDNew.dismiss();
+                        isLoading = false;
                         error.printStackTrace();
 
                         Dialog customDialog = new Dialog(NewActivity.this);

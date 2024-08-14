@@ -219,6 +219,7 @@ public class TambahDetailListingSementaraActivity extends AppCompatActivity {
     LinearLayout LytPjp, LytPjp1;
     LinearLayout LytBtnShm, LytBtnHGB, LytBtnHSHP, LytBtnPPJB, LytBtnStra, LytBtnAJB, LytBtnPetokD;
     LinearLayout LytSelfie, LytKTP;
+    TextView TVBack;
     ImageView back;
     ImageView iv1, iv2, iv3, iv4, iv5, iv6, iv7, iv8, iv9, iv10, iv11, iv12;
     ImageView IVShm, IVHgb, IVHshp, IVPpjb, IVStratatitle, IVAJB, IVPetokD;
@@ -235,7 +236,7 @@ public class TambahDetailListingSementaraActivity extends AppCompatActivity {
     ImageView HpsSHM, HpsHGB, HpsHSHP, HpsPPJB, HpsStratatitle, HpsAJB, HpsPetokD;
     ImageView HpsPjp, HpsPjp1;
     ImageView HpsSelfie, HpsKTP;
-    TextInputEditText namalengkap, nohp, nik, alamat, tgllhir, rekening, bank, atasnama, jenisproperti, namaproperti, alamatproperti, alamatpropertitemplate, wilayahproperti, sertifikat, nosertif, luas, satuanluas, land, satuanland, dimensi, lantai, bed, bath, bedart, bathart, garasi, carpot, listrik, air, pjp, perabot, ketperabot, banner, status, tipeharga, harga, hargasewa, rangeharga, keterangan, hadap, size, EtTglInput, EtFee, CoListing, ktp;
+    TextInputEditText namalengkap, nohp, nik, alamat, tgllhir, rekening, bank, atasnama, jenisproperti, namaproperti, alamatproperti, alamatpropertitemplate, wilayahproperti, luas, satuanluas, land, satuanland, dimensi, lantai, bed, bath, bedart, bathart, garasi, carpot, listrik, air, pjp, perabot, ketperabot, banner, status, tipeharga, harga, hargasewa, rangeharga, keterangan, hadap, size, EtTglInput, EtFee, CoListing, ktp;
     TextInputLayout LytSize, LytTglInput, LytHargaJual, LytHargaSewa, LytRangeHarga, LytTipeHarga;
     RadioButton open, exclusive;
     RadioGroup rgpriority;
@@ -337,7 +338,7 @@ public class TambahDetailListingSementaraActivity extends AppCompatActivity {
         LytSelfie = findViewById(R.id.LytSelfie);
         LytKTP = findViewById(R.id.LytKtp);
 
-        back = findViewById(R.id.backFormBtn);
+        TVBack = findViewById(R.id.TVBack);
 
         batal = findViewById(R.id.btnbatal);
         submit = findViewById(R.id.btnsubmit);
@@ -391,9 +392,7 @@ public class TambahDetailListingSementaraActivity extends AppCompatActivity {
         alamatproperti = findViewById(R.id.etalamatproperti);
         alamatpropertitemplate = findViewById(R.id.etalamatpropertitemplate);
         wilayahproperti = findViewById(R.id.etwilayahlisting);
-        sertifikat = findViewById(R.id.ettipesertifikat);
         pjp = findViewById(R.id.etkonfirmasipjp);
-        nosertif = findViewById(R.id.etnomorsertifikat);
         luas = findViewById(R.id.etluastanah);
         satuanluas = findViewById(R.id.etsatuanluastanah);
         land = findViewById(R.id.etluasbangunan);
@@ -651,12 +650,11 @@ public class TambahDetailListingSementaraActivity extends AppCompatActivity {
         });
 
         maps.setOnClickListener(view -> startMapsActivityForResult());
-        back.setOnClickListener(view -> finish());
+        TVBack.setOnClickListener(view -> finish());
         batal.setOnClickListener(view -> finish());
         bank.setOnClickListener(view -> ShowBank(view));
         pjp.setOnClickListener(view -> ShowPjp(view));
         jenisproperti.setOnClickListener(view -> ShowJenisProperti(view));
-        sertifikat.setOnClickListener(view -> ShowTipeSertifikat(view));
         air.setOnClickListener(view -> ShowSumberAir(view));
         perabot.setOnClickListener(view -> ShowPerabot(view));
         banner.setOnClickListener(view -> ShowBanner(view));
@@ -743,30 +741,14 @@ public class TambahDetailListingSementaraActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable editable) {
                 if (editable.toString().equalsIgnoreCase("Jual")) {
-                    if (jenisproperti.getText().toString().equals("Tanah")){
-                        LytTipeHarga.setVisibility(View.VISIBLE);
-                        LytHargaSewa.setVisibility(View.GONE);
-                    } else if (jenisproperti.getText().toString().equals("Rumah")) {
-                        LytTipeHarga.setVisibility(View.VISIBLE);
-                        LytHargaSewa.setVisibility(View.GONE);
-                    } else {
-                        LytHargaJual.setVisibility(View.VISIBLE);
-                        LytHargaSewa.setVisibility(View.GONE);
-                    }
+                    LytTipeHarga.setVisibility(View.VISIBLE);
+                    LytHargaSewa.setVisibility(View.GONE);
                 } else if (editable.toString().equalsIgnoreCase("Sewa")) {
                     LytHargaSewa.setVisibility(View.VISIBLE);
                     LytHargaJual.setVisibility(View.GONE);
                 } else if (editable.toString().equalsIgnoreCase("Jual/Sewa")) {
-                    if (jenisproperti.getText().toString().equals("Tanah")){
-                        LytTipeHarga.setVisibility(View.VISIBLE);
-                        LytHargaSewa.setVisibility(View.GONE);
-                    } else if (jenisproperti.getText().toString().equals("Rumah")) {
-                        LytTipeHarga.setVisibility(View.VISIBLE);
-                        LytHargaSewa.setVisibility(View.GONE);
-                    } else {
-                        LytHargaJual.setVisibility(View.VISIBLE);
-                        LytHargaSewa.setVisibility(View.VISIBLE);
-                    }
+                    LytTipeHarga.setVisibility(View.VISIBLE);
+                    LytHargaSewa.setVisibility(View.GONE);
                 } else {
                     LytHargaJual.setVisibility(View.GONE);
                     LytHargaSewa.setVisibility(View.GONE);
@@ -5317,7 +5299,7 @@ public class TambahDetailListingSementaraActivity extends AppCompatActivity {
     }
     private void handleImageKTPSuccess() {
         if (UriKTP != null) {
-            ImageKTP.putFile(UriSelfie)
+            ImageKTP.putFile(UriKTP)
                     .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
@@ -5384,7 +5366,7 @@ public class TambahDetailListingSementaraActivity extends AppCompatActivity {
 
         RequestQueue requestQueue = Volley.newRequestQueue(this);
 
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, ServerApi.URL_TAMBAH_PRALISTING_LOKASI,
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, ServerApi.URL_ADD_DATA_PRALISTING_LOKASI,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -5585,6 +5567,7 @@ public class TambahDetailListingSementaraActivity extends AppCompatActivity {
                 map.put("IdAgenCo", agencoid);
                 map.put("IdInput", idagen);
                 map.put("NamaListing", namaproperti.getText().toString());
+                map.put("MetaNamaListing", status.getText().toString() + " " + jenisproperti.getText().toString() + " Wilayah " + wilayahproperti.getText().toString());
                 map.put("Alamat", alamatproperti.getText().toString());
                 map.put("AlamatTemplate", alamatpropertitemplate.getText().toString());
                 map.put("Wilayah", wilayahproperti.getText().toString());
@@ -5775,57 +5758,6 @@ public class TambahDetailListingSementaraActivity extends AppCompatActivity {
         });
 
         builder.setNegativeButton("Batal", null);
-
-        AlertDialog dialog = builder.create();
-        dialog.show();
-    }
-    public void ShowTipeSertifikat(View view) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.CustomAlertDialogStyle);
-        builder.setTitle("Silahkan Pilih Tipe Sertifikat");
-
-        final CharSequence[] TipeSertifikat = {"SHM", "HGB", "Custom"};
-        final int SelectedTipeSertifikat = -1;
-
-        builder.setSingleChoiceItems(TipeSertifikat, SelectedTipeSertifikat, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                if (which == TipeSertifikat.length - 1) {
-                    showCustomTypeInputDialog();
-                } else {
-                    sertifikat.setText(TipeSertifikat[which]);
-                }
-                dialog.dismiss();
-            }
-        });
-
-        builder.setNegativeButton("Batal", null);
-
-        AlertDialog dialog = builder.create();
-        dialog.show();
-    }
-    private void showCustomTypeInputDialog() {
-        final EditText editTextCustomType = new EditText(this);
-        editTextCustomType.setHint("Masukkan Tipe Sertifikat");
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.CustomAlertDialogStyle);
-        builder.setTitle("Tipe Sertifikat")
-                .setView(editTextCustomType)
-                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        String customType = editTextCustomType.getText().toString().trim();
-                        if (!customType.isEmpty()) {
-                            sertifikat.setText(customType);
-                        }
-                        dialog.dismiss();
-                    }
-                })
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                });
 
         AlertDialog dialog = builder.create();
         dialog.show();
@@ -6146,50 +6078,292 @@ public class TambahDetailListingSementaraActivity extends AppCompatActivity {
     }
     public boolean Validate() {
         if (namalengkap.getText().toString().equals("")) {
-            namalengkap.setError("Harap Isi Nama Lengkap Vendor");
+            Dialog customDialog = new Dialog(TambahDetailListingSementaraActivity.this);
+            customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            customDialog.setContentView(R.layout.custom_dialog_eror_input);
+
+            if (customDialog.getWindow() != null) {
+                customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+            }
+
+            Button ok = customDialog.findViewById(R.id.BtnOkErorInput);
+            TextView tv = customDialog.findViewById(R.id.TVDialogErorInput);
+
+            tv.setText("Harap Isi Nama Lengkap Vendor");
+
+            ok.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    customDialog.dismiss();
+                }
+            });
+
+            ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
+
+            Glide.with(TambahDetailListingSementaraActivity.this)
+                    .load(R.drawable.alert) // You can also use a local resource like R.drawable.your_gif_resource
+                    .transition(DrawableTransitionOptions.withCrossFade())
+                    .into(gifImageView);
+
+            customDialog.show();
             namalengkap.requestFocus();
             return false;
         }
         if (nohp.getText().toString().equals("")) {
-            nohp.setError("Harap Isi No WhatsApp Vendor");
+            Dialog customDialog = new Dialog(TambahDetailListingSementaraActivity.this);
+            customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            customDialog.setContentView(R.layout.custom_dialog_eror_input);
+
+            if (customDialog.getWindow() != null) {
+                customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+            }
+
+            Button ok = customDialog.findViewById(R.id.BtnOkErorInput);
+            TextView tv = customDialog.findViewById(R.id.TVDialogErorInput);
+
+            tv.setText("Harap Isi No WhatsApp Vendor");
+
+            ok.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    customDialog.dismiss();
+                }
+            });
+
+            ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
+
+            Glide.with(TambahDetailListingSementaraActivity.this)
+                    .load(R.drawable.alert)
+                    .transition(DrawableTransitionOptions.withCrossFade())
+                    .into(gifImageView);
+
+            customDialog.show();
             nohp.requestFocus();
             return false;
         }
         if (jenisproperti.getText().toString().equals("")) {
-            jenisproperti.setError("Harap Isi Nama Lengkap Vendor");
+            Dialog customDialog = new Dialog(TambahDetailListingSementaraActivity.this);
+            customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            customDialog.setContentView(R.layout.custom_dialog_eror_input);
+
+            if (customDialog.getWindow() != null) {
+                customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+            }
+
+            Button ok = customDialog.findViewById(R.id.BtnOkErorInput);
+            TextView tv = customDialog.findViewById(R.id.TVDialogErorInput);
+
+            tv.setText("Harap Isi Jenis Properti");
+
+            ok.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    customDialog.dismiss();
+                }
+            });
+
+            ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
+
+            Glide.with(TambahDetailListingSementaraActivity.this)
+                    .load(R.drawable.alert)
+                    .transition(DrawableTransitionOptions.withCrossFade())
+                    .into(gifImageView);
+
+            customDialog.show();
             jenisproperti.requestFocus();
             return false;
         }
         if (namaproperti.getText().toString().equals("")) {
-            namaproperti.setError("Harap Isi Nama Properti");
+            Dialog customDialog = new Dialog(TambahDetailListingSementaraActivity.this);
+            customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            customDialog.setContentView(R.layout.custom_dialog_eror_input);
+
+            if (customDialog.getWindow() != null) {
+                customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+            }
+
+            Button ok = customDialog.findViewById(R.id.BtnOkErorInput);
+            TextView tv = customDialog.findViewById(R.id.TVDialogErorInput);
+
+            tv.setText("Harap Isi Nama Properti");
+
+            ok.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    customDialog.dismiss();
+                }
+            });
+
+            ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
+
+            Glide.with(TambahDetailListingSementaraActivity.this)
+                    .load(R.drawable.alert)
+                    .transition(DrawableTransitionOptions.withCrossFade())
+                    .into(gifImageView);
+
+            customDialog.show();
             namaproperti.requestFocus();
             return false;
         }
         if (alamatproperti.getText().toString().equals("")) {
-            alamatproperti.setError("Harap Isi Alamat Properti");
+            Dialog customDialog = new Dialog(TambahDetailListingSementaraActivity.this);
+            customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            customDialog.setContentView(R.layout.custom_dialog_eror_input);
+
+            if (customDialog.getWindow() != null) {
+                customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+            }
+
+            Button ok = customDialog.findViewById(R.id.BtnOkErorInput);
+            TextView tv = customDialog.findViewById(R.id.TVDialogErorInput);
+
+            tv.setText("Harap Isi Alamat Properti");
+
+            ok.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    customDialog.dismiss();
+                }
+            });
+
+            ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
+
+            Glide.with(TambahDetailListingSementaraActivity.this)
+                    .load(R.drawable.alert) // You can also use a local resource like R.drawable.your_gif_resource
+                    .transition(DrawableTransitionOptions.withCrossFade())
+                    .into(gifImageView);
+
+            customDialog.show();
             alamatproperti.requestFocus();
             return false;
         }
         if (alamatpropertitemplate.getText().toString().equals("")) {
-            alamatpropertitemplate.setError("Harap Isi Alamat Properti ( Template )");
+            Dialog customDialog = new Dialog(TambahDetailListingSementaraActivity.this);
+            customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            customDialog.setContentView(R.layout.custom_dialog_eror_input);
+
+            if (customDialog.getWindow() != null) {
+                customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+            }
+
+            Button ok = customDialog.findViewById(R.id.BtnOkErorInput);
+            TextView tv = customDialog.findViewById(R.id.TVDialogErorInput);
+
+            tv.setText("Harap Isi Alamat Properti ( Template )");
+
+            ok.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    customDialog.dismiss();
+                }
+            });
+
+            ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
+
+            Glide.with(TambahDetailListingSementaraActivity.this)
+                    .load(R.drawable.alert)
+                    .transition(DrawableTransitionOptions.withCrossFade())
+                    .into(gifImageView);
+
+            customDialog.show();
             alamatpropertitemplate.requestFocus();
             return false;
         }
         if (wilayahproperti.getText().toString().equals("")) {
-            wilayahproperti.setError("Harap Isi Wilayah Properti");
-            wilayahproperti.requestFocus();
+            Dialog customDialog = new Dialog(TambahDetailListingSementaraActivity.this);
+            customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            customDialog.setContentView(R.layout.custom_dialog_eror_input);
+
+            if (customDialog.getWindow() != null) {
+                customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+            }
+
+            Button ok = customDialog.findViewById(R.id.BtnOkErorInput);
+            TextView tv = customDialog.findViewById(R.id.TVDialogErorInput);
+
+            tv.setText("Harap Isi Wilayah Properti");
+
+            ok.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    customDialog.dismiss();
+                }
+            });
+
+            ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
+
+            Glide.with(TambahDetailListingSementaraActivity.this)
+                    .load(R.drawable.alert)
+                    .transition(DrawableTransitionOptions.withCrossFade())
+                    .into(gifImageView);
+
+            customDialog.show();
             return false;
         }
         if (!luas.getText().toString().equals("")) {
             if (satuanluas.getText().equals("")) {
-                satuanluas.setError("Harap Isi Satuan");
+                Dialog customDialog = new Dialog(TambahDetailListingSementaraActivity.this);
+                customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                customDialog.setContentView(R.layout.custom_dialog_eror_input);
+
+                if (customDialog.getWindow() != null) {
+                    customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                }
+
+                Button ok = customDialog.findViewById(R.id.BtnOkErorInput);
+                TextView tv = customDialog.findViewById(R.id.TVDialogErorInput);
+
+                tv.setText("Harap Isi Satuan Luas");
+
+                ok.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        customDialog.dismiss();
+                    }
+                });
+
+                ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
+
+                Glide.with(TambahDetailListingSementaraActivity.this)
+                        .load(R.drawable.alert)
+                        .transition(DrawableTransitionOptions.withCrossFade())
+                        .into(gifImageView);
+
+                customDialog.show();
                 satuanluas.requestFocus();
                 return false;
             }
         }
         if (!land.getText().toString().equals("")) {
             if (satuanland.getText().equals("")) {
-                satuanland.setError("Harap Isi Satuan");
+                Dialog customDialog = new Dialog(TambahDetailListingSementaraActivity.this);
+                customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                customDialog.setContentView(R.layout.custom_dialog_eror_input);
+
+                if (customDialog.getWindow() != null) {
+                    customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                }
+
+                Button ok = customDialog.findViewById(R.id.BtnOkErorInput);
+                TextView tv = customDialog.findViewById(R.id.TVDialogErorInput);
+
+                tv.setText("Harap Isi Satuan Luas");
+
+                ok.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        customDialog.dismiss();
+                    }
+                });
+
+                ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
+
+                Glide.with(TambahDetailListingSementaraActivity.this)
+                        .load(R.drawable.alert)
+                        .transition(DrawableTransitionOptions.withCrossFade())
+                        .into(gifImageView);
+
+                customDialog.show();
                 satuanland.requestFocus();
                 return false;
             }
@@ -6226,24 +6400,132 @@ public class TambahDetailListingSementaraActivity extends AppCompatActivity {
             return false;
         } else if (status.getText().toString().equals("Jual")) {
             if (harga.getText().toString().equals("")) {
-                harga.setError("Harap Isi Harga Properti");
+                Dialog customDialog = new Dialog(TambahDetailListingSementaraActivity.this);
+                customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                customDialog.setContentView(R.layout.custom_dialog_eror_input);
+
+                if (customDialog.getWindow() != null) {
+                    customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                }
+
+                Button ok = customDialog.findViewById(R.id.BtnOkErorInput);
+                TextView tv = customDialog.findViewById(R.id.TVDialogErorInput);
+
+                tv.setText("Harap Isi Harga Properti");
+
+                ok.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        customDialog.dismiss();
+                    }
+                });
+
+                ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
+
+                Glide.with(TambahDetailListingSementaraActivity.this)
+                        .load(R.drawable.alert) // You can also use a local resource like R.drawable.your_gif_resource
+                        .transition(DrawableTransitionOptions.withCrossFade())
+                        .into(gifImageView);
+
+                customDialog.show();
                 harga.requestFocus();
                 return false;
             }
         } else if (status.getText().toString().equals("Sewa")) {
             if (hargasewa.getText().toString().equals("")) {
-                hargasewa.setError("Harap Isi Harga Properti");
+                Dialog customDialog = new Dialog(TambahDetailListingSementaraActivity.this);
+                customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                customDialog.setContentView(R.layout.custom_dialog_eror_input);
+
+                if (customDialog.getWindow() != null) {
+                    customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                }
+
+                Button ok = customDialog.findViewById(R.id.BtnOkErorInput);
+                TextView tv = customDialog.findViewById(R.id.TVDialogErorInput);
+
+                tv.setText("Harap Isi Harga Properti");
+
+                ok.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        customDialog.dismiss();
+                    }
+                });
+
+                ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
+
+                Glide.with(TambahDetailListingSementaraActivity.this)
+                        .load(R.drawable.alert) // You can also use a local resource like R.drawable.your_gif_resource
+                        .transition(DrawableTransitionOptions.withCrossFade())
+                        .into(gifImageView);
+
+                customDialog.show();
                 hargasewa.requestFocus();
                 return false;
             }
         } else {
             if (harga.getText().toString().equals("")) {
-                harga.setError("Harap Isi Harga Properti");
+                Dialog customDialog = new Dialog(TambahDetailListingSementaraActivity.this);
+                customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                customDialog.setContentView(R.layout.custom_dialog_eror_input);
+
+                if (customDialog.getWindow() != null) {
+                    customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                }
+
+                Button ok = customDialog.findViewById(R.id.BtnOkErorInput);
+                TextView tv = customDialog.findViewById(R.id.TVDialogErorInput);
+
+                tv.setText("Harap Isi Harga Properti");
+
+                ok.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        customDialog.dismiss();
+                    }
+                });
+
+                ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
+
+                Glide.with(TambahDetailListingSementaraActivity.this)
+                        .load(R.drawable.alert) // You can also use a local resource like R.drawable.your_gif_resource
+                        .transition(DrawableTransitionOptions.withCrossFade())
+                        .into(gifImageView);
+
+                customDialog.show();
                 harga.requestFocus();
                 return false;
             }
             if (hargasewa.getText().toString().equals("")) {
-                hargasewa.setError("Harap Isi Harga Properti");
+                Dialog customDialog = new Dialog(TambahDetailListingSementaraActivity.this);
+                customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                customDialog.setContentView(R.layout.custom_dialog_eror_input);
+
+                if (customDialog.getWindow() != null) {
+                    customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                }
+
+                Button ok = customDialog.findViewById(R.id.BtnOkErorInput);
+                TextView tv = customDialog.findViewById(R.id.TVDialogErorInput);
+
+                tv.setText("Harap Isi Harga Properti");
+
+                ok.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        customDialog.dismiss();
+                    }
+                });
+
+                ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
+
+                Glide.with(TambahDetailListingSementaraActivity.this)
+                        .load(R.drawable.alert) // You can also use a local resource like R.drawable.your_gif_resource
+                        .transition(DrawableTransitionOptions.withCrossFade())
+                        .into(gifImageView);
+
+                customDialog.show();
                 hargasewa.requestFocus();
                 return false;
             }

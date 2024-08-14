@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.gooproper.R;
 import com.gooproper.model.PraListingTerdekatModel;
-import com.gooproper.ui.detail.listing.DetailPralistingTerdekatActivity;
+import com.gooproper.ui.detail.pralisting.DetailPralistingTerdekatActivity;
 
 import java.util.List;
 

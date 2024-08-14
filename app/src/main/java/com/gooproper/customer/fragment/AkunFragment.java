@@ -15,7 +15,7 @@ import android.view.Window;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.gooproper.ui.edit.EditAkunActivity;
+import com.gooproper.ui.edit.user.EditAkunActivity;
 import com.gooproper.R;
 import com.gooproper.ui.user.SettingActivity;
 import com.gooproper.ui.user.TentangKamiActivity;

@@ -1,4 +1,4 @@
-package com.gooproper.ui.detail.listing;
+package com.gooproper.ui.detail.pralisting;
 
 import android.Manifest;
 import android.app.AlertDialog;
@@ -18,7 +18,6 @@ import android.text.style.StyleSpan;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -26,15 +25,11 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 import androidx.viewpager.widget.ViewPager;
 
 import com.android.volley.AuthFailureError;
@@ -47,8 +42,6 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -57,17 +50,11 @@ import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.material.textfield.TextInputEditText;
-import com.google.android.material.textfield.TextInputLayout;
 import com.gooproper.R;
 import com.gooproper.adapter.ViewPagerAdapter;
 import com.gooproper.adapter.image.PJPAdapter;
-import com.gooproper.adapter.image.SertifikatAdapter;
-import com.gooproper.model.ListingModel;
 import com.gooproper.pager.SertifikatPdfAdapter;
-import com.gooproper.ui.officer.report.TambahCekLokasiActivity;
 import com.gooproper.ui.officer.survey.TambahSurveyPralistingActivity;
-import com.gooproper.util.AgenManager;
 import com.gooproper.util.FormatCurrency;
 import com.gooproper.util.SendMessageToFCM;
 import com.gooproper.util.ServerApi;
@@ -76,10 +63,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map;
 
 public class DetailPralistingTerdekatActivity extends AppCompatActivity implements OnMapReadyCallback {
@@ -962,7 +947,7 @@ public class DetailPralistingTerdekatActivity extends AppCompatActivity implemen
                 Button cobalagi = customDialog.findViewById(R.id.btntidak);
                 ImageView gifimage = customDialog.findViewById(R.id.ivdialog);
 
-                dialogTitle.setText("Listing Rejected" + StringIdPralisting + StringIdAgen);
+                dialogTitle.setText("Listing Rejected");
                 cobalagi.setVisibility(View.GONE);
 
                 ok.setOnClickListener(new View.OnClickListener() {

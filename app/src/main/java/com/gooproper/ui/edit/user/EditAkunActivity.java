@@ -1,4 +1,4 @@
-package com.gooproper.ui.edit;
+package com.gooproper.ui.edit.user;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;

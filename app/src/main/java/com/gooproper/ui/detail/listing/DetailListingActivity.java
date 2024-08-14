@@ -1,28 +1,23 @@
 package com.gooproper.ui.detail.listing;
 
-import static androidx.media3.common.MediaLibraryInfo.TAG;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
 import android.Manifest;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
-import android.content.ContentResolver;
-import android.content.ContentValues;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -33,14 +28,12 @@ import android.provider.MediaStore;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.style.StyleSpan;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
@@ -79,21 +72,18 @@ import com.gooproper.R;
 import com.gooproper.adapter.image.PJPAdapter;
 import com.gooproper.adapter.image.SertifikatAdapter;
 import com.gooproper.adapter.ViewPagerAdapter;
+import com.gooproper.adapter.listing.ListingAdapter;
 import com.gooproper.model.ListingModel;
 import com.gooproper.pager.SertifikatPdfAdapter;
 import com.gooproper.ui.detail.agen.DetailAgenListingActivity;
-import com.gooproper.ui.edit.EditListingActivity;
-import com.gooproper.ui.edit.EditListingAgenActivity;
-import com.gooproper.ui.edit.EditMapsListingActivity;
-import com.gooproper.ui.edit.EditPraListingAgenActivity;
-import com.gooproper.ui.edit.EditPralistingActivity;
-import com.gooproper.ui.edit.listing.TambahGambarActivity;
+import com.gooproper.ui.edit.listing.EditDataListingActivity;
+import com.gooproper.ui.edit.listing.TambahDataGambarListingActivity;
+import com.gooproper.ui.edit.listing.TambahDataLokasiListingActivity;
+import com.gooproper.ui.edit.listing.TambahDataSelfieListingActivity;
 import com.gooproper.ui.followup.FollowUpActivity;
 import com.gooproper.ui.ImageViewActivity;
 import com.gooproper.ui.officer.report.TambahCekLokasiActivity;
 import com.gooproper.ui.tambah.template.GantiTemplateActivity;
-import com.gooproper.ui.tambah.TambahSelfieActivity;
-import com.gooproper.ui.tambah.TambahSelfieListingActivity;
 import com.gooproper.util.AgenManager;
 import com.gooproper.util.FormatCurrency;
 import com.gooproper.util.Preferences;
@@ -106,7 +96,6 @@ import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Element;
 import com.itextpdf.text.Font;
 import com.itextpdf.text.FontFactory;
-import com.itextpdf.text.Image;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.squareup.picasso.Picasso;
@@ -119,11 +108,7 @@ import org.json.JSONObject;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -135,47 +120,54 @@ import java.util.Map;
 public class DetailListingActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     ProgressDialog PDDetailListing;
-    TextView TVRangeHarga, TVNamaDetailListing, TVAlamatDetailListing, TVHargaDetailListing, TVHargaSewaDetailListing, TVViewsDetailListing, TVLikeDetailListing, TVBedDetailListing, TVNamaAgen, TVNamaAgen2, TVBathDetailListing, TVWideDetailListing, TVLandDetailListing, TVDimensiDetailListing, TVTipeDetailListing, TVStatusDetailListing, TVSertifikatDetailListing, TVLuasDetailListing, TVKamarTidurDetailListing, TVKamarMandiDetailListing, TVLantaiDetailListing, TVGarasiDetailListing, TVCarpotDetailListing, TVListrikDetailListing, TVSumberAirDetailListing, TVPerabotDetailListing, TVSizeBanner, TVDeskripsiDetailListing, TVNoData, TVNoDataPdf, TVPriority, TVKondisi, TVNoPjp, TVNoDataPjp, TVFee, TVTglInput, TVNamaVendor, TVTelpVendor, TVPJP, TVSelfie, TVRejected, TVPoin, TVHadap, TVJumlahFoto;
+    TextView TVRangeHarga, TVNamaDetailListing, TVAlamatDetailListing, TVHargaDetailListing, TVHargaSewaDetailListing, TVViewsDetailListing, TVLikeDetailListing, TVBedDetailListing, TVNamaAgen, TVNamaAgen2, TVBathDetailListing, TVWideDetailListing, TVLandDetailListing, TVDimensiDetailListing, TVTipeDetailListing, TVStatusDetailListing, TVSertifikatDetailListing, TVLuasDetailListing, TVKamarTidurDetailListing, TVKamarMandiDetailListing, TVLantaiDetailListing, TVGarasiDetailListing, TVCarpotDetailListing, TVListrikDetailListing, TVSumberAirDetailListing, TVPerabotDetailListing, TVSizeBanner, TVDeskripsiDetailListing, TVNoData, TVNoDataPdf, TVPriority, TVKondisi, TVNoPjp, TVNoDataPjp, TVFee, TVTglInput, TVNamaVendor, TVTelpVendor, TVPJP, TVSelfie, TVPoin, TVHadap, TVJumlahGambar;
+    TextView SeeAllSekitar, SeeAllTerkait;
     ImageView IVVerified, IVFlowUp, IVWhatsapp, IVInstagram, IVFlowUp2, IVWhatsapp2, IVInstagram2, IVFavorite, IVFavoriteOn, IVShare, IVStar1, IVStar2, IVStar3, IVStar4, IVStar5, IVAlamat, IVNextImg, IVPrevImg, IVSelfie;
-    Button BtnApproveAdmin, BtnApproveManager, BtnRejectedAdmin, BtnRejectedManager, BtnAjukanUlang, BtnLihatTemplate, BtnLihatTemplateKosong, BtnUploadTemplate, BtnDataDouble, BtnHapusListing;
+    Button BtnLihatTemplate, BtnLihatTemplateKosong, BtnUploadTemplate, BtnTemplateDouble, BtnDataDouble, BtnHapusListing;
     Button BtnTambahPjp, BtnTambahBanner, BtnTambahCoList, BtnUpgrade, BtnTambahMaps, BtnTambahSelfie, BtnApproveUpgrade, BtnTambahWilayah, BtnCekLokasi, BtnSimpanPDF, BtnTambahNoArsip, BtnTambahGambar;
-    TextInputEditText tambahagen, tambahcoagen, tambahpjp;
-    TextInputLayout lytambahagen, lyttambahcoagen, lyttambahpjp;
+    TextInputEditText tambahpjp;
+    TextInputLayout lyttambahcoagen, lyttambahpjp;
     CheckBox CBMarketable, CBHarga, CBSelfie, CBLokasi;
     LinearLayout LytCBMarketable, LytCBHarga, LytCBSelfie, LytCBLokasi;
     ScrollView scrollView;
     CardView agen, agen2, CVSold, CVRented;
+    RecyclerView recycleListingSekitar, recycleListingTerkait;
+    RecyclerView.Adapter AdapterSekitar, AdapterTerkait;
     String status, idpralisting, idagen, idlisting, agenid, agencoid, idpengguna, StringNamaListing, StringLuasTanah, StringLuasBangunan, StringKamarTidur, StringKamarTidurArt, StringKamarMandiArt, StringKamarMandi, StringListrik, StringHarga, StringHargaSewa, StringSertifikat, StringAlamat, StringJenisProperty;
     String BuyerNama, BuyerTelp, BuyerKeterangan, BuyerTanggal, BuyerIdAgen, BuyerIdListing, BuyerIdInput, BuyerJam, StringNamaBuyer, AgenId, StringKeteranganReject, StringKondisi;
-    String NamaMaps, IsOfficer, IsCekLokasi, IsArsip;
-    int PoinSekarang, PoinTambah, PoinKurang;
+    String NamaMaps, IsOfficer, IsCekLokasi, IsArsip, IsTemplate;
     String imageUrl, namaAgen, telpAgen, IdCo, UrlSHM, UrlHGB, UrlHSHP, UrlPPJB, UrlStratatitle, UrlAJB, UrlPetokD;
     String productId, StrIdAgen, StrIntentIdAgenCo, StrIntentIdAgen, StrJudulLaporanPdf;
     String PJPHal1, PJPHal2;
+    String StrWilayah, StrJenis, StrKondisi;
+    String intentIdListing,intentIdAgen,intentIdAgenCo,intentIdInput,intentNamaListing,intentAlamat,intentLatitude,intentLongitude,intentLocation,intentWilayah,intentSelfie,intentWide,intentLand,intentDimensi,intentListrik,intentLevel,intentBed,intentBedArt,intentBath,intentBathArt,intentGarage,intentCarpot,intentHadap,intentSHM,intentHGB,intentHSHP,intentPPJB,intentStratatitle,intentAJB,intentPetokD,intentPjp,intentImgSHM,intentImgHGB,intentImgHSHP,intentImgPPJB,intentImgStratatitle,intentImgAJB,intentImgPetokD,intentImgPjp,intentImgPjp1,intentNoCertificate,intentPbb,intentJenisProperti,intentJenisCertificate,intentSumberAir,intentKondisi,intentDeskripsi,intentPrabot,intentKetPrabot,intentPriority,intentTtd,intentBanner,intentSize,intentHarga,intentHargaSewa,intentRangeHarga,intentTglInput,intentImg1,intentImg2,intentImg3,intentImg4,intentImg5,intentImg6,intentImg7,intentImg8,intentImg9,intentImg10,intentImg11,intentImg12,intentVideo,intentLinkFacebook,intentLinkTiktok,intentLinkInstagram,intentLinkYoutube,intentIsAdmin,intentIsManager,intentIsRejected,intentSold,intentRented,intentSoldAgen,intentRentedAgen,intentView,intentMarketable,intentStatusHarga,intentNama,intentNoTelp,intentInstagram,intentFee,intentNamaVendor,intentNoTelpVendor,intentIsSelfie,intentIsLokasi,intentKeterangan,intentIdTemplate,intentTemplate,intentTemplateBlank;
+    int PoinSekarang, PoinTambah, PoinKurang;
     int Poin, FinalPoin, CoPoin;
     ProgressDialog pDialog;
     ListingModel lm;
-    LinearLayout LytSertifikat, LytPJP, LytSize, LytFee, LytTglInput, LytBadge, LytBadgeSold, LytBadgeRented, IVEdit, LytNamaVendor, LytTelpVendor, LytRejected, LytSelfie, LytBtnHapus;
+    LinearLayout LytSertifikat, LytPJP, LytSize, LytFee, LytTglInput, LytBadge, LytEdit, LytNamaVendor, LytTelpVendor, LytSelfie, LytBtnHapus;
     ViewPager viewPager, viewPagerSertifikat, viewPagerPJP;
     ViewPagerAdapter adapter;
     SertifikatAdapter sertifikatAdapter;
-    private SertifikatPdfAdapter sertifikatPdfAdapter;
+    SertifikatPdfAdapter sertifikatPdfAdapter;
     PJPAdapter pjpAdapter;
     ArrayList<String> images = new ArrayList<>();
     ArrayList<String> sertif = new ArrayList<>();
     ArrayList<String> sertifpdf = new ArrayList<>();
     ArrayList<String> pjpimage = new ArrayList<>();
+    List<ListingModel> mItemsSekitar;
+    List<ListingModel> mItemsTerkait;
     private String[] dataOptions;
     private int selectedOption = -1;
     private AgenManager agenManager, agenCoManager;
     private MapView mapView;
     private GoogleMap googleMap;
     double lat, lng;
+    Uri UriPjp1, UriPjp2;
+    private Dialog CustomDialogPjp, CustomDialogArsip, CustomDialogBanner, CustomDialogCoList;
     private static final int REQUEST_WRITE_STORAGE = 112;
     private static final int RESULT_LOAD_PJP1 = 1;
     private static final int RESULT_LOAD_PJP2 = 2;
-    Uri UriPjp1, UriPjp2;
-    private Dialog CustomDialogPjp;
     private static final int MAX_TEXT_LENGTH_PRICE = 10;
     private static final int MAX_TEXT_LENGTH_PRICE_MILIAR = 23;
     private static final int MAX_TEXT_LENGTH_PRICE_JUTA = 19;
@@ -189,38 +181,25 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
         PDDetailListing = new ProgressDialog(DetailListingActivity.this);
         pDialog = new ProgressDialog(this);
 
-        tambahagen = findViewById(R.id.ETTambahAgenDetailListing);
-        tambahcoagen = findViewById(R.id.ETTambahCoAgenDetailListing);
-        tambahpjp = findViewById(R.id.ETTambahNoPjpDetailListing);
         viewPager = findViewById(R.id.VPDetailListing);
         viewPagerSertifikat = findViewById(R.id.VPSertifikatDetailListing);
         viewPagerPJP = findViewById(R.id.VPPJPDetailListing);
         agen = findViewById(R.id.LytAgenDetailListing);
         agen2 = findViewById(R.id.LytAgen2DetailListing);
-        CVSold = findViewById(R.id.LytSoldDetailListing);
-        CVRented = findViewById(R.id.LytRentedDetailListing);
-        lytambahagen = findViewById(R.id.LytTambahAgenDetailListing);
-        lyttambahcoagen = findViewById(R.id.LytTambahCoAgenDetailListing);
-        lyttambahpjp = findViewById(R.id.LytTambahNoPjpDetailListing);
+
         LytSertifikat = findViewById(R.id.LytSertifikat);
         LytPJP = findViewById(R.id.LytViewPjp);
         LytSize = findViewById(R.id.LytUkuranBannerDetailListing);
         LytFee = findViewById(R.id.LytFeeDetailListing);
         LytTglInput = findViewById(R.id.LytTglInputDetailListing);
         LytBadge = findViewById(R.id.LytBadge);
-        LytBadgeSold = findViewById(R.id.LytBadgeSold);
-        LytBadgeRented = findViewById(R.id.LytBadgeRented);
+        LytEdit = findViewById(R.id.LytEditDetailListing);
         LytNamaVendor = findViewById(R.id.LytNamaVendorDetailListing);
         LytTelpVendor = findViewById(R.id.LytTelpVendorDetailListing);
-        LytRejected = findViewById(R.id.LytRejectedDetailListing);
         LytSelfie = findViewById(R.id.LytViewSelfie);
         scrollView = findViewById(R.id.SVDetailListing);
 
-        BtnApproveAdmin = findViewById(R.id.BtnApproveAdminDetailListing);
-        BtnApproveManager = findViewById(R.id.BtnApproveManagerDetailListing);
-        BtnRejectedAdmin = findViewById(R.id.BtnRejectedAdminDetailListing);
-        BtnRejectedManager = findViewById(R.id.BtnRejectedManagerDetailListing);
-        BtnAjukanUlang = findViewById(R.id.BtnAjukanUlangDetailListing);
+        BtnTemplateDouble = findViewById(R.id.BtnTemplateDouble);
         BtnDataDouble = findViewById(R.id.BtnDataDouble);
         BtnHapusListing = findViewById(R.id.BtnHapusListing);
 
@@ -281,9 +260,10 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
         TVTelpVendor = findViewById(R.id.TVTelpVendorDetailListing);
         TVPJP = findViewById(R.id.TVPjp);
         TVSelfie = findViewById(R.id.TVNoSelfie);
-        TVRejected = findViewById(R.id.TVKeteranganDetailListing);
         TVPoin = findViewById(R.id.TVPoinListing);
-        TVJumlahFoto = findViewById(R.id.TVJumlahFotoListing);
+        TVJumlahGambar = findViewById(R.id.TVJumlahGambar);
+        SeeAllSekitar = findViewById(R.id.SeeAllSekitar);
+        SeeAllTerkait = findViewById(R.id.SeeAllTerkait);
 
         IVVerified = findViewById(R.id.IVVerified);
         IVAlamat = findViewById(R.id.IVAlamatDetailListing);
@@ -296,9 +276,6 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
         IVFavorite = findViewById(R.id.IVFavoriteDetailListing);
         IVFavoriteOn = findViewById(R.id.IVFavoriteOnDetailListing);
         IVShare = findViewById(R.id.IVShareDetailListing);
-        IVEdit = findViewById(R.id.IVEditDetailListing);
-        IVNextImg = findViewById(R.id.IVNextImg);
-        IVPrevImg = findViewById(R.id.IVPrevImg);
         IVSelfie = findViewById(R.id.IVSelfie);
 
         CBMarketable = findViewById(R.id.CBMarketable);
@@ -311,6 +288,9 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
         LytCBLokasi = findViewById(R.id.LytCBLokasi);
         LytBtnHapus = findViewById(R.id.LytBtnHapusListing);
 
+        recycleListingSekitar = findViewById(R.id.ListingSekitar);
+        recycleListingTerkait = findViewById(R.id.ListingSerupa);
+
         mapView = findViewById(R.id.MVDetailListing);
         mapView.onCreate(savedInstanceState);
         mapView.getMapAsync(this);
@@ -318,113 +298,117 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
         agenManager = new AgenManager();
         agenCoManager = new AgenManager();
 
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                    REQUEST_WRITE_STORAGE);
-        }
+        mItemsSekitar = new ArrayList<>();
+        mItemsTerkait = new ArrayList<>();
+
+        recycleListingSekitar.setLayoutManager(new LinearLayoutManager(DetailListingActivity.this, LinearLayoutManager.HORIZONTAL, false));
+        AdapterSekitar = new ListingAdapter(DetailListingActivity.this, mItemsSekitar);
+        recycleListingSekitar.setAdapter(AdapterSekitar);
+
+        recycleListingTerkait.setLayoutManager(new LinearLayoutManager(DetailListingActivity.this, LinearLayoutManager.HORIZONTAL, false));
+        AdapterTerkait = new ListingAdapter(DetailListingActivity.this, mItemsTerkait);
+        recycleListingTerkait.setAdapter(AdapterTerkait);
 
         FormatCurrency currency = new FormatCurrency();
 
         Intent data = getIntent();
         final int update = data.getIntExtra("update", 0);
-//        String intentIdPraListing = data.getStringExtra("IdPraListing");
-        String intentIdListing = data.getStringExtra("IdListing");
-        String intentIdAgen = data.getStringExtra("IdAgen");
-        String intentIdAgenCo = data.getStringExtra("IdAgenCo");
-        String intentIdInput = data.getStringExtra("IdInput");
-        String intentNamaListing = data.getStringExtra("NamaListing");
-        String intentAlamat = data.getStringExtra("Alamat");
-        String intentLatitude = data.getStringExtra("Latitude");
-        String intentLongitude = data.getStringExtra("Longitude");
-        String intentLocation = data.getStringExtra("Location");
-        String intentWilayah = data.getStringExtra("Wilayah");
-        String intentSelfie = data.getStringExtra("Selfie");
-        String intentWide = data.getStringExtra("Wide");
-        String intentLand = data.getStringExtra("Land");
-        String intentDimensi = data.getStringExtra("Dimensi");
-        String intentListrik = data.getStringExtra("Listrik");
-        String intentLevel = data.getStringExtra("Level");
-        String intentBed = data.getStringExtra("Bed");
-        String intentBedArt = data.getStringExtra("BedArt");
-        String intentBath = data.getStringExtra("Bath");
-        String intentBathArt = data.getStringExtra("BathArt");
-        String intentGarage = data.getStringExtra("Garage");
-        String intentCarpot = data.getStringExtra("Carpot");
-        String intentHadap = data.getStringExtra("Hadap");
-        String intentSHM = data.getStringExtra("SHM");
-        String intentHGB = data.getStringExtra("HGB");
-        String intentHSHP = data.getStringExtra("HSHP");
-        String intentPPJB = data.getStringExtra("PPJB");
-        String intentStratatitle = data.getStringExtra("Stratatitle");
-        String intentAJB = data.getStringExtra("AJB");
-        String intentPetokD = data.getStringExtra("PetokD");
-        String intentPjp = data.getStringExtra("Pjp");
-        String intentImgSHM = data.getStringExtra("ImgSHM");
-        String intentImgHGB = data.getStringExtra("ImgHGB");
-        String intentImgHSHP = data.getStringExtra("ImgHSHP");
-        String intentImgPPJB = data.getStringExtra("ImgPPJB");
-        String intentImgStratatitle = data.getStringExtra("ImgStratatitle");
-        String intentImgAJB = data.getStringExtra("ImgAJB");
-        String intentImgPetokD = data.getStringExtra("ImgPetokD");
-        String intentImgPjp = data.getStringExtra("ImgPjp");
-        String intentImgPjp1 = data.getStringExtra("ImgPjp1");
-        String intentNoCertificate = data.getStringExtra("NoCertificate");
-        String intentPbb = data.getStringExtra("Pbb");
-        String intentJenisProperti = data.getStringExtra("JenisProperti");
-        String intentJenisCertificate = data.getStringExtra("JenisCertificate");
-        String intentSumberAir = data.getStringExtra("SumberAir");
-        String intentKondisi = data.getStringExtra("Kondisi");
-        String intentDeskripsi = data.getStringExtra("Deskripsi");
-        String intentPrabot = data.getStringExtra("Prabot");
-        String intentKetPrabot = data.getStringExtra("KetPrabot");
-        String intentPriority = data.getStringExtra("Priority");
-        String intentTtd = data.getStringExtra("Ttd");
-        String intentBanner = data.getStringExtra("Banner");
-        String intentSize = data.getStringExtra("Size");
-        String intentHarga = data.getStringExtra("Harga");
-        String intentHargaSewa = data.getStringExtra("HargaSewa");
-        String intentRangeHarga = data.getStringExtra("RangeHarga");
-        String intentTglInput = data.getStringExtra("TglInput");
-        String intentImg1 = data.getStringExtra("Img1");
-        String intentImg2 = data.getStringExtra("Img2");
-        String intentImg3 = data.getStringExtra("Img3");
-        String intentImg4 = data.getStringExtra("Img4");
-        String intentImg5 = data.getStringExtra("Img5");
-        String intentImg6 = data.getStringExtra("Img6");
-        String intentImg7 = data.getStringExtra("Img7");
-        String intentImg8 = data.getStringExtra("Img8");
-        String intentImg9 = data.getStringExtra("Img9");
-        String intentImg10 = data.getStringExtra("Img10");
-        String intentImg11 = data.getStringExtra("Img11");
-        String intentImg12 = data.getStringExtra("Img12");
-        String intentVideo = data.getStringExtra("Video");
-        String intentLinkFacebook = data.getStringExtra("LinkFacebook");
-        String intentLinkTiktok = data.getStringExtra("LinkTiktok");
-        String intentLinkInstagram = data.getStringExtra("LinkInstagram");
-        String intentLinkYoutube = data.getStringExtra("LinkYoutube");
-        String intentIsAdmin = data.getStringExtra("IsAdmin");
-        String intentIsManager = data.getStringExtra("IsManager");
-        String intentIsRejected = data.getStringExtra("IsRejected");
-        String intentSold = data.getStringExtra("Sold");
-        String intentRented = data.getStringExtra("Rented");
-        String intentSoldAgen = data.getStringExtra("SoldAgen");
-        String intentRentedAgen = data.getStringExtra("RentedAgen");
-        String intentView = data.getStringExtra("View");
-        String intentMarketable = data.getStringExtra("Marketable");
-        String intentStatusHarga = data.getStringExtra("StatusHarga");
-        String intentNama = data.getStringExtra("Nama");
-        String intentNoTelp = data.getStringExtra("NoTelp");
-        String intentInstagram = data.getStringExtra("Instagram");
-        String intentFee = data.getStringExtra("Fee");
-        String intentNamaVendor = data.getStringExtra("NamaVendor");
-        String intentNoTelpVendor = data.getStringExtra("NoTelpVendor");
-        String intentIsSelfie = data.getStringExtra("IsSelfie");
-        String intentIsLokasi = data.getStringExtra("IsLokasi");
-        String intentKeterangan = data.getStringExtra("Keterangan");
-        String intentIdTemplate = data.getStringExtra("IdTemplate");
-        String intentTemplate = data.getStringExtra("Template");
-        String intentTemplateBlank = data.getStringExtra("TemplateBlank");
+        intentIdListing = data.getStringExtra("IdListing");
+        intentIdAgen = data.getStringExtra("IdAgen");
+        intentIdAgenCo = data.getStringExtra("IdAgenCo");
+        intentIdInput = data.getStringExtra("IdInput");
+        intentNamaListing = data.getStringExtra("NamaListing");
+        intentAlamat = data.getStringExtra("Alamat");
+        intentLatitude = data.getStringExtra("Latitude");
+        intentLongitude = data.getStringExtra("Longitude");
+        intentLocation = data.getStringExtra("Location");
+        intentWilayah = data.getStringExtra("Wilayah");
+        intentSelfie = data.getStringExtra("Selfie");
+        intentWide = data.getStringExtra("Wide");
+        intentLand = data.getStringExtra("Land");
+        intentDimensi = data.getStringExtra("Dimensi");
+        intentListrik = data.getStringExtra("Listrik");
+        intentLevel = data.getStringExtra("Level");
+        intentBed = data.getStringExtra("Bed");
+        intentBedArt = data.getStringExtra("BedArt");
+        intentBath = data.getStringExtra("Bath");
+        intentBathArt = data.getStringExtra("BathArt");
+        intentGarage = data.getStringExtra("Garage");
+        intentCarpot = data.getStringExtra("Carpot");
+        intentHadap = data.getStringExtra("Hadap");
+        intentSHM = data.getStringExtra("SHM");
+        intentHGB = data.getStringExtra("HGB");
+        intentHSHP = data.getStringExtra("HSHP");
+        intentPPJB = data.getStringExtra("PPJB");
+        intentStratatitle = data.getStringExtra("Stratatitle");
+        intentAJB = data.getStringExtra("AJB");
+        intentPetokD = data.getStringExtra("PetokD");
+        intentPjp = data.getStringExtra("Pjp");
+        intentImgSHM = data.getStringExtra("ImgSHM");
+        intentImgHGB = data.getStringExtra("ImgHGB");
+        intentImgHSHP = data.getStringExtra("ImgHSHP");
+        intentImgPPJB = data.getStringExtra("ImgPPJB");
+        intentImgStratatitle = data.getStringExtra("ImgStratatitle");
+        intentImgAJB = data.getStringExtra("ImgAJB");
+        intentImgPetokD = data.getStringExtra("ImgPetokD");
+        intentImgPjp = data.getStringExtra("ImgPjp");
+        intentImgPjp1 = data.getStringExtra("ImgPjp1");
+        intentNoCertificate = data.getStringExtra("NoCertificate");
+        intentPbb = data.getStringExtra("Pbb");
+        intentJenisProperti = data.getStringExtra("JenisProperti");
+        intentJenisCertificate = data.getStringExtra("JenisCertificate");
+        intentSumberAir = data.getStringExtra("SumberAir");
+        intentKondisi = data.getStringExtra("Kondisi");
+        intentDeskripsi = data.getStringExtra("Deskripsi");
+        intentPrabot = data.getStringExtra("Prabot");
+        intentKetPrabot = data.getStringExtra("KetPrabot");
+        intentPriority = data.getStringExtra("Priority");
+        intentTtd = data.getStringExtra("Ttd");
+        intentBanner = data.getStringExtra("Banner");
+        intentSize = data.getStringExtra("Size");
+        intentHarga = data.getStringExtra("Harga");
+        intentHargaSewa = data.getStringExtra("HargaSewa");
+        intentRangeHarga = data.getStringExtra("RangeHarga");
+        intentTglInput = data.getStringExtra("TglInput");
+        intentImg1 = data.getStringExtra("Img1");
+        intentImg2 = data.getStringExtra("Img2");
+        intentImg3 = data.getStringExtra("Img3");
+        intentImg4 = data.getStringExtra("Img4");
+        intentImg5 = data.getStringExtra("Img5");
+        intentImg6 = data.getStringExtra("Img6");
+        intentImg7 = data.getStringExtra("Img7");
+        intentImg8 = data.getStringExtra("Img8");
+        intentImg9 = data.getStringExtra("Img9");
+        intentImg10 = data.getStringExtra("Img10");
+        intentImg11 = data.getStringExtra("Img11");
+        intentImg12 = data.getStringExtra("Img12");
+        intentVideo = data.getStringExtra("Video");
+        intentLinkFacebook = data.getStringExtra("LinkFacebook");
+        intentLinkTiktok = data.getStringExtra("LinkTiktok");
+        intentLinkInstagram = data.getStringExtra("LinkInstagram");
+        intentLinkYoutube = data.getStringExtra("LinkYoutube");
+        intentIsAdmin = data.getStringExtra("IsAdmin");
+        intentIsManager = data.getStringExtra("IsManager");
+        intentIsRejected = data.getStringExtra("IsRejected");
+        intentSold = data.getStringExtra("Sold");
+        intentRented = data.getStringExtra("Rented");
+        intentSoldAgen = data.getStringExtra("SoldAgen");
+        intentRentedAgen = data.getStringExtra("RentedAgen");
+        intentView = data.getStringExtra("View");
+        intentMarketable = data.getStringExtra("Marketable");
+        intentStatusHarga = data.getStringExtra("StatusHarga");
+        intentNama = data.getStringExtra("Nama");
+        intentNoTelp = data.getStringExtra("NoTelp");
+        intentInstagram = data.getStringExtra("Instagram");
+        intentFee = data.getStringExtra("Fee");
+        intentNamaVendor = data.getStringExtra("NamaVendor");
+        intentNoTelpVendor = data.getStringExtra("NoTelpVendor");
+        intentIsSelfie = data.getStringExtra("IsSelfie");
+        intentIsLokasi = data.getStringExtra("IsLokasi");
+        intentKeterangan = data.getStringExtra("Keterangan");
+        intentIdTemplate = data.getStringExtra("IdTemplate");
+        intentTemplate = data.getStringExtra("Template");
+        intentTemplateBlank = data.getStringExtra("TemplateBlank");
 
         status = Preferences.getKeyStatus(this);
         StrIdAgen = Preferences.getKeyIdAgen(this);
@@ -432,7 +416,6 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
         StrJudulLaporanPdf = "Listingan_"+intentJenisProperti+"_"+intentKondisi;
         StrIntentIdAgen = intentIdAgen;
         StrIntentIdAgenCo = intentIdAgenCo;
-//        idpralisting = intentIdPraListing;
         idlisting = intentIdListing;
         idagen = intentIdAgen;
         IdCo = intentIdAgenCo;
@@ -455,6 +438,12 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
         StringSertifikat = intentJenisCertificate;
         StringJenisProperty = intentJenisProperti;
         StringKondisi = intentKondisi;
+        StrWilayah = intentWilayah;
+        StrJenis = intentJenisProperti;
+        StrKondisi = intentKondisi;
+
+        LoadListingSekitar();
+        LoadListingTerkait();
 
         if (status.equals("3")) {
             RequestQueue queuereport = Volley.newRequestQueue(DetailListingActivity.this);
@@ -469,9 +458,71 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
 
                                     IsOfficer = data.getString("Officer");
                                     if (IsOfficer.equals("1")) {
-                                        BtnCekLokasi.setVisibility(View.VISIBLE);
+                                        RequestQueue queuelokasi = Volley.newRequestQueue(DetailListingActivity.this);
+                                        JsonArrayRequest reqDatalokasi = new JsonArrayRequest(Request.Method.GET, ServerApi.URL_CEK_ISLOKASI+ intentIdListing,null,
+                                                new Response.Listener<JSONArray>() {
+                                                    @Override
+                                                    public void onResponse(JSONArray response) {
+                                                        for(int i = 0 ; i < response.length(); i++)
+                                                        {
+                                                            try {
+                                                                JSONObject data = response.getJSONObject(i);
+
+                                                                IsCekLokasi = data.getString("IsCekLokasi");
+                                                                if (IsCekLokasi.equals("1")) {
+                                                                    IVVerified.setVisibility(View.VISIBLE);
+                                                                    BtnCekLokasi.setVisibility(View.GONE);
+                                                                } else {
+                                                                    IVVerified.setVisibility(View.INVISIBLE);
+                                                                    BtnCekLokasi.setVisibility(View.VISIBLE);
+                                                                }
+                                                            } catch (JSONException e) {
+                                                                e.printStackTrace();
+                                                            }
+                                                        }
+                                                    }
+                                                },
+                                                new Response.ErrorListener() {
+                                                    @Override
+                                                    public void onErrorResponse(VolleyError error) {
+                                                        error.printStackTrace();
+                                                    }
+                                                });
+
+                                        queuelokasi.add(reqDatalokasi);
                                     } else {
-                                        BtnCekLokasi.setVisibility(View.GONE);
+                                        RequestQueue queuelokasi = Volley.newRequestQueue(DetailListingActivity.this);
+                                        JsonArrayRequest reqDatalokasi = new JsonArrayRequest(Request.Method.GET, ServerApi.URL_CEK_ISLOKASI+ intentIdListing,null,
+                                                new Response.Listener<JSONArray>() {
+                                                    @Override
+                                                    public void onResponse(JSONArray response) {
+                                                        for(int i = 0 ; i < response.length(); i++)
+                                                        {
+                                                            try {
+                                                                JSONObject data = response.getJSONObject(i);
+
+                                                                IsCekLokasi = data.getString("IsCekLokasi");
+                                                                if (IsCekLokasi.equals("1")) {
+                                                                    IVVerified.setVisibility(View.VISIBLE);
+                                                                    BtnCekLokasi.setVisibility(View.GONE);
+                                                                } else {
+                                                                    IVVerified.setVisibility(View.INVISIBLE);
+                                                                    BtnCekLokasi.setVisibility(View.GONE);
+                                                                }
+                                                            } catch (JSONException e) {
+                                                                e.printStackTrace();
+                                                            }
+                                                        }
+                                                    }
+                                                },
+                                                new Response.ErrorListener() {
+                                                    @Override
+                                                    public void onErrorResponse(VolleyError error) {
+                                                        error.printStackTrace();
+                                                    }
+                                                });
+
+                                        queuelokasi.add(reqDatalokasi);
                                     }
                                 } catch (JSONException e) {
                                     e.printStackTrace();
@@ -487,37 +538,6 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                     });
 
             queuereport.add(reqDatareport);
-
-            RequestQueue queuelokasi = Volley.newRequestQueue(DetailListingActivity.this);
-            JsonArrayRequest reqDatalokasi = new JsonArrayRequest(Request.Method.GET, ServerApi.URL_CEK_ISLOKASI+ intentIdListing,null,
-                    new Response.Listener<JSONArray>() {
-                        @Override
-                        public void onResponse(JSONArray response) {
-                            for(int i = 0 ; i < response.length(); i++)
-                            {
-                                try {
-                                    JSONObject data = response.getJSONObject(i);
-
-                                    IsCekLokasi = data.getString("IsCekLokasi");
-                                    if (IsCekLokasi.equals("1")) {
-                                        IVVerified.setVisibility(View.VISIBLE);
-                                    } else {
-                                        IVVerified.setVisibility(View.INVISIBLE);
-                                    }
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                        }
-                    },
-                    new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                            error.printStackTrace();
-                        }
-                    });
-
-            queuelokasi.add(reqDatalokasi);
         } else if (status.equals("2")) {
             RequestQueue queuearsip = Volley.newRequestQueue(DetailListingActivity.this);
             JsonArrayRequest reqDataarsip = new JsonArrayRequest(Request.Method.GET, ServerApi.URL_CEK_NO_ARSIP+ intentIdListing,null,
@@ -551,12 +571,40 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                     });
 
             queuearsip.add(reqDataarsip);
-        }
 
-        if (intentIsRejected.equals("1")) {
-            BtnAjukanUlang.setVisibility(View.VISIBLE);
-        } else {
-            BtnAjukanUlang.setVisibility(View.GONE);
+            RequestQueue queuetemplate = Volley.newRequestQueue(DetailListingActivity.this);
+            JsonArrayRequest reqDataTemplate = new JsonArrayRequest(Request.Method.GET, ServerApi.URL_CEK_TEMPLATE_DOUBLE+ intentIdListing,null,
+                    new Response.Listener<JSONArray>() {
+                        @Override
+                        public void onResponse(JSONArray response) {
+                            for(int i = 0 ; i < response.length(); i++)
+                            {
+                                try {
+                                    JSONObject data = response.getJSONObject(i);
+
+                                    IsTemplate = data.getString("total");
+
+                                    if (IsTemplate.isEmpty() || IsTemplate.equals("0") || IsTemplate.equals("1")) {
+                                        BtnTemplateDouble.setVisibility(View.GONE);
+                                        BtnDataDouble.setVisibility(View.VISIBLE);
+                                    } else {
+                                        BtnTemplateDouble.setVisibility(View.VISIBLE);
+                                        BtnDataDouble.setVisibility(View.GONE);
+                                    }
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            error.printStackTrace();
+                        }
+                    });
+
+            queuetemplate.add(reqDataTemplate);
         }
 
         if (intentKondisi.equals("Jual")) {
@@ -572,11 +620,23 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
         }
 
         if (status.equals("1")) {
+            AgenId = "0";
+            idpengguna = Preferences.getKeyIdAdmin(this);
             StringNamaBuyer = Preferences.getKeyNamaLengkap(this);
             LytSertifikat.setVisibility(View.VISIBLE);
             LytPJP.setVisibility(View.VISIBLE);
             LytNamaVendor.setVisibility(View.VISIBLE);
             LytTelpVendor.setVisibility(View.VISIBLE);
+            BtnLihatTemplate.setVisibility(View.GONE);
+            BtnLihatTemplateKosong.setVisibility(View.GONE);
+            BtnUploadTemplate.setVisibility(View.GONE);
+            BtnTambahGambar.setVisibility(View.GONE);
+            TVPoin.setVisibility(View.VISIBLE);
+            IVFlowUp.setVisibility(View.VISIBLE);
+            IVFlowUp2.setVisibility(View.VISIBLE);
+            LytEdit.setVisibility(View.VISIBLE);
+            IVShare.setVisibility(View.VISIBLE);
+            IVFavorite.setVisibility(View.GONE);
             IVWhatsapp.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -589,11 +649,52 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                 }
             });
         } else if (status.equals("2")) {
+            AgenId = "0";
+            idpengguna = Preferences.getKeyIdAdmin(this);
             StringNamaBuyer = Preferences.getKeyNamaLengkap(this);
             LytSertifikat.setVisibility(View.VISIBLE);
             LytPJP.setVisibility(View.VISIBLE);
             LytNamaVendor.setVisibility(View.VISIBLE);
             LytTelpVendor.setVisibility(View.VISIBLE);
+            LytBtnHapus.setVisibility(View.VISIBLE);
+            BtnTambahWilayah.setVisibility(View.VISIBLE);
+            BtnSimpanPDF.setVisibility(View.VISIBLE);
+            BtnTambahGambar.setVisibility(View.VISIBLE);
+            TVPoin.setVisibility(View.VISIBLE);
+            IVFlowUp.setVisibility(View.VISIBLE);
+            IVFlowUp2.setVisibility(View.VISIBLE);
+            LytEdit.setVisibility(View.VISIBLE);
+            IVShare.setVisibility(View.GONE);
+            IVFavorite.setVisibility(View.GONE);
+            BtnTambahGambar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent update = new Intent(DetailListingActivity.this, TambahDataGambarListingActivity.class);
+                    update.putExtra("IdListing", intentIdListing);
+                    update.putExtra("IdAgen", intentIdAgen);
+                    update.putExtra("IdAgenCo", intentIdAgenCo);
+                    update.putExtra("Pjp", intentPjp);
+                    update.putExtra("Priority", intentPriority);
+                    update.putExtra("Banner", intentBanner);
+                    update.putExtra("Marketable", intentMarketable);
+                    update.putExtra("StatusHarga", intentStatusHarga);
+                    update.putExtra("IsSelfie", intentIsSelfie);
+                    update.putExtra("IsLokasi", intentIsLokasi);
+                    update.putExtra("Img1", intentImg1);
+                    update.putExtra("Img2", intentImg2);
+                    update.putExtra("Img3", intentImg3);
+                    update.putExtra("Img4", intentImg4);
+                    update.putExtra("Img5", intentImg5);
+                    update.putExtra("Img6", intentImg6);
+                    update.putExtra("Img7", intentImg7);
+                    update.putExtra("Img8", intentImg8);
+                    update.putExtra("Img9", intentImg9);
+                    update.putExtra("Img10", intentImg10);
+                    update.putExtra("Img11", intentImg11);
+                    update.putExtra("Img12", intentImg12);
+                    startActivity(update);
+                }
+            });
             IVWhatsapp.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -605,8 +706,134 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                     startActivity(i);
                 }
             });
+            LytEdit.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent update = new Intent(DetailListingActivity.this, EditDataListingActivity.class);
+                    update.putExtra("IdListing", intentIdListing);
+                    update.putExtra("IdAgen", intentIdAgen);
+                    update.putExtra("IdAgenCo", intentIdAgenCo);
+                    update.putExtra("IdInput", intentIdInput);
+                    update.putExtra("NamaListing", intentNamaListing);
+                    update.putExtra("Alamat", intentAlamat);
+//                    update.putExtra("AlamatTemplate", intentAlamatTemplate);
+                    update.putExtra("Latitude", intentLatitude);
+                    update.putExtra("Longitude", intentLongitude);
+                    update.putExtra("Location", intentLocation);
+                    update.putExtra("Selfie", intentSelfie);
+                    update.putExtra("Wide", intentWide);
+                    update.putExtra("Land", intentLand);
+                    update.putExtra("Dimensi", intentDimensi);
+                    update.putExtra("Listrik", intentListrik);
+                    update.putExtra("Level", intentLevel);
+                    update.putExtra("Bed", intentBed);
+                    update.putExtra("BedArt", intentBedArt);
+                    update.putExtra("Bath", intentBath);
+                    update.putExtra("BathArt", intentBathArt);
+                    update.putExtra("Garage", intentGarage);
+                    update.putExtra("Carpot", intentCarpot);
+                    update.putExtra("Hadap", intentHadap);
+                    update.putExtra("SHM", intentSHM);
+                    update.putExtra("HGB", intentHGB);
+                    update.putExtra("HSHP", intentHSHP);
+                    update.putExtra("PPJB", intentPPJB);
+                    update.putExtra("Stratatitle", intentStratatitle);
+                    update.putExtra("AJB", intentAJB);
+                    update.putExtra("PetokD", intentPetokD);
+                    update.putExtra("Pjp", intentPjp);
+                    update.putExtra("ImgSHM", intentImgSHM);
+                    update.putExtra("ImgHGB", intentImgHGB);
+                    update.putExtra("ImgHSHP", intentImgHSHP);
+                    update.putExtra("ImgPPJB", intentImgPPJB);
+                    update.putExtra("ImgStratatitle", intentImgStratatitle);
+                    update.putExtra("ImgAJB", intentImgAJB);
+                    update.putExtra("ImgPetokD", intentImgPetokD);
+                    update.putExtra("ImgPjp", intentImgPjp);
+                    update.putExtra("ImgPjp1", intentImgPjp1);
+                    update.putExtra("NoCertificate", intentNoCertificate);
+                    update.putExtra("Pbb", intentPbb);
+                    update.putExtra("JenisProperti", intentJenisProperti);
+                    update.putExtra("JenisCertificate", intentJenisCertificate);
+                    update.putExtra("SumberAir", intentSumberAir);
+                    update.putExtra("Kondisi", intentKondisi);
+                    update.putExtra("Deskripsi", intentDeskripsi);
+                    update.putExtra("Prabot", intentPrabot);
+                    update.putExtra("KetPrabot", intentKetPrabot);
+                    update.putExtra("Priority", intentPriority);
+                    update.putExtra("Ttd", intentTtd);
+                    update.putExtra("Banner", intentBanner);
+                    update.putExtra("Size", intentSize);
+                    update.putExtra("Harga", intentHarga);
+                    update.putExtra("HargaSewa", intentHargaSewa);
+                    update.putExtra("TglInput", intentTglInput);
+                    update.putExtra("Img1", intentImg1);
+                    update.putExtra("Img2", intentImg2);
+                    update.putExtra("Img3", intentImg3);
+                    update.putExtra("Img4", intentImg4);
+                    update.putExtra("Img5", intentImg5);
+                    update.putExtra("Img6", intentImg6);
+                    update.putExtra("Img7", intentImg7);
+                    update.putExtra("Img8", intentImg8);
+                    update.putExtra("Img9", intentImg9);
+                    update.putExtra("Img10", intentImg10);
+                    update.putExtra("Img11", intentImg11);
+                    update.putExtra("Img12", intentImg12);
+                    update.putExtra("Video", intentVideo);
+                    update.putExtra("LinkFacebook", intentLinkFacebook);
+                    update.putExtra("LinkTiktok", intentLinkTiktok);
+                    update.putExtra("LinkInstagram", intentLinkInstagram);
+                    update.putExtra("LinkYoutube", intentLinkYoutube);
+                    update.putExtra("IsAdmin", intentIsAdmin);
+                    update.putExtra("IsManager", intentIsManager);
+                    update.putExtra("IsRejected", intentIsRejected);
+                    update.putExtra("Sold", intentSold);
+                    update.putExtra("Rented", intentRented);
+                    update.putExtra("View", intentView);
+                    update.putExtra("Marketable", intentMarketable);
+                    update.putExtra("StatusHarga", intentStatusHarga);
+                    update.putExtra("Nama", intentNama);
+                    update.putExtra("NoTelp", intentNoTelp);
+                    update.putExtra("Instagram", intentInstagram);
+                    update.putExtra("Fee", intentFee);
+                    update.putExtra("NamaVendor", intentNamaVendor);
+                    update.putExtra("NoTelpVendor", intentNoTelpVendor);
+                    update.putExtra("IsSelfie", intentIsSelfie);
+                    update.putExtra("IsLokasi", intentIsLokasi);
+                    update.putExtra("Keterangan", intentKeterangan);
+                    startActivity(update);
+                }
+            });
+            if (!intentIdTemplate.equals("null")) {
+                BtnUploadTemplate.setText("Ganti Template");
+                BtnLihatTemplate.setVisibility(View.VISIBLE);
+                BtnLihatTemplateKosong.setVisibility(View.VISIBLE);
+                BtnUploadTemplate.setVisibility(View.VISIBLE);
+            } else {
+                BtnUploadTemplate.setVisibility(View.GONE);
+                BtnLihatTemplate.setVisibility(View.GONE);
+                BtnLihatTemplateKosong.setVisibility(View.GONE);
+            }
         } else if (status.equals("3")) {
+            idpengguna = "0";
+            AgenId = Preferences.getKeyIdAgen(this);
             StringNamaBuyer = Preferences.getKeyNama(this);
+            LytSize.setVisibility(View.GONE);
+            LytFee.setVisibility(View.GONE);
+            LytTglInput.setVisibility(View.GONE);
+            LytNamaVendor.setVisibility(View.GONE);
+            LytTelpVendor.setVisibility(View.GONE);
+            LytSelfie.setVisibility(View.GONE);
+            LytCBMarketable.setVisibility(View.GONE);
+            LytCBHarga.setVisibility(View.GONE);
+            LytCBSelfie.setVisibility(View.GONE);
+            LytCBLokasi.setVisibility(View.GONE);
+            BtnLihatTemplate.setVisibility(View.GONE);
+            BtnLihatTemplateKosong.setVisibility(View.GONE);
+            BtnUploadTemplate.setVisibility(View.GONE);
+            TVAlamatDetailListing.setVisibility(View.GONE);
+            IVAlamat.setVisibility(View.GONE);
+            IVFlowUp.setVisibility(View.VISIBLE);
+            IVFlowUp2.setVisibility(View.VISIBLE);
             IVWhatsapp.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -618,399 +845,180 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                     startActivity(i);
                 }
             });
-            LytSize.setVisibility(View.GONE);
-            LytFee.setVisibility(View.GONE);
-            LytTglInput.setVisibility(View.GONE);
-            LytNamaVendor.setVisibility(View.GONE);
-            LytTelpVendor.setVisibility(View.GONE);
-            lytambahagen.setVisibility(View.GONE);
-            LytSelfie.setVisibility(View.GONE);
-        } else {
-            StringNamaBuyer = Preferences.getKeyNamaLengkap(this);
-            IVFlowUp.setVisibility(View.INVISIBLE);
-            LytSize.setVisibility(View.GONE);
-            LytFee.setVisibility(View.GONE);
-            LytTglInput.setVisibility(View.GONE);
-            LytNamaVendor.setVisibility(View.GONE);
-            LytTelpVendor.setVisibility(View.GONE);
-            lytambahagen.setVisibility(View.GONE);
-            LytSelfie.setVisibility(View.GONE);
-            IVWhatsapp.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    String deepLinkUrl = "https://gooproper.com/listing/" + intentIdListing;
-                    String message = "Halo! Saya " + StringNamaBuyer + ", ingin menanyakan informasi mengenai listingan " + intentNamaListing + " yang beralamat di " + intentAlamat + ".\nApakah masih ada? atau ada update terbaru?\nDetail Listingan :\n" + deepLinkUrl;
-                    String url = "https://api.whatsapp.com/send?phone=+62" + intentNoTelp + "&text=" + message;
-                    Intent i = new Intent(Intent.ACTION_VIEW);
-                    i.setData(Uri.parse(url));
-                    startActivity(i);
-                }
-            });
-        }
-
-        if (status.equals("1")) {
-            if (intentIsManager.equals("0")) {
-                BtnApproveAdmin.setVisibility(View.GONE);
-                BtnApproveManager.setVisibility(View.VISIBLE);
-                BtnRejectedAdmin.setVisibility(View.GONE);
-                BtnRejectedManager.setVisibility(View.VISIBLE);
-                BtnLihatTemplate.setVisibility(View.GONE);
-                BtnLihatTemplateKosong.setVisibility(View.GONE);
-                BtnUploadTemplate.setVisibility(View.GONE);
-                BtnTambahGambar.setVisibility(View.GONE);
-                IVFlowUp.setVisibility(View.INVISIBLE);
-                IVFlowUp2.setVisibility(View.INVISIBLE);
-                IVEdit.setVisibility(View.VISIBLE);
-                IVShare.setVisibility(View.INVISIBLE);
-                IVFavorite.setVisibility(View.GONE);
-                AgenId = "0";
-                idpengguna = Preferences.getKeyIdAdmin(this);
-            } else if (intentIsAdmin.equals("0")) {
-                BtnApproveAdmin.setVisibility(View.GONE);
-                BtnApproveManager.setVisibility(View.VISIBLE);
-                BtnRejectedAdmin.setVisibility(View.GONE);
-                BtnRejectedManager.setVisibility(View.VISIBLE);
-                BtnLihatTemplate.setVisibility(View.GONE);
-                BtnLihatTemplateKosong.setVisibility(View.GONE);
-                BtnUploadTemplate.setVisibility(View.GONE);
-                BtnTambahGambar.setVisibility(View.GONE);
-                IVFlowUp.setVisibility(View.INVISIBLE);
-                IVFlowUp2.setVisibility(View.INVISIBLE);
-                IVEdit.setVisibility(View.VISIBLE);
-                IVShare.setVisibility(View.INVISIBLE);
-                IVFavorite.setVisibility(View.GONE);
-                AgenId = "0";
-                idpengguna = Preferences.getKeyIdAdmin(this);
-            } else {
-                BtnApproveAdmin.setVisibility(View.GONE);
-                BtnApproveManager.setVisibility(View.GONE);
-                BtnRejectedAdmin.setVisibility(View.GONE);
-                BtnRejectedManager.setVisibility(View.GONE);
-                BtnLihatTemplate.setVisibility(View.GONE);
-                BtnLihatTemplateKosong.setVisibility(View.GONE);
-                BtnUploadTemplate.setVisibility(View.GONE);
-                BtnTambahGambar.setVisibility(View.GONE);
-                IVFlowUp.setVisibility(View.VISIBLE);
-                IVFlowUp2.setVisibility(View.VISIBLE);
-                IVEdit.setVisibility(View.VISIBLE);
-                IVShare.setVisibility(View.VISIBLE);
-                IVFavorite.setVisibility(View.GONE);
-                AgenId = "0";
-                idpengguna = Preferences.getKeyIdAdmin(this);
-            }
-        } else if (status.equals("2")) {
-            if (intentIsManager.equals("0")) {
-                AgenId = "0";
-                idpengguna = Preferences.getKeyIdAdmin(this);
-                BtnApproveAdmin.setVisibility(View.VISIBLE);
-                BtnApproveManager.setVisibility(View.GONE);
-                BtnRejectedAdmin.setVisibility(View.VISIBLE);
-                BtnRejectedManager.setVisibility(View.GONE);
-                BtnLihatTemplate.setVisibility(View.GONE);
-                BtnLihatTemplateKosong.setVisibility(View.GONE);
-                BtnUploadTemplate.setVisibility(View.GONE);
-                IVFlowUp.setVisibility(View.INVISIBLE);
-                IVFlowUp2.setVisibility(View.INVISIBLE);
-                IVEdit.setVisibility(View.VISIBLE);
-                IVEdit.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent update = new Intent(DetailListingActivity.this, EditListingActivity.class);
-                        update.putExtra("IdPraListing", idpralisting);
-                        update.putExtra("IdListing", intentIdListing);
-                        update.putExtra("IdAgen", intentIdAgen);
-                        update.putExtra("IdInput", intentIdInput);
-                        update.putExtra("NamaListing", intentNamaListing);
-                        update.putExtra("Alamat", intentAlamat);
-                        update.putExtra("Latitude", intentLatitude);
-                        update.putExtra("Longitude", intentLongitude);
-                        update.putExtra("Location", intentLocation);
-                        update.putExtra("Wide", intentWide);
-                        update.putExtra("Land", intentLand);
-                        update.putExtra("Dimensi", intentDimensi);
-                        update.putExtra("Listrik", intentListrik);
-                        update.putExtra("Level", intentLevel);
-                        update.putExtra("Bed", intentBed);
-                        update.putExtra("BedArt", intentBedArt);
-                        update.putExtra("Bath", intentBath);
-                        update.putExtra("BathArt", intentBathArt);
-                        update.putExtra("Garage", intentGarage);
-                        update.putExtra("Carpot", intentCarpot);
-                        update.putExtra("Hadap", intentHadap);
-                        update.putExtra("SHM", intentSHM);
-                        update.putExtra("HGB", intentHGB);
-                        update.putExtra("HSHP", intentHSHP);
-                        update.putExtra("PPJB", intentPPJB);
-                        update.putExtra("Stratatitle", intentStratatitle);
-                        update.putExtra("AJB", intentAJB);
-                        update.putExtra("PetokD", intentPetokD);
-                        update.putExtra("ImgSHM", intentImgSHM);
-                        update.putExtra("ImgHGB", intentImgHGB);
-                        update.putExtra("ImgHSHP", intentImgHSHP);
-                        update.putExtra("ImgPPJB", intentImgPPJB);
-                        update.putExtra("ImgStratatitle", intentImgStratatitle);
-                        update.putExtra("ImgAJB", intentImgAJB);
-                        update.putExtra("ImgPetokD", intentImgPetokD);
-                        update.putExtra("ImgPjp", intentImgPjp);
-                        update.putExtra("ImgPjp1", intentImgPjp1);
-                        update.putExtra("NoCertificate", intentNoCertificate);
-                        update.putExtra("Pbb", intentPbb);
-                        update.putExtra("JenisProperti", intentJenisProperti);
-                        update.putExtra("JenisCertificate", intentJenisCertificate);
-                        update.putExtra("SumberAir", intentSumberAir);
-                        update.putExtra("Kondisi", intentKondisi);
-                        update.putExtra("Deskripsi", intentDeskripsi);
-                        update.putExtra("Prabot", intentPrabot);
-                        update.putExtra("KetPrabot", intentKetPrabot);
-                        update.putExtra("Priority", intentPriority);
-                        update.putExtra("Ttd", intentTtd);
-                        update.putExtra("Banner", intentBanner);
-                        update.putExtra("Size", intentSize);
-                        update.putExtra("Harga", intentHarga);
-                        update.putExtra("HargaSewa", intentHargaSewa);
-                        update.putExtra("TglInput", intentTglInput);
-                        update.putExtra("Img1", intentImg1);
-                        update.putExtra("Img2", intentImg2);
-                        update.putExtra("Img3", intentImg3);
-                        update.putExtra("Img4", intentImg4);
-                        update.putExtra("Img5", intentImg5);
-                        update.putExtra("Img6", intentImg6);
-                        update.putExtra("Img7", intentImg7);
-                        update.putExtra("Img8", intentImg8);
-                        update.putExtra("Img9", intentImg9);
-                        update.putExtra("Img10", intentImg10);
-                        update.putExtra("Img11", intentImg11);
-                        update.putExtra("Img12", intentImg12);
-                        update.putExtra("Video", intentVideo);
-                        update.putExtra("LinkFacebook", intentLinkFacebook);
-                        update.putExtra("LinkTiktok", intentLinkTiktok);
-                        update.putExtra("LinkInstagram", intentLinkInstagram);
-                        update.putExtra("LinkYoutube", intentLinkYoutube);
-                        update.putExtra("IsAdmin", intentIsAdmin);
-                        update.putExtra("IsManager", intentIsManager);
-                        update.putExtra("View", intentView);
-                        update.putExtra("Sold", intentSold);
-                        update.putExtra("Marketable", intentMarketable);
-                        update.putExtra("StatusHarga", intentStatusHarga);
-                        update.putExtra("Nama", intentNama);
-                        update.putExtra("NoTelp", intentNoTelp);
-                        update.putExtra("Instagram", intentInstagram);
-                        update.putExtra("Fee", intentFee);
-                        startActivity(update);
+            if (StrIdAgen.equals(intentIdAgen)) {
+                if (intentLatitude.equals("0") && intentLongitude.equals("0")) {
+                    if (intentSelfie.equals("0") || intentSelfie.equals("") || intentSelfie.isEmpty()) {
+                        BtnTambahSelfie.setVisibility(View.GONE);
+                        BtnTambahMaps.setVisibility(View.VISIBLE);
+                    } else {
+                        BtnTambahSelfie.setVisibility(View.GONE);
+                        BtnTambahMaps.setVisibility(View.VISIBLE);
                     }
-                });
-                IVShare.setVisibility(View.GONE);
-                IVFavorite.setVisibility(View.GONE);
-            } else if (intentIsAdmin.equals("0")) {
-                AgenId = "0";
-                idpengguna = Preferences.getKeyIdAdmin(this);
-                BtnApproveAdmin.setVisibility(View.VISIBLE);
-                BtnApproveManager.setVisibility(View.GONE);
-                BtnRejectedAdmin.setVisibility(View.VISIBLE);
-                BtnRejectedManager.setVisibility(View.GONE);
-                IVFlowUp.setVisibility(View.INVISIBLE);
-                IVFlowUp2.setVisibility(View.INVISIBLE);
-                IVEdit.setVisibility(View.VISIBLE);
-                IVEdit.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent update = new Intent(DetailListingActivity.this, EditListingActivity.class);
-                        update.putExtra("IdPraListing", idpralisting);
-                        update.putExtra("IdListing", intentIdListing);
-                        update.putExtra("IdAgen", intentIdAgen);
-                        update.putExtra("IdInput", intentIdInput);
-                        update.putExtra("NamaListing", intentNamaListing);
-                        update.putExtra("Alamat", intentAlamat);
-                        update.putExtra("Latitude", intentLatitude);
-                        update.putExtra("Longitude", intentLongitude);
-                        update.putExtra("Location", intentLocation);
-                        update.putExtra("Wide", intentWide);
-                        update.putExtra("Land", intentLand);
-                        update.putExtra("Dimensi", intentDimensi);
-                        update.putExtra("Listrik", intentListrik);
-                        update.putExtra("Level", intentLevel);
-                        update.putExtra("Bed", intentBed);
-                        update.putExtra("BedArt", intentBedArt);
-                        update.putExtra("Bath", intentBath);
-                        update.putExtra("BathArt", intentBathArt);
-                        update.putExtra("Garage", intentGarage);
-                        update.putExtra("Carpot", intentCarpot);
-                        update.putExtra("Hadap", intentHadap);
-                        update.putExtra("SHM", intentSHM);
-                        update.putExtra("HGB", intentHGB);
-                        update.putExtra("HSHP", intentHSHP);
-                        update.putExtra("PPJB", intentPPJB);
-                        update.putExtra("Stratatitle", intentStratatitle);
-                        update.putExtra("AJB", intentAJB);
-                        update.putExtra("PetokD", intentPetokD);
-                        update.putExtra("ImgSHM", intentImgSHM);
-                        update.putExtra("ImgHGB", intentImgHGB);
-                        update.putExtra("ImgHSHP", intentImgHSHP);
-                        update.putExtra("ImgPPJB", intentImgPPJB);
-                        update.putExtra("ImgStratatitle", intentImgStratatitle);
-                        update.putExtra("ImgAJB", intentImgAJB);
-                        update.putExtra("ImgPetokD", intentImgPetokD);
-                        update.putExtra("ImgPjp", intentImgPjp);
-                        update.putExtra("ImgPjp1", intentImgPjp1);
-                        update.putExtra("NoCertificate", intentNoCertificate);
-                        update.putExtra("Pbb", intentPbb);
-                        update.putExtra("JenisProperti", intentJenisProperti);
-                        update.putExtra("JenisCertificate", intentJenisCertificate);
-                        update.putExtra("SumberAir", intentSumberAir);
-                        update.putExtra("Kondisi", intentKondisi);
-                        update.putExtra("Deskripsi", intentDeskripsi);
-                        update.putExtra("Prabot", intentPrabot);
-                        update.putExtra("KetPrabot", intentKetPrabot);
-                        update.putExtra("Priority", intentPriority);
-                        update.putExtra("Ttd", intentTtd);
-                        update.putExtra("Banner", intentBanner);
-                        update.putExtra("Size", intentSize);
-                        update.putExtra("Harga", intentHarga);
-                        update.putExtra("HargaSewa", intentHargaSewa);
-                        update.putExtra("TglInput", intentTglInput);
-                        update.putExtra("Img1", intentImg1);
-                        update.putExtra("Img2", intentImg2);
-                        update.putExtra("Img3", intentImg3);
-                        update.putExtra("Img4", intentImg4);
-                        update.putExtra("Img5", intentImg5);
-                        update.putExtra("Img6", intentImg6);
-                        update.putExtra("Img7", intentImg7);
-                        update.putExtra("Img8", intentImg8);
-                        update.putExtra("Img9", intentImg9);
-                        update.putExtra("Img10", intentImg10);
-                        update.putExtra("Img11", intentImg11);
-                        update.putExtra("Img12", intentImg12);
-                        update.putExtra("Video", intentVideo);
-                        update.putExtra("LinkFacebook", intentLinkFacebook);
-                        update.putExtra("LinkTiktok", intentLinkTiktok);
-                        update.putExtra("LinkInstagram", intentLinkInstagram);
-                        update.putExtra("LinkYoutube", intentLinkYoutube);
-                        update.putExtra("IsAdmin", intentIsAdmin);
-                        update.putExtra("IsManager", intentIsManager);
-                        update.putExtra("View", intentView);
-                        update.putExtra("Sold", intentSold);
-                        update.putExtra("Marketable", intentMarketable);
-                        update.putExtra("StatusHarga", intentStatusHarga);
-                        update.putExtra("Nama", intentNama);
-                        update.putExtra("NoTelp", intentNoTelp);
-                        update.putExtra("Instagram", intentInstagram);
-                        update.putExtra("Fee", intentFee);
-                        startActivity(update);
+                } else {
+                    if (intentSelfie.equals("0") || intentSelfie.equals("") || intentSelfie.isEmpty()) {
+                        BtnTambahSelfie.setVisibility(View.VISIBLE);
+                        BtnTambahMaps.setVisibility(View.GONE);
+                    } else {
+                        BtnTambahSelfie.setVisibility(View.GONE);
+                        BtnTambahMaps.setVisibility(View.GONE);
                     }
-                });
-                IVShare.setVisibility(View.GONE);
-                IVFavorite.setVisibility(View.GONE);
-                if (!intentImgPjp.equals("0")) {
-                    lyttambahpjp.setVisibility(View.VISIBLE);
                 }
-            } else {
-                AgenId = "0";
-                idpengguna = Preferences.getKeyIdAdmin(this);
-                BtnApproveAdmin.setVisibility(View.GONE);
-                BtnApproveManager.setVisibility(View.GONE);
-                BtnRejectedAdmin.setVisibility(View.GONE);
-                BtnRejectedManager.setVisibility(View.GONE);
-                BtnTambahWilayah.setVisibility(View.VISIBLE);
-                BtnSimpanPDF.setVisibility(View.VISIBLE);
+                if (intentPjp.isEmpty()) {
+                    BtnTambahPjp.setVisibility(View.VISIBLE);
+                } else {
+                    BtnTambahPjp.setVisibility(View.GONE);
+                }
+                if (intentBanner.equals("Tidak")) {
+                    BtnTambahBanner.setVisibility(View.VISIBLE);
+                } else {
+                    BtnTambahBanner.setVisibility(View.GONE);
+                }
+                if (intentIdAgenCo.equals(StrIdAgen) || intentIdAgenCo.equals("0")) {
+                    BtnTambahCoList.setVisibility(View.VISIBLE);
+                } else {
+                    BtnTambahCoList.setVisibility(View.GONE);
+                }
+                if (intentPriority.equals("open")) {
+                    BtnUpgrade.setVisibility(View.VISIBLE);
+                } else {
+                    BtnUpgrade.setVisibility(View.GONE);
+                }
                 BtnTambahGambar.setVisibility(View.VISIBLE);
-                IVFlowUp.setVisibility(View.VISIBLE);
-                IVFlowUp2.setVisibility(View.VISIBLE);
-                IVEdit.setVisibility(View.VISIBLE);
-                IVShare.setVisibility(View.GONE);
-                IVFavorite.setVisibility(View.GONE);
-                LytBtnHapus.setVisibility(View.VISIBLE);
-                IVEdit.setOnClickListener(new View.OnClickListener() {
+                TVPoin.setVisibility(View.VISIBLE);
+
+                if (intentPriority.equals("exclusive") && !intentPjp.isEmpty() && intentBanner.equals("Ya")) {
+                    if (intentMarketable.equals("1") && intentStatusHarga.equals("1")) {
+                        if (intentIdAgenCo.equals("0")) {
+                            PoinTambah = 70;
+                        } else if (intentIdAgenCo.equals(intentIdAgen)) {
+                            PoinTambah = 70;
+                        } else {
+                            PoinTambah = 70 / 2;
+                        }
+                    } else {
+                        if (intentIdAgenCo.equals("0")) {
+                            PoinTambah = 50;
+                        } else if (intentIdAgenCo.equals(intentIdAgen)) {
+                            PoinTambah = 50;
+                        } else {
+                            PoinTambah = 50 / 2;
+                        }
+                    }
+                } else if (intentPriority.equals("exclusive") && !intentPjp.isEmpty() && intentBanner.equals("Tidak")) {
+                    if (intentMarketable.equals("1") && intentStatusHarga.equals("1")) {
+                        if (intentIdAgenCo.equals("0")) {
+                            PoinTambah = 60;
+                        } else if (intentIdAgenCo.equals(intentIdAgen)) {
+                            PoinTambah = 60;
+                        } else {
+                            PoinTambah = 60 / 2;
+                        }
+                    } else {
+                        if (intentIdAgenCo.equals("0")) {
+                            PoinTambah = 40;
+                        } else if (intentIdAgenCo.equals(intentIdAgen)) {
+                            PoinTambah = 40;
+                        } else {
+                            PoinTambah = 40 / 2;
+                        }
+                    }
+                } else if (intentPriority.equals("open") && !intentPjp.isEmpty() && intentBanner.equals("Ya")) {
+                    if (intentMarketable.equals("1") && intentStatusHarga.equals("1")) {
+                        if (intentIdAgenCo.equals("0")) {
+                            PoinTambah = 40;
+                        } else if (intentIdAgenCo.equals(intentIdAgen)) {
+                            PoinTambah = 40;
+                        } else {
+                            PoinTambah = 40 / 2;
+                        }
+                    } else {
+                        if (intentIdAgenCo.equals("0")) {
+                            PoinTambah = 30;
+                        } else if (intentIdAgenCo.equals(intentIdAgen)) {
+                            PoinTambah = 30;
+                        } else {
+                            PoinTambah = 30 / 2;
+                        }
+                    }
+                } else if (intentPriority.equals("open") && !intentPjp.isEmpty() && intentBanner.equals("Tidak")) {
+                    if (intentMarketable.equals("1") && intentStatusHarga.equals("1")) {
+                        if (intentIdAgenCo.equals("0")) {
+                            PoinTambah = 40;
+                        } else if (intentIdAgenCo.equals(intentIdAgen)) {
+                            PoinTambah = 40;
+                        } else {
+                            PoinTambah = 40 / 2;
+                        }
+                    } else {
+                        if (intentIdAgenCo.equals("0")) {
+                            PoinTambah = 20;
+                        } else if (intentIdAgenCo.equals(intentIdAgen)) {
+                            PoinTambah = 20;
+                        } else {
+                            PoinTambah = 20 / 2;
+                        }
+                    }
+                } else if (intentPriority.equals("open") && intentPjp.isEmpty() && intentBanner.equals("Ya")) {
+                    if (intentMarketable.equals("1") && intentStatusHarga.equals("1")) {
+                        if (intentIdAgenCo.equals("0")) {
+                            PoinTambah = 40;
+                        } else if (intentIdAgenCo.equals(intentIdAgen)) {
+                            PoinTambah = 40;
+                        } else {
+                            PoinTambah = 40 / 2;
+                        }
+                    } else {
+                        if (intentIdAgenCo.equals("0")) {
+                            PoinTambah = 10;
+                        } else if (intentIdAgenCo.equals(intentIdAgen)) {
+                            PoinTambah = 10;
+                        } else {
+                            PoinTambah = 10 / 2;
+                        }
+                    }
+                } else if (intentPriority.equals("open") && intentPjp.isEmpty() && intentBanner.equals("Tidak")) {
+                    if (intentMarketable.equals("1") && intentStatusHarga.equals("1")) {
+                        if (intentIdAgenCo.equals("0")) {
+                            PoinTambah = 20;
+                        } else if (intentIdAgenCo.equals(intentIdAgen)) {
+                            PoinTambah = 20;
+                        } else {
+                            PoinTambah = 20 / 2;
+                        }
+                    } else {
+                        if (intentIdAgenCo.equals("0")) {
+                            PoinTambah = 10;
+                        } else if (intentIdAgenCo.equals(intentIdAgen)) {
+                            PoinTambah = 10;
+                        } else {
+                            PoinTambah = 10 / 2;
+                        }
+                    }
+                }
+
+                BtnTambahSelfie.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent update = new Intent(DetailListingActivity.this, EditListingAgenActivity.class);
-                        update.putExtra("IdPraListing", idpralisting);
+                        Intent update = new Intent(DetailListingActivity.this, TambahDataSelfieListingActivity.class);
                         update.putExtra("IdListing", intentIdListing);
-                        update.putExtra("IdAgen", intentIdAgen);
-                        update.putExtra("IdInput", intentIdInput);
-                        update.putExtra("NamaListing", intentNamaListing);
-                        update.putExtra("Alamat", intentAlamat);
-                        update.putExtra("Latitude", intentLatitude);
-                        update.putExtra("Longitude", intentLongitude);
-                        update.putExtra("Location", intentLocation);
-                        update.putExtra("Wide", intentWide);
-                        update.putExtra("Land", intentLand);
-                        update.putExtra("Dimensi", intentDimensi);
-                        update.putExtra("Listrik", intentListrik);
-                        update.putExtra("Level", intentLevel);
-                        update.putExtra("Bed", intentBed);
-                        update.putExtra("BedArt", intentBedArt);
-                        update.putExtra("Bath", intentBath);
-                        update.putExtra("BathArt", intentBathArt);
-                        update.putExtra("Garage", intentGarage);
-                        update.putExtra("Carpot", intentCarpot);
-                        update.putExtra("Hadap", intentHadap);
-                        update.putExtra("SHM", intentSHM);
-                        update.putExtra("HGB", intentHGB);
-                        update.putExtra("HSHP", intentHSHP);
-                        update.putExtra("PPJB", intentPPJB);
-                        update.putExtra("Stratatitle", intentStratatitle);
-                        update.putExtra("AJB", intentAJB);
-                        update.putExtra("PetokD", intentPetokD);
-                        update.putExtra("Pjp", intentPjp);
-                        update.putExtra("ImgSHM", intentImgSHM);
-                        update.putExtra("ImgHGB", intentImgHGB);
-                        update.putExtra("ImgHSHP", intentImgHSHP);
-                        update.putExtra("ImgPPJB", intentImgPPJB);
-                        update.putExtra("ImgStratatitle", intentImgStratatitle);
-                        update.putExtra("ImgAJB", intentImgAJB);
-                        update.putExtra("ImgPetokD", intentImgPetokD);
-                        update.putExtra("ImgPjp", intentImgPjp);
-                        update.putExtra("ImgPjp1", intentImgPjp1);
-                        update.putExtra("NoCertificate", intentNoCertificate);
-                        update.putExtra("Pbb", intentPbb);
-                        update.putExtra("JenisProperti", intentJenisProperti);
-                        update.putExtra("JenisCertificate", intentJenisCertificate);
-                        update.putExtra("SumberAir", intentSumberAir);
-                        update.putExtra("Kondisi", intentKondisi);
-                        update.putExtra("Deskripsi", intentDeskripsi);
-                        update.putExtra("Prabot", intentPrabot);
-                        update.putExtra("KetPrabot", intentKetPrabot);
-                        update.putExtra("Priority", intentPriority);
-                        update.putExtra("Ttd", intentTtd);
-                        update.putExtra("Banner", intentBanner);
-                        update.putExtra("Size", intentSize);
-                        update.putExtra("Harga", intentHarga);
-                        update.putExtra("HargaSewa", intentHargaSewa);
-                        update.putExtra("TglInput", intentTglInput);
-                        update.putExtra("Img1", intentImg1);
-                        update.putExtra("Img2", intentImg2);
-                        update.putExtra("Img3", intentImg3);
-                        update.putExtra("Img4", intentImg4);
-                        update.putExtra("Img5", intentImg5);
-                        update.putExtra("Img6", intentImg6);
-                        update.putExtra("Img7", intentImg7);
-                        update.putExtra("Img8", intentImg8);
-                        update.putExtra("Img9", intentImg9);
-                        update.putExtra("Img10", intentImg10);
-                        update.putExtra("Img11", intentImg11);
-                        update.putExtra("Img12", intentImg12);
-                        update.putExtra("Video", intentVideo);
-                        update.putExtra("LinkFacebook", intentLinkFacebook);
-                        update.putExtra("LinkTiktok", intentLinkTiktok);
-                        update.putExtra("LinkInstagram", intentLinkInstagram);
-                        update.putExtra("LinkYoutube", intentLinkYoutube);
-                        update.putExtra("IsAdmin", intentIsAdmin);
-                        update.putExtra("IsManager", intentIsManager);
-                        update.putExtra("View", intentView);
-                        update.putExtra("Sold", intentSold);
-                        update.putExtra("Marketable", intentMarketable);
-                        update.putExtra("StatusHarga", intentStatusHarga);
-                        update.putExtra("Nama", intentNama);
-                        update.putExtra("NoTelp", intentNoTelp);
-                        update.putExtra("Instagram", intentInstagram);
-                        update.putExtra("Fee", intentFee);
+                        update.putExtra("PoinTambah", String.valueOf(PoinTambah));
+                        startActivity(update);
+                    }
+                });
+                BtnTambahMaps.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent update = new Intent(DetailListingActivity.this, TambahDataLokasiListingActivity.class);
+                        update.putExtra("IdListing", intentIdListing);
+                        update.putExtra("Selfie", intentSelfie);
+                        update.putExtra("PoinTambah", String.valueOf(PoinTambah));
                         startActivity(update);
                     }
                 });
                 BtnTambahGambar.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent update = new Intent(DetailListingActivity.this, TambahGambarActivity.class);
+                        Intent update = new Intent(DetailListingActivity.this, TambahDataGambarListingActivity.class);
                         update.putExtra("IdListing", intentIdListing);
                         update.putExtra("IdAgen", intentIdAgen);
                         update.putExtra("IdAgenCo", intentIdAgenCo);
@@ -1036,1415 +1044,50 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                         startActivity(update);
                     }
                 });
-                if (!intentIdTemplate.equals("null")) {
-                    BtnUploadTemplate.setText("Ganti Template");
-                    BtnLihatTemplate.setVisibility(View.VISIBLE);
-                    BtnLihatTemplateKosong.setVisibility(View.VISIBLE);
-                    BtnUploadTemplate.setVisibility(View.VISIBLE);
-                } else {
-                    BtnUploadTemplate.setVisibility(View.GONE);
-                    BtnLihatTemplate.setVisibility(View.GONE);
-                    BtnLihatTemplateKosong.setVisibility(View.GONE);
-                }
-            }
-        } else if (status.equals("3")) {
-            if (intentLatitude.equals("0") && intentLongitude.equals("0")) {
-                if (intentIsManager.equals("0")) {
-                    TVAlamatDetailListing.setVisibility(View.GONE);
-                    IVAlamat.setVisibility(View.GONE);
-                    BtnApproveAdmin.setVisibility(View.GONE);
-                    BtnApproveManager.setVisibility(View.GONE);
-                    BtnRejectedAdmin.setVisibility(View.GONE);
-                    BtnRejectedManager.setVisibility(View.GONE);
-                    BtnLihatTemplate.setVisibility(View.GONE);
-                    BtnLihatTemplateKosong.setVisibility(View.GONE);
-                    BtnUploadTemplate.setVisibility(View.GONE);
-                    IVFlowUp.setVisibility(View.VISIBLE);
-                    IVFlowUp2.setVisibility(View.VISIBLE);
-                    idpengguna = "0";
-                    AgenId = Preferences.getKeyIdAgen(this);
-                    BtnTambahMaps.setVisibility(View.VISIBLE);
-                    IVEdit.setVisibility(View.VISIBLE);
-                    IVShare.setVisibility(View.GONE);
-                    IVFavorite.setVisibility(View.GONE);
-                    LytCBMarketable.setVisibility(View.GONE);
-                    LytCBHarga.setVisibility(View.GONE);
-                    LytCBSelfie.setVisibility(View.GONE);
-                    LytCBLokasi.setVisibility(View.GONE);
-                    IVEdit.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Intent update = new Intent(DetailListingActivity.this, EditPraListingAgenActivity.class);
-                            update.putExtra("IdPraListing", idpralisting);
-                            update.putExtra("IdListing", intentIdListing);
-                            update.putExtra("IdAgen", intentIdAgen);
-                            update.putExtra("IdAgenCo", intentIdAgenCo);
-                            update.putExtra("IdInput", intentIdInput);
-                            update.putExtra("NamaListing", intentNamaListing);
-                            update.putExtra("Alamat", intentAlamat);
-                            update.putExtra("Latitude", intentLatitude);
-                            update.putExtra("Longitude", intentLongitude);
-                            update.putExtra("Location", intentLocation);
-                            update.putExtra("Selfie", intentSelfie);
-                            update.putExtra("Wide", intentWide);
-                            update.putExtra("Land", intentLand);
-                            update.putExtra("Dimensi", intentDimensi);
-                            update.putExtra("Listrik", intentListrik);
-                            update.putExtra("Level", intentLevel);
-                            update.putExtra("Bed", intentBed);
-                            update.putExtra("BedArt", intentBedArt);
-                            update.putExtra("Bath", intentBath);
-                            update.putExtra("BathArt", intentBathArt);
-                            update.putExtra("Garage", intentGarage);
-                            update.putExtra("Carpot", intentCarpot);
-                            update.putExtra("Hadap", intentHadap);
-                            update.putExtra("SHM", intentSHM);
-                            update.putExtra("HGB", intentHGB);
-                            update.putExtra("HSHP", intentHSHP);
-                            update.putExtra("PPJB", intentPPJB);
-                            update.putExtra("Stratatitle", intentStratatitle);
-                            update.putExtra("AJB", intentAJB);
-                            update.putExtra("PetokD", intentPetokD);
-                            update.putExtra("Pjp", intentPjp);
-                            update.putExtra("ImgSHM", intentImgSHM);
-                            update.putExtra("ImgHGB", intentImgHGB);
-                            update.putExtra("ImgHSHP", intentImgHSHP);
-                            update.putExtra("ImgPPJB", intentImgPPJB);
-                            update.putExtra("ImgStratatitle", intentImgStratatitle);
-                            update.putExtra("ImgAJB", intentImgAJB);
-                            update.putExtra("ImgPetokD", intentImgPetokD);
-                            update.putExtra("ImgPjp", intentImgPjp);
-                            update.putExtra("ImgPjp1", intentImgPjp1);
-                            update.putExtra("NoCertificate", intentNoCertificate);
-                            update.putExtra("Pbb", intentPbb);
-                            update.putExtra("JenisProperti", intentJenisProperti);
-                            update.putExtra("JenisCertificate", intentJenisCertificate);
-                            update.putExtra("SumberAir", intentSumberAir);
-                            update.putExtra("Kondisi", intentKondisi);
-                            update.putExtra("Deskripsi", intentDeskripsi);
-                            update.putExtra("Prabot", intentPrabot);
-                            update.putExtra("KetPrabot", intentKetPrabot);
-                            update.putExtra("Priority", intentPriority);
-                            update.putExtra("Ttd", intentTtd);
-                            update.putExtra("Banner", intentBanner);
-                            update.putExtra("Size", intentSize);
-                            update.putExtra("Harga", intentHarga);
-                            update.putExtra("HargaSewa", intentHargaSewa);
-                            update.putExtra("TglInput", intentTglInput);
-                            update.putExtra("Img1", intentImg1);
-                            update.putExtra("Img2", intentImg2);
-                            update.putExtra("Img3", intentImg3);
-                            update.putExtra("Img4", intentImg4);
-                            update.putExtra("Img5", intentImg5);
-                            update.putExtra("Img6", intentImg6);
-                            update.putExtra("Img7", intentImg7);
-                            update.putExtra("Img8", intentImg8);
-                            update.putExtra("Img9", intentImg9);
-                            update.putExtra("Img10", intentImg10);
-                            update.putExtra("Img11", intentImg11);
-                            update.putExtra("Img12", intentImg12);
-                            update.putExtra("Video", intentVideo);
-                            update.putExtra("LinkFacebook", intentLinkFacebook);
-                            update.putExtra("LinkTiktok", intentLinkTiktok);
-                            update.putExtra("LinkInstagram", intentLinkInstagram);
-                            update.putExtra("LinkYoutube", intentLinkYoutube);
-                            update.putExtra("IsAdmin", intentIsAdmin);
-                            update.putExtra("IsManager", intentIsManager);
-                            update.putExtra("IsRejected", intentIsRejected);
-                            update.putExtra("Sold", intentSold);
-                            update.putExtra("Rented", intentRented);
-                            update.putExtra("View", intentView);
-                            update.putExtra("Marketable", intentMarketable);
-                            update.putExtra("StatusHarga", intentStatusHarga);
-                            update.putExtra("Nama", intentNama);
-                            update.putExtra("NoTelp", intentNoTelp);
-                            update.putExtra("Instagram", intentInstagram);
-                            update.putExtra("Fee", intentFee);
-                            update.putExtra("NamaVendor", intentNamaVendor);
-                            update.putExtra("NoTelpVendor", intentNoTelpVendor);
-                            update.putExtra("IsSelfie", intentIsSelfie);
-                            update.putExtra("IsLokasi", intentIsLokasi);
-                            update.putExtra("Keterangan", intentKeterangan);
-                            startActivity(update);
-                        }
-                    });
-                    BtnTambahMaps.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Intent update = new Intent(DetailListingActivity.this, EditPralistingActivity.class);
-                            update.putExtra("IdPraListing", idpralisting);
-                            update.putExtra("Selfie", intentSelfie);
-                            startActivity(update);
-                        }
-                    });
-                } else if (intentIsAdmin.equals("0")) {
-                    TVAlamatDetailListing.setVisibility(View.GONE);
-                    IVAlamat.setVisibility(View.GONE);
-                    BtnApproveAdmin.setVisibility(View.GONE);
-                    BtnApproveManager.setVisibility(View.GONE);
-                    BtnRejectedAdmin.setVisibility(View.GONE);
-                    BtnRejectedManager.setVisibility(View.GONE);
-                    BtnLihatTemplate.setVisibility(View.GONE);
-                    BtnLihatTemplateKosong.setVisibility(View.GONE);
-                    BtnUploadTemplate.setVisibility(View.GONE);
-                    IVFlowUp.setVisibility(View.VISIBLE);
-                    IVFlowUp2.setVisibility(View.VISIBLE);
-                    idpengguna = "0";
-                    AgenId = Preferences.getKeyIdAgen(this);
-                    BtnTambahMaps.setVisibility(View.VISIBLE);
-                    IVEdit.setVisibility(View.VISIBLE);
-                    IVShare.setVisibility(View.GONE);
-                    IVFavorite.setVisibility(View.GONE);
-                    LytCBMarketable.setVisibility(View.GONE);
-                    LytCBHarga.setVisibility(View.GONE);
-                    LytCBSelfie.setVisibility(View.GONE);
-                    LytCBLokasi.setVisibility(View.GONE);
-                    IVEdit.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Intent update = new Intent(DetailListingActivity.this, EditPraListingAgenActivity.class);
-                            update.putExtra("IdPraListing", idpralisting);
-                            update.putExtra("IdListing", intentIdListing);
-                            update.putExtra("IdAgen", intentIdAgen);
-                            update.putExtra("IdAgenCo", intentIdAgenCo);
-                            update.putExtra("IdInput", intentIdInput);
-                            update.putExtra("NamaListing", intentNamaListing);
-                            update.putExtra("Alamat", intentAlamat);
-                            update.putExtra("Latitude", intentLatitude);
-                            update.putExtra("Longitude", intentLongitude);
-                            update.putExtra("Location", intentLocation);
-                            update.putExtra("Selfie", intentSelfie);
-                            update.putExtra("Wide", intentWide);
-                            update.putExtra("Land", intentLand);
-                            update.putExtra("Dimensi", intentDimensi);
-                            update.putExtra("Listrik", intentListrik);
-                            update.putExtra("Level", intentLevel);
-                            update.putExtra("Bed", intentBed);
-                            update.putExtra("BedArt", intentBedArt);
-                            update.putExtra("Bath", intentBath);
-                            update.putExtra("BathArt", intentBathArt);
-                            update.putExtra("Garage", intentGarage);
-                            update.putExtra("Carpot", intentCarpot);
-                            update.putExtra("Hadap", intentHadap);
-                            update.putExtra("SHM", intentSHM);
-                            update.putExtra("HGB", intentHGB);
-                            update.putExtra("HSHP", intentHSHP);
-                            update.putExtra("PPJB", intentPPJB);
-                            update.putExtra("Stratatitle", intentStratatitle);
-                            update.putExtra("AJB", intentAJB);
-                            update.putExtra("PetokD", intentPetokD);
-                            update.putExtra("Pjp", intentPjp);
-                            update.putExtra("ImgSHM", intentImgSHM);
-                            update.putExtra("ImgHGB", intentImgHGB);
-                            update.putExtra("ImgHSHP", intentImgHSHP);
-                            update.putExtra("ImgPPJB", intentImgPPJB);
-                            update.putExtra("ImgStratatitle", intentImgStratatitle);
-                            update.putExtra("ImgAJB", intentImgAJB);
-                            update.putExtra("ImgPetokD", intentImgPetokD);
-                            update.putExtra("ImgPjp", intentImgPjp);
-                            update.putExtra("ImgPjp1", intentImgPjp1);
-                            update.putExtra("NoCertificate", intentNoCertificate);
-                            update.putExtra("Pbb", intentPbb);
-                            update.putExtra("JenisProperti", intentJenisProperti);
-                            update.putExtra("JenisCertificate", intentJenisCertificate);
-                            update.putExtra("SumberAir", intentSumberAir);
-                            update.putExtra("Kondisi", intentKondisi);
-                            update.putExtra("Deskripsi", intentDeskripsi);
-                            update.putExtra("Prabot", intentPrabot);
-                            update.putExtra("KetPrabot", intentKetPrabot);
-                            update.putExtra("Priority", intentPriority);
-                            update.putExtra("Ttd", intentTtd);
-                            update.putExtra("Banner", intentBanner);
-                            update.putExtra("Size", intentSize);
-                            update.putExtra("Harga", intentHarga);
-                            update.putExtra("HargaSewa", intentHargaSewa);
-                            update.putExtra("TglInput", intentTglInput);
-                            update.putExtra("Img1", intentImg1);
-                            update.putExtra("Img2", intentImg2);
-                            update.putExtra("Img3", intentImg3);
-                            update.putExtra("Img4", intentImg4);
-                            update.putExtra("Img5", intentImg5);
-                            update.putExtra("Img6", intentImg6);
-                            update.putExtra("Img7", intentImg7);
-                            update.putExtra("Img8", intentImg8);
-                            update.putExtra("Img9", intentImg9);
-                            update.putExtra("Img10", intentImg10);
-                            update.putExtra("Img11", intentImg11);
-                            update.putExtra("Img12", intentImg12);
-                            update.putExtra("Video", intentVideo);
-                            update.putExtra("LinkFacebook", intentLinkFacebook);
-                            update.putExtra("LinkTiktok", intentLinkTiktok);
-                            update.putExtra("LinkInstagram", intentLinkInstagram);
-                            update.putExtra("LinkYoutube", intentLinkYoutube);
-                            update.putExtra("IsAdmin", intentIsAdmin);
-                            update.putExtra("IsManager", intentIsManager);
-                            update.putExtra("IsRejected", intentIsRejected);
-                            update.putExtra("Sold", intentSold);
-                            update.putExtra("Rented", intentRented);
-                            update.putExtra("View", intentView);
-                            update.putExtra("Marketable", intentMarketable);
-                            update.putExtra("StatusHarga", intentStatusHarga);
-                            update.putExtra("Nama", intentNama);
-                            update.putExtra("NoTelp", intentNoTelp);
-                            update.putExtra("Instagram", intentInstagram);
-                            update.putExtra("Fee", intentFee);
-                            update.putExtra("NamaVendor", intentNamaVendor);
-                            update.putExtra("NoTelpVendor", intentNoTelpVendor);
-                            update.putExtra("IsSelfie", intentIsSelfie);
-                            update.putExtra("IsLokasi", intentIsLokasi);
-                            update.putExtra("Keterangan", intentKeterangan);
-                            startActivity(update);
-                        }
-                    });
-                    BtnTambahMaps.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Intent update = new Intent(DetailListingActivity.this, EditPralistingActivity.class);
-                            update.putExtra("IdPraListing", idpralisting);
-                            update.putExtra("Selfie", intentSelfie);
-                            startActivity(update);
-                        }
-                    });
-                } else {
-                    TVAlamatDetailListing.setVisibility(View.GONE);
-                    IVAlamat.setVisibility(View.GONE);
-                    BtnApproveAdmin.setVisibility(View.GONE);
-                    BtnApproveManager.setVisibility(View.GONE);
-                    BtnRejectedAdmin.setVisibility(View.GONE);
-                    BtnRejectedManager.setVisibility(View.GONE);
-                    BtnLihatTemplate.setVisibility(View.GONE);
-                    BtnLihatTemplateKosong.setVisibility(View.GONE);
-                    BtnUploadTemplate.setVisibility(View.GONE);
-                    IVFlowUp.setVisibility(View.VISIBLE);
-                    IVFlowUp2.setVisibility(View.VISIBLE);
-                    idpengguna = "0";
-                    AgenId = Preferences.getKeyIdAgen(this);
-                    LytCBMarketable.setVisibility(View.GONE);
-                    LytCBHarga.setVisibility(View.GONE);
-                    LytCBSelfie.setVisibility(View.GONE);
-                    LytCBLokasi.setVisibility(View.GONE);
-                    if (StrIdAgen.equals(intentIdAgen)) {
-                        if (intentPjp.isEmpty()) {
-                            BtnTambahPjp.setVisibility(View.VISIBLE);
-                        } else {
-                            BtnTambahPjp.setVisibility(View.GONE);
-                        }
-                        if (intentBanner.equals("Tidak")) {
-                            BtnTambahBanner.setVisibility(View.VISIBLE);
-                        } else {
-                            BtnTambahBanner.setVisibility(View.GONE);
-                        }
-                        if (intentIdAgenCo.equals(StrIdAgen) || intentIdAgenCo.equals("0")) {
-                            BtnTambahCoList.setVisibility(View.VISIBLE);
-                        } else {
-                            BtnTambahCoList.setVisibility(View.GONE);
-                        }
-                        if (intentPriority.equals("open")) {
-                            BtnUpgrade.setVisibility(View.VISIBLE);
-                        } else {
-                            BtnUpgrade.setVisibility(View.GONE);
-                        }
-                        BtnTambahMaps.setVisibility(View.VISIBLE);
-                        BtnTambahGambar.setVisibility(View.VISIBLE);
-
-                        if (intentPriority.equals("exclusive") && !intentPjp.isEmpty() && intentBanner.equals("Ya")) {
-                            if (intentMarketable.equals("1") && intentStatusHarga.equals("1")) {
-                                if (intentIdAgenCo.equals("0")) {
-                                    PoinTambah = 70;
-                                } else if (intentIdAgenCo.equals(intentIdAgen)) {
-                                    PoinTambah = 70;
-                                } else {
-                                    PoinTambah = 70 / 2;
-                                }
-                            } else {
-                                if (intentIdAgenCo.equals("0")) {
-                                    PoinTambah = 50;
-                                } else if (intentIdAgenCo.equals(intentIdAgen)) {
-                                    PoinTambah = 50;
-                                } else {
-                                    PoinTambah = 50 / 2;
-                                }
-                            }
-                        } else if (intentPriority.equals("exclusive") && !intentPjp.isEmpty() && intentBanner.equals("Tidak")) {
-                            if (intentMarketable.equals("1") && intentStatusHarga.equals("1")) {
-                                if (intentIdAgenCo.equals("0")) {
-                                    PoinTambah = 60;
-                                } else if (intentIdAgenCo.equals(intentIdAgen)) {
-                                    PoinTambah = 60;
-                                } else {
-                                    PoinTambah = 60 / 2;
-                                }
-                            } else {
-                                if (intentIdAgenCo.equals("0")) {
-                                    PoinTambah = 40;
-                                } else if (intentIdAgenCo.equals(intentIdAgen)) {
-                                    PoinTambah = 40;
-                                } else {
-                                    PoinTambah = 40 / 2;
-                                }
-                            }
-                        } else if (intentPriority.equals("open") && !intentPjp.isEmpty() && intentBanner.equals("Ya")) {
-                            if (intentMarketable.equals("1") && intentStatusHarga.equals("1")) {
-                                if (intentIdAgenCo.equals("0")) {
-                                    PoinTambah = 40;
-                                } else if (intentIdAgenCo.equals(intentIdAgen)) {
-                                    PoinTambah = 40;
-                                } else {
-                                    PoinTambah = 40 / 2;
-                                }
-                            } else {
-                                if (intentIdAgenCo.equals("0")) {
-                                    PoinTambah = 30;
-                                } else if (intentIdAgenCo.equals(intentIdAgen)) {
-                                    PoinTambah = 30;
-                                } else {
-                                    PoinTambah = 30 / 2;
-                                }
-                            }
-                        } else if (intentPriority.equals("open") && !intentPjp.isEmpty() && intentBanner.equals("Tidak")) {
-                            if (intentMarketable.equals("1") && intentStatusHarga.equals("1")) {
-                                if (intentIdAgenCo.equals("0")) {
-                                    PoinTambah = 40;
-                                } else if (intentIdAgenCo.equals(intentIdAgen)) {
-                                    PoinTambah = 40;
-                                } else {
-                                    PoinTambah = 40 / 2;
-                                }
-                            } else {
-                                if (intentIdAgenCo.equals("0")) {
-                                    PoinTambah = 20;
-                                } else if (intentIdAgenCo.equals(intentIdAgen)) {
-                                    PoinTambah = 20;
-                                } else {
-                                    PoinTambah = 20 / 2;
-                                }
-                            }
-                        } else if (intentPriority.equals("open") && intentPjp.isEmpty() && intentBanner.equals("Ya")) {
-                            if (intentMarketable.equals("1") && intentStatusHarga.equals("1")) {
-                                if (intentIdAgenCo.equals("0")) {
-                                    PoinTambah = 40;
-                                } else if (intentIdAgenCo.equals(intentIdAgen)) {
-                                    PoinTambah = 40;
-                                } else {
-                                    PoinTambah = 40 / 2;
-                                }
-                            } else {
-                                if (intentIdAgenCo.equals("0")) {
-                                    PoinTambah = 10;
-                                } else if (intentIdAgenCo.equals(intentIdAgen)) {
-                                    PoinTambah = 10;
-                                } else {
-                                    PoinTambah = 10 / 2;
-                                }
-                            }
-                        } else if (intentPriority.equals("open") && intentPjp.isEmpty() && intentBanner.equals("Tidak")) {
-                            if (intentMarketable.equals("1") && intentStatusHarga.equals("1")) {
-                                if (intentIdAgenCo.equals("0")) {
-                                    PoinTambah = 20;
-                                } else if (intentIdAgenCo.equals(intentIdAgen)) {
-                                    PoinTambah = 20;
-                                } else {
-                                    PoinTambah = 20 / 2;
-                                }
-                            } else {
-                                if (intentIdAgenCo.equals("0")) {
-                                    PoinTambah = 10;
-                                } else if (intentIdAgenCo.equals(intentIdAgen)) {
-                                    PoinTambah = 10;
-                                } else {
-                                    PoinTambah = 10 / 2;
-                                }
-                            }
-                        }
-
-                        BtnTambahMaps.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                Intent update = new Intent(DetailListingActivity.this, EditMapsListingActivity.class);
-                                update.putExtra("IdListing", idlisting);
-                                update.putExtra("Selfie", intentSelfie);
-                                update.putExtra("PoinTambah", String.valueOf(PoinTambah));
-                                startActivity(update);
-                            }
-                        });
-                        BtnTambahGambar.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                Intent update = new Intent(DetailListingActivity.this, TambahGambarActivity.class);
-                                update.putExtra("IdListing", intentIdListing);
-                                update.putExtra("IdAgen", intentIdAgen);
-                                update.putExtra("IdAgenCo", intentIdAgenCo);
-                                update.putExtra("Pjp", intentPjp);
-                                update.putExtra("Priority", intentPriority);
-                                update.putExtra("Banner", intentBanner);
-                                update.putExtra("Marketable", intentMarketable);
-                                update.putExtra("StatusHarga", intentStatusHarga);
-                                update.putExtra("IsSelfie", intentIsSelfie);
-                                update.putExtra("IsLokasi", intentIsLokasi);
-                                update.putExtra("Img1", intentImg1);
-                                update.putExtra("Img2", intentImg2);
-                                update.putExtra("Img3", intentImg3);
-                                update.putExtra("Img4", intentImg4);
-                                update.putExtra("Img5", intentImg5);
-                                update.putExtra("Img6", intentImg6);
-                                update.putExtra("Img7", intentImg7);
-                                update.putExtra("Img8", intentImg8);
-                                update.putExtra("Img9", intentImg9);
-                                update.putExtra("Img10", intentImg10);
-                                update.putExtra("Img11", intentImg11);
-                                update.putExtra("Img12", intentImg12);
-                                startActivity(update);
-                            }
-                        });
-                    } else {
-                        BtnTambahMaps.setVisibility(View.GONE);
-                        BtnTambahGambar.setVisibility(View.GONE);
-                    }
-                }
-            } else if (intentSelfie.equals("0") || intentSelfie.equals("") || intentSelfie.isEmpty()) {
-                if (intentIsManager.equals("0")) {
-                    TVAlamatDetailListing.setVisibility(View.GONE);
-                    IVAlamat.setVisibility(View.GONE);
-                    BtnApproveAdmin.setVisibility(View.GONE);
-                    BtnApproveManager.setVisibility(View.GONE);
-                    BtnRejectedAdmin.setVisibility(View.GONE);
-                    BtnRejectedManager.setVisibility(View.GONE);
-                    BtnLihatTemplate.setVisibility(View.GONE);
-                    BtnLihatTemplateKosong.setVisibility(View.GONE);
-                    BtnUploadTemplate.setVisibility(View.GONE);
-                    IVFlowUp.setVisibility(View.VISIBLE);
-                    IVFlowUp2.setVisibility(View.VISIBLE);
-                    idpengguna = "0";
-                    AgenId = Preferences.getKeyIdAgen(this);
-                    BtnTambahSelfie.setVisibility(View.VISIBLE);
-                    IVEdit.setVisibility(View.VISIBLE);
-                    IVShare.setVisibility(View.GONE);
-                    IVFavorite.setVisibility(View.GONE);
-                    LytCBMarketable.setVisibility(View.GONE);
-                    LytCBHarga.setVisibility(View.GONE);
-                    LytCBSelfie.setVisibility(View.GONE);
-                    LytCBLokasi.setVisibility(View.GONE);
-                    IVEdit.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Intent update = new Intent(DetailListingActivity.this, EditPraListingAgenActivity.class);
-                            update.putExtra("IdPraListing", idpralisting);
-                            update.putExtra("IdListing", intentIdListing);
-                            update.putExtra("IdAgen", intentIdAgen);
-                            update.putExtra("IdAgenCo", intentIdAgenCo);
-                            update.putExtra("IdInput", intentIdInput);
-                            update.putExtra("NamaListing", intentNamaListing);
-                            update.putExtra("Alamat", intentAlamat);
-                            update.putExtra("Latitude", intentLatitude);
-                            update.putExtra("Longitude", intentLongitude);
-                            update.putExtra("Location", intentLocation);
-                            update.putExtra("Selfie", intentSelfie);
-                            update.putExtra("Wide", intentWide);
-                            update.putExtra("Land", intentLand);
-                            update.putExtra("Dimensi", intentDimensi);
-                            update.putExtra("Listrik", intentListrik);
-                            update.putExtra("Level", intentLevel);
-                            update.putExtra("Bed", intentBed);
-                            update.putExtra("BedArt", intentBedArt);
-                            update.putExtra("Bath", intentBath);
-                            update.putExtra("BathArt", intentBathArt);
-                            update.putExtra("Garage", intentGarage);
-                            update.putExtra("Carpot", intentCarpot);
-                            update.putExtra("Hadap", intentHadap);
-                            update.putExtra("SHM", intentSHM);
-                            update.putExtra("HGB", intentHGB);
-                            update.putExtra("HSHP", intentHSHP);
-                            update.putExtra("PPJB", intentPPJB);
-                            update.putExtra("Stratatitle", intentStratatitle);
-                            update.putExtra("AJB", intentAJB);
-                            update.putExtra("PetokD", intentPetokD);
-                            update.putExtra("Pjp", intentPjp);
-                            update.putExtra("ImgSHM", intentImgSHM);
-                            update.putExtra("ImgHGB", intentImgHGB);
-                            update.putExtra("ImgHSHP", intentImgHSHP);
-                            update.putExtra("ImgPPJB", intentImgPPJB);
-                            update.putExtra("ImgStratatitle", intentImgStratatitle);
-                            update.putExtra("ImgAJB", intentImgAJB);
-                            update.putExtra("ImgPetokD", intentImgPetokD);
-                            update.putExtra("ImgPjp", intentImgPjp);
-                            update.putExtra("ImgPjp1", intentImgPjp1);
-                            update.putExtra("NoCertificate", intentNoCertificate);
-                            update.putExtra("Pbb", intentPbb);
-                            update.putExtra("JenisProperti", intentJenisProperti);
-                            update.putExtra("JenisCertificate", intentJenisCertificate);
-                            update.putExtra("SumberAir", intentSumberAir);
-                            update.putExtra("Kondisi", intentKondisi);
-                            update.putExtra("Deskripsi", intentDeskripsi);
-                            update.putExtra("Prabot", intentPrabot);
-                            update.putExtra("KetPrabot", intentKetPrabot);
-                            update.putExtra("Priority", intentPriority);
-                            update.putExtra("Ttd", intentTtd);
-                            update.putExtra("Banner", intentBanner);
-                            update.putExtra("Size", intentSize);
-                            update.putExtra("Harga", intentHarga);
-                            update.putExtra("HargaSewa", intentHargaSewa);
-                            update.putExtra("TglInput", intentTglInput);
-                            update.putExtra("Img1", intentImg1);
-                            update.putExtra("Img2", intentImg2);
-                            update.putExtra("Img3", intentImg3);
-                            update.putExtra("Img4", intentImg4);
-                            update.putExtra("Img5", intentImg5);
-                            update.putExtra("Img6", intentImg6);
-                            update.putExtra("Img7", intentImg7);
-                            update.putExtra("Img8", intentImg8);
-                            update.putExtra("Img9", intentImg9);
-                            update.putExtra("Img10", intentImg10);
-                            update.putExtra("Img11", intentImg11);
-                            update.putExtra("Img12", intentImg12);
-                            update.putExtra("Video", intentVideo);
-                            update.putExtra("LinkFacebook", intentLinkFacebook);
-                            update.putExtra("LinkTiktok", intentLinkTiktok);
-                            update.putExtra("LinkInstagram", intentLinkInstagram);
-                            update.putExtra("LinkYoutube", intentLinkYoutube);
-                            update.putExtra("IsAdmin", intentIsAdmin);
-                            update.putExtra("IsManager", intentIsManager);
-                            update.putExtra("IsRejected", intentIsRejected);
-                            update.putExtra("Sold", intentSold);
-                            update.putExtra("Rented", intentRented);
-                            update.putExtra("View", intentView);
-                            update.putExtra("Marketable", intentMarketable);
-                            update.putExtra("StatusHarga", intentStatusHarga);
-                            update.putExtra("Nama", intentNama);
-                            update.putExtra("NoTelp", intentNoTelp);
-                            update.putExtra("Instagram", intentInstagram);
-                            update.putExtra("Fee", intentFee);
-                            update.putExtra("NamaVendor", intentNamaVendor);
-                            update.putExtra("NoTelpVendor", intentNoTelpVendor);
-                            update.putExtra("IsSelfie", intentIsSelfie);
-                            update.putExtra("IsLokasi", intentIsLokasi);
-                            update.putExtra("Keterangan", intentKeterangan);
-                            startActivity(update);
-                        }
-                    });
-                    BtnTambahSelfie.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Intent update = new Intent(DetailListingActivity.this, TambahSelfieActivity.class);
-                            update.putExtra("IdPraListing", idpralisting);
-                            startActivity(update);
-                        }
-                    });
-                } else if (intentIsAdmin.equals("0")) {
-                    TVAlamatDetailListing.setVisibility(View.GONE);
-                    IVAlamat.setVisibility(View.GONE);
-                    BtnApproveAdmin.setVisibility(View.GONE);
-                    BtnApproveManager.setVisibility(View.GONE);
-                    BtnRejectedAdmin.setVisibility(View.GONE);
-                    BtnRejectedManager.setVisibility(View.GONE);
-                    BtnLihatTemplate.setVisibility(View.GONE);
-                    BtnLihatTemplateKosong.setVisibility(View.GONE);
-                    BtnUploadTemplate.setVisibility(View.GONE);
-                    IVFlowUp.setVisibility(View.VISIBLE);
-                    IVFlowUp2.setVisibility(View.VISIBLE);
-                    idpengguna = "0";
-                    AgenId = Preferences.getKeyIdAgen(this);
-                    BtnTambahSelfie.setVisibility(View.VISIBLE);
-                    IVEdit.setVisibility(View.VISIBLE);
-                    IVShare.setVisibility(View.GONE);
-                    IVFavorite.setVisibility(View.GONE);
-                    LytCBMarketable.setVisibility(View.GONE);
-                    LytCBHarga.setVisibility(View.GONE);
-                    LytCBSelfie.setVisibility(View.GONE);
-                    LytCBLokasi.setVisibility(View.GONE);
-                    IVEdit.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Intent update = new Intent(DetailListingActivity.this, EditPraListingAgenActivity.class);
-                            update.putExtra("IdPraListing", idpralisting);
-                            update.putExtra("IdListing", intentIdListing);
-                            update.putExtra("IdAgen", intentIdAgen);
-                            update.putExtra("IdAgenCo", intentIdAgenCo);
-                            update.putExtra("IdInput", intentIdInput);
-                            update.putExtra("NamaListing", intentNamaListing);
-                            update.putExtra("Alamat", intentAlamat);
-                            update.putExtra("Latitude", intentLatitude);
-                            update.putExtra("Longitude", intentLongitude);
-                            update.putExtra("Location", intentLocation);
-                            update.putExtra("Selfie", intentSelfie);
-                            update.putExtra("Wide", intentWide);
-                            update.putExtra("Land", intentLand);
-                            update.putExtra("Dimensi", intentDimensi);
-                            update.putExtra("Listrik", intentListrik);
-                            update.putExtra("Level", intentLevel);
-                            update.putExtra("Bed", intentBed);
-                            update.putExtra("BedArt", intentBedArt);
-                            update.putExtra("Bath", intentBath);
-                            update.putExtra("BathArt", intentBathArt);
-                            update.putExtra("Garage", intentGarage);
-                            update.putExtra("Carpot", intentCarpot);
-                            update.putExtra("Hadap", intentHadap);
-                            update.putExtra("SHM", intentSHM);
-                            update.putExtra("HGB", intentHGB);
-                            update.putExtra("HSHP", intentHSHP);
-                            update.putExtra("PPJB", intentPPJB);
-                            update.putExtra("Stratatitle", intentStratatitle);
-                            update.putExtra("AJB", intentAJB);
-                            update.putExtra("PetokD", intentPetokD);
-                            update.putExtra("Pjp", intentPjp);
-                            update.putExtra("ImgSHM", intentImgSHM);
-                            update.putExtra("ImgHGB", intentImgHGB);
-                            update.putExtra("ImgHSHP", intentImgHSHP);
-                            update.putExtra("ImgPPJB", intentImgPPJB);
-                            update.putExtra("ImgStratatitle", intentImgStratatitle);
-                            update.putExtra("ImgAJB", intentImgAJB);
-                            update.putExtra("ImgPetokD", intentImgPetokD);
-                            update.putExtra("ImgPjp", intentImgPjp);
-                            update.putExtra("ImgPjp1", intentImgPjp1);
-                            update.putExtra("NoCertificate", intentNoCertificate);
-                            update.putExtra("Pbb", intentPbb);
-                            update.putExtra("JenisProperti", intentJenisProperti);
-                            update.putExtra("JenisCertificate", intentJenisCertificate);
-                            update.putExtra("SumberAir", intentSumberAir);
-                            update.putExtra("Kondisi", intentKondisi);
-                            update.putExtra("Deskripsi", intentDeskripsi);
-                            update.putExtra("Prabot", intentPrabot);
-                            update.putExtra("KetPrabot", intentKetPrabot);
-                            update.putExtra("Priority", intentPriority);
-                            update.putExtra("Ttd", intentTtd);
-                            update.putExtra("Banner", intentBanner);
-                            update.putExtra("Size", intentSize);
-                            update.putExtra("Harga", intentHarga);
-                            update.putExtra("HargaSewa", intentHargaSewa);
-                            update.putExtra("TglInput", intentTglInput);
-                            update.putExtra("Img1", intentImg1);
-                            update.putExtra("Img2", intentImg2);
-                            update.putExtra("Img3", intentImg3);
-                            update.putExtra("Img4", intentImg4);
-                            update.putExtra("Img5", intentImg5);
-                            update.putExtra("Img6", intentImg6);
-                            update.putExtra("Img7", intentImg7);
-                            update.putExtra("Img8", intentImg8);
-                            update.putExtra("Img9", intentImg9);
-                            update.putExtra("Img10", intentImg10);
-                            update.putExtra("Img11", intentImg11);
-                            update.putExtra("Img12", intentImg12);
-                            update.putExtra("Video", intentVideo);
-                            update.putExtra("LinkFacebook", intentLinkFacebook);
-                            update.putExtra("LinkTiktok", intentLinkTiktok);
-                            update.putExtra("LinkInstagram", intentLinkInstagram);
-                            update.putExtra("LinkYoutube", intentLinkYoutube);
-                            update.putExtra("IsAdmin", intentIsAdmin);
-                            update.putExtra("IsManager", intentIsManager);
-                            update.putExtra("IsRejected", intentIsRejected);
-                            update.putExtra("Sold", intentSold);
-                            update.putExtra("Rented", intentRented);
-                            update.putExtra("View", intentView);
-                            update.putExtra("Marketable", intentMarketable);
-                            update.putExtra("StatusHarga", intentStatusHarga);
-                            update.putExtra("Nama", intentNama);
-                            update.putExtra("NoTelp", intentNoTelp);
-                            update.putExtra("Instagram", intentInstagram);
-                            update.putExtra("Fee", intentFee);
-                            update.putExtra("NamaVendor", intentNamaVendor);
-                            update.putExtra("NoTelpVendor", intentNoTelpVendor);
-                            update.putExtra("IsSelfie", intentIsSelfie);
-                            update.putExtra("IsLokasi", intentIsLokasi);
-                            update.putExtra("Keterangan", intentKeterangan);
-                            startActivity(update);
-                        }
-                    });
-                    BtnTambahSelfie.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Intent update = new Intent(DetailListingActivity.this, TambahSelfieActivity.class);
-                            update.putExtra("IdPraListing", idpralisting);
-                            startActivity(update);
-                        }
-                    });
-                } else {
-                    TVAlamatDetailListing.setVisibility(View.GONE);
-                    IVAlamat.setVisibility(View.GONE);
-                    BtnApproveAdmin.setVisibility(View.GONE);
-                    BtnApproveManager.setVisibility(View.GONE);
-                    BtnRejectedAdmin.setVisibility(View.GONE);
-                    BtnRejectedManager.setVisibility(View.GONE);
-                    BtnLihatTemplate.setVisibility(View.GONE);
-                    BtnLihatTemplateKosong.setVisibility(View.GONE);
-                    BtnUploadTemplate.setVisibility(View.GONE);
-                    IVFlowUp.setVisibility(View.VISIBLE);
-                    IVFlowUp2.setVisibility(View.VISIBLE);
-                    idpengguna = "0";
-                    AgenId = Preferences.getKeyIdAgen(this);
-                    LytCBMarketable.setVisibility(View.GONE);
-                    LytCBHarga.setVisibility(View.GONE);
-                    LytCBSelfie.setVisibility(View.GONE);
-                    LytCBLokasi.setVisibility(View.GONE);
-                    if (StrIdAgen.equals(intentIdAgen)) {
-                        if (intentPjp.isEmpty()) {
-                            BtnTambahPjp.setVisibility(View.VISIBLE);
-                        } else {
-                            BtnTambahPjp.setVisibility(View.GONE);
-                        }
-                        if (intentBanner.equals("Tidak")) {
-                            BtnTambahBanner.setVisibility(View.VISIBLE);
-                        } else {
-                            BtnTambahBanner.setVisibility(View.GONE);
-                        }
-                        if (intentIdAgenCo.equals(StrIdAgen) || intentIdAgenCo.equals("0")) {
-                            BtnTambahCoList.setVisibility(View.VISIBLE);
-                        } else {
-                            BtnTambahCoList.setVisibility(View.GONE);
-                        }
-                        if (intentPriority.equals("open")) {
-                            BtnUpgrade.setVisibility(View.VISIBLE);
-                        } else {
-                            BtnUpgrade.setVisibility(View.GONE);
-                        }
-                        BtnTambahSelfie.setVisibility(View.VISIBLE);
-                        BtnTambahMaps.setVisibility(View.GONE);
-                        BtnTambahGambar.setVisibility(View.VISIBLE);
-
-                        if (intentPriority.equals("exclusive") && !intentPjp.isEmpty() && intentBanner.equals("Ya")) {
-                            if (intentMarketable.equals("1") && intentStatusHarga.equals("1")) {
-                                if (intentIdAgenCo.equals("0")) {
-                                    PoinTambah = 70;
-                                } else if (intentIdAgenCo.equals(intentIdAgen)) {
-                                    PoinTambah = 70;
-                                } else {
-                                    PoinTambah = 70 / 2;
-                                }
-                            } else {
-                                if (intentIdAgenCo.equals("0")) {
-                                    PoinTambah = 50;
-                                } else if (intentIdAgenCo.equals(intentIdAgen)) {
-                                    PoinTambah = 50;
-                                } else {
-                                    PoinTambah = 50 / 2;
-                                }
-                            }
-                        } else if (intentPriority.equals("exclusive") && !intentPjp.isEmpty() && intentBanner.equals("Tidak")) {
-                            if (intentMarketable.equals("1") && intentStatusHarga.equals("1")) {
-                                if (intentIdAgenCo.equals("0")) {
-                                    PoinTambah = 60;
-                                } else if (intentIdAgenCo.equals(intentIdAgen)) {
-                                    PoinTambah = 60;
-                                } else {
-                                    PoinTambah = 60 / 2;
-                                }
-                            } else {
-                                if (intentIdAgenCo.equals("0")) {
-                                    PoinTambah = 40;
-                                } else if (intentIdAgenCo.equals(intentIdAgen)) {
-                                    PoinTambah = 40;
-                                } else {
-                                    PoinTambah = 40 / 2;
-                                }
-                            }
-                        } else if (intentPriority.equals("open") && !intentPjp.isEmpty() && intentBanner.equals("Ya")) {
-                            if (intentMarketable.equals("1") && intentStatusHarga.equals("1")) {
-                                if (intentIdAgenCo.equals("0")) {
-                                    PoinTambah = 40;
-                                } else if (intentIdAgenCo.equals(intentIdAgen)) {
-                                    PoinTambah = 40;
-                                } else {
-                                    PoinTambah = 40 / 2;
-                                }
-                            } else {
-                                if (intentIdAgenCo.equals("0")) {
-                                    PoinTambah = 30;
-                                } else if (intentIdAgenCo.equals(intentIdAgen)) {
-                                    PoinTambah = 30;
-                                } else {
-                                    PoinTambah = 30 / 2;
-                                }
-                            }
-                        } else if (intentPriority.equals("open") && !intentPjp.isEmpty() && intentBanner.equals("Tidak")) {
-                            if (intentMarketable.equals("1") && intentStatusHarga.equals("1")) {
-                                if (intentIdAgenCo.equals("0")) {
-                                    PoinTambah = 40;
-                                } else if (intentIdAgenCo.equals(intentIdAgen)) {
-                                    PoinTambah = 40;
-                                } else {
-                                    PoinTambah = 40 / 2;
-                                }
-                            } else {
-                                if (intentIdAgenCo.equals("0")) {
-                                    PoinTambah = 20;
-                                } else if (intentIdAgenCo.equals(intentIdAgen)) {
-                                    PoinTambah = 20;
-                                } else {
-                                    PoinTambah = 20 / 2;
-                                }
-                            }
-                        } else if (intentPriority.equals("open") && intentPjp.isEmpty() && intentBanner.equals("Ya")) {
-                            if (intentMarketable.equals("1") && intentStatusHarga.equals("1")) {
-                                if (intentIdAgenCo.equals("0")) {
-                                    PoinTambah = 40;
-                                } else if (intentIdAgenCo.equals(intentIdAgen)) {
-                                    PoinTambah = 40;
-                                } else {
-                                    PoinTambah = 40 / 2;
-                                }
-                            } else {
-                                if (intentIdAgenCo.equals("0")) {
-                                    PoinTambah = 10;
-                                } else if (intentIdAgenCo.equals(intentIdAgen)) {
-                                    PoinTambah = 10;
-                                } else {
-                                    PoinTambah = 10 / 2;
-                                }
-                            }
-                        } else if (intentPriority.equals("open") && intentPjp.isEmpty() && intentBanner.equals("Tidak")) {
-                            if (intentMarketable.equals("1") && intentStatusHarga.equals("1")) {
-                                if (intentIdAgenCo.equals("0")) {
-                                    PoinTambah = 20;
-                                } else if (intentIdAgenCo.equals(intentIdAgen)) {
-                                    PoinTambah = 20;
-                                } else {
-                                    PoinTambah = 20 / 2;
-                                }
-                            } else {
-                                if (intentIdAgenCo.equals("0")) {
-                                    PoinTambah = 10;
-                                } else if (intentIdAgenCo.equals(intentIdAgen)) {
-                                    PoinTambah = 10;
-                                } else {
-                                    PoinTambah = 10 / 2;
-                                }
-                            }
-                        }
-
-                        BtnTambahSelfie.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                Intent update = new Intent(DetailListingActivity.this, TambahSelfieListingActivity.class);
-                                update.putExtra("IdListing", idlisting);
-                                update.putExtra("PoinTambah", String.valueOf(PoinTambah));
-                                startActivity(update);
-                            }
-                        });
-                        BtnTambahGambar.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                Intent update = new Intent(DetailListingActivity.this, TambahGambarActivity.class);
-                                update.putExtra("IdListing", intentIdListing);
-                                update.putExtra("IdAgen", intentIdAgen);
-                                update.putExtra("IdAgenCo", intentIdAgenCo);
-                                update.putExtra("Pjp", intentPjp);
-                                update.putExtra("Priority", intentPriority);
-                                update.putExtra("Banner", intentBanner);
-                                update.putExtra("Marketable", intentMarketable);
-                                update.putExtra("StatusHarga", intentStatusHarga);
-                                update.putExtra("IsSelfie", intentIsSelfie);
-                                update.putExtra("IsLokasi", intentIsLokasi);
-                                update.putExtra("Img1", intentImg1);
-                                update.putExtra("Img2", intentImg2);
-                                update.putExtra("Img3", intentImg3);
-                                update.putExtra("Img4", intentImg4);
-                                update.putExtra("Img5", intentImg5);
-                                update.putExtra("Img6", intentImg6);
-                                update.putExtra("Img7", intentImg7);
-                                update.putExtra("Img8", intentImg8);
-                                update.putExtra("Img9", intentImg9);
-                                update.putExtra("Img10", intentImg10);
-                                update.putExtra("Img11", intentImg11);
-                                update.putExtra("Img12", intentImg12);
-                                startActivity(update);
-                            }
-                        });
-                    } else {
-                        BtnTambahSelfie.setVisibility(View.GONE);
-                        BtnTambahMaps.setVisibility(View.GONE);
-                        BtnTambahGambar.setVisibility(View.GONE);
-                    }
-                }
             } else {
-                if (intentIsManager.equals("0")) {
-                    TVAlamatDetailListing.setVisibility(View.GONE);
-                    IVAlamat.setVisibility(View.GONE);
-                    BtnApproveAdmin.setVisibility(View.GONE);
-                    BtnApproveManager.setVisibility(View.GONE);
-                    BtnRejectedAdmin.setVisibility(View.GONE);
-                    BtnRejectedManager.setVisibility(View.GONE);
-                    BtnLihatTemplate.setVisibility(View.GONE);
-                    BtnLihatTemplateKosong.setVisibility(View.GONE);
-                    BtnUploadTemplate.setVisibility(View.GONE);
-                    IVFlowUp.setVisibility(View.VISIBLE);
-                    IVFlowUp2.setVisibility(View.VISIBLE);
-                    idpengguna = "0";
-                    AgenId = Preferences.getKeyIdAgen(this);
-                    BtnTambahMaps.setVisibility(View.GONE);
-                    BtnTambahSelfie.setVisibility(View.GONE);
-                    IVEdit.setVisibility(View.VISIBLE);
-                    IVShare.setVisibility(View.GONE);
-                    IVFavorite.setVisibility(View.GONE);
-                    IVEdit.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Intent update = new Intent(DetailListingActivity.this, EditPraListingAgenActivity.class);
-                            update.putExtra("IdPraListing", idpralisting);
-                            update.putExtra("IdListing", intentIdListing);
-                            update.putExtra("IdAgen", intentIdAgen);
-                            update.putExtra("IdAgenCo", intentIdAgenCo);
-                            update.putExtra("IdInput", intentIdInput);
-                            update.putExtra("NamaListing", intentNamaListing);
-                            update.putExtra("Alamat", intentAlamat);
-                            update.putExtra("Latitude", intentLatitude);
-                            update.putExtra("Longitude", intentLongitude);
-                            update.putExtra("Location", intentLocation);
-                            update.putExtra("Selfie", intentSelfie);
-                            update.putExtra("Wide", intentWide);
-                            update.putExtra("Land", intentLand);
-                            update.putExtra("Dimensi", intentDimensi);
-                            update.putExtra("Listrik", intentListrik);
-                            update.putExtra("Level", intentLevel);
-                            update.putExtra("Bed", intentBed);
-                            update.putExtra("BedArt", intentBedArt);
-                            update.putExtra("Bath", intentBath);
-                            update.putExtra("BathArt", intentBathArt);
-                            update.putExtra("Garage", intentGarage);
-                            update.putExtra("Carpot", intentCarpot);
-                            update.putExtra("Hadap", intentHadap);
-                            update.putExtra("SHM", intentSHM);
-                            update.putExtra("HGB", intentHGB);
-                            update.putExtra("HSHP", intentHSHP);
-                            update.putExtra("PPJB", intentPPJB);
-                            update.putExtra("Stratatitle", intentStratatitle);
-                            update.putExtra("AJB", intentAJB);
-                            update.putExtra("PetokD", intentPetokD);
-                            update.putExtra("Pjp", intentPjp);
-                            update.putExtra("ImgSHM", intentImgSHM);
-                            update.putExtra("ImgHGB", intentImgHGB);
-                            update.putExtra("ImgHSHP", intentImgHSHP);
-                            update.putExtra("ImgPPJB", intentImgPPJB);
-                            update.putExtra("ImgStratatitle", intentImgStratatitle);
-                            update.putExtra("ImgAJB", intentImgAJB);
-                            update.putExtra("ImgPetokD", intentImgPetokD);
-                            update.putExtra("ImgPjp", intentImgPjp);
-                            update.putExtra("ImgPjp1", intentImgPjp1);
-                            update.putExtra("NoCertificate", intentNoCertificate);
-                            update.putExtra("Pbb", intentPbb);
-                            update.putExtra("JenisProperti", intentJenisProperti);
-                            update.putExtra("JenisCertificate", intentJenisCertificate);
-                            update.putExtra("SumberAir", intentSumberAir);
-                            update.putExtra("Kondisi", intentKondisi);
-                            update.putExtra("Deskripsi", intentDeskripsi);
-                            update.putExtra("Prabot", intentPrabot);
-                            update.putExtra("KetPrabot", intentKetPrabot);
-                            update.putExtra("Priority", intentPriority);
-                            update.putExtra("Ttd", intentTtd);
-                            update.putExtra("Banner", intentBanner);
-                            update.putExtra("Size", intentSize);
-                            update.putExtra("Harga", intentHarga);
-                            update.putExtra("HargaSewa", intentHargaSewa);
-                            update.putExtra("TglInput", intentTglInput);
-                            update.putExtra("Img1", intentImg1);
-                            update.putExtra("Img2", intentImg2);
-                            update.putExtra("Img3", intentImg3);
-                            update.putExtra("Img4", intentImg4);
-                            update.putExtra("Img5", intentImg5);
-                            update.putExtra("Img6", intentImg6);
-                            update.putExtra("Img7", intentImg7);
-                            update.putExtra("Img8", intentImg8);
-                            update.putExtra("Img9", intentImg9);
-                            update.putExtra("Img10", intentImg10);
-                            update.putExtra("Img11", intentImg11);
-                            update.putExtra("Img12", intentImg12);
-                            update.putExtra("Video", intentVideo);
-                            update.putExtra("LinkFacebook", intentLinkFacebook);
-                            update.putExtra("LinkTiktok", intentLinkTiktok);
-                            update.putExtra("LinkInstagram", intentLinkInstagram);
-                            update.putExtra("LinkYoutube", intentLinkYoutube);
-                            update.putExtra("IsAdmin", intentIsAdmin);
-                            update.putExtra("IsManager", intentIsManager);
-                            update.putExtra("IsRejected", intentIsRejected);
-                            update.putExtra("Sold", intentSold);
-                            update.putExtra("Rented", intentRented);
-                            update.putExtra("View", intentView);
-                            update.putExtra("Marketable", intentMarketable);
-                            update.putExtra("StatusHarga", intentStatusHarga);
-                            update.putExtra("Nama", intentNama);
-                            update.putExtra("NoTelp", intentNoTelp);
-                            update.putExtra("Instagram", intentInstagram);
-                            update.putExtra("Fee", intentFee);
-                            update.putExtra("NamaVendor", intentNamaVendor);
-                            update.putExtra("NoTelpVendor", intentNoTelpVendor);
-                            update.putExtra("IsSelfie", intentIsSelfie);
-                            update.putExtra("IsLokasi", intentIsLokasi);
-                            update.putExtra("Keterangan", intentKeterangan);
-                            startActivity(update);
-                        }
-                    });
-                    LytCBMarketable.setVisibility(View.GONE);
-                    LytCBHarga.setVisibility(View.GONE);
-                    LytCBSelfie.setVisibility(View.GONE);
-                    LytCBLokasi.setVisibility(View.GONE);
-                } else if (intentIsAdmin.equals("0")) {
-                    TVAlamatDetailListing.setVisibility(View.GONE);
-                    IVAlamat.setVisibility(View.GONE);
-                    BtnApproveAdmin.setVisibility(View.GONE);
-                    BtnApproveManager.setVisibility(View.GONE);
-                    BtnRejectedAdmin.setVisibility(View.GONE);
-                    BtnRejectedManager.setVisibility(View.GONE);
-                    BtnLihatTemplate.setVisibility(View.GONE);
-                    BtnLihatTemplateKosong.setVisibility(View.GONE);
-                    BtnUploadTemplate.setVisibility(View.GONE);
-                    IVFlowUp.setVisibility(View.VISIBLE);
-                    IVFlowUp2.setVisibility(View.VISIBLE);
-                    idpengguna = "0";
-                    AgenId = Preferences.getKeyIdAgen(this);
-                    BtnTambahMaps.setVisibility(View.GONE);
-                    BtnTambahSelfie.setVisibility(View.GONE);
-                    IVEdit.setVisibility(View.VISIBLE);
-                    IVShare.setVisibility(View.GONE);
-                    IVFavorite.setVisibility(View.GONE);
-                    IVEdit.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Intent update = new Intent(DetailListingActivity.this, EditPraListingAgenActivity.class);
-                            update.putExtra("IdPraListing", idpralisting);
-                            update.putExtra("IdListing", intentIdListing);
-                            update.putExtra("IdAgen", intentIdAgen);
-                            update.putExtra("IdAgenCo", intentIdAgenCo);
-                            update.putExtra("IdInput", intentIdInput);
-                            update.putExtra("NamaListing", intentNamaListing);
-                            update.putExtra("Alamat", intentAlamat);
-                            update.putExtra("Latitude", intentLatitude);
-                            update.putExtra("Longitude", intentLongitude);
-                            update.putExtra("Location", intentLocation);
-                            update.putExtra("Selfie", intentSelfie);
-                            update.putExtra("Wide", intentWide);
-                            update.putExtra("Land", intentLand);
-                            update.putExtra("Dimensi", intentDimensi);
-                            update.putExtra("Listrik", intentListrik);
-                            update.putExtra("Level", intentLevel);
-                            update.putExtra("Bed", intentBed);
-                            update.putExtra("BedArt", intentBedArt);
-                            update.putExtra("Bath", intentBath);
-                            update.putExtra("BathArt", intentBathArt);
-                            update.putExtra("Garage", intentGarage);
-                            update.putExtra("Carpot", intentCarpot);
-                            update.putExtra("Hadap", intentHadap);
-                            update.putExtra("SHM", intentSHM);
-                            update.putExtra("HGB", intentHGB);
-                            update.putExtra("HSHP", intentHSHP);
-                            update.putExtra("PPJB", intentPPJB);
-                            update.putExtra("Stratatitle", intentStratatitle);
-                            update.putExtra("AJB", intentAJB);
-                            update.putExtra("PetokD", intentPetokD);
-                            update.putExtra("Pjp", intentPjp);
-                            update.putExtra("ImgSHM", intentImgSHM);
-                            update.putExtra("ImgHGB", intentImgHGB);
-                            update.putExtra("ImgHSHP", intentImgHSHP);
-                            update.putExtra("ImgPPJB", intentImgPPJB);
-                            update.putExtra("ImgStratatitle", intentImgStratatitle);
-                            update.putExtra("ImgAJB", intentImgAJB);
-                            update.putExtra("ImgPetokD", intentImgPetokD);
-                            update.putExtra("ImgPjp", intentImgPjp);
-                            update.putExtra("ImgPjp1", intentImgPjp1);
-                            update.putExtra("NoCertificate", intentNoCertificate);
-                            update.putExtra("Pbb", intentPbb);
-                            update.putExtra("JenisProperti", intentJenisProperti);
-                            update.putExtra("JenisCertificate", intentJenisCertificate);
-                            update.putExtra("SumberAir", intentSumberAir);
-                            update.putExtra("Kondisi", intentKondisi);
-                            update.putExtra("Deskripsi", intentDeskripsi);
-                            update.putExtra("Prabot", intentPrabot);
-                            update.putExtra("KetPrabot", intentKetPrabot);
-                            update.putExtra("Priority", intentPriority);
-                            update.putExtra("Ttd", intentTtd);
-                            update.putExtra("Banner", intentBanner);
-                            update.putExtra("Size", intentSize);
-                            update.putExtra("Harga", intentHarga);
-                            update.putExtra("HargaSewa", intentHargaSewa);
-                            update.putExtra("TglInput", intentTglInput);
-                            update.putExtra("Img1", intentImg1);
-                            update.putExtra("Img2", intentImg2);
-                            update.putExtra("Img3", intentImg3);
-                            update.putExtra("Img4", intentImg4);
-                            update.putExtra("Img5", intentImg5);
-                            update.putExtra("Img6", intentImg6);
-                            update.putExtra("Img7", intentImg7);
-                            update.putExtra("Img8", intentImg8);
-                            update.putExtra("Img9", intentImg9);
-                            update.putExtra("Img10", intentImg10);
-                            update.putExtra("Img11", intentImg11);
-                            update.putExtra("Img12", intentImg12);
-                            update.putExtra("Video", intentVideo);
-                            update.putExtra("LinkFacebook", intentLinkFacebook);
-                            update.putExtra("LinkTiktok", intentLinkTiktok);
-                            update.putExtra("LinkInstagram", intentLinkInstagram);
-                            update.putExtra("LinkYoutube", intentLinkYoutube);
-                            update.putExtra("IsAdmin", intentIsAdmin);
-                            update.putExtra("IsManager", intentIsManager);
-                            update.putExtra("IsRejected", intentIsRejected);
-                            update.putExtra("Sold", intentSold);
-                            update.putExtra("Rented", intentRented);
-                            update.putExtra("View", intentView);
-                            update.putExtra("Marketable", intentMarketable);
-                            update.putExtra("StatusHarga", intentStatusHarga);
-                            update.putExtra("Nama", intentNama);
-                            update.putExtra("NoTelp", intentNoTelp);
-                            update.putExtra("Instagram", intentInstagram);
-                            update.putExtra("Fee", intentFee);
-                            update.putExtra("NamaVendor", intentNamaVendor);
-                            update.putExtra("NoTelpVendor", intentNoTelpVendor);
-                            update.putExtra("IsSelfie", intentIsSelfie);
-                            update.putExtra("IsLokasi", intentIsLokasi);
-                            update.putExtra("Keterangan", intentKeterangan);
-                            startActivity(update);
-                        }
-                    });
-                    LytCBMarketable.setVisibility(View.GONE);
-                    LytCBHarga.setVisibility(View.GONE);
-                    LytCBSelfie.setVisibility(View.GONE);
-                    LytCBLokasi.setVisibility(View.GONE);
-                } else {
-                    TVAlamatDetailListing.setVisibility(View.GONE);
-                    IVAlamat.setVisibility(View.GONE);
-                    BtnApproveAdmin.setVisibility(View.GONE);
-                    BtnApproveManager.setVisibility(View.GONE);
-                    BtnRejectedAdmin.setVisibility(View.GONE);
-                    BtnRejectedManager.setVisibility(View.GONE);
-                    BtnTambahMaps.setVisibility(View.GONE);
-                    BtnTambahSelfie.setVisibility(View.GONE);
-                    BtnLihatTemplate.setVisibility(View.GONE);
-                    BtnLihatTemplateKosong.setVisibility(View.GONE);
-                    BtnUploadTemplate.setVisibility(View.GONE);
-                    IVFlowUp.setVisibility(View.VISIBLE);
-                    IVFlowUp2.setVisibility(View.VISIBLE);
-                    idpengguna = "0";
-                    AgenId = Preferences.getKeyIdAgen(this);
-                    LytCBMarketable.setVisibility(View.GONE);
-                    LytCBHarga.setVisibility(View.GONE);
-                    LytCBSelfie.setVisibility(View.GONE);
-                    LytCBLokasi.setVisibility(View.GONE);
-                    if (StrIdAgen.equals(intentIdAgen)) {
-                        if (intentPjp.isEmpty()) {
-                            BtnTambahPjp.setVisibility(View.VISIBLE);
-                        } else {
-                            BtnTambahPjp.setVisibility(View.GONE);
-                        }
-                        if (intentBanner.equals("Tidak")) {
-                            BtnTambahBanner.setVisibility(View.VISIBLE);
-                        } else {
-                            BtnTambahBanner.setVisibility(View.GONE);
-                        }
-                        if (intentIdAgenCo.equals(StrIdAgen) || intentIdAgenCo.equals("0")) {
-                            BtnTambahCoList.setVisibility(View.VISIBLE);
-                        } else {
-                            BtnTambahCoList.setVisibility(View.GONE);
-                        }
-                        if (intentPriority.equals("open")) {
-                            BtnUpgrade.setVisibility(View.VISIBLE);
-                        } else {
-                            BtnUpgrade.setVisibility(View.GONE);
-                        }
-                        BtnTambahSelfie.setVisibility(View.VISIBLE);
-                        BtnTambahMaps.setVisibility(View.GONE);
-                        BtnTambahGambar.setVisibility(View.VISIBLE);
-
-                        if (intentPriority.equals("exclusive") && !intentPjp.isEmpty() && intentBanner.equals("Ya")) {
-                            if (intentMarketable.equals("1") && intentStatusHarga.equals("1")) {
-                                if (intentIdAgenCo.equals("0")) {
-                                    PoinTambah = 70;
-                                } else if (intentIdAgenCo.equals(intentIdAgen)) {
-                                    PoinTambah = 70;
-                                } else {
-                                    PoinTambah = 70 / 2;
-                                }
-                            } else {
-                                if (intentIdAgenCo.equals("0")) {
-                                    PoinTambah = 50;
-                                } else if (intentIdAgenCo.equals(intentIdAgen)) {
-                                    PoinTambah = 50;
-                                } else {
-                                    PoinTambah = 50 / 2;
-                                }
-                            }
-                        } else if (intentPriority.equals("exclusive") && !intentPjp.isEmpty() && intentBanner.equals("Tidak")) {
-                            if (intentMarketable.equals("1") && intentStatusHarga.equals("1")) {
-                                if (intentIdAgenCo.equals("0")) {
-                                    PoinTambah = 60;
-                                } else if (intentIdAgenCo.equals(intentIdAgen)) {
-                                    PoinTambah = 60;
-                                } else {
-                                    PoinTambah = 60 / 2;
-                                }
-                            } else {
-                                if (intentIdAgenCo.equals("0")) {
-                                    PoinTambah = 40;
-                                } else if (intentIdAgenCo.equals(intentIdAgen)) {
-                                    PoinTambah = 40;
-                                } else {
-                                    PoinTambah = 40 / 2;
-                                }
-                            }
-                        } else if (intentPriority.equals("open") && !intentPjp.isEmpty() && intentBanner.equals("Ya")) {
-                            if (intentMarketable.equals("1") && intentStatusHarga.equals("1")) {
-                                if (intentIdAgenCo.equals("0")) {
-                                    PoinTambah = 40;
-                                } else if (intentIdAgenCo.equals(intentIdAgen)) {
-                                    PoinTambah = 40;
-                                } else {
-                                    PoinTambah = 40 / 2;
-                                }
-                            } else {
-                                if (intentIdAgenCo.equals("0")) {
-                                    PoinTambah = 30;
-                                } else if (intentIdAgenCo.equals(intentIdAgen)) {
-                                    PoinTambah = 30;
-                                } else {
-                                    PoinTambah = 30 / 2;
-                                }
-                            }
-                        } else if (intentPriority.equals("open") && !intentPjp.isEmpty() && intentBanner.equals("Tidak")) {
-                            if (intentMarketable.equals("1") && intentStatusHarga.equals("1")) {
-                                if (intentIdAgenCo.equals("0")) {
-                                    PoinTambah = 40;
-                                } else if (intentIdAgenCo.equals(intentIdAgen)) {
-                                    PoinTambah = 40;
-                                } else {
-                                    PoinTambah = 40 / 2;
-                                }
-                            } else {
-                                if (intentIdAgenCo.equals("0")) {
-                                    PoinTambah = 20;
-                                } else if (intentIdAgenCo.equals(intentIdAgen)) {
-                                    PoinTambah = 20;
-                                } else {
-                                    PoinTambah = 20 / 2;
-                                }
-                            }
-                        } else if (intentPriority.equals("open") && intentPjp.isEmpty() && intentBanner.equals("Ya")) {
-                            if (intentMarketable.equals("1") && intentStatusHarga.equals("1")) {
-                                if (intentIdAgenCo.equals("0")) {
-                                    PoinTambah = 40;
-                                } else if (intentIdAgenCo.equals(intentIdAgen)) {
-                                    PoinTambah = 40;
-                                } else {
-                                    PoinTambah = 40 / 2;
-                                }
-                            } else {
-                                if (intentIdAgenCo.equals("0")) {
-                                    PoinTambah = 10;
-                                } else if (intentIdAgenCo.equals(intentIdAgen)) {
-                                    PoinTambah = 10;
-                                } else {
-                                    PoinTambah = 10 / 2;
-                                }
-                            }
-                        } else if (intentPriority.equals("open") && intentPjp.isEmpty() && intentBanner.equals("Tidak")) {
-                            if (intentMarketable.equals("1") && intentStatusHarga.equals("1")) {
-                                if (intentIdAgenCo.equals("0")) {
-                                    PoinTambah = 20;
-                                } else if (intentIdAgenCo.equals(intentIdAgen)) {
-                                    PoinTambah = 20;
-                                } else {
-                                    PoinTambah = 20 / 2;
-                                }
-                            } else {
-                                if (intentIdAgenCo.equals("0")) {
-                                    PoinTambah = 10;
-                                } else if (intentIdAgenCo.equals(intentIdAgen)) {
-                                    PoinTambah = 10;
-                                } else {
-                                    PoinTambah = 10 / 2;
-                                }
-                            }
-                        }
-
-                        BtnTambahSelfie.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                Intent update = new Intent(DetailListingActivity.this, TambahSelfieListingActivity.class);
-                                update.putExtra("IdListing", idlisting);
-                                update.putExtra("PoinTambah", String.valueOf(PoinTambah));
-                                startActivity(update);
-                            }
-                        });
-                        BtnTambahGambar.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                Intent update = new Intent(DetailListingActivity.this, TambahGambarActivity.class);
-                                update.putExtra("IdListing", intentIdListing);
-                                update.putExtra("IdAgen", intentIdAgen);
-                                update.putExtra("IdAgenCo", intentIdAgenCo);
-                                update.putExtra("Pjp", intentPjp);
-                                update.putExtra("Priority", intentPriority);
-                                update.putExtra("Banner", intentBanner);
-                                update.putExtra("Marketable", intentMarketable);
-                                update.putExtra("StatusHarga", intentStatusHarga);
-                                update.putExtra("IsSelfie", intentIsSelfie);
-                                update.putExtra("IsLokasi", intentIsLokasi);
-                                update.putExtra("Img1", intentImg1);
-                                update.putExtra("Img2", intentImg2);
-                                update.putExtra("Img3", intentImg3);
-                                update.putExtra("Img4", intentImg4);
-                                update.putExtra("Img5", intentImg5);
-                                update.putExtra("Img6", intentImg6);
-                                update.putExtra("Img7", intentImg7);
-                                update.putExtra("Img8", intentImg8);
-                                update.putExtra("Img9", intentImg9);
-                                update.putExtra("Img10", intentImg10);
-                                update.putExtra("Img11", intentImg11);
-                                update.putExtra("Img12", intentImg12);
-                                startActivity(update);
-                            }
-                        });
-                    } else {
-                        BtnTambahSelfie.setVisibility(View.GONE);
-                        BtnTambahMaps.setVisibility(View.GONE);
-                        BtnTambahGambar.setVisibility(View.GONE);
-                    }
-//                    if (intentPjp.isEmpty()) {
-//                        BtnTambahPjp.setVisibility(View.VISIBLE);
-//                    } else {
-//                        BtnTambahPjp.setVisibility(View.GONE);
-//                    }
-//                    if (intentBanner.equals("Tidak")) {
-//                        BtnTambahBanner.setVisibility(View.VISIBLE);
-//                    } else {
-//                        BtnTambahBanner.setVisibility(View.GONE);
-//                    }
-//                    if (intentIdAgenCo.equals(StrIdAgen) || intentIdAgenCo.equals("0")) {
-//                        BtnTambahCoList.setVisibility(View.VISIBLE);
-//                    } else {
-//                        BtnTambahCoList.setVisibility(View.GONE);
-//                    }
-//                    if (intentPriority.equals("open")) {
-//                        BtnUpgrade.setVisibility(View.VISIBLE);
-//                    } else {
-//                        BtnUpgrade.setVisibility(View.GONE);
-//                    }
-                }
+                BtnTambahMaps.setVisibility(View.GONE);
+                BtnTambahSelfie.setVisibility(View.GONE);
+                BtnTambahPjp.setVisibility(View.GONE);
+                BtnTambahBanner.setVisibility(View.GONE);
+                BtnTambahCoList.setVisibility(View.GONE);
+                BtnTambahGambar.setVisibility(View.GONE);
+                BtnUpgrade.setVisibility(View.GONE);
+                TVPoin.setVisibility(View.GONE);
             }
-        } else if (status.equals("4")) {
-            IVFlowUp.setVisibility(View.INVISIBLE);
-            BtnApproveAdmin.setVisibility(View.GONE);
-            BtnApproveManager.setVisibility(View.GONE);
-            BtnRejectedAdmin.setVisibility(View.GONE);
-            BtnRejectedManager.setVisibility(View.GONE);
-            BtnLihatTemplate.setVisibility(View.GONE);
-            BtnLihatTemplateKosong.setVisibility(View.GONE);
-            BtnUploadTemplate.setVisibility(View.GONE);
-            IVFlowUp.setVisibility(View.INVISIBLE);
-            IVFlowUp2.setVisibility(View.INVISIBLE);
-            TVAlamatDetailListing.setVisibility(View.GONE);
-            IVAlamat.setVisibility(View.GONE);
-            idpengguna = Preferences.getKeyIdCustomer(this);
-            AgenId = "0";
-            LytCBMarketable.setVisibility(View.GONE);
-            LytCBHarga.setVisibility(View.GONE);
-            LytCBSelfie.setVisibility(View.GONE);
-            LytCBLokasi.setVisibility(View.GONE);
         } else {
-            TVAlamatDetailListing.setVisibility(View.GONE);
+            AgenId = "0";
+            idpengguna = Preferences.getKeyIdCustomer(this);
+            StringNamaBuyer = Preferences.getKeyNamaLengkap(this);
+            IVFlowUp.setVisibility(View.INVISIBLE);
+            LytSize.setVisibility(View.GONE);
+            LytFee.setVisibility(View.GONE);
+            LytTglInput.setVisibility(View.GONE);
+            LytNamaVendor.setVisibility(View.GONE);
+            LytTelpVendor.setVisibility(View.GONE);
+            LytSelfie.setVisibility(View.GONE);
             BtnLihatTemplate.setVisibility(View.GONE);
             BtnLihatTemplateKosong.setVisibility(View.GONE);
             BtnUploadTemplate.setVisibility(View.GONE);
-            IVAlamat.setVisibility(View.GONE);
             IVFlowUp.setVisibility(View.INVISIBLE);
             IVFlowUp2.setVisibility(View.INVISIBLE);
+            IVAlamat.setVisibility(View.GONE);
+            TVAlamatDetailListing.setVisibility(View.GONE);
+            TVPoin.setVisibility(View.GONE);
             LytCBMarketable.setVisibility(View.GONE);
             LytCBHarga.setVisibility(View.GONE);
             LytCBSelfie.setVisibility(View.GONE);
             LytCBLokasi.setVisibility(View.GONE);
+            IVWhatsapp.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    String deepLinkUrl = "https://gooproper.com/listing/" + intentIdListing;
+                    String message = "Halo! Saya " + StringNamaBuyer + ", ingin menanyakan informasi mengenai listingan " + intentNamaListing + " yang beralamat di " + intentAlamat + ".\nApakah masih ada? atau ada update terbaru?\nDetail Listingan :\n" + deepLinkUrl;
+                    String url = "https://api.whatsapp.com/send?phone=+62" + intentNoTelp + "&text=" + message;
+                    Intent i = new Intent(Intent.ACTION_VIEW);
+                    i.setData(Uri.parse(url));
+                    startActivity(i);
+                }
+            });
         }
 
         if (intentIdAgenCo.equals("0")) {
@@ -2454,20 +1097,6 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
         } else {
             LoadCo();
             agen2.setVisibility(View.VISIBLE);
-        }
-
-        if (StrIdAgen.equals(intentIdAgen)) {
-            TVPoin.setVisibility(View.VISIBLE);
-            TVJumlahFoto.setVisibility(View.VISIBLE);
-        } else if (status.equals("1")) {
-            TVPoin.setVisibility(View.VISIBLE);
-            TVJumlahFoto.setVisibility(View.VISIBLE);
-        } else if (status.equals("2")) {
-            TVPoin.setVisibility(View.VISIBLE);
-            TVJumlahFoto.setVisibility(View.VISIBLE);
-        } else {
-            TVPoin.setVisibility(View.GONE);
-            TVJumlahFoto.setVisibility(View.GONE);
         }
 
         CountLike(idlisting);
@@ -2494,103 +1123,6 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                 startActivity(update);
             }
         });
-        tambahagen.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                fetchDataFromApi();
-            }
-        });
-        tambahcoagen.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                fetchDataFromApiCo();
-            }
-        });
-        BtnApproveAdmin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (lytambahagen.getVisibility() == View.VISIBLE) {
-                    String input = tambahagen.getText().toString();
-                    if (input.isEmpty()) {
-                        Dialog customDialog = new Dialog(DetailListingActivity.this);
-                        customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                        customDialog.setContentView(R.layout.custom_dialog_eror_input);
-
-                        if (customDialog.getWindow() != null) {
-                            customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-                        }
-
-                        Button ok = customDialog.findViewById(R.id.BtnOkErorInput);
-                        TextView message = customDialog.findViewById(R.id.TVDialogErorInput);
-                        ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
-
-                        message.setText("Harap tambahkan agen terlebih dahulu");
-
-                        ok.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                customDialog.dismiss();
-                            }
-                        });
-
-                        Glide.with(DetailListingActivity.this)
-                                .load(R.drawable.alert) // You can also use a local resource like R.drawable.your_gif_resource
-                                .transition(DrawableTransitionOptions.withCrossFade())
-                                .into(gifImageView);
-
-                        customDialog.show();
-                    } else {
-                        approveadmin();
-                    }
-                } else {
-                    approveadmin();
-                }
-            }
-        });
-        BtnApproveManager.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (lytambahagen.getVisibility() == View.VISIBLE) {
-                    String input = tambahagen.getText().toString();
-                    if (input.isEmpty()) {
-                        Dialog customDialog = new Dialog(DetailListingActivity.this);
-                        customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                        customDialog.setContentView(R.layout.custom_dialog_eror_input);
-
-                        if (customDialog.getWindow() != null) {
-                            customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-                        }
-
-                        Button ok = customDialog.findViewById(R.id.BtnOkErorInput);
-                        TextView message = customDialog.findViewById(R.id.TVDialogErorInput);
-                        ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
-
-                        message.setText("Harap tambahkan agen terlebih dahulu");
-
-                        ok.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                customDialog.dismiss();
-                            }
-                        });
-
-                        Glide.with(DetailListingActivity.this)
-                                .load(R.drawable.alert) // You can also use a local resource like R.drawable.your_gif_resource
-                                .transition(DrawableTransitionOptions.withCrossFade())
-                                .into(gifImageView);
-
-                        customDialog.show();
-                    } else {
-                        approvemanager();
-                    }
-                } else {
-                    approvemanager();
-                }
-            }
-        });
-        BtnRejectedAdmin.setOnClickListener(v -> ShowRejected());
-        BtnRejectedManager.setOnClickListener(v -> ShowRejected());
-        BtnAjukanUlang.setOnClickListener(v -> ajukanulang());
         BtnLihatTemplate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -2880,6 +1412,12 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                 SimpanPdf(intentIdListing);
             }
         });
+        BtnTemplateDouble.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                TemplateDouble();
+            }
+        });
         BtnDataDouble.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -2915,725 +1453,1348 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
             for (String img : intentImages) {
                 if (!img.equals("0")) {
                     CountImage++;
-                    TVJumlahFoto.setText("Foto = " + CountImage);
                 }
             }
 
-            if (intentPriority.equals("exclusive") && !intentPjp.isEmpty() && intentBanner.equals("Ya")) {
-                if (intentIsSelfie.equals("1") && intentIsLokasi.equals("1")) {
-                    if (intentMarketable.equals("1") && intentStatusHarga.equals("1")) {
-                        if (intentIdAgenCo.equals("0")) {
-                            if (CountImage >= 8) {
-                                FinalPoin = 120;
-                                TVPoin.setText(String.valueOf(FinalPoin));
+            if (isDatePassed(intentTglInput)) {
+                if (intentPriority.equals("exclusive") && !intentPjp.isEmpty() && intentBanner.equals("Ya")) {
+                    if (intentIsSelfie.equals("1") && intentIsLokasi.equals("1")) {
+                        if (intentMarketable.equals("1") && intentStatusHarga.equals("1")) {
+                            if (intentIdAgenCo.equals("0")) {
+                                if (CountImage >= 8) {
+                                    FinalPoin = 120;
+                                    TVPoin.setText(String.valueOf(FinalPoin));
+                                } else {
+                                    FinalPoin = 50;
+                                    TVPoin.setText(String.valueOf(FinalPoin));
+                                }
+                            } else if (intentIdAgenCo.equals(intentIdAgen)) {
+                                if (CountImage >= 8) {
+                                    FinalPoin = 120;
+                                    TVPoin.setText(String.valueOf(FinalPoin));
+                                } else {
+                                    FinalPoin = 50;
+                                    TVPoin.setText(String.valueOf(FinalPoin));
+                                }
                             } else {
-                                FinalPoin = 50;
-                                TVPoin.setText(String.valueOf(FinalPoin));
-                            }
-                        } else if (intentIdAgenCo.equals(intentIdAgen)) {
-                            if (CountImage >= 8) {
-                                FinalPoin = 120;
-                                TVPoin.setText(String.valueOf(FinalPoin));
-                            } else {
-                                FinalPoin = 50;
-                                TVPoin.setText(String.valueOf(FinalPoin));
+                                if (CountImage >= 8) {
+                                    FinalPoin = 120 / 2;
+                                    TVPoin.setText(String.valueOf(FinalPoin));
+                                } else {
+                                    FinalPoin = 50 / 2;
+                                    TVPoin.setText(String.valueOf(FinalPoin));
+                                }
                             }
                         } else {
-                            if (CountImage >= 8) {
+                            if (intentIdAgenCo.equals("0")) {
+                                if (CountImage >= 8) {
+                                    FinalPoin = 100;
+                                    TVPoin.setText(String.valueOf(FinalPoin));
+                                } else {
+                                    FinalPoin = 50;
+                                    TVPoin.setText(String.valueOf(FinalPoin));
+                                }
+                            } else if (intentIdAgenCo.equals(intentIdAgen)) {
+                                if (CountImage >= 8) {
+                                    FinalPoin = 100;
+                                    TVPoin.setText(String.valueOf(FinalPoin));
+                                } else {
+                                    FinalPoin = 50;
+                                    TVPoin.setText(String.valueOf(FinalPoin));
+                                }
+                            } else {
+                                if (CountImage >= 8) {
+                                    FinalPoin = 100 / 2;
+                                    TVPoin.setText(String.valueOf(FinalPoin));
+                                } else {
+                                    FinalPoin = 50 / 2;
+                                    TVPoin.setText(String.valueOf(FinalPoin));
+                                }
+                            }
+                        }
+                    } else {
+                        if (intentIdAgenCo.equals("0")) {
+                            FinalPoin = 50;
+                            TVPoin.setText(String.valueOf(FinalPoin));
+                        } else if (intentIdAgenCo.equals(intentIdAgen)) {
+                            FinalPoin = 50;
+                            TVPoin.setText(String.valueOf(FinalPoin));
+                        } else {
+                            FinalPoin = 50 / 2;
+                            TVPoin.setText(String.valueOf(FinalPoin));
+                        }
+                    }
+                } else if (intentPriority.equals("exclusive") && !intentPjp.isEmpty() && intentBanner.equals("Tidak")) {
+                    if (intentIsSelfie.equals("1") && intentIsLokasi.equals("1")) {
+                        if (intentMarketable.equals("1") && intentStatusHarga.equals("1")) {
+                            if (intentIdAgenCo.equals("0")) {
+                                if (CountImage >= 8) {
+                                    FinalPoin = 100;
+                                    TVPoin.setText(String.valueOf(FinalPoin));
+                                } else {
+                                    FinalPoin = 40;
+                                    TVPoin.setText(String.valueOf(FinalPoin));
+                                }
+                            } else if (intentIdAgenCo.equals(intentIdAgen)) {
+                                if (CountImage >= 8) {
+                                    FinalPoin = 100;
+                                    TVPoin.setText(String.valueOf(FinalPoin));
+                                } else {
+                                    FinalPoin = 40;
+                                    TVPoin.setText(String.valueOf(FinalPoin));
+                                }
+                            } else {
+                                if (CountImage >= 8) {
+                                    FinalPoin = 100 / 2;
+                                    TVPoin.setText(String.valueOf(FinalPoin));
+                                } else {
+                                    FinalPoin = 40 / 2;
+                                    TVPoin.setText(String.valueOf(FinalPoin));
+                                }
+                            }
+                        } else {
+                            if (intentIdAgenCo.equals("0")) {
+                                if (CountImage >= 8) {
+                                    FinalPoin = 80;
+                                    TVPoin.setText(String.valueOf(FinalPoin));
+                                } else {
+                                    FinalPoin = 40;
+                                    TVPoin.setText(String.valueOf(FinalPoin));
+                                }
+                            } else if (intentIdAgenCo.equals(intentIdAgen)) {
+                                if (CountImage >= 8) {
+                                    FinalPoin = 80;
+                                    TVPoin.setText(String.valueOf(FinalPoin));
+                                } else {
+                                    FinalPoin = 40;
+                                    TVPoin.setText(String.valueOf(FinalPoin));
+                                }
+                            } else {
+                                if (CountImage >= 8) {
+                                    FinalPoin = 80 / 2;
+                                    TVPoin.setText(String.valueOf(FinalPoin));
+                                } else {
+                                    FinalPoin = 40 / 2;
+                                    TVPoin.setText(String.valueOf(FinalPoin));
+                                }
+                            }
+                        }
+                    } else {
+                        if (intentIdAgenCo.equals("0")) {
+                            FinalPoin = 40;
+                            TVPoin.setText(String.valueOf(FinalPoin));
+                        } else if (intentIdAgenCo.equals(intentIdAgen)) {
+                            FinalPoin = 40;
+                            TVPoin.setText(String.valueOf(FinalPoin));
+                        } else {
+                            FinalPoin = 40 / 2;
+                            TVPoin.setText(String.valueOf(FinalPoin));
+                        }
+                    }
+                } else if (intentPriority.equals("open") && !intentPjp.isEmpty() && intentBanner.equals("Ya")) {
+                    if (intentIsSelfie.equals("1") && intentIsLokasi.equals("1")) {
+                        if (intentMarketable.equals("1") && intentStatusHarga.equals("1")) {
+                            if (intentIdAgenCo.equals("0")) {
+                                if (CountImage >= 8) {
+                                    FinalPoin = 70;
+                                    TVPoin.setText(String.valueOf(FinalPoin));
+                                } else {
+                                    FinalPoin = 30;
+                                    TVPoin.setText(String.valueOf(FinalPoin));
+                                }
+                            } else if (intentIdAgenCo.equals(intentIdAgen)) {
+                                if (CountImage >= 8) {
+                                    FinalPoin = 70;
+                                    TVPoin.setText(String.valueOf(FinalPoin));
+                                } else {
+                                    FinalPoin = 30;
+                                    TVPoin.setText(String.valueOf(FinalPoin));
+                                }
+                            } else {
+                                if (CountImage >= 8) {
+                                    FinalPoin = 70 / 2;
+                                    TVPoin.setText(String.valueOf(FinalPoin));
+                                } else {
+                                    FinalPoin = 30 / 2;
+                                    TVPoin.setText(String.valueOf(FinalPoin));
+                                }
+                            }
+                        } else {
+                            if (intentIdAgenCo.equals("0")) {
+                                if (CountImage >= 8) {
+                                    FinalPoin = 60;
+                                    TVPoin.setText(String.valueOf(FinalPoin));
+                                } else {
+                                    FinalPoin = 30;
+                                    TVPoin.setText(String.valueOf(FinalPoin));
+                                }
+                            } else if (intentIdAgenCo.equals(intentIdAgen)) {
+                                if (CountImage >= 8) {
+                                    FinalPoin = 60;
+                                    TVPoin.setText(String.valueOf(FinalPoin));
+                                } else {
+                                    FinalPoin = 30;
+                                    TVPoin.setText(String.valueOf(FinalPoin));
+                                }
+                            } else {
+                                if (CountImage >= 8) {
+                                    FinalPoin = 60 / 2;
+                                    TVPoin.setText(String.valueOf(FinalPoin));
+                                } else {
+                                    FinalPoin = 30 / 2;
+                                    TVPoin.setText(String.valueOf(FinalPoin));
+                                }
+                            }
+                        }
+                    } else {
+                        if (intentIdAgenCo.equals("0")) {
+                            FinalPoin = 30;
+                            TVPoin.setText(String.valueOf(FinalPoin));
+                        } else if (intentIdAgenCo.equals(intentIdAgen)) {
+                            FinalPoin = 30;
+                            TVPoin.setText(String.valueOf(FinalPoin));
+                        } else {
+                            FinalPoin = 30 / 2;
+                            TVPoin.setText(String.valueOf(FinalPoin));
+                        }
+                    }
+                } else if (intentPriority.equals("open") && !intentPjp.isEmpty() && intentBanner.equals("Tidak")) {
+                    if (intentIsSelfie.equals("1") && intentIsLokasi.equals("1")) {
+                        if (intentMarketable.equals("1") && intentStatusHarga.equals("1")) {
+                            if (intentIdAgenCo.equals("0")) {
+                                if (CountImage >= 8) {
+                                    FinalPoin = 60;
+                                    TVPoin.setText(String.valueOf(FinalPoin));
+                                } else {
+                                    FinalPoin = 20;
+                                    TVPoin.setText(String.valueOf(FinalPoin));
+                                }
+                            } else if (intentIdAgenCo.equals(intentIdAgen)) {
+                                if (CountImage >= 8) {
+                                    FinalPoin = 60;
+                                    TVPoin.setText(String.valueOf(FinalPoin));
+                                } else {
+                                    FinalPoin = 20;
+                                    TVPoin.setText(String.valueOf(FinalPoin));
+                                }
+                            } else {
+                                if (CountImage >= 8) {
+                                    FinalPoin = 60 / 2;
+                                    TVPoin.setText(String.valueOf(FinalPoin));
+                                } else {
+                                    FinalPoin = 20 / 2;
+                                    TVPoin.setText(String.valueOf(FinalPoin));
+                                }
+                            }
+                        } else {
+                            if (intentIdAgenCo.equals("0")) {
+                                if (CountImage >= 8) {
+                                    FinalPoin = 40;
+                                    TVPoin.setText(String.valueOf(FinalPoin));
+                                } else {
+                                    FinalPoin = 20;
+                                    TVPoin.setText(String.valueOf(FinalPoin));
+                                }
+                            } else if (intentIdAgenCo.equals(intentIdAgen)) {
+                                if (CountImage >= 8) {
+                                    FinalPoin = 40;
+                                    TVPoin.setText(String.valueOf(FinalPoin));
+                                } else {
+                                    FinalPoin = 20;
+                                    TVPoin.setText(String.valueOf(FinalPoin));
+                                }
+                            } else {
+                                if (CountImage >= 8) {
+                                    FinalPoin = 40 / 2;
+                                    TVPoin.setText(String.valueOf(FinalPoin));
+                                } else {
+                                    FinalPoin = 20 / 2;
+                                    TVPoin.setText(String.valueOf(FinalPoin));
+                                }
+                            }
+                        }
+                    } else {
+                        if (intentIdAgenCo.equals("0")) {
+                            FinalPoin = 20;
+                            TVPoin.setText(String.valueOf(FinalPoin));
+                        } else if (intentIdAgenCo.equals(intentIdAgen)) {
+                            FinalPoin = 20;
+                            TVPoin.setText(String.valueOf(FinalPoin));
+                        } else {
+                            FinalPoin = 20 / 2;
+                            TVPoin.setText(String.valueOf(FinalPoin));
+                        }
+                    }
+                } else if (intentPriority.equals("open") && intentPjp.isEmpty() && intentBanner.equals("Ya")) {
+                    if (intentIsSelfie.equals("1") && intentIsLokasi.equals("1")) {
+                        if (intentMarketable.equals("1") && intentStatusHarga.equals("1")) {
+                            if (intentIdAgenCo.equals("0")) {
+                                if (CountImage >= 8) {
+                                    FinalPoin = 40;
+                                    TVPoin.setText(String.valueOf(FinalPoin));
+                                } else {
+                                    FinalPoin = 10;
+                                    TVPoin.setText(String.valueOf(FinalPoin));
+                                }
+                            } else if (intentIdAgenCo.equals(intentIdAgen)) {
+                                if (CountImage >= 8) {
+                                    FinalPoin = 40;
+                                    TVPoin.setText(String.valueOf(FinalPoin));
+                                } else {
+                                    FinalPoin = 10;
+                                    TVPoin.setText(String.valueOf(FinalPoin));
+                                }
+                            } else {
+                                if (CountImage >= 8) {
+                                    FinalPoin = 40 / 2;
+                                    TVPoin.setText(String.valueOf(FinalPoin));
+                                } else {
+                                    FinalPoin = 10 / 2;
+                                    TVPoin.setText(String.valueOf(FinalPoin));
+                                }
+                            }
+                        } else {
+                            if (intentIdAgenCo.equals("0")) {
+                                if (CountImage >= 8) {
+                                    FinalPoin = 20;
+                                    TVPoin.setText(String.valueOf(FinalPoin));
+                                } else {
+                                    FinalPoin = 10;
+                                    TVPoin.setText(String.valueOf(FinalPoin));
+                                }
+                            } else if (intentIdAgenCo.equals(intentIdAgen)) {
+                                if (CountImage >= 8) {
+                                    FinalPoin = 20;
+                                    TVPoin.setText(String.valueOf(FinalPoin));
+                                } else {
+                                    FinalPoin = 10;
+                                    TVPoin.setText(String.valueOf(FinalPoin));
+                                }
+                            } else {
+                                if (CountImage >= 8) {
+                                    FinalPoin = 20 / 2;
+                                    TVPoin.setText(String.valueOf(FinalPoin));
+                                } else {
+                                    FinalPoin = 10 / 2;
+                                    TVPoin.setText(String.valueOf(FinalPoin));
+                                }
+                            }
+                        }
+                    } else {
+                        if (intentIdAgenCo.equals("0")) {
+                            FinalPoin = 10;
+                            TVPoin.setText(String.valueOf(FinalPoin));
+                        } else if (intentIdAgenCo.equals(intentIdAgen)) {
+                            FinalPoin = 10;
+                            TVPoin.setText(String.valueOf(FinalPoin));
+                        } else {
+                            FinalPoin = 10 / 2;
+                            TVPoin.setText(String.valueOf(FinalPoin));
+                        }
+                    }
+                } else if (intentPriority.equals("open") && intentPjp.isEmpty() && intentBanner.equals("Tidak")) {
+                    if (intentIsSelfie.equals("1") && intentIsLokasi.equals("1")) {
+                        if (intentMarketable.equals("1") && intentStatusHarga.equals("1")) {
+                            if (intentIdAgenCo.equals("0")) {
+                                if (CountImage >= 8) {
+                                    FinalPoin = 30;
+                                    TVPoin.setText(String.valueOf(FinalPoin));
+                                } else {
+                                    FinalPoin = 10;
+                                    TVPoin.setText(String.valueOf(FinalPoin));
+                                }
+                            } else if (intentIdAgenCo.equals(intentIdAgen)) {
+                                if (CountImage >= 8) {
+                                    FinalPoin = 30;
+                                    TVPoin.setText(String.valueOf(FinalPoin));
+                                } else {
+                                    FinalPoin = 10;
+                                    TVPoin.setText(String.valueOf(FinalPoin));
+                                }
+                            } else {
+                                if (CountImage >= 8) {
+                                    FinalPoin = 30 / 2;
+                                    TVPoin.setText(String.valueOf(FinalPoin));
+                                } else {
+                                    FinalPoin = 10 / 2;
+                                    TVPoin.setText(String.valueOf(FinalPoin));
+                                }
+                            }
+                        } else {
+                            if (intentIdAgenCo.equals("0")) {
+                                if (CountImage >= 8) {
+                                    FinalPoin = 20;
+                                    TVPoin.setText(String.valueOf(FinalPoin));
+                                } else {
+                                    FinalPoin = 10;
+                                    TVPoin.setText(String.valueOf(FinalPoin));
+                                }
+                            } else if (intentIdAgenCo.equals(intentIdAgen)) {
+                                if (CountImage >= 8) {
+                                    FinalPoin = 20;
+                                    TVPoin.setText(String.valueOf(FinalPoin));
+                                } else {
+                                    FinalPoin = 10;
+                                    TVPoin.setText(String.valueOf(FinalPoin));
+                                }
+                            } else {
+                                if (CountImage >= 8) {
+                                    FinalPoin = 20 / 2;
+                                    TVPoin.setText(String.valueOf(FinalPoin));
+                                } else {
+                                    FinalPoin = 10 / 2;
+                                    TVPoin.setText(String.valueOf(FinalPoin));
+                                }
+                            }
+                        }
+                    } else {
+                        if (intentIdAgenCo.equals("0")) {
+                            FinalPoin = 10;
+                            TVPoin.setText(String.valueOf(FinalPoin));
+                        } else if (intentIdAgenCo.equals(intentIdAgen)) {
+                            FinalPoin = 10;
+                            TVPoin.setText(String.valueOf(FinalPoin));
+                        } else {
+                            FinalPoin = 10 / 2;
+                            TVPoin.setText(String.valueOf(FinalPoin));
+                        }
+                    }
+                }
+            } else {
+                if (intentPriority.equals("exclusive") && !intentPjp.isEmpty() && intentBanner.equals("Ya")) {
+                    if (intentIsSelfie.equals("1") && intentIsLokasi.equals("1")) {
+                        if (intentMarketable.equals("1") && intentStatusHarga.equals("1")) {
+                            if (intentIdAgenCo.equals("0")) {
+                                FinalPoin = 120;
+                                TVPoin.setText(String.valueOf(FinalPoin));
+                            } else if (intentIdAgenCo.equals(intentIdAgen)) {
+                                FinalPoin = 120;
+                                TVPoin.setText(String.valueOf(FinalPoin));
+                            } else {
                                 FinalPoin = 120 / 2;
                                 TVPoin.setText(String.valueOf(FinalPoin));
+                            }
+                        } else {
+                            if (intentIdAgenCo.equals("0")) {
+                                FinalPoin = 100;
+                                TVPoin.setText(String.valueOf(FinalPoin));
+                            } else if (intentIdAgenCo.equals(intentIdAgen)) {
+                                FinalPoin = 100;
+                                TVPoin.setText(String.valueOf(FinalPoin));
                             } else {
-                                FinalPoin = 50 / 2;
+                                FinalPoin = 100 / 2;
                                 TVPoin.setText(String.valueOf(FinalPoin));
                             }
                         }
-                        Poin = 50;
-                        CBMarketable.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                            @Override
-                            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                                updatepoin1();
-                            }
-                        });
-                        CBHarga.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                            @Override
-                            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                                updatepoin1();
-                            }
-                        });
                     } else {
                         if (intentIdAgenCo.equals("0")) {
-                            if (CountImage >= 8) {
-                                FinalPoin = 100;
-                                TVPoin.setText(String.valueOf(FinalPoin));
-                            } else {
-                                FinalPoin = 50;
-                                TVPoin.setText(String.valueOf(FinalPoin));
-                            }
+                            FinalPoin = 50;
+                            TVPoin.setText(String.valueOf(FinalPoin));
                         } else if (intentIdAgenCo.equals(intentIdAgen)) {
-                            if (CountImage >= 8) {
+                            FinalPoin = 50;
+                            TVPoin.setText(String.valueOf(FinalPoin));
+                        } else {
+                            FinalPoin = 50 / 2;
+                            TVPoin.setText(String.valueOf(FinalPoin));
+                        }
+                    }
+                } else if (intentPriority.equals("exclusive") && !intentPjp.isEmpty() && intentBanner.equals("Tidak")) {
+                    if (intentIsSelfie.equals("1") && intentIsLokasi.equals("1")) {
+                        if (intentMarketable.equals("1") && intentStatusHarga.equals("1")) {
+                            if (intentIdAgenCo.equals("0")) {
+                                FinalPoin = 100;
+                                TVPoin.setText(String.valueOf(FinalPoin));
+                            } else if (intentIdAgenCo.equals(intentIdAgen)) {
                                 FinalPoin = 100;
                                 TVPoin.setText(String.valueOf(FinalPoin));
                             } else {
-                                FinalPoin = 50;
+                                FinalPoin = 100 / 2;
                                 TVPoin.setText(String.valueOf(FinalPoin));
                             }
                         } else {
-                            if (CountImage >= 8) {
-                                FinalPoin = 100 / 2;
+                            if (intentIdAgenCo.equals("0")) {
+                                FinalPoin = 80;
                                 TVPoin.setText(String.valueOf(FinalPoin));
-                            } else {
-                                FinalPoin = 50 / 2;
-                                TVPoin.setText(String.valueOf(FinalPoin));
-                            }
-                        }
-                        Poin = 50;
-                        CBMarketable.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                            @Override
-                            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                                updatepoin1();
-                            }
-                        });
-                        CBHarga.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                            @Override
-                            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                                updatepoin1();
-                            }
-                        });
-                    }
-                } else {
-                    if (intentIdAgenCo.equals("0")) {
-                        FinalPoin = 50;
-                        TVPoin.setText(String.valueOf(FinalPoin));
-                    } else if (intentIdAgenCo.equals(intentIdAgen)) {
-                        FinalPoin = 50;
-                        TVPoin.setText(String.valueOf(FinalPoin));
-                    } else {
-                        FinalPoin = 50 / 2;
-                        TVPoin.setText(String.valueOf(FinalPoin));
-                    }
-                    Poin = 50;
-                    CBSelfie.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                        @Override
-                        public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                            updatepoint1();
-                        }
-                    });
-                    CBLokasi.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                        @Override
-                        public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                            updatepoint1();
-                        }
-                    });
-                    CBMarketable.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                        @Override
-                        public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                            updatepoint1();
-                        }
-                    });
-                    CBHarga.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                        @Override
-                        public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                            updatepoint1();
-                        }
-                    });
-                }
-            } else if (intentPriority.equals("exclusive") && !intentPjp.isEmpty() && intentBanner.equals("Tidak")) {
-                if (intentIsSelfie.equals("1") && intentIsLokasi.equals("1")) {
-                    if (intentMarketable.equals("1") && intentStatusHarga.equals("1")) {
-                        if (intentIdAgenCo.equals("0")) {
-                            if (CountImage >= 8) {
-                                FinalPoin = 100;
-                                TVPoin.setText(String.valueOf(FinalPoin));
-                            } else {
-                                FinalPoin = 40;
-                                TVPoin.setText(String.valueOf(FinalPoin));
-                            }
-                        } else if (intentIdAgenCo.equals(intentIdAgen)) {
-                            if (CountImage >= 8) {
-                                FinalPoin = 100;
-                                TVPoin.setText(String.valueOf(FinalPoin));
-                            } else {
-                                FinalPoin = 40;
-                                TVPoin.setText(String.valueOf(FinalPoin));
-                            }
-                        } else {
-                            if (CountImage >= 8) {
-                                FinalPoin = 100 / 2;
-                                TVPoin.setText(String.valueOf(FinalPoin));
-                            } else {
-                                FinalPoin = 40 / 2;
-                                TVPoin.setText(String.valueOf(FinalPoin));
-                            }
-                        }
-                        Poin = 40;
-                        CBMarketable.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                            @Override
-                            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                                updatepoin2();
-                            }
-                        });
-                        CBHarga.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                            @Override
-                            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                                updatepoin2();
-                            }
-                        });
-                    } else {
-                        if (intentIdAgenCo.equals("0")) {
-                            if (CountImage >= 8) {
+                            } else if (intentIdAgenCo.equals(intentIdAgen)) {
                                 FinalPoin = 80;
                                 TVPoin.setText(String.valueOf(FinalPoin));
                             } else {
-                                FinalPoin = 40;
-                                TVPoin.setText(String.valueOf(FinalPoin));
-                            }
-                        } else if (intentIdAgenCo.equals(intentIdAgen)) {
-                            if (CountImage >= 8) {
-                                FinalPoin = 80;
-                                TVPoin.setText(String.valueOf(FinalPoin));
-                            } else {
-                                FinalPoin = 40;
-                                TVPoin.setText(String.valueOf(FinalPoin));
-                            }
-                        } else {
-                            if (CountImage >= 8) {
                                 FinalPoin = 80 / 2;
                                 TVPoin.setText(String.valueOf(FinalPoin));
-                            } else {
-                                FinalPoin = 40 / 2;
-                                TVPoin.setText(String.valueOf(FinalPoin));
                             }
                         }
-                        Poin = 40;
-                        CBMarketable.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                            @Override
-                            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                                updatepoin2();
-                            }
-                        });
-                        CBHarga.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                            @Override
-                            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                                updatepoin2();
-                            }
-                        });
-                    }
-                } else {
-                    if (intentIdAgenCo.equals("0")) {
-                        FinalPoin = 40;
-                        TVPoin.setText(String.valueOf(FinalPoin));
-                    } else if (intentIdAgenCo.equals(intentIdAgen)) {
-                        FinalPoin = 40;
-                        TVPoin.setText(String.valueOf(FinalPoin));
                     } else {
-                        FinalPoin = 40 / 2;
-                        TVPoin.setText(String.valueOf(FinalPoin));
-                    }
-                    Poin = 40;
-                    CBSelfie.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                        @Override
-                        public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                            updatepoint2();
-                        }
-                    });
-                    CBLokasi.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                        @Override
-                        public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                            updatepoint2();
-                        }
-                    });
-                    CBMarketable.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                        @Override
-                        public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                            updatepoint2();
-                        }
-                    });
-                    CBHarga.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                        @Override
-                        public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                            updatepoint2();
-                        }
-                    });
-                }
-            } else if (intentPriority.equals("open") && !intentPjp.isEmpty() && intentBanner.equals("Ya")) {
-                if (intentIsSelfie.equals("1") && intentIsLokasi.equals("1")) {
-                    if (intentMarketable.equals("1") && intentStatusHarga.equals("1")) {
                         if (intentIdAgenCo.equals("0")) {
-                            if (CountImage >= 8) {
-                                FinalPoin = 70;
-                                TVPoin.setText(String.valueOf(FinalPoin));
-                            } else {
-                                FinalPoin = 30;
-                                TVPoin.setText(String.valueOf(FinalPoin));
-                            }
+                            FinalPoin = 40;
+                            TVPoin.setText(String.valueOf(FinalPoin));
                         } else if (intentIdAgenCo.equals(intentIdAgen)) {
-                            if (CountImage >= 8) {
+                            FinalPoin = 40;
+                            TVPoin.setText(String.valueOf(FinalPoin));
+                        } else {
+                            FinalPoin = 40 / 2;
+                            TVPoin.setText(String.valueOf(FinalPoin));
+                        }
+                    }
+                } else if (intentPriority.equals("open") && !intentPjp.isEmpty() && intentBanner.equals("Ya")) {
+                    if (intentIsSelfie.equals("1") && intentIsLokasi.equals("1")) {
+                        if (intentMarketable.equals("1") && intentStatusHarga.equals("1")) {
+                            if (intentIdAgenCo.equals("0")) {
+                                FinalPoin = 70;
+                                TVPoin.setText(String.valueOf(FinalPoin));
+                            } else if (intentIdAgenCo.equals(intentIdAgen)) {
                                 FinalPoin = 70;
                                 TVPoin.setText(String.valueOf(FinalPoin));
                             } else {
-                                FinalPoin = 30;
-                                TVPoin.setText(String.valueOf(FinalPoin));
-                            }
-                        } else {
-                            if (CountImage >= 8) {
                                 FinalPoin = 70 / 2;
                                 TVPoin.setText(String.valueOf(FinalPoin));
-                            } else {
-                                FinalPoin = 30 / 2;
-                                TVPoin.setText(String.valueOf(FinalPoin));
-                            }
-                        }
-                        Poin = 30;
-                        CBMarketable.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                            @Override
-                            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                                updatepoin3();
-                            }
-                        });
-                        CBHarga.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                            @Override
-                            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                                updatepoin3();
-                            }
-                        });
-                    } else {
-                        if (intentIdAgenCo.equals("0")) {
-                            if (CountImage >= 8) {
-                                FinalPoin = 60;
-                                TVPoin.setText(String.valueOf(FinalPoin));
-                            } else {
-                                FinalPoin = 30;
-                                TVPoin.setText(String.valueOf(FinalPoin));
-                            }
-                        } else if (intentIdAgenCo.equals(intentIdAgen)) {
-                            if (CountImage >= 8) {
-                                FinalPoin = 60;
-                                TVPoin.setText(String.valueOf(FinalPoin));
-                            } else {
-                                FinalPoin = 30;
-                                TVPoin.setText(String.valueOf(FinalPoin));
                             }
                         } else {
-                            if (CountImage >= 8) {
+                            if (intentIdAgenCo.equals("0")) {
+                                FinalPoin = 60;
+                                TVPoin.setText(String.valueOf(FinalPoin));
+                            } else if (intentIdAgenCo.equals(intentIdAgen)) {
+                                FinalPoin = 60;
+                                TVPoin.setText(String.valueOf(FinalPoin));
+                            } else {
                                 FinalPoin = 60 / 2;
                                 TVPoin.setText(String.valueOf(FinalPoin));
-                            } else {
-                                FinalPoin = 30 / 2;
-                                TVPoin.setText(String.valueOf(FinalPoin));
                             }
                         }
-                        Poin = 30;
-                        CBMarketable.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                            @Override
-                            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                                updatepoin3();
-                            }
-                        });
-                        CBHarga.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                            @Override
-                            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                                updatepoin3();
-                            }
-                        });
-                    }
-                } else {
-                    if (intentIdAgenCo.equals("0")) {
-                        FinalPoin = 30;
-                        TVPoin.setText(String.valueOf(FinalPoin));
-                    } else if (intentIdAgenCo.equals(intentIdAgen)) {
-                        FinalPoin = 30;
-                        TVPoin.setText(String.valueOf(FinalPoin));
                     } else {
-                        FinalPoin = 30 / 2;
-                        TVPoin.setText(String.valueOf(FinalPoin));
-                    }
-                    Poin = 30;
-                    CBSelfie.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                        @Override
-                        public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                            updatepoint3();
-                        }
-                    });
-                    CBLokasi.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                        @Override
-                        public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                            updatepoint3();
-                        }
-                    });
-                    CBMarketable.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                        @Override
-                        public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                            updatepoint3();
-                        }
-                    });
-                    CBHarga.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                        @Override
-                        public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                            updatepoint3();
-                        }
-                    });
-                }
-            } else if (intentPriority.equals("open") && !intentPjp.isEmpty() && intentBanner.equals("Tidak")) {
-                if (intentIsSelfie.equals("1") && intentIsLokasi.equals("1")) {
-                    if (intentMarketable.equals("1") && intentStatusHarga.equals("1")) {
                         if (intentIdAgenCo.equals("0")) {
-                            if (CountImage >= 8) {
-                                FinalPoin = 60;
-                                TVPoin.setText(String.valueOf(FinalPoin));
-                            } else {
-                                FinalPoin = 20;
-                                TVPoin.setText(String.valueOf(FinalPoin));
-                            }
+                            FinalPoin = 30;
+                            TVPoin.setText(String.valueOf(FinalPoin));
                         } else if (intentIdAgenCo.equals(intentIdAgen)) {
-                            if (CountImage >= 8) {
+                            FinalPoin = 30;
+                            TVPoin.setText(String.valueOf(FinalPoin));
+                        } else {
+                            FinalPoin = 30 / 2;
+                            TVPoin.setText(String.valueOf(FinalPoin));
+                        }
+                    }
+                } else if (intentPriority.equals("open") && !intentPjp.isEmpty() && intentBanner.equals("Tidak")) {
+                    if (intentIsSelfie.equals("1") && intentIsLokasi.equals("1")) {
+                        if (intentMarketable.equals("1") && intentStatusHarga.equals("1")) {
+                            if (intentIdAgenCo.equals("0")) {
+                                FinalPoin = 60;
+                                TVPoin.setText(String.valueOf(FinalPoin));
+                            } else if (intentIdAgenCo.equals(intentIdAgen)) {
                                 FinalPoin = 60;
                                 TVPoin.setText(String.valueOf(FinalPoin));
                             } else {
-                                FinalPoin = 20;
-                                TVPoin.setText(String.valueOf(FinalPoin));
-                            }
-                        } else {
-                            if (CountImage >= 8) {
                                 FinalPoin = 60 / 2;
                                 TVPoin.setText(String.valueOf(FinalPoin));
-                            } else {
-                                FinalPoin = 20 / 2;
-                                TVPoin.setText(String.valueOf(FinalPoin));
-                            }
-                        }
-                        Poin = 20;
-                        CBMarketable.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                            @Override
-                            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                                updatepoin4();
-                            }
-                        });
-                        CBHarga.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                            @Override
-                            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                                updatepoin4();
-                            }
-                        });
-                    } else {
-                        if (intentIdAgenCo.equals("0")) {
-                            if (CountImage >= 8) {
-                                FinalPoin = 40;
-                                TVPoin.setText(String.valueOf(FinalPoin));
-                            } else {
-                                FinalPoin = 20;
-                                TVPoin.setText(String.valueOf(FinalPoin));
-                            }
-                        } else if (intentIdAgenCo.equals(intentIdAgen)) {
-                            if (CountImage >= 8) {
-                                FinalPoin = 40;
-                                TVPoin.setText(String.valueOf(FinalPoin));
-                            } else {
-                                FinalPoin = 20;
-                                TVPoin.setText(String.valueOf(FinalPoin));
                             }
                         } else {
-                            if (CountImage >= 8) {
+                            if (intentIdAgenCo.equals("0")) {
+                                FinalPoin = 40;
+                                TVPoin.setText(String.valueOf(FinalPoin));
+                            } else if (intentIdAgenCo.equals(intentIdAgen)) {
+                                FinalPoin = 40;
+                                TVPoin.setText(String.valueOf(FinalPoin));
+                            } else {
                                 FinalPoin = 40 / 2;
                                 TVPoin.setText(String.valueOf(FinalPoin));
-                            } else {
-                                FinalPoin = 20 / 2;
-                                TVPoin.setText(String.valueOf(FinalPoin));
                             }
                         }
-                        Poin = 20;
-                        CBMarketable.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                            @Override
-                            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                                updatepoin4();
-                            }
-                        });
-                        CBHarga.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                            @Override
-                            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                                updatepoin4();
-                            }
-                        });
-                    }
-                } else {
-                    if (intentIdAgenCo.equals("0")) {
-                        FinalPoin = 20;
-                        TVPoin.setText(String.valueOf(FinalPoin));
-                    } else if (intentIdAgenCo.equals(intentIdAgen)) {
-                        FinalPoin = 20;
-                        TVPoin.setText(String.valueOf(FinalPoin));
                     } else {
-                        FinalPoin = 20 / 2;
-                        TVPoin.setText(String.valueOf(FinalPoin));
-                    }
-                    Poin = 20;
-                    CBSelfie.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                        @Override
-                        public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                            updatepoint4();
-                        }
-                    });
-                    CBLokasi.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                        @Override
-                        public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                            updatepoint4();
-                        }
-                    });
-                    CBMarketable.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                        @Override
-                        public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                            updatepoint4();
-                        }
-                    });
-                    CBHarga.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                        @Override
-                        public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                            updatepoint4();
-                        }
-                    });
-                }
-            } else if (intentPriority.equals("open") && intentPjp.isEmpty() && intentBanner.equals("Ya")) {
-                if (intentIsSelfie.equals("1") && intentIsLokasi.equals("1")) {
-                    if (intentMarketable.equals("1") && intentStatusHarga.equals("1")) {
                         if (intentIdAgenCo.equals("0")) {
-                            if (CountImage >= 8) {
-                                FinalPoin = 40;
-                                TVPoin.setText(String.valueOf(FinalPoin));
-                            } else {
-                                FinalPoin = 10;
-                                TVPoin.setText(String.valueOf(FinalPoin));
-                            }
+                            FinalPoin = 20;
+                            TVPoin.setText(String.valueOf(FinalPoin));
                         } else if (intentIdAgenCo.equals(intentIdAgen)) {
-                            if (CountImage >= 8) {
+                            FinalPoin = 20;
+                            TVPoin.setText(String.valueOf(FinalPoin));
+                        } else {
+                            FinalPoin = 20 / 2;
+                            TVPoin.setText(String.valueOf(FinalPoin));
+                        }
+                    }
+                } else if (intentPriority.equals("open") && intentPjp.isEmpty() && intentBanner.equals("Ya")) {
+                    if (intentIsSelfie.equals("1") && intentIsLokasi.equals("1")) {
+                        if (intentMarketable.equals("1") && intentStatusHarga.equals("1")) {
+                            if (intentIdAgenCo.equals("0")) {
+                                FinalPoin = 40;
+                                TVPoin.setText(String.valueOf(FinalPoin));
+                            } else if (intentIdAgenCo.equals(intentIdAgen)) {
                                 FinalPoin = 40;
                                 TVPoin.setText(String.valueOf(FinalPoin));
                             } else {
-                                FinalPoin = 10;
-                                TVPoin.setText(String.valueOf(FinalPoin));
-                            }
-                        } else {
-                            if (CountImage >= 8) {
                                 FinalPoin = 40 / 2;
                                 TVPoin.setText(String.valueOf(FinalPoin));
-                            } else {
-                                FinalPoin = 10 / 2;
-                                TVPoin.setText(String.valueOf(FinalPoin));
-                            }
-                        }
-                        Poin = 10;
-                        CBMarketable.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                            @Override
-                            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                                updatepoin5();
-                            }
-                        });
-                        CBHarga.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                            @Override
-                            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                                updatepoin5();
-                            }
-                        });
-                    } else {
-                        if (intentIdAgenCo.equals("0")) {
-                            if (CountImage >= 8) {
-                                FinalPoin = 20;
-                                TVPoin.setText(String.valueOf(FinalPoin));
-                            } else {
-                                FinalPoin = 10;
-                                TVPoin.setText(String.valueOf(FinalPoin));
-                            }
-                        } else if (intentIdAgenCo.equals(intentIdAgen)) {
-                            if (CountImage >= 8) {
-                                FinalPoin = 20;
-                                TVPoin.setText(String.valueOf(FinalPoin));
-                            } else {
-                                FinalPoin = 10;
-                                TVPoin.setText(String.valueOf(FinalPoin));
                             }
                         } else {
-                            if (CountImage >= 8) {
-                                FinalPoin = 20 / 2;
+                            if (intentIdAgenCo.equals("0")) {
+                                FinalPoin = 20;
+                                TVPoin.setText(String.valueOf(FinalPoin));
+                            } else if (intentIdAgenCo.equals(intentIdAgen)) {
+                                FinalPoin = 20;
                                 TVPoin.setText(String.valueOf(FinalPoin));
                             } else {
-                                FinalPoin = 10 / 2;
+                                FinalPoin = 20 / 2;
                                 TVPoin.setText(String.valueOf(FinalPoin));
                             }
                         }
-                        Poin = 10;
-                        CBMarketable.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                            @Override
-                            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                                updatepoin5();
-                            }
-                        });
-                        CBHarga.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                            @Override
-                            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                                updatepoin5();
-                            }
-                        });
-                    }
-                } else {
-                    if (intentIdAgenCo.equals("0")) {
-                        FinalPoin = 10;
-                        TVPoin.setText(String.valueOf(FinalPoin));
-                    } else if (intentIdAgenCo.equals(intentIdAgen)) {
-                        FinalPoin = 10;
-                        TVPoin.setText(String.valueOf(FinalPoin));
                     } else {
-                        FinalPoin = 10 / 2;
-                        TVPoin.setText(String.valueOf(FinalPoin));
-                    }
-                    Poin = 10;
-                    CBSelfie.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                        @Override
-                        public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                            updatepoint5();
-                        }
-                    });
-                    CBLokasi.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                        @Override
-                        public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                            updatepoint5();
-                        }
-                    });
-                    CBMarketable.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                        @Override
-                        public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                            updatepoint5();
-                        }
-                    });
-                    CBHarga.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                        @Override
-                        public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                            updatepoint5();
-                        }
-                    });
-                }
-            } else if (intentPriority.equals("open") && intentPjp.isEmpty() && intentBanner.equals("Tidak")) {
-                if (intentIsSelfie.equals("1") && intentIsLokasi.equals("1")) {
-                    if (intentMarketable.equals("1") && intentStatusHarga.equals("1")) {
                         if (intentIdAgenCo.equals("0")) {
-                            if (CountImage >= 8) {
+                            FinalPoin = 10;
+                            TVPoin.setText(String.valueOf(FinalPoin));
+                        } else if (intentIdAgenCo.equals(intentIdAgen)) {
+                            FinalPoin = 10;
+                            TVPoin.setText(String.valueOf(FinalPoin));
+                        } else {
+                            FinalPoin = 10 / 2;
+                            TVPoin.setText(String.valueOf(FinalPoin));
+                        }
+                    }
+                } else if (intentPriority.equals("open") && intentPjp.isEmpty() && intentBanner.equals("Tidak")) {
+                    if (intentIsSelfie.equals("1") && intentIsLokasi.equals("1")) {
+                        if (intentMarketable.equals("1") && intentStatusHarga.equals("1")) {
+                            if (intentIdAgenCo.equals("0")) {
+                                FinalPoin = 30;
+                                TVPoin.setText(String.valueOf(FinalPoin));
+                            } else if (intentIdAgenCo.equals(intentIdAgen)) {
                                 FinalPoin = 30;
                                 TVPoin.setText(String.valueOf(FinalPoin));
                             } else {
-                                FinalPoin = 10;
-                                TVPoin.setText(String.valueOf(FinalPoin));
-                            }
-                        } else if (intentIdAgenCo.equals(intentIdAgen)) {
-                            if (CountImage >= 8) {
-                                FinalPoin = 30;
-                                TVPoin.setText(String.valueOf(FinalPoin));
-                            } else {
-                                FinalPoin = 10;
-                                TVPoin.setText(String.valueOf(FinalPoin));
-                            }
-                        } else {
-                            if (CountImage >= 8) {
                                 FinalPoin = 30 / 2;
                                 TVPoin.setText(String.valueOf(FinalPoin));
-                            } else {
-                                FinalPoin = 10 / 2;
-                                TVPoin.setText(String.valueOf(FinalPoin));
-                            }
-                        }
-                        Poin = 10;
-                        CBMarketable.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                            @Override
-                            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                                updatepoin6();
-                            }
-                        });
-                        CBHarga.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                            @Override
-                            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                                updatepoin6();
-                            }
-                        });
-                    } else {
-                        if (intentIdAgenCo.equals("0")) {
-                            if (CountImage >= 8) {
-                                FinalPoin = 20;
-                                TVPoin.setText(String.valueOf(FinalPoin));
-                            } else {
-                                FinalPoin = 10;
-                                TVPoin.setText(String.valueOf(FinalPoin));
-                            }
-                        } else if (intentIdAgenCo.equals(intentIdAgen)) {
-                            if (CountImage >= 8) {
-                                FinalPoin = 20;
-                                TVPoin.setText(String.valueOf(FinalPoin));
-                            } else {
-                                FinalPoin = 10;
-                                TVPoin.setText(String.valueOf(FinalPoin));
                             }
                         } else {
-                            if (CountImage >= 8) {
-                                FinalPoin = 20 / 2;
+                            if (intentIdAgenCo.equals("0")) {
+                                FinalPoin = 20;
+                                TVPoin.setText(String.valueOf(FinalPoin));
+                            } else if (intentIdAgenCo.equals(intentIdAgen)) {
+                                FinalPoin = 20;
                                 TVPoin.setText(String.valueOf(FinalPoin));
                             } else {
-                                FinalPoin = 10 / 2;
+                                FinalPoin = 20 / 2;
                                 TVPoin.setText(String.valueOf(FinalPoin));
                             }
                         }
-                        Poin = 10;
-                        CBMarketable.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                            @Override
-                            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                                updatepoin6();
-                            }
-                        });
-                        CBHarga.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                            @Override
-                            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                                updatepoin6();
-                            }
-                        });
-                    }
-                } else {
-                    if (intentIdAgenCo.equals("0")) {
-                        FinalPoin = 10;
-                        TVPoin.setText(String.valueOf(FinalPoin));
-                    } else if (intentIdAgenCo.equals(intentIdAgen)) {
-                        FinalPoin = 10;
-                        TVPoin.setText(String.valueOf(FinalPoin));
                     } else {
-                        FinalPoin = 10 / 2;
-                        TVPoin.setText(String.valueOf(FinalPoin));
+                        if (intentIdAgenCo.equals("0")) {
+                            FinalPoin = 10;
+                            TVPoin.setText(String.valueOf(FinalPoin));
+                        } else if (intentIdAgenCo.equals(intentIdAgen)) {
+                            FinalPoin = 10;
+                            TVPoin.setText(String.valueOf(FinalPoin));
+                        } else {
+                            FinalPoin = 10 / 2;
+                            TVPoin.setText(String.valueOf(FinalPoin));
+                        }
                     }
-                    Poin = 10;
-                    CBSelfie.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                        @Override
-                        public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                            updatepoint6();
-                        }
-                    });
-                    CBLokasi.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                        @Override
-                        public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                            updatepoint6();
-                        }
-                    });
-                    CBMarketable.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                        @Override
-                        public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                            updatepoint6();
-                        }
-                    });
-                    CBHarga.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                        @Override
-                        public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                            updatepoint6();
-                        }
-                    });
                 }
             }
-            if (intentIsRejected.equals("0")) {
-                LytRejected.setVisibility(View.GONE);
-            } else {
-                LytRejected.setVisibility(View.VISIBLE);
-                TVRejected.setText(intentKeterangan);
-            }
+
+//            if (intentPriority.equals("exclusive") && !intentPjp.isEmpty() && intentBanner.equals("Ya")) {
+//                if (intentIsSelfie.equals("1") && intentIsLokasi.equals("1")) {
+//                    if (intentMarketable.equals("1") && intentStatusHarga.equals("1")) {
+//                        if (intentIdAgenCo.equals("0")) {
+//                            if (CountImage >= 8) {
+//                                FinalPoin = 120;
+//                                TVPoin.setText(String.valueOf(FinalPoin));
+//                            } else {
+//                                FinalPoin = 50;
+//                                TVPoin.setText(String.valueOf(FinalPoin));
+//                            }
+//                        } else if (intentIdAgenCo.equals(intentIdAgen)) {
+//                            if (CountImage >= 8) {
+//                                FinalPoin = 120;
+//                                TVPoin.setText(String.valueOf(FinalPoin));
+//                            } else {
+//                                FinalPoin = 50;
+//                                TVPoin.setText(String.valueOf(FinalPoin));
+//                            }
+//                        } else {
+//                            if (CountImage >= 8) {
+//                                FinalPoin = 120 / 2;
+//                                TVPoin.setText(String.valueOf(FinalPoin));
+//                            } else {
+//                                FinalPoin = 50 / 2;
+//                                TVPoin.setText(String.valueOf(FinalPoin));
+//                            }
+//                        }
+//                        Poin = 50;
+//                        CBMarketable.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//                            @Override
+//                            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+//                                updatepoin1();
+//                            }
+//                        });
+//                        CBHarga.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//                            @Override
+//                            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+//                                updatepoin1();
+//                            }
+//                        });
+//                    } else {
+//                        if (intentIdAgenCo.equals("0")) {
+//                            if (CountImage >= 8) {
+//                                FinalPoin = 100;
+//                                TVPoin.setText(String.valueOf(FinalPoin));
+//                            } else {
+//                                FinalPoin = 50;
+//                                TVPoin.setText(String.valueOf(FinalPoin));
+//                            }
+//                        } else if (intentIdAgenCo.equals(intentIdAgen)) {
+//                            if (CountImage >= 8) {
+//                                FinalPoin = 100;
+//                                TVPoin.setText(String.valueOf(FinalPoin));
+//                            } else {
+//                                FinalPoin = 50;
+//                                TVPoin.setText(String.valueOf(FinalPoin));
+//                            }
+//                        } else {
+//                            if (CountImage >= 8) {
+//                                FinalPoin = 100 / 2;
+//                                TVPoin.setText(String.valueOf(FinalPoin));
+//                            } else {
+//                                FinalPoin = 50 / 2;
+//                                TVPoin.setText(String.valueOf(FinalPoin));
+//                            }
+//                        }
+//                        Poin = 50;
+//                        CBMarketable.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//                            @Override
+//                            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+//                                updatepoin1();
+//                            }
+//                        });
+//                        CBHarga.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//                            @Override
+//                            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+//                                updatepoin1();
+//                            }
+//                        });
+//                    }
+//                } else {
+//                    if (intentIdAgenCo.equals("0")) {
+//                        FinalPoin = 50;
+//                        TVPoin.setText(String.valueOf(FinalPoin));
+//                    } else if (intentIdAgenCo.equals(intentIdAgen)) {
+//                        FinalPoin = 50;
+//                        TVPoin.setText(String.valueOf(FinalPoin));
+//                    } else {
+//                        FinalPoin = 50 / 2;
+//                        TVPoin.setText(String.valueOf(FinalPoin));
+//                    }
+//                    Poin = 50;
+//                    CBSelfie.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//                        @Override
+//                        public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+//                            updatepoint1();
+//                        }
+//                    });
+//                    CBLokasi.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//                        @Override
+//                        public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+//                            updatepoint1();
+//                        }
+//                    });
+//                    CBMarketable.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//                        @Override
+//                        public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+//                            updatepoint1();
+//                        }
+//                    });
+//                    CBHarga.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//                        @Override
+//                        public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+//                            updatepoint1();
+//                        }
+//                    });
+//                }
+//            } else if (intentPriority.equals("exclusive") && !intentPjp.isEmpty() && intentBanner.equals("Tidak")) {
+//                if (intentIsSelfie.equals("1") && intentIsLokasi.equals("1")) {
+//                    if (intentMarketable.equals("1") && intentStatusHarga.equals("1")) {
+//                        if (intentIdAgenCo.equals("0")) {
+//                            if (CountImage >= 8) {
+//                                FinalPoin = 100;
+//                                TVPoin.setText(String.valueOf(FinalPoin));
+//                            } else {
+//                                FinalPoin = 40;
+//                                TVPoin.setText(String.valueOf(FinalPoin));
+//                            }
+//                        } else if (intentIdAgenCo.equals(intentIdAgen)) {
+//                            if (CountImage >= 8) {
+//                                FinalPoin = 100;
+//                                TVPoin.setText(String.valueOf(FinalPoin));
+//                            } else {
+//                                FinalPoin = 40;
+//                                TVPoin.setText(String.valueOf(FinalPoin));
+//                            }
+//                        } else {
+//                            if (CountImage >= 8) {
+//                                FinalPoin = 100 / 2;
+//                                TVPoin.setText(String.valueOf(FinalPoin));
+//                            } else {
+//                                FinalPoin = 40 / 2;
+//                                TVPoin.setText(String.valueOf(FinalPoin));
+//                            }
+//                        }
+//                        Poin = 40;
+//                        CBMarketable.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//                            @Override
+//                            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+//                                updatepoin2();
+//                            }
+//                        });
+//                        CBHarga.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//                            @Override
+//                            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+//                                updatepoin2();
+//                            }
+//                        });
+//                    } else {
+//                        if (intentIdAgenCo.equals("0")) {
+//                            if (CountImage >= 8) {
+//                                FinalPoin = 80;
+//                                TVPoin.setText(String.valueOf(FinalPoin));
+//                            } else {
+//                                FinalPoin = 40;
+//                                TVPoin.setText(String.valueOf(FinalPoin));
+//                            }
+//                        } else if (intentIdAgenCo.equals(intentIdAgen)) {
+//                            if (CountImage >= 8) {
+//                                FinalPoin = 80;
+//                                TVPoin.setText(String.valueOf(FinalPoin));
+//                            } else {
+//                                FinalPoin = 40;
+//                                TVPoin.setText(String.valueOf(FinalPoin));
+//                            }
+//                        } else {
+//                            if (CountImage >= 8) {
+//                                FinalPoin = 80 / 2;
+//                                TVPoin.setText(String.valueOf(FinalPoin));
+//                            } else {
+//                                FinalPoin = 40 / 2;
+//                                TVPoin.setText(String.valueOf(FinalPoin));
+//                            }
+//                        }
+//                        Poin = 40;
+//                        CBMarketable.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//                            @Override
+//                            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+//                                updatepoin2();
+//                            }
+//                        });
+//                        CBHarga.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//                            @Override
+//                            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+//                                updatepoin2();
+//                            }
+//                        });
+//                    }
+//                } else {
+//                    if (intentIdAgenCo.equals("0")) {
+//                        FinalPoin = 40;
+//                        TVPoin.setText(String.valueOf(FinalPoin));
+//                    } else if (intentIdAgenCo.equals(intentIdAgen)) {
+//                        FinalPoin = 40;
+//                        TVPoin.setText(String.valueOf(FinalPoin));
+//                    } else {
+//                        FinalPoin = 40 / 2;
+//                        TVPoin.setText(String.valueOf(FinalPoin));
+//                    }
+//                    Poin = 40;
+//                    CBSelfie.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//                        @Override
+//                        public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+//                            updatepoint2();
+//                        }
+//                    });
+//                    CBLokasi.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//                        @Override
+//                        public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+//                            updatepoint2();
+//                        }
+//                    });
+//                    CBMarketable.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//                        @Override
+//                        public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+//                            updatepoint2();
+//                        }
+//                    });
+//                    CBHarga.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//                        @Override
+//                        public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+//                            updatepoint2();
+//                        }
+//                    });
+//                }
+//            } else if (intentPriority.equals("open") && !intentPjp.isEmpty() && intentBanner.equals("Ya")) {
+//                if (intentIsSelfie.equals("1") && intentIsLokasi.equals("1")) {
+//                    if (intentMarketable.equals("1") && intentStatusHarga.equals("1")) {
+//                        if (intentIdAgenCo.equals("0")) {
+//                            if (CountImage >= 8) {
+//                                FinalPoin = 70;
+//                                TVPoin.setText(String.valueOf(FinalPoin));
+//                            } else {
+//                                FinalPoin = 30;
+//                                TVPoin.setText(String.valueOf(FinalPoin));
+//                            }
+//                        } else if (intentIdAgenCo.equals(intentIdAgen)) {
+//                            if (CountImage >= 8) {
+//                                FinalPoin = 70;
+//                                TVPoin.setText(String.valueOf(FinalPoin));
+//                            } else {
+//                                FinalPoin = 30;
+//                                TVPoin.setText(String.valueOf(FinalPoin));
+//                            }
+//                        } else {
+//                            if (CountImage >= 8) {
+//                                FinalPoin = 70 / 2;
+//                                TVPoin.setText(String.valueOf(FinalPoin));
+//                            } else {
+//                                FinalPoin = 30 / 2;
+//                                TVPoin.setText(String.valueOf(FinalPoin));
+//                            }
+//                        }
+//                        Poin = 30;
+//                        CBMarketable.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//                            @Override
+//                            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+//                                updatepoin3();
+//                            }
+//                        });
+//                        CBHarga.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//                            @Override
+//                            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+//                                updatepoin3();
+//                            }
+//                        });
+//                    } else {
+//                        if (intentIdAgenCo.equals("0")) {
+//                            if (CountImage >= 8) {
+//                                FinalPoin = 60;
+//                                TVPoin.setText(String.valueOf(FinalPoin));
+//                            } else {
+//                                FinalPoin = 30;
+//                                TVPoin.setText(String.valueOf(FinalPoin));
+//                            }
+//                        } else if (intentIdAgenCo.equals(intentIdAgen)) {
+//                            if (CountImage >= 8) {
+//                                FinalPoin = 60;
+//                                TVPoin.setText(String.valueOf(FinalPoin));
+//                            } else {
+//                                FinalPoin = 30;
+//                                TVPoin.setText(String.valueOf(FinalPoin));
+//                            }
+//                        } else {
+//                            if (CountImage >= 8) {
+//                                FinalPoin = 60 / 2;
+//                                TVPoin.setText(String.valueOf(FinalPoin));
+//                            } else {
+//                                FinalPoin = 30 / 2;
+//                                TVPoin.setText(String.valueOf(FinalPoin));
+//                            }
+//                        }
+//                        Poin = 30;
+//                        CBMarketable.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//                            @Override
+//                            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+//                                updatepoin3();
+//                            }
+//                        });
+//                        CBHarga.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//                            @Override
+//                            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+//                                updatepoin3();
+//                            }
+//                        });
+//                    }
+//                } else {
+//                    if (intentIdAgenCo.equals("0")) {
+//                        FinalPoin = 30;
+//                        TVPoin.setText(String.valueOf(FinalPoin));
+//                    } else if (intentIdAgenCo.equals(intentIdAgen)) {
+//                        FinalPoin = 30;
+//                        TVPoin.setText(String.valueOf(FinalPoin));
+//                    } else {
+//                        FinalPoin = 30 / 2;
+//                        TVPoin.setText(String.valueOf(FinalPoin));
+//                    }
+//                    Poin = 30;
+//                    CBSelfie.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//                        @Override
+//                        public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+//                            updatepoint3();
+//                        }
+//                    });
+//                    CBLokasi.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//                        @Override
+//                        public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+//                            updatepoint3();
+//                        }
+//                    });
+//                    CBMarketable.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//                        @Override
+//                        public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+//                            updatepoint3();
+//                        }
+//                    });
+//                    CBHarga.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//                        @Override
+//                        public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+//                            updatepoint3();
+//                        }
+//                    });
+//                }
+//            } else if (intentPriority.equals("open") && !intentPjp.isEmpty() && intentBanner.equals("Tidak")) {
+//                if (intentIsSelfie.equals("1") && intentIsLokasi.equals("1")) {
+//                    if (intentMarketable.equals("1") && intentStatusHarga.equals("1")) {
+//                        if (intentIdAgenCo.equals("0")) {
+//                            if (CountImage >= 8) {
+//                                FinalPoin = 60;
+//                                TVPoin.setText(String.valueOf(FinalPoin));
+//                            } else {
+//                                FinalPoin = 20;
+//                                TVPoin.setText(String.valueOf(FinalPoin));
+//                            }
+//                        } else if (intentIdAgenCo.equals(intentIdAgen)) {
+//                            if (CountImage >= 8) {
+//                                FinalPoin = 60;
+//                                TVPoin.setText(String.valueOf(FinalPoin));
+//                            } else {
+//                                FinalPoin = 20;
+//                                TVPoin.setText(String.valueOf(FinalPoin));
+//                            }
+//                        } else {
+//                            if (CountImage >= 8) {
+//                                FinalPoin = 60 / 2;
+//                                TVPoin.setText(String.valueOf(FinalPoin));
+//                            } else {
+//                                FinalPoin = 20 / 2;
+//                                TVPoin.setText(String.valueOf(FinalPoin));
+//                            }
+//                        }
+//                        Poin = 20;
+//                        CBMarketable.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//                            @Override
+//                            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+//                                updatepoin4();
+//                            }
+//                        });
+//                        CBHarga.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//                            @Override
+//                            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+//                                updatepoin4();
+//                            }
+//                        });
+//                    } else {
+//                        if (intentIdAgenCo.equals("0")) {
+//                            if (CountImage >= 8) {
+//                                FinalPoin = 40;
+//                                TVPoin.setText(String.valueOf(FinalPoin));
+//                            } else {
+//                                FinalPoin = 20;
+//                                TVPoin.setText(String.valueOf(FinalPoin));
+//                            }
+//                        } else if (intentIdAgenCo.equals(intentIdAgen)) {
+//                            if (CountImage >= 8) {
+//                                FinalPoin = 40;
+//                                TVPoin.setText(String.valueOf(FinalPoin));
+//                            } else {
+//                                FinalPoin = 20;
+//                                TVPoin.setText(String.valueOf(FinalPoin));
+//                            }
+//                        } else {
+//                            if (CountImage >= 8) {
+//                                FinalPoin = 40 / 2;
+//                                TVPoin.setText(String.valueOf(FinalPoin));
+//                            } else {
+//                                FinalPoin = 20 / 2;
+//                                TVPoin.setText(String.valueOf(FinalPoin));
+//                            }
+//                        }
+//                        Poin = 20;
+//                        CBMarketable.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//                            @Override
+//                            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+//                                updatepoin4();
+//                            }
+//                        });
+//                        CBHarga.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//                            @Override
+//                            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+//                                updatepoin4();
+//                            }
+//                        });
+//                    }
+//                } else {
+//                    if (intentIdAgenCo.equals("0")) {
+//                        FinalPoin = 20;
+//                        TVPoin.setText(String.valueOf(FinalPoin));
+//                    } else if (intentIdAgenCo.equals(intentIdAgen)) {
+//                        FinalPoin = 20;
+//                        TVPoin.setText(String.valueOf(FinalPoin));
+//                    } else {
+//                        FinalPoin = 20 / 2;
+//                        TVPoin.setText(String.valueOf(FinalPoin));
+//                    }
+//                    Poin = 20;
+//                    CBSelfie.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//                        @Override
+//                        public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+//                            updatepoint4();
+//                        }
+//                    });
+//                    CBLokasi.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//                        @Override
+//                        public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+//                            updatepoint4();
+//                        }
+//                    });
+//                    CBMarketable.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//                        @Override
+//                        public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+//                            updatepoint4();
+//                        }
+//                    });
+//                    CBHarga.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//                        @Override
+//                        public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+//                            updatepoint4();
+//                        }
+//                    });
+//                }
+//            } else if (intentPriority.equals("open") && intentPjp.isEmpty() && intentBanner.equals("Ya")) {
+//                if (intentIsSelfie.equals("1") && intentIsLokasi.equals("1")) {
+//                    if (intentMarketable.equals("1") && intentStatusHarga.equals("1")) {
+//                        if (intentIdAgenCo.equals("0")) {
+//                            if (CountImage >= 8) {
+//                                FinalPoin = 40;
+//                                TVPoin.setText(String.valueOf(FinalPoin));
+//                            } else {
+//                                FinalPoin = 10;
+//                                TVPoin.setText(String.valueOf(FinalPoin));
+//                            }
+//                        } else if (intentIdAgenCo.equals(intentIdAgen)) {
+//                            if (CountImage >= 8) {
+//                                FinalPoin = 40;
+//                                TVPoin.setText(String.valueOf(FinalPoin));
+//                            } else {
+//                                FinalPoin = 10;
+//                                TVPoin.setText(String.valueOf(FinalPoin));
+//                            }
+//                        } else {
+//                            if (CountImage >= 8) {
+//                                FinalPoin = 40 / 2;
+//                                TVPoin.setText(String.valueOf(FinalPoin));
+//                            } else {
+//                                FinalPoin = 10 / 2;
+//                                TVPoin.setText(String.valueOf(FinalPoin));
+//                            }
+//                        }
+//                        Poin = 10;
+//                        CBMarketable.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//                            @Override
+//                            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+//                                updatepoin5();
+//                            }
+//                        });
+//                        CBHarga.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//                            @Override
+//                            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+//                                updatepoin5();
+//                            }
+//                        });
+//                    } else {
+//                        if (intentIdAgenCo.equals("0")) {
+//                            if (CountImage >= 8) {
+//                                FinalPoin = 20;
+//                                TVPoin.setText(String.valueOf(FinalPoin));
+//                            } else {
+//                                FinalPoin = 10;
+//                                TVPoin.setText(String.valueOf(FinalPoin));
+//                            }
+//                        } else if (intentIdAgenCo.equals(intentIdAgen)) {
+//                            if (CountImage >= 8) {
+//                                FinalPoin = 20;
+//                                TVPoin.setText(String.valueOf(FinalPoin));
+//                            } else {
+//                                FinalPoin = 10;
+//                                TVPoin.setText(String.valueOf(FinalPoin));
+//                            }
+//                        } else {
+//                            if (CountImage >= 8) {
+//                                FinalPoin = 20 / 2;
+//                                TVPoin.setText(String.valueOf(FinalPoin));
+//                            } else {
+//                                FinalPoin = 10 / 2;
+//                                TVPoin.setText(String.valueOf(FinalPoin));
+//                            }
+//                        }
+//                        Poin = 10;
+//                        CBMarketable.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//                            @Override
+//                            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+//                                updatepoin5();
+//                            }
+//                        });
+//                        CBHarga.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//                            @Override
+//                            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+//                                updatepoin5();
+//                            }
+//                        });
+//                    }
+//                } else {
+//                    if (intentIdAgenCo.equals("0")) {
+//                        FinalPoin = 10;
+//                        TVPoin.setText(String.valueOf(FinalPoin));
+//                    } else if (intentIdAgenCo.equals(intentIdAgen)) {
+//                        FinalPoin = 10;
+//                        TVPoin.setText(String.valueOf(FinalPoin));
+//                    } else {
+//                        FinalPoin = 10 / 2;
+//                        TVPoin.setText(String.valueOf(FinalPoin));
+//                    }
+//                    Poin = 10;
+//                    CBSelfie.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//                        @Override
+//                        public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+//                            updatepoint5();
+//                        }
+//                    });
+//                    CBLokasi.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//                        @Override
+//                        public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+//                            updatepoint5();
+//                        }
+//                    });
+//                    CBMarketable.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//                        @Override
+//                        public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+//                            updatepoint5();
+//                        }
+//                    });
+//                    CBHarga.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//                        @Override
+//                        public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+//                            updatepoint5();
+//                        }
+//                    });
+//                }
+//            } else if (intentPriority.equals("open") && intentPjp.isEmpty() && intentBanner.equals("Tidak")) {
+//                if (intentIsSelfie.equals("1") && intentIsLokasi.equals("1")) {
+//                    if (intentMarketable.equals("1") && intentStatusHarga.equals("1")) {
+//                        if (intentIdAgenCo.equals("0")) {
+//                            if (CountImage >= 8) {
+//                                FinalPoin = 30;
+//                                TVPoin.setText(String.valueOf(FinalPoin));
+//                            } else {
+//                                FinalPoin = 10;
+//                                TVPoin.setText(String.valueOf(FinalPoin));
+//                            }
+//                        } else if (intentIdAgenCo.equals(intentIdAgen)) {
+//                            if (CountImage >= 8) {
+//                                FinalPoin = 30;
+//                                TVPoin.setText(String.valueOf(FinalPoin));
+//                            } else {
+//                                FinalPoin = 10;
+//                                TVPoin.setText(String.valueOf(FinalPoin));
+//                            }
+//                        } else {
+//                            if (CountImage >= 8) {
+//                                FinalPoin = 30 / 2;
+//                                TVPoin.setText(String.valueOf(FinalPoin));
+//                            } else {
+//                                FinalPoin = 10 / 2;
+//                                TVPoin.setText(String.valueOf(FinalPoin));
+//                            }
+//                        }
+//                        Poin = 10;
+//                        CBMarketable.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//                            @Override
+//                            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+//                                updatepoin6();
+//                            }
+//                        });
+//                        CBHarga.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//                            @Override
+//                            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+//                                updatepoin6();
+//                            }
+//                        });
+//                    } else {
+//                        if (intentIdAgenCo.equals("0")) {
+//                            if (CountImage >= 8) {
+//                                FinalPoin = 20;
+//                                TVPoin.setText(String.valueOf(FinalPoin));
+//                            } else {
+//                                FinalPoin = 10;
+//                                TVPoin.setText(String.valueOf(FinalPoin));
+//                            }
+//                        } else if (intentIdAgenCo.equals(intentIdAgen)) {
+//                            if (CountImage >= 8) {
+//                                FinalPoin = 20;
+//                                TVPoin.setText(String.valueOf(FinalPoin));
+//                            } else {
+//                                FinalPoin = 10;
+//                                TVPoin.setText(String.valueOf(FinalPoin));
+//                            }
+//                        } else {
+//                            if (CountImage >= 8) {
+//                                FinalPoin = 20 / 2;
+//                                TVPoin.setText(String.valueOf(FinalPoin));
+//                            } else {
+//                                FinalPoin = 10 / 2;
+//                                TVPoin.setText(String.valueOf(FinalPoin));
+//                            }
+//                        }
+//                        Poin = 10;
+//                        CBMarketable.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//                            @Override
+//                            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+//                                updatepoin6();
+//                            }
+//                        });
+//                        CBHarga.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//                            @Override
+//                            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+//                                updatepoin6();
+//                            }
+//                        });
+//                    }
+//                } else {
+//                    if (intentIdAgenCo.equals("0")) {
+//                        FinalPoin = 10;
+//                        TVPoin.setText(String.valueOf(FinalPoin));
+//                    } else if (intentIdAgenCo.equals(intentIdAgen)) {
+//                        FinalPoin = 10;
+//                        TVPoin.setText(String.valueOf(FinalPoin));
+//                    } else {
+//                        FinalPoin = 10 / 2;
+//                        TVPoin.setText(String.valueOf(FinalPoin));
+//                    }
+//                    Poin = 10;
+//                    CBSelfie.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//                        @Override
+//                        public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+//                            updatepoint6();
+//                        }
+//                    });
+//                    CBLokasi.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//                        @Override
+//                        public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+//                            updatepoint6();
+//                        }
+//                    });
+//                    CBMarketable.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//                        @Override
+//                        public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+//                            updatepoint6();
+//                        }
+//                    });
+//                    CBHarga.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//                        @Override
+//                        public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+//                            updatepoint6();
+//                        }
+//                    });
+//                }
+//            }
             if (intentMarketable.equals("1")) {
                 CBMarketable.setChecked(true);
             } else {
@@ -3655,106 +2816,18 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                 CBLokasi.setChecked(false);
             }
             if (intentIdAgen.equals("null")) {
-                if (intentSold.equals("1")) {
-                    LytBadgeRented.setVisibility(View.GONE);
-                    LytBadgeSold.setVisibility(View.VISIBLE);
-                    LytBadge.setVisibility(View.GONE);
-                    CVSold.setVisibility(View.VISIBLE);
-                    CVRented.setVisibility(View.GONE);
+                if (status.equals("1")) {
                     agen.setVisibility(View.GONE);
-                    lytambahagen.setVisibility(View.GONE);
-                    TVHargaDetailListing.setVisibility(View.GONE);
-                    TVHargaSewaDetailListing.setVisibility(View.GONE);
-                } else if (intentSoldAgen.equals("1")) {
-                    LytBadgeRented.setVisibility(View.GONE);
-                    LytBadgeSold.setVisibility(View.VISIBLE);
-                    LytBadge.setVisibility(View.GONE);
-                    CVSold.setVisibility(View.VISIBLE);
-                    CVRented.setVisibility(View.GONE);
+                    idagen = agenid;
+                } else if (status.equals("2")) {
                     agen.setVisibility(View.GONE);
-                    lytambahagen.setVisibility(View.GONE);
-                    TVHargaDetailListing.setVisibility(View.GONE);
-                    TVHargaSewaDetailListing.setVisibility(View.GONE);
-                } else if (intentRented.equals("1")) {
-                    LytBadgeRented.setVisibility(View.VISIBLE);
-                    LytBadgeSold.setVisibility(View.GONE);
-                    LytBadge.setVisibility(View.GONE);
-                    CVSold.setVisibility(View.GONE);
-                    CVRented.setVisibility(View.VISIBLE);
-                    agen.setVisibility(View.GONE);
-                    lytambahagen.setVisibility(View.GONE);
-                    TVHargaDetailListing.setVisibility(View.GONE);
-                    TVHargaSewaDetailListing.setVisibility(View.GONE);
-                } else if (intentRentedAgen.equals("1")) {
-                    LytBadgeRented.setVisibility(View.VISIBLE);
-                    LytBadgeSold.setVisibility(View.GONE);
-                    LytBadge.setVisibility(View.GONE);
-                    CVSold.setVisibility(View.GONE);
-                    CVRented.setVisibility(View.VISIBLE);
-                    agen.setVisibility(View.GONE);
-                    lytambahagen.setVisibility(View.GONE);
-                    TVHargaDetailListing.setVisibility(View.GONE);
-                    TVHargaSewaDetailListing.setVisibility(View.GONE);
+                    idagen = agenid;
                 } else {
-                    if (status.equals("1")) {
-                        agen.setVisibility(View.GONE);
-                        lytambahagen.setVisibility(View.VISIBLE);
-                        idagen = agenid;
-                    } else if (status.equals("2")) {
-                        agen.setVisibility(View.GONE);
-                        lytambahagen.setVisibility(View.VISIBLE);
-                        idagen = agenid;
-                    } else {
-                        agen.setVisibility(View.GONE);
-                        lytambahagen.setVisibility(View.GONE);
-                    }
+                    agen.setVisibility(View.GONE);
                 }
             } else {
-                if (intentSold.equals("1")) {
-                    LytBadgeRented.setVisibility(View.GONE);
-                    LytBadgeSold.setVisibility(View.VISIBLE);
-                    LytBadge.setVisibility(View.GONE);
-                    CVSold.setVisibility(View.VISIBLE);
-                    CVRented.setVisibility(View.GONE);
-                    agen.setVisibility(View.GONE);
-                    lytambahagen.setVisibility(View.GONE);
-                    TVHargaDetailListing.setVisibility(View.GONE);
-                    TVHargaSewaDetailListing.setVisibility(View.GONE);
-                } else if (intentSoldAgen.equals("1")) {
-                    LytBadgeRented.setVisibility(View.GONE);
-                    LytBadgeSold.setVisibility(View.VISIBLE);
-                    LytBadge.setVisibility(View.GONE);
-                    CVSold.setVisibility(View.VISIBLE);
-                    CVRented.setVisibility(View.GONE);
-                    agen.setVisibility(View.GONE);
-                    lytambahagen.setVisibility(View.GONE);
-                    TVHargaDetailListing.setVisibility(View.GONE);
-                    TVHargaSewaDetailListing.setVisibility(View.GONE);
-                } else if (intentRented.equals("1")) {
-                    LytBadgeRented.setVisibility(View.VISIBLE);
-                    LytBadgeSold.setVisibility(View.GONE);
-                    LytBadge.setVisibility(View.GONE);
-                    CVSold.setVisibility(View.GONE);
-                    CVRented.setVisibility(View.VISIBLE);
-                    agen.setVisibility(View.GONE);
-                    lytambahagen.setVisibility(View.GONE);
-                    TVHargaDetailListing.setVisibility(View.GONE);
-                    TVHargaSewaDetailListing.setVisibility(View.GONE);
-                } else if (intentRentedAgen.equals("1")) {
-                    LytBadgeRented.setVisibility(View.VISIBLE);
-                    LytBadgeSold.setVisibility(View.GONE);
-                    LytBadge.setVisibility(View.GONE);
-                    CVSold.setVisibility(View.GONE);
-                    CVRented.setVisibility(View.VISIBLE);
-                    agen.setVisibility(View.GONE);
-                    lytambahagen.setVisibility(View.GONE);
-                    TVHargaDetailListing.setVisibility(View.GONE);
-                    TVHargaSewaDetailListing.setVisibility(View.GONE);
-                } else {
-                    agen.setVisibility(View.VISIBLE);
-                    lytambahagen.setVisibility(View.GONE);
-                    idagen = intentIdAgen;
-                }
+                agen.setVisibility(View.VISIBLE);
+                idagen = intentIdAgen;
             }
             if (intentNamaVendor.isEmpty()) {
                 TVNamaVendor.setText("-");
@@ -4172,20 +3245,10 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
             if (!intentImgPjp1.equals("0")) {
                 pjpimage.add(intentImgPjp1);
             }
-
-            if (intentImg2.equals("0") && intentImg3.equals("0") && intentImg4.equals("0") && intentImg5.equals("0") && intentImg6.equals("0") && intentImg7.equals("0") && intentImg8.equals("0") && intentImg9.equals("0") && intentImg10.equals("0") && intentImg11.equals("0") && intentImg12.equals("0")) {
-                IVNextImg.setVisibility(View.GONE);
-                IVPrevImg.setVisibility(View.GONE);
-            } else {
-                IVNextImg.setVisibility(View.VISIBLE);
-                IVPrevImg.setVisibility(View.VISIBLE);
-            }
-
             if (intentImgSHM.equals("0") && intentImgHGB.equals("0") && intentImgHSHP.equals("0") && intentImgPPJB.equals("0") && intentImgStratatitle.equals("0") && intentImgAJB.equals("0") && intentImgPetokD.equals("0")) {
                 viewPagerSertifikat.setVisibility(View.GONE);
                 TVNoData.setVisibility(View.VISIBLE);
             }
-
             if (intentImgPjp.equals("0") && intentImgPjp1.equals("0")) {
                 viewPagerPJP.setVisibility(View.GONE);
                 TVNoDataPjp.setVisibility(View.VISIBLE);
@@ -4203,11 +3266,45 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
             pjpAdapter = new PJPAdapter(this, pjpimage);
             viewPagerPJP.setPadding(0, 0, 0, 0);
             viewPagerPJP.setAdapter(pjpAdapter);
+
+            viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+                @Override
+                public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                }
+
+                @Override
+                public void onPageSelected(int position) {
+                    updatePageInfo(position);
+                }
+
+                @Override
+                public void onPageScrollStateChanged(int state) {
+                }
+            });
+
+            updatePageInfo(0);
         }
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
         }
+    }
+    private void updatePageInfo(int currentPage) {
+        String info = (currentPage + 1) + "/" + images.size();
+        TVJumlahGambar.setText(info);
+    }
+    public boolean isDatePassed(String dateString) {
+        if (dateString == null) return false;
+
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        try {
+            Date dateFromDatabase = format.parse(dateString);
+            Date currentDate = format.parse("2024-05-28");
+            return currentDate.after(dateFromDatabase);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
     private String truncateTextWithEllipsisPrice(String text) {
         if (text.length() > MAX_TEXT_LENGTH_PRICE) {
@@ -4662,42 +3759,257 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
-    private void showToast(String message) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    private void LoadListingSekitar() {
+        RequestQueue queue = Volley.newRequestQueue(DetailListingActivity.this);
+        JsonArrayRequest reqData = new JsonArrayRequest(Request.Method.GET, String.format(ServerApi.URL_GET_LISTING_SEKITAR,StrWilayah,StrJenis,StrKondisi), null,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        mItemsSekitar.clear();
+                        for (int i = 0; i < response.length(); i++) {
+                            try {
+                                JSONObject data = response.getJSONObject(i);
+                                ListingModel md = new ListingModel();
+                                md.setIdListing(data.getString("IdListing"));
+                                md.setIdAgen(data.getString("IdAgen"));
+                                md.setIdAgenCo(data.getString("IdAgenCo"));
+                                md.setIdInput(data.getString("IdInput"));
+                                md.setNoArsip(data.getString("NoArsip"));
+                                md.setNamaListing(data.getString("NamaListing"));
+                                md.setAlamat(data.getString("Alamat"));
+                                md.setAlamatTemplate(data.getString("AlamatTemplate"));
+                                md.setLatitude(data.getString("Latitude"));
+                                md.setLongitude(data.getString("Longitude"));
+                                md.setLocation(data.getString("Location"));
+                                md.setWilayah(data.getString("Wilayah"));
+                                md.setSelfie(data.getString("Selfie"));
+                                md.setWide(data.getString("Wide"));
+                                md.setLand(data.getString("Land"));
+                                md.setDimensi(data.getString("Dimensi"));
+                                md.setListrik(data.getString("Listrik"));
+                                md.setLevel(data.getString("Level"));
+                                md.setBed(data.getString("Bed"));
+                                md.setBath(data.getString("Bath"));
+                                md.setBedArt(data.getString("BedArt"));
+                                md.setBathArt(data.getString("BathArt"));
+                                md.setGarage(data.getString("Garage"));
+                                md.setCarpot(data.getString("Carpot"));
+                                md.setHadap(data.getString("Hadap"));
+                                md.setSHM(data.getString("SHM"));
+                                md.setHGB(data.getString("HGB"));
+                                md.setHSHP(data.getString("HSHP"));
+                                md.setPPJB(data.getString("PPJB"));
+                                md.setStratatitle(data.getString("Stratatitle"));
+                                md.setAJB(data.getString("AJB"));
+                                md.setPetokD(data.getString("PetokD"));
+                                md.setPjp(data.getString("Pjp"));
+                                md.setImgSHM(data.getString("ImgSHM"));
+                                md.setImgHGB(data.getString("ImgHGB"));
+                                md.setImgHSHP(data.getString("ImgHSHP"));
+                                md.setImgPPJB(data.getString("ImgPPJB"));
+                                md.setImgStratatitle(data.getString("ImgStratatitle"));
+                                md.setImgAJB(data.getString("ImgAJB"));
+                                md.setImgPetokD(data.getString("ImgPetokD"));
+                                md.setImgPjp(data.getString("ImgPjp"));
+                                md.setImgPjp1(data.getString("ImgPjp1"));
+                                md.setNoCertificate(data.getString("NoCertificate"));
+                                md.setPbb(data.getString("Pbb"));
+                                md.setJenisProperti(data.getString("JenisProperti"));
+                                md.setJenisCertificate(data.getString("JenisCertificate"));
+                                md.setSumberAir(data.getString("SumberAir"));
+                                md.setKondisi(data.getString("Kondisi"));
+                                md.setDeskripsi(data.getString("Deskripsi"));
+                                md.setPrabot(data.getString("Prabot"));
+                                md.setKetPrabot(data.getString("KetPrabot"));
+                                md.setPriority(data.getString("Priority"));
+                                md.setTtd(data.getString("Ttd"));
+                                md.setBanner(data.getString("Banner"));
+                                md.setSize(data.getString("Size"));
+                                md.setHarga(data.getString("Harga"));
+                                md.setHargaSewa(data.getString("HargaSewa"));
+                                md.setRangeHarga(data.getString("RangeHarga"));
+                                md.setTglInput(data.getString("TglInput"));
+                                md.setImg1(data.getString("Img1"));
+                                md.setImg2(data.getString("Img2"));
+                                md.setImg3(data.getString("Img3"));
+                                md.setImg4(data.getString("Img4"));
+                                md.setImg5(data.getString("Img5"));
+                                md.setImg6(data.getString("Img6"));
+                                md.setImg7(data.getString("Img7"));
+                                md.setImg8(data.getString("Img8"));
+                                md.setImg9(data.getString("Img9"));
+                                md.setImg10(data.getString("Img10"));
+                                md.setImg11(data.getString("Img11"));
+                                md.setImg12(data.getString("Img12"));
+                                md.setVideo(data.getString("Video"));
+                                md.setLinkFacebook(data.getString("LinkFacebook"));
+                                md.setLinkTiktok(data.getString("LinkTiktok"));
+                                md.setLinkInstagram(data.getString("LinkInstagram"));
+                                md.setLinkYoutube(data.getString("LinkYoutube"));
+                                md.setIsAdmin(data.getString("IsAdmin"));
+                                md.setIsManager(data.getString("IsManager"));
+                                md.setIsRejected(data.getString("IsRejected"));
+                                md.setSold(data.getString("Sold"));
+                                md.setRented(data.getString("Rented"));
+                                md.setSoldAgen(data.getString("SoldAgen"));
+                                md.setRentedAgen(data.getString("RentedAgen"));
+                                md.setView(data.getString("View"));
+                                md.setMarketable(data.getString("Marketable"));
+                                md.setStatusHarga(data.getString("StatusHarga"));
+                                md.setNama(data.getString("Nama"));
+                                md.setNoTelp(data.getString("NoTelp"));
+                                md.setInstagram(data.getString("Instagram"));
+                                md.setFee(data.getString("Fee"));
+                                md.setNamaVendor(data.getString("NamaVendor"));
+                                md.setNoTelpVendor(data.getString("NoTelpVendor"));
+                                md.setIsSelfie(data.getString("IsSelfie"));
+                                md.setIsLokasi(data.getString("IsLokasi"));
+                                md.setIdTemplate(data.getString("IdTemplate"));
+                                md.setTemplate(data.getString("Template"));
+                                md.setTemplateBlank(data.getString("TemplateBlank"));
+                                mItemsSekitar.add(md);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+                        AdapterSekitar.notifyDataSetChanged();
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        error.printStackTrace();
+                    }
+                });
+
+        queue.add(reqData);
     }
-    private void ShowRejected() {
-        AlertDialog.Builder customBuilder = new AlertDialog.Builder(this, R.style.CustomAlertDialogStyle);
-        customBuilder.setTitle("Keterangan Reject");
+    private void LoadListingTerkait() {
+        RequestQueue queue = Volley.newRequestQueue(DetailListingActivity.this);
+        JsonArrayRequest reqData = new JsonArrayRequest(Request.Method.GET, String.format(ServerApi.URL_GET_LISTING_TERKAIT,StrJenis,StrKondisi), null,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        mItemsTerkait.clear();
+                        for (int i = 0; i < response.length(); i++) {
+                            try {
+                                JSONObject data = response.getJSONObject(i);
+                                ListingModel md = new ListingModel();
+                                md.setIdListing(data.getString("IdListing"));
+                                md.setIdAgen(data.getString("IdAgen"));
+                                md.setIdAgenCo(data.getString("IdAgenCo"));
+                                md.setIdInput(data.getString("IdInput"));
+                                md.setNoArsip(data.getString("NoArsip"));
+                                md.setNamaListing(data.getString("NamaListing"));
+                                md.setAlamat(data.getString("Alamat"));
+                                md.setAlamatTemplate(data.getString("AlamatTemplate"));
+                                md.setLatitude(data.getString("Latitude"));
+                                md.setLongitude(data.getString("Longitude"));
+                                md.setLocation(data.getString("Location"));
+                                md.setWilayah(data.getString("Wilayah"));
+                                md.setSelfie(data.getString("Selfie"));
+                                md.setWide(data.getString("Wide"));
+                                md.setLand(data.getString("Land"));
+                                md.setDimensi(data.getString("Dimensi"));
+                                md.setListrik(data.getString("Listrik"));
+                                md.setLevel(data.getString("Level"));
+                                md.setBed(data.getString("Bed"));
+                                md.setBath(data.getString("Bath"));
+                                md.setBedArt(data.getString("BedArt"));
+                                md.setBathArt(data.getString("BathArt"));
+                                md.setGarage(data.getString("Garage"));
+                                md.setCarpot(data.getString("Carpot"));
+                                md.setHadap(data.getString("Hadap"));
+                                md.setSHM(data.getString("SHM"));
+                                md.setHGB(data.getString("HGB"));
+                                md.setHSHP(data.getString("HSHP"));
+                                md.setPPJB(data.getString("PPJB"));
+                                md.setStratatitle(data.getString("Stratatitle"));
+                                md.setAJB(data.getString("AJB"));
+                                md.setPetokD(data.getString("PetokD"));
+                                md.setPjp(data.getString("Pjp"));
+                                md.setImgSHM(data.getString("ImgSHM"));
+                                md.setImgHGB(data.getString("ImgHGB"));
+                                md.setImgHSHP(data.getString("ImgHSHP"));
+                                md.setImgPPJB(data.getString("ImgPPJB"));
+                                md.setImgStratatitle(data.getString("ImgStratatitle"));
+                                md.setImgAJB(data.getString("ImgAJB"));
+                                md.setImgPetokD(data.getString("ImgPetokD"));
+                                md.setImgPjp(data.getString("ImgPjp"));
+                                md.setImgPjp1(data.getString("ImgPjp1"));
+                                md.setNoCertificate(data.getString("NoCertificate"));
+                                md.setPbb(data.getString("Pbb"));
+                                md.setJenisProperti(data.getString("JenisProperti"));
+                                md.setJenisCertificate(data.getString("JenisCertificate"));
+                                md.setSumberAir(data.getString("SumberAir"));
+                                md.setKondisi(data.getString("Kondisi"));
+                                md.setDeskripsi(data.getString("Deskripsi"));
+                                md.setPrabot(data.getString("Prabot"));
+                                md.setKetPrabot(data.getString("KetPrabot"));
+                                md.setPriority(data.getString("Priority"));
+                                md.setTtd(data.getString("Ttd"));
+                                md.setBanner(data.getString("Banner"));
+                                md.setSize(data.getString("Size"));
+                                md.setHarga(data.getString("Harga"));
+                                md.setHargaSewa(data.getString("HargaSewa"));
+                                md.setRangeHarga(data.getString("RangeHarga"));
+                                md.setTglInput(data.getString("TglInput"));
+                                md.setImg1(data.getString("Img1"));
+                                md.setImg2(data.getString("Img2"));
+                                md.setImg3(data.getString("Img3"));
+                                md.setImg4(data.getString("Img4"));
+                                md.setImg5(data.getString("Img5"));
+                                md.setImg6(data.getString("Img6"));
+                                md.setImg7(data.getString("Img7"));
+                                md.setImg8(data.getString("Img8"));
+                                md.setImg9(data.getString("Img9"));
+                                md.setImg10(data.getString("Img10"));
+                                md.setImg11(data.getString("Img11"));
+                                md.setImg12(data.getString("Img12"));
+                                md.setVideo(data.getString("Video"));
+                                md.setLinkFacebook(data.getString("LinkFacebook"));
+                                md.setLinkTiktok(data.getString("LinkTiktok"));
+                                md.setLinkInstagram(data.getString("LinkInstagram"));
+                                md.setLinkYoutube(data.getString("LinkYoutube"));
+                                md.setIsAdmin(data.getString("IsAdmin"));
+                                md.setIsManager(data.getString("IsManager"));
+                                md.setIsRejected(data.getString("IsRejected"));
+                                md.setSold(data.getString("Sold"));
+                                md.setRented(data.getString("Rented"));
+                                md.setSoldAgen(data.getString("SoldAgen"));
+                                md.setRentedAgen(data.getString("RentedAgen"));
+                                md.setView(data.getString("View"));
+                                md.setMarketable(data.getString("Marketable"));
+                                md.setStatusHarga(data.getString("StatusHarga"));
+                                md.setNama(data.getString("Nama"));
+                                md.setNoTelp(data.getString("NoTelp"));
+                                md.setInstagram(data.getString("Instagram"));
+                                md.setFee(data.getString("Fee"));
+                                md.setNamaVendor(data.getString("NamaVendor"));
+                                md.setNoTelpVendor(data.getString("NoTelpVendor"));
+                                md.setIsSelfie(data.getString("IsSelfie"));
+                                md.setIsLokasi(data.getString("IsLokasi"));
+                                md.setIdTemplate(data.getString("IdTemplate"));
+                                md.setTemplate(data.getString("Template"));
+                                md.setTemplateBlank(data.getString("TemplateBlank"));
+                                mItemsTerkait.add(md);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
 
-        LinearLayout containerLayout = new LinearLayout(this);
-        containerLayout.setOrientation(LinearLayout.VERTICAL);
-        containerLayout.setPadding(30, 20, 30, 0);
+                        AdapterTerkait.notifyDataSetChanged();
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        error.printStackTrace();
+                    }
+                });
 
-        final EditText customKetInput = new EditText(this);
-
-        customKetInput.setPadding(15, 15, 15, 15);
-        customKetInput.setTextColor(getResources().getColor(android.R.color.black));
-        customKetInput.setHint("Masukkan Keterangan");
-        customKetInput.setHintTextColor(getResources().getColor(android.R.color.black));
-        customKetInput.setBackgroundResource(R.drawable.backgroundbox);
-
-        containerLayout.addView(customKetInput);
-
-        customBuilder.setView(containerLayout);
-
-        customBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                String customBankName = customKetInput.getText().toString();
-                StringKeteranganReject = customBankName;
-                reject();
-            }
-        });
-
-        customBuilder.setNegativeButton("Batal", null);
-
-        AlertDialog customDialog = customBuilder.create();
-        customDialog.show();
+        queue.add(reqData);
     }
     private void LoadCo() {
         RequestQueue queue = Volley.newRequestQueue(this);
@@ -4896,53 +4208,12 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
 
         queue.add(reqData);
     }
-    private void fetchDataFromApiCo() {
-        agenCoManager.fetchDataFromApi(this, new AgenManager.ApiCallback() {
-            @Override
-            public void onSuccess(List<AgenManager.DataItem> dataList) {
-                showAlertDialogCo(dataList);
-            }
-
-            @Override
-            public void onError(String errorMessage) {
-            }
-        });
-    }
-    private void showAlertDialogCo(List<AgenManager.DataItem> dataList) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.CustomAlertDialogStyle);
-        builder.setTitle("Daftar Agen");
-
-        final String[] dataItems = new String[dataList.size()];
-        for (int i = 0; i < dataList.size(); i++) {
-            AgenManager.DataItem item = dataList.get(i);
-            dataItems[i] = item.getName();
-        }
-
-        builder.setItems(dataItems, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                AgenManager.DataItem selectedData = dataList.get(which);
-                agencoid = selectedData.getId();
-                handleSelectedData(selectedData);
-            }
-        });
-
-        builder.setPositiveButton("OK", null);
-        builder.show();
-    }
-    private void handleSelectedDataCo(AgenManager.DataItem selectedData) {
-        String selectedText = "ID Agen Co Listing: " + selectedData.getId();
-        Toast.makeText(this, selectedText, Toast.LENGTH_SHORT).show();
-
-        tambahcoagen.setText(selectedData.getName());
-        agencoid = selectedData.getId();
-    }
-    private void approveadmin() {
+    private void TemplateDouble() {
         pDialog.setMessage("Sedang Diproses...");
         pDialog.setCancelable(false);
         pDialog.show();
 
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, ServerApi.URL_APPROVE_ADMIN, new Response.Listener<String>() {
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, ServerApi.URL_TEMPLATE_DOUBLE, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 pDialog.cancel();
@@ -4959,12 +4230,13 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                 Button cobalagi = customDialog.findViewById(R.id.btntidak);
                 ImageView gifimage = customDialog.findViewById(R.id.ivdialog);
 
-                dialogTitle.setText("Berhasil Approve Listing");
+                dialogTitle.setText("Listing Deleted");
                 cobalagi.setVisibility(View.GONE);
 
                 ok.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+                        customDialog.dismiss();
                         finish();
                     }
                 });
@@ -4993,248 +4265,7 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                 Button cobalagi = customDialog.findViewById(R.id.btntidak);
                 ImageView gifimage = customDialog.findViewById(R.id.ivdialog);
 
-                dialogTitle.setText("Gagal Approve Listing");
-                ok.setVisibility(View.GONE);
-
-                cobalagi.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        customDialog.dismiss();
-                    }
-                });
-
-                Glide.with(DetailListingActivity.this)
-                        .load(R.mipmap.ic_no) // You can also use a local resource like R.drawable.your_gif_resource
-                        .transition(DrawableTransitionOptions.withCrossFade())
-                        .into(gifimage);
-
-                customDialog.show();
-            }
-        }) {
-            @Nullable
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> map = new HashMap<>();
-
-                final String StringMarketable = CBMarketable.isChecked() ? "1" : "0";
-                final String StringHarga = CBHarga.isChecked() ? "1" : "0";
-                final String StringSelfie = CBSelfie.isChecked() ? "1" : "0";
-                final String StringLokasi = CBLokasi.isChecked() ? "1" : "0";
-
-                map.put("IdAgen", idagen);
-                map.put("IdPraListing", idpralisting);
-                map.put("Pjp", tambahpjp.getText().toString().trim());
-                map.put("Marketable", StringMarketable);
-                map.put("StatusHarga", StringHarga);
-                map.put("IsSelfie", StringSelfie);
-                map.put("IsLokasi", StringLokasi);
-
-                System.out.println(map);
-
-                return map;
-            }
-        };
-
-        RequestQueue requestQueue = Volley.newRequestQueue(this);
-        requestQueue.add(stringRequest);
-    }
-    private void approvemanager() {
-        pDialog.setMessage("Sedang Diproses...");
-        pDialog.setCancelable(false);
-        pDialog.show();
-
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, ServerApi.URL_APPROVE_MANAGER, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                pDialog.cancel();
-                Dialog customDialog = new Dialog(DetailListingActivity.this);
-                customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                customDialog.setContentView(R.layout.custom_dialog_sukses);
-
-                if (customDialog.getWindow() != null) {
-                    customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-                }
-
-                TextView dialogTitle = customDialog.findViewById(R.id.dialog_title);
-                Button ok = customDialog.findViewById(R.id.btnya);
-                Button cobalagi = customDialog.findViewById(R.id.btntidak);
-                ImageView gifimage = customDialog.findViewById(R.id.ivdialog);
-
-                dialogTitle.setText("Berhasil Approve Listing");
-                cobalagi.setVisibility(View.GONE);
-
-                ok.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
-                        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, ServerApi.URL_GET_DEVICE_AGEN + idagen, null, new Response.Listener<JSONArray>() {
-                            @Override
-                            public void onResponse(JSONArray response) {
-                                try {
-                                    ArrayList<String> tokens = new ArrayList<>();
-                                    for (int i = 0; i < response.length(); i++) {
-                                        JSONObject tokenObject = response.getJSONObject(i);
-                                        String token = tokenObject.getString("Token");
-                                        tokens.add(token);
-                                    }
-                                    new SendMessageTask().execute(tokens.toArray(new String[0]));
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                        }, new Response.ErrorListener() {
-                            @Override
-                            public void onErrorResponse(VolleyError error) {
-                                // Tangani kesalahan jika terjadi
-                            }
-                        });
-                        requestQueue.add(jsonArrayRequest);
-                        customDialog.dismiss();
-                        finish();
-                    }
-                });
-
-                Glide.with(DetailListingActivity.this)
-                        .load(R.mipmap.ic_yes) // You can also use a local resource like R.drawable.your_gif_resource
-                        .transition(DrawableTransitionOptions.withCrossFade())
-                        .into(gifimage);
-
-                customDialog.show();
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                pDialog.cancel();
-                Dialog customDialog = new Dialog(DetailListingActivity.this);
-                customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                customDialog.setContentView(R.layout.custom_dialog_sukses);
-
-                if (customDialog.getWindow() != null) {
-                    customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-                }
-
-                TextView dialogTitle = customDialog.findViewById(R.id.dialog_title);
-                Button ok = customDialog.findViewById(R.id.btnya);
-                Button cobalagi = customDialog.findViewById(R.id.btntidak);
-                ImageView gifimage = customDialog.findViewById(R.id.ivdialog);
-
-                dialogTitle.setText("Gagal Approve Listing");
-                ok.setVisibility(View.GONE);
-
-                Glide.with(DetailListingActivity.this)
-                        .load(R.mipmap.ic_no)
-                        .transition(DrawableTransitionOptions.withCrossFade())
-                        .into(gifimage);
-
-                customDialog.show();
-            }
-        }) {
-            @Nullable
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> map = new HashMap<>();
-
-                final String StringMarketable = CBMarketable.isChecked() ? "1" : "0";
-                final String StringHarga = CBHarga.isChecked() ? "1" : "0";
-                final String StringSelfie = CBSelfie.isChecked() ? "1" : "0";
-                final String StringLokasi = CBLokasi.isChecked() ? "1" : "0";
-
-                map.put("IdAgen", idagen);
-                map.put("IdPraListing", idpralisting);
-                map.put("Marketable", StringMarketable);
-                map.put("StatusHarga", StringHarga);
-                map.put("IsSelfie", StringSelfie);
-                map.put("IsLokasi", StringLokasi);
-                System.out.println(map);
-
-                return map;
-            }
-        };
-
-        RequestQueue requestQueue = Volley.newRequestQueue(this);
-        requestQueue.add(stringRequest);
-    }
-    private void ajukanulang() {
-        pDialog.setMessage("Sedang Diproses...");
-        pDialog.setCancelable(false);
-        pDialog.show();
-
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, ServerApi.URL_AJUKAN_ULANG, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                pDialog.cancel();
-                Dialog customDialog = new Dialog(DetailListingActivity.this);
-                customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                customDialog.setContentView(R.layout.custom_dialog_sukses);
-
-                if (customDialog.getWindow() != null) {
-                    customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-                }
-
-                TextView dialogTitle = customDialog.findViewById(R.id.dialog_title);
-                Button ok = customDialog.findViewById(R.id.btnya);
-                Button cobalagi = customDialog.findViewById(R.id.btntidak);
-                ImageView gifimage = customDialog.findViewById(R.id.ivdialog);
-
-                dialogTitle.setText("Listing di Ajukan Ulang");
-                cobalagi.setVisibility(View.GONE);
-
-                ok.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
-                        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, ServerApi.URL_GET_DEVICE, null, new Response.Listener<JSONArray>() {
-                            @Override
-                            public void onResponse(JSONArray response) {
-                                try {
-                                    ArrayList<String> tokens = new ArrayList<>();
-                                    for (int i = 0; i < response.length(); i++) {
-                                        JSONObject tokenObject = response.getJSONObject(i);
-                                        String token = tokenObject.getString("Token");
-                                        tokens.add(token);
-                                    }
-                                    new SendMessageTaskAjukanUlang().execute(tokens.toArray(new String[0]));
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                        }, new Response.ErrorListener() {
-                            @Override
-                            public void onErrorResponse(VolleyError error) {
-                                // Tangani kesalahan jika terjadi
-                            }
-                        });
-                        requestQueue.add(jsonArrayRequest);
-                        customDialog.dismiss();
-                        finish();
-                    }
-                });
-
-                Glide.with(DetailListingActivity.this)
-                        .load(R.mipmap.ic_yes) // You can also use a local resource like R.drawable.your_gif_resource
-                        .transition(DrawableTransitionOptions.withCrossFade())
-                        .into(gifimage);
-
-                customDialog.show();
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                pDialog.cancel();
-                Dialog customDialog = new Dialog(DetailListingActivity.this);
-                customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                customDialog.setContentView(R.layout.custom_dialog_sukses);
-
-                if (customDialog.getWindow() != null) {
-                    customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-                }
-
-                TextView dialogTitle = customDialog.findViewById(R.id.dialog_title);
-                Button ok = customDialog.findViewById(R.id.btnya);
-                Button cobalagi = customDialog.findViewById(R.id.btntidak);
-                ImageView gifimage = customDialog.findViewById(R.id.ivdialog);
-
-                dialogTitle.setText("Gagal Ajukan Ulang Listing");
+                dialogTitle.setText("Gagal Delete Listing");
                 ok.setVisibility(View.GONE);
 
                 Glide.with(DetailListingActivity.this)
@@ -5250,112 +4281,7 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> map = new HashMap<>();
                 System.out.println(map);
-                map.put("IdPraListing", idpralisting);
-                return map;
-            }
-        };
-
-        RequestQueue requestQueue = Volley.newRequestQueue(this);
-        requestQueue.add(stringRequest);
-    }
-    private void reject() {
-        pDialog.setMessage("Sedang Diproses...");
-        pDialog.setCancelable(false);
-        pDialog.show();
-
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, ServerApi.URL_REJECTED, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                pDialog.cancel();
-                Dialog customDialog = new Dialog(DetailListingActivity.this);
-                customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                customDialog.setContentView(R.layout.custom_dialog_sukses);
-
-                if (customDialog.getWindow() != null) {
-                    customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-                }
-
-                TextView dialogTitle = customDialog.findViewById(R.id.dialog_title);
-                Button ok = customDialog.findViewById(R.id.btnya);
-                Button cobalagi = customDialog.findViewById(R.id.btntidak);
-                ImageView gifimage = customDialog.findViewById(R.id.ivdialog);
-
-                dialogTitle.setText("Listing Rejected");
-                cobalagi.setVisibility(View.GONE);
-
-                ok.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
-                        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, ServerApi.URL_GET_DEVICE_AGEN + idagen, null, new Response.Listener<JSONArray>() {
-                            @Override
-                            public void onResponse(JSONArray response) {
-                                try {
-                                    ArrayList<String> tokens = new ArrayList<>();
-                                    for (int i = 0; i < response.length(); i++) {
-                                        JSONObject tokenObject = response.getJSONObject(i);
-                                        String token = tokenObject.getString("Token");
-                                        tokens.add(token);
-                                    }
-                                    new SendMessageTaskReject().execute(tokens.toArray(new String[0]));
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                        }, new Response.ErrorListener() {
-                            @Override
-                            public void onErrorResponse(VolleyError error) {
-                                // Tangani kesalahan jika terjadi
-                            }
-                        });
-                        requestQueue.add(jsonArrayRequest);
-                        customDialog.dismiss();
-                        finish();
-                    }
-                });
-
-                Glide.with(DetailListingActivity.this)
-                        .load(R.mipmap.ic_yes) // You can also use a local resource like R.drawable.your_gif_resource
-                        .transition(DrawableTransitionOptions.withCrossFade())
-                        .into(gifimage);
-
-                customDialog.show();
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                pDialog.cancel();
-                Dialog customDialog = new Dialog(DetailListingActivity.this);
-                customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                customDialog.setContentView(R.layout.custom_dialog_sukses);
-
-                if (customDialog.getWindow() != null) {
-                    customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-                }
-
-                TextView dialogTitle = customDialog.findViewById(R.id.dialog_title);
-                Button ok = customDialog.findViewById(R.id.btnya);
-                Button cobalagi = customDialog.findViewById(R.id.btntidak);
-                ImageView gifimage = customDialog.findViewById(R.id.ivdialog);
-
-                dialogTitle.setText("Gagal Reject Listing");
-                ok.setVisibility(View.GONE);
-
-                Glide.with(DetailListingActivity.this)
-                        .load(R.mipmap.ic_no)
-                        .transition(DrawableTransitionOptions.withCrossFade())
-                        .into(gifimage);
-
-                customDialog.show();
-            }
-        }) {
-            @Nullable
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> map = new HashMap<>();
-                System.out.println(map);
-                map.put("IdPraListing", idpralisting);
-                map.put("Keterangan", StringKeteranganReject);
+                map.put("IdTemplate", intentIdTemplate);
                 return map;
             }
         };
@@ -5391,28 +4317,6 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                 ok.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
-                        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, ServerApi.URL_GET_DEVICE_AGEN + idagen, null, new Response.Listener<JSONArray>() {
-                            @Override
-                            public void onResponse(JSONArray response) {
-                                try {
-                                    ArrayList<String> tokens = new ArrayList<>();
-                                    for (int i = 0; i < response.length(); i++) {
-                                        JSONObject tokenObject = response.getJSONObject(i);
-                                        String token = tokenObject.getString("Token");
-                                        tokens.add(token);
-                                    }
-                                    new SendMessageTaskReject().execute(tokens.toArray(new String[0]));
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                        }, new Response.ErrorListener() {
-                            @Override
-                            public void onErrorResponse(VolleyError error) {
-                            }
-                        });
-                        requestQueue.add(jsonArrayRequest);
                         customDialog.dismiss();
                         finish();
                     }
@@ -5494,28 +4398,6 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                 ok.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
-                        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, ServerApi.URL_GET_DEVICE_AGEN + idagen, null, new Response.Listener<JSONArray>() {
-                            @Override
-                            public void onResponse(JSONArray response) {
-                                try {
-                                    ArrayList<String> tokens = new ArrayList<>();
-                                    for (int i = 0; i < response.length(); i++) {
-                                        JSONObject tokenObject = response.getJSONObject(i);
-                                        String token = tokenObject.getString("Token");
-                                        tokens.add(token);
-                                    }
-                                    new SendMessageTaskReject().execute(tokens.toArray(new String[0]));
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                        }, new Response.ErrorListener() {
-                            @Override
-                            public void onErrorResponse(VolleyError error) {
-                            }
-                        });
-                        requestQueue.add(jsonArrayRequest);
                         customDialog.dismiss();
                         finish();
                     }
@@ -5569,18 +4451,6 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(stringRequest);
     }
-    private void fetchDataFromApi() {
-        agenManager.fetchDataFromApi(this, new AgenManager.ApiCallback() {
-            @Override
-            public void onSuccess(List<AgenManager.DataItem> dataList) {
-                showAlertDialog(dataList);
-            }
-
-            @Override
-            public void onError(String errorMessage) {
-            }
-        });
-    }
     private void showAlertDialog(List<AgenManager.DataItem> dataList) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.CustomAlertDialogStyle);
         builder.setTitle("Daftar Agen");
@@ -5607,7 +4477,7 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
         String selectedText = "Selected ID: " + selectedData.getId();
         Toast.makeText(this, selectedText, Toast.LENGTH_SHORT).show();
 
-        tambahagen.setText(selectedData.getName());
+//        tambahagen.setText(selectedData.getName());
         agenid = selectedData.getId();
     }
     private void shareDeepLink(String productId) {
@@ -5698,19 +4568,19 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
         });
     }
     public void ShowTambahBanner(int Poin, String IdListing) {
-        Dialog customDialog = new Dialog(DetailListingActivity.this);
-        customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        customDialog.setContentView(R.layout.dialog_tambah_banner);
+        CustomDialogBanner = new Dialog(DetailListingActivity.this);
+        CustomDialogBanner.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        CustomDialogBanner.setContentView(R.layout.dialog_tambah_banner);
 
-        if (customDialog.getWindow() != null) {
-            customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        if (CustomDialogBanner.getWindow() != null) {
+            CustomDialogBanner.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         }
 
-        TextInputEditText Ukuran = customDialog.findViewById(R.id.ETUkuranBanner);
-        TextInputEditText UkuranCustom = customDialog.findViewById(R.id.ETUkuranBannerCustom);
+        TextInputEditText Ukuran = CustomDialogBanner.findViewById(R.id.ETUkuranBanner);
+        TextInputEditText UkuranCustom = CustomDialogBanner.findViewById(R.id.ETUkuranBannerCustom);
 
-        TextInputLayout LytUkuran = customDialog.findViewById(R.id.lytUkuranBanner);
-        TextInputLayout LytUkuranCustom = customDialog.findViewById(R.id.lytUkuranBannerCustom);
+        TextInputLayout LytUkuran = CustomDialogBanner.findViewById(R.id.lytUkuranBanner);
+        TextInputLayout LytUkuranCustom = CustomDialogBanner.findViewById(R.id.lytUkuranBannerCustom);
 
         Ukuran.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -5741,13 +4611,13 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
             }
         });
 
-        Button Batal = customDialog.findViewById(R.id.BtnBatal);
-        Button Simpan = customDialog.findViewById(R.id.BtnSimpan);
+        Button Batal = CustomDialogBanner.findViewById(R.id.BtnBatal);
+        Button Simpan = CustomDialogBanner.findViewById(R.id.BtnSimpan);
 
         Batal.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                customDialog.dismiss();
+                CustomDialogBanner.dismiss();
             }
         });
 
@@ -5769,7 +4639,7 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                     Button cobalagi = customDialog.findViewById(R.id.btntidak);
                     ImageView gifimage = customDialog.findViewById(R.id.ivdialog);
 
-                    dialogTitle.setText("Harap Pilih Agen Terlebih Dahulu");
+                    dialogTitle.setText("Harap Pilih Size Banner Terlebih Dahulu");
                     cobalagi.setVisibility(View.GONE);
 
                     ok.setOnClickListener(new View.OnClickListener() {
@@ -5793,7 +4663,7 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
 
                         RequestQueue requestQueue = Volley.newRequestQueue(DetailListingActivity.this);
 
-                        StringRequest stringRequest = new StringRequest(Request.Method.POST, ServerApi.URL_TAMBAH_BANNER,
+                        StringRequest stringRequest = new StringRequest(Request.Method.POST, ServerApi.URL_UPDATE_DATA_BANNER_LISTING,
                                 new Response.Listener<String>() {
                                     @Override
                                     public void onResponse(String response) {
@@ -5822,6 +4692,7 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                                                     @Override
                                                     public void onClick(View view) {
                                                         customDialog.dismiss();
+                                                        CustomDialogBanner.dismiss();
                                                     }
                                                 });
 
@@ -5922,160 +4793,57 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
 
                         requestQueue.add(stringRequest);
                     } else {
-                        pDialog.setMessage("Menyimpan Data");
-                        pDialog.setCancelable(false);
-                        pDialog.show();
+                        Dialog customDialog = new Dialog(DetailListingActivity.this);
+                        customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                        customDialog.setContentView(R.layout.custom_dialog_sukses);
 
-                        RequestQueue requestQueue = Volley.newRequestQueue(DetailListingActivity.this);
+                        if (customDialog.getWindow() != null) {
+                            customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                        }
 
-                        StringRequest stringRequest = new StringRequest(Request.Method.POST, ServerApi.URL_TAMBAH_BANNER,
-                                new Response.Listener<String>() {
-                                    @Override
-                                    public void onResponse(String response) {
-                                        pDialog.cancel();
-                                        try {
-                                            JSONObject res = new JSONObject(response);
-                                            String status = res.getString("Status");
-                                            if (status.equals("Sukses")) {
-                                                Dialog customDialog = new Dialog(DetailListingActivity.this);
-                                                customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                                                customDialog.setContentView(R.layout.custom_dialog_sukses);
+                        TextView dialogTitle = customDialog.findViewById(R.id.dialog_title);
+                        Button ok = customDialog.findViewById(R.id.btnya);
+                        Button cobalagi = customDialog.findViewById(R.id.btntidak);
+                        ImageView gifimage = customDialog.findViewById(R.id.ivdialog);
 
-                                                if (customDialog.getWindow() != null) {
-                                                    customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-                                                }
+                        dialogTitle.setText("Harap Pilih Size Banner Terlebih Dahulu");
+                        cobalagi.setVisibility(View.GONE);
 
-                                                TextView dialogTitle = customDialog.findViewById(R.id.dialog_title);
-                                                Button ok = customDialog.findViewById(R.id.btnya);
-                                                Button cobalagi = customDialog.findViewById(R.id.btntidak);
-                                                ImageView gifimage = customDialog.findViewById(R.id.ivdialog);
-
-                                                dialogTitle.setText("Berhasil Menambahkan Banner Listingan");
-                                                cobalagi.setVisibility(View.GONE);
-
-                                                ok.setOnClickListener(new View.OnClickListener() {
-                                                    @Override
-                                                    public void onClick(View view) {
-                                                        customDialog.dismiss();
-                                                    }
-                                                });
-
-                                                Glide.with(DetailListingActivity.this)
-                                                        .load(R.mipmap.ic_yes)
-                                                        .transition(DrawableTransitionOptions.withCrossFade())
-                                                        .into(gifimage);
-
-                                                customDialog.show();
-                                            } else if (status.equals("Error")) {
-                                                Dialog customDialog = new Dialog(DetailListingActivity.this);
-                                                customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                                                customDialog.setContentView(R.layout.custom_dialog_sukses);
-
-                                                if (customDialog.getWindow() != null) {
-                                                    customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-                                                }
-
-                                                TextView dialogTitle = customDialog.findViewById(R.id.dialog_title);
-                                                Button ok = customDialog.findViewById(R.id.btnya);
-                                                Button cobalagi = customDialog.findViewById(R.id.btntidak);
-                                                ImageView gifimage = customDialog.findViewById(R.id.ivdialog);
-
-                                                dialogTitle.setText("Gagal Menambahkan Banner Listingan");
-                                                ok.setVisibility(View.GONE);
-
-                                                cobalagi.setOnClickListener(new View.OnClickListener() {
-                                                    @Override
-                                                    public void onClick(View view) {
-                                                        customDialog.dismiss();
-                                                    }
-                                                });
-
-                                                Glide.with(DetailListingActivity.this)
-                                                        .load(R.mipmap.ic_no)
-                                                        .transition(DrawableTransitionOptions.withCrossFade())
-                                                        .into(gifimage);
-
-                                                customDialog.show();
-                                            }
-                                        } catch (JSONException e) {
-                                            e.printStackTrace();
-                                        }
-                                    }
-                                },
-                                new Response.ErrorListener() {
-                                    @Override
-                                    public void onErrorResponse(VolleyError error) {
-                                        pDialog.cancel();
-                                        Dialog customDialog = new Dialog(DetailListingActivity.this);
-                                        customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                                        customDialog.setContentView(R.layout.custom_dialog_sukses);
-
-                                        if (customDialog.getWindow() != null) {
-                                            customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-                                        }
-
-                                        TextView dialogTitle = customDialog.findViewById(R.id.dialog_title);
-                                        Button ok = customDialog.findViewById(R.id.btnya);
-                                        Button cobalagi = customDialog.findViewById(R.id.btntidak);
-                                        ImageView gifimage = customDialog.findViewById(R.id.ivdialog);
-
-                                        dialogTitle.setText("Terdapat Masalah Jaringan");
-                                        ok.setVisibility(View.GONE);
-
-                                        cobalagi.setOnClickListener(new View.OnClickListener() {
-                                            @Override
-                                            public void onClick(View view) {
-                                                customDialog.dismiss();
-                                            }
-                                        });
-
-                                        Glide.with(DetailListingActivity.this)
-                                                .load(R.mipmap.ic_eror_network_foreground)
-                                                .transition(DrawableTransitionOptions.withCrossFade())
-                                                .into(gifimage);
-
-                                        customDialog.show();
-                                    }
-                                }) {
+                        ok.setOnClickListener(new View.OnClickListener() {
                             @Override
-                            protected Map<String, String> getParams() throws AuthFailureError {
-                                Map<String, String> map = new HashMap<>();
-
-                                String Keterangan = "Tambah Banner Ukuran " + UkuranCustom.getText().toString();
-
-                                map.put("IdListing", IdListing);
-                                map.put("Keterangan", Keterangan);
-                                map.put("PoinTambahan", String.valueOf(Poin));
-                                map.put("Banner", "Ya");
-                                map.put("Size", UkuranCustom.getText().toString());
-                                map.put("PoinBerkurang", "0");
-                                System.out.println(map);
-
-                                return map;
+                            public void onClick(View view) {
+                                customDialog.dismiss();
                             }
-                        };
+                        });
 
-                        requestQueue.add(stringRequest);
+                        Glide.with(DetailListingActivity.this)
+                                .load(R.drawable.alert)
+                                .transition(DrawableTransitionOptions.withCrossFade())
+                                .into(gifimage);
+
+                        customDialog.show();
                     }
                 }
             }
         });
 
-        customDialog.show();
+        CustomDialogBanner.show();
     }
     public void ShowTambahCoList(int Poin, String IdListing) {
-        Dialog customDialog = new Dialog(DetailListingActivity.this);
-        customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        customDialog.setContentView(R.layout.dialog_tambah_colist);
+        CustomDialogCoList = new Dialog(DetailListingActivity.this);
+        CustomDialogCoList.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        CustomDialogCoList.setContentView(R.layout.dialog_tambah_colist);
 
-        if (customDialog.getWindow() != null) {
-            customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        if (CustomDialogCoList.getWindow() != null) {
+            CustomDialogCoList.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         }
 
-        TextInputEditText ETNamaAgen = customDialog.findViewById(R.id.ETNamaAgen);
-        TextInputEditText ETIdAgen = customDialog.findViewById(R.id.ETIdAgen);
+        TextInputEditText ETNamaAgen = CustomDialogCoList.findViewById(R.id.ETNamaAgen);
+        TextInputEditText ETIdAgen = CustomDialogCoList.findViewById(R.id.ETIdAgen);
 
-        TextInputLayout LytDaftarAgen = customDialog.findViewById(R.id.lytDaftarAgen);
+        ETIdAgen.setVisibility(View.GONE);
+
+        TextInputLayout LytDaftarAgen = CustomDialogCoList.findViewById(R.id.lytDaftarAgen);
 
         ETNamaAgen.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -6104,7 +4872,7 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
 
                         builder.setPositiveButton("OK", null);
                         builder.show();
-                        showAlertDialog(dataList);
+//                        showAlertDialog(dataList);
                     }
 
                     @Override
@@ -6114,13 +4882,13 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
             }
         });
 
-        Button Batal = customDialog.findViewById(R.id.BtnBatal);
-        Button Simpan = customDialog.findViewById(R.id.BtnSimpan);
+        Button Batal = CustomDialogCoList.findViewById(R.id.BtnBatal);
+        Button Simpan = CustomDialogCoList.findViewById(R.id.BtnSimpan);
 
         Batal.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                customDialog.dismiss();
+                CustomDialogCoList.dismiss();
             }
         });
 
@@ -6164,7 +4932,7 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
 
                     RequestQueue requestQueue = Volley.newRequestQueue(DetailListingActivity.this);
 
-                    StringRequest stringRequest = new StringRequest(Request.Method.POST, ServerApi.URL_TAMBAH_COLIST,
+                    StringRequest stringRequest = new StringRequest(Request.Method.POST, ServerApi.URL_UPDATE_DATA_COLIST_LISTING,
                             new Response.Listener<String>() {
                                 @Override
                                 public void onResponse(String response) {
@@ -6193,6 +4961,7 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                                                 @Override
                                                 public void onClick(View view) {
                                                     customDialog.dismiss();
+                                                    CustomDialogCoList.dismiss();
                                                 }
                                             });
 
@@ -6295,7 +5064,7 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
             }
         });
 
-        customDialog.show();
+        CustomDialogCoList.show();
     }
     public void ShowTambahWilayah(String IdListing) {
         Dialog customDialog = new Dialog(DetailListingActivity.this);
@@ -6487,18 +5256,18 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
         customDialog.show();
     }
     public void ShowTambahArsip(String IdListing) {
-        Dialog customDialog = new Dialog(DetailListingActivity.this);
-        customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        customDialog.setContentView(R.layout.dialog_tambah_no_arsip);
+        CustomDialogArsip = new Dialog(DetailListingActivity.this);
+        CustomDialogArsip.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        CustomDialogArsip.setContentView(R.layout.dialog_tambah_no_arsip);
 
-        if (customDialog.getWindow() != null) {
-            customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        if (CustomDialogArsip.getWindow() != null) {
+            CustomDialogArsip.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         }
 
-        TextInputEditText ETNoArsip = customDialog.findViewById(R.id.ETNoArsip);
+        TextInputEditText ETNoArsip = CustomDialogArsip.findViewById(R.id.ETNoArsip);
 
-        Button Batal = customDialog.findViewById(R.id.BtnBatal);
-        Button Simpan = customDialog.findViewById(R.id.BtnSimpan);
+        Button Batal = CustomDialogArsip.findViewById(R.id.BtnBatal);
+        Button Simpan = CustomDialogArsip.findViewById(R.id.BtnSimpan);
 
         if (StringJenisProperty.equals("Rumah")) {
             if (StringKondisi.equals("Jual")){
@@ -6595,7 +5364,7 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
         Batal.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                customDialog.dismiss();
+                CustomDialogArsip.dismiss();
             }
         });
 
@@ -6668,6 +5437,7 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                                                 @Override
                                                 public void onClick(View view) {
                                                     customDialog.dismiss();
+                                                    CustomDialogArsip.dismiss();
                                                 }
                                             });
 
@@ -6765,7 +5535,7 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
             }
         });
 
-        customDialog.show();
+        CustomDialogArsip.show();
     }
     public void ShowTambahPjp(int Poin, String IdListing) {
         CustomDialogPjp = new Dialog(DetailListingActivity.this);
@@ -6873,7 +5643,7 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
 
                                                                             RequestQueue requestQueue = Volley.newRequestQueue(DetailListingActivity.this);
 
-                                                                            StringRequest stringRequest = new StringRequest(Request.Method.POST, ServerApi.URL_TAMBAH_PJP,
+                                                                            StringRequest stringRequest = new StringRequest(Request.Method.POST, ServerApi.URL_UPDATE_DATA_PJP_LISTING,
                                                                                     new Response.Listener<String>() {
                                                                                         @Override
                                                                                         public void onResponse(String response) {
@@ -6902,6 +5672,7 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                                                                                                         @Override
                                                                                                         public void onClick(View view) {
                                                                                                             customDialog.dismiss();
+                                                                                                            CustomDialogPjp.dismiss();
                                                                                                         }
                                                                                                     });
 
@@ -7721,112 +6492,6 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
                 });
         requestQueue.add(jsonArrayRequest);
     }
-    private class ImagePdf extends AsyncTask<String, Void, Uri> {
-        private Context context;
-        private Document document;
-
-        public ImagePdf(Context context, Document document) {
-            this.context = context;
-            this.document = document;
-        }
-
-        @Override
-        protected Uri doInBackground(String... params) {
-            String imageUrl = params[0];
-
-            try {
-                // Buka koneksi ke URL
-                URL url = new URL(imageUrl);
-                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-                connection.setDoInput(true);
-                connection.connect();
-
-                // Dapatkan InputStream dari koneksi
-                InputStream input = connection.getInputStream();
-
-                // Simpan gambar ke direktori MediaStore
-                ContentValues contentValues = new ContentValues();
-                contentValues.put(MediaStore.Images.Media.TITLE, String.format("%d.jpg", System.currentTimeMillis()));
-                contentValues.put(MediaStore.Images.Media.DISPLAY_NAME, String.format("%d.jpg", System.currentTimeMillis()));
-                contentValues.put(MediaStore.Images.Media.DESCRIPTION, String.format("%d.jpg", System.currentTimeMillis()));
-                contentValues.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg");
-
-                // Menyimpan file di direktori Pictures/MY_APP_NAME
-                contentValues.put(MediaStore.Images.Media.RELATIVE_PATH, Environment.DIRECTORY_PICTURES + File.separator + "GooProper");
-
-                ContentResolver resolver = context.getContentResolver();
-                Uri imageUri = resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues);
-
-                if (imageUri != null) {
-                    try (OutputStream outputStream = resolver.openOutputStream(imageUri)) {
-                        byte[] buffer = new byte[1024];
-                        int bytesRead;
-                        while ((bytesRead = input.read(buffer)) != -1) {
-                            outputStream.write(buffer, 0, bytesRead);
-                        }
-                    }
-                }
-
-                // Tutup InputStream setelah selesai
-                input.close();
-
-                return imageUri;
-
-            } catch (IOException e) {
-                e.printStackTrace();
-                return null;
-            }
-        }
-
-        @Override
-        protected void onPostExecute(Uri result) {
-            if (result != null) {
-                try {
-                    // Mendapatkan path file gambar dari URI
-                    String imagePath = getImagePathFromUri(DetailListingActivity.this, result);
-
-                    // Membuat objek Image dari file gambar
-                    Image image = Image.getInstance(imagePath);
-
-                    // Menambahkan gambar ke dalam dokumen PDF
-                    document.open(); // Buka dokumen sebelum menambahkan elemen
-                    document.add(image);
-
-                    // Tutup dokumen setelah selesai menambahkan gambar
-                    document.close();
-
-                    Toast.makeText(context, "Berhasil Download", Toast.LENGTH_SHORT).show();
-                } catch (IOException | DocumentException e) {
-                    e.printStackTrace();
-                    Log.d(TAG, "onPostExecute: "+ e);
-                    Toast.makeText(context, "Gagal menambahkan gambar ke PDF", Toast.LENGTH_SHORT).show();
-                }
-            } else {
-                Toast.makeText(context, "Gagal Download", Toast.LENGTH_SHORT).show();
-            }
-        }
-
-        private String getImagePathFromUri(Context context, Uri uri) {
-            String path = null;
-            String[] projection = {MediaStore.Images.Media.DATA};
-            Cursor cursor = context.getContentResolver().query(uri, projection, null, null, null);
-            if (cursor != null) {
-                int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-                cursor.moveToFirst();
-                path = cursor.getString(column_index);
-                cursor.close();
-            }
-            return path;
-        }
-    }
-    private Bitmap getBitmapFromURL(String imageUrl) throws IOException {
-        URL url = new URL(imageUrl);
-        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-        connection.setDoInput(true);
-        connection.connect();
-        InputStream input = connection.getInputStream();
-        return BitmapFactory.decodeStream(input);
-    }
     private Uri getImageUriFromImageView(ImageView imageView) {
         return (Uri) imageView.getTag();
     }
@@ -7911,7 +6576,7 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
         @Override
         protected String doInBackground(String... params) {
             for (String token : params) {
-                sendNotificationToToken(token, "listingku");
+                sendNotificationToToken(token, "pending");
             }
             return null;
         }
@@ -7924,50 +6589,8 @@ public class DetailListingActivity extends AppCompatActivity implements OnMapRea
         }
     }
     private void sendNotificationToToken(String token, String notificationType) {
-        String title = "Admin Goo Proper";
-        String message = "Listing Anda Sudah di Approve";
-        String response = SendMessageToFCM.sendMessage(token, title, message, notificationType);
-    }
-    private class SendMessageTaskReject extends AsyncTask<String, Void, String> {
-        @Override
-        protected String doInBackground(String... params) {
-            for (String token : params) {
-                sendNotificationToToken(token, "rejected");
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(String response) {
-            if (response != null) {
-                Toast.makeText(getApplicationContext(), response, Toast.LENGTH_SHORT).show();
-            }
-        }
-    }
-    private void sendNotificationToTokenReject(String token, String notificationType) {
-        String title = "Admin Goo Proper";
-        String message = "Listing Anda Ditolak";
-        String response = SendMessageToFCM.sendMessage(token, title, message, notificationType);
-    }
-    private class SendMessageTaskAjukanUlang extends AsyncTask<String, Void, String> {
-        @Override
-        protected String doInBackground(String... params) {
-            for (String token : params) {
-                sendNotificationToToken(token, "pralisting");
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(String response) {
-            if (response != null) {
-                Toast.makeText(getApplicationContext(), response, Toast.LENGTH_SHORT).show();
-            }
-        }
-    }
-    private void sendNotificationToTokenAjukanUlang(String token, String notificationType) {
         String title = Preferences.getKeyNama(this);
-        String message = "Pengajuan Ulang Listing";
+        String message = "Tambah Data Listing";
         String response = SendMessageToFCM.sendMessage(token, title, message, notificationType);
     }
 }

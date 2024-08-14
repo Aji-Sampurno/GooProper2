@@ -335,6 +335,14 @@
         android:background="@color/second" />
 
     <Button
+        android:id="@+id/BtnUnduhPralisting"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="unduh PraListing Mingguan"
+        android:textColor="@color/main" />
+
+    <Button
         android:id="@+id/BtnUnduh"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

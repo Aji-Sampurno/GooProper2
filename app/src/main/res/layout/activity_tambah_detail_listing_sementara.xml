@@ -24,22 +24,17 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
-                <ImageView
-                    android:id="@+id/backFormBtn"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
-                    app:srcCompat="@drawable/ic_cancel" />
-
                 <TextView
-                    android:id="@+id/textView8"
-                    style="@style/TextAppearance.Material3.TitleLarge"
+                    android:id="@+id/TVBack"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
-                    android:text="Properti"
+                    android:drawablePadding="8dp"
+                    android:text="@string/TV_Properti"
                     android:textColor="@color/black"
-                    android:textSize="16sp" />
+                    app:drawableLeftCompat="@drawable/ic_cancel"
+                    app:drawableStartCompat="@drawable/ic_cancel" />
+
             </LinearLayout>
 
             <LinearLayout
@@ -54,13 +49,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:text="Form Listing GooProper"
+                    android:text="@string/form_listing_gooproper"
                     android:textColor="@color/black" />
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginTop="10dp"
                     android:background="#000000" />
 
                 <RadioGroup
@@ -76,7 +71,7 @@
                         android:layout_height="wrap_content"
                         android:layout_margin="5dp"
                         android:buttonTint="@color/black"
-                        android:text="Open"
+                        android:text="@string/RB_Open"
                         android:textColor="@color/black" />
 
                     <RadioButton
@@ -85,7 +80,7 @@
                         android:layout_height="wrap_content"
                         android:layout_margin="5dp"
                         android:buttonTint="@color/black"
-                        android:text="Exclusive"
+                        android:text="@string/RB_Exclusive"
                         android:textColor="@color/black" />
 
                 </RadioGroup>
@@ -93,12 +88,13 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginTop="10dp"
                     android:background="#000000" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:baselineAligned="false"
                     android:orientation="horizontal"
                     android:weightSum="4">
 
@@ -112,17 +108,18 @@
                             android:id="@+id/CBSelfie"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:clickable="false"
                             android:buttonTint="@color/black"
+                            android:clickable="false"
+                            android:gravity="center"
                             android:textColor="@color/black" />
 
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center"
-                            android:text="Selfie"
+                            android:text="@string/CB_Selfie"
                             android:textColor="@color/black" />
+
                     </LinearLayout>
 
                     <LinearLayout
@@ -135,17 +132,18 @@
                             android:id="@+id/CBLokasi"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:clickable="false"
                             android:buttonTint="@color/black"
+                            android:clickable="false"
+                            android:gravity="center"
                             android:textColor="@color/black" />
 
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center"
-                            android:text="Lokasi"
+                            android:text="@string/CB_Lokasi"
                             android:textColor="@color/black" />
+
                     </LinearLayout>
 
                     <LinearLayout
@@ -158,16 +156,17 @@
                             android:id="@+id/CBMarketable"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:gravity="center"
                             android:buttonTint="@color/black"
+                            android:gravity="center"
                             android:textColor="@color/black" />
 
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center"
-                            android:text="Marketable"
+                            android:text="@string/CB_Marketable"
                             android:textColor="@color/black" />
+
                     </LinearLayout>
 
                     <LinearLayout
@@ -180,16 +179,17 @@
                             android:id="@+id/CBHarga"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:gravity="center"
                             android:buttonTint="@color/black"
+                            android:gravity="center"
                             android:textColor="@color/black" />
 
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center"
-                            android:text="Harga"
+                            android:text="@string/CB_Harga"
                             android:textColor="@color/black" />
+
                     </LinearLayout>
 
                 </LinearLayout>
@@ -197,7 +197,7 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginTop="10dp"
                     android:background="#000000" />
 
             </LinearLayout>
@@ -214,7 +214,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="5dp"
-                    android:text="Info Dasar Vendor"
+                    android:text="@string/info_dasar_vendor"
                     android:textColor="@color/black"
                     android:textStyle="bold" />
 
@@ -232,6 +232,7 @@
                         android:hint="Nama Lengkap Vendor"
                         android:inputType="textPersonName"
                         android:textColor="@color/black" />
+
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -248,8 +249,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Nomor Hp Vendor"
-                        android:inputType="phone"
+                        android:inputType="number"
                         android:textColor="@color/black" />
+
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -267,6 +269,7 @@
                         android:hint="NIK Vendor"
                         android:inputType="number"
                         android:textColor="@color/black" />
+
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -283,6 +286,7 @@
                         android:hint="Alamat Vendor"
                         android:inputType="textPersonName"
                         android:textColor="@color/black" />
+
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -300,11 +304,13 @@
                         android:focusable="false"
                         android:inputType="none"
                         android:textColor="@color/black" />
+
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:baselineAligned="false"
                     android:orientation="horizontal"
                     android:weightSum="3">
 
@@ -323,6 +329,7 @@
                             android:hint="No Rekening Vendor"
                             android:inputType="number"
                             android:textColor="@color/black" />
+
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
@@ -342,6 +349,7 @@
                             android:focusable="false"
                             android:inputType="none"
                             android:textColor="@color/black" />
+
                     </com.google.android.material.textfield.TextInputLayout>
 
                 </LinearLayout>
@@ -360,6 +368,7 @@
                         android:hint="Atas Nama Rekening Vendor"
                         android:inputType="textPersonName"
                         android:textColor="@color/black" />
+
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -367,7 +376,8 @@
                     style="@style/CustomOutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp">
+                    android:layout_marginTop="10dp"
+                    android:visibility="gone">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/etnoktpvendor"
@@ -376,6 +386,7 @@
                         android:hint="No KTP Vendor"
                         android:inputType="number"
                         android:textColor="@color/black" />
+
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <Button
@@ -384,7 +395,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:backgroundTint="@color/main"
-                    android:text="Tambahkan KTP Vendor"
+                    android:text="@string/btn_tambahkan_ktp_vendor"
                     android:textColor="@color/white" />
 
                 <LinearLayout
@@ -400,7 +411,8 @@
                         android:id="@+id/IVKtp"
                         android:layout_width="250dp"
                         android:layout_height="250dp"
-                        android:layout_weight="1"/>
+                        android:layout_weight="1"
+                        android:contentDescription="@string/iv_description_upload" />
 
                     <ImageView
                         android:id="@+id/IVDeleteKtp"
@@ -409,6 +421,7 @@
                         android:layout_gravity="center"
                         android:layout_margin="5dp"
                         android:layout_weight="2"
+                        android:contentDescription="@string/iv_description_delete"
                         android:gravity="center"
                         android:src="@drawable/ic_delete"
                         app:tint="@color/red_color" />
@@ -421,7 +434,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:layout_marginBottom="5dp"
-                    android:text="Spesifikasi Properti Listing"
+                    android:text="@string/title_spesifikasi_properti"
                     android:textColor="@color/black"
                     android:textStyle="bold" />
 
@@ -440,6 +453,7 @@
                         android:focusable="false"
                         android:inputType="none"
                         android:textColor="@color/black" />
+
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -457,6 +471,7 @@
                         android:hint="Judul Properti"
                         android:inputType="textPersonName"
                         android:textColor="@color/black" />
+
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -465,15 +480,37 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    app:boxBackgroundColor="#DBDDDF">
+                    app:boxBackgroundColor="#DBDDDF"
+                    app:helperText="Alamat Lengkap Properti">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/etalamatproperti"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Alamat Properti"
+                        android:hint="Alamat Lengkap Properti"
                         android:inputType="none"
                         android:textColor="@color/black" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/lytnoalamatproperti"
+                    style="@style/CustomOutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:visibility="gone"
+                    app:boxBackgroundColor="#DBDDDF"
+                    app:helperText="No. Blok / No. Rumah">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etnoalamatproperti"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Blok / Unit / No. Rumah"
+                        android:inputType="none"
+                        android:textColor="@color/black" />
+
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -491,6 +528,7 @@
                         android:hint="Alamat Properti ( Template )"
                         android:inputType="none"
                         android:textColor="@color/black" />
+
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -505,10 +543,11 @@
                         android:id="@+id/etwilayahlisting"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:focusable="false"
                         android:hint="Wilayah"
                         android:inputType="none"
-                        android:focusable="false"
                         android:textColor="@color/black" />
+
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -527,59 +566,14 @@
                         android:focusable="false"
                         android:inputType="none"
                         android:textColor="@color/black" />
+
                 </com.google.android.material.textfield.TextInputLayout>
-
-                <Button
-                    android:id="@+id/map"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:backgroundTint="@color/main"
-                    android:text="Tambahkan Lokasi Maps"
-                    android:textColor="@color/white" />
-
-                <Button
-                    android:id="@+id/selfie"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:backgroundTint="@color/main"
-                    android:text="Tambahkan Selfie"
-                    android:textColor="@color/white" />
-
-                <LinearLayout
-                    android:id="@+id/LytSelfie"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:orientation="horizontal"
-                    android:visibility="gone"
-                    android:weightSum="3">
-
-                    <ImageView
-                        android:id="@+id/IVSelfie"
-                        android:layout_width="250dp"
-                        android:layout_height="250dp"
-                        android:layout_weight="1"/>
-
-                    <ImageView
-                        android:id="@+id/IVDeleteSelfie"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_margin="5dp"
-                        android:layout_weight="2"
-                        android:gravity="center"
-                        android:src="@drawable/ic_delete"
-                        app:tint="@color/red_color" />
-
-                </LinearLayout>
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:text="Sertifikat"
+                    android:text="@string/title_sertifikat"
                     android:textColor="@color/black" />
 
                 <LinearLayout
@@ -594,7 +588,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="SHM"
+                        android:text="@string/cb_shm"
                         android:textColor="@color/black" />
 
                     <CheckBox
@@ -602,7 +596,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="HGB"
+                        android:text="@string/cb_hgb"
                         android:textColor="@color/black" />
 
                     <CheckBox
@@ -610,7 +604,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="HS/HP"
+                        android:text="@string/cb_hs_hp"
                         android:textColor="@color/black" />
 
                 </LinearLayout>
@@ -627,7 +621,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="PPJB"
+                        android:text="@string/cb_ppjb"
                         android:textColor="@color/black" />
 
                     <CheckBox
@@ -635,7 +629,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Stratatitle"
+                        android:text="@string/cb_stratatitle"
                         android:textColor="@color/black" />
 
                     <CheckBox
@@ -643,7 +637,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="AJB"
+                        android:text="@string/cb_ajb"
                         android:textColor="@color/black" />
 
                 </LinearLayout>
@@ -652,15 +646,13 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:orientation="horizontal"
-                    android:weightSum="1">
+                    android:orientation="horizontal">
 
                     <CheckBox
                         android:id="@+id/CBPetokD"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Petok D"
+                        android:text="@string/cb_petok_d"
                         android:textColor="@color/black" />
 
                 </LinearLayout>
@@ -686,7 +678,7 @@
                             android:layout_gravity="center"
                             android:layout_weight="1"
                             android:gravity="center"
-                            android:text="judul pdf"
+                            android:text="@string/tv_judul_pdf"
                             android:textAlignment="center"
                             android:textColor="@color/black"
                             android:visibility="gone" />
@@ -696,6 +688,10 @@
                             android:layout_width="250dp"
                             android:layout_height="250dp"
                             android:layout_weight="1"
+                            android:clickable="true"
+                            android:contentDescription="@string/iv_description_upload"
+                            android:focusable="true"
+                            android:onClick="tampilkanPreview"
                             android:visibility="gone" />
 
                         <ImageView
@@ -705,6 +701,7 @@
                             android:layout_gravity="center"
                             android:layout_margin="5dp"
                             android:layout_weight="2"
+                            android:contentDescription="@string/iv_description_delete"
                             android:gravity="center"
                             android:src="@drawable/ic_delete"
                             app:tint="@color/red_color" />
@@ -721,21 +718,25 @@
 
                         <Button
                             android:id="@+id/BtnSHM"
+                            style="?android:attr/buttonBarButtonStyle"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="10dp"
                             android:layout_marginEnd="5dp"
                             android:layout_weight="1"
-                            android:text="Upload Gambar SHM" />
+                            android:backgroundTint="@color/main"
+                            android:text="@string/btn_upload_gambar_shm" />
 
                         <Button
                             android:id="@+id/BtnSHMPDF"
+                            style="?android:attr/buttonBarButtonStyle"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="5dp"
                             android:layout_marginTop="10dp"
                             android:layout_weight="1"
-                            android:text="Upload Pdf SHM" />
+                            android:backgroundTint="@color/main"
+                            android:text="@string/btn_upload_pdf_shm" />
 
                     </LinearLayout>
 
@@ -762,7 +763,7 @@
                             android:layout_gravity="center"
                             android:layout_weight="1"
                             android:gravity="center"
-                            android:text="judul pdf"
+                            android:text="@string/tv_judul_pdf"
                             android:textAlignment="center"
                             android:textColor="@color/black"
                             android:visibility="gone" />
@@ -772,6 +773,10 @@
                             android:layout_width="250dp"
                             android:layout_height="250dp"
                             android:layout_weight="1"
+                            android:clickable="true"
+                            android:contentDescription="@string/iv_description_upload"
+                            android:focusable="true"
+                            android:onClick="tampilkanPreview"
                             android:visibility="gone" />
 
                         <ImageView
@@ -781,6 +786,7 @@
                             android:layout_gravity="center"
                             android:layout_margin="5dp"
                             android:layout_weight="2"
+                            android:contentDescription="@string/iv_description_delete"
                             android:gravity="center"
                             android:src="@drawable/ic_delete"
                             app:tint="@color/red_color" />
@@ -797,21 +803,25 @@
 
                         <Button
                             android:id="@+id/BtnHGB"
+                            style="?android:attr/buttonBarButtonStyle"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="10dp"
                             android:layout_marginEnd="5dp"
                             android:layout_weight="1"
-                            android:text="Upload Gambar HGB " />
+                            android:backgroundTint="@color/main"
+                            android:text="@string/btn_hgb" />
 
                         <Button
                             android:id="@+id/BtnHGBPDF"
+                            style="?android:attr/buttonBarButtonStyle"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="5dp"
                             android:layout_marginTop="10dp"
                             android:layout_weight="1"
-                            android:text="Upload  Pdf  HGB" />
+                            android:backgroundTint="@color/main"
+                            android:text="@string/btn_pdf_hgb" />
 
                     </LinearLayout>
 
@@ -838,7 +848,7 @@
                             android:layout_gravity="center"
                             android:layout_weight="1"
                             android:gravity="center"
-                            android:text="judul pdf"
+                            android:text="@string/tv_judul_pdf"
                             android:textAlignment="center"
                             android:textColor="@color/black"
                             android:visibility="gone" />
@@ -848,6 +858,10 @@
                             android:layout_width="250dp"
                             android:layout_height="250dp"
                             android:layout_weight="1"
+                            android:clickable="true"
+                            android:contentDescription="@string/iv_description_upload"
+                            android:focusable="true"
+                            android:onClick="tampilkanPreview"
                             android:visibility="gone" />
 
                         <ImageView
@@ -857,6 +871,7 @@
                             android:layout_gravity="center"
                             android:layout_margin="5dp"
                             android:layout_weight="2"
+                            android:contentDescription="@string/iv_description_delete"
                             android:gravity="center"
                             android:src="@drawable/ic_delete"
                             app:tint="@color/red_color" />
@@ -873,21 +888,25 @@
 
                         <Button
                             android:id="@+id/BtnHSHP"
+                            style="?android:attr/buttonBarButtonStyle"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="10dp"
                             android:layout_marginEnd="5dp"
                             android:layout_weight="1"
-                            android:text="Upload Gambar HSHP" />
+                            android:backgroundTint="@color/main"
+                            android:text="@string/btn_hshp" />
 
                         <Button
                             android:id="@+id/BtnHSHPPDF"
+                            style="?android:attr/buttonBarButtonStyle"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="5dp"
                             android:layout_marginTop="10dp"
                             android:layout_weight="1"
-                            android:text="Upload Pdf HSHP" />
+                            android:backgroundTint="@color/main"
+                            android:text="@string/btn_pdf_hshp" />
 
                     </LinearLayout>
 
@@ -914,7 +933,7 @@
                             android:layout_gravity="center"
                             android:layout_weight="1"
                             android:gravity="center"
-                            android:text="judul pdf"
+                            android:text="@string/tv_judul_pdf"
                             android:textAlignment="center"
                             android:textColor="@color/black"
                             android:visibility="gone" />
@@ -924,6 +943,10 @@
                             android:layout_width="250dp"
                             android:layout_height="250dp"
                             android:layout_weight="1"
+                            android:clickable="true"
+                            android:contentDescription="@string/iv_description_upload"
+                            android:focusable="true"
+                            android:onClick="tampilkanPreview"
                             android:visibility="gone" />
 
                         <ImageView
@@ -933,6 +956,7 @@
                             android:layout_gravity="center"
                             android:layout_margin="5dp"
                             android:layout_weight="2"
+                            android:contentDescription="@string/iv_description_delete"
                             android:gravity="center"
                             android:src="@drawable/ic_delete"
                             app:tint="@color/red_color" />
@@ -949,21 +973,25 @@
 
                         <Button
                             android:id="@+id/BtnPPJB"
+                            style="?android:attr/buttonBarButtonStyle"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="10dp"
                             android:layout_marginEnd="5dp"
                             android:layout_weight="1"
-                            android:text="Upload Gambar PPJB" />
+                            android:backgroundTint="@color/main"
+                            android:text="@string/btn_ppjb" />
 
                         <Button
                             android:id="@+id/BtnPPJBPDF"
+                            style="?android:attr/buttonBarButtonStyle"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="5dp"
                             android:layout_marginTop="10dp"
                             android:layout_weight="1"
-                            android:text="Upload Pdf PPJB" />
+                            android:backgroundTint="@color/main"
+                            android:text="@string/btn_pdf_ppjb" />
 
                     </LinearLayout>
 
@@ -990,7 +1018,7 @@
                             android:layout_gravity="center"
                             android:layout_weight="1"
                             android:gravity="center"
-                            android:text="judul pdf"
+                            android:text="@string/tv_judul_pdf"
                             android:textAlignment="center"
                             android:textColor="@color/black"
                             android:visibility="gone" />
@@ -1000,6 +1028,10 @@
                             android:layout_width="250dp"
                             android:layout_height="250dp"
                             android:layout_weight="1"
+                            android:clickable="true"
+                            android:contentDescription="@string/iv_description_upload"
+                            android:focusable="true"
+                            android:onClick="tampilkanPreview"
                             android:visibility="gone" />
 
                         <ImageView
@@ -1009,6 +1041,7 @@
                             android:layout_gravity="center"
                             android:layout_margin="5dp"
                             android:layout_weight="2"
+                            android:contentDescription="@string/iv_description_delete"
                             android:gravity="center"
                             android:src="@drawable/ic_delete"
                             app:tint="@color/red_color" />
@@ -1025,21 +1058,25 @@
 
                         <Button
                             android:id="@+id/BtnStratatitle"
+                            style="?android:attr/buttonBarButtonStyle"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="10dp"
                             android:layout_marginEnd="5dp"
                             android:layout_weight="1"
-                            android:text="Upload Gambar Stratatitle" />
+                            android:backgroundTint="@color/main"
+                            android:text="@string/btn_upload_gambar_stratatitle" />
 
                         <Button
                             android:id="@+id/BtnStratatitlePDF"
+                            style="?android:attr/buttonBarButtonStyle"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="5dp"
                             android:layout_marginTop="10dp"
                             android:layout_weight="1"
-                            android:text="Upload Pdf Stratatitle" />
+                            android:backgroundTint="@color/main"
+                            android:text="@string/btn_upload_pdf_stratatitle" />
 
                     </LinearLayout>
 
@@ -1066,7 +1103,7 @@
                             android:layout_gravity="center"
                             android:layout_weight="1"
                             android:gravity="center"
-                            android:text="judul pdf"
+                            android:text="@string/tv_judul_pdf"
                             android:textAlignment="center"
                             android:textColor="@color/black"
                             android:visibility="gone" />
@@ -1076,6 +1113,10 @@
                             android:layout_width="250dp"
                             android:layout_height="250dp"
                             android:layout_weight="1"
+                            android:clickable="true"
+                            android:contentDescription="@string/iv_description_upload"
+                            android:focusable="true"
+                            android:onClick="tampilkanPreview"
                             android:visibility="gone" />
 
                         <ImageView
@@ -1085,6 +1126,7 @@
                             android:layout_gravity="center"
                             android:layout_margin="5dp"
                             android:layout_weight="2"
+                            android:contentDescription="@string/iv_description_delete"
                             android:gravity="center"
                             android:src="@drawable/ic_delete"
                             app:tint="@color/red_color" />
@@ -1101,21 +1143,25 @@
 
                         <Button
                             android:id="@+id/BtnAJB"
+                            style="?android:attr/buttonBarButtonStyle"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="10dp"
                             android:layout_marginEnd="5dp"
                             android:layout_weight="1"
-                            android:text="Upload Gambar AJB" />
+                            android:backgroundTint="@color/main"
+                            android:text="@string/btn_ajb" />
 
                         <Button
                             android:id="@+id/BtnAJBPDF"
+                            style="?android:attr/buttonBarButtonStyle"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="5dp"
                             android:layout_marginTop="10dp"
                             android:layout_weight="1"
-                            android:text="Upload  Pdf  AJB " />
+                            android:backgroundTint="@color/main"
+                            android:text="@string/btn_pdf_ajb" />
 
                     </LinearLayout>
 
@@ -1142,7 +1188,7 @@
                             android:layout_gravity="center"
                             android:layout_weight="1"
                             android:gravity="center"
-                            android:text="judul pdf"
+                            android:text="@string/tv_judul_pdf"
                             android:textAlignment="center"
                             android:textColor="@color/black"
                             android:visibility="gone" />
@@ -1152,6 +1198,10 @@
                             android:layout_width="250dp"
                             android:layout_height="250dp"
                             android:layout_weight="1"
+                            android:clickable="true"
+                            android:contentDescription="@string/iv_description_upload"
+                            android:focusable="true"
+                            android:onClick="tampilkanPreview"
                             android:visibility="gone" />
 
                         <ImageView
@@ -1161,6 +1211,7 @@
                             android:layout_gravity="center"
                             android:layout_margin="5dp"
                             android:layout_weight="2"
+                            android:contentDescription="@string/iv_description_delete"
                             android:gravity="center"
                             android:src="@drawable/ic_delete"
                             app:tint="@color/red_color" />
@@ -1177,204 +1228,34 @@
 
                         <Button
                             android:id="@+id/BtnPetokD"
+                            style="?android:attr/buttonBarButtonStyle"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="10dp"
                             android:layout_marginEnd="5dp"
                             android:layout_weight="1"
-                            android:text="Upload Gambar Petok D" />
+                            android:backgroundTint="@color/main"
+                            android:text="@string/btn_petok_d" />
 
                         <Button
                             android:id="@+id/BtnPetokDPDF"
+                            style="?android:attr/buttonBarButtonStyle"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="5dp"
                             android:layout_marginTop="10dp"
                             android:layout_weight="1"
-                            android:text="Upload Pdf Petok D" />
+                            android:backgroundTint="@color/main"
+                            android:text="@string/btn_pdf_petok_d" />
 
                     </LinearLayout>
-
-                </LinearLayout>
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/lytKonfirmasiPjp"
-                    style="@style/CustomOutlinedBox"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:hint="Menyertakan PJP?"
-                    app:boxBackgroundColor="#DBDDDF">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/etkonfirmasipjp"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:focusable="false"
-                        android:inputType="none"
-                        android:textColor="@color/black" />
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                    <LinearLayout
-                        android:id="@+id/LytBuktiChat"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:orientation="horizontal"
-                        android:visibility="gone">
-
-                        <ImageView
-                            android:id="@+id/IVBuktiChat"
-                            android:layout_width="250dp"
-                            android:layout_height="250dp" />
-
-                        <ImageView
-                            android:id="@+id/IVDeleteBuktiChat"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:layout_margin="5dp"
-                            android:gravity="center"
-                            android:src="@drawable/ic_delete"
-                            app:tint="@color/red_color" />
-
-                    </LinearLayout>
-
-                    <Button
-                        android:id="@+id/BtnBuktiChat"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:text="Upload Bukti Chat"
-                        android:visibility="gone" />
 
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                    <LinearLayout
-                        android:id="@+id/LytPjp"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:orientation="horizontal"
-                        android:visibility="gone">
-
-                        <ImageView
-                            android:id="@+id/IVPjp"
-                            android:layout_width="250dp"
-                            android:layout_height="250dp" />
-
-                        <ImageView
-                            android:id="@+id/IVDeletePjp"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:layout_margin="5dp"
-                            android:gravity="center"
-                            android:src="@drawable/ic_delete"
-                            app:tint="@color/red_color" />
-
-                    </LinearLayout>
-
-                    <Button
-                        android:id="@+id/BtnPjp"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:text="Upload PJP Halaman 1"
-                        android:visibility="gone" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                    <LinearLayout
-                        android:id="@+id/LytPjp1"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:orientation="horizontal"
-                        android:visibility="gone">
-
-                        <ImageView
-                            android:id="@+id/IVPjp1"
-                            android:layout_width="250dp"
-                            android:layout_height="250dp" />
-
-                        <ImageView
-                            android:id="@+id/IVDeletePjp1"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:layout_margin="5dp"
-                            android:gravity="center"
-                            android:src="@drawable/ic_delete"
-                            app:tint="@color/red_color" />
-
-                    </LinearLayout>
-
-                    <Button
-                        android:id="@+id/BtnPjp1"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:text="Upload PJP Halaman 2"
-                        android:visibility="gone" />
-
-                </LinearLayout>
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/lyttipesertifikat"
-                    style="@style/CustomOutlinedBox"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:hint="Tipe Sertifikat"
-                    android:visibility="gone">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/ettipesertifikat"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:focusable="false"
-                        android:inputType="none"
-                        android:textColor="@color/black"
-                        android:visibility="gone" />
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/lytnomorsertifikat"
-                    style="@style/CustomOutlinedBox"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:visibility="gone">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/etnomorsertifikat"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="No Sertifikat"
-                        android:inputType="number"
-                        android:textColor="@color/black"
-                        android:visibility="gone" />
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:baselineAligned="false"
                     android:orientation="horizontal"
                     android:weightSum="2">
 
@@ -1419,6 +1300,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:baselineAligned="false"
                     android:orientation="horizontal"
                     android:weightSum="2">
 
@@ -1474,6 +1356,7 @@
                         android:hint="Hadap Bangunan"
                         android:inputType="text"
                         android:textColor="@color/black" />
+
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -1490,6 +1373,7 @@
                         android:hint="Dimensi"
                         android:inputType="text"
                         android:textColor="@color/black" />
+
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -1506,6 +1390,7 @@
                         android:hint="Jumlah Lantai"
                         android:inputType="numberDecimal"
                         android:textColor="@color/black" />
+
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <TextView
@@ -1514,13 +1399,14 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:layout_marginBottom="5dp"
-                    android:text="Detail Ruangan"
+                    android:text="@string/title_detail_ruangan"
                     android:textColor="@color/black"
                     android:textStyle="bold" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:baselineAligned="false"
                     android:orientation="horizontal"
                     android:weightSum="2">
 
@@ -1540,6 +1426,7 @@
                             android:hint="Kamar Tidur"
                             android:inputType="number"
                             android:textColor="@color/black" />
+
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
@@ -1559,6 +1446,7 @@
                             android:hint="Kamar Mandi"
                             android:inputType="number"
                             android:textColor="@color/black" />
+
                     </com.google.android.material.textfield.TextInputLayout>
 
                 </LinearLayout>
@@ -1566,6 +1454,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:baselineAligned="false"
                     android:orientation="horizontal"
                     android:weightSum="2">
 
@@ -1585,6 +1474,7 @@
                             android:hint="Kamar Tidur Pembantu"
                             android:inputType="number"
                             android:textColor="@color/black" />
+
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
@@ -1604,6 +1494,7 @@
                             android:hint="Kamar Mandi Pembantu"
                             android:inputType="number"
                             android:textColor="@color/black" />
+
                     </com.google.android.material.textfield.TextInputLayout>
 
                 </LinearLayout>
@@ -1611,6 +1502,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:baselineAligned="false"
                     android:orientation="horizontal"
                     android:weightSum="2">
 
@@ -1630,6 +1522,7 @@
                             android:hint="Garasi"
                             android:inputType="number"
                             android:textColor="@color/black" />
+
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
@@ -1649,6 +1542,7 @@
                             android:hint="Carpot"
                             android:inputType="number"
                             android:textColor="@color/black" />
+
                     </com.google.android.material.textfield.TextInputLayout>
 
                 </LinearLayout>
@@ -1656,6 +1550,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:baselineAligned="false"
                     android:orientation="horizontal"
                     android:weightSum="2">
 
@@ -1674,6 +1569,7 @@
                             android:hint="Daya Listrik"
                             android:inputType="number"
                             android:textColor="@color/black" />
+
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
@@ -1693,9 +1589,20 @@
                             android:focusable="false"
                             android:inputType="none"
                             android:textColor="@color/black" />
+
                     </com.google.android.material.textfield.TextInputLayout>
 
                 </LinearLayout>
+
+                <TextView
+                    style="@style/TextAppearance.MaterialComponents.Subtitle1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="5dp"
+                    android:text="@string/title_interior_dan_eksterior_properti"
+                    android:textColor="@color/black"
+                    android:textStyle="bold" />
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/lytperabot"
@@ -1712,6 +1619,7 @@
                         android:focusable="false"
                         android:inputType="none"
                         android:textColor="@color/black" />
+
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -1728,7 +1636,466 @@
                         android:hint="Keterangan Perabot"
                         android:inputType="text"
                         android:textColor="@color/black" />
+
                 </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/LytRuangTamu"
+                    style="@style/CustomOutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:hint="@string/hint_ruang_tamu">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/ETRuangTamu"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:focusable="false"
+                        android:inputType="none"
+                        android:textColor="@color/black" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/LytRuangMakan"
+                    style="@style/CustomOutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:hint="@string/hint_ruang_makan">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/ETRuangMakan"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:focusable="false"
+                        android:inputType="none"
+                        android:textColor="@color/black" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/LytDapur"
+                    style="@style/CustomOutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:hint="@string/hint_dapur">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/ETDapur"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:focusable="false"
+                        android:inputType="none"
+                        android:textColor="@color/black" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/LytJemuran"
+                    style="@style/CustomOutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:hint="@string/hint_jemuran">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/ETJemuran"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="number"
+                        android:textColor="@color/black" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <TextView
+                    style="@style/TextAppearance.MaterialComponents.Subtitle1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="5dp"
+                    android:text="@string/title_fasilitas_umum"
+                    android:textColor="@color/black"
+                    android:textStyle="bold" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:baselineAligned="false"
+                        android:orientation="horizontal"
+                        android:weightSum="4">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <CheckBox
+                                android:id="@+id/CBMasjid"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:buttonTint="@color/black"
+                                android:gravity="center"
+                                android:textColor="@color/black" />
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:text="@string/cb_masjid"
+                                android:textColor="@color/black" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <CheckBox
+                                android:id="@+id/CBTaman"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:buttonTint="@color/black"
+                                android:gravity="center"
+                                android:textColor="@color/black" />
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:text="@string/cb_taman"
+                                android:textColor="@color/black" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <CheckBox
+                                android:id="@+id/CBPlayground"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:buttonTint="@color/black"
+                                android:gravity="center"
+                                android:textColor="@color/black" />
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:text="@string/cb_playground"
+                                android:textColor="@color/black" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <CheckBox
+                                android:id="@+id/CBCctv"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:buttonTint="@color/black"
+                                android:gravity="center"
+                                android:textColor="@color/black" />
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:text="@string/cb_cctv"
+                                android:textColor="@color/black" />
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:baselineAligned="false"
+                        android:orientation="horizontal"
+                        android:weightSum="4">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <CheckBox
+                                android:id="@+id/CBOneGateSystem"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:buttonTint="@color/black"
+                                android:gravity="center"
+                                android:textColor="@color/black" />
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:text="@string/cb_one_gate_system"
+                                android:textColor="@color/black" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <CheckBox
+                                android:id="@+id/CBKolamRenang"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:buttonTint="@color/black"
+                                android:gravity="center"
+                                android:textColor="@color/black" />
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:text="@string/cb_kolam_renang"
+                                android:textColor="@color/black" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <CheckBox
+                                android:id="@+id/CBSportSpace"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:buttonTint="@color/black"
+                                android:gravity="center"
+                                android:textColor="@color/black" />
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:text="@string/cb_sport_space"
+                                android:textColor="@color/black" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <CheckBox
+                                android:id="@+id/CBParkingSpot"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:buttonTint="@color/black"
+                                android:gravity="center"
+                                android:textColor="@color/black" />
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:text="@string/cb_parking_spot"
+                                android:textColor="@color/black" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <TextView
+                    style="@style/TextAppearance.MaterialComponents.Subtitle1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="5dp"
+                    android:text="@string/title_data_tambahan"
+                    android:textColor="@color/black"
+                    android:textStyle="bold" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/lytstatusproperti"
+                    style="@style/CustomOutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:hint="Status"
+                    app:boxBackgroundColor="#DBDDDF">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etstatusproperti"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:focusable="false"
+                        android:inputType="none"
+                        android:textColor="@color/black" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/lytstatusharga"
+                    style="@style/CustomOutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:hint="Status Harga"
+                    android:visibility="gone"
+                    app:boxBackgroundColor="#DBDDDF">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etstatusharga"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:focusable="false"
+                        android:inputType="none"
+                        android:textColor="@color/black" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/lytharga"
+                    style="@style/CustomOutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:visibility="gone"
+                    app:boxBackgroundColor="#DBDDDF">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etharga"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Harga Jual"
+                        android:inputType="number"
+                        android:textColor="@color/black" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/lythargasewa"
+                    style="@style/CustomOutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:visibility="gone"
+                    app:boxBackgroundColor="#DBDDDF">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/ethargasewa"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Harga Sewa"
+                        android:inputType="number"
+                        android:textColor="@color/black" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/lytrangeharga"
+                    style="@style/CustomOutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:visibility="gone"
+                    app:boxBackgroundColor="#DBDDDF">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etrangeharga"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Harga Sewa Perbulan"
+                        android:inputType="number"
+                        android:textColor="@color/black" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/lytketerangan"
+                    style="@style/CustomOutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etketerangan"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Deskripsi"
+                        android:inputType="textMultiLine"
+                        android:textColor="@color/black" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <Button
+                    android:id="@+id/map"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:backgroundTint="@color/main"
+                    android:text="@string/btn_tambahkan_lokasi_maps"
+                    android:textColor="@color/white" />
+
+                <Button
+                    android:id="@+id/selfie"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:backgroundTint="@color/main"
+                    android:text="@string/TV_Selfie"
+                    android:textColor="@color/white" />
+
+                <LinearLayout
+                    android:id="@+id/LytSelfie"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal"
+                    android:visibility="gone"
+                    android:weightSum="3">
+
+                    <ImageView
+                        android:id="@+id/IVSelfie"
+                        android:layout_width="250dp"
+                        android:layout_height="250dp"
+                        android:layout_weight="1"
+                        android:contentDescription="@string/iv_description_upload" />
+
+                    <ImageView
+                        android:id="@+id/IVDeleteSelfie"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_margin="5dp"
+                        android:layout_weight="2"
+                        android:contentDescription="@string/iv_description_delete"
+                        android:gravity="center"
+                        android:src="@drawable/ic_delete"
+                        app:tint="@color/red_color" />
+
+                </LinearLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/lytbanner"
@@ -1767,16 +2134,16 @@
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/lytstatusproperti"
+                    android:id="@+id/lytKonfirmasiPjp"
                     style="@style/CustomOutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:hint="Status"
+                    android:hint="Menyertakan PJP?"
                     app:boxBackgroundColor="#DBDDDF">
 
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/etstatusproperti"
+                        android:id="@+id/etkonfirmasipjp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:focusable="false"
@@ -1784,94 +2151,137 @@
                         android:textColor="@color/black" />
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/lytstatusharga"
-                    style="@style/CustomOutlinedBox"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:hint="Status Harga"
-                    android:visibility="gone"
-                    app:boxBackgroundColor="#DBDDDF">
+                    android:orientation="vertical">
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/etstatusharga"
+                    <LinearLayout
+                        android:id="@+id/LytBuktiChat"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:focusable="false"
-                        android:inputType="none"
-                        android:textColor="@color/black" />
-                </com.google.android.material.textfield.TextInputLayout>
+                        android:layout_marginTop="10dp"
+                        android:orientation="horizontal"
+                        android:visibility="gone">
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/lytharga"
-                    style="@style/CustomOutlinedBox"
+                        <ImageView
+                            android:id="@+id/IVBuktiChat"
+                            android:layout_width="250dp"
+                            android:layout_height="250dp"
+                            android:contentDescription="@string/iv_description_upload" />
+
+                        <ImageView
+                            android:id="@+id/IVDeleteBuktiChat"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_margin="5dp"
+                            android:contentDescription="@string/iv_description_delete"
+                            android:gravity="center"
+                            android:src="@drawable/ic_delete"
+                            app:tint="@color/red_color" />
+
+                    </LinearLayout>
+
+                    <Button
+                        android:id="@+id/BtnBuktiChat"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="@string/btn_bukti_chat"
+                        android:visibility="gone" />
+
+                </LinearLayout>
+
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:visibility="gone"
-                    app:boxBackgroundColor="#DBDDDF">
+                    android:orientation="vertical">
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/etharga"
+                    <LinearLayout
+                        android:id="@+id/LytPjp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Harga Jual"
-                        android:inputType="number"
-                        android:textColor="@color/black" />
-                </com.google.android.material.textfield.TextInputLayout>
+                        android:layout_marginTop="10dp"
+                        android:orientation="horizontal"
+                        android:visibility="gone">
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/lythargasewa"
-                    style="@style/CustomOutlinedBox"
+                        <ImageView
+                            android:id="@+id/IVPjp"
+                            android:layout_width="250dp"
+                            android:layout_height="250dp"
+                            android:clickable="true"
+                            android:contentDescription="@string/iv_description_upload"
+                            android:focusable="true"
+                            android:onClick="tampilkanPreview" />
+
+                        <ImageView
+                            android:id="@+id/IVDeletePjp"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_margin="5dp"
+                            android:contentDescription="@string/iv_description_delete"
+                            android:gravity="center"
+                            android:src="@drawable/ic_delete"
+                            app:tint="@color/red_color" />
+
+                    </LinearLayout>
+
+                    <Button
+                        android:id="@+id/BtnPjp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="@string/btn_upload_pjp_halaman_1"
+                        android:visibility="gone" />
+
+                </LinearLayout>
+
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:visibility="gone"
-                    app:boxBackgroundColor="#DBDDDF">
+                    android:orientation="vertical">
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/ethargasewa"
+                    <LinearLayout
+                        android:id="@+id/LytPjp1"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Harga Sewa"
-                        android:inputType="number"
-                        android:textColor="@color/black" />
-                </com.google.android.material.textfield.TextInputLayout>
+                        android:layout_marginTop="10dp"
+                        android:orientation="horizontal"
+                        android:visibility="gone">
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/lytrangeharga"
-                    style="@style/CustomOutlinedBox"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:visibility="gone"
-                    app:boxBackgroundColor="#DBDDDF">
+                        <ImageView
+                            android:id="@+id/IVPjp1"
+                            android:layout_width="250dp"
+                            android:layout_height="250dp"
+                            android:clickable="true"
+                            android:contentDescription="@string/iv_description_upload"
+                            android:focusable="true"
+                            android:onClick="tampilkanPreview" />
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/etrangeharga"
+                        <ImageView
+                            android:id="@+id/IVDeletePjp1"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_margin="5dp"
+                            android:contentDescription="@string/iv_description_delete"
+                            android:gravity="center"
+                            android:src="@drawable/ic_delete"
+                            app:tint="@color/red_color" />
+
+                    </LinearLayout>
+
+                    <Button
+                        android:id="@+id/BtnPjp1"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Harga Sewa Perbulan"
-                        android:inputType="number"
-                        android:textColor="@color/black" />
-                </com.google.android.material.textfield.TextInputLayout>
+                        android:layout_marginTop="10dp"
+                        android:text="@string/btn_upload_pjp_halaman_2"
+                        android:visibility="gone" />
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/lytketerangan"
-                    style="@style/CustomOutlinedBox"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/etketerangan"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="Keterangan"
-                        android:inputType="textMultiLine"
-                        android:textColor="@color/black" />
-                </com.google.android.material.textfield.TextInputLayout>
+                </LinearLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/lytfee"
@@ -1901,11 +2311,21 @@
                         android:id="@+id/etCoListing"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Co Listing"
                         android:focusable="false"
+                        android:hint="Co Listing"
                         android:inputType="none"
                         android:textColor="@color/black" />
                 </com.google.android.material.textfield.TextInputLayout>
+
+                <TextView
+                    style="@style/TextAppearance.MaterialComponents.Subtitle1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="5dp"
+                    android:text="@string/title_gambar_properti"
+                    android:textColor="@color/black"
+                    android:textStyle="bold" />
 
                 <LinearLayout
                     android:id="@+id/lyts1"
@@ -1918,7 +2338,8 @@
                     <ImageView
                         android:id="@+id/ivs1"
                         android:layout_width="250dp"
-                        android:layout_height="250dp" />
+                        android:layout_height="250dp"
+                        android:contentDescription="@string/iv_description_upload" />
 
                     <ImageView
                         android:id="@+id/IVDelete1"
@@ -1926,6 +2347,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_margin="5dp"
+                        android:contentDescription="@string/iv_description_delete"
                         android:gravity="center"
                         android:src="@drawable/ic_delete"
                         app:tint="@color/red_color" />
@@ -1952,7 +2374,8 @@
                     <ImageView
                         android:id="@+id/ivs2"
                         android:layout_width="250dp"
-                        android:layout_height="250dp" />
+                        android:layout_height="250dp"
+                        android:contentDescription="@string/iv_description_upload" />
 
                     <ImageView
                         android:id="@+id/IVDelete2"
@@ -1960,6 +2383,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_margin="5dp"
+                        android:contentDescription="@string/iv_description_delete"
                         android:gravity="center"
                         android:src="@drawable/ic_delete"
                         app:tint="@color/red_color" />
@@ -1987,7 +2411,8 @@
                     <ImageView
                         android:id="@+id/ivs3"
                         android:layout_width="250dp"
-                        android:layout_height="250dp" />
+                        android:layout_height="250dp"
+                        android:contentDescription="@string/iv_description_upload" />
 
                     <ImageView
                         android:id="@+id/IVDelete3"
@@ -1995,6 +2420,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_margin="5dp"
+                        android:contentDescription="@string/iv_description_delete"
                         android:gravity="center"
                         android:src="@drawable/ic_delete"
                         app:tint="@color/red_color" />
@@ -2022,7 +2448,8 @@
                     <ImageView
                         android:id="@+id/ivs4"
                         android:layout_width="250dp"
-                        android:layout_height="250dp" />
+                        android:layout_height="250dp"
+                        android:contentDescription="@string/iv_description_upload" />
 
                     <ImageView
                         android:id="@+id/IVDelete4"
@@ -2030,6 +2457,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_margin="5dp"
+                        android:contentDescription="@string/iv_description_delete"
                         android:gravity="center"
                         android:src="@drawable/ic_delete"
                         app:tint="@color/red_color" />
@@ -2057,7 +2485,8 @@
                     <ImageView
                         android:id="@+id/ivs5"
                         android:layout_width="250dp"
-                        android:layout_height="250dp" />
+                        android:layout_height="250dp"
+                        android:contentDescription="@string/iv_description_upload" />
 
                     <ImageView
                         android:id="@+id/IVDelete5"
@@ -2065,6 +2494,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_margin="5dp"
+                        android:contentDescription="@string/iv_description_delete"
                         android:gravity="center"
                         android:src="@drawable/ic_delete"
                         app:tint="@color/red_color" />
@@ -2092,7 +2522,8 @@
                     <ImageView
                         android:id="@+id/ivs6"
                         android:layout_width="250dp"
-                        android:layout_height="250dp" />
+                        android:layout_height="250dp"
+                        android:contentDescription="@string/iv_description_upload" />
 
                     <ImageView
                         android:id="@+id/IVDelete6"
@@ -2100,6 +2531,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_margin="5dp"
+                        android:contentDescription="@string/iv_description_delete"
                         android:gravity="center"
                         android:src="@drawable/ic_delete"
                         app:tint="@color/red_color" />
@@ -2127,7 +2559,8 @@
                     <ImageView
                         android:id="@+id/ivs7"
                         android:layout_width="250dp"
-                        android:layout_height="250dp" />
+                        android:layout_height="250dp"
+                        android:contentDescription="@string/iv_description_upload" />
 
                     <ImageView
                         android:id="@+id/IVDelete7"
@@ -2135,6 +2568,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_margin="5dp"
+                        android:contentDescription="@string/iv_description_delete"
                         android:gravity="center"
                         android:src="@drawable/ic_delete"
                         app:tint="@color/red_color" />
@@ -2162,7 +2596,8 @@
                     <ImageView
                         android:id="@+id/ivs8"
                         android:layout_width="250dp"
-                        android:layout_height="250dp" />
+                        android:layout_height="250dp"
+                        android:contentDescription="@string/iv_description_upload" />
 
                     <ImageView
                         android:id="@+id/IVDelete8"
@@ -2170,6 +2605,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_margin="5dp"
+                        android:contentDescription="@string/iv_description_delete"
                         android:gravity="center"
                         android:src="@drawable/ic_delete"
                         app:tint="@color/red_color" />
@@ -2197,7 +2633,8 @@
                     <ImageView
                         android:id="@+id/ivs9"
                         android:layout_width="250dp"
-                        android:layout_height="250dp" />
+                        android:layout_height="250dp"
+                        android:contentDescription="@string/iv_description_upload" />
 
                     <ImageView
                         android:id="@+id/IVDelete9"
@@ -2205,6 +2642,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_margin="5dp"
+                        android:contentDescription="@string/iv_description_delete"
                         android:gravity="center"
                         android:src="@drawable/ic_delete"
                         app:tint="@color/red_color" />
@@ -2232,7 +2670,8 @@
                     <ImageView
                         android:id="@+id/ivs10"
                         android:layout_width="250dp"
-                        android:layout_height="250dp" />
+                        android:layout_height="250dp"
+                        android:contentDescription="@string/iv_description_upload" />
 
                     <ImageView
                         android:id="@+id/IVDelete10"
@@ -2240,6 +2679,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_margin="5dp"
+                        android:contentDescription="@string/iv_description_delete"
                         android:gravity="center"
                         android:src="@drawable/ic_delete"
                         app:tint="@color/red_color" />
@@ -2267,7 +2707,8 @@
                     <ImageView
                         android:id="@+id/ivs11"
                         android:layout_width="250dp"
-                        android:layout_height="250dp" />
+                        android:layout_height="250dp"
+                        android:contentDescription="@string/iv_description_upload" />
 
                     <ImageView
                         android:id="@+id/IVDelete11"
@@ -2275,6 +2716,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_margin="5dp"
+                        android:contentDescription="@string/iv_description_delete"
                         android:gravity="center"
                         android:src="@drawable/ic_delete"
                         app:tint="@color/red_color" />
@@ -2302,7 +2744,8 @@
                     <ImageView
                         android:id="@+id/ivs12"
                         android:layout_width="250dp"
-                        android:layout_height="250dp" />
+                        android:layout_height="250dp"
+                        android:contentDescription="@string/iv_description_upload" />
 
                     <ImageView
                         android:id="@+id/IVDelete12"
@@ -2310,6 +2753,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_margin="5dp"
+                        android:contentDescription="@string/iv_description_delete"
                         android:gravity="center"
                         android:src="@drawable/ic_delete"
                         app:tint="@color/red_color" />

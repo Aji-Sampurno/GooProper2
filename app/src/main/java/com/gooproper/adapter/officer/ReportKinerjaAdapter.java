@@ -40,7 +40,7 @@ public class ReportKinerjaAdapter extends RecyclerView.Adapter<ReportKinerjaAdap
     @NonNull
     @Override
     public ReportKinerjaAdapter.HolderData onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View layout = LayoutInflater.from(parent.getContext()).inflate(R.layout.rv_report_kinerja,parent,false);
+        View layout = LayoutInflater.from(parent.getContext()).inflate(R.layout.rv_pasang_banner,parent,false);
         HolderData holderData = new HolderData(layout);
         return holderData;
     }

@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.gooproper.R;
 import com.gooproper.model.ListingModel;
-import com.gooproper.ui.detail.listing.DetailPraListingActivity;
+import com.gooproper.ui.detail.pralisting.DetailPraListingRejectedActivity;
 import com.gooproper.util.FormatCurrency;
 import com.gooproper.util.Preferences;
 
@@ -255,7 +255,7 @@ public class RejectedAdapter extends RecyclerView.Adapter<RejectedAdapter.Holder
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent update = new Intent(context, DetailPraListingActivity.class);
+                    Intent update = new Intent(context, DetailPraListingRejectedActivity.class);
                     update.putExtra("update",1);
                     update.putExtra("IdPraListing",listingModel.getIdPraListing());
                     update.putExtra("IdAgen",listingModel.getIdAgen());

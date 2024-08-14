@@ -37,7 +37,44 @@
         android:theme="@style/Theme.GooProper"
         tools:targetApi="31">
         <activity
-            android:name=".ui.edit.listing.TambahGambarActivity"
+            android:name=".ui.tambah.buyer.ReportBuyerActivity"
+            android:exported="false" />
+        <activity
+            android:name=".NewUi.Listing.Tambah.TambahVendorListingActivity"
+            android:exported="false"
+            android:theme="@style/Theme.GooProper" />
+        <activity
+            android:name=".ui.edit.listing.TambahDataLokasiListingActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.edit.listing.TambahDataSelfieListingActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.edit.listing.EditDataListingActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.edit.listing.TambahDataGambarListingActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.detail.listing.DetailListingSoldActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.edit.pralisting.TambahDataSelfiePralistingActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.edit.pralisting.TambahDataGambarPralistingActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.edit.pralisting.TambahDataLokasiPralistingActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.edit.pralisting.EditDataPralistingActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.officer.banner.ListBannerActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.edit.TambahGambarActivity"
             android:exported="false" />
         <activity
             android:name=".ui.edit.primary.EditPrimaryActivity"
@@ -49,7 +86,10 @@
             android:name=".ui.followup.HistoryFollowUpActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.detail.listing.DetailPralistingTerdekatActivity"
+            android:name=".ui.detail.pralisting.DetailPralistingTerdekatActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.detail.pralisting.DetailPraListingRejectedActivity"
             android:exported="false" />
         <activity
             android:name=".ui.officer.survey.SurveyLokasiActivity"
@@ -97,7 +137,7 @@
             android:name=".ui.tambah.TambahSelfieListingActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.edit.EditDetailInfoActivity"
+            android:name=".ui.edit.info.EditDetailInfoActivity"
             android:exported="false" />
         <activity
             android:name=".ui.tbo.TambahPenghargaanActivity"
@@ -130,7 +170,7 @@
             android:name=".ui.listing.InfoPropertyKuActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.edit.EditInfoActivity"
+            android:name=".ui.edit.info.EditInfoActivity"
             android:exported="false" />
         <activity
             android:name=".ui.tambah.listing.TambahListingInfoActivity"
@@ -285,7 +325,7 @@
 
                 <data
                     android:host="gooproper.com"
-                    android:pathPrefix="/agen"
+                    android:pathPrefix="/agen/"
                     android:scheme="https" />
             </intent-filter>
         </activity>
@@ -350,7 +390,7 @@
             android:name=".ui.AgenActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.detail.listing.DetailPraListingActivity"
+            android:name=".ui.detail.pralisting.DetailPraListingActivity"
             android:exported="false" />
         <activity
             android:name=".ui.detail.listing.DetailListingActivity"
@@ -398,7 +438,7 @@
             android:name=".ui.user.UbahSandiActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.edit.EditAkunActivity"
+            android:name=".ui.edit.user.EditAkunActivity"
             android:exported="false" />
         <activity
             android:name=".ui.user.TentangKamiActivity"

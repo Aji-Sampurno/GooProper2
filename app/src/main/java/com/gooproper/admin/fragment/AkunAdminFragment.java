@@ -24,7 +24,7 @@ import com.android.volley.toolbox.Volley;
 import com.gooproper.ui.followup.HistoryFollowUpActivity;
 import com.gooproper.ui.unuse.CobaPesanActivity;
 import com.gooproper.ui.ReportAgenActivity;
-import com.gooproper.ui.edit.EditAkunActivity;
+import com.gooproper.ui.edit.user.EditAkunActivity;
 import com.gooproper.R;
 import com.gooproper.ui.user.SettingActivity;
 import com.gooproper.ui.user.TentangKamiActivity;

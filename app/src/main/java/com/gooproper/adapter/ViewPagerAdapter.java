@@ -96,15 +96,13 @@ public class ViewPagerAdapter extends PagerAdapter {
             Glide.with(context)
                     .load(currentLink)
                     .into(imageView);
-//            Picasso.get()
-//                    .load(currentLink)
-//                    .into(imageView);
             container.addView(view, 0);
             imageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     Intent intent = new Intent(context, ImageViewActivity.class);
-                    intent.putExtra("imageResources", images); // Mengirim seluruh daftar sumber gambar
+                    intent.putExtra("imageResources", images);
+                    intent.putExtra("position", position);
                     context.startActivity(intent);
                 }
             });
@@ -136,7 +134,6 @@ public class ViewPagerAdapter extends PagerAdapter {
                 Log.e("VideoViewError", "Error: " + e.getMessage());
             }
         }
-
 
         return view;
     }

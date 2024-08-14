@@ -4,4 +4,139 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_location">LocationActivity</string>
     <string name="title_activity_maps">MapsActivity</string>
+
+    <!-- String For Judul Halaman -->
+    <string name="form_listing_gooproper">Form Listing GooProper</string>
+    <string name="form_tambah_vendor">Data Vendor</string>
+
+    <!-- String For Edit Text -->
+    <string name="et_nama_vendor">Nama Lengkap Vendor</string>
+    <string name="et_no_hp_vendor">Nomor Hp Vendor</string>
+    <string name="et_nik_vendor">NIK Vendor</string>
+    <string name="et_alamat_vendor">Alamat Vendor</string>
+    <string name="et_tgl_lahir_vendor">Tanggal Lahir Vendor</string>
+    <string name="et_no_rekening_vendor">No Rekening Vendor</string>
+    <string name="et_bank_vendor">Bank Vendor</string>
+    <string name="et_atas_nama_rekening_vendor">Atas Nama Rekening Vendor</string>
+
+    <!-- String For Text View-->
+    <string name="TV_Properti">Properti</string>
+    <string name="info_dasar_vendor">Info Dasar Vendor</string>
+    <string name="title_spesifikasi_properti">Spesifikasi Properti</string>
+    <string name="title_sertifikat">Sertifikat</string>
+    <string name="title_detail_ruangan">Detail Ruangan</string>
+    <string name="title_interior_dan_eksterior_properti">Interior dan Eksterior Properti</string>
+    <string name="title_fasilitas_umum">Fasilitas Umum</string>
+    <string name="title_data_tambahan">Data Tambahan</string>
+    <string name="title_gambar_properti">Gambar Properti</string>
+    <string name="tv_judul_pdf">judul pdf</string>
+
+    <!-- String For Text Input Layout-->
+    <string name="hint_dapur">Dapur</string>
+    <string name="hint_jemuran">Laundry Area</string>
+    <string name="hint_ruang_makan">Ruang Makan</string>
+    <string name="hint_ruang_tamu">Ruang Tamu</string>
+
+    <!-- String For Button-->
+    <string name="btn_tambahkan_lokasi_maps">Tambahkan Lokasi Maps</string>
+    <string name="btn_tambahkan_ktp_vendor">Tambahkan KTP Vendor</string>
+    <string name="btn_upload_gambar_shm">Upload Gambar \nSHM</string>
+    <string name="btn_upload_pdf_shm">Upload Pdf \nSHM</string>
+    <string name="btn_upload_gambar_stratatitle">Upload Gambar \nStratatitle</string>
+    <string name="btn_upload_pdf_stratatitle">Upload Pdf \nStratatitle</string>
+    <string name="btn_ajb">Upload Gambar \nAJB</string>
+    <string name="btn_pdf_ajb">Upload Pdf \nAJB</string>
+    <string name="btn_hgb">Upload Gambar \nHGB</string>
+    <string name="btn_pdf_hgb">Upload Pdf \nHGB</string>
+    <string name="btn_hshp">Upload Gambar \nHSHP</string>
+    <string name="btn_pdf_hshp">Upload Pdf \nHSHP</string>
+    <string name="btn_ppjb">Upload Gambar \nPPJB</string>
+    <string name="btn_pdf_ppjb">Upload Pdf \nPPJB</string>
+    <string name="btn_petok_d">Upload Gambar \nPetok D</string>
+    <string name="btn_pdf_petok_d">Upload Pdf \nPetok D</string>
+    <string name="btn_bukti_chat">Upload Bukti Chat</string>
+    <string name="btn_upload_pjp_halaman_1">Upload PJP Halaman 1</string>
+    <string name="btn_upload_pjp_halaman_2">Upload PJP Halaman 2</string>
+    <string name="TV_Selfie">Tambahkan Selfie</string>
+
+    <!-- String For Radio Button-->
+    <string name="RB_Open">Open</string>
+    <string name="RB_Exclusive">Exclusive</string>
+
+    <!-- String For CheckBox-->
+    <string name="CB_Selfie">Selfie</string>
+    <string name="CB_Lokasi">Lokasi</string>
+    <string name="CB_Marketable">Marketable</string>
+    <string name="CB_Harga">Harga</string>
+    <string name="cb_ajb">AJB</string>
+    <string name="cb_hgb">HGB</string>
+    <string name="cb_hs_hp">HS/HP</string>
+    <string name="cb_ppjb">PPJB</string>
+    <string name="cb_petok_d">Petok D</string>
+    <string name="cb_shm">SHM</string>
+    <string name="cb_stratatitle">Stratatitle</string>
+    <string name="cb_masjid">Masjid</string>
+    <string name="cb_taman">Taman</string>
+    <string name="cb_playground">Playground</string>
+    <string name="cb_cctv">CCTV</string>
+    <string name="cb_one_gate_system">One Gate System</string>
+    <string name="cb_kolam_renang">Kolam Renang</string>
+    <string name="cb_sport_space">Sport Space</string>
+    <string name="cb_parking_spot">Parking Spot</string>
+
+    <!-- String For ImageView-->
+    <string name="iv_description_upload">untuk tampil unggahan</string>
+    <string name="iv_description_delete">untuk hapus unggahan</string>
+    <string name="btn_tambah_gambar">Tambah Gambar</string>
+    <string name="btn_gambar_tampak_depan">Gambar Tampak Depan</string>
+    <string name="btn_batal">batal</string>
+    <string name="btn_submit">submit</string>
+    <string name="et_co_listing">Co Listing</string>
+    <string name="et_alamat_lengkap_properti">Alamat Lengkap Properti</string>
+    <string name="et_alamat_properti_template">Alamat Properti ( Template )</string>
+    <string name="et_carpot">Carpot</string>
+    <string name="et_daya_listrik">Daya Listrik</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+
+    <string name="lorem_ipsum">
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam in scelerisque sem. Mauris
+        volutpat, dolor id interdum ullamcorper, risus dolor egestas lectus, sit amet mattis purus
+        dui nec risus. Maecenas non sodales nisi, vel dictum dolor. Class aptent taciti sociosqu ad
+        litora torquent per conubia nostra, per inceptos himenaeos. Suspendisse blandit eleifend
+        diam, vel rutrum tellus vulputate quis. Aliquam eget libero aliquet, imperdiet nisl a,
+        ornare ex. Sed rhoncus est ut libero porta lobortis. Fusce in dictum tellus.\n\n
+        Suspendisse interdum ornare ante. Aliquam nec cursus lorem. Morbi id magna felis. Vivamus
+        egestas, est a condimentum egestas, turpis nisl iaculis ipsum, in dictum tellus dolor sed
+        neque. Morbi tellus erat, dapibus ut sem a, iaculis tincidunt dui. Interdum et malesuada
+        fames ac ante ipsum primis in faucibus. Curabitur et eros porttitor, ultricies urna vitae,
+        molestie nibh. Phasellus at commodo eros, non aliquet metus. Sed maximus nisl nec dolor
+        bibendum, vel congue leo egestas.\n\n
+        Sed interdum tortor nibh, in sagittis risus mollis quis. Curabitur mi odio, condimentum sit
+        amet auctor at, mollis non turpis. Nullam pretium libero vestibulum, finibus orci vel,
+        molestie quam. Fusce blandit tincidunt nulla, quis sollicitudin libero facilisis et. Integer
+        interdum nunc ligula, et fermentum metus hendrerit id. Vestibulum lectus felis, dictum at
+        lacinia sit amet, tristique id quam. Cras eu consequat dui. Suspendisse sodales nunc ligula,
+        in lobortis sem porta sed. Integer id ultrices magna, in luctus elit. Sed a pellentesque
+        est.\n\n
+        Aenean nunc velit, lacinia sed dolor sed, ultrices viverra nulla. Etiam a venenatis nibh.
+        Morbi laoreet, tortor sed facilisis varius, nibh orci rhoncus nulla, id elementum leo dui
+        non lorem. Nam mollis ipsum quis auctor varius. Quisque elementum eu libero sed commodo. In
+        eros nisl, imperdiet vel imperdiet et, scelerisque a mauris. Pellentesque varius ex nunc,
+        quis imperdiet eros placerat ac. Duis finibus orci et est auctor tincidunt. Sed non viverra
+        ipsum. Nunc quis augue egestas, cursus lorem at, molestie sem. Morbi a consectetur ipsum, a
+        placerat diam. Etiam vulputate dignissim convallis. Integer faucibus mauris sit amet finibus
+        convallis.\n\n
+        Phasellus in aliquet mi. Pellentesque habitant morbi tristique senectus et netus et
+        malesuada fames ac turpis egestas. In volutpat arcu ut felis sagittis, in finibus massa
+        gravida. Pellentesque id tellus orci. Integer dictum, lorem sed efficitur ullamcorper,
+        libero justo consectetur ipsum, in mollis nisl ex sed nisl. Donec maximus ullamcorper
+        sodales. Praesent bibendum rhoncus tellus nec feugiat. In a ornare nulla. Donec rhoncus
+        libero vel nunc consequat, quis tincidunt nisl eleifend. Cras bibendum enim a justo luctus
+        vestibulum. Fusce dictum libero quis erat maximus, vitae volutpat diam dignissim.
+    </string>
+
 </resources>

@@ -25,7 +25,7 @@ import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.google.firebase.FirebaseApp;
 import com.gooproper.R;
 import com.gooproper.guest.MainGuestActivity;
-import com.gooproper.ui.edit.EditAkunActivity;
+import com.gooproper.ui.edit.user.EditAkunActivity;
 import com.gooproper.util.Preferences;
 import com.gooproper.util.ServerApi;
 

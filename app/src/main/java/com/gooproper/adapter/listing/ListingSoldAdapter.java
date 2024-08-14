@@ -16,6 +16,7 @@ import com.bumptech.glide.Glide;
 import com.gooproper.R;
 import com.gooproper.model.ListingModel;
 import com.gooproper.ui.detail.listing.DetailListingActivity;
+import com.gooproper.ui.detail.listing.DetailListingSoldActivity;
 import com.gooproper.util.Preferences;
 
 import java.util.List;
@@ -224,7 +225,7 @@ public class ListingSoldAdapter extends RecyclerView.Adapter<ListingSoldAdapter.
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent update = new Intent(context, DetailListingActivity.class);
+                    Intent update = new Intent(context, DetailListingSoldActivity.class);
                     update.putExtra("update", 1);
                     update.putExtra("IdListing",listingModel.getIdListing());
                     update.putExtra("IdAgen",listingModel.getIdAgen());

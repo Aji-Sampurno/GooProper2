@@ -1,12 +1,14 @@
 package com.gooproper.ui.detail.info;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
 import androidx.viewpager.widget.ViewPager;
 
 import android.Manifest;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -18,19 +20,23 @@ import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.style.StyleSpan;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -44,8 +50,9 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.gooproper.R;
 import com.gooproper.adapter.ViewPagerAdapter;
 import com.gooproper.model.InfoModel;
-import com.gooproper.ui.edit.EditDetailInfoActivity;
-import com.gooproper.ui.edit.EditInfoActivity;
+import com.gooproper.ui.detail.listing.DetailListingActivity;
+import com.gooproper.ui.edit.info.EditDetailInfoActivity;
+import com.gooproper.ui.edit.info.EditInfoActivity;
 import com.gooproper.ui.followup.FollowUpInfoActivity;
 import com.gooproper.ui.tambah.listing.TambahListingInfoActivity;
 import com.gooproper.util.FormatCurrency;
@@ -57,6 +64,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class DetailInfoActivity extends AppCompatActivity implements OnMapReadyCallback {
 
@@ -64,11 +73,12 @@ public class DetailInfoActivity extends AppCompatActivity implements OnMapReadyC
     TextView TVJudul, TVLokasi, TVHarga, TVHargaSewa, TVNamaAgen, TVLuas, TVLTanah, TVLBangunan, TVJenis, TVStatus, TVDeskripsi, TVTglInput, TVNarahubung, TVTelpNarahubung, TVNoSelfie, TVPoin;
     LinearLayout LytNarahubung, LytTelpNarahubung, LytTglInput, LytEdit;
     ImageView IVAddListing, IVWhatsapp, IVInstagram, IVSelfie, IVFollowUp;
-    Button BtnTambah, BtnTambahSpek;
+    Button BtnTambah, BtnTambahSpek, BtnHapusInfo;
     LinearLayout LytSelfie;
     ScrollView scrollView;
     CardView agen;
     String NamaMaps, StringStatus, StringIdAgen, StrIdAgen, StringJudul, StringLokasi, StringNamaBuyer;
+    String IntentIdInfo, IntentIdAgen, IntentJenisProperty, IntentStatusProperty, IntentNarahubung, IntentImgSelfie, IntentImgProperty, IntentLokasi, IntentAlamat, IntentNoTelp, IntentLatitude, IntentLongitude, IntentTglInput, IntentJamInput, IntentIsListing, IntentLBangunan, IntentLTanah, IntentHarga, IntentHargaSewa, IntentKeterangan, IntentIsSpek;
     InfoModel infoModel;
     ViewPager viewPager;
     ViewPagerAdapter adapter;
@@ -99,6 +109,7 @@ public class DetailInfoActivity extends AppCompatActivity implements OnMapReadyC
 
         BtnTambah = findViewById(R.id.BtnAddListing);
         BtnTambahSpek = findViewById(R.id.BtnAddSpek);
+        BtnHapusInfo = findViewById(R.id.BtnHapusInfo);
 
         TVJudul = findViewById(R.id.TVJudulDetailInfo);
         TVLokasi = findViewById(R.id.TVLokasiDetailInfo);
@@ -127,27 +138,27 @@ public class DetailInfoActivity extends AppCompatActivity implements OnMapReadyC
 
         Intent data = getIntent();
         final int update = data.getIntExtra("update", 0);
-        String IntentIdInfo = data.getStringExtra("IdInfo");
-        String IntentIdAgen = data.getStringExtra("IdAgen");
-        String IntentJenisProperty = data.getStringExtra("JenisProperty");
-        String IntentStatusProperty = data.getStringExtra("StatusProperty");
-        String IntentNarahubung = data.getStringExtra("Narahubung");
-        String IntentImgSelfie = data.getStringExtra("ImgSelfie");
-        String IntentImgProperty = data.getStringExtra("ImgProperty");
-        String IntentLokasi = data.getStringExtra("Lokasi");
-        String IntentAlamat = data.getStringExtra("Alamat");
-        String IntentNoTelp = data.getStringExtra("NoTelp");
-        String IntentLatitude = data.getStringExtra("Latitude");
-        String IntentLongitude = data.getStringExtra("Longitude");
-        String IntentTglInput = data.getStringExtra("TglInput");
-        String IntentJamInput = data.getStringExtra("JamInput");
-        String IntentIsListing = data.getStringExtra("IsListing");
-        String IntentLBangunan = data.getStringExtra("LBangunan");
-        String IntentLTanah = data.getStringExtra("LTanah");
-        String IntentHarga = data.getStringExtra("Harga");
-        String IntentHargaSewa = data.getStringExtra("HargaSewa");
-        String IntentKeterangan = data.getStringExtra("Keterangan");
-        String IntentIsSpek = data.getStringExtra("IsSpek");
+        IntentIdInfo = data.getStringExtra("IdInfo");
+        IntentIdAgen = data.getStringExtra("IdAgen");
+        IntentJenisProperty = data.getStringExtra("JenisProperty");
+        IntentStatusProperty = data.getStringExtra("StatusProperty");
+        IntentNarahubung = data.getStringExtra("Narahubung");
+        IntentImgSelfie = data.getStringExtra("ImgSelfie");
+        IntentImgProperty = data.getStringExtra("ImgProperty");
+        IntentLokasi = data.getStringExtra("Lokasi");
+        IntentAlamat = data.getStringExtra("Alamat");
+        IntentNoTelp = data.getStringExtra("NoTelp");
+        IntentLatitude = data.getStringExtra("Latitude");
+        IntentLongitude = data.getStringExtra("Longitude");
+        IntentTglInput = data.getStringExtra("TglInput");
+        IntentJamInput = data.getStringExtra("JamInput");
+        IntentIsListing = data.getStringExtra("IsListing");
+        IntentLBangunan = data.getStringExtra("LBangunan");
+        IntentLTanah = data.getStringExtra("LTanah");
+        IntentHarga = data.getStringExtra("Harga");
+        IntentHargaSewa = data.getStringExtra("HargaSewa");
+        IntentKeterangan = data.getStringExtra("Keterangan");
+        IntentIsSpek = data.getStringExtra("IsSpek");
 
         StringStatus = Preferences.getKeyStatus(this);
         StringIdAgen = Preferences.getKeyIdAgen(this);
@@ -173,6 +184,12 @@ public class DetailInfoActivity extends AppCompatActivity implements OnMapReadyC
                 update.putExtra("IdInfo",IntentIdInfo);
                 update.putExtra("Status",IntentStatusProperty);
                 startActivity(update);
+            }
+        });
+        BtnHapusInfo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                HapusInfo();
             }
         });
         LytEdit.setOnClickListener(new View.OnClickListener() {
@@ -241,16 +258,20 @@ public class DetailInfoActivity extends AppCompatActivity implements OnMapReadyC
         if (StringStatus.equals("1")) {
             LytSelfie.setVisibility(View.VISIBLE);
             StringNamaBuyer = Preferences.getKeyNamaLengkap(this);
+            BtnHapusInfo.setVisibility(View.VISIBLE);
         } else if (StringStatus.equals("2")) {
             LytSelfie.setVisibility(View.VISIBLE);
             StringNamaBuyer = Preferences.getKeyNamaLengkap(this);
+            BtnHapusInfo.setVisibility(View.VISIBLE);
         } else if (StringStatus.equals("3")) {
             LytSelfie.setVisibility(View.GONE);
             StringNamaBuyer = Preferences.getKeyNama(this);
+            BtnHapusInfo.setVisibility(View.GONE);
         } else {
             LytSelfie.setVisibility(View.GONE);
             BtnTambahSpek.setVisibility(View.GONE);
             TVPoin.setVisibility(View.GONE);
+            BtnHapusInfo.setVisibility(View.GONE);
             StringNamaBuyer = Preferences.getKeyNamaLengkap(this);
         }
 
@@ -308,7 +329,7 @@ public class DetailInfoActivity extends AppCompatActivity implements OnMapReadyC
             if (IntentLokasi.isEmpty()) {
                 TVLokasi.setText("-");
             } else {
-                TVLokasi.setText(IntentLokasi);
+                TVLokasi.setText(IntentAlamat);
             }
             if (IntentLTanah.isEmpty() || IntentLTanah.equals(" ")) {
                 TVLTanah.setText("-");
@@ -519,5 +540,86 @@ public class DetailInfoActivity extends AppCompatActivity implements OnMapReadyC
                 });
 
         queue.add(reqData);
+    }
+    private void HapusInfo() {
+        pDialog.setMessage("Sedang Diproses...");
+        pDialog.setCancelable(false);
+        pDialog.show();
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, ServerApi.URL_HIDE_INFO, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                pDialog.cancel();
+                Dialog customDialog = new Dialog(DetailInfoActivity.this);
+                customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                customDialog.setContentView(R.layout.custom_dialog_sukses);
+
+                if (customDialog.getWindow() != null) {
+                    customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                }
+
+                TextView dialogTitle = customDialog.findViewById(R.id.dialog_title);
+                Button ok = customDialog.findViewById(R.id.btnya);
+                Button cobalagi = customDialog.findViewById(R.id.btntidak);
+                ImageView gifimage = customDialog.findViewById(R.id.ivdialog);
+
+                dialogTitle.setText("Info Deleted");
+                cobalagi.setVisibility(View.GONE);
+
+                ok.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        customDialog.dismiss();
+                        finish();
+                    }
+                });
+
+                Glide.with(DetailInfoActivity.this)
+                        .load(R.mipmap.ic_yes)
+                        .transition(DrawableTransitionOptions.withCrossFade())
+                        .into(gifimage);
+
+                customDialog.show();
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                pDialog.cancel();
+                Dialog customDialog = new Dialog(DetailInfoActivity.this);
+                customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                customDialog.setContentView(R.layout.custom_dialog_sukses);
+
+                if (customDialog.getWindow() != null) {
+                    customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                }
+
+                TextView dialogTitle = customDialog.findViewById(R.id.dialog_title);
+                Button ok = customDialog.findViewById(R.id.btnya);
+                Button cobalagi = customDialog.findViewById(R.id.btntidak);
+                ImageView gifimage = customDialog.findViewById(R.id.ivdialog);
+
+                dialogTitle.setText("Gagal Delete Info");
+                ok.setVisibility(View.GONE);
+
+                Glide.with(DetailInfoActivity.this)
+                        .load(R.mipmap.ic_no)
+                        .transition(DrawableTransitionOptions.withCrossFade())
+                        .into(gifimage);
+
+                customDialog.show();
+            }
+        }) {
+            @Nullable
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> map = new HashMap<>();
+                System.out.println(map);
+                map.put("IdInfo", IntentIdInfo);
+                return map;
+            }
+        };
+
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(stringRequest);
     }
 }

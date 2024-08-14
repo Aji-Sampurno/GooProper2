@@ -1,4 +1,4 @@
-package com.gooproper.ui.edit;
+package com.gooproper.ui.edit.info;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;

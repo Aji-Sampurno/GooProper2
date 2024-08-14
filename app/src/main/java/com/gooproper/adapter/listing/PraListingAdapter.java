@@ -28,7 +28,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.gooproper.R;
 import com.gooproper.model.PraListingModel;
-import com.gooproper.ui.detail.listing.DetailPraListingActivity;
+import com.gooproper.ui.detail.pralisting.DetailPraListingActivity;
 import com.gooproper.util.FormatCurrency;
 import com.gooproper.util.ServerApi;
 

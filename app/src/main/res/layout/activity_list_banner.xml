@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/main"
+    android:orientation="vertical"
+    tools:context=".ui.officer.banner.ListBannerActivity">
+
+    <LinearLayout
+        android:id="@+id/LYTTopPasangBanner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/top_bar"
+        android:orientation="horizontal"
+        android:padding="10dp"
+        android:weightSum="7">
+
+        <EditText
+            android:id="@+id/etsearchView"
+            android:padding="10dp"
+            android:textColor="@color/white"
+            android:hint="Cari..."
+            android:textColorHint="@color/white"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/backgroundbox"/>
+
+        <androidx.appcompat.widget.SearchView
+            android:id="@+id/searchView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="8dp"
+            android:layout_weight="1"
+            android:background="@drawable/backgroundbox"
+            android:iconifiedByDefault="false"
+            android:queryHint="Address"
+            android:visibility="gone"/>
+
+        <ImageView
+            android:id="@+id/filterBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="3"
+            android:adjustViewBounds="true"
+            android:padding="10dp"
+            android:src="@drawable/ic_filter"
+            app:tint="@color/second" />
+
+        <ImageView
+            android:id="@+id/sortAscendingBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="3"
+            android:adjustViewBounds="true"
+            android:padding="10dp"
+            android:src="@drawable/ic_sort"
+            app:tint="@color/second"
+            android:visibility="visible"/>
+
+        <ImageView
+            android:id="@+id/sortDescendingBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="3"
+            android:adjustViewBounds="true"
+            android:padding="10dp"
+            android:src="@drawable/ic_sort"
+            android:rotation="180"
+            app:tint="@color/second"
+            android:visibility="gone"/>
+
+    </LinearLayout>
+
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/SRPasangBanner"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/RVPasangBanner"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp" />
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+</LinearLayout>

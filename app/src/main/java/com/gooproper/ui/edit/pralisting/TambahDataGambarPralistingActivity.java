@@ -1,4 +1,4 @@
-package com.gooproper.ui.edit.listing;
+package com.gooproper.ui.edit.pralisting;
 
 import android.Manifest;
 import android.app.AlertDialog;
@@ -14,15 +14,9 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.provider.OpenableColumns;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
-import android.widget.CompoundButton;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -49,20 +43,12 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
-import com.github.chrisbanes.photoview.PhotoView;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.material.datepicker.MaterialDatePicker;
-import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.gooproper.R;
-import com.gooproper.adapter.DaerahManager;
-import com.gooproper.adapter.WilayahManager;
-import com.gooproper.ui.LocationActivity;
-import com.gooproper.ui.tambah.listing.TambahListingActivity;
-import com.gooproper.util.AgenManager;
 import com.gooproper.util.Preferences;
 import com.gooproper.util.SendMessageToFCM;
 import com.gooproper.util.ServerApi;
@@ -73,18 +59,14 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
-import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import jxl.write.Label;
-
-public class TambahGambarActivity extends AppCompatActivity {
+public class TambahDataGambarPralistingActivity extends AppCompatActivity {
 
     private ProgressDialog pDialog;
     final int CODE_GALLERY_REQUEST1 = 1;
@@ -155,7 +137,7 @@ public class TambahGambarActivity extends AppCompatActivity {
     ImageView hps1, hps2, hps3, hps4, hps5, hps6, hps7, hps8, hps9, hps10, hps11, hps12;
     Button batal, submit;
     Button select, select1, select2, select3, select4, select5, select6, select7, select9, select10, select11, select12;
-    String intentIdListing,intentIdAgen,intentIdAgenCo,intentPjp,intentPriority,intentBanner,intentImg1,intentImg2,intentImg3,intentImg4,intentImg5,intentImg6,intentImg7,intentImg8,intentImg9,intentImg10,intentImg11,intentImg12,intentMarketable,intentStatusHarga,intentIsSelfie,intentIsLokasi;
+    String intentIdPraListing,intentIdAgen,intentIdAgenCo,intentPjp,intentPriority,intentBanner,intentImg1,intentImg2,intentImg3,intentImg4,intentImg5,intentImg6,intentImg7,intentImg8,intentImg9,intentImg10,intentImg11,intentImg12,intentMarketable,intentStatusHarga,intentIsSelfie,intentIsLokasi;
     int PoinSekarang, PoinTambah, PoinKurang;
     String image1, image2, image3, image4, image5, image6, image7, image8, image9, image10, image11, image12;
     String timeStamp;
@@ -167,9 +149,9 @@ public class TambahGambarActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_tambah_gambar);
+        setContentView(R.layout.activity_tambah_data_gambar_pralisting);
 
-        pDialog = new ProgressDialog(TambahGambarActivity.this);
+        pDialog = new ProgressDialog(TambahDataGambarPralistingActivity.this);
 
         mStorageRef = FirebaseStorage.getInstance().getReference();
 
@@ -231,12 +213,7 @@ public class TambahGambarActivity extends AppCompatActivity {
 
         Intent data = getIntent();
         final int update = data.getIntExtra("update", 0);
-        intentIdListing = data.getStringExtra("IdListing");
-        intentIdAgen = data.getStringExtra("IdAgen");
-        intentIdAgenCo = data.getStringExtra("IdAgenCo");
-        intentPjp = data.getStringExtra("Pjp");
-        intentPriority = data.getStringExtra("Priority");
-        intentBanner = data.getStringExtra("Banner");
+        intentIdPraListing = data.getStringExtra("IdPraListing");
         intentImg1 = data.getStringExtra("Img1");
         intentImg2 = data.getStringExtra("Img2");
         intentImg3 = data.getStringExtra("Img3");
@@ -249,10 +226,6 @@ public class TambahGambarActivity extends AppCompatActivity {
         intentImg10 = data.getStringExtra("Img10");
         intentImg11 = data.getStringExtra("Img11");
         intentImg12 = data.getStringExtra("Img12");
-        intentMarketable = data.getStringExtra("Marketable");
-        intentStatusHarga = data.getStringExtra("StatusHarga");
-        intentIsSelfie = data.getStringExtra("IsSelfie");
-        intentIsLokasi = data.getStringExtra("IsLokasi");
 
         timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
         fileListing1 = "Listing1_" + timeStamp + ".jpg";
@@ -432,469 +405,6 @@ public class TambahGambarActivity extends AppCompatActivity {
             select12.setVisibility(View.VISIBLE);
         }
 
-        int CountImage = 0;
-
-        String[] intentImages = {
-                intentImg1,
-                intentImg2,
-                intentImg3,
-                intentImg4,
-                intentImg5,
-                intentImg6,
-                intentImg7,
-                intentImg8,
-                intentImg9,
-                intentImg10,
-                intentImg11,
-                intentImg12
-        };
-
-        for (String img : intentImages) {
-            if (!img.equals("0")) {
-                CountImage++;
-            }
-        }
-
-        int CountUriImage = 0;
-
-        String[] uriImages = {
-                String.valueOf(Uri1),
-                String.valueOf(Uri2),
-                String.valueOf(Uri3),
-                String.valueOf(Uri4),
-                String.valueOf(Uri5),
-                String.valueOf(Uri6),
-                String.valueOf(Uri7),
-                String.valueOf(Uri8),
-                String.valueOf(Uri9),
-                String.valueOf(Uri10),
-                String.valueOf(Uri11),
-                String.valueOf(Uri12),
-        };
-
-        for (String img : intentImages) {
-            if (img != null) {
-                CountUriImage++;
-            }
-        }
-        
-        int totalImage = CountImage + CountUriImage;
-
-        if (intentPriority.equals("exclusive") && !intentPjp.isEmpty() && intentBanner.equals("Ya")){
-            PoinSekarang = 50;
-            if (intentIsSelfie.equals("1") && intentIsLokasi.equals("1")) {
-                if (intentMarketable.equals("1") && intentStatusHarga.equals("1")) {
-                    if (intentIdAgenCo.equals("0")){
-                        if (CountImage >= 8) {
-                            PoinTambah = 0;
-                            handleImage1Success();
-                        } else {
-                            if (totalImage >= 8) {
-                                PoinTambah = 70;
-                                handleImage1Success();
-                            } else {
-                                PoinTambah = 0;
-                                handleImage1Success();
-                            }
-                        }
-                    } else if (intentIdAgenCo.equals(intentIdAgen)) {
-                        if (CountImage >= 8) {
-                            PoinTambah = 0;
-                            handleImage1Success();
-                        } else {
-                            if (totalImage >= 8) {
-                                PoinTambah = 70;
-                                handleImage1Success();
-                            } else {
-                                PoinTambah = 0;
-                                handleImage1Success();
-                            }
-                        }
-                    } else {
-                        if (CountImage >= 8) {
-                            PoinTambah = 0;
-                            handleImage1Success();
-                        } else {
-                            if (totalImage >= 8) {
-                                PoinTambah = 70 / 2;
-                                handleImage1Success();
-                            } else {
-                                PoinTambah = 0;
-                                handleImage1Success();
-                            }
-                        }
-                    }
-                } else {
-                    if (intentIdAgenCo.equals("0")){
-                        if (CountImage >= 8) {
-                            PoinTambah = 0;
-                            handleImage1Success();
-                        } else {
-                            if (totalImage >= 8) {
-                                PoinTambah = 50;
-                                handleImage1Success();
-                            } else {
-                                PoinTambah = 0;
-                                handleImage1Success();
-                            }
-                        }
-                    } else if (intentIdAgenCo.equals(intentIdAgen)) {
-                        if (CountImage >= 8) {
-                            PoinTambah = 0;
-                            handleImage1Success();
-                        } else {
-                            if (totalImage >= 8) {
-                                PoinTambah = 50;
-                                handleImage1Success();
-                            } else {
-                                PoinTambah = 0;
-                                handleImage1Success();
-                            }
-                        }
-                    } else {
-                        if (CountImage >= 8) {
-                            PoinTambah = 0;
-                            handleImage1Success();
-                        } else {
-                            if (totalImage >= 8) {
-                                PoinTambah = 50 / 2;
-                                handleImage1Success();
-                            } else {
-                                PoinTambah = 0;
-                                handleImage1Success();
-                            }
-                        }
-                    }
-                }
-            } else {
-                PoinTambah = 0;
-                handleImage1Success();
-            }
-        } else if (intentPriority.equals("exclusive") && !intentPjp.isEmpty() && intentBanner.equals("Tidak")) {
-            PoinSekarang = 40;
-            if (intentIsSelfie.equals("1") && intentIsLokasi.equals("1")) {
-                if (intentMarketable.equals("1") && intentStatusHarga.equals("1")) {
-                    if (intentIdAgenCo.equals("0")){
-                        if (CountImage >= 8) {
-                            PoinTambah = 0;
-                            handleImage1Success();
-                        } else {
-                            if (totalImage >= 8) {
-                                PoinTambah = 60;
-                                handleImage1Success();
-                            } else {
-                                PoinTambah = 0;
-                                handleImage1Success();
-                            }
-                        }
-                    } else if (intentIdAgenCo.equals(intentIdAgen)) {
-                        if (CountImage >= 8) {
-                            PoinTambah = 0;
-                            handleImage1Success();
-                        } else {
-                            if (totalImage >= 8) {
-                                PoinTambah = 60;
-                                handleImage1Success();
-                            } else {
-                                PoinTambah = 0;
-                                handleImage1Success();
-                            }
-                        }
-                    } else {
-                        if (CountImage >= 8) {
-                            PoinTambah = 0;
-                            handleImage1Success();
-                        } else {
-                            if (totalImage >= 8) {
-                                PoinTambah = 60 / 2;
-                                handleImage1Success();
-                            } else {
-                                PoinTambah = 0;
-                                handleImage1Success();
-                            }
-                        }
-                    }
-                } else {
-                    if (intentIdAgenCo.equals("0")){
-                        if (CountImage >= 8) {
-                            PoinTambah = 0;
-                            handleImage1Success();
-                        } else {
-                            if (totalImage >= 8) {
-                                PoinTambah = 40;
-                                handleImage1Success();
-                            } else {
-                                PoinTambah = 0;
-                                handleImage1Success();
-                            }
-                        }
-                    } else if (intentIdAgenCo.equals(intentIdAgen)) {
-                        if (CountImage >= 8) {
-                            PoinTambah = 0;
-                            handleImage1Success();
-                        } else {
-                            if (totalImage >= 8) {
-                                PoinTambah = 40;
-                                handleImage1Success();
-                            } else {
-                                PoinTambah = 0;
-                                handleImage1Success();
-                            }
-                        }
-                    } else {
-                        if (CountImage >= 8) {
-                            PoinTambah = 0;
-                            handleImage1Success();
-                        } else {
-                            if (totalImage >= 8) {
-                                PoinTambah = 40 / 2;
-                                handleImage1Success();
-                            } else {
-                                PoinTambah = 0;
-                                handleImage1Success();
-                            }
-                        }
-                    }
-                }
-            } else {
-                PoinTambah = 0;
-                handleImage1Success();
-            }
-        } else if (intentPriority.equals("open") && !intentPjp.isEmpty() && intentBanner.equals("Ya")) {
-            PoinSekarang = 30;
-            if (intentIsSelfie.equals("1") && intentIsLokasi.equals("1")) {
-                if (intentMarketable.equals("1") && intentStatusHarga.equals("1")) {
-                    if (intentIdAgenCo.equals("0")){
-                        if (CountImage >= 8) {
-                            PoinTambah = 0;
-                            handleImage1Success();
-                        } else {
-                            if (totalImage >= 8) {
-                                PoinTambah = 40;
-                                handleImage1Success();
-                            } else {
-                                PoinTambah = 0;
-                                handleImage1Success();
-                            }
-                        }
-                    } else if (intentIdAgenCo.equals(intentIdAgen)) {
-                        if (CountImage >= 8) {
-                            PoinTambah = 0;
-                            handleImage1Success();
-                        } else {
-                            if (totalImage >= 8) {
-                                PoinTambah = 40;
-                                handleImage1Success();
-                            } else {
-                                PoinTambah = 0;
-                                handleImage1Success();
-                            }
-                        }
-                    } else {
-                        if (CountImage >= 8) {
-                            PoinTambah = 0;
-                            handleImage1Success();
-                        } else {
-                            if (totalImage >= 8) {
-                                PoinTambah = 40 / 2;
-                                handleImage1Success();
-                            } else {
-                                PoinTambah = 0;
-                                handleImage1Success();
-                            }
-                        }
-                    }
-                } else {
-                    if (intentIdAgenCo.equals("0")){
-                        if (totalImage >= 8) {
-                            PoinTambah = 30;
-                        } else {
-                            PoinTambah = 0;
-                        }
-                    } else if (intentIdAgenCo.equals(intentIdAgen)) {
-                        if (totalImage >= 8) {
-                            PoinTambah = 30;
-                        } else {
-                            PoinTambah = 0;
-                        }
-                    } else {
-                        if (totalImage >= 8) {
-                            PoinTambah = 30 / 2;
-                        } else {
-                            PoinTambah = 0;
-                        }
-                    }
-                }
-            } else {
-                if (intentIdAgenCo.equals("0")){
-                    PoinTambah = 0;
-                } else if (intentIdAgenCo.equals(intentIdAgen)) {
-                    PoinTambah = 0;
-                } else {
-                    PoinTambah = 0;
-                }
-            }
-        } else if (intentPriority.equals("open") && !intentPjp.isEmpty() && intentBanner.equals("Tidak")) {
-            PoinSekarang = 20;
-            if (intentIsSelfie.equals("1") && intentIsLokasi.equals("1")) {
-                if (intentMarketable.equals("1") && intentStatusHarga.equals("1")) {
-                    if (intentIdAgenCo.equals("0")){
-                        if (totalImage >= 8) {
-                            PoinTambah = 40;
-                        } else {
-                            PoinTambah = 0;
-                        }
-                    } else if (intentIdAgenCo.equals(intentIdAgen)) {
-                        if (totalImage >= 8) {
-                            PoinTambah = 40;
-                        } else {
-                            PoinTambah = 0;
-                        }
-                    } else {
-                        if (totalImage >= 8) {
-                            PoinTambah = 40 / 2;
-                        } else {
-                            PoinTambah = 0;
-                        }
-                    }
-                } else {
-                    if (intentIdAgenCo.equals("0")){
-                        if (totalImage >= 8) {
-                            PoinTambah = 0;
-                        } else {
-                            PoinTambah = 0;
-                        }
-                    } else if (intentIdAgenCo.equals(intentIdAgen)) {
-                        if (totalImage >= 8) {
-                            PoinTambah = 0;
-                        } else {
-                            PoinTambah = 0;
-                        }
-                    } else {
-                        if (totalImage >= 8) {
-                            PoinTambah = 0;
-                        } else {
-                            PoinTambah = 0;
-                        }
-                    }
-                }
-            } else {
-                if (intentIdAgenCo.equals("0")){
-                    PoinTambah = 0;
-                } else if (intentIdAgenCo.equals(intentIdAgen)) {
-                    PoinTambah = 0;
-                } else {
-                    PoinTambah = 0;
-                }
-            }
-        } else if (intentPriority.equals("open") && intentPjp.isEmpty() && intentBanner.equals("Ya")) {
-            PoinSekarang = 10;
-            if (intentIsSelfie.equals("1") && intentIsLokasi.equals("1")) {
-                if (intentMarketable.equals("1") && intentStatusHarga.equals("1")) {
-                    if (intentIdAgenCo.equals("0")){
-                        if (totalImage >= 8) {
-                            PoinTambah = 30;
-                        } else {
-                            PoinTambah = 0;
-                        }
-                    } else if (intentIdAgenCo.equals(intentIdAgen)) {
-                        if (totalImage >= 8) {
-                            PoinTambah = 30;
-                        } else {
-                            PoinTambah = 0;
-                        }
-                    } else {
-                        if (totalImage >= 8) {
-                            PoinTambah = 30 / 2;
-                        } else {
-                            PoinTambah = 0;
-                        }
-                    }
-                } else {
-                    if (intentIdAgenCo.equals("0")){
-                        if (totalImage >= 8) {
-                            PoinTambah = 10;
-                        } else {
-                            PoinTambah = 0;
-                        }
-                    } else if (intentIdAgenCo.equals(intentIdAgen)) {
-                        if (totalImage >= 8) {
-                            PoinTambah = 10;
-                        } else {
-                            PoinTambah = 0;
-                        }
-                    } else {
-                        if (totalImage >= 8) {
-                            PoinTambah = 10 / 2;
-                        } else {
-                            PoinTambah = 0;
-                        }
-                    }
-                }
-            } else {
-                if (intentIdAgenCo.equals("0")){
-                    PoinTambah = 0;
-                } else if (intentIdAgenCo.equals(intentIdAgen)) {
-                    PoinTambah = 0;
-                } else {
-                    PoinTambah = 0;
-                }
-            }
-        } else if (intentPriority.equals("open") && intentPjp.isEmpty() && intentBanner.equals("Tidak")) {
-            PoinSekarang = 10;
-            if (intentIsSelfie.equals("1") && intentIsLokasi.equals("1")) {
-                if (intentMarketable.equals("1") && intentStatusHarga.equals("1")) {
-                    if (intentIdAgenCo.equals("0")){
-                        if (totalImage >= 8) {
-                            PoinTambah = 20;
-                        } else {
-                            PoinTambah = 0;
-                        }
-                    } else if (intentIdAgenCo.equals(intentIdAgen)) {
-                        if (totalImage >= 8) {
-                            PoinTambah = 20;
-                        } else {
-                            PoinTambah = 0;
-                        }
-                    } else {
-                        if (totalImage >= 8) {
-                            PoinTambah = 20 / 2;
-                        } else {
-                            PoinTambah = 0 / 2;
-                        }
-                    }
-                } else {
-                    if (intentIdAgenCo.equals("0")){
-                        if (totalImage >= 8) {
-                            PoinTambah = 10;
-                        } else {
-                            PoinTambah = 0;
-                        }
-                    } else if (intentIdAgenCo.equals(intentIdAgen)) {
-                        if (totalImage >= 8) {
-                            PoinTambah = 10;
-                        } else {
-                            PoinTambah = 0;
-                        }
-                    } else {
-                        if (totalImage >= 8) {
-                            PoinTambah = 10 / 2;
-                        } else {
-                            PoinTambah = 0;
-                        }
-                    }
-                }
-            } else {
-                if (intentIdAgenCo.equals("0")){
-                    PoinTambah = 0;
-                } else if (intentIdAgenCo.equals(intentIdAgen)) {
-                    PoinTambah = 0;
-                } else {
-                    PoinTambah = 0;
-                }
-            }
-        }
-
         if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
         }
@@ -907,7 +417,7 @@ public class TambahGambarActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int which) {
                         switch (which) {
                             case 0:
-                                ActivityCompat.requestPermissions(TambahGambarActivity.this, new String[]{Manifest.permission.CAMERA}, CODE_CAMERA_REQUEST1);
+                                ActivityCompat.requestPermissions(TambahDataGambarPralistingActivity.this, new String[]{Manifest.permission.CAMERA}, CODE_CAMERA_REQUEST1);
                                 break;
                             case 1:
                                 requestPermissions1();
@@ -926,7 +436,7 @@ public class TambahGambarActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int which) {
                         switch (which) {
                             case 0:
-                                ActivityCompat.requestPermissions(TambahGambarActivity.this, new String[]{Manifest.permission.CAMERA}, CODE_CAMERA_REQUEST2);
+                                ActivityCompat.requestPermissions(TambahDataGambarPralistingActivity.this, new String[]{Manifest.permission.CAMERA}, CODE_CAMERA_REQUEST2);
                                 break;
                             case 1:
                                 requestPermissions2();
@@ -945,7 +455,7 @@ public class TambahGambarActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int which) {
                         switch (which) {
                             case 0:
-                                ActivityCompat.requestPermissions(TambahGambarActivity.this, new String[]{Manifest.permission.CAMERA}, CODE_CAMERA_REQUEST3);
+                                ActivityCompat.requestPermissions(TambahDataGambarPralistingActivity.this, new String[]{Manifest.permission.CAMERA}, CODE_CAMERA_REQUEST3);
                                 break;
                             case 1:
                                 requestPermissions3();
@@ -964,7 +474,7 @@ public class TambahGambarActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int which) {
                         switch (which) {
                             case 0:
-                                ActivityCompat.requestPermissions(TambahGambarActivity.this, new String[]{Manifest.permission.CAMERA}, CODE_CAMERA_REQUEST4);
+                                ActivityCompat.requestPermissions(TambahDataGambarPralistingActivity.this, new String[]{Manifest.permission.CAMERA}, CODE_CAMERA_REQUEST4);
                                 break;
                             case 1:
                                 requestPermissions4();
@@ -983,7 +493,7 @@ public class TambahGambarActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int which) {
                         switch (which) {
                             case 0:
-                                ActivityCompat.requestPermissions(TambahGambarActivity.this, new String[]{Manifest.permission.CAMERA}, CODE_CAMERA_REQUEST5);
+                                ActivityCompat.requestPermissions(TambahDataGambarPralistingActivity.this, new String[]{Manifest.permission.CAMERA}, CODE_CAMERA_REQUEST5);
                                 break;
                             case 1:
                                 requestPermissions5();
@@ -1002,7 +512,7 @@ public class TambahGambarActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int which) {
                         switch (which) {
                             case 0:
-                                ActivityCompat.requestPermissions(TambahGambarActivity.this, new String[]{Manifest.permission.CAMERA}, CODE_CAMERA_REQUEST6);
+                                ActivityCompat.requestPermissions(TambahDataGambarPralistingActivity.this, new String[]{Manifest.permission.CAMERA}, CODE_CAMERA_REQUEST6);
                                 break;
                             case 1:
                                 requestPermissions6();
@@ -1021,7 +531,7 @@ public class TambahGambarActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int which) {
                         switch (which) {
                             case 0:
-                                ActivityCompat.requestPermissions(TambahGambarActivity.this, new String[]{Manifest.permission.CAMERA}, CODE_CAMERA_REQUEST7);
+                                ActivityCompat.requestPermissions(TambahDataGambarPralistingActivity.this, new String[]{Manifest.permission.CAMERA}, CODE_CAMERA_REQUEST7);
                                 break;
                             case 1:
                                 requestPermissions7();
@@ -1040,7 +550,7 @@ public class TambahGambarActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int which) {
                         switch (which) {
                             case 0:
-                                ActivityCompat.requestPermissions(TambahGambarActivity.this, new String[]{Manifest.permission.CAMERA}, CODE_CAMERA_REQUEST8);
+                                ActivityCompat.requestPermissions(TambahDataGambarPralistingActivity.this, new String[]{Manifest.permission.CAMERA}, CODE_CAMERA_REQUEST8);
                                 break;
                             case 1:
                                 requestPermissions8();
@@ -1059,7 +569,7 @@ public class TambahGambarActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int which) {
                         switch (which) {
                             case 0:
-                                ActivityCompat.requestPermissions(TambahGambarActivity.this, new String[]{Manifest.permission.CAMERA}, CODE_CAMERA_REQUEST9);
+                                ActivityCompat.requestPermissions(TambahDataGambarPralistingActivity.this, new String[]{Manifest.permission.CAMERA}, CODE_CAMERA_REQUEST9);
                                 break;
                             case 1:
                                 requestPermissions9();
@@ -1078,7 +588,7 @@ public class TambahGambarActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int which) {
                         switch (which) {
                             case 0:
-                                ActivityCompat.requestPermissions(TambahGambarActivity.this, new String[]{Manifest.permission.CAMERA}, CODE_CAMERA_REQUEST10);
+                                ActivityCompat.requestPermissions(TambahDataGambarPralistingActivity.this, new String[]{Manifest.permission.CAMERA}, CODE_CAMERA_REQUEST10);
                                 break;
                             case 1:
                                 requestPermissions10();
@@ -1097,7 +607,7 @@ public class TambahGambarActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int which) {
                         switch (which) {
                             case 0:
-                                ActivityCompat.requestPermissions(TambahGambarActivity.this, new String[]{Manifest.permission.CAMERA}, CODE_CAMERA_REQUEST11);
+                                ActivityCompat.requestPermissions(TambahDataGambarPralistingActivity.this, new String[]{Manifest.permission.CAMERA}, CODE_CAMERA_REQUEST11);
                                 break;
                             case 1:
                                 requestPermissions11();
@@ -1116,7 +626,7 @@ public class TambahGambarActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int which) {
                         switch (which) {
                             case 0:
-                                ActivityCompat.requestPermissions(TambahGambarActivity.this, new String[]{Manifest.permission.CAMERA}, CODE_CAMERA_REQUEST12);
+                                ActivityCompat.requestPermissions(TambahDataGambarPralistingActivity.this, new String[]{Manifest.permission.CAMERA}, CODE_CAMERA_REQUEST12);
                                 break;
                             case 1:
                                 requestPermissions12();
@@ -1463,10 +973,8 @@ public class TambahGambarActivity extends AppCompatActivity {
             }
         } else if (requestCode == PERMISSION_REQUEST_CODE_MEDIA_IMAGES2) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-                intent.setType("image/*");
-                intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
-                startActivityForResult(Intent.createChooser(intent, "Select Picture"), CODE_GALLERY_REQUEST2);
+                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(intent, CODE_GALLERY_REQUEST2);
             }
         } else if (requestCode == PERMISSION_REQUEST_CODE_MEDIA_IMAGES3) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -1525,7 +1033,7 @@ public class TambahGambarActivity extends AppCompatActivity {
                 Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 startActivityForResult(intent, CODE_GALLERY_REQUEST1);
             } else {
-                Dialog customDialog = new Dialog(TambahGambarActivity.this);
+                Dialog customDialog = new Dialog(TambahDataGambarPralistingActivity.this);
                 customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                 customDialog.setContentView(R.layout.custom_dialog_eror_input);
 
@@ -1547,7 +1055,7 @@ public class TambahGambarActivity extends AppCompatActivity {
 
                 ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
 
-                Glide.with(TambahGambarActivity.this)
+                Glide.with(TambahDataGambarPralistingActivity.this)
                         .load(R.drawable.alert) // You can also use a local resource like R.drawable.your_gif_resource
                         .transition(DrawableTransitionOptions.withCrossFade())
                         .into(gifImageView);
@@ -1557,12 +1065,10 @@ public class TambahGambarActivity extends AppCompatActivity {
             return;
         } else if (requestCode == CODE_GALLERY_REQUEST2) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Intent intent = new Intent(Intent.ACTION_PICK);
-                intent.setType("image/*");
-                intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 startActivityForResult(intent, CODE_GALLERY_REQUEST2);
             } else {
-                Dialog customDialog = new Dialog(TambahGambarActivity.this);
+                Dialog customDialog = new Dialog(TambahDataGambarPralistingActivity.this);
                 customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                 customDialog.setContentView(R.layout.custom_dialog_eror_input);
 
@@ -1584,7 +1090,7 @@ public class TambahGambarActivity extends AppCompatActivity {
 
                 ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
 
-                Glide.with(TambahGambarActivity.this)
+                Glide.with(TambahDataGambarPralistingActivity.this)
                         .load(R.drawable.alert) // You can also use a local resource like R.drawable.your_gif_resource
                         .transition(DrawableTransitionOptions.withCrossFade())
                         .into(gifImageView);
@@ -1597,7 +1103,7 @@ public class TambahGambarActivity extends AppCompatActivity {
                 Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 startActivityForResult(intent, CODE_GALLERY_REQUEST3);
             } else {
-                Dialog customDialog = new Dialog(TambahGambarActivity.this);
+                Dialog customDialog = new Dialog(TambahDataGambarPralistingActivity.this);
                 customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                 customDialog.setContentView(R.layout.custom_dialog_eror_input);
 
@@ -1619,7 +1125,7 @@ public class TambahGambarActivity extends AppCompatActivity {
 
                 ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
 
-                Glide.with(TambahGambarActivity.this)
+                Glide.with(TambahDataGambarPralistingActivity.this)
                         .load(R.drawable.alert) // You can also use a local resource like R.drawable.your_gif_resource
                         .transition(DrawableTransitionOptions.withCrossFade())
                         .into(gifImageView);
@@ -1632,7 +1138,7 @@ public class TambahGambarActivity extends AppCompatActivity {
                 Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 startActivityForResult(intent, CODE_GALLERY_REQUEST4);
             } else {
-                Dialog customDialog = new Dialog(TambahGambarActivity.this);
+                Dialog customDialog = new Dialog(TambahDataGambarPralistingActivity.this);
                 customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                 customDialog.setContentView(R.layout.custom_dialog_eror_input);
 
@@ -1654,7 +1160,7 @@ public class TambahGambarActivity extends AppCompatActivity {
 
                 ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
 
-                Glide.with(TambahGambarActivity.this)
+                Glide.with(TambahDataGambarPralistingActivity.this)
                         .load(R.drawable.alert) // You can also use a local resource like R.drawable.your_gif_resource
                         .transition(DrawableTransitionOptions.withCrossFade())
                         .into(gifImageView);
@@ -1667,7 +1173,7 @@ public class TambahGambarActivity extends AppCompatActivity {
                 Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 startActivityForResult(intent, CODE_GALLERY_REQUEST5);
             } else {
-                Dialog customDialog = new Dialog(TambahGambarActivity.this);
+                Dialog customDialog = new Dialog(TambahDataGambarPralistingActivity.this);
                 customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                 customDialog.setContentView(R.layout.custom_dialog_eror_input);
 
@@ -1689,7 +1195,7 @@ public class TambahGambarActivity extends AppCompatActivity {
 
                 ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
 
-                Glide.with(TambahGambarActivity.this)
+                Glide.with(TambahDataGambarPralistingActivity.this)
                         .load(R.drawable.alert) // You can also use a local resource like R.drawable.your_gif_resource
                         .transition(DrawableTransitionOptions.withCrossFade())
                         .into(gifImageView);
@@ -1702,7 +1208,7 @@ public class TambahGambarActivity extends AppCompatActivity {
                 Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 startActivityForResult(intent, CODE_GALLERY_REQUEST6);
             } else {
-                Dialog customDialog = new Dialog(TambahGambarActivity.this);
+                Dialog customDialog = new Dialog(TambahDataGambarPralistingActivity.this);
                 customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                 customDialog.setContentView(R.layout.custom_dialog_eror_input);
 
@@ -1724,7 +1230,7 @@ public class TambahGambarActivity extends AppCompatActivity {
 
                 ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
 
-                Glide.with(TambahGambarActivity.this)
+                Glide.with(TambahDataGambarPralistingActivity.this)
                         .load(R.drawable.alert) // You can also use a local resource like R.drawable.your_gif_resource
                         .transition(DrawableTransitionOptions.withCrossFade())
                         .into(gifImageView);
@@ -1737,7 +1243,7 @@ public class TambahGambarActivity extends AppCompatActivity {
                 Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 startActivityForResult(intent, CODE_GALLERY_REQUEST7);
             } else {
-                Dialog customDialog = new Dialog(TambahGambarActivity.this);
+                Dialog customDialog = new Dialog(TambahDataGambarPralistingActivity.this);
                 customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                 customDialog.setContentView(R.layout.custom_dialog_eror_input);
 
@@ -1759,7 +1265,7 @@ public class TambahGambarActivity extends AppCompatActivity {
 
                 ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
 
-                Glide.with(TambahGambarActivity.this)
+                Glide.with(TambahDataGambarPralistingActivity.this)
                         .load(R.drawable.alert) // You can also use a local resource like R.drawable.your_gif_resource
                         .transition(DrawableTransitionOptions.withCrossFade())
                         .into(gifImageView);
@@ -1772,7 +1278,7 @@ public class TambahGambarActivity extends AppCompatActivity {
                 Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 startActivityForResult(intent, CODE_GALLERY_REQUEST8);
             } else {
-                Dialog customDialog = new Dialog(TambahGambarActivity.this);
+                Dialog customDialog = new Dialog(TambahDataGambarPralistingActivity.this);
                 customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                 customDialog.setContentView(R.layout.custom_dialog_eror_input);
 
@@ -1794,7 +1300,7 @@ public class TambahGambarActivity extends AppCompatActivity {
 
                 ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
 
-                Glide.with(TambahGambarActivity.this)
+                Glide.with(TambahDataGambarPralistingActivity.this)
                         .load(R.drawable.alert) // You can also use a local resource like R.drawable.your_gif_resource
                         .transition(DrawableTransitionOptions.withCrossFade())
                         .into(gifImageView);
@@ -1807,7 +1313,7 @@ public class TambahGambarActivity extends AppCompatActivity {
                 Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 startActivityForResult(intent, CODE_GALLERY_REQUEST9);
             } else {
-                Dialog customDialog = new Dialog(TambahGambarActivity.this);
+                Dialog customDialog = new Dialog(TambahDataGambarPralistingActivity.this);
                 customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                 customDialog.setContentView(R.layout.custom_dialog_eror_input);
 
@@ -1829,7 +1335,7 @@ public class TambahGambarActivity extends AppCompatActivity {
 
                 ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
 
-                Glide.with(TambahGambarActivity.this)
+                Glide.with(TambahDataGambarPralistingActivity.this)
                         .load(R.drawable.alert) // You can also use a local resource like R.drawable.your_gif_resource
                         .transition(DrawableTransitionOptions.withCrossFade())
                         .into(gifImageView);
@@ -1842,7 +1348,7 @@ public class TambahGambarActivity extends AppCompatActivity {
                 Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 startActivityForResult(intent, CODE_GALLERY_REQUEST10);
             } else {
-                Dialog customDialog = new Dialog(TambahGambarActivity.this);
+                Dialog customDialog = new Dialog(TambahDataGambarPralistingActivity.this);
                 customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                 customDialog.setContentView(R.layout.custom_dialog_eror_input);
 
@@ -1864,7 +1370,7 @@ public class TambahGambarActivity extends AppCompatActivity {
 
                 ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
 
-                Glide.with(TambahGambarActivity.this)
+                Glide.with(TambahDataGambarPralistingActivity.this)
                         .load(R.drawable.alert) // You can also use a local resource like R.drawable.your_gif_resource
                         .transition(DrawableTransitionOptions.withCrossFade())
                         .into(gifImageView);
@@ -1877,7 +1383,7 @@ public class TambahGambarActivity extends AppCompatActivity {
                 Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 startActivityForResult(intent, CODE_GALLERY_REQUEST11);
             } else {
-                Dialog customDialog = new Dialog(TambahGambarActivity.this);
+                Dialog customDialog = new Dialog(TambahDataGambarPralistingActivity.this);
                 customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                 customDialog.setContentView(R.layout.custom_dialog_eror_input);
 
@@ -1899,7 +1405,7 @@ public class TambahGambarActivity extends AppCompatActivity {
 
                 ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
 
-                Glide.with(TambahGambarActivity.this)
+                Glide.with(TambahDataGambarPralistingActivity.this)
                         .load(R.drawable.alert) // You can also use a local resource like R.drawable.your_gif_resource
                         .transition(DrawableTransitionOptions.withCrossFade())
                         .into(gifImageView);
@@ -1912,7 +1418,7 @@ public class TambahGambarActivity extends AppCompatActivity {
                 Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 startActivityForResult(intent, CODE_GALLERY_REQUEST12);
             } else {
-                Dialog customDialog = new Dialog(TambahGambarActivity.this);
+                Dialog customDialog = new Dialog(TambahDataGambarPralistingActivity.this);
                 customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                 customDialog.setContentView(R.layout.custom_dialog_eror_input);
 
@@ -1934,7 +1440,7 @@ public class TambahGambarActivity extends AppCompatActivity {
 
                 ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
 
-                Glide.with(TambahGambarActivity.this)
+                Glide.with(TambahDataGambarPralistingActivity.this)
                         .load(R.drawable.alert) // You can also use a local resource like R.drawable.your_gif_resource
                         .transition(DrawableTransitionOptions.withCrossFade())
                         .into(gifImageView);
@@ -1946,7 +1452,7 @@ public class TambahGambarActivity extends AppCompatActivity {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 bukaKamera1();
             } else {
-                AlertDialog.Builder builder = new AlertDialog.Builder(TambahGambarActivity.this);
+                AlertDialog.Builder builder = new AlertDialog.Builder(TambahDataGambarPralistingActivity.this);
                 builder.setTitle("Izin Kamera Ditolak").
                         setMessage("Aplikasi memerlukan izin kamera untuk mengambil gambar.");
                 builder.setPositiveButton("OK",
@@ -1959,7 +1465,7 @@ public class TambahGambarActivity extends AppCompatActivity {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 bukaKamera2();
             } else {
-                AlertDialog.Builder builder = new AlertDialog.Builder(TambahGambarActivity.this);
+                AlertDialog.Builder builder = new AlertDialog.Builder(TambahDataGambarPralistingActivity.this);
                 builder.setTitle("Izin Kamera Ditolak").
                         setMessage("Aplikasi memerlukan izin kamera untuk mengambil gambar.");
                 builder.setPositiveButton("OK",
@@ -1972,7 +1478,7 @@ public class TambahGambarActivity extends AppCompatActivity {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 bukaKamera3();
             } else {
-                AlertDialog.Builder builder = new AlertDialog.Builder(TambahGambarActivity.this);
+                AlertDialog.Builder builder = new AlertDialog.Builder(TambahDataGambarPralistingActivity.this);
                 builder.setTitle("Izin Kamera Ditolak").
                         setMessage("Aplikasi memerlukan izin kamera untuk mengambil gambar.");
                 builder.setPositiveButton("OK",
@@ -1985,7 +1491,7 @@ public class TambahGambarActivity extends AppCompatActivity {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 bukaKamera4();
             } else {
-                AlertDialog.Builder builder = new AlertDialog.Builder(TambahGambarActivity.this);
+                AlertDialog.Builder builder = new AlertDialog.Builder(TambahDataGambarPralistingActivity.this);
                 builder.setTitle("Izin Kamera Ditolak").
                         setMessage("Aplikasi memerlukan izin kamera untuk mengambil gambar.");
                 builder.setPositiveButton("OK",
@@ -1998,7 +1504,7 @@ public class TambahGambarActivity extends AppCompatActivity {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 bukaKamera5();
             } else {
-                AlertDialog.Builder builder = new AlertDialog.Builder(TambahGambarActivity.this);
+                AlertDialog.Builder builder = new AlertDialog.Builder(TambahDataGambarPralistingActivity.this);
                 builder.setTitle("Izin Kamera Ditolak").
                         setMessage("Aplikasi memerlukan izin kamera untuk mengambil gambar.");
                 builder.setPositiveButton("OK",
@@ -2011,7 +1517,7 @@ public class TambahGambarActivity extends AppCompatActivity {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 bukaKamera6();
             } else {
-                AlertDialog.Builder builder = new AlertDialog.Builder(TambahGambarActivity.this);
+                AlertDialog.Builder builder = new AlertDialog.Builder(TambahDataGambarPralistingActivity.this);
                 builder.setTitle("Izin Kamera Ditolak").
                         setMessage("Aplikasi memerlukan izin kamera untuk mengambil gambar.");
                 builder.setPositiveButton("OK",
@@ -2024,7 +1530,7 @@ public class TambahGambarActivity extends AppCompatActivity {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 bukaKamera7();
             } else {
-                AlertDialog.Builder builder = new AlertDialog.Builder(TambahGambarActivity.this);
+                AlertDialog.Builder builder = new AlertDialog.Builder(TambahDataGambarPralistingActivity.this);
                 builder.setTitle("Izin Kamera Ditolak").
                         setMessage("Aplikasi memerlukan izin kamera untuk mengambil gambar.");
                 builder.setPositiveButton("OK",
@@ -2037,7 +1543,7 @@ public class TambahGambarActivity extends AppCompatActivity {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 bukaKamera8();
             } else {
-                AlertDialog.Builder builder = new AlertDialog.Builder(TambahGambarActivity.this);
+                AlertDialog.Builder builder = new AlertDialog.Builder(TambahDataGambarPralistingActivity.this);
                 builder.setTitle("Izin Kamera Ditolak").
                         setMessage("Aplikasi memerlukan izin kamera untuk mengambil gambar.");
                 builder.setPositiveButton("OK",
@@ -2050,7 +1556,7 @@ public class TambahGambarActivity extends AppCompatActivity {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 bukaKamera9();
             } else {
-                AlertDialog.Builder builder = new AlertDialog.Builder(TambahGambarActivity.this);
+                AlertDialog.Builder builder = new AlertDialog.Builder(TambahDataGambarPralistingActivity.this);
                 builder.setTitle("Izin Kamera Ditolak").
                         setMessage("Aplikasi memerlukan izin kamera untuk mengambil gambar.");
                 builder.setPositiveButton("OK",
@@ -2063,7 +1569,7 @@ public class TambahGambarActivity extends AppCompatActivity {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 bukaKamera10();
             } else {
-                AlertDialog.Builder builder = new AlertDialog.Builder(TambahGambarActivity.this);
+                AlertDialog.Builder builder = new AlertDialog.Builder(TambahDataGambarPralistingActivity.this);
                 builder.setTitle("Izin Kamera Ditolak").
                         setMessage("Aplikasi memerlukan izin kamera untuk mengambil gambar.");
                 builder.setPositiveButton("OK",
@@ -2076,7 +1582,7 @@ public class TambahGambarActivity extends AppCompatActivity {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 bukaKamera11();
             } else {
-                AlertDialog.Builder builder = new AlertDialog.Builder(TambahGambarActivity.this);
+                AlertDialog.Builder builder = new AlertDialog.Builder(TambahDataGambarPralistingActivity.this);
                 builder.setTitle("Izin Kamera Ditolak").
                         setMessage("Aplikasi memerlukan izin kamera untuk mengambil gambar.");
                 builder.setPositiveButton("OK",
@@ -2089,7 +1595,7 @@ public class TambahGambarActivity extends AppCompatActivity {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 bukaKamera12();
             } else {
-                AlertDialog.Builder builder = new AlertDialog.Builder(TambahGambarActivity.this);
+                AlertDialog.Builder builder = new AlertDialog.Builder(TambahDataGambarPralistingActivity.this);
                 builder.setTitle("Izin Kamera Ditolak").
                         setMessage("Aplikasi memerlukan izin kamera untuk mengambil gambar.");
                 builder.setPositiveButton("OK",
@@ -2383,7 +1889,7 @@ public class TambahGambarActivity extends AppCompatActivity {
                                     .addOnFailureListener(exception -> {
                                         HideProgressDialog();
                                         handleImage1Success();
-                                        Toast.makeText(TambahGambarActivity.this, "Upload failed: " + exception.getMessage(), Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(TambahDataGambarPralistingActivity.this, "Upload failed: " + exception.getMessage(), Toast.LENGTH_SHORT).show();
                                     });
                         }
                     })
@@ -2392,10 +1898,11 @@ public class TambahGambarActivity extends AppCompatActivity {
                         public void onFailure(@NonNull Exception e) {
                             HideProgressDialog();
                             handleImage1Success();
-                            Toast.makeText(TambahGambarActivity.this, "Upload failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(TambahDataGambarPralistingActivity.this, "Upload failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     });
         } else {
+            showProgressDialog();
             image1 = intentImg1;
             handleImage2Success();
         }
@@ -2414,7 +1921,7 @@ public class TambahGambarActivity extends AppCompatActivity {
                                     })
                                     .addOnFailureListener(exception -> {
                                         handleImage2Success();
-                                        Toast.makeText(TambahGambarActivity.this, "Upload failed: " + exception.getMessage(), Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(TambahDataGambarPralistingActivity.this, "Upload failed: " + exception.getMessage(), Toast.LENGTH_SHORT).show();
                                     });
                         }
                     })
@@ -2422,7 +1929,7 @@ public class TambahGambarActivity extends AppCompatActivity {
                         @Override
                         public void onFailure(@NonNull Exception e) {
                             handleImage2Success();
-                            Toast.makeText(TambahGambarActivity.this, "Upload failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(TambahDataGambarPralistingActivity.this, "Upload failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     });
         } else {
@@ -2444,7 +1951,7 @@ public class TambahGambarActivity extends AppCompatActivity {
                                     })
                                     .addOnFailureListener(exception -> {
                                         handleImage3Success();
-                                        Toast.makeText(TambahGambarActivity.this, "Upload failed: " + exception.getMessage(), Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(TambahDataGambarPralistingActivity.this, "Upload failed: " + exception.getMessage(), Toast.LENGTH_SHORT).show();
                                     });
                         }
                     })
@@ -2452,7 +1959,7 @@ public class TambahGambarActivity extends AppCompatActivity {
                         @Override
                         public void onFailure(@NonNull Exception e) {
                             handleImage3Success();
-                            Toast.makeText(TambahGambarActivity.this, "Upload failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(TambahDataGambarPralistingActivity.this, "Upload failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     });
         } else {
@@ -2474,7 +1981,7 @@ public class TambahGambarActivity extends AppCompatActivity {
                                     })
                                     .addOnFailureListener(exception -> {
                                         handleImage4Success();
-                                        Toast.makeText(TambahGambarActivity.this, "Upload failed: " + exception.getMessage(), Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(TambahDataGambarPralistingActivity.this, "Upload failed: " + exception.getMessage(), Toast.LENGTH_SHORT).show();
                                     });
                         }
                     })
@@ -2482,7 +1989,7 @@ public class TambahGambarActivity extends AppCompatActivity {
                         @Override
                         public void onFailure(@NonNull Exception e) {
                             handleImage4Success();
-                            Toast.makeText(TambahGambarActivity.this, "Upload failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(TambahDataGambarPralistingActivity.this, "Upload failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     });
         } else {
@@ -2504,7 +2011,7 @@ public class TambahGambarActivity extends AppCompatActivity {
                                     })
                                     .addOnFailureListener(exception -> {
                                         handleImage5Success();
-                                        Toast.makeText(TambahGambarActivity.this, "Upload failed: " + exception.getMessage(), Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(TambahDataGambarPralistingActivity.this, "Upload failed: " + exception.getMessage(), Toast.LENGTH_SHORT).show();
                                     });
                         }
                     })
@@ -2512,7 +2019,7 @@ public class TambahGambarActivity extends AppCompatActivity {
                         @Override
                         public void onFailure(@NonNull Exception e) {
                             handleImage5Success();
-                            Toast.makeText(TambahGambarActivity.this, "Upload failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(TambahDataGambarPralistingActivity.this, "Upload failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     });
         } else {
@@ -2534,7 +2041,7 @@ public class TambahGambarActivity extends AppCompatActivity {
                                     })
                                     .addOnFailureListener(exception -> {
                                         handleImage6Success();
-                                        Toast.makeText(TambahGambarActivity.this, "Upload failed: " + exception.getMessage(), Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(TambahDataGambarPralistingActivity.this, "Upload failed: " + exception.getMessage(), Toast.LENGTH_SHORT).show();
                                     });
                         }
                     })
@@ -2542,7 +2049,7 @@ public class TambahGambarActivity extends AppCompatActivity {
                         @Override
                         public void onFailure(@NonNull Exception e) {
                             handleImage6Success();
-                            Toast.makeText(TambahGambarActivity.this, "Upload failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(TambahDataGambarPralistingActivity.this, "Upload failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     });
         } else {
@@ -2564,7 +2071,7 @@ public class TambahGambarActivity extends AppCompatActivity {
                                     })
                                     .addOnFailureListener(exception -> {
                                         handleImage7Success();
-                                        Toast.makeText(TambahGambarActivity.this, "Upload failed: " + exception.getMessage(), Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(TambahDataGambarPralistingActivity.this, "Upload failed: " + exception.getMessage(), Toast.LENGTH_SHORT).show();
                                     });
                         }
                     })
@@ -2572,7 +2079,7 @@ public class TambahGambarActivity extends AppCompatActivity {
                         @Override
                         public void onFailure(@NonNull Exception e) {
                             handleImage7Success();
-                            Toast.makeText(TambahGambarActivity.this, "Upload failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(TambahDataGambarPralistingActivity.this, "Upload failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     });
         } else {
@@ -2594,7 +2101,7 @@ public class TambahGambarActivity extends AppCompatActivity {
                                     })
                                     .addOnFailureListener(exception -> {
                                         handleImage8Success();
-                                        Toast.makeText(TambahGambarActivity.this, "Upload failed: " + exception.getMessage(), Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(TambahDataGambarPralistingActivity.this, "Upload failed: " + exception.getMessage(), Toast.LENGTH_SHORT).show();
                                     });
                         }
                     })
@@ -2602,7 +2109,7 @@ public class TambahGambarActivity extends AppCompatActivity {
                         @Override
                         public void onFailure(@NonNull Exception e) {
                             handleImage8Success();
-                            Toast.makeText(TambahGambarActivity.this, "Upload failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(TambahDataGambarPralistingActivity.this, "Upload failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     });
         } else {
@@ -2624,7 +2131,7 @@ public class TambahGambarActivity extends AppCompatActivity {
                                     })
                                     .addOnFailureListener(exception -> {
                                         handleImage9Success();
-                                        Toast.makeText(TambahGambarActivity.this, "Upload failed: " + exception.getMessage(), Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(TambahDataGambarPralistingActivity.this, "Upload failed: " + exception.getMessage(), Toast.LENGTH_SHORT).show();
                                     });
                         }
                     })
@@ -2632,7 +2139,7 @@ public class TambahGambarActivity extends AppCompatActivity {
                         @Override
                         public void onFailure(@NonNull Exception e) {
                             handleImage9Success();
-                            Toast.makeText(TambahGambarActivity.this, "Upload failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(TambahDataGambarPralistingActivity.this, "Upload failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     });
         } else {
@@ -2654,7 +2161,7 @@ public class TambahGambarActivity extends AppCompatActivity {
                                     })
                                     .addOnFailureListener(exception -> {
                                         handleImage10Success();
-                                        Toast.makeText(TambahGambarActivity.this, "Upload failed: " + exception.getMessage(), Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(TambahDataGambarPralistingActivity.this, "Upload failed: " + exception.getMessage(), Toast.LENGTH_SHORT).show();
                                     });
                         }
                     })
@@ -2662,7 +2169,7 @@ public class TambahGambarActivity extends AppCompatActivity {
                         @Override
                         public void onFailure(@NonNull Exception e) {
                             handleImage10Success();
-                            Toast.makeText(TambahGambarActivity.this, "Upload failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(TambahDataGambarPralistingActivity.this, "Upload failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     });
         } else {
@@ -2684,7 +2191,7 @@ public class TambahGambarActivity extends AppCompatActivity {
                                     })
                                     .addOnFailureListener(exception -> {
                                         handleImage11Success();
-                                        Toast.makeText(TambahGambarActivity.this, "Upload failed: " + exception.getMessage(), Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(TambahDataGambarPralistingActivity.this, "Upload failed: " + exception.getMessage(), Toast.LENGTH_SHORT).show();
                                     });
                         }
                     })
@@ -2692,7 +2199,7 @@ public class TambahGambarActivity extends AppCompatActivity {
                         @Override
                         public void onFailure(@NonNull Exception e) {
                             handleImage11Success();
-                            Toast.makeText(TambahGambarActivity.this, "Upload failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(TambahDataGambarPralistingActivity.this, "Upload failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     });
         } else {
@@ -2715,7 +2222,7 @@ public class TambahGambarActivity extends AppCompatActivity {
                                     })
                                     .addOnFailureListener(exception -> {
                                         handleImage12Success();
-                                        Toast.makeText(TambahGambarActivity.this, "Upload failed: " + exception.getMessage(), Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(TambahDataGambarPralistingActivity.this, "Upload failed: " + exception.getMessage(), Toast.LENGTH_SHORT).show();
                                     });
                         }
                     })
@@ -2723,7 +2230,7 @@ public class TambahGambarActivity extends AppCompatActivity {
                         @Override
                         public void onFailure(@NonNull Exception e) {
                             handleImage12Success();
-                            Toast.makeText(TambahGambarActivity.this, "Upload failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(TambahDataGambarPralistingActivity.this, "Upload failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     });
         } else {
@@ -2739,7 +2246,7 @@ public class TambahGambarActivity extends AppCompatActivity {
 
         RequestQueue requestQueue = Volley.newRequestQueue(this);
 
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, ServerApi.URL_TAMBAH_GAMBAR_LISTING,
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, ServerApi.URL_UPDATE_DATA_GAMBAR_PRALISTING,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -2748,7 +2255,7 @@ public class TambahGambarActivity extends AppCompatActivity {
                             JSONObject res = new JSONObject(response);
                             String status = res.getString("Status");
                             if (status.equals("Sukses")) {
-                                Dialog customDialog = new Dialog(TambahGambarActivity.this);
+                                Dialog customDialog = new Dialog(TambahDataGambarPralistingActivity.this);
                                 customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                                 customDialog.setContentView(R.layout.custom_dialog_sukses);
 
@@ -2794,14 +2301,14 @@ public class TambahGambarActivity extends AppCompatActivity {
                                     }
                                 });
 
-                                Glide.with(TambahGambarActivity.this)
+                                Glide.with(TambahDataGambarPralistingActivity.this)
                                         .load(R.mipmap.ic_yes)
                                         .transition(DrawableTransitionOptions.withCrossFade())
                                         .into(gifimage);
 
                                 customDialog.show();
                             } else if (status.equals("Error")) {
-                                Dialog customDialog = new Dialog(TambahGambarActivity.this);
+                                Dialog customDialog = new Dialog(TambahDataGambarPralistingActivity.this);
                                 customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                                 customDialog.setContentView(R.layout.custom_dialog_sukses);
 
@@ -2824,7 +2331,7 @@ public class TambahGambarActivity extends AppCompatActivity {
                                     }
                                 });
 
-                                Glide.with(TambahGambarActivity.this)
+                                Glide.with(TambahDataGambarPralistingActivity.this)
                                         .load(R.mipmap.ic_no)
                                         .transition(DrawableTransitionOptions.withCrossFade())
                                         .into(gifimage);
@@ -2840,7 +2347,7 @@ public class TambahGambarActivity extends AppCompatActivity {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         pDialog.cancel();
-                        Dialog customDialog = new Dialog(TambahGambarActivity.this);
+                        Dialog customDialog = new Dialog(TambahDataGambarPralistingActivity.this);
                         customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                         customDialog.setContentView(R.layout.custom_dialog_sukses);
 
@@ -2863,7 +2370,7 @@ public class TambahGambarActivity extends AppCompatActivity {
                             }
                         });
 
-                        Glide.with(TambahGambarActivity.this)
+                        Glide.with(TambahDataGambarPralistingActivity.this)
                                 .load(R.mipmap.ic_eror_network_foreground)
                                 .transition(DrawableTransitionOptions.withCrossFade())
                                 .into(gifimage);
@@ -2874,10 +2381,7 @@ public class TambahGambarActivity extends AppCompatActivity {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> map = new HashMap<>();
-
-                String Keterangan = "Tambah Gambar Listing";
-
-                map.put("IdListing", intentIdListing);
+                map.put("IdPraListing", intentIdPraListing);
                 map.put("Img1", image1);
                 map.put("Img2", image2);
                 map.put("Img3", image3);
@@ -2890,9 +2394,6 @@ public class TambahGambarActivity extends AppCompatActivity {
                 map.put("Img10", image10);
                 map.put("Img11", image11);
                 map.put("Img12", image12);
-                map.put("Keterangan", Keterangan);
-                map.put("PoinTambahan", "0");
-                map.put("PoinBerkurang", "0");
                 System.out.println(map);
 
                 return map;
@@ -2905,7 +2406,7 @@ public class TambahGambarActivity extends AppCompatActivity {
         @Override
         protected String doInBackground(String... params) {
             for (String token : params) {
-                sendNotificationToToken(token, "listing");
+                sendNotificationToToken(token, "pralisting");
             }
             return null;
         }
@@ -2918,7 +2419,7 @@ public class TambahGambarActivity extends AppCompatActivity {
     }
     private void sendNotificationToToken(String token, String notificationType) {
         String title = Preferences.getKeyNama(this);
-        String message = "Menambahkan Gambar Listingan";
+        String message = "Menambahkan Gambar Pralisting";
         String response = SendMessageToFCM.sendMessage(token, title, message, notificationType);
     }
 }

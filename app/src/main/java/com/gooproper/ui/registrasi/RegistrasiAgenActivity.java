@@ -265,7 +265,7 @@ public class RegistrasiAgenActivity extends AppCompatActivity {
                 materialDatePicker.addOnPositiveButtonClickListener(new MaterialPickerOnPositiveButtonClickListener<Long>() {
                     @Override
                     public void onPositiveButtonClick(Long selection) {
-                        String tanggal = new SimpleDateFormat("yyyy-dd-MM", Locale.getDefault()).format(new Date(selection));
+                        String tanggal = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date(selection));
                         tglkelahiran.setText(MessageFormat.format("{0}", tanggal));
                     }
                 });
@@ -282,7 +282,7 @@ public class RegistrasiAgenActivity extends AppCompatActivity {
                 materialDatePicker.addOnPositiveButtonClickListener(new MaterialPickerOnPositiveButtonClickListener<Long>() {
                     @Override
                     public void onPositiveButtonClick(Long selection) {
-                        String tanggal = new SimpleDateFormat("yyyy-dd-MM", Locale.getDefault()).format(new Date(selection));
+                        String tanggal = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date(selection));
                         TglKelahiranMitra.setText(MessageFormat.format("{0}", tanggal));
                     }
                 });

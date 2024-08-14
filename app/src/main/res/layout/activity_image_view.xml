@@ -56,4 +56,19 @@
 
     </LinearLayout>
 
+    <TextView
+        android:id="@+id/TVJumlahGambar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:padding="5dp"
+        android:background="@drawable/badgegambar"
+        android:layout_gravity="bottom|start"
+        android:gravity="center"
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:ellipsize="none"
+        android:singleLine="true"
+        style="@style/TextAppearance.AppCompat.Caption"/>
+
 </FrameLayout>

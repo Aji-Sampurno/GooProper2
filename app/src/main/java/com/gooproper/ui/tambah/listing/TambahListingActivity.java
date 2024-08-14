@@ -223,6 +223,7 @@ public class TambahListingActivity extends AppCompatActivity {
     LinearLayout LytPjp, LytPjp1;
     LinearLayout LytSelfie, LytKTP;
     LinearLayout LytBtnShm, LytBtnHGB, LytBtnHSHP, LytBtnPPJB, LytBtnStra, LytBtnAJB, LytBtnPetokD;
+    TextView TVBack;
     ImageView back;
     ImageView iv1, iv2, iv3, iv4, iv5, iv6, iv7, iv8, iv9, iv10, iv11, iv12;
     ImageView IVShm, IVHgb, IVHshp, IVPpjb, IVStratatitle, IVAJB, IVPetokD;
@@ -239,11 +240,13 @@ public class TambahListingActivity extends AppCompatActivity {
     Button BtnSHMPdf, BtnHGBPdf, BtnHSHPPdf, BtnPPJBPdf, BtnSTRAPdf, BtnAJBPdf, BtnPetokDPdf;
     Button BtnPjp, BtnPjp1;
     Button BtnSelfie, BtnKTP;
-    TextInputEditText namalengkap, nohp, nik, alamat, tgllhir, rekening, bank, atasnama, jenisproperti, namaproperti, alamatproperti, noalamatproperti, alamatpropertitemplate, wilayahproperti, sertifikat, nosertif, luas, satuanluas, land, satuanland, dimensi, lantai, bed, bath, bedart, bathart, garasi, carpot, listrik, air, pjp, perabot, ketperabot, banner, status, tipeharga, harga, hargasewa, rangeharga, keterangan, hadap, size, EtTglInput, EtFee, CoListing, ktp;
+    TextInputEditText namalengkap, nohp, nik, alamat, tgllhir, rekening, bank, atasnama, jenisproperti, namaproperti, alamatproperti, noalamatproperti, alamatpropertitemplate, wilayahproperti, luas, satuanluas, land, satuanland, dimensi, lantai, bed, bath, bedart, bathart, garasi, carpot, listrik, air, pjp, perabot, ketperabot, banner, status, tipeharga, harga, hargasewa, rangeharga, keterangan, hadap, size, EtTglInput, EtFee, CoListing, ktp;
+    TextInputEditText RuangTamu, RuangMakan, Dapur, Jemuran;
     TextInputLayout LytSize, LytTglInput, LytHargaJual, LytHargaSewa, LytRangeHarga, LytTipeHarga;
     RadioButton open, exclusive;
     RadioGroup rgpriority;
     CheckBox CBSHM, CBHGB, CBHSHP, CBPPJB, CBSTRA, CBAJB, CBPetokD, CBMarketable, CBHarga, CBSelfie, CBLokasi;
+    CheckBox CBMasjid, CBTaman, CBPlayground, CBCctv, CBOneGateSystem, CBKolamRenang, CBSportSpace, CBParkingSpot;
     String idagen, idnull, sstatus, priority, namalisting, isAdmin, idadmin, idinput, HargaString, HargaSewaString, SHarga, SHargaSewa, agenid, agencoid, SRangeHarga, SRange, RangeHargaString;
     String image1, image2, image3, image4, image5, image6, image7, image8, image9, image10, image11, image12;
     String SHM, HGB, HSHP, PPJB, STRA, AJB, PetokD;
@@ -258,6 +261,8 @@ public class TambahListingActivity extends AppCompatActivity {
     String fileSertifikatshmpdf,fileSertifikathgbpdf,fileSertifikathshppdf,fileSertifikatppjbpdf,fileSertifikatstrapdf,fileSertifikatajbpdf,fileSertifikatpetokdpdf;
     String filePjp1,filePjp2;
     String fileSelfie,fileKTP;
+    String StrNamaDaerah;
+    String StrRuangTamu, StrRuangMakan, StrDapur;
     private StorageReference mStorageRef;
     StorageReference storageRef;
     StorageReference ImgListing1,ImgListing2,ImgListing3,ImgListing4,ImgListing5,ImgListing6,ImgListing7,ImgListing8,ImgListing9,ImgListing10,ImgListing11,ImgListing12;
@@ -343,7 +348,7 @@ public class TambahListingActivity extends AppCompatActivity {
         LytSelfie = findViewById(R.id.LytSelfie);
         LytKTP = findViewById(R.id.LytKtp);
 
-        back = findViewById(R.id.backFormBtn);
+        TVBack = findViewById(R.id.TVBack);
 
         batal = findViewById(R.id.btnbatal);
         submit = findViewById(R.id.btnsubmit);
@@ -398,9 +403,7 @@ public class TambahListingActivity extends AppCompatActivity {
         noalamatproperti = findViewById(R.id.etnoalamatproperti);
         alamatpropertitemplate = findViewById(R.id.etalamatpropertitemplate);
         wilayahproperti = findViewById(R.id.etwilayahlisting);
-        sertifikat = findViewById(R.id.ettipesertifikat);
         pjp = findViewById(R.id.etkonfirmasipjp);
-        nosertif = findViewById(R.id.etnomorsertifikat);
         luas = findViewById(R.id.etluastanah);
         satuanluas = findViewById(R.id.etsatuanluastanah);
         land = findViewById(R.id.etluasbangunan);
@@ -431,6 +434,11 @@ public class TambahListingActivity extends AppCompatActivity {
         CoListing = findViewById(R.id.etCoListing);
         ktp = findViewById(R.id.etnoktpvendor);
 
+        RuangTamu = findViewById(R.id.ETRuangTamu);
+        RuangMakan = findViewById(R.id.ETRuangMakan);
+        Dapur = findViewById(R.id.ETDapur);
+        Jemuran = findViewById(R.id.ETJemuran);
+
         maps = findViewById(R.id.map);
 
         CBSHM = findViewById(R.id.CBSHM);
@@ -444,6 +452,14 @@ public class TambahListingActivity extends AppCompatActivity {
         CBHarga = findViewById(R.id.CBHarga);
         CBSelfie = findViewById(R.id.CBSelfie);
         CBLokasi = findViewById(R.id.CBLokasi);
+        CBMasjid = findViewById(R.id.CBMasjid);
+        CBTaman = findViewById(R.id.CBTaman);
+        CBPlayground = findViewById(R.id.CBPlayground);
+        CBCctv = findViewById(R.id.CBCctv);
+        CBOneGateSystem = findViewById(R.id.CBOneGateSystem);
+        CBKolamRenang = findViewById(R.id.CBKolamRenang);
+        CBSportSpace = findViewById(R.id.CBSportSpace);
+        CBParkingSpot = findViewById(R.id.CBParkingSpot);
 
         BtnSHM = findViewById(R.id.BtnSHM);
         BtnSHMPdf = findViewById(R.id.BtnSHMPDF);
@@ -843,14 +859,16 @@ public class TambahListingActivity extends AppCompatActivity {
         }
 
         maps.setOnClickListener(view -> startMapsActivityForResult());
-        back.setOnClickListener(view -> finish());
+        TVBack.setOnClickListener(view -> finish());
         batal.setOnClickListener(view -> finish());
         bank.setOnClickListener(view -> ShowBank(view));
         pjp.setOnClickListener(view -> ShowPjp(view));
         jenisproperti.setOnClickListener(view -> ShowJenisProperti(view));
-        sertifikat.setOnClickListener(view -> ShowTipeSertifikat(view));
         air.setOnClickListener(view -> ShowSumberAir(view));
         perabot.setOnClickListener(view -> ShowPerabot(view));
+        RuangTamu.setOnClickListener(view -> ShowRuangTamu(view));
+        RuangMakan.setOnClickListener(view -> ShowRuangMakan(view));
+        Dapur.setOnClickListener(view -> ShowDapur(view));
         banner.setOnClickListener(view -> ShowBanner(view));
         size.setOnClickListener(view -> ShowSize(view));
         status.setOnClickListener(view -> ShowStatus(view));
@@ -934,30 +952,14 @@ public class TambahListingActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable editable) {
                 if (editable.toString().equalsIgnoreCase("Jual")) {
-                    if (jenisproperti.getText().toString().equals("Tanah")){
-                        LytTipeHarga.setVisibility(View.VISIBLE);
-                        LytHargaSewa.setVisibility(View.GONE);
-                    } else if (jenisproperti.getText().toString().equals("Rumah")) {
-                        LytTipeHarga.setVisibility(View.VISIBLE);
-                        LytHargaSewa.setVisibility(View.GONE);
-                    } else {
-                        LytHargaJual.setVisibility(View.VISIBLE);
-                        LytHargaSewa.setVisibility(View.GONE);
-                    }
+                    LytTipeHarga.setVisibility(View.VISIBLE);
+                    LytHargaSewa.setVisibility(View.GONE);
                 } else if (editable.toString().equalsIgnoreCase("Sewa")) {
                     LytHargaSewa.setVisibility(View.VISIBLE);
                     LytHargaJual.setVisibility(View.GONE);
                 } else if (editable.toString().equalsIgnoreCase("Jual/Sewa")) {
-                    if (jenisproperti.getText().toString().equals("Tanah")){
-                        LytTipeHarga.setVisibility(View.VISIBLE);
-                        LytHargaSewa.setVisibility(View.GONE);
-                    } else if (jenisproperti.getText().toString().equals("Rumah")) {
-                        LytTipeHarga.setVisibility(View.VISIBLE);
-                        LytHargaSewa.setVisibility(View.GONE);
-                    } else {
-                        LytHargaJual.setVisibility(View.VISIBLE);
-                        LytHargaSewa.setVisibility(View.VISIBLE);
-                    }
+                    LytTipeHarga.setVisibility(View.VISIBLE);
+                    LytHargaSewa.setVisibility(View.GONE);
                 } else {
                     LytHargaJual.setVisibility(View.GONE);
                     LytHargaSewa.setVisibility(View.GONE);
@@ -1420,6 +1422,8 @@ public class TambahListingActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which) {
                 DaerahManager.DataItem selectedData = dataList.get(which);
                 String iddaerah = selectedData.getIdDaerah();
+                String namadaerah = selectedData.getNamaDaerah();
+                StrNamaDaerah = namadaerah;
                 fetchDataWilayah(iddaerah);
             }
         });
@@ -5574,7 +5578,7 @@ public class TambahListingActivity extends AppCompatActivity {
     }
     private void handleImageKTPSuccess() {
         if (UriKTP != null) {
-            ImageKTP.putFile(UriSelfie)
+            ImageKTP.putFile(UriKTP)
                     .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
@@ -5661,7 +5665,7 @@ public class TambahListingActivity extends AppCompatActivity {
 
         RequestQueue requestQueue = Volley.newRequestQueue(this);
 
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, ServerApi.URL_TAMBAH_PRALISTING,
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, ServerApi.URL_ADD_DATA_PRALISTING,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -5718,7 +5722,7 @@ public class TambahListingActivity extends AppCompatActivity {
                                 });
 
                                 Glide.with(TambahListingActivity.this)
-                                        .load(R.mipmap.ic_yes) // You can also use a local resource like R.drawable.your_gif_resource
+                                        .load(R.mipmap.ic_yes)
                                         .transition(DrawableTransitionOptions.withCrossFade())
                                         .into(gifimage);
 
@@ -5748,7 +5752,7 @@ public class TambahListingActivity extends AppCompatActivity {
                                 });
 
                                 Glide.with(TambahListingActivity.this)
-                                        .load(R.mipmap.ic_no) // You can also use a local resource like R.drawable.your_gif_resource
+                                        .load(R.mipmap.ic_no)
                                         .transition(DrawableTransitionOptions.withCrossFade())
                                         .into(gifimage);
 
@@ -5837,6 +5841,21 @@ public class TambahListingActivity extends AppCompatActivity {
                 } else {
                     SRangeHarga = RangeHargaString;
                 }
+                if (RuangTamu.getText().toString().equals("Ada")) {
+                    StrRuangTamu = "1";
+                } else {
+                    StrRuangTamu = "0";
+                }
+                if (RuangMakan.getText().toString().equals("Ada")) {
+                    StrRuangMakan = "1";
+                } else {
+                    StrRuangMakan = "0";
+                }
+                if (Dapur.getText().toString().equals("Ada")) {
+                    StrDapur = "1";
+                } else {
+                    StrDapur = "0";
+                }
 
                 String tanah = luas.getText().toString() + " " + satuanluas.getText().toString();
                 String bangunan = land.getText().toString() + " " + satuanland.getText().toString();
@@ -5848,10 +5867,20 @@ public class TambahListingActivity extends AppCompatActivity {
                 final String StringSTRA = CBSTRA.isChecked() ? "1" : "0";
                 final String StringAJB = CBAJB.isChecked() ? "1" : "0";
                 final String StringPetokD = CBPetokD.isChecked() ? "1" : "0";
+
                 final String StringMarketable = CBMarketable.isChecked() ? "1" : "0";
                 final String StringHarga = CBHarga.isChecked() ? "1" : "0";
                 final String StringSelfie = CBSelfie.isChecked() ? "1" : "0";
                 final String StringLokasi = CBLokasi.isChecked() ? "1" : "0";
+
+                final String StringMasjid = CBMasjid.isChecked() ? "1" : "0";
+                final String StringTaman = CBTaman.isChecked() ? "1" : "0";
+                final String StringPlayground = CBPlayground.isChecked() ? "1" : "0";
+                final String StringCctv = CBCctv.isChecked() ? "1" : "0";
+                final String StringOneGateSystem = CBOneGateSystem.isChecked() ? "1" : "0";
+                final String StringKolamRenang = CBKolamRenang.isChecked() ? "1" : "0";
+                final String StringSportSpace = CBSportSpace.isChecked() ? "1" : "0";
+                final String StringParkingSpot = CBParkingSpot.isChecked() ? "1" : "0";
 
                 map.put("NamaLengkap", namalengkap.getText().toString());
                 map.put("NoTelp", nohp.getText().toString());
@@ -5865,9 +5894,11 @@ public class TambahListingActivity extends AppCompatActivity {
                 map.put("IdAgenCo", agencoid);
                 map.put("IdInput", idnull);
                 map.put("NamaListing", namaproperti.getText().toString());
+                map.put("MetaNamaListing", status.getText().toString() + " " + jenisproperti.getText().toString() + " Wilayah " + wilayahproperti.getText().toString());
                 map.put("Alamat", alamatproperti.getText().toString());
                 map.put("AlamatTemplate", alamatpropertitemplate.getText().toString());
                 map.put("Wilayah", wilayahproperti.getText().toString());
+                map.put("Daerah", StrNamaDaerah);
                 map.put("Latitude", Lat);
                 map.put("Longitude", Lng);
                 map.put("Location", StrLokasi);
@@ -5902,7 +5933,20 @@ public class TambahListingActivity extends AppCompatActivity {
                 map.put("JenisProperti", jenisproperti.getText().toString());
                 map.put("SumberAir", air.getText().toString());
                 map.put("Kondisi", status.getText().toString());
+                map.put("RuangTamu", StrRuangTamu);
+                map.put("RuangMakan", StrRuangMakan);
+                map.put("Dapur", StrDapur);
+                map.put("Jemuran", Jemuran.getText().toString());
+                map.put("Masjid", StringMasjid);
+                map.put("Taman", StringTaman);
+                map.put("Playground", StringPlayground);
+                map.put("Cctv", StringCctv);
+                map.put("OneGateSystem", StringOneGateSystem);
+                map.put("KolamRenang", StringKolamRenang);
+                map.put("SportSpace", StringSportSpace);
+                map.put("ParkingSpot", StringParkingSpot);
                 map.put("Deskripsi", keterangan.getText().toString());
+                map.put("MetaDeskripsi", status.getText().toString() + " " + jenisproperti.getText().toString() + " Wilayah " + wilayahproperti.getText().toString() + " Luas Tanah " + tanah + " Luas Bangunan " + bangunan + " " + perabot.getText().toString());
                 map.put("Prabot", perabot.getText().toString());
                 map.put("KetPrabot", ketperabot.getText().toString());
                 map.put("Priority", priority);
@@ -5953,7 +5997,7 @@ public class TambahListingActivity extends AppCompatActivity {
 
         RequestQueue requestQueue = Volley.newRequestQueue(this);
 
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, ServerApi.URL_TAMBAH_PRALISTING,
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, ServerApi.URL_ADD_DATA_PRALISTING,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -6131,6 +6175,21 @@ public class TambahListingActivity extends AppCompatActivity {
                 } else {
                     SRangeHarga = RangeHargaString;
                 }
+                if (RuangTamu.getText().toString().equals("Ada")) {
+                    StrRuangTamu = "1";
+                } else {
+                    StrRuangTamu = "0";
+                }
+                if (RuangMakan.getText().toString().equals("Ada")) {
+                    StrRuangMakan = "1";
+                } else {
+                    StrRuangMakan = "0";
+                }
+                if (Dapur.getText().toString().equals("Ada")) {
+                    StrDapur = "1";
+                } else {
+                    StrDapur = "0";
+                }
 
                 String tanah = luas.getText().toString() + " " + satuanluas.getText().toString();
                 String bangunan = land.getText().toString() + " " + satuanland.getText().toString();
@@ -6147,6 +6206,15 @@ public class TambahListingActivity extends AppCompatActivity {
                 final String StringSelfie = CBSelfie.isChecked() ? "1" : "0";
                 final String StringLokasi = CBLokasi.isChecked() ? "1" : "0";
 
+                final String StringMasjid = CBMasjid.isChecked() ? "1" : "0";
+                final String StringTaman = CBTaman.isChecked() ? "1" : "0";
+                final String StringPlayground = CBPlayground.isChecked() ? "1" : "0";
+                final String StringCctv = CBCctv.isChecked() ? "1" : "0";
+                final String StringOneGateSystem = CBOneGateSystem.isChecked() ? "1" : "0";
+                final String StringKolamRenang = CBKolamRenang.isChecked() ? "1" : "0";
+                final String StringSportSpace = CBSportSpace.isChecked() ? "1" : "0";
+                final String StringParkingSpot = CBParkingSpot.isChecked() ? "1" : "0";
+
                 map.put("NamaLengkap", namalengkap.getText().toString());
                 map.put("NoTelp", nohp.getText().toString());
                 map.put("AlamatVendor", alamat.getText().toString());
@@ -6159,9 +6227,11 @@ public class TambahListingActivity extends AppCompatActivity {
                 map.put("IdAgenCo", agencoid);
                 map.put("IdInput", idagen);
                 map.put("NamaListing", namaproperti.getText().toString());
+                map.put("MetaNamaListing", status.getText().toString() + " " + jenisproperti.getText().toString() + " Wilayah " + wilayahproperti.getText().toString());
                 map.put("Alamat", alamatproperti.getText().toString());
                 map.put("AlamatTemplate", alamatpropertitemplate.getText().toString());
                 map.put("Wilayah", wilayahproperti.getText().toString());
+                map.put("Daerah", StrNamaDaerah);
                 map.put("Latitude", Lat);
                 map.put("Longitude", Lng);
                 map.put("Location", StrLokasi);
@@ -6196,7 +6266,20 @@ public class TambahListingActivity extends AppCompatActivity {
                 map.put("JenisProperti", jenisproperti.getText().toString());
                 map.put("SumberAir", air.getText().toString());
                 map.put("Kondisi", status.getText().toString());
+                map.put("RuangTamu", StrRuangTamu);
+                map.put("RuangMakan", StrRuangMakan);
+                map.put("Dapur", StrDapur);
+                map.put("Jemuran", Jemuran.getText().toString());
+                map.put("Masjid", StringMasjid);
+                map.put("Taman", StringTaman);
+                map.put("Playground", StringPlayground);
+                map.put("Cctv", StringCctv);
+                map.put("OneGateSystem", StringOneGateSystem);
+                map.put("KolamRenang", StringKolamRenang);
+                map.put("SportSpace", StringSportSpace);
+                map.put("ParkingSpot", StringParkingSpot);
                 map.put("Deskripsi", keterangan.getText().toString());
+                map.put("MetaDeskripsi", status.getText().toString() + " " + jenisproperti.getText().toString() + " Wilayah " + wilayahproperti.getText().toString() + " Luas Tanah " + tanah + " Luas Bangunan " + bangunan + " " + perabot.getText().toString());
                 map.put("Prabot", perabot.getText().toString());
                 map.put("KetPrabot", ketperabot.getText().toString());
                 map.put("Priority", priority);
@@ -6245,7 +6328,7 @@ public class TambahListingActivity extends AppCompatActivity {
         pDialog.setCancelable(false);
         pDialog.show();
         RequestQueue requestQueue = Volley.newRequestQueue(this);
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, ServerApi.URL_TAMBAH_PRALISTING,
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, ServerApi.URL_ADD_DATA_PRALISTING,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -6418,6 +6501,21 @@ public class TambahListingActivity extends AppCompatActivity {
                 } else {
                     SRangeHarga = RangeHargaString;
                 }
+                if (RuangTamu.getText().toString().equals("Ada")) {
+                    StrRuangTamu = "1";
+                } else {
+                    StrRuangTamu = "0";
+                }
+                if (RuangMakan.getText().toString().equals("Ada")) {
+                    StrRuangMakan = "1";
+                } else {
+                    StrRuangMakan = "0";
+                }
+                if (Dapur.getText().toString().equals("Ada")) {
+                    StrDapur = "1";
+                } else {
+                    StrDapur = "0";
+                }
 
                 String tanah = luas.getText().toString() + " " + satuanluas.getText().toString();
                 String bangunan = land.getText().toString() + " " + satuanland.getText().toString();
@@ -6434,6 +6532,15 @@ public class TambahListingActivity extends AppCompatActivity {
                 final String StringSelfie = CBSelfie.isChecked() ? "1" : "0";
                 final String StringLokasi = CBLokasi.isChecked() ? "1" : "0";
 
+                final String StringMasjid = CBMasjid.isChecked() ? "1" : "0";
+                final String StringTaman = CBTaman.isChecked() ? "1" : "0";
+                final String StringPlayground = CBPlayground.isChecked() ? "1" : "0";
+                final String StringCctv = CBCctv.isChecked() ? "1" : "0";
+                final String StringOneGateSystem = CBOneGateSystem.isChecked() ? "1" : "0";
+                final String StringKolamRenang = CBKolamRenang.isChecked() ? "1" : "0";
+                final String StringSportSpace = CBSportSpace.isChecked() ? "1" : "0";
+                final String StringParkingSpot = CBParkingSpot.isChecked() ? "1" : "0";
+
                 map.put("NamaLengkap", namalengkap.getText().toString());
                 map.put("NoTelp", nohp.getText().toString());
                 map.put("AlamatVendor", alamat.getText().toString());
@@ -6446,9 +6553,11 @@ public class TambahListingActivity extends AppCompatActivity {
                 map.put("IdAgenCo", idnull);
                 map.put("IdInput", idagen);
                 map.put("NamaListing", namaproperti.getText().toString());
+                map.put("MetaNamaListing", status.getText().toString() + " " + jenisproperti.getText().toString() + " Wilayah " + wilayahproperti.getText().toString());
                 map.put("Alamat", alamatproperti.getText().toString());
                 map.put("AlamatTemplate", alamatpropertitemplate.getText().toString());
                 map.put("Wilayah", wilayahproperti.getText().toString());
+                map.put("Daerah", StrNamaDaerah);
                 map.put("Latitude", Lat);
                 map.put("Longitude", Lng);
                 map.put("Location", StringLokasi);
@@ -6483,7 +6592,20 @@ public class TambahListingActivity extends AppCompatActivity {
                 map.put("JenisProperti", jenisproperti.getText().toString());
                 map.put("SumberAir", air.getText().toString());
                 map.put("Kondisi", status.getText().toString());
+                map.put("RuangTamu", StrRuangTamu);
+                map.put("RuangMakan", StrRuangMakan);
+                map.put("Dapur", StrDapur);
+                map.put("Jemuran", Jemuran.getText().toString());
+                map.put("Masjid", StringMasjid);
+                map.put("Taman", StringTaman);
+                map.put("Playground", StringPlayground);
+                map.put("Cctv", StringCctv);
+                map.put("OneGateSystem", StringOneGateSystem);
+                map.put("KolamRenang", StringKolamRenang);
+                map.put("SportSpace", StringSportSpace);
+                map.put("ParkingSpot", StringParkingSpot);
                 map.put("Deskripsi", keterangan.getText().toString());
+                map.put("MetaDeskripsi", status.getText().toString() + " " + jenisproperti.getText().toString() + " Wilayah " + wilayahproperti.getText().toString() + " Luas Tanah " + tanah + " Luas Bangunan " + bangunan + " " + perabot.getText().toString());
                 map.put("Prabot", perabot.getText().toString());
                 map.put("KetPrabot", ketperabot.getText().toString());
                 map.put("Priority", priority);
@@ -6614,6 +6736,84 @@ public class TambahListingActivity extends AppCompatActivity {
         AlertDialog dialog = builder.create();
         dialog.show();
     }
+    public void ShowRuangTamu(View view) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.CustomAlertDialogStyle);
+        builder.setTitle("Ketersediaan Ruang Tamu");
+
+        final CharSequence[] JenisProperti = {"Ada", "Tidak"};
+        final int[] SelectedJenisProperti = {0};
+
+        builder.setSingleChoiceItems(JenisProperti, SelectedJenisProperti[0], new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                SelectedJenisProperti[0] = which;
+            }
+        });
+
+        builder.setPositiveButton("Pilih", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                RuangTamu.setText(JenisProperti[SelectedJenisProperti[0]]);
+            }
+        });
+
+        builder.setNegativeButton("Batal", null);
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+    public void ShowRuangMakan(View view) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.CustomAlertDialogStyle);
+        builder.setTitle("Ketersediaan Ruang Makan");
+
+        final CharSequence[] JenisProperti = {"Ada", "Tidak"};
+        final int[] SelectedJenisProperti = {0};
+
+        builder.setSingleChoiceItems(JenisProperti, SelectedJenisProperti[0], new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                SelectedJenisProperti[0] = which;
+            }
+        });
+
+        builder.setPositiveButton("Pilih", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                RuangMakan.setText(JenisProperti[SelectedJenisProperti[0]]);
+            }
+        });
+
+        builder.setNegativeButton("Batal", null);
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+    public void ShowDapur(View view) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.CustomAlertDialogStyle);
+        builder.setTitle("Ketersediaan Dapur");
+
+        final CharSequence[] JenisProperti = {"Ada", "Tidak"};
+        final int[] SelectedJenisProperti = {0};
+
+        builder.setSingleChoiceItems(JenisProperti, SelectedJenisProperti[0], new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                SelectedJenisProperti[0] = which;
+            }
+        });
+
+        builder.setPositiveButton("Pilih", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Dapur.setText(JenisProperti[SelectedJenisProperti[0]]);
+            }
+        });
+
+        builder.setNegativeButton("Batal", null);
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
     public void ShowPjp(View view) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.CustomAlertDialogStyle);
         builder.setTitle("Ketersediaan PJP");
@@ -6636,57 +6836,6 @@ public class TambahListingActivity extends AppCompatActivity {
         });
 
         builder.setNegativeButton("Batal", null);
-
-        AlertDialog dialog = builder.create();
-        dialog.show();
-    }
-    public void ShowTipeSertifikat(View view) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.CustomAlertDialogStyle);
-        builder.setTitle("Silahkan Pilih Tipe Sertifikat");
-
-        final CharSequence[] TipeSertifikat = {"SHM", "HGB", "Custom"};
-        final int SelectedTipeSertifikat = -1;
-
-        builder.setSingleChoiceItems(TipeSertifikat, SelectedTipeSertifikat, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                if (which == TipeSertifikat.length - 1) {
-                    showCustomTypeInputDialog();
-                } else {
-                    sertifikat.setText(TipeSertifikat[which]);
-                }
-                dialog.dismiss();
-            }
-        });
-
-        builder.setNegativeButton("Batal", null);
-
-        AlertDialog dialog = builder.create();
-        dialog.show();
-    }
-    private void showCustomTypeInputDialog() {
-        final EditText editTextCustomType = new EditText(this);
-        editTextCustomType.setHint("Masukkan Tipe Sertifikat");
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.CustomAlertDialogStyle);
-        builder.setTitle("Tipe Sertifikat")
-                .setView(editTextCustomType)
-                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        String customType = editTextCustomType.getText().toString().trim();
-                        if (!customType.isEmpty()) {
-                            sertifikat.setText(customType);
-                        }
-                        dialog.dismiss();
-                    }
-                })
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                });
 
         AlertDialog dialog = builder.create();
         dialog.show();
@@ -6721,7 +6870,7 @@ public class TambahListingActivity extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.CustomAlertDialogStyle);
         builder.setTitle("Ketersediaan Prabot");
 
-        final CharSequence[] Perabot = {"Ada", "Tidak"};
+        final CharSequence[] Perabot = {"Full Furnished", "Semi Furnished", "UnFurnished"};
         final int[] SelectedPerabot = {0};
 
         builder.setSingleChoiceItems(Perabot, SelectedPerabot[0], new DialogInterface.OnClickListener() {
@@ -7052,50 +7201,292 @@ public class TambahListingActivity extends AppCompatActivity {
     }
     public boolean Validate() {
         if (namalengkap.getText().toString().equals("")) {
-            namalengkap.setError("Harap Isi Nama Lengkap Vendor");
+            Dialog customDialog = new Dialog(TambahListingActivity.this);
+            customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            customDialog.setContentView(R.layout.custom_dialog_eror_input);
+
+            if (customDialog.getWindow() != null) {
+                customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+            }
+
+            Button ok = customDialog.findViewById(R.id.BtnOkErorInput);
+            TextView tv = customDialog.findViewById(R.id.TVDialogErorInput);
+
+            tv.setText("Harap Isi Nama Lengkap Vendor");
+
+            ok.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    customDialog.dismiss();
+                }
+            });
+
+            ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
+
+            Glide.with(TambahListingActivity.this)
+                    .load(R.drawable.alert) // You can also use a local resource like R.drawable.your_gif_resource
+                    .transition(DrawableTransitionOptions.withCrossFade())
+                    .into(gifImageView);
+
+            customDialog.show();
             namalengkap.requestFocus();
             return false;
         }
         if (nohp.getText().toString().equals("")) {
-            nohp.setError("Harap Isi No WhatsApp Vendor");
+            Dialog customDialog = new Dialog(TambahListingActivity.this);
+            customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            customDialog.setContentView(R.layout.custom_dialog_eror_input);
+
+            if (customDialog.getWindow() != null) {
+                customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+            }
+
+            Button ok = customDialog.findViewById(R.id.BtnOkErorInput);
+            TextView tv = customDialog.findViewById(R.id.TVDialogErorInput);
+
+            tv.setText("Harap Isi No WhatsApp Vendor");
+
+            ok.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    customDialog.dismiss();
+                }
+            });
+
+            ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
+
+            Glide.with(TambahListingActivity.this)
+                    .load(R.drawable.alert)
+                    .transition(DrawableTransitionOptions.withCrossFade())
+                    .into(gifImageView);
+
+            customDialog.show();
             nohp.requestFocus();
             return false;
         }
         if (jenisproperti.getText().toString().equals("")) {
-            jenisproperti.setError("Harap Isi Nama Lengkap Vendor");
+            Dialog customDialog = new Dialog(TambahListingActivity.this);
+            customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            customDialog.setContentView(R.layout.custom_dialog_eror_input);
+
+            if (customDialog.getWindow() != null) {
+                customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+            }
+
+            Button ok = customDialog.findViewById(R.id.BtnOkErorInput);
+            TextView tv = customDialog.findViewById(R.id.TVDialogErorInput);
+
+            tv.setText("Harap Isi Jenis Properti");
+
+            ok.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    customDialog.dismiss();
+                }
+            });
+
+            ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
+
+            Glide.with(TambahListingActivity.this)
+                    .load(R.drawable.alert)
+                    .transition(DrawableTransitionOptions.withCrossFade())
+                    .into(gifImageView);
+
+            customDialog.show();
             jenisproperti.requestFocus();
             return false;
         }
         if (namaproperti.getText().toString().equals("")) {
-            namaproperti.setError("Harap Isi Nama Properti");
+            Dialog customDialog = new Dialog(TambahListingActivity.this);
+            customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            customDialog.setContentView(R.layout.custom_dialog_eror_input);
+
+            if (customDialog.getWindow() != null) {
+                customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+            }
+
+            Button ok = customDialog.findViewById(R.id.BtnOkErorInput);
+            TextView tv = customDialog.findViewById(R.id.TVDialogErorInput);
+
+            tv.setText("Harap Isi Nama Properti");
+
+            ok.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    customDialog.dismiss();
+                }
+            });
+
+            ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
+
+            Glide.with(TambahListingActivity.this)
+                    .load(R.drawable.alert)
+                    .transition(DrawableTransitionOptions.withCrossFade())
+                    .into(gifImageView);
+
+            customDialog.show();
             namaproperti.requestFocus();
             return false;
         }
         if (alamatproperti.getText().toString().equals("")) {
-            alamatproperti.setError("Harap Isi Alamat Properti");
+            Dialog customDialog = new Dialog(TambahListingActivity.this);
+            customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            customDialog.setContentView(R.layout.custom_dialog_eror_input);
+
+            if (customDialog.getWindow() != null) {
+                customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+            }
+
+            Button ok = customDialog.findViewById(R.id.BtnOkErorInput);
+            TextView tv = customDialog.findViewById(R.id.TVDialogErorInput);
+
+            tv.setText("Harap Isi Alamat Properti");
+
+            ok.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    customDialog.dismiss();
+                }
+            });
+
+            ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
+
+            Glide.with(TambahListingActivity.this)
+                    .load(R.drawable.alert) // You can also use a local resource like R.drawable.your_gif_resource
+                    .transition(DrawableTransitionOptions.withCrossFade())
+                    .into(gifImageView);
+
+            customDialog.show();
             alamatproperti.requestFocus();
             return false;
         }
         if (alamatpropertitemplate.getText().toString().equals("")) {
-            alamatpropertitemplate.setError("Harap Isi Alamat Properti ( Template ");
+            Dialog customDialog = new Dialog(TambahListingActivity.this);
+            customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            customDialog.setContentView(R.layout.custom_dialog_eror_input);
+
+            if (customDialog.getWindow() != null) {
+                customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+            }
+
+            Button ok = customDialog.findViewById(R.id.BtnOkErorInput);
+            TextView tv = customDialog.findViewById(R.id.TVDialogErorInput);
+
+            tv.setText("Harap Isi Alamat Properti ( Template )");
+
+            ok.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    customDialog.dismiss();
+                }
+            });
+
+            ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
+
+            Glide.with(TambahListingActivity.this)
+                    .load(R.drawable.alert)
+                    .transition(DrawableTransitionOptions.withCrossFade())
+                    .into(gifImageView);
+
+            customDialog.show();
             alamatpropertitemplate.requestFocus();
             return false;
         }
         if (wilayahproperti.getText().toString().equals("")) {
-            wilayahproperti.setError("Harap Isi Wilayah Properti");
-            wilayahproperti.requestFocus();
+            Dialog customDialog = new Dialog(TambahListingActivity.this);
+            customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            customDialog.setContentView(R.layout.custom_dialog_eror_input);
+
+            if (customDialog.getWindow() != null) {
+                customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+            }
+
+            Button ok = customDialog.findViewById(R.id.BtnOkErorInput);
+            TextView tv = customDialog.findViewById(R.id.TVDialogErorInput);
+
+            tv.setText("Harap Isi Wilayah Properti");
+
+            ok.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    customDialog.dismiss();
+                }
+            });
+
+            ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
+
+            Glide.with(TambahListingActivity.this)
+                    .load(R.drawable.alert)
+                    .transition(DrawableTransitionOptions.withCrossFade())
+                    .into(gifImageView);
+
+            customDialog.show();
             return false;
         }
         if (!luas.getText().toString().equals("")) {
             if (satuanluas.getText().equals("")) {
-                satuanluas.setError("Harap Isi Satuan");
+                Dialog customDialog = new Dialog(TambahListingActivity.this);
+                customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                customDialog.setContentView(R.layout.custom_dialog_eror_input);
+
+                if (customDialog.getWindow() != null) {
+                    customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                }
+
+                Button ok = customDialog.findViewById(R.id.BtnOkErorInput);
+                TextView tv = customDialog.findViewById(R.id.TVDialogErorInput);
+
+                tv.setText("Harap Isi Satuan Luas");
+
+                ok.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        customDialog.dismiss();
+                    }
+                });
+
+                ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
+
+                Glide.with(TambahListingActivity.this)
+                        .load(R.drawable.alert)
+                        .transition(DrawableTransitionOptions.withCrossFade())
+                        .into(gifImageView);
+
+                customDialog.show();
                 satuanluas.requestFocus();
                 return false;
             }
         }
         if (!land.getText().toString().equals("")) {
             if (satuanland.getText().equals("")) {
-                satuanland.setError("Harap Isi Satuan");
+                Dialog customDialog = new Dialog(TambahListingActivity.this);
+                customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                customDialog.setContentView(R.layout.custom_dialog_eror_input);
+
+                if (customDialog.getWindow() != null) {
+                    customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                }
+
+                Button ok = customDialog.findViewById(R.id.BtnOkErorInput);
+                TextView tv = customDialog.findViewById(R.id.TVDialogErorInput);
+
+                tv.setText("Harap Isi Satuan Luas");
+
+                ok.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        customDialog.dismiss();
+                    }
+                });
+
+                ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
+
+                Glide.with(TambahListingActivity.this)
+                        .load(R.drawable.alert)
+                        .transition(DrawableTransitionOptions.withCrossFade())
+                        .into(gifImageView);
+
+                customDialog.show();
                 satuanland.requestFocus();
                 return false;
             }
@@ -7132,24 +7523,132 @@ public class TambahListingActivity extends AppCompatActivity {
             return false;
         } else if (status.getText().toString().equals("Jual")) {
             if (harga.getText().toString().equals("")) {
-                harga.setError("Harap Isi Harga Properti");
+                Dialog customDialog = new Dialog(TambahListingActivity.this);
+                customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                customDialog.setContentView(R.layout.custom_dialog_eror_input);
+
+                if (customDialog.getWindow() != null) {
+                    customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                }
+
+                Button ok = customDialog.findViewById(R.id.BtnOkErorInput);
+                TextView tv = customDialog.findViewById(R.id.TVDialogErorInput);
+
+                tv.setText("Harap Isi Harga Properti");
+
+                ok.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        customDialog.dismiss();
+                    }
+                });
+
+                ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
+
+                Glide.with(TambahListingActivity.this)
+                        .load(R.drawable.alert) // You can also use a local resource like R.drawable.your_gif_resource
+                        .transition(DrawableTransitionOptions.withCrossFade())
+                        .into(gifImageView);
+
+                customDialog.show();
                 harga.requestFocus();
                 return false;
             }
         } else if (status.getText().toString().equals("Sewa")) {
             if (hargasewa.getText().toString().equals("")) {
-                hargasewa.setError("Harap Isi Harga Properti");
+                Dialog customDialog = new Dialog(TambahListingActivity.this);
+                customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                customDialog.setContentView(R.layout.custom_dialog_eror_input);
+
+                if (customDialog.getWindow() != null) {
+                    customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                }
+
+                Button ok = customDialog.findViewById(R.id.BtnOkErorInput);
+                TextView tv = customDialog.findViewById(R.id.TVDialogErorInput);
+
+                tv.setText("Harap Isi Harga Properti");
+
+                ok.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        customDialog.dismiss();
+                    }
+                });
+
+                ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
+
+                Glide.with(TambahListingActivity.this)
+                        .load(R.drawable.alert) // You can also use a local resource like R.drawable.your_gif_resource
+                        .transition(DrawableTransitionOptions.withCrossFade())
+                        .into(gifImageView);
+
+                customDialog.show();
                 hargasewa.requestFocus();
                 return false;
             }
         } else {
             if (harga.getText().toString().equals("")) {
-                harga.setError("Harap Isi Harga Properti");
+                Dialog customDialog = new Dialog(TambahListingActivity.this);
+                customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                customDialog.setContentView(R.layout.custom_dialog_eror_input);
+
+                if (customDialog.getWindow() != null) {
+                    customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                }
+
+                Button ok = customDialog.findViewById(R.id.BtnOkErorInput);
+                TextView tv = customDialog.findViewById(R.id.TVDialogErorInput);
+
+                tv.setText("Harap Isi Harga Properti");
+
+                ok.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        customDialog.dismiss();
+                    }
+                });
+
+                ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
+
+                Glide.with(TambahListingActivity.this)
+                        .load(R.drawable.alert) // You can also use a local resource like R.drawable.your_gif_resource
+                        .transition(DrawableTransitionOptions.withCrossFade())
+                        .into(gifImageView);
+
+                customDialog.show();
                 harga.requestFocus();
                 return false;
             }
             if (hargasewa.getText().toString().equals("")) {
-                hargasewa.setError("Harap Isi Harga Properti");
+                Dialog customDialog = new Dialog(TambahListingActivity.this);
+                customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                customDialog.setContentView(R.layout.custom_dialog_eror_input);
+
+                if (customDialog.getWindow() != null) {
+                    customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                }
+
+                Button ok = customDialog.findViewById(R.id.BtnOkErorInput);
+                TextView tv = customDialog.findViewById(R.id.TVDialogErorInput);
+
+                tv.setText("Harap Isi Harga Properti");
+
+                ok.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        customDialog.dismiss();
+                    }
+                });
+
+                ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
+
+                Glide.with(TambahListingActivity.this)
+                        .load(R.drawable.alert) // You can also use a local resource like R.drawable.your_gif_resource
+                        .transition(DrawableTransitionOptions.withCrossFade())
+                        .into(gifImageView);
+
+                customDialog.show();
                 hargasewa.requestFocus();
                 return false;
             }

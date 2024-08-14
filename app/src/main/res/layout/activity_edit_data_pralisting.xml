@@ -1,0 +1,1936 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".ui.edit.pralisting.EditDataPralistingActivity">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/backFormBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    app:srcCompat="@drawable/ic_cancel" />
+
+                <TextView
+                    android:id="@+id/textView8"
+                    style="@style/TextAppearance.Material3.TitleLarge"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:text="Properti"
+                    android:textColor="@color/black"
+                    android:textSize="16sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="11dp">
+
+                <TextView
+                    style="@style/TextAppearance.Material3.ActionBar.Title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="Form Edit Pralisting GooProper"
+                    android:textColor="@color/black" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="8dp"
+                    android:background="#000000" />
+
+                <RadioGroup
+                    android:id="@+id/rgstatus"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <RadioButton
+                        android:id="@+id/rbopen"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:text="Open"
+                        android:textColor="@color/black" />
+
+                    <RadioButton
+                        android:id="@+id/rbexclusive"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:text="Exclusive"
+                        android:textColor="@color/black" />
+
+                </RadioGroup>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="8dp"
+                    android:background="#000000" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="4">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <CheckBox
+                            android:id="@+id/CBSelfie"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:buttonTint="@color/black"
+                            android:textColor="@color/black"
+                            android:clickable="false" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="Selfie"
+                            android:textColor="@color/black" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <CheckBox
+                            android:id="@+id/CBLokasi"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:buttonTint="@color/black"
+                            android:textColor="@color/black"
+                            android:clickable="false" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="Lokasi"
+                            android:textColor="@color/black" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <CheckBox
+                            android:id="@+id/CBMarketable"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:buttonTint="@color/black"
+                            android:textColor="@color/black"
+                            android:clickable="false"/>
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="Marketable"
+                            android:textColor="@color/black" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <CheckBox
+                            android:id="@+id/CBHarga"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:buttonTint="@color/black"
+                            android:textColor="@color/black"
+                            android:clickable="false"/>
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="Harga"
+                            android:textColor="@color/black" />
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="8dp"
+                    android:background="#000000" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingStart="11dp"
+                android:paddingEnd="11dp">
+
+                <TextView
+                    style="@style/TextAppearance.MaterialComponents.Subtitle1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+                    android:text="Spesifikasi Properti Listing"
+                    android:textColor="@color/black"
+                    android:textStyle="bold" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/lytjenisproperti"
+                    style="@style/CustomOutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Jenis Properti">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etjenisproperti"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:focusable="false"
+                        android:inputType="none"
+                        android:textColor="@color/black" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/lytnamaproperti"
+                    style="@style/CustomOutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etnamaproperti"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Judul Properti"
+                        android:inputType="textPersonName"
+                        android:textColor="@color/black" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/lytalamatproperti"
+                    style="@style/CustomOutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etalamatproperti"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Alamat Properti"
+                        android:inputType="none"
+                        android:textColor="@color/black" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/lytalamatpropertitemplate"
+                    style="@style/CustomOutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etalamatpropertitemplate"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Alamat Properti ( Template )"
+                        android:inputType="none"
+                        android:textColor="@color/black" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/lytwilayahlisting"
+                    style="@style/CustomOutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etwilayahlisting"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Wilayah"
+                        android:inputType="none"
+                        android:focusable="false"
+                        android:textColor="@color/black" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="Sertifikat"
+                    android:textColor="@color/black" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal"
+                    android:weightSum="3">
+
+                    <CheckBox
+                        android:id="@+id/CBSHM"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="SHM"
+                        android:textColor="@color/black" />
+
+                    <CheckBox
+                        android:id="@+id/CBHGB"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="HGB"
+                        android:textColor="@color/black" />
+
+                    <CheckBox
+                        android:id="@+id/CBHSHP"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="HS/HP"
+                        android:textColor="@color/black" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal"
+                    android:weightSum="3">
+
+                    <CheckBox
+                        android:id="@+id/CBPPJB"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="PPJB"
+                        android:textColor="@color/black" />
+
+                    <CheckBox
+                        android:id="@+id/CBStratatitle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Stratatitle"
+                        android:textColor="@color/black" />
+
+                    <CheckBox
+                        android:id="@+id/CBAJB"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="AJB"
+                        android:textColor="@color/black" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal"
+                    android:weightSum="1">
+
+                    <CheckBox
+                        android:id="@+id/CBPetokD"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Petok D"
+                        android:textColor="@color/black" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:id="@+id/LytSHM"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:orientation="horizontal"
+                        android:visibility="gone"
+                        android:weightSum="3">
+
+                        <TextView
+                            android:id="@+id/TVSHM"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:text="judul pdf"
+                            android:textAlignment="center"
+                            android:textColor="@color/black"
+                            android:visibility="gone" />
+
+                        <ImageView
+                            android:id="@+id/IVSHM"
+                            android:layout_width="250dp"
+                            android:layout_height="250dp"
+                            android:layout_weight="1"
+                            android:visibility="gone" />
+
+                        <ImageView
+                            android:id="@+id/IVDeleteSHM"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_margin="5dp"
+                            android:layout_weight="2"
+                            android:gravity="center"
+                            android:src="@drawable/ic_delete"
+                            app:tint="@color/red_color" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/LytBtnSHM"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:visibility="gone"
+                        android:weightSum="2">
+
+                        <Button
+                            android:id="@+id/BtnSHM"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginEnd="5dp"
+                            android:layout_weight="1"
+                            android:text="Upload Gambar SHM" />
+
+                        <Button
+                            android:id="@+id/BtnSHMPDF"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="5dp"
+                            android:layout_marginTop="10dp"
+                            android:layout_weight="1"
+                            android:text="Upload Pdf SHM" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:id="@+id/LytHGB"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:orientation="horizontal"
+                        android:visibility="gone"
+                        android:weightSum="3">
+
+                        <TextView
+                            android:id="@+id/TVHGB"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:text="judul pdf"
+                            android:textAlignment="center"
+                            android:textColor="@color/black"
+                            android:visibility="gone" />
+
+                        <ImageView
+                            android:id="@+id/IVHGB"
+                            android:layout_width="250dp"
+                            android:layout_height="250dp"
+                            android:layout_weight="1"
+                            android:visibility="gone" />
+
+                        <ImageView
+                            android:id="@+id/IVDeleteHGB"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_margin="5dp"
+                            android:layout_weight="2"
+                            android:gravity="center"
+                            android:src="@drawable/ic_delete"
+                            app:tint="@color/red_color" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/LytBtnHGB"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:visibility="gone"
+                        android:weightSum="2">
+
+                        <Button
+                            android:id="@+id/BtnHGB"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginEnd="5dp"
+                            android:layout_weight="1"
+                            android:text="Upload Gambar HGB " />
+
+                        <Button
+                            android:id="@+id/BtnHGBPDF"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="5dp"
+                            android:layout_marginTop="10dp"
+                            android:layout_weight="1"
+                            android:text="Upload  Pdf  HGB" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:id="@+id/LytHSHP"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:orientation="horizontal"
+                        android:visibility="gone"
+                        android:weightSum="3">
+
+                        <TextView
+                            android:id="@+id/TVHSHP"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:text="judul pdf"
+                            android:textAlignment="center"
+                            android:textColor="@color/black"
+                            android:visibility="gone" />
+
+                        <ImageView
+                            android:id="@+id/IVHSHP"
+                            android:layout_width="250dp"
+                            android:layout_height="250dp"
+                            android:layout_weight="1"
+                            android:visibility="gone" />
+
+                        <ImageView
+                            android:id="@+id/IVDeleteHSHP"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_margin="5dp"
+                            android:layout_weight="2"
+                            android:gravity="center"
+                            android:src="@drawable/ic_delete"
+                            app:tint="@color/red_color" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/LytBtnHSHP"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:visibility="gone"
+                        android:weightSum="2">
+
+                        <Button
+                            android:id="@+id/BtnHSHP"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginEnd="5dp"
+                            android:layout_weight="1"
+                            android:text="Upload Gambar HSHP" />
+
+                        <Button
+                            android:id="@+id/BtnHSHPPDF"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="5dp"
+                            android:layout_marginTop="10dp"
+                            android:layout_weight="1"
+                            android:text="Upload Pdf HSHP" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:id="@+id/LytPPJB"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:orientation="horizontal"
+                        android:visibility="gone"
+                        android:weightSum="3">
+
+                        <TextView
+                            android:id="@+id/TVPPJB"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:text="judul pdf"
+                            android:textAlignment="center"
+                            android:textColor="@color/black"
+                            android:visibility="gone" />
+
+                        <ImageView
+                            android:id="@+id/IVPPJB"
+                            android:layout_width="250dp"
+                            android:layout_height="250dp"
+                            android:layout_weight="1"
+                            android:visibility="gone" />
+
+                        <ImageView
+                            android:id="@+id/IVDeletePPJB"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_margin="5dp"
+                            android:layout_weight="2"
+                            android:gravity="center"
+                            android:src="@drawable/ic_delete"
+                            app:tint="@color/red_color" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/LytBtnPPJB"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:visibility="gone"
+                        android:weightSum="2">
+
+                        <Button
+                            android:id="@+id/BtnPPJB"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginEnd="5dp"
+                            android:layout_weight="1"
+                            android:text="Upload Gambar PPJB" />
+
+                        <Button
+                            android:id="@+id/BtnPPJBPDF"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="5dp"
+                            android:layout_marginTop="10dp"
+                            android:layout_weight="1"
+                            android:text="Upload Pdf PPJB" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:id="@+id/LytStratatitle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:orientation="horizontal"
+                        android:visibility="gone"
+                        android:weightSum="3">
+
+                        <TextView
+                            android:id="@+id/TVSTRA"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:text="judul pdf"
+                            android:textAlignment="center"
+                            android:textColor="@color/black"
+                            android:visibility="gone" />
+
+                        <ImageView
+                            android:id="@+id/IVStratatitle"
+                            android:layout_width="250dp"
+                            android:layout_height="250dp"
+                            android:layout_weight="1"
+                            android:visibility="gone" />
+
+                        <ImageView
+                            android:id="@+id/IVDeleteStratatitle"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_margin="5dp"
+                            android:layout_weight="2"
+                            android:gravity="center"
+                            android:src="@drawable/ic_delete"
+                            app:tint="@color/red_color" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/LytBtnStratatitle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:visibility="gone"
+                        android:weightSum="2">
+
+                        <Button
+                            android:id="@+id/BtnStratatitle"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginEnd="5dp"
+                            android:layout_weight="1"
+                            android:text="Upload Gambar Stratatitle" />
+
+                        <Button
+                            android:id="@+id/BtnStratatitlePDF"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="5dp"
+                            android:layout_marginTop="10dp"
+                            android:layout_weight="1"
+                            android:text="Upload Pdf Stratatitle" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:id="@+id/LytAJB"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:orientation="horizontal"
+                        android:visibility="gone"
+                        android:weightSum="3">
+
+                        <TextView
+                            android:id="@+id/TVAJB"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:text="judul pdf"
+                            android:textAlignment="center"
+                            android:textColor="@color/black"
+                            android:visibility="gone" />
+
+                        <ImageView
+                            android:id="@+id/IVAJB"
+                            android:layout_width="250dp"
+                            android:layout_height="250dp"
+                            android:layout_weight="1"
+                            android:visibility="gone" />
+
+                        <ImageView
+                            android:id="@+id/IVDeleteAJB"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_margin="5dp"
+                            android:layout_weight="2"
+                            android:gravity="center"
+                            android:src="@drawable/ic_delete"
+                            app:tint="@color/red_color" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/LytBtnAJB"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:visibility="gone"
+                        android:weightSum="2">
+
+                        <Button
+                            android:id="@+id/BtnAJB"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginEnd="5dp"
+                            android:layout_weight="1"
+                            android:text="Upload Gambar AJB" />
+
+                        <Button
+                            android:id="@+id/BtnAJBPDF"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="5dp"
+                            android:layout_marginTop="10dp"
+                            android:layout_weight="1"
+                            android:text="Upload  Pdf  AJB " />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:id="@+id/LytPetokD"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:orientation="horizontal"
+                        android:visibility="gone"
+                        android:weightSum="3">
+
+                        <TextView
+                            android:id="@+id/TVPetokD"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:text="judul pdf"
+                            android:textAlignment="center"
+                            android:textColor="@color/black"
+                            android:visibility="gone" />
+
+                        <ImageView
+                            android:id="@+id/IVPetokD"
+                            android:layout_width="250dp"
+                            android:layout_height="250dp"
+                            android:layout_weight="1"
+                            android:visibility="gone" />
+
+                        <ImageView
+                            android:id="@+id/IVDeletePetokD"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_margin="5dp"
+                            android:layout_weight="2"
+                            android:gravity="center"
+                            android:src="@drawable/ic_delete"
+                            app:tint="@color/red_color" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/LytBtnPetokD"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:visibility="gone"
+                        android:weightSum="2">
+
+                        <Button
+                            android:id="@+id/BtnPetokD"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginEnd="5dp"
+                            android:layout_weight="1"
+                            android:text="Upload Gambar Petok D" />
+
+                        <Button
+                            android:id="@+id/BtnPetokDPDF"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="5dp"
+                            android:layout_marginTop="10dp"
+                            android:layout_weight="1"
+                            android:text="Upload Pdf Petok D" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/lytKonfirmasiPjp"
+                    style="@style/CustomOutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:hint="Menyertakan PJP?">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etkonfirmasipjp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:focusable="false"
+                        android:inputType="none"
+                        android:textColor="@color/black" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:id="@+id/LytBuktiChat"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:orientation="horizontal"
+                        android:visibility="gone">
+
+                        <ImageView
+                            android:id="@+id/IVBuktiChat"
+                            android:layout_width="250dp"
+                            android:layout_height="250dp" />
+
+                        <ImageView
+                            android:id="@+id/IVDeleteBuktiChat"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_margin="5dp"
+                            android:gravity="center"
+                            android:src="@drawable/ic_delete"
+                            app:tint="@color/red_color" />
+
+                    </LinearLayout>
+
+                    <Button
+                        android:id="@+id/BtnBuktiChat"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="Upload Bukti Chat"
+                        android:visibility="gone" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:id="@+id/LytPjp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:orientation="horizontal"
+                        android:visibility="gone">
+
+                        <ImageView
+                            android:id="@+id/IVPjp"
+                            android:layout_width="250dp"
+                            android:layout_height="250dp" />
+
+                        <ImageView
+                            android:id="@+id/IVDeletePjp"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_margin="5dp"
+                            android:gravity="center"
+                            android:src="@drawable/ic_delete"
+                            app:tint="@color/red_color" />
+
+                    </LinearLayout>
+
+                    <Button
+                        android:id="@+id/BtnPjp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="Upload PJP Halaman 1"
+                        android:visibility="gone" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:id="@+id/LytPjp1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:orientation="horizontal"
+                        android:visibility="gone">
+
+                        <ImageView
+                            android:id="@+id/IVPjp1"
+                            android:layout_width="250dp"
+                            android:layout_height="250dp" />
+
+                        <ImageView
+                            android:id="@+id/IVDeletePjp1"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_margin="5dp"
+                            android:gravity="center"
+                            android:src="@drawable/ic_delete"
+                            app:tint="@color/red_color" />
+
+                    </LinearLayout>
+
+                    <Button
+                        android:id="@+id/BtnPjp1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="Upload PJP Halaman 2"
+                        android:visibility="gone" />
+
+                </LinearLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/lytluastanah"
+                    style="@style/CustomOutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etluastanah"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Luas Tanah"
+                        android:inputType="text"
+                        android:textColor="@color/black" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/lytluasbangunan"
+                    style="@style/CustomOutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etluasbangunan"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Luas Bangunan"
+                        android:inputType="text"
+                        android:textColor="@color/black" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/lytdimensi"
+                    style="@style/CustomOutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etdimensi"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Dimensi"
+                        android:inputType="text"
+                        android:textColor="@color/black" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/lythadap"
+                    style="@style/CustomOutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/ethadap"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Hadap Bangunan"
+                        android:inputType="text"
+                        android:textColor="@color/black" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/lytjumlahlantai"
+                    style="@style/CustomOutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etjumlahlantai"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Jumlah Lantai"
+                        android:inputType="numberDecimal"
+                        android:textColor="@color/black" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <TextView
+                    style="@style/TextAppearance.MaterialComponents.Subtitle1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="5dp"
+                    android:text="Detail Ruangan"
+                    android:textColor="@color/black"
+                    android:textStyle="bold" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="2">
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/lytkamartidur"
+                        style="@style/CustomOutlinedBox"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:layout_weight="1"
+                        app:helperText="cth: 3">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/etkamartidur"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="Kamar Tidur"
+                            android:inputType="number"
+                            android:textColor="@color/black" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/lytkamarmandi"
+                        style="@style/CustomOutlinedBox"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="5dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_weight="1"
+                        app:helperText="cth: 3">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/etkamarmandi"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="Kamar Mandi"
+                            android:inputType="number"
+                            android:textColor="@color/black" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="2">
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/lytkamartidurart"
+                        style="@style/CustomOutlinedBox"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:layout_weight="1"
+                        app:helperText="cth: 3">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/etkamartidurart"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="Kamar Tidur Pembantu"
+                            android:inputType="number"
+                            android:textColor="@color/black" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/lytkamarmandiart"
+                        style="@style/CustomOutlinedBox"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="5dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_weight="1"
+                        app:helperText="cth: 3">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/etkamarmandiart"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="Kamar Mandi Pembantu"
+                            android:inputType="number"
+                            android:textColor="@color/black" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="2">
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/lytgarasi"
+                        style="@style/CustomOutlinedBox"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:layout_weight="1"
+                        app:helperText="cth: 1">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/etgarasi"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="Garasi"
+                            android:inputType="number"
+                            android:textColor="@color/black" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/lytcarpot"
+                        style="@style/CustomOutlinedBox"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="5dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_weight="1"
+                        app:helperText="cth: 1">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/etcarpot"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="Carpot"
+                            android:inputType="number"
+                            android:textColor="@color/black" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="2">
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/lytdayalistrik"
+                        style="@style/CustomOutlinedBox"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:layout_weight="1">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/etdayalistrik"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="Daya Listrik"
+                            android:inputType="number"
+                            android:textColor="@color/black" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/lytsumberair"
+                        style="@style/CustomOutlinedBox"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="5dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_weight="1"
+                        android:hint="Sumber Air">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/etsumberair"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:focusable="false"
+                            android:inputType="none"
+                            android:textColor="@color/black" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                </LinearLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/lytperabot"
+                    style="@style/CustomOutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:hint="Perabot">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etperabot"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:focusable="false"
+                        android:inputType="none"
+                        android:textColor="@color/black" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/lytketperabot"
+                    style="@style/CustomOutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etketperabot"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Keterangan Perabot"
+                        android:inputType="text"
+                        android:textColor="@color/black" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/lytbanner"
+                    style="@style/CustomOutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:hint="Banner">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etbanner"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:focusable="false"
+                        android:inputType="none"
+                        android:textColor="@color/black" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/lytUkuranBanner"
+                    style="@style/CustomOutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:hint="Ukuran Banner"
+                    android:visibility="gone">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etukuranbanner"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:focusable="false"
+                        android:inputType="none"
+                        android:textColor="@color/black" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/lytstatusproperti"
+                    style="@style/CustomOutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:hint="Status">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etstatusproperti"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:focusable="false"
+                        android:inputType="none"
+                        android:textColor="@color/black" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/lytharga"
+                    style="@style/CustomOutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:visibility="gone">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etharga"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Harga Jual"
+                        android:inputType="number"
+                        android:textColor="@color/black" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/lythargasewa"
+                    style="@style/CustomOutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:visibility="gone">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/ethargasewa"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Harga Sewa"
+                        android:inputType="number"
+                        android:textColor="@color/black" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/lytketerangan"
+                    style="@style/CustomOutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etketerangan"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Keterangan"
+                        android:inputType="textMultiLine"
+                        android:textColor="@color/black" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/lytfee"
+                    style="@style/CustomOutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etfee"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Fee"
+                        android:inputType="text"
+                        android:textColor="@color/black" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <LinearLayout
+                    android:id="@+id/lyts1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal"
+                    android:visibility="gone">
+
+                    <ImageView
+                        android:id="@+id/ivs1"
+                        android:layout_width="250dp"
+                        android:layout_height="250dp" />
+
+                    <ImageView
+                        android:id="@+id/IVDelete1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_margin="5dp"
+                        android:gravity="center"
+                        android:src="@drawable/ic_delete"
+                        app:tint="@color/red_color" />
+
+                </LinearLayout>
+
+                <Button
+                    android:id="@+id/btnSelectImage1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:backgroundTint="@color/main"
+                    android:text="Ganti Tampak Depan"
+                    android:textColor="@color/white" />
+
+                <LinearLayout
+                    android:id="@+id/lyts2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal"
+                    android:visibility="gone">
+
+                    <ImageView
+                        android:id="@+id/ivs2"
+                        android:layout_width="250dp"
+                        android:layout_height="250dp" />
+
+                    <ImageView
+                        android:id="@+id/IVDelete2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_margin="5dp"
+                        android:gravity="center"
+                        android:src="@drawable/ic_delete"
+                        app:tint="@color/red_color" />
+
+                </LinearLayout>
+
+                <Button
+                    android:id="@+id/btnSelectImage2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:backgroundTint="@color/main"
+                    android:text="Tambah Gambar"
+                    android:textColor="@color/white"
+                    android:visibility="gone" />
+
+                <LinearLayout
+                    android:id="@+id/lyts3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal"
+                    android:visibility="gone">
+
+                    <ImageView
+                        android:id="@+id/ivs3"
+                        android:layout_width="250dp"
+                        android:layout_height="250dp" />
+
+                    <ImageView
+                        android:id="@+id/IVDelete3"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_margin="5dp"
+                        android:gravity="center"
+                        android:src="@drawable/ic_delete"
+                        app:tint="@color/red_color" />
+
+                </LinearLayout>
+
+                <Button
+                    android:id="@+id/btnSelectImage3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:backgroundTint="@color/main"
+                    android:text="Tambah Gambar"
+                    android:textColor="@color/white"
+                    android:visibility="gone" />
+
+                <LinearLayout
+                    android:id="@+id/lyts4"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal"
+                    android:visibility="gone">
+
+                    <ImageView
+                        android:id="@+id/ivs4"
+                        android:layout_width="250dp"
+                        android:layout_height="250dp" />
+
+                    <ImageView
+                        android:id="@+id/IVDelete4"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_margin="5dp"
+                        android:gravity="center"
+                        android:src="@drawable/ic_delete"
+                        app:tint="@color/red_color" />
+
+                </LinearLayout>
+
+                <Button
+                    android:id="@+id/btnSelectImage4"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:backgroundTint="@color/main"
+                    android:text="Tambah Gambar"
+                    android:textColor="@color/white"
+                    android:visibility="gone" />
+
+                <LinearLayout
+                    android:id="@+id/lyts5"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal"
+                    android:visibility="gone">
+
+                    <ImageView
+                        android:id="@+id/ivs5"
+                        android:layout_width="250dp"
+                        android:layout_height="250dp" />
+
+                    <ImageView
+                        android:id="@+id/IVDelete5"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_margin="5dp"
+                        android:gravity="center"
+                        android:src="@drawable/ic_delete"
+                        app:tint="@color/red_color" />
+
+                </LinearLayout>
+
+                <Button
+                    android:id="@+id/btnSelectImage5"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:backgroundTint="@color/main"
+                    android:text="Tambah Gambar"
+                    android:textColor="@color/white"
+                    android:visibility="gone" />
+
+                <LinearLayout
+                    android:id="@+id/lyts6"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal"
+                    android:visibility="gone">
+
+                    <ImageView
+                        android:id="@+id/ivs6"
+                        android:layout_width="250dp"
+                        android:layout_height="250dp" />
+
+                    <ImageView
+                        android:id="@+id/IVDelete6"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_margin="5dp"
+                        android:gravity="center"
+                        android:src="@drawable/ic_delete"
+                        app:tint="@color/red_color" />
+
+                </LinearLayout>
+
+                <Button
+                    android:id="@+id/btnSelectImage6"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:backgroundTint="@color/main"
+                    android:text="Tambah Gambar"
+                    android:textColor="@color/white"
+                    android:visibility="gone" />
+
+                <LinearLayout
+                    android:id="@+id/lyts7"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal"
+                    android:visibility="gone">
+
+                    <ImageView
+                        android:id="@+id/ivs7"
+                        android:layout_width="250dp"
+                        android:layout_height="250dp" />
+
+                    <ImageView
+                        android:id="@+id/IVDelete7"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_margin="5dp"
+                        android:gravity="center"
+                        android:src="@drawable/ic_delete"
+                        app:tint="@color/red_color" />
+
+                </LinearLayout>
+
+                <Button
+                    android:id="@+id/btnSelectImage7"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:backgroundTint="@color/main"
+                    android:text="Tambah Gambar"
+                    android:textColor="@color/white"
+                    android:visibility="gone" />
+
+                <LinearLayout
+                    android:id="@+id/lyts8"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal"
+                    android:visibility="gone">
+
+                    <ImageView
+                        android:id="@+id/ivs8"
+                        android:layout_width="250dp"
+                        android:layout_height="250dp" />
+
+                    <ImageView
+                        android:id="@+id/IVDelete8"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_margin="5dp"
+                        android:gravity="center"
+                        android:src="@drawable/ic_delete"
+                        app:tint="@color/red_color" />
+
+                </LinearLayout>
+
+                <Button
+                    android:id="@+id/btnSelectImage"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:backgroundTint="@color/main"
+                    android:text="Tambah Gambar"
+                    android:textColor="@color/white"
+                    android:visibility="gone" />
+
+                <LinearLayout
+                    android:id="@+id/lyts9"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal"
+                    android:visibility="gone">
+
+                    <ImageView
+                        android:id="@+id/ivs9"
+                        android:layout_width="250dp"
+                        android:layout_height="250dp" />
+
+                    <ImageView
+                        android:id="@+id/IVDelete9"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_margin="5dp"
+                        android:gravity="center"
+                        android:src="@drawable/ic_delete"
+                        app:tint="@color/red_color" />
+
+                </LinearLayout>
+
+                <Button
+                    android:id="@+id/btnSelectImage9"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:backgroundTint="@color/main"
+                    android:text="Tambah Gambar"
+                    android:textColor="@color/white"
+                    android:visibility="gone" />
+
+                <LinearLayout
+                    android:id="@+id/lyts10"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal"
+                    android:visibility="gone">
+
+                    <ImageView
+                        android:id="@+id/ivs10"
+                        android:layout_width="250dp"
+                        android:layout_height="250dp" />
+
+                    <ImageView
+                        android:id="@+id/IVDelete10"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_margin="5dp"
+                        android:gravity="center"
+                        android:src="@drawable/ic_delete"
+                        app:tint="@color/red_color" />
+
+                </LinearLayout>
+
+                <Button
+                    android:id="@+id/btnSelectImage10"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:backgroundTint="@color/main"
+                    android:text="Tambah Gambar"
+                    android:textColor="@color/white"
+                    android:visibility="gone" />
+
+                <LinearLayout
+                    android:id="@+id/lyts11"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal"
+                    android:visibility="gone">
+
+                    <ImageView
+                        android:id="@+id/ivs11"
+                        android:layout_width="250dp"
+                        android:layout_height="250dp" />
+
+                    <ImageView
+                        android:id="@+id/IVDelete11"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_margin="5dp"
+                        android:gravity="center"
+                        android:src="@drawable/ic_delete"
+                        app:tint="@color/red_color" />
+
+                </LinearLayout>
+
+                <Button
+                    android:id="@+id/btnSelectImage11"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:backgroundTint="@color/main"
+                    android:text="Tambah Gambar"
+                    android:textColor="@color/white"
+                    android:visibility="gone" />
+
+                <LinearLayout
+                    android:id="@+id/lyts12"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal"
+                    android:visibility="gone">
+
+                    <ImageView
+                        android:id="@+id/ivs12"
+                        android:layout_width="250dp"
+                        android:layout_height="250dp" />
+
+                    <ImageView
+                        android:id="@+id/IVDelete12"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_margin="5dp"
+                        android:gravity="center"
+                        android:src="@drawable/ic_delete"
+                        app:tint="@color/red_color" />
+
+                </LinearLayout>
+
+                <Button
+                    android:id="@+id/btnSelectImage12"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:backgroundTint="@color/main"
+                    android:text="Tambah Gambar"
+                    android:textColor="@color/white"
+                    android:visibility="gone" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:orientation="horizontal"
+                    android:weightSum="3">
+
+                    <Button
+                        android:id="@+id/btnbatal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="5dp"
+                        android:layout_weight="2"
+                        android:backgroundTint="@color/grey"
+                        android:text="batal"
+                        android:textColor="@color/black" />
+
+                    <Button
+                        android:id="@+id/btnsubmit"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="6dp"
+                        android:layout_weight="1"
+                        android:backgroundTint="@color/main"
+                        android:text="submit"
+                        android:textColor="@color/white" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

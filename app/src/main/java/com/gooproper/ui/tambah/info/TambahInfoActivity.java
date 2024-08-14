@@ -83,8 +83,8 @@ public class TambahInfoActivity extends AppCompatActivity {
     private static final int STORAGE_PERMISSION_CODE = 12;
     private ArrayList<Uri> uriList = new ArrayList<>();
     Uri UriSelfie, UriProperty;
-    TextInputEditText ETJenisProperty, ETStatusProperty, ETNama, ETTelp, ETLTanah, ETLBangunan, ETSLTanah, ETSLBangunan, ETHJual, ETHSewa, ETKeterangan;
-    TextInputLayout LytHJual, LytHSewa;
+    TextInputEditText ETJenisProperty, ETStatusProperty, ETStatusNarahubung, ETNama, ETTelp, ETLTanah, ETLBangunan, ETSLTanah, ETSLBangunan, ETHJual, ETHSewa, ETKeterangan;
+    TextInputLayout LytNarahubung, LytHJual, LytHSewa;
     LinearLayout LytSelfie, LytProperty;
     ImageView Back, IVSelfie, IVProperty;
     Button Batal, Submit, BtnSelfie, BtnProperty, BtnMap;
@@ -109,6 +109,7 @@ public class TambahInfoActivity extends AppCompatActivity {
 
         LytSelfie = findViewById(R.id.LytSelfie);
         LytProperty = findViewById(R.id.LytProperty);
+        LytNarahubung = findViewById(R.id.LytNarahubungProperti);
         LytHJual = findViewById(R.id.lytharga);
         LytHSewa = findViewById(R.id.lythargasewa);
 
@@ -116,6 +117,7 @@ public class TambahInfoActivity extends AppCompatActivity {
 
         ETJenisProperty = findViewById(R.id.ETJenisProperti);
         ETStatusProperty = findViewById(R.id.ETStatusProperti);
+        ETStatusNarahubung = findViewById(R.id.ETStatusNarahubung);
         ETNama = findViewById(R.id.ETNarahubungProperti);
         ETTelp = findViewById(R.id.ETTelpVendorProperti);
         ETLTanah = findViewById(R.id.etluastanah);
@@ -158,6 +160,7 @@ public class TambahInfoActivity extends AppCompatActivity {
         BtnProperty.setOnClickListener(view -> showPhotoProperty());
         ETStatusProperty.setOnClickListener(view -> ShowStatus(view));
         ETJenisProperty.setOnClickListener(view -> ShowJenisProperti(view));
+        ETStatusNarahubung.setOnClickListener(view -> ShowStatusNarahubung(view));
         ETSLTanah.setOnClickListener(view -> ShowSatuanLTanah(view));
         ETSLBangunan.setOnClickListener(view -> ShowSatuanLBangunan(view));
 
@@ -250,6 +253,30 @@ public class TambahInfoActivity extends AppCompatActivity {
                 } else {
                     LytHJual.setVisibility(View.GONE);
                     LytHSewa.setVisibility(View.GONE);
+                }
+            }
+        });
+        ETStatusNarahubung.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if (editable.toString().equalsIgnoreCase("Agen Kantor Lain")) {
+                    LytNarahubung.setVisibility(View.VISIBLE);
+                } else if (editable.toString().equalsIgnoreCase("Broker Tradisional")) {
+                    LytNarahubung.setVisibility(View.VISIBLE);
+                } else if (editable.toString().equalsIgnoreCase("Owner")) {
+                    LytNarahubung.setVisibility(View.VISIBLE);
+                } else {
+                    LytNarahubung.setVisibility(View.GONE);
                 }
             }
         });
@@ -550,7 +577,7 @@ public class TambahInfoActivity extends AppCompatActivity {
 
         RequestQueue requestQueue = Volley.newRequestQueue(this);
 
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, ServerApi.URL_TAMBAH_INFO,
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, ServerApi.URL_ADD_DATA_INFO,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -718,6 +745,7 @@ public class TambahInfoActivity extends AppCompatActivity {
                 map.put("IdAgen", IdInput);
                 map.put("JenisProperty", ETJenisProperty.getText().toString());
                 map.put("StatusProperty", ETStatusProperty.getText().toString());
+                map.put("StatusNarahubung", ETStatusNarahubung.getText().toString());
                 map.put("Narahubung", ETNama.getText().toString());
                 map.put("NoTelp", ETTelp.getText().toString());
                 map.put("LuasTanah", tanah);
@@ -784,6 +812,33 @@ public class TambahInfoActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 ETStatusProperty.setText(Status[SelectedStatus[0]]);
+            }
+        });
+
+        builder.setNegativeButton("Batal", null);
+
+        AlertDialog dialog = builder.create();
+
+        dialog.show();
+    }
+    public void ShowStatusNarahubung(View view) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.CustomAlertDialogStyle);
+        builder.setTitle("Silahkan Pilih Status Narahubung");
+
+        final CharSequence[] Status = {"Agen Kantor Lain", "Broker Tradisional", "Owner"};
+        final int[] SelectedStatus = {0};
+
+        builder.setSingleChoiceItems(Status, SelectedStatus[0], new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                SelectedStatus[0] = which;
+            }
+        });
+
+        builder.setPositiveButton("Pilih", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                ETStatusNarahubung.setText(Status[SelectedStatus[0]]);
             }
         });
 
@@ -892,6 +947,37 @@ public class TambahInfoActivity extends AppCompatActivity {
             TextView tv = customDialog.findViewById(R.id.TVDialogErorInput);
 
             tv.setText("Harap Pilih Status Properti");
+
+            ok.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    customDialog.dismiss();
+                }
+            });
+
+            ImageView gifImageView = customDialog.findViewById(R.id.IVDialogErorInput);
+
+            Glide.with(TambahInfoActivity.this)
+                    .load(R.drawable.alert) // You can also use a local resource like R.drawable.your_gif_resource
+                    .transition(DrawableTransitionOptions.withCrossFade())
+                    .into(gifImageView);
+
+            customDialog.show();
+            return false;
+        }
+        if (ETStatusNarahubung.getText().toString().equals("")) {
+            Dialog customDialog = new Dialog(TambahInfoActivity.this);
+            customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            customDialog.setContentView(R.layout.custom_dialog_eror_input);
+
+            if (customDialog.getWindow() != null) {
+                customDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+            }
+
+            Button ok = customDialog.findViewById(R.id.BtnOkErorInput);
+            TextView tv = customDialog.findViewById(R.id.TVDialogErorInput);
+
+            tv.setText("Harap Pilih Status Narahubung");
 
             ok.setOnClickListener(new View.OnClickListener() {
                 @Override
